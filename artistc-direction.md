@@ -1,4 +1,4 @@
-# WEBAO — Artistic Direction
+# WEBAO - Artistic Direction
 
 > **Goal:** Make WEBAO feel like a serious design studio, not a generic website-builder landing page.
 
@@ -6,7 +6,7 @@ The landing page should be **high-impact, memorable, and visually authored**. It
 
 ## Visual References
 
-These references are about **feel, pacing, interaction, composition, and presentation** — not copying their designs.
+These references are about **feel, pacing, interaction, composition, and presentation** - not copying their designs.
 
 - https://www.translate-wf.com/
   - Strong visual storytelling and scroll-driven presentation.
@@ -17,6 +17,8 @@ These references are about **feel, pacing, interaction, composition, and present
   - Strong use of photography/illustration, visual identity, and editorial composition.
   - Rich imagery can carry the brand instead of relying on generic UI decoration.
   - Product/content sections have distinct visual personalities.
+  - Components effects and animations, reactive website.
+  - A strong visual personality
 
 - https://www.audemarspiguet.com/en/home
   - Premium editorial presentation with large imagery and restrained typography.
@@ -186,10 +188,7 @@ Contact areas should use placeholders or clearly non-functional demo interaction
 
 Every demo should have a **small, unobtrusive corner control** that lets visitors leave the demo easily.
 
-It should provide a route back to either:
-
-1. the WEBAO home page, or
-2. the WEBAO demo catalog.
+It should provide a route back to the WEBAO demo catalog.
 
 This control must remain discoverable without overpowering the fictional website's own design.
 
@@ -207,6 +206,8 @@ Possible assets include:
 - Product/service imagery.
 - Generated or commissioned visual assets.
 - Subtle decorative elements tied to each demo's identity.
+
+*No-copyright images may be used, they must fit the page. 
 
 Assets should have a reason to exist. Avoid adding random blobs, gradients, floating objects, or decorative noise simply to make the page look “modern.”
 
