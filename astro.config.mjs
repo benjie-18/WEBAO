@@ -17,6 +17,8 @@ export default defineConfig({
     prerenderEnvironment: "node",
   }),
   vite: {
+    server: { host: "0.0.0.0", allowedHosts: true },
+    preview: { host: "0.0.0.0" },
     ssr: {
       external: ["node:fs", "node:path", "node:url"],
     },

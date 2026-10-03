@@ -8,8 +8,9 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "cf:dev": "wrangler dev",
-    "cf:deploy": "wrangler deploy",
+    "cf:dev": "wrangler dev --assets ./dist/client",
+    "cf:deploy": "npm run build && wrangler deploy",
+    "cf:build": "astro build",
     "lint": "astro check"
   },
   "dependencies": {

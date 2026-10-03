@@ -65,3 +65,46 @@ It must be impressive and feature packed. Clients should be able to contact the 
 The landing page should be impressive, with animations and great style. 
 
 For more information on the artistic direction and components of the main site, visit artistc-direction.md
+
+## Development
+
+```bash
+npm install
+npm run dev      # http://localhost:4321
+npm run build    # astro build → dist/client
+npm run check    # astro check (type + Astro)
+npm run preview  # preview built site
+```
+
+Project architecture:
+
+- `src/layouts/BaseLayout.astro` — SEO, header/footer, scroll progress, ClientRouter, reveal
+- `src/styles/global.css` — tokens, typography (Instrument Serif + Inter + IBM Plex Mono), layout, motion (respects `prefers-reduced-motion`)
+- `src/components/{ui,layout,anim}` — reusable Button, Card, Badge, Section, Reveal, CursorJourney
+- `src/lib/{demos,motion}.ts` — demo catalog (12 art-directed fictions) + motion helpers
+- `src/pages/{index,pricing,contact,demos,404,sitemap.xml.ts}` — polished marketing site; demos are searchable/filterable catalog with escape hatch (no real demo microsites yet per spec)
+
+## Deployment — Cloudflare Workers (static assets)
+
+- **Framework preset:** `Astro`
+- **Build command:** `npm run build` (runs `astro build` → `dist/client`)
+- **Output / Assets directory:** `dist/client`
+- **Deploy commands:**
+  ```bash
+  npm run build && npx wrangler deploy
+  # or
+  npm run cf:deploy
+  npm run cf:dev   # local Workers preview with assets
+  ```
+
+`wrangler.jsonc` is configured for **assets-only Workers**:
+
+```jsonc
+{
+  "assets": { "directory": "./dist/client", "binding": "ASSETS" },
+  "compatibility_date": "2026-10-03",
+  "compatibility_flags": ["nodejs_compat"]
+}
+```
+
+> **Fix for `npx wrangler build` error:** Do **not** use `npx wrangler build` as the build command. That command compiles a Worker and expects `html/css/js` before building, so it fails with *“Could not detect a directory containing static files…”* when `dist/client` doesn’t yet exist. Use `npm run build` instead — Astro generates `dist/client` (and `dist/client/_headers` for caching), then `wrangler deploy` uploads from that directory. If your Cloudflare dashboard is set to `npx wrangler build`, change it to `npm run build`.

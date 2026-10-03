@@ -34,6 +34,24 @@ button, input, textarea, select { font: inherit; }
 }
 ::selection { background: var(--ink); color: var(--paper); }
 
+/* Scroll progress */
+.scroll-progress {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  z-index: 100;
+  pointer-events: none;
+  background: transparent;
+}
+.scroll-progress-bar {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, var(--accent) 0%, #FF7A3D 50%, var(--ink) 100%);
+  transform-origin: left;
+  transform: scaleX(0);
+  will-change: transform;
+}
+
 /* --- Tokens --- */
 :root {
   /* Color */

@@ -1,4 +1,5 @@
 ---
+import { ClientRouter } from "astro:transitions";
 interface Props {
   title?: string;
   description?: string;
@@ -55,9 +56,12 @@ const canonical = Astro.url ? new URL(Astro.url.pathname, Astro.site).toString()
       @import "../styles/global.css";
     </style>
 
+    <ClientRouter />
+
     <slot name="head" />
   </head>
   <body>
+    <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress-bar" data-progress></div></div>
     <a href="#main" class="skip-link">Skip to content</a>
 
     <header class:list={["site-header", headerVariant === "dark" && "site-header--dark"]} role="banner">
@@ -172,20 +176,28 @@ const canonical = Astro.url ? new URL(Astro.url.pathname, Astro.site).toString()
         document.querySelectorAll('[data-reveal]').forEach(el => el.classList.add('is-visible'));
       }
 
-      // Subtle header shadow on scroll
+      // Subtle header shadow + scroll progress
       const header = document.querySelector('.site-header') as HTMLElement | null;
-      if (header) {
+      const progress = document.querySelector('[data-progress]') as HTMLElement | null;
+      if (header || progress) {
         let ticking = false;
-        window.addEventListener('scroll', () => {
+        const onScroll = () => {
           if (!ticking) {
             requestAnimationFrame(() => {
               const y = window.scrollY;
-              (header as HTMLElement).style.boxShadow = y > 8 ? '0 4px 24px rgba(10,15,28,.06)' : 'none';
+              if (header) (header as HTMLElement).style.boxShadow = y > 8 ? '0 4px 24px rgba(10,15,28,.06)' : 'none';
+              if (progress) {
+                const h = document.documentElement.scrollHeight - window.innerHeight;
+                const p = h > 0 ? Math.min(y / h, 1) : 0;
+                progress.style.transform = `scaleX(${p})`;
+              }
               ticking = false;
             });
             ticking = true;
           }
-        }, { passive: true });
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
       }
 
       // Smooth anchor offset for sticky header

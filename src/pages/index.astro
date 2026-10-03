@@ -1,13 +1,15 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import CursorJourney from "../components/anim/CursorJourney.astro";
 ---
 
 <BaseLayout
   title="WEBAO — Custom websites for small business · webao.ca"
   description="A professional website without the headache. Custom design, domain, hosting, SEO & support for $149 CAD/month. For electricians, plumbers, restaurants and local businesses across Canada."
 >
-  <!-- HERO -->
-  <section class="hero grain">
+  <!-- HERO -- wow: watermark + parallax + split reveal -->
+  <section class="hero grain" id="hero">
+    <div class="hero-watermark" aria-hidden="true"><span>WEBAO</span><span>WEBAO</span></div>
     <div class="shell hero-grid">
       <div class="hero-copy">
         <div class="hero-kicker" data-reveal>
@@ -50,8 +52,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         </div>
       </div>
 
-      <div class="hero-visual" data-reveal="scale" style="--d:140ms" aria-hidden="true">
-        <div class="visual-stack">
+      <div class="hero-visual" data-reveal="scale" style="--d:140ms" aria-hidden="true" data-hero-visual>
+        <div class="visual-stack" data-parallax="stack">
           <!-- Top bar -->
           <div class="browser-bar">
             <div class="dots"><i></i><i></i><i></i></div>
@@ -123,8 +125,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
             </div>
           </div>
 
-          <!-- Floating cards -->
-          <div class="float-card float-a">
+          <!-- Floating cards — parallax layers -->
+          <div class="float-card float-a" data-parallax="a">
             <div class="float-icon">◐</div>
             <div>
               <div style="font-weight: 700; font-size: 13px; letter-spacing:-0.02em;">Domain + Hosting included</div>
@@ -132,7 +134,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
             </div>
             <span class="check">✓</span>
           </div>
-          <div class="float-card float-b">
+          <div class="float-card float-b" data-parallax="b">
             <div style="font-family: var(--font-mono); font-size:10px; letter-spacing:.12em; color: var(--muted);">ANALYTICS THIS WEEK</div>
             <div style="display:flex; align-items:end; gap:6px; margin-top:8px;">
               <span style="font-family: var(--font-display); font-size:28px; line-height:1;">+38%</span>
@@ -392,7 +394,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         <p class="mono" style="color: rgba(248,245,239,.5); margin-top:12px; font-size: 12px;">PICK A DOOR — EACH IS A DIFFERENT COMPOSITION, SAME STUDIO.</p>
       </div>
 
-      <div class="agency-grid">
+      <div class="agency-grid" style="position: relative;">
+        <CursorJourney />
         <!-- Pricing card -->
         <a href="/pricing" class="agency-card agency-card--pricing" data-reveal>
           <div class="agency-top mono">
@@ -852,6 +855,34 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     }
     .rail-line { flex:1; height:1px; background: var(--line); max-width: 420px; }
 
+    .hero-watermark {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: clip;
+      z-index: 0;
+      opacity: .035;
+      display: grid;
+      place-items: center;
+      user-select: none;
+    }
+    .hero-watermark span {
+      position: absolute;
+      font-family: var(--font-display);
+      font-size: clamp(10rem, 28vw, 24rem);
+      line-height: 1;
+      letter-spacing: -0.06em;
+      color: var(--ink);
+      white-space: nowrap;
+      transform: rotate(-6deg);
+    }
+    .hero-watermark span:last-child {
+      transform: rotate(-6deg) translate(1.2em, 1.1em);
+      opacity: .6;
+    }
+    .hero { isolation: isolate; }
+    .hero-grid, .hero-rail { position: relative; z-index: 1; }
+
     @media (max-width: 960px) {
       .hero-grid { grid-template-columns: 1fr; }
       .hero-visual { order: -1; }
@@ -1179,5 +1210,77 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       .cta-visual { order: -1; }
       .cta-stamp { right: 6%; }
     }
+
+    /* Performance: content-visibility for below-fold */
+    .section { content-visibility: auto; contain-intrinsic-size: auto 700px; }
+    .hero, .marquee { content-visibility: visible; contain-intrinsic-size: auto; }
   </style>
+
+  <script>
+    // Hero parallax — mouse + scroll, respects reduced-motion and coarse pointer
+    const hero = document.getElementById('hero');
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isCoarse = window.matchMedia('(pointer: coarse), (hover: none)').matches;
+    if (hero && !prefersReduced && !isCoarse) {
+      const stack = hero.querySelector('[data-parallax="stack"]') as HTMLElement | null;
+      const a = hero.querySelector('[data-parallax="a"]') as HTMLElement | null;
+      const b = hero.querySelector('[data-parallax="b"]') as HTMLElement | null;
+      const watermark = hero.querySelector('.hero-watermark') as HTMLElement | null;
+      let raf = 0, tx = 0, ty = 0, cx = 0, cy = 0;
+      hero.addEventListener('mousemove', (e: MouseEvent) => {
+        const r = hero.getBoundingClientRect();
+        tx = ((e.clientX - r.left) / r.width - 0.5) * 2; // -1..1
+        ty = ((e.clientY - r.top) / r.height - 0.5) * 2;
+        if (!raf) raf = requestAnimationFrame(tick);
+      });
+      hero.addEventListener('mouseleave', () => {
+        tx = 0; ty = 0;
+        if (!raf) raf = requestAnimationFrame(tick);
+      });
+      function tick() {
+        raf = 0;
+        cx += (tx - cx) * 0.08;
+        cy += (ty - cy) * 0.08;
+        if (stack) stack.style.transform = `rotate(.4deg) translate3d(${cx * 6}px, ${cy * 6}px, 0)`;
+        if (a) a.style.transform = `rotate(1.2deg) translate3d(${cx * 14}px, ${cy * 10}px, 0)`;
+        if (b) b.style.transform = `rotate(-1deg) translate3d(${cx * -12}px, ${cy * -8}px, 0)`;
+        if (watermark) watermark.style.transform = `translate3d(${cx * -10}px, ${cy * -6}px, 0)`;
+        if (Math.abs(tx - cx) > 0.001 || Math.abs(ty - cy) > 0.001) {
+          raf = requestAnimationFrame(tick);
+        }
+      }
+      // scroll parallax on watermark
+      let sTick = false;
+      window.addEventListener('scroll', () => {
+        if (sTick) return;
+        sTick = true;
+        requestAnimationFrame(() => {
+          const y = window.scrollY * 0.08;
+          if (watermark && !prefersReduced) watermark.style.transform += ` translateY(${y}px)`;
+          sTick = false;
+        });
+      }, { passive: true });
+    }
+
+    // Subtle 3D tilt for agency/demo cards — respects reduced-motion / coarse
+    if (!prefersReduced && !isCoarse) {
+      const cards = document.querySelectorAll('.agency-card, .demo-card');
+      cards.forEach((el) => {
+        const card = el as HTMLElement;
+        card.style.willChange = 'transform';
+        // @ts-ignore
+        card.addEventListener('mousemove', (e: MouseEvent) => {
+          const r = card.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width - 0.5;
+          const py = (e.clientY - r.top) / r.height - 0.5;
+          const ry = px * 6; // rotateY
+          const rx = py * -5; // rotateX
+          card.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(0) translateY(-4px)`;
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = '';
+        });
+      });
+    }
+  </script>
 </BaseLayout>
