@@ -1,0 +1,22 @@
+---
+interface Props {
+  variant?: "default" | "dark" | "ink2" | "muted";
+  tight?: boolean;
+  grain?: boolean;
+  id?: string;
+}
+const { variant = "default", tight = false, grain = false, id } = Astro.props as Props;
+const classes = [
+  "section",
+  variant === "dark" && "section--dark",
+  variant === "ink2" && "section--ink2",
+  tight && "section--tight",
+  grain && "grain",
+].filter(Boolean).join(" ");
+---
+
+<section id={id} class={classes}>
+  <div class="shell">
+    <slot />
+  </div>
+</section>

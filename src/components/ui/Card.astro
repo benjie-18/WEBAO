@@ -1,0 +1,16 @@
+---
+interface Props {
+  variant?: "default" | "dark" | "accent";
+  hover?: boolean;
+}
+const { variant = "default", hover = true } = Astro.props as Props;
+const cls = ["card", variant !== "default" && `card--${variant}`, hover && "hover-lift"].filter(Boolean).join(" ");
+---
+
+<div class={cls}>
+  <slot />
+</div>
+
+<style>
+  .card { /* base styles from global.css */ }
+</style>

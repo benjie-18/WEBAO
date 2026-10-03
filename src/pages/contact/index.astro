@@ -1,0 +1,270 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Contact — WEBAO · Start your website"
+  description="Tell us about your business. We reply within one business day with two demo directions and a clear timeline. No forms that go nowhere."
+>
+  <section class="contact-hero grain">
+    <div class="shell">
+      <div class="contact-grid">
+        <div class="contact-copy" data-reveal>
+          <div class="eyebrow">Contact — a real conversation, not a queue</div>
+          <h1 class="display" style="font-size: clamp(2.6rem, 6vw, 4.8rem); line-height:.88; margin-top:12px;">
+            Tell us about<br />
+            <span style="font-style: italic; font-weight:400; color: var(--accent);">your business.</span>
+          </h1>
+          <p class="prose" style="margin-top:14px; max-width:52ch;">
+            You don’t need a perfect brief. Send your trade, city, and a couple of phone photos — we’ll reply with two demo directions and a honest timeline.
+          </p>
+
+          <div class="contact-cards">
+            <a href="mailto:hello@webao.ca" class="c-card">
+              <span class="c-icon">✉</span>
+              <span>
+                <strong>hello@webao.ca</strong>
+                <span class="mono">Reply within one business day</span>
+              </span>
+              <span aria-hidden="true">→</span>
+            </a>
+            <a href="tel:+15145550192" class="c-card">
+              <span class="c-icon">☎</span>
+              <span>
+                <strong>+1 (514) 555-0192</strong>
+                <span class="mono">Mon–Fri 9am–5pm ET</span>
+              </span>
+              <span aria-hidden="true">→</span>
+            </a>
+          </div>
+
+          <div class="trust-mini mono">
+            <span>◐ SSL & hosting included</span>
+            <span>·</span>
+            <span>Average reply 3 hours</span>
+            <span>·</span>
+            <span>No spam, ever</span>
+          </div>
+
+          <div class="testi" aria-label="Testimonial">
+            <div class="stars">★★★★★</div>
+            <p>“I sent a Facebook page link and three photos. They sent back a preview in two days that looked like us — but better.”</p>
+            <span class="mono">— Nadia K., Clinique Sora · Brossard</span>
+          </div>
+        </div>
+
+        <div class="contact-form-wrap" data-reveal style="--d:120ms">
+          <form class="form" id="contact-form" novalidate>
+            <div class="form-head">
+              <h2>Send your details</h2>
+              <p class="mono">We’ll reply same day · No commitment</p>
+            </div>
+
+            <div class="field-grid">
+              <label>Business name
+                <input name="business" placeholder="e.g., Dubois HVAC" autocomplete="organization" required />
+              </label>
+              <label>Trade / Industry
+                <select name="trade" required>
+                  <option value="" disabled selected>Select one</option>
+                  <option>Electrician</option>
+                  <option>Plumber</option>
+                  <option>HVAC</option>
+                  <option>Roofing / Construction</option>
+                  <option>Landscaping</option>
+                  <option>Restaurant / Café</option>
+                  <option>Clinic / Wellness</option>
+                  <option>Auto / Detailing</option>
+                  <option>Other</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="field-grid">
+              <label>City
+                <input name="city" placeholder="e.g., Laval" autocomplete="address-level2" required />
+              </label>
+              <label>Your name
+                <input name="name" placeholder="e.g., Alex Dubois" autocomplete="name" required />
+              </label>
+            </div>
+
+            <label>Email
+              <input name="email" type="email" placeholder="you@entreprise.ca" autocomplete="email" required />
+            </label>
+
+            <label>Phone <span class="optional mono">(optional)</span>
+              <input name="phone" type="tel" placeholder="+1 (514) 555-0192" autocomplete="tel" />
+            </label>
+
+            <label>What do you want the site to do?
+              <textarea name="goal" rows="3" placeholder="e.g., Get more quote requests, show our service area, let clients book online…"></textarea>
+            </label>
+
+            <label>Anything else? Photos, services, logo link
+              <textarea name="details" rows="3" placeholder="Paste a Google Drive / Photos link, list services, attach notes… (you can also just email us after)"></textarea>
+            </label>
+
+            <div class="form-meta mono">
+              <label class="check-row"><input type="checkbox" required /> I understand this is a demo form — WEBAO will contact me about a website.</label>
+              <span>By continuing you agree to be contacted about your site. No spam. Unsubscribe anytime.</span>
+            </div>
+
+            <button type="submit" class="btn btn--primary" style="width:100%; justify-content:center; margin-top:6px;">
+              Send details →
+            </button>
+            <div class="mono" style="text-align:center; font-size:11px; color: var(--muted); margin-top:8px;">Or email us directly at <a href="mailto:hello@webao.ca" style="color: var(--ink); font-weight:650; text-decoration: underline; text-underline-offset:3px;">hello@webao.ca</a></div>
+
+            <div id="form-status" role="status" aria-live="polite" class="form-status mono" hidden></div>
+          </form>
+
+          <div class="form-foot mono">
+            <span>🔒</span>
+            <span>Your info stays with WEBAO. Used only to reply about your website. No trackers on form submit.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Secondary info -->
+  <section class="section section--tight grain" style="background: var(--paper-2); border-top:1px solid var(--line);">
+    <div class="shell">
+      <div class="info-grid" data-reveal>
+        <div class="info-card">
+          <h3>How we reply</h3>
+          <p>Within one business day we’ll send:</p>
+          <ul>
+            <li>→ Two demo directions that fit your trade</li>
+            <li>→ Honest timeline & what we need from you</li>
+            <li>→ Fixed price (usually $149/mo) or tailored quote</li>
+          </ul>
+          <div class="mono" style="margin-top:10px; font-size:11px; color: var(--muted);">No “sales call” script — just the site, the price, the work.</div>
+        </div>
+        <div class="info-card">
+          <h3>What to send now (if you have it)</h3>
+          <ul>
+            <li>→ 5–10 phone photos (work, truck, team)</li>
+            <li>→ Services + service area</li>
+            <li>→ Logo (or “we don’t have one” — that’s fine)</li>
+            <li>→ One site you like (or don’t like) and why</li>
+          </ul>
+          <div class="mono" style="margin-top:10px; font-size:11px; color: var(--muted);">Don’t have it all? Send what you have. We’ll ask good questions.</div>
+        </div>
+        <div class="info-card">
+          <h3>Prefer email or call?</h3>
+          <p>That works too. Reach us directly:</p>
+          <div class="mono" style="margin-top:10px; display:grid; gap:6px; font-size:12.5px;">
+            <span>✉ hello@webao.ca</span>
+            <span>☎ +1 (514) 555-0192</span>
+            <span>⌚ Mon–Fri 9am–5pm ET</span>
+            <span>📍 Montréal · Serving all Canada</span>
+          </div>
+          <a href="mailto:hello@webao.ca" class="btn btn--dark btn--sm" style="margin-top:14px; width:100%; justify-content:center;">Email us directly →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const form = document.getElementById('contact-form') as HTMLFormElement | null;
+    const status = document.getElementById('form-status') as HTMLElement | null;
+    if (form && status) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const data = new FormData(form as HTMLFormElement);
+        const required = ['business','trade','city','name','email'];
+        let valid = true;
+        for (const k of required) {
+          const v = data.get(k);
+          if (!v || String(v).trim() === '') valid = false;
+        }
+        const email = String(data.get('email') || '');
+        if (!email.includes('@')) valid = false;
+        if (!valid) {
+          (status as HTMLElement).hidden = false;
+          status.textContent = 'Please fill the required fields with a valid email.';
+          (status as HTMLElement).style.color = '#B91C1C';
+          (status as HTMLElement).style.background = '#FFF0EF';
+          (status as HTMLElement).style.borderColor = '#FFD4D0';
+          return;
+        }
+        // Demo-only: show success, no real submission
+        (status as HTMLElement).hidden = false;
+        status.textContent = 'Thanks — details captured (demo). In production this would email hello@webao.ca. We’d reply within one business day.';
+        (status as HTMLElement).style.color = '#0E7A5A';
+        (status as HTMLElement).style.background = '#ECFDF5';
+        (status as HTMLElement).style.borderColor = '#A7F3D0';
+        (form as HTMLFormElement).reset();
+        // optionally disable button
+        const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+        if (btn) { btn.textContent = 'Sent ✓'; btn.disabled = true; (btn as HTMLElement).style.opacity = '.7'; }
+      });
+    }
+  </script>
+
+  <style>
+    .contact-hero {
+      padding-block: clamp(28px,5vw,64px);
+      background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
+      border-bottom: 1px solid var(--line);
+    }
+    .contact-grid {
+      display:grid; grid-template-columns: 1fr 1.05fr; gap: clamp(24px,4vw,40px); align-items:start;
+    }
+    .contact-copy { position: sticky; top: calc(var(--header-h) + 16px); }
+    .contact-cards { margin-top:18px; display:grid; gap:10px; }
+    .c-card {
+      display:flex; align-items:center; gap:12px;
+      background:white; border:1px solid var(--line); border-radius:14px; padding:14px;
+      box-shadow: var(--shadow-sm);
+      transition: transform .2s var(--ease-out), box-shadow .2s;
+    }
+    .c-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .c-icon { width:36px; height:36px; border-radius:10px; background: var(--paper-2); border:1px solid var(--line); display:grid; place-items:center; font-size:14px; }
+    .c-card strong { display:block; font-size:14.5px; letter-spacing:-0.02em; }
+    .c-card .mono { display:block; font-size:11px; color: var(--muted); margin-top:2px; }
+    .trust-mini { margin-top:14px; display:flex; gap:8px; flex-wrap:wrap; font-size:11px; color: var(--muted); }
+    .testi { margin-top:18px; background: white; border:1px solid var(--line); border-radius:14px; padding:16px; box-shadow: var(--shadow-sm); }
+    .testi .stars { color:#FFB020; font-size:12px; }
+    .testi p { margin-top:8px; font-size:14px; line-height:1.6; color: var(--ink-3); font-style: italic; }
+    .testi .mono { display:block; margin-top:8px; font-size:11px; color: var(--muted); }
+
+    .contact-form-wrap { display:grid; gap:10px; }
+    .form {
+      background: white; border:1px solid var(--line); border-radius:18px; padding:18px;
+      box-shadow: var(--shadow-md);
+      display:grid; gap:14px;
+    }
+    .form-head h2 { font-size: 1.35rem; letter-spacing:-0.02em; font-weight:750; line-height:1; }
+    .form-head p { margin-top:4px; font-size:11px; color: var(--muted); }
+    .field-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    label { display:grid; gap:6px; font-size:13px; font-weight:600; letter-spacing:-0.01em; color: var(--ink-3); }
+    input, select, textarea {
+      width:100%; padding:10px 12px;
+      border:1px solid var(--line-strong); border-radius:10px;
+      background: var(--paper-3);
+      font-size:14px; font-weight:500; color: var(--ink);
+      transition: border-color .2s, box-shadow .2s;
+    }
+    textarea { resize: vertical; min-height: 72px; }
+    input:focus, select:focus, textarea:focus { outline:none; border-color: var(--ink); box-shadow: 0 0 0 3px rgba(10,15,28,.08); }
+    .optional { font-weight:500; color: var(--muted); text-transform:none; letter-spacing:0; font-size:11px; }
+    .form-meta { display:grid; gap:8px; font-size:11px; color: var(--muted); line-height:1.5; }
+    .check-row { display:flex; gap:8px; align-items:center; font-size:12.5px; color: var(--ink-3); font-weight:500; cursor:pointer; }
+    .check-row input { width:16px; height:16px; accent-color: var(--ink); }
+    .form-status { padding:10px 12px; border-radius:10px; border:1px solid var(--line); font-size:12.5px; line-height:1.5; }
+    .form-foot { display:flex; gap:8px; align-items:center; font-size:11px; color: var(--muted); padding: 6px 2px; line-height:1.5; }
+
+    .info-grid { display:grid; grid-template-columns: repeat(3,1fr); gap:16px; }
+    .info-card { background:white; border:1px solid var(--line); border-radius:16px; padding:18px; box-shadow: var(--shadow-sm); }
+    .info-card h3 { font-size:14.5px; letter-spacing:-0.02em; font-weight:750; }
+    .info-card p { margin-top:8px; font-size:13px; color: var(--muted); line-height:1.5; }
+    .info-card ul { list-style:none; padding:0; margin-top:10px; display:grid; gap:6px; font-size:13px; line-height:1.5; color: var(--ink-3); }
+
+    @media (max-width: 900px) {
+      .contact-grid, .field-grid, .info-grid { grid-template-columns: 1fr; }
+      .contact-copy { position: static; }
+    }
+  </style>
+</BaseLayout>
