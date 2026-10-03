@@ -1,0 +1,24 @@
+{
+  "name": "webao",
+  "type": "module",
+  "version": "0.2.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "cf:dev": "wrangler dev",
+    "cf:deploy": "wrangler deploy",
+    "lint": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^14.3.3",
+    "astro": "^7.3.5"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "typescript": "^5.9.3",
+    "wrangler": "^4.147.0"
+  }
+}

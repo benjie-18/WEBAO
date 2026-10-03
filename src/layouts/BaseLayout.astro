@@ -1,0 +1,214 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  noIndex?: boolean;
+  headerVariant?: "light" | "dark";
+}
+const {
+  title = "WEBAO — Websites that work for small business",
+  description = "WEBAO designs, hosts and maintains custom websites for small businesses. One simple monthly fee. Custom domain, hosting, SEO, analytics and ongoing support included.",
+  ogImage = "/favicon.svg",
+  noIndex = false,
+  headerVariant = "light",
+} = Astro.props as Props;
+
+const canonical = Astro.url ? new URL(Astro.url.pathname, Astro.site).toString() : "https://webao.ca/";
+---
+
+<!doctype html>
+<html lang="en-CA">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noIndex && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="theme-color" content="#0A0F1C" />
+    <meta name="color-scheme" content="light" />
+
+    <!-- Open Graph -->
+    <meta property="og:site_name" content="WEBAO" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <!-- Fonts: Instrument Serif + Inter + IBM Plex Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet" />
+
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+
+    <!-- Global styles -->
+    <style is:global>
+      @import "../styles/global.css";
+    </style>
+
+    <slot name="head" />
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+
+    <header class:list={["site-header", headerVariant === "dark" && "site-header--dark"]} role="banner">
+      <div class="header-inner">
+        <a href="/" class="brand" aria-label="WEBAO home">
+          <span class="brand-mark" aria-hidden="true">W</span>
+          <span>WEBAO</span>
+          <span class="mono" style="font-size: 10px; letter-spacing: .16em; opacity:.55; margin-left:2px; font-weight:500;">WEBAO.CA</span>
+        </a>
+
+        <nav class="nav" aria-label="Primary">
+          <a href="/demos">Demos</a>
+          <a href="/pricing">Pricing</a>
+          <a href="/contact">Contact</a>
+          <a href="/contact" class="cta">Start your site →</a>
+        </nav>
+
+        <button class="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-panel">
+          <span></span>
+        </button>
+      </div>
+    </header>
+
+    <div id="mobile-panel" class="mobile-panel" hidden>
+      <a href="/demos">Demos <span aria-hidden="true">→</span></a>
+      <a href="/pricing">Pricing <span aria-hidden="true">→</span></a>
+      <a href="/contact">Contact <span aria-hidden="true">→</span></a>
+      <a href="/contact" style="background: var(--ink); color: var(--paper); border-radius: 12px; padding-inline: 16px; margin-top: 12px; border-bottom:0;">Start your site →</a>
+    </div>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="site-footer" role="contentinfo">
+      <div class="shell">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <a href="/" class="brand" style="color: var(--paper);">
+              <span class="brand-mark" style="background: var(--paper); color: var(--ink);">W</span>
+              <span>WEBAO</span>
+            </a>
+            <p>Custom websites for small businesses across Canada. One monthly fee. We handle domain, hosting, maintenance, and support — you run your business.</p>
+            <div class="cluster" style="margin-top: 20px;">
+              <span class="mono" style="font-size:10px; color: rgba(248,245,239,.5); letter-spacing:.14em;">MONTRÉAL — TORONTO — VANCOUVER</span>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h4>Studio</h4>
+            <a href="/demos">Demo catalog</a>
+            <a href="/pricing">Pricing</a>
+            <a href="/contact">Contact</a>
+            <a href="/#process">How it works</a>
+          </div>
+          <div class="footer-col">
+            <h4>Services</h4>
+            <a href="/pricing">Custom 3–5 page sites</a>
+            <a href="/pricing">Hosting & SSL</a>
+            <a href="/pricing">SEO & Analytics</a>
+            <a href="/pricing">Ongoing support</a>
+          </div>
+          <div class="footer-col">
+            <h4>Contact</h4>
+            <a href="mailto:hello@webao.ca">hello@webao.ca</a>
+            <a href="tel:+15145550192">+1 (514) 555-0192</a>
+            <span style="display:block; margin-top:10px; color: rgba(248,245,239,.55); font-size:13px; line-height:1.5;">Response within one business day.<br />Mon–Fri 9am–5pm ET.</span>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>© {new Date().getFullYear()} WEBAO Inc. — Crafted for small business.</span>
+          <span style="display:flex; gap:16px;">
+            <a href="/contact" style="color: inherit;">Privacy</a>
+            <a href="/contact" style="color: inherit;">Terms</a>
+            <span aria-hidden="true">·</span>
+            <span>Built with Astro × Cloudflare</span>
+          </span>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Mobile menu
+      const toggle = document.querySelector('.menu-toggle');
+      const panel = document.getElementById('mobile-panel');
+      if (toggle && panel) {
+        toggle.addEventListener('click', () => {
+          const open = toggle.getAttribute('aria-expanded') === 'true';
+          toggle.setAttribute('aria-expanded', String(!open));
+          if (open) {
+            panel.setAttribute('hidden','');
+            panel.classList.remove('open');
+          } else {
+            panel.removeAttribute('hidden');
+            panel.classList.add('open');
+          }
+        });
+      }
+
+      // Reveal on scroll — respects prefers-reduced-motion
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!prefersReduced && 'IntersectionObserver' in window) {
+        const io = new IntersectionObserver((entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              e.target.classList.add('is-visible');
+              io.unobserve(e.target);
+            }
+          }
+        }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+        document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
+      } else {
+        document.querySelectorAll('[data-reveal]').forEach(el => el.classList.add('is-visible'));
+      }
+
+      // Subtle header shadow on scroll
+      const header = document.querySelector('.site-header') as HTMLElement | null;
+      if (header) {
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+          if (!ticking) {
+            requestAnimationFrame(() => {
+              const y = window.scrollY;
+              (header as HTMLElement).style.boxShadow = y > 8 ? '0 4px 24px rgba(10,15,28,.06)' : 'none';
+              ticking = false;
+            });
+            ticking = true;
+          }
+        }, { passive: true });
+      }
+
+      // Smooth anchor offset for sticky header
+      document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', (e) => {
+          const id = a.getAttribute('href');
+          if (!id || id === '#') return;
+          const target = document.querySelector(id);
+          if (target) {
+            e.preventDefault();
+            const top = target.getBoundingClientRect().top + window.scrollY - 72;
+            window.scrollTo({ top, behavior: prefersReduced ? 'auto' : 'smooth' });
+            history.pushState(null,'',id);
+          }
+        });
+      });
+    </script>
+
+    <style>
+      /* Inlined critical for header/mobile */
+      @media (prefers-reduced-motion: reduce) {
+        * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+      }
+    </style>
+  </body>
+</html>

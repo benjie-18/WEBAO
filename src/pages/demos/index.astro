@@ -1,0 +1,297 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { demos, demoCategories as categories } from "../../lib/demos";
+---
+
+<BaseLayout
+  title="Demo catalog — WEBAO · 12 art-directed site designs"
+  description="Browse 12 fully art-directed fictional business sites. Search by trade, tone, or city. Each demo is a different design direction — not the same template in 12 colors."
+>
+  <section class="demos-hero grain">
+    <div class="shell">
+      <div class="demos-hero-grid" data-reveal>
+        <div>
+          <div class="eyebrow">Demos — not templates. Real fictional businesses.</div>
+          <h1 class="display" style="font-size: clamp(2.6rem, 6vw, 5rem); line-height:.88; margin-top:12px;">
+            What could <span style="font-style: italic; font-weight:400; color: var(--accent);">yours</span> look like?
+          </h1>
+          <p class="prose" style="margin-top:14px; max-width: 52ch; font-size: 15px;">
+            Each demo is its own website — different type, palette, layout, and voice. Search by trade and open a believable fictional site to feel the range.
+          </p>
+          <div class="mono" style="margin-top:10px; font-size:11px; color: var(--muted);">12 DIRECTIONS TODAY — GROWING MONTHLY · ALL FICTIONAL · NO REAL CONTACT FORMS</div>
+        </div>
+        <div class="demos-hero-card" aria-hidden="true">
+          <div class="demos-hero-preview">
+            <div class="mono" style="font-size:10px; opacity:.5;">HOW TO USE THIS CATALOG</div>
+            <ol class="mono" style="margin-top:12px; display:grid; gap:8px; font-size:12px; line-height:1.5; color: var(--ink-3); list-style: none; padding:0;">
+              <li><strong style="color: var(--ink);">1. Filter by trade</strong> — Electrician, restaurant, clinique…</li>
+              <li><strong style="color: var(--ink);">2. Search</strong> — “editorial”, “Laval”, “bold”…</li>
+              <li><strong style="color: var(--ink);">3. Open demo</strong> — full site with own nav & pages.</li>
+            </ol>
+            <div style="margin-top:14px; height:1px; background: var(--line);"></div>
+            <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+              <span class="pill mono" style="background: var(--ink); color:white;">Searchable</span>
+              <span class="pill mono" style="background: var(--paper-2); border:1px solid var(--line);">Filterable</span>
+              <span class="pill mono" style="background: var(--paper-2); border:1px solid var(--line);">12 styles</span>
+            </div>
+          </div>
+          <div class="mono" style="margin-top:10px; font-size:10px; text-align:center; color: var(--muted);">DEMO SITES ARE NON-FUNCTIONAL PREVIEWS — EACH HAS AN ESCAPE BACK TO THIS CATALOG</div>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="controls" data-reveal style="--d:100ms">
+        <label class="search">
+          <span aria-hidden="true">⌕</span>
+          <input id="search" type="search" placeholder="Search demos — try “trades”, “editorial”, “Laval”, “premium”…" autocomplete="off" />
+          <span class="mono" style="font-size:11px; color: var(--muted); white-space:nowrap;">12 demos</span>
+        </label>
+        <div class="filters" role="group" aria-label="Filter by category">
+          {categories.map((c) => (
+            <button class:list={["chip", c === "All" && "chip--active"]} data-filter={c} aria-pressed={c === "All" ? "true" : "false"}>{c}</button>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 20px;">
+    <div class="shell">
+      <div id="demo-grid" class="demo-grid" data-reveal>
+        {demos.map((d, i) => (
+          <a href="#" class="demo-card-demo" data-category={d.category} data-search={`${d.name} ${d.category} ${d.city} ${d.tone} ${d.palette} ${d.description}`.toLowerCase()} data-reveal style={`--d:${(i%3)*80}ms`} data-demo-id={d.id} aria-label={`Preview ${d.name} demo (fictional)`}>
+            <div class="demo-thumb" style={`background:${d.accent};`}>
+              {/* custom thumb art per demo */}
+              <div class="thumb-inner">
+                <div class="thumb-bar mono">{d.city.toUpperCase()} · {d.category.toUpperCase()}</div>
+                <div class="thumb-title display" style="font-size:1.35rem; line-height:.9; color:white;">{d.name.split(" ")[0]} <span style="font-weight:400; opacity:.8;">{d.name.split(" ").slice(1).join(" ")}</span></div>
+                <div class="thumb-tone mono" style="color: rgba(255,255,255,.7); font-size:10px; margin-top:6px;">{d.tone} · {d.palette}</div>
+                {d.id === "mira" && <div style="margin-top:14px; display:flex; gap:6px;"><span style="background:white; color:#431407; padding:5px 10px; border-radius:99px; font-size:11px; font-weight:700;">Menu</span><span style="border:1px solid rgba(255,255,255,.4); color:white; padding:5px 10px; border-radius:99px; font-size:11px;">Reserve</span></div>}
+                {d.id === "nora" && <div style="margin-top:14px; display:flex; gap:8px;"><span style="background:white; color:var(--ink); padding:5px 10px; border-radius:99px; font-size:11px; font-weight:700;">Get Quote</span><span style="background:rgba(255,255,255,.12); color:white; padding:5px 10px; border-radius:99px; font-size:11px; border:1px solid rgba(255,255,255,.18);">24h</span></div>}
+                {d.id !== "mira" && d.id !== "nora" && <div style="margin-top:14px; height:1px; background: rgba(255,255,255,.18);"></div>}
+              </div>
+              <div class="thumb-meta mono" style="background: rgba(0,0,0,.22); backdrop-filter: blur(8px);">
+                <span>{d.description}</span>
+              </div>
+            </div>
+            <div class="demo-card-foot">
+              <div>
+                <div style="font-weight:750; letter-spacing:-0.02em; font-size:14px;">{d.name}</div>
+                <div class="mono" style="font-size:11px; color: var(--muted);">{d.city} · {d.tone}</div>
+              </div>
+              <span class="mono" style="font-size:11px; background: var(--paper-2); border:1px solid var(--line); padding:6px 10px; border-radius:99px;">Preview →</span>
+            </div>
+            <span class="corner mono">FICTIONAL</span>
+          </a>
+        ))}
+      </div>
+
+      <div id="empty" class="empty mono" hidden>
+        No demos match — try “trades”, “restaurant”, or clear filters.
+        <button id="clear" class="btn btn--ghost btn--sm" style="margin-top:12px;">Clear search</button>
+      </div>
+
+      <div class="demos-note mono" data-reveal>
+        <span> demos are previews · no real businesses · contact uses placeholders or disabled forms</span>
+        <span style="opacity:.5;">→ Each demo will live as its own microsite with header, pages, footer, and a corner escape back to this catalog. Not built in this pass — catalog only.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section section--dark grain" style="padding-block: 48px;">
+    <div class="shell" style="display:flex; flex-wrap:wrap; gap:16px; align-items:center; justify-content:space-between;">
+      <div>
+        <h2 class="display" style="font-size: clamp(1.8rem, 4vw, 2.6rem); line-height:.9; color: var(--paper);">Found a direction you like?</h2>
+        <p class="mono" style="margin-top:8px; color: rgba(248,245,239,.6); font-size:12px;">Tell us which demo feels closest — we’ll tailor it to your business in 48h.</p>
+      </div>
+      <div class="cluster">
+        <a href="/contact" class="btn btn--primary" style="background: var(--paper); color: var(--ink);">Start from a demo →</a>
+        <a href="/pricing" class="btn" style="color: var(--paper); border-color: rgba(248,245,239,.18);">See pricing</a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const search = document.getElementById('search') as HTMLInputElement | null;
+    const chips = Array.from(document.querySelectorAll('[data-filter]'));
+    const cards = Array.from(document.querySelectorAll('[data-category]')) as HTMLElement[];
+    const empty = document.getElementById('empty') as HTMLElement | null;
+    const clearBtn = document.getElementById('clear');
+    let active = 'All';
+    let query = '';
+
+    function apply() {
+      let visible = 0;
+      const q = query.trim().toLowerCase();
+      for (const c of cards) {
+        const cat = c.getAttribute('data-category') || '';
+        const txt = c.getAttribute('data-search') || '';
+        const matchCat = active === 'All' || cat === active;
+        const matchQ = !q || txt.includes(q);
+        const show = matchCat && matchQ;
+        (c as HTMLElement).style.display = show ? '' : 'none';
+        if (show) visible++;
+      }
+      if (empty) (empty as HTMLElement).hidden = visible !== 0;
+      // update count in search
+      const count = document.querySelector('.search .mono');
+      if (count) count.textContent = `${visible} demos`;
+    }
+
+    if (search) {
+      search.addEventListener('input', (e) => {
+        query = (e.target as HTMLInputElement).value;
+        apply();
+      });
+    }
+    for (const chip of chips) {
+      chip.addEventListener('click', () => {
+        active = chip.getAttribute('data-filter') || 'All';
+        for (const c of chips) {
+          const isActive = c.getAttribute('data-filter') === active;
+          c.classList.toggle('chip--active', isActive);
+          c.setAttribute('aria-pressed', String(isActive));
+        }
+        apply();
+      });
+    }
+    if (clearBtn && search) {
+      clearBtn.addEventListener('click', () => {
+        query = '';
+        (search as HTMLInputElement).value = '';
+        active = 'All';
+        for (const c of chips) {
+          const isActive = c.getAttribute('data-filter') === 'All';
+          c.classList.toggle('chip--active', isActive);
+          c.setAttribute('aria-pressed', String(isActive));
+        }
+        apply();
+      });
+    }
+
+    // Demo card click — demo placeholder modal
+    for (const card of cards) {
+      card.addEventListener('click', (e) => {
+        e.preventDefault();
+        const name = card.querySelector('.demo-card-foot div div')?.textContent || 'Demo';
+        const id = card.getAttribute('data-demo-id');
+        // gentle toast instead of navigation, since demos not built yet
+        const toast = document.createElement('div');
+        toast.setAttribute('role','status');
+        toast.setAttribute('aria-live','polite');
+        toast.textContent = `${name} — fictional preview. Full demo site (/${id}) will be a standalone microsite with its own navigation and a corner “Back to demos” control. Not built in this phase — per instructions.`;
+        Object.assign(toast.style, {
+          position:'fixed', bottom:'20px', left:'50%', transform:'translateX(-50%) translateY(8px)',
+          background:'#0A0F1C', color:'#F8F5EF', padding:'12px 16px', borderRadius:'12px',
+          fontSize:'13px', lineHeight:'1.5', maxWidth:'min(560px, 90vw)', boxShadow:'0 16px 40px rgba(0,0,0,.24)',
+          zIndex:'80', opacity:'0', transition:'opacity .2s, transform .2s'
+        });
+        document.body.appendChild(toast);
+        requestAnimationFrame(()=> { toast.style.opacity='1'; toast.style.transform='translateX(-50%) translateY(0)'; });
+        setTimeout(()=> { toast.style.opacity='0'; toast.style.transform='translateX(-50%) translateY(8px)'; setTimeout(()=> toast.remove(), 220); }, 3400);
+      });
+    }
+  </script>
+
+  <style>
+    .demos-hero {
+      padding-block: clamp(28px,5vw,56px);
+      background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
+      border-bottom: 1px solid var(--line);
+    }
+    .demos-hero-grid {
+      display:grid; grid-template-columns: 1.2fr .8fr; gap: clamp(24px,4vw,32px); align-items:start;
+    }
+    .demos-hero-card {
+      background:white; border:1px solid var(--line); border-radius:16px; padding:14px; box-shadow: var(--shadow-sm);
+    }
+    .demos-hero-preview { background: var(--paper-3); border:1px solid var(--line); border-radius:12px; padding:14px; }
+    .pill { padding:6px 10px; border-radius:99px; font-size:10px; letter-spacing:.06em; }
+
+    .controls {
+      margin-top: 18px;
+      display:grid; gap:12px;
+      background:white; border:1px solid var(--line); border-radius:16px; padding:14px; box-shadow: var(--shadow-sm);
+    }
+    .search {
+      display:flex; align-items:center; gap:10px;
+      background: var(--paper-3); border:1px solid var(--line); border-radius:12px; padding:10px 12px;
+    }
+    .search span:first-child { font-size:16px; opacity:.5; }
+    .search input {
+      flex:1; border:0; background:transparent; outline:none; font-size:14px; font-weight:500;
+    }
+    .filters { display:flex; gap:8px; flex-wrap:wrap; }
+    .chip {
+      padding:7px 12px; border-radius:99px; border:1px solid var(--line); background: var(--paper-2);
+      font-size:12.5px; font-weight:600; letter-spacing:-0.01em; cursor:pointer;
+      transition: background .2s, color .2s, border-color .2s;
+    }
+    .chip:hover { background: white; }
+    .chip--active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+    .demo-grid {
+      display:grid; grid-template-columns: repeat(3,1fr); gap:16px;
+    }
+    .demo-card-demo {
+      position:relative;
+      background:white; border:1px solid var(--line); border-radius:18px; overflow:clip;
+      box-shadow: var(--shadow-sm);
+      display:flex; flex-direction:column;
+      transition: transform .35s var(--ease-out), box-shadow .35s;
+    }
+    .demo-card-demo:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .demo-thumb {
+      position:relative;
+      min-height: 220px;
+      padding:16px;
+      display:flex; flex-direction:column; justify-content:space-between;
+      overflow:clip;
+    }
+    .demo-thumb::after {
+      content:""; position:absolute; inset:0;
+      background:
+        radial-gradient(400px 200px at 80% 20%, rgba(255,255,255,.18) 0%, transparent 60%),
+        linear-gradient(180deg, rgba(0,0,0,.08) 0%, rgba(0,0,0,.22) 100%);
+      pointer-events:none;
+    }
+    .thumb-inner { position:relative; z-index:1; }
+    .thumb-bar { font-size:10px; color: rgba(255,255,255,.72); letter-spacing:.08em; }
+    .thumb-tone { font-size:10px; }
+    .thumb-meta {
+      position:relative; z-index:1;
+      margin-top:14px;
+      color: rgba(255,255,255,.92);
+      font-size:11px; line-height:1.5;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.18);
+      border-radius:10px; padding:8px 10px;
+    }
+    .demo-card-foot {
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:12px 14px; background:white; border-top:1px solid var(--line);
+    }
+    .corner {
+      position:absolute; top:10px; right:10px; z-index:2;
+      font-size:9px; letter-spacing:.12em; background: rgba(0,0,0,.55); color:white;
+      padding:4px 7px; border-radius:99px; border:1px solid rgba(255,255,255,.18); backdrop-filter: blur(6px);
+    }
+    .empty {
+      text-align:center; padding:32px; background: var(--paper-2); border:1px dashed var(--line-strong); border-radius:16px; font-size:13px; color: var(--muted); margin-top:12px;
+    }
+    .demos-note {
+      margin-top:14px; display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between;
+      font-size:10px; color: var(--muted);
+      border-top:1px solid var(--line); padding-top:12px;
+    }
+
+    @media (max-width: 960px) {
+      .demos-hero-grid, .demo-grid { grid-template-columns: 1fr; }
+      .demo-thumb { min-height: 180px; }
+    }
+    @media (max-width: 700px) {
+      .demo-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</BaseLayout>

@@ -1,0 +1,14 @@
+---
+interface Props {
+  delay?: number;
+  as?: string;
+  variant?: "slide" | "fade" | "scale";
+}
+const { delay = 0, as: Tag = "div", variant = "slide" } = Astro.props as Props;
+const reveal = variant === "fade" ? "fade" : variant === "scale" ? "scale" : undefined;
+---
+
+<!-- @ts-ignore -- dynamic tag -->
+<Tag data-reveal={reveal} style={delay ? `--d:${delay}ms` : undefined}>
+  <slot />
+</Tag>

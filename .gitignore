@@ -1,0 +1,19 @@
+# Astro
+dist/
+.astro/
+node_modules/
+.wrangler/
+.dev.vars
+
+# Env
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
