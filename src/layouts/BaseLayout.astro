@@ -58,6 +58,18 @@ const canonical = Astro.url ? new URL(Astro.url.pathname, Astro.site).toString()
 
     <ClientRouter />
 
+    <!-- JSON-LD: Organization + LocalBusiness -->
+    <script is:inline type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      name: "WEBAO",
+      url: "https://webao.ca",
+      logo: "https://webao.ca/favicon.svg",
+      sameAs: [],
+      contactPoint: { "@type": "ContactPoint", email: "hello@webao.ca", telephone: "+1-514-555-0192", contactType: "customer service", availableLanguage: ["en","fr"], areaServed: "CA" },
+      description: description,
+    })} />
+
     <slot name="head" />
   </head>
   <body>
@@ -158,10 +170,26 @@ const canonical = Astro.url ? new URL(Astro.url.pathname, Astro.site).toString()
             panel.classList.add('open');
           }
         });
+        // close on link click
+        panel.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+          toggle.setAttribute('aria-expanded', 'false');
+          panel.setAttribute('hidden','');
+          panel.classList.remove('open');
+        }));
+        // close on escape
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && panel.classList.contains('open')) {
+            toggle.setAttribute('aria-expanded', 'false');
+            panel.setAttribute('hidden','');
+            panel.classList.remove('open');
+            (toggle as HTMLElement).focus();
+          }
+        });
       }
 
       // Reveal on scroll — respects prefers-reduced-motion
       const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const isCoarse = window.matchMedia('(pointer: coarse), (hover: none)').matches;
       if (!prefersReduced && 'IntersectionObserver' in window) {
         const io = new IntersectionObserver((entries) => {
           for (const e of entries) {
@@ -172,11 +200,60 @@ const canonical = Astro.url ? new URL(Astro.url.pathname, Astro.site).toString()
           }
         }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
         document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
+        // stagger bars in hero
+        const bars = document.querySelectorAll('.bars i');
+        if (bars.length) {
+          const barObserver = new IntersectionObserver((entries) => {
+            entries.forEach(ent => {
+              if (ent.isIntersecting) {
+                bars.forEach((b, idx) => {
+                  (b as HTMLElement).style.transform = 'scaleY(0)';
+                  (b as HTMLElement).style.transformOrigin = 'bottom';
+                  (b as HTMLElement).style.transition = `transform .6s var(--ease-out) ${idx*60}ms`;
+                  requestAnimationFrame(() => {
+                    (b as HTMLElement).style.transform = 'scaleY(1)';
+                  });
+                });
+                barObserver.disconnect();
+              }
+            });
+          }, { threshold: 0.3 });
+          const floatB = document.querySelector('.float-b');
+          if (floatB) barObserver.observe(floatB);
+        }
+        // animated stat counters — 48h, 12+, 80+
+        const stats = document.querySelectorAll('.stat-n');
+        if (stats.length) {
+          const statObserver = new IntersectionObserver((entries) => {
+            entries.forEach(ent => {
+              if (ent.isIntersecting) {
+                const el = ent.target as HTMLElement;
+                const raw = el.textContent || '';
+                const m = raw.match(/(\d+)/);
+                if (!m) { statObserver.unobserve(el); return; }
+                const target = parseInt(m[1], 10);
+                const suffix = raw.replace(m[1], '');
+                const start = performance.now();
+                const duration = 900;
+                const step = (now: number) => {
+                  const p = Math.min((now - start) / duration, 1);
+                  const eased = 1 - Math.pow(1 - p, 3);
+                  el.textContent = String(Math.round(eased * target)) + suffix;
+                  if (p < 1) requestAnimationFrame(step);
+                  else el.textContent = target + suffix;
+                };
+                requestAnimationFrame(step);
+                statObserver.unobserve(el);
+              }
+            });
+          }, { threshold: 0.6 });
+          stats.forEach(s => statObserver.observe(s));
+        }
       } else {
         document.querySelectorAll('[data-reveal]').forEach(el => el.classList.add('is-visible'));
       }
 
-      // Subtle header shadow + scroll progress
+      // Subtle header shadow + scroll progress + header bg opacity
       const header = document.querySelector('.site-header') as HTMLElement | null;
       const progress = document.querySelector('[data-progress]') as HTMLElement | null;
       if (header || progress) {
@@ -185,7 +262,10 @@ const canonical = Astro.url ? new URL(Astro.url.pathname, Astro.site).toString()
           if (!ticking) {
             requestAnimationFrame(() => {
               const y = window.scrollY;
-              if (header) (header as HTMLElement).style.boxShadow = y > 8 ? '0 4px 24px rgba(10,15,28,.06)' : 'none';
+              if (header) {
+                (header as HTMLElement).style.boxShadow = y > 8 ? '0 4px 24px rgba(10,15,28,.06), 0 1px 0 rgba(10,15,28,.04)' : 'none';
+                (header as HTMLElement).style.background = y > 8 ? 'color-mix(in srgb, var(--paper) 96%, transparent)' : 'color-mix(in srgb, var(--paper) 88%, transparent)';
+              }
               if (progress) {
                 const h = document.documentElement.scrollHeight - window.innerHeight;
                 const p = h > 0 ? Math.min(y / h, 1) : 0;
@@ -198,6 +278,24 @@ const canonical = Astro.url ? new URL(Astro.url.pathname, Astro.site).toString()
         };
         window.addEventListener('scroll', onScroll, { passive: true });
         onScroll();
+      }
+
+      // Magnetic buttons — desktop only, respects reduced motion
+      if (!prefersReduced && !isCoarse && 'ontouchstart' in window === false) {
+        const magnetics = document.querySelectorAll('.btn--primary, .btn--dark, .cta .btn');
+        magnetics.forEach(btn => {
+          const el = btn as HTMLElement;
+          el.classList.add('btn--magnetic');
+          el.addEventListener('mousemove', (e: MouseEvent) => {
+            const r = el.getBoundingClientRect();
+            const x = (e.clientX - r.left - r.width/2) * 0.18;
+            const y = (e.clientY - r.top - r.height/2) * 0.28;
+            el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+          });
+          el.addEventListener('mouseleave', () => {
+            el.style.transform = '';
+          });
+        });
       }
 
       // Smooth anchor offset for sticky header
@@ -213,6 +311,19 @@ const canonical = Astro.url ? new URL(Astro.url.pathname, Astro.site).toString()
             history.pushState(null,'',id);
           }
         });
+      });
+
+      // Prefetch hover for internal links (boost View Transitions)
+      document.querySelectorAll('a[href^="/"]').forEach(a => {
+        a.addEventListener('mouseenter', () => {
+          const href = a.getAttribute('href');
+          if (href && !document.querySelector(`link[rel="prefetch"][href="${href}"]`)) {
+            const link = document.createElement('link');
+            link.rel = 'prefetch';
+            link.href = href;
+            document.head.appendChild(link);
+          }
+        }, { once: true });
       });
     </script>
 

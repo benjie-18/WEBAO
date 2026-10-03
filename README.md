@@ -97,14 +97,16 @@ Project architecture:
   npm run cf:dev   # local Workers preview with assets
   ```
 
-`wrangler.jsonc` is configured for **assets-only Workers**:
+`wrangler.jsonc` is configured for **assets-only Workers** (no Worker script, static SPA):
 
 ```jsonc
 {
-  "assets": { "directory": "./dist/client", "binding": "ASSETS" },
+  "assets": { "directory": "./dist/client" },
   "compatibility_date": "2026-10-03",
   "compatibility_flags": ["nodejs_compat"]
 }
 ```
 
-> **Fix for `npx wrangler build` error:** Do **not** use `npx wrangler build` as the build command. That command compiles a Worker and expects `html/css/js` before building, so it fails with *“Could not detect a directory containing static files…”* when `dist/client` doesn’t yet exist. Use `npm run build` instead — Astro generates `dist/client` (and `dist/client/_headers` for caching), then `wrangler deploy` uploads from that directory. If your Cloudflare dashboard is set to `npx wrangler build`, change it to `npm run build`.
+> **Fixes for Cloudflare build errors:**
+> - **`npx wrangler build` / “Could not detect static files”:** Do **not** use `npx wrangler build` as the build command. That command compiles a Worker and expects built assets before it runs, so it fails when `dist/client` doesn’t yet exist. Use **`npm run build`** instead — Astro generates `dist/client` (and `dist/client/_headers` for caching), then `wrangler deploy` uploads from that directory. If your dashboard is set to `npx wrangler build`, change it to `npm run build`.
+> - **`Cannot use assets with a binding in an assets-only Worker`:** Remove the `assets.binding` (`\"ASSETS\"`) from `wrangler.jsonc` when no `main` Worker script is present. Assets-only Workers serve `dist/client` directly; a binding is only valid when you also provide a Worker (e.g. `main: \"./src/worker.ts\"`). Fixed by leaving `assets` as `{ \"directory\": \"./dist/client\" }`.
