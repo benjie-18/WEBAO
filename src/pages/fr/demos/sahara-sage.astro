@@ -2,15 +2,17 @@
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
 
 // Démo : Sahara & Sage, studio fictif d'objets bohèmes, Montréal.
-// Direction artistique autonome. Bohème : terracotta, sauge, sable, arches,
-// motifs macramé. Non relié au système de thème WEBAO.
+// Direction artistique autonome. Bohème : terracotta, sauge, sable, arches.
+// Non relié au système de thème WEBAO.
+// REFONTE : on magasine par pièce, pas par produit. Trois scènes de pièces
+// complètes avec pastilles à toucher tissées dans la photo. Aucune carte produit.
 const IMG = {
   hero: "/demos/sahara-sage/01.jpg",
   throw: "/demos/sahara-sage/02.jpg",
   vase: "/demos/sahara-sage/03.jpg",
   artisan: "/demos/sahara-sage/04.jpg",
   look1: "https://images.unsplash.com/photo-1567016432779-094069958ea5?q=80&w=1000&auto=format&fit=crop",
-  look2: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1000&auto=format&fit=crop",
+  look2: "https://i.etsystatic.com/64597397/r/il/7d8bb7/7820596923/il_800x800.7820596923_818k.jpg",
 };
 ---
 
@@ -19,8 +21,8 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sahara &amp; Sage : objets bohèmes faits main</title>
-  <meta name="description" content="Sahara & Sage : objets bohèmes tissés, tournés et noués à la main. Textiles, céramiques, macramé. Boîtes curatrices expédiées partout au Canada." />
+  <title>Sahara &amp; Sage : visitez les pièces | Objets bohèmes</title>
+  <meta name="description" content="Sahara & Sage : objets bohèmes tissés, tournés et noués à la main. Visitez trois pièces décorées et touchez ce qui vous plaît. Textiles, céramiques, macramé." />
   <meta name="robots" content="noindex" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -36,119 +38,123 @@ const IMG = {
         <span>Sahara <em>&amp;</em> Sage</span>
       </a>
       <div class="ss-nav-links">
-        <a href="#collection">Collection</a>
-        <a href="#artisans">Artisans</a>
-        <a href="#lookbook">Lookbook</a>
-        <a href="#boites">Boîtes</a>
+        <a href="#room-living">Salon</a>
+        <a href="#room-bedroom">Chambre</a>
+        <a href="#room-corner">Coin lecture</a>
+        <a href="#boxes">Boîtes</a>
       </div>
-      <a class="ss-btn ss-btn-small" href="#contact">Voir la nouveauté</a>
+      <a class="ss-btn ss-btn-small" href="#contact">Voir le studio</a>
       <button class="ss-burger" id="ss-burger" aria-expanded="false" aria-controls="ss-menu" aria-label="Ouvrir le menu">
         <span></span><span></span><span></span>
       </button>
     </nav>
     <div class="ss-menu" id="ss-menu" hidden>
-      <a href="#collection">Collection</a>
-      <a href="#artisans">Artisans</a>
-      <a href="#lookbook">Lookbook</a>
-      <a href="#boites">Boîtes</a>
-      <a class="ss-btn" href="#contact">Voir la nouveauté</a>
+      <a href="#room-living">Salon</a>
+      <a href="#room-bedroom">Chambre</a>
+      <a href="#room-corner">Coin lecture</a>
+      <a href="#boxes">Boîtes</a>
+      <a class="ss-btn" href="#contact">Voir le studio</a>
     </div>
   </header>
 
   <main id="top">
-    <!-- HERO -->
-    <section class="ss-hero">
-      <div class="ss-blob ss-blob-a" aria-hidden="true"></div>
-      <div class="ss-blob ss-blob-b" aria-hidden="true"></div>
-      <div class="ss-hero-in">
-        <div class="ss-hero-copy">
-          <p class="ss-caveat">fait main, avec amour, toujours</p>
-          <h1 class="ss-h1">Tissé pour les <em>vagabonds,</em><br />pensé pour la maison</h1>
-          <p class="ss-lede">Textiles, céramiques et macramés fabriqués lentement par 24 artisans. Des palettes terreuses, des matières honnêtes et des pièces qui semblent déjà avoir des histoires.</p>
-          <div class="ss-hero-cta">
-            <a class="ss-btn" href="#collection">Voir la collection</a>
-            <a class="ss-btn ss-btn-line" href="#artisans">Rencontrer les makers</a>
-          </div>
-          <div class="ss-hero-badges">
-            <span>Livraison gratuite dès 75 $</span>
-            <span class="ss-moon" aria-hidden="true"></span>
-            <span>Petites séries, toujours</span>
-          </div>
-        </div>
-        <div class="ss-hero-arch">
-          <div class="ss-arch">
-            <img src={IMG.hero} alt="Salon bohème en rotin, textiles superposés, plantes et coussins terracotta" loading="eager" fetchpriority="high" />
-          </div>
-          <svg class="ss-macrame" viewBox="0 0 200 60" aria-hidden="true">
-            <g fill="none" stroke="#6B4A35" stroke-width="2.5">
-              <path d="M10 4 C 30 20, 30 40, 10 56" />
-              <path d="M30 4 C 50 20, 50 40, 30 56" />
-              <path d="M50 4 C 70 20, 70 40, 50 56" />
-              <path d="M70 4 C 90 20, 90 40, 70 56" />
-              <path d="M90 4 C 110 20, 110 40, 90 56" />
-              <path d="M110 4 C 130 20, 130 40, 110 56" />
-              <path d="M130 4 C 150 20, 150 40, 130 56" />
-              <path d="M150 4 C 170 20, 170 40, 150 56" />
-              <path d="M170 4 C 190 20, 190 40, 170 56" />
-            </g>
-            <g fill="#C67B5C">
-              <circle cx="10" cy="56" r="4"/><circle cx="30" cy="56" r="4"/><circle cx="50" cy="56" r="4"/><circle cx="70" cy="56" r="4"/><circle cx="90" cy="56" r="4"/><circle cx="110" cy="56" r="4"/><circle cx="130" cy="56" r="4"/><circle cx="150" cy="56" r="4"/><circle cx="170" cy="56" r="4"/><circle cx="190" cy="56" r="4"/>
-            </g>
-          </svg>
-        </div>
-      </div>
-      <div class="ss-strip" aria-hidden="true">
-        <span>Tissé</span><span>Tourné</span><span>Noué</span><span>Teinté</span><span>Cousu</span><span>Tissé</span><span>Tourné</span><span>Noué</span><span>Teinté</span><span>Cousu</span>
+    <!-- OPENER: text only. No hero image. -->
+    <section class="ss-open">
+      <div class="ss-wrap ss-open-in">
+        <p class="ss-caveat">fait main, avec amour, toujours</p>
+        <h1 class="ss-h1">Entrez, flânez.<br /><em>Touchez à tout.</em></h1>
+        <p class="ss-lede">Ici, pas de grille de produits. Traversez trois de nos pièces, touchez les petites pastilles sur ce qui vous plaît, et les objets se présentent d'eux-mêmes. Textiles, céramiques et macramés, fabriqués lentement par 24 artisans.</p>
+        <p class="ss-hint"><span class="ss-dot" aria-hidden="true"></span> touchez une pastille pour rencontrer un objet</p>
       </div>
     </section>
 
-    <!-- COLLECTION -->
-    <section class="ss-section" id="collection">
-      <div class="ss-wrap">
-        <p class="ss-caveat ss-center">tout droit sorti de l'atelier</p>
-        <h2 class="ss-h2 ss-center">La <em>collection</em></h2>
-        <div class="ss-grid">
-          <article class="ss-card">
-            <div class="ss-card-img"><img src={IMG.throw} alt="Salon bohème avec meubles en rotin et textiles chaleureux" loading="lazy" /></div>
-            <div class="ss-card-body">
-              <p class="ss-card-tag">Textiles</p>
-              <h3>Jeté Sahara</h3>
-              <p>Coton et laine tissés au métier, teints à la garance. À franges, généreux, fait pour les longues lectures.</p>
-              <p class="ss-price">129 $ <span>· 4 couleurs</span></p>
-            </div>
-          </article>
-          <article class="ss-card">
-            <div class="ss-card-img"><img src={IMG.vase} alt="Mains d\u2019artisan façonnant un vase en terre cuite au tour" loading="lazy" /></div>
-            <div class="ss-card-body">
-              <p class="ss-card-tag">Céramiques</p>
-              <h3>Trio Dune</h3>
-              <p>Grès tourné au tour, émaux sable et terracotta. Aucun identique, chacun signé en dessous.</p>
-              <p class="ss-price">84 $ <span>· ensemble de 3</span></p>
-            </div>
-          </article>
-          <article class="ss-card">
-            <div class="ss-card-img"><img src={IMG.look2} alt="Chambre bohème avec macramé et literie superposée" loading="lazy" /></div>
-            <div class="ss-card-body">
-              <p class="ss-card-tag">Macramé</p>
-              <h3>Suspension Lune</h3>
-              <p>Un croissant de corde de coton nouée à la main sur bois flotté. Environ six heures de nœuds.</p>
-              <p class="ss-price">96 $ <span>· fait sur commande</span></p>
-            </div>
-          </article>
-        </div>
+    <!-- ROOM 1 -->
+    <section class="ss-room" id="room-living">
+      <div class="ss-room-head ss-wrap">
+        <p class="ss-caveat">pièce nº 1</p>
+        <h2 class="ss-h2">Le <em>salon</em></h2>
+        <p class="ss-copy">Rotin, textiles superposés et lumière d'après-midi. Trois objets habitent ici.</p>
+      </div>
+      <figure class="ss-scene" data-scene>
+        <img src={IMG.hero} alt="Salon bohème en rotin, textiles superposés, plantes et coussins terracotta" loading="eager" fetchpriority="high" />
+        <button class="ss-hot" style="--x: 28%; --y: 62%;" aria-expanded="false" aria-controls="ss-p1"><span aria-hidden="true">1</span><span class="ss-sr">Jeté Sahara, 129 $</span></button>
+        <button class="ss-hot" style="--x: 68%; --y: 24%;" aria-expanded="false" aria-controls="ss-p2"><span aria-hidden="true">2</span><span class="ss-sr">Suspension Nœud Lune, 96 $</span></button>
+        <button class="ss-hot" style="--x: 56%; --y: 78%;" aria-expanded="false" aria-controls="ss-p3"><span aria-hidden="true">3</span><span class="ss-sr">Ensemble de vases Dune, 84 $</span></button>
+      </figure>
+      <div class="ss-wrap ss-pieces">
+        <article class="ss-piece" id="ss-p1" hidden>
+          <p class="ss-piece-n">1</p>
+          <div><h3>Jeté Sahara · 129 $</h3><p>Coton et laine tissés main, teints à la garance. À franges, généreux, fait pour les longues lectures. 4 coloris.</p></div>
+        </article>
+        <article class="ss-piece" id="ss-p2" hidden>
+          <p class="ss-piece-n">2</p>
+          <div><h3>Suspension Nœud Lune · 96 $</h3><p>Un croissant de corde de coton nouée main sur bois flotté. Notre noueuse y passe environ six heures. Sur commande.</p></div>
+        </article>
+        <article class="ss-piece" id="ss-p3" hidden>
+          <p class="ss-piece-n">3</p>
+          <div><h3>Ensemble de vases Dune · 84 $</h3><p>Grès tourné aux émaux sable et terracotta. Lot de 3, aucun pareil, chacun signé en dessous.</p></div>
+        </article>
       </div>
     </section>
 
-    <!-- ARTISANS -->
-    <section class="ss-artisans" id="artisans">
-      <div class="ss-wrap ss-art-in">
-        <div class="ss-arch ss-arch-sm">
-          <img src={IMG.artisan} alt="Chambre bohème avec tenture en macramé et table en rotin" loading="lazy" />
-        </div>
+    <!-- ROOM 2 -->
+    <section class="ss-room ss-room-alt" id="room-bedroom">
+      <div class="ss-room-head ss-wrap">
+        <p class="ss-caveat">pièce nº 2</p>
+        <h2 class="ss-h2">La <em>chambre</em></h2>
+        <p class="ss-copy">Du macramé au-dessus du lit, un jeté qui a vu cent matins lents. Deux objets habitent ici.</p>
+      </div>
+      <figure class="ss-scene" data-scene>
+        <img src={IMG.artisan} alt="Chambre bohème avec suspension en macramé et table de chevet en rotin" loading="lazy" />
+        <button class="ss-hot" style="--x: 64%; --y: 22%;" aria-expanded="false" aria-controls="ss-p4"><span aria-hidden="true">1</span><span class="ss-sr">Suspension Nœud Lune, 96 $</span></button>
+        <button class="ss-hot" style="--x: 38%; --y: 66%;" aria-expanded="false" aria-controls="ss-p5"><span aria-hidden="true">2</span><span class="ss-sr">Jeté Sahara, 129 $</span></button>
+      </figure>
+      <div class="ss-wrap ss-pieces">
+        <article class="ss-piece" id="ss-p4" hidden>
+          <p class="ss-piece-n">1</p>
+          <div><h3>Suspension Nœud Lune · 96 $</h3><p>Au-dessus du lit, là où la lumière du matin frappe en premier. Corde de coton nouée main sur bois flotté. Sur commande.</p></div>
+        </article>
+        <article class="ss-piece" id="ss-p5" hidden>
+          <p class="ss-piece-n">2</p>
+          <div><h3>Jeté Sahara · 129 $</h3><p>Plié au pied du lit, toujours. Tissé main, teint à la garance, plus doux à chaque lavage. 4 coloris.</p></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ROOM 3 -->
+    <section class="ss-room" id="room-corner">
+      <div class="ss-room-head ss-wrap">
+        <p class="ss-caveat">pièce nº 3</p>
+        <h2 class="ss-h2">Le <em>coin lecture</em></h2>
+        <p class="ss-copy">Un sofa terracotta, une bonne lampe, zéro excuse. Deux objets habitent ici.</p>
+      </div>
+      <figure class="ss-scene" data-scene>
+        <img src={IMG.look1} alt="Sofa terracotta avec coussin rose et sac tissé" loading="lazy" />
+        <button class="ss-hot" style="--x: 34%; --y: 55%;" aria-expanded="false" aria-controls="ss-p6"><span aria-hidden="true">1</span><span class="ss-sr">Jeté Sahara, 129 $</span></button>
+        <button class="ss-hot" style="--x: 70%; --y: 72%;" aria-expanded="false" aria-controls="ss-p7"><span aria-hidden="true">2</span><span class="ss-sr">Ensemble de vases Dune, 84 $</span></button>
+      </figure>
+      <div class="ss-wrap ss-pieces">
+        <article class="ss-piece" id="ss-p6" hidden>
+          <p class="ss-piece-n">1</p>
+          <div><h3>Jeté Sahara · 129 $</h3><p>Drapé sur l'accoudoir, prêt. Le coloris rose a été teint pour assortir ce sofa exactement. 4 coloris.</p></div>
+        </article>
+        <article class="ss-piece" id="ss-p7" hidden>
+          <p class="ss-piece-n">2</p>
+          <div><h3>Ensemble de vases Dune · 84 $</h3><p>Sur la table d'appoint, avec des herbes séchées. Grès tourné, lot de 3, chacun signé en dessous.</p></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ARTISAN INTERLUDE -->
+    <section class="ss-interlude">
+      <div class="ss-wrap ss-inter-in">
+        <figure class="ss-arch">
+          <img src={IMG.vase} alt="Mains d'artisan façonnant un vase en terracotta au tour" loading="lazy" />
+        </figure>
         <div>
           <p class="ss-caveat">nos gens</p>
-          <h2 class="ss-h2">Fabriqué lentement par de <em>chers amis</em></h2>
-          <p class="ss-copy">Nous travaillons avec 24 artisans indépendants du Québec et des Maritimes. Chaque pièce est fabriquée en petites séries, avec de l'argile et du coton sourcés le plus près possible de chez nous. Nous payons juste, nous signons chaque pièce et nous connaissons chaque maker par son prénom.</p>
+          <h2 class="ss-h2">Fait lentement par <em>de bons amis</em></h2>
+          <p class="ss-copy">On travaille avec 24 artisans indépendants du Québec et des Maritimes. Chaque pièce est faite en petites séries, avec de l'argile creusée et du coton cultivé aussi près de chez nous que possible. On paie juste, on signe chaque pièce, et on connaît chaque maker par son prénom.</p>
           <div class="ss-stats">
             <div><strong>24</strong><span>artisans partenaires</span></div>
             <div><strong>100 %</strong><span>matières naturelles</span></div>
@@ -158,70 +164,26 @@ const IMG = {
       </div>
     </section>
 
-    <!-- LOOKBOOK -->
-    <section class="ss-section" id="lookbook">
-      <div class="ss-wrap">
-        <p class="ss-caveat ss-center">stylé par vous</p>
-        <h2 class="ss-h2 ss-center">Le <em>lookbook</em></h2>
-        <div class="ss-look">
-          <figure>
-            <img src={IMG.look1} alt="Chambre bohème superposée aux tons chauds" loading="lazy" />
-            <figcaption>Le Nid, stylé par Camille à Verdun</figcaption>
-          </figure>
-          <figure>
-            <img src={IMG.look2} alt="Intérieur bohème avec tenture tissée" loading="lazy" />
-            <figcaption>Lumière du matin, stylé par Priya à Halifax</figcaption>
-          </figure>
-          <figure>
-            <img src={IMG.throw} alt="Fauteuils en rotin et textiles chaleureux dans un salon bohème" loading="lazy" />
-            <figcaption>Coin lecture, stylé par nous (on n'a pas pu résister)</figcaption>
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <!-- BOÎTES / PRIX -->
-    <section class="ss-boxes" id="boites">
+    <!-- BOXES: an order ledger, not tiers -->
+    <section class="ss-boxes" id="boxes">
       <div class="ss-wrap">
         <p class="ss-caveat ss-center">curatées, emballées avec soin</p>
         <h2 class="ss-h2 ss-center">Boîtes <em>saisonnières</em></h2>
-        <p class="ss-copy ss-center ss-max">Quatre fois par année, nous emballons une boîte de pièces en petites séries autour d'un thème. Gardez tout ou offrez le reste. Les dernières boîtes se sont envolées en quelques jours.</p>
-        <div class="ss-tiers">
-          <article class="ss-tier">
-            <h3>La Vagabonde</h3>
-            <p class="ss-tier-price">89 $</p>
-            <ul>
-              <li>Une bougie de soya coulée à la main</li>
-              <li>Mini suspension macramé pour plante</li>
-              <li>Jeu de cartes postales d'artisan</li>
-              <li>Un textile surprise</li>
-            </ul>
-            <a class="ss-btn ss-btn-line" href="#contact">Réserver la mienne</a>
-          </article>
-          <article class="ss-tier ss-tier-hot">
-            <p class="ss-caveat">la préférée</p>
-            <h3>Le Nid</h3>
-            <p class="ss-tier-price">149 $</p>
-            <ul>
-              <li>Tout ce que contient La Vagabonde</li>
-              <li>Housse de coussin Sahara</li>
-              <li>Duo de tasses tournées à la main</li>
-              <li>Mini tenture tissée</li>
-            </ul>
-            <a class="ss-btn" href="#contact">Réserver la mienne</a>
-          </article>
-          <article class="ss-tier">
-            <h3>L'Oasis</h3>
-            <p class="ss-tier-price">219 $</p>
-            <ul>
-              <li>Tout ce que contient Le Nid</li>
-              <li>Suspension Lune</li>
-              <li>Grand vase Dune</li>
-              <li>Mot personnel d'un maker</li>
-            </ul>
-            <a class="ss-btn ss-btn-line" href="#contact">Réserver la mienne</a>
-          </article>
-        </div>
+        <p class="ss-copy ss-center ss-max">Quatre fois par année, on emballe une boîte de pièces en petites séries autour d'un thème. Écrivez-nous pour réserver la vôtre; les dernières boîtes sont parties en quelques jours.</p>
+        <ol class="ss-ledger">
+          <li>
+            <div><h3>Le Vagabond</h3><p>Une bougie de soya coulée main, une mini suspension en macramé, un jeu de cartes d'artisans et un textile surprise.</p></div>
+            <p class="ss-ledger-price">89 $</p>
+          </li>
+          <li>
+            <div><h3>Le Nid</h3><p>Tout ce qu'il y a dans Le Vagabond, plus une housse de coussin Sahara, un duo de tasses tournées main et un mini tissage mural.</p></div>
+            <p class="ss-ledger-price">149 $</p>
+          </li>
+          <li>
+            <div><h3>L'Oasis</h3><p>Tout ce qu'il y a dans Le Nid, plus la suspension Nœud Lune, un grand vase Dune et un mot personnel d'un maker.</p></div>
+            <p class="ss-ledger-price">219 $</p>
+          </li>
+        </ol>
       </div>
     </section>
 
@@ -230,8 +192,8 @@ const IMG = {
       <div class="ss-wrap ss-contact-in">
         <div>
           <p class="ss-caveat">dites bonjour</p>
-          <h2 class="ss-h2">Passez à <em>l'atelier</em></h2>
-          <p class="ss-copy">On fait chauffer le thé et on vous laisse tout toucher. Commandes sur mesure, listes de mariage ou simple jasette autour de l'argile.</p>
+          <h2 class="ss-h2">Passez au <em>studio</em></h2>
+          <p class="ss-copy">On sert le thé et on vous laisse tout toucher. Commandes sur mesure, listes de mariage, ou juste une jasette sur l'argile.</p>
           <address class="ss-addr">
             214, rue des Artisans<br />
             Montréal, QC H2Y 1C6<br />
@@ -243,7 +205,7 @@ const IMG = {
         <form class="ss-form" id="ss-form" novalidate>
           <h3>Écrivez-nous</h3>
           <label>Nom<input type="text" name="name" required placeholder="Amina Diallo" /></label>
-          <label>Courriel<input type="email" name="email" required placeholder="amina@exemple.com" /></label>
+          <label>Courriel<input type="email" name="email" required placeholder="amina@example.com" /></label>
           <label>De quoi rêvez-vous ?
             <select name="topic">
               <option>Une pièce sur mesure</option>
@@ -263,7 +225,7 @@ const IMG = {
   <footer class="ss-footer">
     <p class="ss-footer-mark" aria-hidden="true">S&amp;S</p>
     <div class="ss-wrap ss-footer-in">
-      <p>© 2026 Sahara &amp; Sage. Studio de démo fictif. Tous les métiers à tisser sont imaginaires.</p>
+      <p>© 2026 Sahara &amp; Sage. Studio démo fictif. Tous les métiers à tisser sont imaginaires.</p>
       <p>214, rue des Artisans, Montréal QC · <a href="tel:+15145550142">(514) 555-0142</a> · <a href="mailto:hello@saharasage.ca">hello@saharasage.ca</a></p>
     </div>
   </footer>
@@ -272,30 +234,57 @@ const IMG = {
 
   <script>
     (function () {
-      const burger = document.getElementById('ss-burger');
-      const menu = document.getElementById('ss-menu');
-      if (burger && menu) {
+      // Pastilles : affichent l'annotation de l'objet correspondant.
+      document.querySelectorAll('[data-scene]').forEach(function (scene) {
+        var hots = scene.querySelectorAll('.ss-hot');
+        hots.forEach(function (hot) {
+          hot.addEventListener('click', function () {
+            var target = document.getElementById(hot.getAttribute('aria-controls') || '');
+            var isOpen = hot.getAttribute('aria-expanded') === 'true';
+            hots.forEach(function (h) { h.setAttribute('aria-expanded', 'false'); h.classList.remove('ss-hot-on'); });
+            var section = scene.parentElement;
+            if (section) section.querySelectorAll('.ss-piece').forEach(function (p) { p.setAttribute('hidden', ''); });
+            if (!isOpen && target) {
+              hot.setAttribute('aria-expanded', 'true');
+              hot.classList.add('ss-hot-on');
+              target.removeAttribute('hidden');
+              target.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            }
+          });
+        });
+      });
+      // Menu mobile
+      var burgerEl = document.getElementById('ss-burger');
+      var menuEl = document.getElementById('ss-menu');
+      if (burgerEl && menuEl) {
+        var burger = burgerEl;
+        var menu = menuEl;
         burger.addEventListener('click', function () {
           var open = menu.hasAttribute('hidden');
           if (open) { menu.removeAttribute('hidden'); } else { menu.setAttribute('hidden', ''); }
           burger.setAttribute('aria-expanded', String(open));
           burger.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
         });
-        menu.querySelectorAll('a').forEach(function (a) {
+        var m = menu;
+        m.querySelectorAll('a').forEach(function (a) {
           a.addEventListener('click', function () {
-            menu.setAttribute('hidden', '');
+            m.setAttribute('hidden', '');
             burger.setAttribute('aria-expanded', 'false');
             burger.setAttribute('aria-label', 'Ouvrir le menu');
           });
         });
       }
-      var form = document.getElementById('ss-form') as HTMLFormElement | null;
-      form?.addEventListener('submit', function (e) {
-        e.preventDefault();
-        var note = form?.querySelector('.ss-form-note');
-        if (note) note.textContent = 'Merci, belle âme. Votre mot est en route et nous répondrons sous deux jours.';
-        form?.reset();
-      });
+      // Formulaire démo : ne soumet jamais rien
+      var formEl = document.getElementById('ss-form');
+      if (formEl instanceof HTMLFormElement) {
+        var form = formEl;
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var note = form.querySelector('.ss-form-note');
+          if (note) note.textContent = 'Merci, belle âme. Votre mot est en route et on vous répond sous deux jours.';
+          form.reset();
+        });
+      }
     })();
   </script>
 
@@ -324,20 +313,22 @@ const IMG = {
     .ss-wrap { max-width: 1180px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px); }
     .ss-center { text-align: center; }
     .ss-max { max-width: 56ch; margin-left: auto; margin-right: auto; }
+    .ss-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
     .ss-caveat {
       font-family: var(--ss-hand); font-size: clamp(1.5rem, 3vw, 2rem);
       color: var(--ss-terra-deep); margin: 0 0 10px; font-weight: 600;
     }
     .ss-h1 {
-      font-size: clamp(2.8rem, 7vw, 5.2rem); line-height: 1.02;
+      font-size: clamp(3rem, 8vw, 5.6rem); line-height: 1.02;
       font-weight: 600; margin: 0 0 22px; letter-spacing: -0.01em;
     }
     .ss-h1 em, .ss-h2 em { font-style: italic; color: var(--ss-terra-deep); }
-    .ss-h2 { font-size: clamp(2.1rem, 5vw, 3.4rem); font-weight: 600; margin: 0 0 26px; line-height: 1.08; }
-    .ss-lede { font-size: 1.13rem; line-height: 1.75; color: var(--ss-bark); max-width: 44ch; margin: 0 0 30px; }
+    .ss-h2 { font-size: clamp(2.1rem, 5vw, 3.4rem); font-weight: 600; margin: 0 0 14px; line-height: 1.08; }
+    .ss-lede { font-size: 1.13rem; line-height: 1.75; color: var(--ss-bark); max-width: 52ch; margin: 0 0 26px; }
     .ss-copy { font-size: 1.05rem; line-height: 1.75; color: var(--ss-bark); margin: 0 0 20px; max-width: 52ch; }
 
+    /* buttons */
     .ss-btn {
       display: inline-flex; align-items: center; justify-content: center;
       background: var(--ss-terra); color: #fff; font-family: var(--ss-serif);
@@ -348,10 +339,9 @@ const IMG = {
       box-shadow: 0 6px 18px rgba(198, 123, 92, 0.35);
     }
     .ss-btn:hover { background: var(--ss-terra-deep); border-color: var(--ss-terra-deep); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(198, 123, 92, 0.4); }
-    .ss-btn-line { background: transparent; color: var(--ss-bark-deep); border-color: var(--ss-bark); box-shadow: none; }
-    .ss-btn-line:hover { background: var(--ss-bark); color: var(--ss-cream); border-color: var(--ss-bark); }
     .ss-btn-small { padding: 11px 24px; font-size: 0.95rem; }
 
+    /* nav */
     .ss-navwrap { position: fixed; top: 0; left: 0; right: 0; z-index: 60; }
     .ss-nav {
       display: flex; align-items: center; gap: 22px;
@@ -370,105 +360,84 @@ const IMG = {
     .ss-burger span { display: block; width: 26px; height: 3px; border-radius: 3px; background: var(--ss-bark-deep); margin: 5px 0; }
     .ss-menu { display: none; }
 
-    .ss-hero { position: relative; padding: 150px 0 0; overflow: hidden; }
-    .ss-blob { position: absolute; border-radius: 50%; filter: blur(2px); z-index: 0; }
-    .ss-blob-a { width: 420px; height: 420px; background: radial-gradient(circle, rgba(156, 175, 136, 0.4), transparent 70%); top: -80px; right: -100px; animation: ss-drift 12s ease-in-out infinite alternate; }
-    .ss-blob-b { width: 340px; height: 340px; background: radial-gradient(circle, rgba(198, 123, 92, 0.35), transparent 70%); bottom: 120px; left: -120px; animation: ss-drift 14s ease-in-out infinite alternate-reverse; }
-    @keyframes ss-drift { to { transform: translate(30px, 40px) scale(1.08); } }
-    .ss-hero-in {
-      position: relative; z-index: 1; max-width: 1180px; margin: 0 auto;
-      padding: 0 clamp(20px, 4vw, 40px);
-      display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(30px, 5vw, 70px); align-items: center;
+    /* opener: text only */
+    .ss-open { padding: 170px 0 90px; }
+    .ss-open-in { max-width: 860px; }
+    .ss-hint { display: flex; align-items: center; gap: 12px; font-family: var(--ss-hand); font-size: 1.5rem; color: var(--ss-bark); margin: 0; }
+    .ss-dot {
+      width: 30px; height: 30px; border-radius: 50%; background: var(--ss-terra); color: #fff;
+      display: inline-grid; place-items: center; font-family: var(--ss-serif); font-size: 15px; font-weight: 700;
+      box-shadow: 0 0 0 6px rgba(198, 123, 92, 0.25);
+      animation: ss-pulse 2.4s ease-in-out infinite;
     }
-    .ss-hero-copy { padding-bottom: 40px; }
-    .ss-hero-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 28px; }
-    .ss-hero-badges { display: flex; align-items: center; gap: 14px; font-size: 0.95rem; font-weight: 600; color: var(--ss-bark); }
-    .ss-moon { width: 26px; height: 26px; border-radius: 50%; background: var(--ss-sage); box-shadow: 8px 4px 0 0 var(--ss-cream) inset; }
-    .ss-hero-arch { position: relative; }
+    .ss-dot::after { content: "1"; }
+    @keyframes ss-pulse { 50% { box-shadow: 0 0 0 12px rgba(198, 123, 92, 0.12); } }
+
+    /* rooms */
+    .ss-room { padding: 40px 0 90px; }
+    .ss-room-alt { background: var(--ss-sand); border-block: 2px solid var(--ss-sand-deep); padding: 90px 0; margin: 40px 0; }
+    .ss-room-head { margin-bottom: 34px; }
+    .ss-scene { position: relative; margin: 0; max-width: 1440px; margin-inline: auto; }
+    .ss-scene img { width: 100%; height: clamp(420px, 62vw, 760px); object-fit: cover; display: block; }
+    .ss-hot {
+      position: absolute; left: var(--x); top: var(--y); transform: translate(-50%, -50%);
+      width: 44px; height: 44px; border-radius: 50%;
+      background: rgba(198, 123, 92, 0.92); color: #fff; border: 2px solid #fff;
+      font-family: var(--ss-serif); font-weight: 700; font-size: 18px; cursor: pointer;
+      display: grid; place-items: center;
+      box-shadow: 0 0 0 6px rgba(198, 123, 92, 0.25), 0 6px 16px rgba(0,0,0,0.3);
+      transition: transform 0.18s ease, background 0.18s ease;
+      animation: ss-pulse 2.4s ease-in-out infinite;
+    }
+    .ss-hot:hover { transform: translate(-50%, -50%) scale(1.15); background: var(--ss-terra-deep); }
+    .ss-hot-on { background: var(--ss-bark-deep); animation: none; }
+    .ss-pieces { display: grid; gap: 14px; margin-top: 26px; }
+    .ss-piece {
+      display: flex; gap: 20px; align-items: baseline;
+      background: #fff; border: 2px solid var(--ss-sand-deep); border-radius: 20px;
+      padding: 22px 26px; box-shadow: 0 10px 26px rgba(107, 74, 53, 0.12);
+    }
+    .ss-piece[hidden] { display: none; }
+    .ss-piece-n {
+      flex: none; width: 40px; height: 40px; border-radius: 50%;
+      background: var(--ss-terra); color: #fff; display: grid; place-items: center;
+      font-weight: 700; font-size: 18px; margin: 0;
+    }
+    .ss-piece h3 { margin: 0 0 6px; font-size: 1.35rem; font-weight: 600; }
+    .ss-piece p { margin: 0; color: var(--ss-bark); line-height: 1.65; font-size: 1rem; }
+
+    /* interlude */
+    .ss-interlude { padding: clamp(70px, 9vw, 120px) 0; }
+    .ss-inter-in { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: clamp(30px, 5vw, 70px); align-items: center; }
     .ss-arch {
-      border-radius: 999px 999px 24px 24px; overflow: hidden;
+      border-radius: 999px 999px 24px 24px; overflow: hidden; margin: 0;
       border: 6px solid var(--ss-sand-deep);
       outline: 2px solid var(--ss-terra); outline-offset: 9px;
       box-shadow: 0 24px 60px rgba(107, 74, 53, 0.25);
       aspect-ratio: 4 / 5;
     }
     .ss-arch img { width: 100%; height: 100%; object-fit: cover; }
-    .ss-arch-sm { aspect-ratio: 4 / 5; }
-    .ss-macrame { position: absolute; left: 50%; transform: translateX(-50%); bottom: -34px; width: min(240px, 60%); }
-    .ss-strip {
-      margin-top: 70px; background: var(--ss-bark-deep); color: var(--ss-sand);
-      display: flex; gap: 44px; overflow: hidden; padding: 16px 0; width: max-content;
-      font-family: var(--ss-hand); font-size: 1.6rem; animation: ss-strip 22s linear infinite;
-    }
-    .ss-strip span { white-space: nowrap; }
-    @keyframes ss-strip { to { transform: translateX(-50%); } }
-
-    .ss-section { padding: clamp(70px, 9vw, 120px) 0; }
-
-    .ss-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; margin-top: 40px; }
-    .ss-card {
-      background: #fff; border-radius: 28px; overflow: hidden;
-      border: 2px solid var(--ss-sand-deep);
-      box-shadow: 0 14px 34px rgba(107, 74, 53, 0.12);
-      transition: transform 0.22s ease, box-shadow 0.22s ease;
-    }
-    .ss-card:hover { transform: translateY(-8px) rotate(-0.6deg); box-shadow: 0 22px 44px rgba(107, 74, 53, 0.2); }
-    .ss-card-img { aspect-ratio: 4 / 3; overflow: hidden; }
-    .ss-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; filter: sepia(0.16) saturate(1.06); }
-    .ss-card:hover .ss-card-img img { transform: scale(1.05); }
-    .ss-card-body { padding: 26px 26px 30px; }
-    .ss-card-tag { font-family: var(--ss-hand); font-size: 1.35rem; color: var(--ss-terra-deep); margin: 0 0 6px; }
-    .ss-card h3 { font-size: 1.5rem; margin: 0 0 10px; font-weight: 600; }
-    .ss-card p { margin: 0 0 12px; color: var(--ss-bark); font-size: 0.98rem; line-height: 1.65; }
-    .ss-price { font-size: 1.35rem; font-weight: 700; color: var(--ss-bark-deep); }
-    .ss-price span { font-size: 0.9rem; font-weight: 500; color: var(--ss-bark); }
-
-    .ss-artisans {
-      background:
-        repeating-linear-gradient(45deg, rgba(156, 175, 136, 0.12) 0 14px, transparent 14px 28px),
-        var(--ss-sand);
-      padding: clamp(70px, 9vw, 120px) 0;
-      border-block: 2px solid var(--ss-sand-deep);
-    }
-    .ss-art-in { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: clamp(30px, 5vw, 70px); align-items: center; }
     .ss-stats { display: flex; gap: clamp(20px, 4vw, 50px); margin-top: 26px; flex-wrap: wrap; }
     .ss-stats div { display: grid; gap: 4px; }
     .ss-stats strong { font-size: 2.4rem; color: var(--ss-terra-deep); font-weight: 700; }
     .ss-stats span { font-size: 0.92rem; color: var(--ss-bark); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
 
-    .ss-look { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 40px; }
-    .ss-look figure { margin: 0; }
-    .ss-look img {
-      width: 100%; aspect-ratio: 3 / 4; object-fit: cover;
-      border-radius: 200px 200px 20px 20px;
-      border: 4px solid var(--ss-sage);
-      box-shadow: 0 16px 36px rgba(107, 74, 53, 0.16);
-    }
-    .ss-look figure:nth-child(2) img { border-color: var(--ss-terra); border-radius: 20px; transform: rotate(1.2deg); }
-    .ss-look figure:nth-child(3) img { border-radius: 50%; aspect-ratio: 1 / 1; border-color: var(--ss-sand-deep); }
-    .ss-look figcaption { font-family: var(--ss-hand); font-size: 1.4rem; color: var(--ss-bark); text-align: center; margin-top: 12px; }
-
+    /* boxes ledger */
     .ss-boxes { background: var(--ss-bark-deep); color: var(--ss-cream); padding: clamp(70px, 9vw, 120px) 0; }
     .ss-boxes .ss-h2 { color: var(--ss-cream); }
     .ss-boxes .ss-h2 em { color: var(--ss-sand); }
     .ss-boxes .ss-copy { color: var(--ss-sand); }
-    .ss-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 44px; }
-    .ss-tier {
-      background: var(--ss-cream); color: var(--ss-bark-deep);
-      border-radius: 28px; padding: 34px 30px; display: grid; gap: 14px; align-content: start;
-      border: 2px solid var(--ss-sand-deep);
-      transition: transform 0.22s ease;
+    .ss-ledger { list-style: none; margin: 44px 0 0; padding: 0; display: grid; gap: 0; border-top: 2px solid rgba(232, 220, 200, 0.3); }
+    .ss-ledger li {
+      display: grid; grid-template-columns: 1fr auto; gap: 26px; align-items: baseline;
+      padding: 28px 6px; border-bottom: 2px solid rgba(232, 220, 200, 0.3);
     }
-    .ss-tier:hover { transform: translateY(-6px); }
-    .ss-tier-hot { background: var(--ss-terra); color: #fff; border-color: var(--ss-terra-deep); transform: scale(1.03); }
-    .ss-tier-hot:hover { transform: scale(1.03) translateY(-6px); }
-    .ss-tier-hot .ss-caveat { color: #fff; margin: 0; }
-    .ss-tier h3 { font-size: 1.6rem; margin: 0; font-weight: 600; }
-    .ss-tier-price { font-size: 2.6rem; font-weight: 700; margin: 0; }
-    .ss-tier ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-size: 0.98rem; line-height: 1.5; }
-    .ss-tier ul li::before { content: "✿ "; color: var(--ss-sage-deep); }
-    .ss-tier-hot ul li::before { color: #fff; }
+    .ss-ledger h3 { margin: 0 0 8px; font-size: 1.6rem; font-weight: 600; }
+    .ss-ledger p { margin: 0; color: var(--ss-sand); line-height: 1.65; max-width: 56ch; }
+    .ss-ledger-price { font-size: 2.4rem; font-weight: 700; color: var(--ss-terra); margin: 0; font-variant-numeric: tabular-nums; }
 
+    /* contact */
+    .ss-section { padding: clamp(70px, 9vw, 120px) 0; }
     .ss-contact-in { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(30px, 5vw, 70px); align-items: start; }
     .ss-addr { font-style: normal; font-size: 1.05rem; line-height: 1.9; color: var(--ss-bark); margin-top: 18px; }
     .ss-addr a { color: var(--ss-terra-deep); font-weight: 600; }
@@ -488,6 +457,7 @@ const IMG = {
     .ss-form-note { margin: 0; font-family: var(--ss-hand); font-size: 1.5rem; color: var(--ss-sage-deep); }
     .ss-form-note:empty { display: none; }
 
+    /* footer */
     .ss-footer { background: var(--ss-sand); border-top: 2px solid var(--ss-sand-deep); padding: 60px 0 80px; text-align: center; }
     .ss-footer-mark { font-family: var(--ss-hand); font-size: 3.4rem; color: var(--ss-terra-deep); margin: 0 0 18px; }
     .ss-footer-in { display: grid; gap: 8px; color: var(--ss-bark); font-size: 0.95rem; }
@@ -504,16 +474,13 @@ const IMG = {
       .ss-menu[hidden] { display: none; }
       .ss-menu a:not(.ss-btn) { padding: 12px 6px; color: var(--ss-bark-deep); text-decoration: none; font-weight: 600; font-size: 1.1rem; border-bottom: 1px solid var(--ss-sand-deep); }
       .ss-menu .ss-btn { margin-top: 12px; }
-      .ss-hero-in { grid-template-columns: 1fr; }
-      .ss-hero-arch { max-width: 440px; margin: 0 auto; width: 100%; }
-      .ss-grid, .ss-tiers, .ss-look { grid-template-columns: 1fr; max-width: 480px; margin-left: auto; margin-right: auto; }
-      .ss-art-in, .ss-contact-in { grid-template-columns: 1fr; }
-      .ss-art-in .ss-arch { max-width: 440px; margin: 0 auto; width: 100%; }
-      .ss-strip { font-size: 1.3rem; }
+      .ss-inter-in, .ss-contact-in { grid-template-columns: 1fr; }
+      .ss-inter-in .ss-arch { max-width: 440px; margin: 0 auto; width: 100%; }
+      .ss-ledger li { grid-template-columns: 1fr; gap: 8px; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .ss-sun, .ss-strip, .ss-blob-a, .ss-blob-b { animation: none; }
-      .ss-btn, .ss-card, .ss-tier, .ss-card-img img { transition: none; }
+      .ss-sun, .ss-dot, .ss-hot { animation: none; }
+      .ss-btn, .ss-hot { transition: none; }
     }
   </style>
 </body>
