@@ -22,6 +22,41 @@ const t = useTranslations(locale);
   <img src="/dark-icon.svg" alt="" aria-hidden="true" class="tt-icon tt-moon" width="20" height="20" />
 </button>
 
+<style is:global>
+  /* Theme switch: circular reveal from the toggle button via View Transitions.
+     The old snapshot stays fully painted underneath while the new theme
+     wipes in as an expanding circle. Transform/clip-path only. */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: var(--dur-4, 600ms);
+    animation-timing-function: var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1));
+  }
+  ::view-transition-old(root) {
+    animation-name: webao-theme-hold;
+  }
+  ::view-transition-new(root) {
+    animation-name: webao-theme-reveal;
+  }
+  @keyframes webao-theme-hold {
+    from { opacity: 1; }
+    to { opacity: 1; }
+  }
+  @keyframes webao-theme-reveal {
+    from {
+      clip-path: circle(0px at var(--vt-x, 50%) var(--vt-y, 80px));
+    }
+    to {
+      clip-path: circle(var(--vt-r, 150vmax) at var(--vt-x, 50%) var(--vt-y, 80px));
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation-duration: 0.01ms;
+    }
+  }
+</style>
+
 <script is:inline data-astro-rerun>
   (function () {
     var KEY = "webao.theme";
@@ -48,15 +83,8 @@ const t = useTranslations(locale);
       });
     }
 
-    function setTheme(theme, animate) {
+    function applyTheme(theme) {
       var html = document.documentElement;
-      if (currentTheme() === theme) {
-        syncToggles(theme);
-        return;
-      }
-      var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      var doAnimate = animate !== false && !reduced;
-      if (doAnimate) html.classList.add("theming");
       html.setAttribute("data-theme", theme);
       try {
         localStorage.setItem(KEY, theme);
@@ -67,7 +95,65 @@ const t = useTranslations(locale);
       try {
         window.dispatchEvent(new CustomEvent("webao:themechange", { detail: { theme: theme } }));
       } catch (e) {}
-      if (doAnimate) {
+    }
+
+    function setTheme(theme, sourceBtn) {
+      var html = document.documentElement;
+      if (currentTheme() === theme) {
+        syncToggles(theme);
+        return;
+      }
+      var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var canVT =
+        !reduced &&
+        typeof document.startViewTransition === "function";
+
+      if (canVT) {
+        // Circular reveal from the toggle button position.
+        var x = window.innerWidth / 2;
+        var y = 80;
+        try {
+          var btn =
+            sourceBtn && sourceBtn.getBoundingClientRect
+              ? sourceBtn
+              : document.querySelector("[data-theme-toggle]");
+          if (btn) {
+            var rect = btn.getBoundingClientRect();
+            x = rect.left + rect.width / 2;
+            y = rect.top + rect.height / 2;
+          }
+        } catch (e) {}
+        var r = Math.hypot(
+          Math.max(x, window.innerWidth - x),
+          Math.max(y, window.innerHeight - y)
+        );
+        html.style.setProperty("--vt-x", Math.round(x) + "px");
+        html.style.setProperty("--vt-y", Math.round(y) + "px");
+        html.style.setProperty("--vt-r", Math.ceil(r) + "px");
+        var transition = document.startViewTransition(function () {
+          applyTheme(theme);
+        });
+        var cleaned = false;
+        var cleanup = function () {
+          if (cleaned) return;
+          cleaned = true;
+          html.style.removeProperty("--vt-x");
+          html.style.removeProperty("--vt-y");
+          html.style.removeProperty("--vt-r");
+        };
+        if (transition && transition.finished) {
+          transition.finished.then(cleanup, cleanup);
+        }
+        // Safety net: the finished promise can resolve later than the
+        // nominal animation duration; never leak the custom properties.
+        window.setTimeout(cleanup, 1200);
+        return;
+      }
+
+      // Fallback: smooth color crossfade, or instant under reduced motion.
+      if (!reduced) html.classList.add("theming");
+      applyTheme(theme);
+      if (!reduced) {
         window.setTimeout(function () {
           html.classList.remove("theming");
         }, 650);
@@ -80,7 +166,7 @@ const t = useTranslations(locale);
         if (btn.dataset.webaoThemeBound) return;
         btn.dataset.webaoThemeBound = "1";
         btn.addEventListener("click", function () {
-          setTheme(currentTheme() === "dark" ? "light" : "dark");
+          setTheme(currentTheme() === "dark" ? "light" : "dark", btn);
         });
       });
     }
