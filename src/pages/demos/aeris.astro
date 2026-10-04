@@ -5,11 +5,11 @@ import EscapeHatch from "../../components/demos/EscapeHatch.astro";
 // Standalone art direction. Frutiger Aero: glossy aqua, aurora gradients,
 // glass orbs, lens flares, dewy nature meets tech. Not connected to the WEBAO theme system.
 const IMG = {
-  hero: "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80&w=1600&auto=format&fit=crop",
-  chip: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1000&auto=format&fit=crop",
+  hero: "/demos/aeris/01.jpg",
+  chip: "/demos/aeris/02.jpg",
   solar: "https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=1000&auto=format&fit=crop",
   hills: "https://images.unsplash.com/photo-1501854140801-50d01698950b?q=80&w=1000&auto=format&fit=crop",
-  leaves: "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?q=80&w=1000&auto=format&fit=crop",
+  leaves: "/demos/aeris/03.jpg",
   wave: "https://images.unsplash.com/photo-1439405326854-014607f694d7?q=80&w=1600&auto=format&fit=crop",
 };
 ---
@@ -59,7 +59,7 @@ const IMG = {
     <!-- HERO -->
     <section class="fa-hero">
       <div class="fa-hero-bg" aria-hidden="true">
-        <img src={IMG.hero} alt="" loading="eager" fetchpriority="high" />
+        <img src={IMG.hero} alt="Glossy water droplets beading on a vivid green leaf" loading="eager" fetchpriority="high" />
       </div>
       <div class="fa-aurora" aria-hidden="true"></div>
       <div class="fa-orb fa-orb-1" aria-hidden="true"></div>
@@ -98,7 +98,7 @@ const IMG = {
             </div>
           </article>
           <article class="fa-panel">
-            <div class="fa-panel-img"><img src={IMG.leaves} alt="Sunlit green leaves with water droplets" loading="lazy" /></div>
+            <div class="fa-panel-img"><img src={IMG.leaves} alt="Dew drops sparkling on a green leaf in morning light" loading="lazy" /></div>
             <div class="fa-panel-body">
               <h3>Dew Grid</h3>
               <p>Neighbourhoods share stored sunshine through a mesh that behaves like a forest: every leaf feeds the canopy.</p>
@@ -412,7 +412,7 @@ const IMG = {
       background: linear-gradient(160deg, rgba(255,255,255,0.72), rgba(234,247,253,0.55));
       backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
       border-radius: 32px; border: 1px solid rgba(255,255,255,0.8);
-      box-shadow: inset 0 2px 6px rgba(255,255,255,0.8), 0 20px 50px rgba(11,61,74,0.18);
+      box-shadow: inset 0 2px 6px rgba(255,255,255,0.8), inset 0 -3px 10px rgba(79,195,247,0.35), 0 20px 50px rgba(11,61,74,0.18);
       position: relative; overflow: hidden;
     }
     .fa-glass-card::before {

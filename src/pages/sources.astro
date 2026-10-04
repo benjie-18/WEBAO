@@ -1,0 +1,55 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import sourcesData from "../lib/sources.json";
+type Source = { demo: string; file: string; source: string; query: string };
+const sources = sourcesData as Source[];
+
+const locale = "en" as const;
+const title = "Image sources & credits · WEBAO";
+const description = "Attribution for photography and imagery used across the WEBAO demo sites.";
+
+// Group entries by demo
+const byDemo = new Map<string, typeof sources>();
+for (const s of sources) {
+  const list = byDemo.get(s.demo) ?? [];
+  list.push(s);
+  byDemo.set(s.demo, list);
+}
+---
+
+<BaseLayout title={title} description={description} locale={locale}>
+  <section class="section">
+    <div class="shell" style="max-width: 860px;">
+      <div class="eyebrow">Credits</div>
+      <h1 class="display" style="font-size: clamp(2rem, 5vw, 3.6rem); line-height:.92; margin-top:12px;">Image sources</h1>
+      <p class="prose" style="margin-top:14px; max-width: 60ch;">
+        Photography and imagery shown across the WEBAO demo sites, with links to
+        their source pages. Demo sites are fictional; images belong to their
+        respective creators and sources.
+      </p>
+
+      <div style="margin-top: 36px; display:grid; gap: 28px;">
+        {[...byDemo.entries()].map(([demo, items]) => (
+          <div style="border:1px solid var(--line); border-radius:16px; padding:20px 22px; background: var(--card-bg);">
+            <h2 style="font-size:15px; letter-spacing:-0.01em; margin:0 0 12px;">
+              <a href={`/demos/${demo}`} style="color: inherit; text-decoration: underline; text-underline-offset:3px;">{demo}</a>
+            </h2>
+            <ul style="list-style:none; margin:0; padding:0; display:grid; gap:8px;">
+              {items.map((s) => (
+                <li class="mono" style="font-size:12px; color: var(--muted); display:flex; flex-wrap:wrap; gap:8px; align-items:baseline;">
+                  <span style="color: var(--ink);">{s.file}</span>
+                  <span aria-hidden="true">→</span>
+                  <a href={s.source} target="_blank" rel="noopener" style="color: var(--accent-text); word-break: break-all; text-transform: none;">{s.source}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      <p class="mono" style="margin-top:28px; font-size:11px; color: var(--muted);">
+        If you own an image listed here and would like it replaced, contact us and we will swap it promptly.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
