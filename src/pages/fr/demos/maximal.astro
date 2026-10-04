@@ -3,13 +3,17 @@ import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
 
 // Démo : MAXIMAL, collectif créatif maximaliste fictif, Montréal.
 // Direction artistique autonome. Fort, contrasté, « plus, c'est plus ». Sans lien avec le thème WEBAO.
+// REFONTE : chaos en collage. La page s'ouvre en pleine explosion, sans hero
+// propre. Les services sont un mur d'autocollants, les réalisations un album
+// découpé qui se chevauche, les tarifs des billets de foire, et un bouton
+// METTEZ-EN PLUS fait apparaître des autocollants en direct.
 const IMG = {
   heroA: "/demos/maximal/01.jpg",
   heroB: "/demos/maximal/02.jpg",
   work1: "https://images.unsplash.com/photo-1541701494587-cb58502866ab?q=80&w=900&auto=format&fit=crop",
   work2: "/demos/maximal/03.jpg",
   work3: "/demos/maximal/04.jpg",
-  work4: "https://images.unsplash.com/photo-1515405295579-ba7b45403062?q=80&w=900&auto=format&fit=crop",
+  work4: "https://live.staticflickr.com/6048/6309838030_5a79d8af2c.jpg",
 };
 ---
 
@@ -19,7 +23,7 @@ const IMG = {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MAXIMAL : Plus, c'est plus | Collectif créatif maximaliste, Montréal</title>
-  <meta name="description" content="MAXIMAL est un collectif créatif maximaliste fictif à Montréal. Image de marque, web, animation, murales, emballage, et tout en même temps. Trop, avec goût." />
+  <meta name="description" content="MAXIMAL est un collectif créatif maximaliste fictif à Montréal. Branding, web, motion, murales, emballage, et tout en même temps. Trop, avec goût." />
   <meta name="robots" content="noindex" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -35,177 +39,192 @@ const IMG = {
         <span></span><span></span><span></span>
       </button>
       <div class="mx-nav-links" id="mx-menu">
-        <a href="#services">Services</a>
-        <a href="#work">Réalisations</a>
-        <a href="#manifesto">Manifeste</a>
-        <a href="#tiers">Formules chaos</a>
-        <a class="mx-nav-cta" href="#contact">Lancez le chaos</a>
+        <a href="#menu">Menu</a>
+        <a href="#messes">Désordres</a>
+        <a href="#creed">Credo</a>
+        <a href="#tickets">Billets</a>
+        <a class="mx-nav-cta" href="#shout">Criez-nous</a>
       </div>
     </nav>
   </header>
 
   <main id="top">
-    <!-- HERO : délibérément surchargé -->
-    <section class="mx-hero">
+    <!-- COLLAGE EXPLOSION: the page starts mid-blast. No hero section. -->
+    <section class="mx-blast" id="blast" aria-label="Collage d'intro MAXIMAL">
       <div class="mx-checker" aria-hidden="true"></div>
-      <div class="mx-hero-in">
-        <p class="mx-eyebrow"><span class="mx-tag">Montréal, QC</span> <span class="mx-tag mx-tag-pink">Collectif créatif maximaliste</span> <span class="mx-tag mx-tag-blue">Depuis 2019</span></p>
-        <h1 class="mx-h1">
-          <span class="mx-line1">PLUS,</span>
-          <span class="mx-line2">C'EST <em>PLUS</em></span>
+      <div class="mx-blast-stage" id="mx-stage">
+        <p class="mx-blast-kicker"><span class="mx-tag">Montréal, QC</span> <span class="mx-tag mx-tag-pink">Collectif créatif maximaliste</span> <span class="mx-tag mx-tag-blue">Depuis 2019</span></p>
+        <h1 class="mx-blast-h1">
+          <span class="mx-b1">PLUS,</span>
+          <span class="mx-b2">C'EST <em>PLUS</em></span>
         </h1>
-        <p class="mx-lede">Nous sommes MAXIMAL, un collectif créatif allergique à la retenue. Image de marque, sites web, animation, murales, emballage, fanzines, produits dérivés, et douze autres choses, tout en même temps, exprès. <strong>Le minimalisme est une rumeur.</strong> On a vérifié.</p>
-        <div class="mx-hero-cta">
-          <a class="mx-btn mx-btn-pink" href="#tiers">Choisissez votre chaos</a>
-          <a class="mx-btn mx-btn-ghost" href="#work">Voyez le beau gâchis</a>
+        <p class="mx-blast-lede">On est MAXIMAL, un collectif créatif allergique à la retenue. Branding, sites web, motion, murales, emballage, zines, merch et douze autres affaires, tout en même temps, exprès. <strong>Le minimalisme est une rumeur.</strong> On a vérifié.</p>
+        <div class="mx-blast-cta">
+          <a class="mx-btn mx-btn-pink" href="#tickets">Choisir son chaos</a>
+          <button class="mx-btn mx-btn-lime" id="mx-louder" type="button">Mettez-en plus <span id="mx-count" aria-hidden="true">(0)</span></button>
         </div>
-        <div class="mx-polaroids">
-          <figure class="mx-polaroid mx-p1"><img src={IMG.heroA} alt="Salon maximaliste, murs verts, sofa bleu, mur de cadres" loading="eager" fetchpriority="high" /><figcaption>ambiance : FORT</figcaption></figure>
-          <figure class="mx-polaroid mx-p2"><img src={IMG.heroB} alt="Salon maximaliste rose et vert aux motifs superposés" loading="lazy" /><figcaption>ambiance : PLUS FORT</figcaption></figure>
-        </div>
+        <figure class="mx-pol mx-pol-a"><img src={IMG.heroA} alt="Salon maximaliste, murs verts, sofa en velours bleu, mur de cadres" loading="eager" fetchpriority="high" /><figcaption>ambiance : FORT</figcaption></figure>
+        <figure class="mx-pol mx-pol-b"><img src={IMG.heroB} alt="Salon maximaliste rose et vert aux motifs superposés" loading="lazy" /><figcaption>ambiance : PLUS FORT</figcaption></figure>
+        <div class="mx-burst mx-burst-a" aria-hidden="true"><span>WOW!</span></div>
+        <div class="mx-burst mx-burst-b" aria-hidden="true"><span>100 %<br />EXTRA</span></div>
+        <p class="mx-sticker mx-st-a" aria-hidden="true">BEIGE INTERDIT</p>
+        <p class="mx-sticker mx-st-b" aria-hidden="true">LE GOÛT EST UNE CAGE</p>
       </div>
-      <div class="mx-burst mx-burst-1" aria-hidden="true"><span>WOW!</span></div>
-      <div class="mx-burst mx-burst-2" aria-hidden="true"><span>100%<br />EN PLUS</span></div>
-      <div class="mx-sticker mx-sticker-1" aria-hidden="true">BEIGE INTERDIT</div>
-      <div class="mx-ticker" aria-hidden="true">
-        <div class="mx-ticker-track">
-          <span>IMAGE DE MARQUE</span><span>✸</span><span>WEB</span><span>✸</span><span>ANIMATION</span><span>✸</span><span>MURALES</span><span>✸</span><span>EMBALLAGE</span><span>✸</span><span>FANZINES</span><span>✸</span><span>PRODUITS DÉRIVÉS</span><span>✸</span><span>SIGNALÉTIQUE</span><span>✸</span>
-          <span>IMAGE DE MARQUE</span><span>✸</span><span>WEB</span><span>✸</span><span>ANIMATION</span><span>✸</span><span>MURALES</span><span>✸</span><span>EMBALLAGE</span><span>✸</span><span>FANZINES</span><span>✸</span><span>PRODUITS DÉRIVÉS</span><span>✸</span><span>SIGNALÉTIQUE</span><span>✸</span>
-        </div>
-      </div>
+      <p class="mx-blast-foot">Cette page en fait déjà trop. C'est le but. <a href="#menu">Continuez ↓</a></p>
     </section>
 
-    <!-- MUR DE SERVICES -->
-    <section class="mx-section mx-services" id="services">
+    <div class="mx-ticker" aria-hidden="true">
+      <div class="mx-ticker-track">
+        <span>BRANDING</span><span>✸</span><span>WEB</span><span>✸</span><span>MOTION</span><span>✸</span><span>MURALES</span><span>✸</span><span>EMBALLAGE</span><span>✸</span><span>ZINES</span><span>✸</span><span>MERCH</span><span>✸</span><span>SIGNALÉTIQUE</span><span>✸</span>
+        <span>BRANDING</span><span>✸</span><span>WEB</span><span>✸</span><span>MOTION</span><span>✸</span><span>MURALES</span><span>✸</span><span>EMBALLAGE</span><span>✸</span><span>ZINES</span><span>✸</span><span>MERCH</span><span>✸</span><span>SIGNALÉTIQUE</span><span>✸</span>
+      </div>
+    </div>
+
+    <!-- STICKER WALL -->
+    <section class="mx-wall" id="menu">
       <div class="mx-wrap">
         <p class="mx-kicker">/// le menu (oui, tout)</p>
         <h2 class="mx-h2">ON FAIT <span class="mx-underline">TOUT</span><span class="mx-h2-serif">, évidemment.</span></h2>
-        <div class="mx-service-wall">
-          <article class="mx-svc mx-c1"><h3>Image de marque</h3><p>Des logos qui ont des opinions. Des systèmes qui tiennent la route.</p></article>
-          <article class="mx-svc mx-c2"><h3>Design web</h3><p>Des sites qui refusent de chuchoter.</p></article>
-          <article class="mx-svc mx-c3"><h3>Animation</h3><p>Si ça peut bouger, ça doit bouger. Deux fois.</p></article>
-          <article class="mx-svc mx-c4"><h3>Emballage</h3><p>Une présence en rayon qu'on entend.</p></article>
-          <article class="mx-svc mx-c5"><h3>Murales et signalétique</h3><p>Des murs, mais qui crient poliment.</p></article>
-          <article class="mx-svc mx-c6"><h3>Fanzines et imprimé</h3><p>De l'encre sur du papier, agrafes comprises.</p></article>
-          <article class="mx-svc mx-c1"><h3>Direction artistique</h3><p>Du chaos, mais planifié.</p></article>
-          <article class="mx-svc mx-c2"><h3>Illustration</h3><p>Dessiné à la main, puis monté à onze.</p></article>
-          <article class="mx-svc mx-c3"><h3>Contenu social</h3><p>Des accroche-regards, des casse-pouces.</p></article>
-          <article class="mx-svc mx-c4"><h3>Design d'exposition</h3><p>Des salles que les gens photographient.</p></article>
-          <article class="mx-svc mx-c5"><h3>Produits dérivés</h3><p>T-shirts, fourre-tout et chapeaux douteux.</p></article>
-          <article class="mx-svc mx-c6"><h3>Nommage et ton</h3><p>Des mots avec des paillettes dessus.</p></article>
-        </div>
-        <p class="mx-wall-note">Il manque quelque chose? <a href="#contact">Dites-le-nous.</a> On fait probablement ça aussi. On fait des portraits de chiens maintenant. (Des portraits de chiens fictifs.)</p>
       </div>
+      <div class="mx-stickers" aria-label="Liste des services">
+        <p class="mx-stk mx-c1">Identité de marque <small>des logos avec des opinions</small></p>
+        <p class="mx-stk mx-c2">Design web <small>des sites qui refusent de chuchoter</small></p>
+        <p class="mx-stk mx-c3">Motion <small>si ça bouge, deux fois</small></p>
+        <p class="mx-stk mx-c4">Emballage <small>une présence qu'on entend</small></p>
+        <p class="mx-stk mx-c5">Murales <small>des murs qui crient poliment</small></p>
+        <p class="mx-stk mx-c6">Zines <small>encre, agrafes et tout</small></p>
+        <p class="mx-stk mx-c2">Direction artistique <small>le chaos, mais planifié</small></p>
+        <p class="mx-stk mx-c3">Illustration <small>poussée à onze</small></p>
+        <p class="mx-stk mx-c4">Contenu social <small>qui arrête le pouce</small></p>
+        <p class="mx-stk mx-c5">Scénographie <small>des pièces qu'on photographie</small></p>
+        <p class="mx-stk mx-c6">Merch <small>tees, totes, chapeaux douteux</small></p>
+        <p class="mx-stk mx-c1">Nommage <small>des mots avec des paillettes</small></p>
+      </div>
+      <p class="mx-wrap mx-wall-note">Il manque quelque chose ? <a href="#shout">Dites-le-nous.</a> On le fait probablement aussi. On fait des portraits de chiens maintenant. (Fictifs.)</p>
     </section>
 
-    <!-- PORTFOLIO CHAOTIQUE -->
-    <section class="mx-section mx-work" id="work">
+    <div class="mx-ticker mx-ticker-pink" aria-hidden="true">
+      <div class="mx-ticker-track">
+        <span>PREUVE QU'ON NE TIENT PAS EN PLACE</span><span>✸</span><span>PREUVE QU'ON NE TIENT PAS EN PLACE</span><span>✸</span><span>PREUVE QU'ON NE TIENT PAS EN PLACE</span><span>✸</span>
+        <span>PREUVE QU'ON NE TIENT PAS EN PLACE</span><span>✸</span><span>PREUVE QU'ON NE TIENT PAS EN PLACE</span><span>✸</span><span>PREUVE QU'ON NE TIENT PAS EN PLACE</span><span>✸</span>
+      </div>
+    </div>
+
+    <!-- SCRAPBOOK SPREAD -->
+    <section class="mx-scrap" id="messes">
       <div class="mx-wrap">
-        <p class="mx-kicker mx-kicker-light">/// la preuve qu'on ne tient pas en place</p>
-        <h2 class="mx-h2 mx-h2-light">NOS RÉCENTS <span class="mx-h2-serif">beaux</span> GÂCHIS</h2>
-        <div class="mx-grid">
-          <figure class="mx-tile mx-t1">
-            <img src={IMG.work1} alt="Œuvre abstraite colorée pour l'identité Acid Bloom" loading="lazy" />
-            <figcaption><strong>Acid Bloom</strong><span>Identité visuelle · le client a pleuré (de joie)</span></figcaption>
-            <span class="mx-mini-burst" aria-hidden="true">TOP</span>
-          </figure>
-          <figure class="mx-tile mx-t2">
-            <img src={IMG.work2} alt="Intérieur éclectique, mur de cadres pour Chrome Dreams" loading="lazy" />
-            <figcaption><strong>Chrome Dreams</strong><span>Site web · 47 animations, 0 regret</span></figcaption>
-          </figure>
-          <figure class="mx-tile mx-t3">
-            <img src={IMG.work3} alt="Salon maximaliste coloré pour Neon District" loading="lazy" />
-            <figcaption><strong>Neon District</strong><span>Murale · visible de l'espace (soi-disant)</span></figcaption>
-            <span class="mx-tape" aria-hidden="true"></span>
-          </figure>
-          <figure class="mx-tile mx-t4">
-            <img src={IMG.work4} alt="Éclaboussures de peinture vives pour l'emballage Paint Fight" loading="lazy" />
-            <figcaption><strong>Paint Fight</strong><span>Emballage · devenu viral-ish</span></figcaption>
-          </figure>
-          <figure class="mx-tile mx-t5 mx-tile-css">
-            <div class="mx-tile-css-in" aria-hidden="true">✸</div>
-            <figcaption><strong>Votre logo ici</strong><span>Mais en plus fort · créneau libre</span></figcaption>
-          </figure>
-        </div>
+        <p class="mx-kicker mx-kicker-light">/// nos beaux désordres récents</p>
+        <h2 class="mx-h2 mx-h2-light">L'<span class="mx-h2-serif">album</span></h2>
+      </div>
+      <div class="mx-spread">
+        <figure class="mx-scrap-item mx-s1">
+          <img src={IMG.work1} alt="Œuvre abstraite colorée pour l'identité Acid Bloom" loading="lazy" />
+          <figcaption><strong>Acid Bloom</strong><span>Identité de marque · la cliente a pleuré (de joie)</span></figcaption>
+          <span class="mx-mini-burst" aria-hidden="true">HOT</span>
+        </figure>
+        <figure class="mx-scrap-item mx-s2">
+          <img src={IMG.work2} alt="Mur de cadres éclectique pour Chrome Dreams" loading="lazy" />
+          <figcaption><strong>Chrome Dreams</strong><span>Site web · 47 animations, 0 regret</span></figcaption>
+          <span class="mx-tape" aria-hidden="true"></span>
+        </figure>
+        <figure class="mx-scrap-item mx-s3">
+          <img src={IMG.work3} alt="Salon maximaliste coloré pour Neon District" loading="lazy" />
+          <figcaption><strong>Neon District</strong><span>Murale · visible de l'espace (paraît-il)</span></figcaption>
+        </figure>
+        <figure class="mx-scrap-item mx-s4">
+          <img src={IMG.work4} alt="Éclaboussure de peinture vive pour l'emballage Paint Fight" loading="lazy" />
+          <figcaption><strong>Paint Fight</strong><span>Emballage · devenu viral-ish</span></figcaption>
+          <span class="mx-mini-burst" aria-hidden="true">WOW</span>
+        </figure>
+        <p class="mx-scrap-note" aria-hidden="true">votre logo ici, mais FORT →</p>
       </div>
     </section>
 
-    <!-- MANIFESTE -->
-    <section class="mx-section mx-manifesto" id="manifesto">
+    <!-- GRAFFITI CREED -->
+    <section class="mx-creed" id="creed">
       <div class="mx-wrap">
-        <p class="mx-kicker">/// le manifeste maximaliste (abrégé, à peine)</p>
-        <h2 class="mx-h2">BON. <span class="mx-h2-serif">voici ce qu'on croit.</span></h2>
-        <div class="mx-mani">
-          <blockquote class="mx-m1"><p>« L'espace blanc, c'est juste de l'espace qu'on a oublié de décorer. »</p></blockquote>
-          <blockquote class="mx-m2"><p>« Si ça ne jure pas, ça ne claque pas. »</p></blockquote>
-          <blockquote class="mx-m3"><p>« Le bon goût est une cage. On a mangé la cage. C'était délicieux. »</p></blockquote>
-          <blockquote class="mx-m4"><p>« La retenue est un choix de design. La fanfare aussi. »</p></blockquote>
+        <p class="mx-kicker">/// le credo maximaliste (abrégé, à peine)</p>
+        <div class="mx-creed-wall">
+          <blockquote class="mx-c1"><p>« L'espace blanc, c'est de l'espace qu'on a oublié de décorer. »</p></blockquote>
+          <blockquote class="mx-c2"><p>« Si ça ne jure pas, ça ne claque pas. »</p></blockquote>
+          <blockquote class="mx-c3"><p>« Le goût est une cage. On a mangé la cage. C'était délicieux. »</p></blockquote>
+          <blockquote class="mx-c4"><p>« La retenue est un choix. La fanfare aussi. »</p></blockquote>
         </div>
-        <p class="mx-mani-foot">Signé, nous douze, en douze polices différentes. <a href="#contact">Venez débattre →</a></p>
+        <p class="mx-creed-foot">Signé, nous douze, en douze polices différentes. <a href="#shout">Contredisez-nous →</a></p>
       </div>
     </section>
 
-    <!-- FORMULES CHAOS -->
-    <section class="mx-section mx-tiers" id="tiers">
+    <!-- CARNIVAL TICKETS -->
+    <section class="mx-tickets" id="tickets">
       <div class="mx-wrap">
-        <p class="mx-kicker mx-kicker-light">/// des prix, mais en version forte</p>
-        <h2 class="mx-h2 mx-h2-light">FORMULES <span class="mx-h2-serif">chaos</span></h2>
-        <div class="mx-tier-grid">
-          <article class="mx-tier">
-            <h3>Chaos doux</h3>
-            <p class="mx-price">2,5 k$<span> / projet</span></p>
-            <p class="mx-tier-sub">Pour les curieux du chaos.</p>
-            <ul>
-              <li>Une chose forte (logo, site ou affiche)</li>
-              <li>Deux rondes de révisions (on en supplie une troisième)</li>
-              <li>Un (1) moment de bon goût, encadré</li>
-              <li>Livraison en 3 semaines, paillettes incluses</li>
-            </ul>
-            <a class="mx-btn mx-btn-dark" href="#contact">Commencer doux</a>
+        <p class="mx-kicker mx-kicker-light">/// les tarifs, en grand</p>
+        <h2 class="mx-h2 mx-h2-light">BILLETS <span class="mx-h2-serif">de chaos</span></h2>
+        <p class="mx-ticket-sub">Admet un (1) projet au design maximum. Déchirez le long du pointillé.</p>
+        <div class="mx-ticket-row">
+          <article class="mx-ticket">
+            <div class="mx-ticket-stub"><span>ADMET<br />UN</span></div>
+            <div class="mx-ticket-main">
+              <h3>Chaos doux</h3>
+              <p class="mx-price">2,5 k$</p>
+              <p class="mx-tier-sub">Pour les curieux du chaos.</p>
+              <ul>
+                <li>Une affaire forte (logo, site ou affiche)</li>
+                <li>Deux rondes de révisions (on en supplie une troisième)</li>
+                <li>Un (1) moment de bon goût, encadré</li>
+                <li>Livré en 3 semaines, paillettes incluses</li>
+              </ul>
+              <a class="mx-btn mx-btn-dark" href="#shout">Chaos doux</a>
+            </div>
           </article>
-          <article class="mx-tier mx-tier-hot">
-            <span class="mx-mini-burst mx-mini-burst-lg" aria-hidden="true">LE PLUS POPULAIRE !!</span>
-            <h3>Chaos total</h3>
-            <p class="mx-price">8 k$<span> / projet</span></p>
-            <p class="mx-tier-sub">Notre signature. Attachez vos tuques.</p>
-            <ul>
-              <li>Identité visuelle + site web, en beau désaccord</li>
-              <li>Pack animation : intros, autocollants, boucles</li>
-              <li>Gabarits sociaux (30, tous forts)</li>
-              <li>Révisions illimitées jusqu'à ce qu'on rie tous</li>
-              <li>Confettis de lancement (numériques, puis vrais)</li>
-            </ul>
-            <a class="mx-btn mx-btn-pink" href="#contact">Passer en chaos total</a>
+          <article class="mx-ticket mx-ticket-hot">
+            <div class="mx-ticket-stub"><span>LE PLUS<br />POPULAIRE</span></div>
+            <div class="mx-ticket-main">
+              <h3>Chaos total</h3>
+              <p class="mx-price">8 k$</p>
+              <p class="mx-tier-sub">Notre signature. Attachez-vous.</p>
+              <ul>
+                <li>Identité + site web, qui jurent magnifiquement</li>
+                <li>Pack motion : intros, autocollants, boucles</li>
+                <li>Gabarits sociaux (30, tous forts)</li>
+                <li>Révisions illimitées jusqu'à ce qu'on rie</li>
+                <li>Confettis de lancement (numériques, puis vrais)</li>
+              </ul>
+              <a class="mx-btn mx-btn-pink" href="#shout">Chaos total</a>
+            </div>
           </article>
-          <article class="mx-tier">
-            <h3>Chaos absolu</h3>
-            <p class="mx-price">20 k$+<span> / projet</span></p>
-            <p class="mx-tier-sub">Le bagel tout garni du design.</p>
-            <ul>
-              <li>Tout du Chaos total, plus des murales</li>
-              <li>Emballage, produits dérivés, fanzine</li>
-              <li>Direction artistique de la fête de lancement</li>
-              <li>Une fanfare (fictive, mais forte)</li>
-            </ul>
-            <a class="mx-btn mx-btn-dark" href="#contact">Passer en absolu</a>
+          <article class="mx-ticket">
+            <div class="mx-ticket-stub"><span>ADMET<br />UN</span></div>
+            <div class="mx-ticket-main">
+              <h3>Chaos absolu</h3>
+              <p class="mx-price">20 k$+</p>
+              <p class="mx-tier-sub">Le bagel tout garni du design.</p>
+              <ul>
+                <li>Tout le Chaos total, plus des murales</li>
+                <li>Emballage, merch, zine</li>
+                <li>Direction artistique du lancement</li>
+                <li>Une fanfare (fictive, mais forte)</li>
+              </ul>
+              <a class="mx-btn mx-btn-dark" href="#shout">Chaos absolu</a>
+            </div>
           </article>
         </div>
-        <p class="mx-tier-note">Tous les prix sont fictifs. Tout l'enthousiasme est réel. Taxes en sus, paillettes gratuites.</p>
+        <p class="mx-ticket-note">Tous les prix sont fictifs. Tout l'enthousiasme est réel. Taxes en sus, paillettes gratuites.</p>
       </div>
     </section>
 
-    <!-- CONTACT -->
-    <section class="mx-section mx-contact" id="contact">
-      <div class="mx-wrap mx-contact-in">
-        <div class="mx-contact-copy">
+    <!-- SHOUT -->
+    <section class="mx-shout" id="shout">
+      <div class="mx-wrap mx-shout-in">
+        <div class="mx-shout-copy">
           <p class="mx-kicker mx-kicker-light">/// dites bonjour, fort</p>
-          <h2 class="mx-h2 mx-h2-light">PRÊT POUR UN DESIGN <span class="mx-h2-serif">maximum</span>?</h2>
-          <p class="mx-contact-txt">Parlez-nous de votre projet. Plus le brief est fort, plus on répond vite. Les briefs discrets sont aussi acceptés (on les arrangera).</p>
-          <ul class="mx-contact-list">
+          <h2 class="mx-h2 mx-h2-light">PRÊT POUR LE DESIGN <span class="mx-h2-serif">maximum ?</span></h2>
+          <p class="mx-shout-txt">Parlez-nous de votre projet. Plus le brief est fort, plus on répond vite. Les briefs tranquilles sont acceptés aussi (on va les réparer).</p>
+          <div class="mx-mega" aria-hidden="true">📢</div>
+          <ul class="mx-shout-list">
             <li><strong>Studio</strong><span>404, boulevard Saint-Laurent, Montréal QC</span></li>
             <li><strong>Téléphone</strong><span><a href="tel:+15145550142">(514) 555-0142</a></span></li>
             <li><strong>Courriel</strong><span><a href="mailto:hello@maximal.studio">hello@maximal.studio</a></span></li>
-            <li><strong>Heures</strong><span>Lun au ven, 9 h à 18 h, l'heure forte en tout temps</span></li>
+            <li><strong>Heures</strong><span>Lun au ven, 9 à 18, toujours l'heure de crier</span></li>
           </ul>
         </div>
         <form class="mx-form" id="mx-form" novalidate>
@@ -227,7 +246,7 @@ const IMG = {
           <label>Votre projet
             <textarea name="message" rows="4" placeholder="Dites-nous tout. Les majuscules sont permises."></textarea>
           </label>
-          <button class="mx-btn mx-btn-lime" type="submit">Envoyer fort</button>
+          <button class="mx-btn mx-btn-lime" type="submit">Envoyer FORT</button>
           <p class="mx-form-note" role="status" aria-live="polite"></p>
         </form>
       </div>
@@ -237,7 +256,7 @@ const IMG = {
   <footer class="mx-footer">
     <p class="mx-footer-giant" aria-hidden="true">MAXIMAL</p>
     <div class="mx-wrap mx-footer-in">
-      <p>© 2026 MAXIMAL. Démo fictive. Aucun beige n'a été maltraité.</p>
+      <p>© 2026 MAXIMAL. Démo fictive. Aucun beige n'a été blessé.</p>
       <p>404, boulevard Saint-Laurent, Montréal QC · <a href="tel:+15145550142">(514) 555-0142</a> · <a href="mailto:hello@maximal.studio">hello@maximal.studio</a></p>
     </div>
   </footer>
@@ -247,28 +266,63 @@ const IMG = {
   <script>
     (function () {
       // Menu mobile
-      var burger = document.querySelector('.mx-burger') as HTMLButtonElement | null;
-      var nav = document.querySelector('.mx-navwrap');
-      burger?.addEventListener('click', function () {
-        var open = nav?.classList.toggle('mx-nav-open');
-        burger?.setAttribute('aria-expanded', open ? 'true' : 'false');
-        burger?.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
-      });
-      document.querySelectorAll('.mx-nav-links a').forEach(function (a) {
-        a.addEventListener('click', function () {
-          nav?.classList.remove('mx-nav-open');
-          burger?.setAttribute('aria-expanded', 'false');
-          burger?.setAttribute('aria-label', 'Ouvrir le menu');
+      var burgerEl = document.querySelector('.mx-burger');
+      var navEl = document.querySelector('.mx-navwrap');
+      if (burgerEl instanceof HTMLButtonElement) {
+        var burger = burgerEl;
+        var nav = navEl;
+        burger.addEventListener('click', function () {
+          var open = nav ? nav.classList.toggle('mx-nav-open') : false;
+          burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+          burger.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
         });
-      });
-      // Formulaire de démo : ne s'envoie nulle part
-      var form = document.getElementById('mx-form') as HTMLFormElement | null;
-      form?.addEventListener('submit', function (e) {
-        e.preventDefault();
-        var note = form?.querySelector('.mx-form-note');
-        if (note) note.textContent = 'Message reçu. On vous répondra avec au moins trois points d\u2019exclamation !!!';
-        form?.reset();
-      });
+        document.querySelectorAll('.mx-nav-links a').forEach(function (a) {
+          a.addEventListener('click', function () {
+            if (nav) nav.classList.remove('mx-nav-open');
+            burger.setAttribute('aria-expanded', 'false');
+            burger.setAttribute('aria-label', 'Ouvrir le menu');
+          });
+        });
+      }
+      // METTEZ-EN PLUS : fait apparaître des autocollants au hasard sur le collage
+      var louderEl = document.getElementById('mx-louder');
+      var stageEl = document.getElementById('mx-stage');
+      var countEl = document.getElementById('mx-count');
+      var words = ['WOW!', 'EXTRA!', 'PLUS FORT!', 'OUI!', 'ENCORE!', 'BAM!', 'CHAOS!', 'PAILLETTES!', 'PAS DE BEIGE!', 'MONTEZ LE SON!'];
+      var classes = ['mx-st-a', 'mx-st-b', 'mx-st-c', 'mx-st-d'];
+      var n = 0;
+      if (louderEl && stageEl) {
+        var louder = louderEl;
+        var stage = stageEl;
+        var count = countEl;
+        louder.addEventListener('click', function () {
+          var el = document.createElement('p');
+          el.className = 'mx-sticker mx-spawned ' + classes[n % classes.length];
+          el.setAttribute('aria-hidden', 'true');
+          el.textContent = words[n % words.length];
+          el.style.left = (4 + Math.random() * 88) + '%';
+          el.style.top = (4 + Math.random() * 88) + '%';
+          el.style.setProperty('--rot', (Math.random() * 24 - 12).toFixed(1) + 'deg');
+          stage.appendChild(el);
+          n += 1;
+          if (count) count.textContent = '(' + n + ')';
+          if (n > 40) {
+            var old = stage.querySelector('.mx-spawned');
+            if (old) old.remove();
+          }
+        });
+      }
+      // Formulaire démo : ne soumet jamais rien
+      var formEl = document.getElementById('mx-form');
+      if (formEl instanceof HTMLFormElement) {
+        var form = formEl;
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var note = form.querySelector('.mx-form-note');
+          if (note) note.textContent = 'Message reçu. On répondra avec au moins trois points d\'exclamation !!!';
+          form.reset();
+        });
+      }
     })();
   </script>
 
@@ -293,7 +347,6 @@ const IMG = {
     .mx *, .mx *::before, .mx *::after { box-sizing: border-box; }
     .mx img { display: block; max-width: 100%; }
     .mx-wrap { max-width: 1200px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px); }
-    .mx-section { padding: clamp(70px, 9vw, 130px) 0; position: relative; }
 
     /* type */
     .mx-kicker { font-weight: 700; font-size: 13px; letter-spacing: 0.28em; text-transform: uppercase; margin: 0 0 18px; }
@@ -305,7 +358,7 @@ const IMG = {
 
     /* buttons */
     .mx-btn {
-      display: inline-flex; align-items: center; justify-content: center;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
       font-family: var(--mx-black); font-size: 15px; letter-spacing: 0.04em; text-transform: uppercase;
       padding: 18px 34px; text-decoration: none; cursor: pointer; border: 3px solid var(--mx-ink);
       box-shadow: 6px 6px 0 var(--mx-ink); transition: transform 0.12s ease, box-shadow 0.12s ease;
@@ -313,8 +366,8 @@ const IMG = {
     .mx-btn:hover { transform: translate(-2px, -2px); box-shadow: 9px 9px 0 var(--mx-ink); }
     .mx-btn-pink { background: var(--mx-pink); color: #fff; }
     .mx-btn-dark { background: var(--mx-ink); color: var(--mx-yellow); }
-    .mx-btn-lime { background: var(--mx-lime); color: var(--mx-ink); width: 100%; }
-    .mx-btn-ghost { background: var(--mx-paper); color: var(--mx-ink); }
+    .mx-btn-lime { background: var(--mx-lime); color: var(--mx-ink); }
+    .mx-btn span { font-family: var(--mx-body); font-weight: 700; }
 
     /* nav */
     .mx-navwrap { position: fixed; top: 0; left: 0; right: 0; z-index: 60; }
@@ -339,132 +392,163 @@ const IMG = {
     .mx-nav-links a:hover { background: var(--mx-yellow); color: var(--mx-ink); border-color: var(--mx-ink); }
     .mx-nav-cta { background: var(--mx-ink); color: var(--mx-yellow) !important; border: 2px solid var(--mx-ink) !important; }
 
-    /* hero */
-    .mx-hero { position: relative; overflow: hidden; padding: 130px 0 0; border-bottom: 6px solid var(--mx-ink); }
+    /* blast: collage explosion */
+    .mx-blast { position: relative; padding: 120px 0 30px; border-bottom: 6px solid var(--mx-ink); overflow: hidden; }
     .mx-checker {
-      position: absolute; inset: 0; opacity: 0.16; pointer-events: none;
+      position: absolute; inset: 0; opacity: 0.14; pointer-events: none;
       background: repeating-conic-gradient(var(--mx-ink) 0% 25%, transparent 0% 50%) 0 0 / 56px 56px;
     }
-    .mx-hero-in { position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px) 70px; }
-    .mx-eyebrow { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 26px; }
+    .mx-blast-stage {
+      position: relative; z-index: 2; max-width: 1200px; margin: 0 auto;
+      padding: 40px clamp(20px, 4vw, 40px) 120px; min-height: 92vh;
+    }
+    .mx-blast-kicker { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 26px; position: relative; z-index: 5; }
     .mx-tag {
       font-weight: 700; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
       background: var(--mx-ink); color: var(--mx-yellow); padding: 8px 14px; transform: rotate(-1.5deg);
     }
     .mx-tag-pink { background: var(--mx-pink); color: #fff; transform: rotate(1.2deg); }
     .mx-tag-blue { background: var(--mx-blue); color: #fff; transform: rotate(-0.8deg); }
-    .mx-h1 { font-family: var(--mx-black); margin: 0 0 26px; line-height: 0.88; text-transform: uppercase; }
-    .mx-line1 { display: block; font-size: clamp(4.2rem, 17vw, 12rem); color: var(--mx-pink); text-shadow: 5px 5px 0 var(--mx-ink), 10px 10px 0 var(--mx-blue); transform: rotate(-2deg); }
-    .mx-line2 { display: block; font-size: clamp(3rem, 12vw, 8.5rem); color: var(--mx-ink); transform: rotate(1.4deg); margin-top: 6px; }
-    .mx-line2 em { font-family: var(--mx-serif); font-style: italic; color: var(--mx-blue); -webkit-text-stroke: 0; }
-    .mx-lede { font-size: 18px; line-height: 1.55; max-width: 52ch; margin: 0 0 30px; background: var(--mx-paper); border: 3px solid var(--mx-ink); padding: 18px 22px; box-shadow: 6px 6px 0 var(--mx-ink); transform: rotate(0.6deg); }
-    .mx-hero-cta { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 44px; }
-    .mx-polaroids { display: flex; gap: 26px; flex-wrap: wrap; }
-    .mx-polaroid { background: #fff; border: 3px solid var(--mx-ink); padding: 12px 12px 8px; margin: 0; box-shadow: 8px 8px 0 var(--mx-ink); width: 250px; }
-    .mx-polaroid img { width: 100%; height: 180px; object-fit: cover; border: 2px solid var(--mx-ink); }
-    .mx-polaroid figcaption { font-family: var(--mx-black); font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; padding: 10px 4px 6px; text-align: center; }
-    .mx-p1 { transform: rotate(-4deg); }
-    .mx-p2 { transform: rotate(3deg); margin-top: 26px; }
-
-    /* starbursts + stickers */
+    .mx-blast-h1 { font-family: var(--mx-black); margin: 0 0 26px; line-height: 0.88; text-transform: uppercase; position: relative; z-index: 5; }
+    .mx-b1 { display: block; font-size: clamp(4.2rem, 17vw, 12rem); color: var(--mx-pink); text-shadow: 5px 5px 0 var(--mx-ink), 10px 10px 0 var(--mx-blue); transform: rotate(-2deg); }
+    .mx-b2 { display: block; font-size: clamp(3rem, 12vw, 8.5rem); color: var(--mx-ink); transform: rotate(1.4deg); margin-top: 6px; }
+    .mx-b2 em { font-family: var(--mx-serif); font-style: italic; color: var(--mx-blue); }
+    .mx-blast-lede {
+      position: relative; z-index: 5; font-size: 18px; line-height: 1.55; max-width: 46ch; margin: 0 0 30px;
+      background: var(--mx-paper); border: 3px solid var(--mx-ink); padding: 18px 22px;
+      box-shadow: 6px 6px 0 var(--mx-ink); transform: rotate(0.6deg);
+    }
+    .mx-blast-cta { display: flex; gap: 16px; flex-wrap: wrap; position: relative; z-index: 5; }
+    .mx-pol { position: absolute; background: #fff; border: 3px solid var(--mx-ink); padding: 12px 12px 8px; margin: 0; box-shadow: 8px 8px 0 var(--mx-ink); width: min(250px, 38vw); z-index: 3; }
+    .mx-pol img { width: 100%; height: 170px; object-fit: cover; border: 2px solid var(--mx-ink); }
+    .mx-pol figcaption { font-family: var(--mx-black); font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; padding: 10px 4px 6px; text-align: center; }
+    .mx-pol-a { top: 90px; right: 4%; transform: rotate(5deg); }
+    .mx-pol-b { bottom: 60px; right: 16%; transform: rotate(-6deg); }
     .mx-burst {
-      position: absolute; z-index: 3; display: flex; align-items: center; justify-content: center;
+      position: absolute; z-index: 4; display: flex; align-items: center; justify-content: center;
       text-align: center; font-family: var(--mx-black); text-transform: uppercase;
       clip-path: polygon(100% 50%, 86.7% 59.8%, 93.3% 75%, 76.9% 76.9%, 75% 93.3%, 59.8% 86.7%, 50% 100%, 40.2% 86.7%, 25% 93.3%, 23.1% 76.9%, 6.7% 75%, 13.3% 59.8%, 0% 50%, 13.3% 40.2%, 6.7% 25%, 23.1% 23.1%, 25% 6.7%, 40.2% 13.3%, 50% 0%, 59.8% 13.3%, 75% 6.7%, 76.9% 23.1%, 93.3% 25%, 86.7% 40.2%);
       animation: mx-spin 14s linear infinite;
     }
     @keyframes mx-spin { to { transform: rotate(360deg); } }
-    .mx-burst-1 { width: 150px; height: 150px; background: var(--mx-lime); top: 150px; right: 6%; font-size: 22px; color: var(--mx-ink); }
-    .mx-burst-2 { width: 190px; height: 190px; background: var(--mx-blue); bottom: 120px; right: 12%; font-size: 20px; color: #fff; animation-direction: reverse; }
+    .mx-burst-a { width: 150px; height: 150px; background: var(--mx-lime); top: 300px; right: 30%; font-size: 22px; }
+    .mx-burst-b { width: 180px; height: 180px; background: var(--mx-blue); bottom: 200px; left: 2%; font-size: 20px; color: #fff; animation-direction: reverse; }
     .mx-sticker {
-      position: absolute; z-index: 3; font-family: var(--mx-black); font-size: 14px; letter-spacing: 0.06em;
+      position: absolute; z-index: 4; font-family: var(--mx-black); font-size: 14px; letter-spacing: 0.06em;
       background: var(--mx-paper); border: 3px solid var(--mx-ink); padding: 10px 16px; box-shadow: 4px 4px 0 var(--mx-ink);
+      margin: 0;
     }
-    .mx-sticker-1 { top: 420px; left: 4%; transform: rotate(-8deg); }
+    .mx-st-a { top: 420px; left: 40%; transform: rotate(-8deg); }
+    .mx-st-b { bottom: 90px; left: 8%; transform: rotate(7deg); background: var(--mx-lime); }
+    .mx-st-c { background: var(--mx-pink); color: #fff; }
+    .mx-st-d { background: var(--mx-blue); color: #fff; }
+    .mx-spawned { transform: rotate(var(--rot, -4deg)); animation: mx-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    @keyframes mx-pop { from { transform: scale(0) rotate(var(--rot, -4deg)); } to { transform: scale(1) rotate(var(--rot, -4deg)); } }
+    .mx-blast-foot { position: relative; z-index: 5; text-align: center; font-weight: 700; font-size: 15px; margin: 0; padding: 10px 20px 30px; }
+    .mx-blast-foot a { color: var(--mx-blue); }
 
-    /* ticker */
-    .mx-ticker { position: relative; z-index: 2; background: var(--mx-ink); color: var(--mx-yellow); border-top: 4px solid var(--mx-ink); overflow: hidden; padding: 14px 0; }
+    /* tickers */
+    .mx-ticker { position: relative; z-index: 2; background: var(--mx-ink); color: var(--mx-yellow); border-bottom: 6px solid var(--mx-ink); overflow: hidden; padding: 14px 0; }
     .mx-ticker-track { display: inline-flex; gap: 26px; white-space: nowrap; font-family: var(--mx-black); font-size: 20px; letter-spacing: 0.06em; animation: mx-tick 18s linear infinite; }
     @keyframes mx-tick { to { transform: translateX(-50%); } }
+    .mx-ticker-pink { background: var(--mx-pink); color: #fff; border-bottom: none; border-top: 6px solid var(--mx-ink); }
 
-    /* services wall */
-    .mx-services { background: var(--mx-paper); border-bottom: 6px solid var(--mx-ink); }
-    .mx-service-wall { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
-    .mx-svc { border: 3px solid var(--mx-ink); padding: 22px 20px; box-shadow: 5px 5px 0 var(--mx-ink); transition: transform 0.15s ease; }
-    .mx-svc:hover { transform: rotate(0deg) scale(1.04) !important; }
-    .mx-svc h3 { font-family: var(--mx-black); font-size: 19px; text-transform: uppercase; margin: 0 0 8px; }
-    .mx-svc p { margin: 0; font-size: 14.5px; line-height: 1.5; }
-    .mx-c1 { background: var(--mx-pink); color: #fff; transform: rotate(-1.2deg); }
-    .mx-c2 { background: var(--mx-blue); color: #fff; transform: rotate(0.9deg); }
-    .mx-c3 { background: var(--mx-lime); transform: rotate(-0.7deg); }
-    .mx-c4 { background: var(--mx-yellow); transform: rotate(1.1deg); }
-    .mx-c5 { background: var(--mx-ink); color: var(--mx-paper); transform: rotate(-0.9deg); }
-    .mx-c6 { background: #fff; transform: rotate(0.8deg); }
-    .mx-wall-note { margin: 34px 0 0; font-size: 16px; }
+    /* sticker wall */
+    .mx-wall { background: var(--mx-paper); padding: clamp(70px, 9vw, 120px) 0; border-bottom: 6px solid var(--mx-ink); }
+    .mx-stickers {
+      position: relative; max-width: 1200px; margin: 0 auto; padding: 30px clamp(20px, 4vw, 40px) 50px;
+      display: flex; flex-wrap: wrap; gap: 18px; align-items: center; justify-content: center;
+    }
+    .mx-stk {
+      margin: 0; border: 3px solid var(--mx-ink); padding: 18px 24px; box-shadow: 5px 5px 0 var(--mx-ink);
+      font-family: var(--mx-black); font-size: 19px; text-transform: uppercase;
+      transition: transform 0.15s ease; max-width: 300px;
+    }
+    .mx-stk small { display: block; font-family: var(--mx-body); font-weight: 500; font-size: 13.5px; text-transform: none; margin-top: 6px; }
+    .mx-stk:nth-child(odd) { transform: rotate(-1.6deg); }
+    .mx-stk:nth-child(even) { transform: rotate(1.3deg); }
+    .mx-stk:nth-child(3n) { transform: rotate(-0.7deg) translateY(8px); }
+    .mx-stk:hover { transform: rotate(0deg) scale(1.06) !important; z-index: 2; position: relative; }
+    .mx-c1 { background: var(--mx-pink); color: #fff; }
+    .mx-c2 { background: var(--mx-blue); color: #fff; }
+    .mx-c3 { background: var(--mx-lime); }
+    .mx-c4 { background: var(--mx-yellow); }
+    .mx-c5 { background: var(--mx-ink); color: var(--mx-paper); }
+    .mx-c6 { background: #fff; }
+    .mx-wall-note { margin: 10px auto 0; font-size: 16px; }
     .mx-wall-note a { color: var(--mx-blue); font-weight: 700; }
 
-    /* work grid */
-    .mx-work { background: var(--mx-blue); border-bottom: 6px solid var(--mx-ink); }
-    .mx-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
-    .mx-tile { position: relative; background: var(--mx-paper); border: 4px solid var(--mx-ink); padding: 12px; margin: 0; box-shadow: 8px 8px 0 var(--mx-ink); }
-    .mx-tile img { width: 100%; height: 240px; object-fit: cover; border: 3px solid var(--mx-ink); }
-    .mx-tile figcaption { padding: 14px 6px 8px; display: grid; gap: 4px; }
-    .mx-tile figcaption strong { font-family: var(--mx-black); font-size: 20px; text-transform: uppercase; }
-    .mx-tile figcaption span { font-size: 14px; font-weight: 500; }
-    .mx-t1 { transform: rotate(-1.6deg); }
-    .mx-t2 { transform: rotate(1.3deg); margin-top: 24px; }
-    .mx-t3 { transform: rotate(-0.8deg); }
-    .mx-t4 { transform: rotate(1.8deg); }
-    .mx-t5 { transform: rotate(-1.1deg); margin-top: 24px; }
-    .mx-tile-css-in {
-      height: 240px; border: 3px dashed var(--mx-ink); display: flex; align-items: center; justify-content: center;
-      font-size: 90px; color: var(--mx-pink);
-      background: repeating-conic-gradient(var(--mx-yellow) 0% 25%, var(--mx-paper) 0% 50%) 0 0 / 44px 44px;
+    /* scrapbook */
+    .mx-scrap { background: var(--mx-blue); padding: clamp(70px, 9vw, 120px) 0; border-bottom: 6px solid var(--mx-ink); }
+    .mx-spread { position: relative; max-width: 1200px; margin: 0 auto; padding: 20px clamp(20px, 4vw, 40px) 60px; min-height: 640px; }
+    .mx-scrap-item {
+      position: absolute; background: var(--mx-paper); border: 4px solid var(--mx-ink); padding: 12px; margin: 0;
+      box-shadow: 8px 8px 0 var(--mx-ink); width: min(360px, 80vw);
     }
+    .mx-scrap-item img { width: 100%; height: 230px; object-fit: cover; border: 3px solid var(--mx-ink); }
+    .mx-scrap-item figcaption { padding: 14px 6px 8px; display: grid; gap: 4px; }
+    .mx-scrap-item figcaption strong { font-family: var(--mx-black); font-size: 20px; text-transform: uppercase; }
+    .mx-scrap-item figcaption span { font-size: 14px; font-weight: 500; }
+    .mx-s1 { top: 0; left: 4%; transform: rotate(-3deg); z-index: 2; }
+    .mx-s2 { top: 60px; right: 6%; transform: rotate(2.5deg); z-index: 1; }
+    .mx-s3 { top: 330px; left: 12%; transform: rotate(1.8deg); z-index: 3; }
+    .mx-s4 { top: 360px; right: 12%; transform: rotate(-2.2deg); z-index: 2; }
     .mx-mini-burst {
       position: absolute; top: -18px; right: -14px; background: var(--mx-lime); color: var(--mx-ink);
       font-family: var(--mx-black); font-size: 13px; padding: 12px 16px; border: 3px solid var(--mx-ink);
       transform: rotate(10deg); box-shadow: 4px 4px 0 var(--mx-ink);
     }
-    .mx-mini-burst-lg { font-size: 15px; padding: 14px 20px; }
     .mx-tape {
       position: absolute; top: -14px; left: 50%; width: 120px; height: 30px; transform: translateX(-50%) rotate(-4deg);
       background: rgba(242, 255, 0, 0.85); border-left: 2px dashed var(--mx-ink); border-right: 2px dashed var(--mx-ink);
     }
+    .mx-scrap-note {
+      position: absolute; bottom: 0; left: 50%; transform: translateX(-50%) rotate(-2deg); margin: 0;
+      font-family: var(--mx-black); font-size: 18px; text-transform: uppercase; color: var(--mx-yellow);
+      background: var(--mx-ink); padding: 14px 26px; border: 3px solid var(--mx-yellow); white-space: nowrap;
+    }
 
-    /* manifesto */
-    .mx-manifesto { background: var(--mx-pink); border-bottom: 6px solid var(--mx-ink); }
-    .mx-mani { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
-    .mx-mani blockquote { margin: 0; border: 4px solid var(--mx-ink); padding: 30px 28px; box-shadow: 8px 8px 0 var(--mx-ink); }
-    .mx-mani p { font-family: var(--mx-black); font-size: clamp(1.4rem, 3vw, 2.1rem); line-height: 1.15; text-transform: uppercase; margin: 0; }
-    .mx-m1 { background: var(--mx-yellow); transform: rotate(-1.4deg); }
-    .mx-m2 { background: var(--mx-ink); color: var(--mx-paper); transform: rotate(1.2deg); margin-top: 30px !important; }
-    .mx-m3 { background: var(--mx-lime); transform: rotate(0.9deg); }
-    .mx-m4 { background: var(--mx-paper); transform: rotate(-1deg); margin-top: 30px !important; }
-    .mx-mani-foot { margin: 36px 0 0; font-size: 17px; font-weight: 700; }
-    .mx-mani-foot a { color: var(--mx-ink); }
+    /* creed */
+    .mx-creed { background: var(--mx-pink); padding: clamp(70px, 9vw, 120px) 0; border-bottom: 6px solid var(--mx-ink); }
+    .mx-creed-wall { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 26px; }
+    .mx-creed-wall blockquote { margin: 0; padding: 30px 28px; }
+    .mx-creed-wall p { font-family: var(--mx-black); font-size: clamp(1.6rem, 4vw, 2.6rem); line-height: 1.05; text-transform: uppercase; margin: 0; }
+    .mx-creed .mx-c1 { transform: rotate(-2deg); color: var(--mx-yellow); text-shadow: 3px 3px 0 var(--mx-ink); }
+    .mx-creed .mx-c2 { transform: rotate(1.6deg); color: var(--mx-ink); margin-top: 40px; }
+    .mx-creed .mx-c3 { transform: rotate(1deg); color: #fff; text-shadow: 3px 3px 0 var(--mx-blue); }
+    .mx-creed .mx-c4 { transform: rotate(-1.4deg); color: var(--mx-lime); text-shadow: 3px 3px 0 var(--mx-ink); margin-top: 40px; }
+    .mx-creed-foot { margin: 44px 0 0; font-size: 17px; font-weight: 700; }
+    .mx-creed-foot a { color: var(--mx-ink); }
 
-    /* tiers */
-    .mx-tiers { background: var(--mx-ink); border-bottom: 6px solid var(--mx-ink); }
-    .mx-tier-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; align-items: stretch; }
-    .mx-tier { position: relative; background: var(--mx-paper); border: 4px solid var(--mx-yellow); padding: 34px 30px; display: grid; gap: 14px; align-content: start; }
-    .mx-tier h3 { font-family: var(--mx-black); font-size: 26px; text-transform: uppercase; margin: 0; }
+    /* tickets */
+    .mx-tickets { background: var(--mx-ink); padding: clamp(70px, 9vw, 120px) 0; border-bottom: 6px solid var(--mx-ink); }
+    .mx-ticket-sub { color: var(--mx-paper); font-family: var(--mx-serif); font-style: italic; font-size: 19px; margin: 0 0 40px; }
+    .mx-ticket-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; align-items: stretch; }
+    .mx-ticket { display: grid; grid-template-columns: 84px 1fr; background: var(--mx-paper); border: 4px solid var(--mx-yellow); }
+    .mx-ticket-stub {
+      background: var(--mx-yellow); border-right: 3px dashed var(--mx-ink);
+      display: grid; place-items: center; padding: 20px 8px;
+      font-family: var(--mx-black); font-size: 14px; text-transform: uppercase; text-align: center; line-height: 1.4;
+    }
+    .mx-ticket-hot .mx-ticket-stub { background: var(--mx-pink); color: #fff; }
+    .mx-ticket-main { padding: 30px 28px; display: grid; gap: 12px; align-content: start; }
+    .mx-ticket-main h3 { font-family: var(--mx-black); font-size: 26px; text-transform: uppercase; margin: 0; }
     .mx-price { font-family: var(--mx-black); font-size: 44px; margin: 0; color: var(--mx-blue); }
-    .mx-price span { font-size: 16px; font-family: var(--mx-body); font-weight: 500; color: var(--mx-ink); }
     .mx-tier-sub { font-family: var(--mx-serif); font-style: italic; font-size: 18px; margin: 0; }
-    .mx-tier ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-size: 15px; font-weight: 500; }
-    .mx-tier li::before { content: "✸ "; color: var(--mx-pink); font-weight: 700; }
-    .mx-tier-hot { background: var(--mx-yellow); transform: rotate(-1deg) scale(1.03); border-color: var(--mx-pink); }
-    .mx-tier-note { color: var(--mx-paper); margin: 30px 0 0; font-size: 14px; }
+    .mx-ticket-main ul { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 10px; font-size: 15px; font-weight: 500; }
+    .mx-ticket-main li::before { content: "✸ "; color: var(--mx-pink); font-weight: 700; }
+    .mx-ticket-note { color: var(--mx-paper); margin: 30px 0 0; font-size: 14px; }
 
-    /* contact */
-    .mx-contact { background: var(--mx-lime); }
-    .mx-contact-in { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(36px, 6vw, 80px); align-items: start; }
-    .mx-contact-txt { font-size: 17px; line-height: 1.6; max-width: 44ch; }
-    .mx-contact-list { list-style: none; margin: 26px 0 0; padding: 0; display: grid; gap: 14px; }
-    .mx-contact-list li { background: var(--mx-paper); border: 3px solid var(--mx-ink); padding: 14px 18px; box-shadow: 5px 5px 0 var(--mx-ink); display: grid; gap: 2px; }
-    .mx-contact-list strong { font-family: var(--mx-black); font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; }
-    .mx-contact-list a { color: var(--mx-blue); font-weight: 700; }
+    /* shout */
+    .mx-shout { background: var(--mx-lime); padding: clamp(70px, 9vw, 120px) 0; }
+    .mx-shout-in { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(36px, 6vw, 80px); align-items: start; }
+    .mx-shout-txt { font-size: 17px; line-height: 1.6; max-width: 44ch; }
+    .mx-mega { font-size: 90px; margin: 10px 0 20px; transform: rotate(-8deg); display: inline-block; animation: mx-wiggle 1.6s ease-in-out infinite; }
+    @keyframes mx-wiggle { 50% { transform: rotate(6deg) scale(1.08); } }
+    .mx-shout-list { list-style: none; margin: 26px 0 0; padding: 0; display: grid; gap: 14px; }
+    .mx-shout-list li { background: var(--mx-paper); border: 3px solid var(--mx-ink); padding: 14px 18px; box-shadow: 5px 5px 0 var(--mx-ink); display: grid; gap: 2px; }
+    .mx-shout-list strong { font-family: var(--mx-black); font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; }
+    .mx-shout-list a { color: var(--mx-blue); font-weight: 700; }
     .mx-form { background: var(--mx-ink); color: var(--mx-paper); padding: clamp(28px, 4vw, 44px); display: grid; gap: 16px; border: 4px solid var(--mx-ink); box-shadow: 10px 10px 0 var(--mx-pink); transform: rotate(0.8deg); }
     .mx-form h3 { font-family: var(--mx-black); font-size: 28px; text-transform: uppercase; color: var(--mx-yellow); margin: 0; }
     .mx-form label { display: grid; gap: 8px; font-weight: 700; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mx-yellow); }
@@ -474,6 +558,7 @@ const IMG = {
       padding: 14px 16px; width: 100%;
     }
     .mx-form input:focus, .mx-form select:focus, .mx-form textarea:focus { outline: 3px solid var(--mx-pink); outline-offset: 2px; }
+    .mx-form .mx-btn-lime { width: 100%; }
     .mx-form-note { margin: 0; color: var(--mx-lime); font-weight: 700; font-size: 15px; }
     .mx-form-note:empty { display: none; }
 
@@ -490,13 +575,13 @@ const IMG = {
 
     /* responsive */
     @media (max-width: 1020px) {
-      .mx-service-wall { grid-template-columns: repeat(3, 1fr); }
-      .mx-grid { grid-template-columns: 1fr 1fr; }
-      .mx-t2, .mx-t5 { margin-top: 0; }
-      .mx-tier-grid { grid-template-columns: 1fr; max-width: 560px; margin-inline: auto; }
-      .mx-tier-hot { transform: rotate(-1deg); }
-      .mx-contact-in { grid-template-columns: 1fr; }
-      .mx-burst-2 { display: none; }
+      .mx-ticket-row { grid-template-columns: 1fr; max-width: 560px; margin-inline: auto; }
+      .mx-shout-in { grid-template-columns: 1fr; }
+      .mx-spread { min-height: 0; display: grid; gap: 30px; padding-bottom: 90px; }
+      .mx-scrap-item { position: relative; top: auto !important; left: auto !important; right: auto !important; width: 100%; max-width: 480px; margin-inline: auto; }
+      .mx-scrap-note { bottom: 20px; }
+      .mx-burst-b { display: none; }
+      .mx-pol-a { top: 60px; }
     }
     @media (max-width: 860px) {
       .mx-burger { display: flex; }
@@ -508,21 +593,18 @@ const IMG = {
       .mx-nav-open .mx-nav-links { display: flex; }
       .mx-nav-links a { color: var(--mx-yellow); border: 2px solid var(--mx-yellow); text-align: center; }
       .mx-nav-links a:hover { background: var(--mx-yellow); color: var(--mx-ink); }
-      .mx-mani { grid-template-columns: 1fr; }
-      .mx-m2, .mx-m4 { margin-top: 0 !important; }
-      .mx-burst-1 { width: 110px; height: 110px; font-size: 16px; top: 120px; right: 4%; }
-      .mx-sticker-1 { display: none; }
-    }
-    @media (max-width: 640px) {
-      .mx-service-wall { grid-template-columns: 1fr 1fr; }
-      .mx-grid { grid-template-columns: 1fr; }
-      .mx-p2 { margin-top: 0; }
-      .mx-lede { transform: none; }
+      .mx-creed-wall { grid-template-columns: 1fr; }
+      .mx-creed .mx-c2, .mx-creed .mx-c4 { margin-top: 0; }
+      .mx-pol-b { display: none; }
+      .mx-burst-a { width: 110px; height: 110px; font-size: 16px; top: 260px; right: 4%; }
+      .mx-st-b { display: none; }
+      .mx-blast-stage { min-height: 0; padding-bottom: 60px; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .mx-ticker-track, .mx-burst { animation: none; }
-      .mx-btn, .mx-svc { transition: none; }
-      .mx-svc:hover { transform: none; }
+      .mx-ticker-track, .mx-burst, .mx-mega { animation: none; }
+      .mx-btn, .mx-stk { transition: none; }
+      .mx-stk:hover { transform: none; }
+      .mx-spawned { animation: none; }
     }
   </style>
 </body>
