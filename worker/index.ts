@@ -34,6 +34,31 @@ export default {
       }
     }
 
+    // Demo/carousel imagery: served from static assets when present,
+    // otherwise from KV (images are stored as base64 in the repo and
+    // restored at build time, but KV is the durable fallback).
+    if (url.pathname.startsWith("/demos/") || url.pathname.startsWith("/carousel/")) {
+      const asset = await env.ASSETS.fetch(request);
+      if (asset.status !== 404) return asset;
+      try {
+        const data = await env.WEBAO_KV.get("img:" + url.pathname, "arrayBuffer");
+        if (data) {
+          const ct = url.pathname.endsWith(".png") ? "image/png"
+            : url.pathname.endsWith(".webp") ? "image/webp"
+            : "image/jpeg";
+          return new Response(data, {
+            headers: {
+              "content-type": ct,
+              "cache-control": "public, max-age=31536000, immutable",
+            },
+          });
+        }
+      } catch (e) {
+        console.error("kv image error", (e as Error)?.message);
+      }
+      return asset;
+    }
+
     // Everything else: the static site, served by the assets binding.
     return env.ASSETS.fetch(request);
   },

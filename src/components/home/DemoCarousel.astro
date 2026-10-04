@@ -1,0 +1,166 @@
+---
+import { getDemos, localizedPaths, type Locale } from "../../lib/i18n";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props as Props;
+const paths = localizedPaths[locale];
+
+// Same catalog order as /demos, minus hidden duplicates
+const hidden = new Set(["boba-club"]);
+const demos = getDemos(locale).filter((d) => !hidden.has(d.id));
+
+const heading = locale === "fr" ? "Trente directions. Zéro modèle." : "Thirty directions. Zero templates.";
+const sub = locale === "fr"
+  ? "Chaque vignette est la page d’accueil réelle d’un site démo. Laissez défiler, cliquez pour explorer."
+  : "Every frame is the real homepage of a demo site. Let it roll, click to explore.";
+const eyebrow = locale === "fr" ? "Le catalogue en mouvement" : "The catalog in motion";
+const browse = locale === "fr" ? "Parcourir les 30 démos →" : "Browse all 30 demos →";
+const prevLabel = locale === "fr" ? "Précédent" : "Previous";
+const nextLabel = locale === "fr" ? "Suivant" : "Next";
+---
+
+<section class="carousel-section grain" aria-label={eyebrow}>
+  <div class="shell">
+    <div class="split-head" data-reveal>
+      <div>
+        <div class="eyebrow">{eyebrow}</div>
+        <h2 class="display" style="font-size: clamp(2.2rem, 5vw, 4.2rem); margin-top: 14px; line-height:.92;">{heading}</h2>
+      </div>
+      <div class="split-head-actions">
+        <p class="prose" style="font-size: 15px; max-width: 38ch;">{sub}</p>
+        <a href={paths.demos} class="btn btn--ghost btn--sm" style="margin-top:16px;">{browse}</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="carousel" data-carousel data-reveal>
+    <div class="carousel-viewport">
+      <div class="carousel-track">
+        {demos.map((d) => (
+          <a href={`${paths.demos}/${d.id}`} class="carousel-card" aria-label={`${d.name}, ${d.tone}`}>
+            <span class="carousel-shot">
+              <img src={`/carousel/${d.id}.jpg`} alt={`${d.name} homepage`} loading="lazy" width="1280" height="800" />
+            </span>
+            <span class="carousel-meta">
+              <span class="carousel-name">{d.name}</span>
+              <span class="carousel-tone mono">{d.tone}</span>
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+    <div class="carousel-controls">
+      <button type="button" class="carousel-btn" data-carousel-prev aria-label={prevLabel}>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg>
+      </button>
+      <div class="carousel-progress" data-carousel-progress role="slider" aria-label="Carousel position" tabindex="0"><span data-carousel-fill></span></div>
+      <button type="button" class="carousel-btn" data-carousel-next aria-label={nextLabel}>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+  function initCarousel() {
+    const root = document.querySelector('[data-carousel]');
+    if (!root || (root as HTMLElement).dataset.init) return;
+    (root as HTMLElement).dataset.init = "1";
+    const track = root.querySelector('.carousel-track') as HTMLElement;
+    const cards = Array.from(track.querySelectorAll('.carousel-card')) as HTMLElement[];
+    const prev = root.querySelector('[data-carousel-prev]') as HTMLButtonElement;
+    const next = root.querySelector('[data-carousel-next]') as HTMLButtonElement;
+    const progress = root.querySelector('[data-carousel-progress]') as HTMLElement;
+    if (!cards.length) return;
+
+    let index = 0;
+    let perView = 1;
+    let timer: number | null = null;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function measure() {
+      const w = root.querySelector('.carousel-viewport')!.clientWidth;
+      perView = w >= 1100 ? 3 : w >= 700 ? 2 : 1;
+    }
+    function maxIndex() { return Math.max(0, cards.length - perView); }
+
+    const fill = root.querySelector('[data-carousel-fill]') as HTMLElement;
+    function paintProgress() {
+      const max = maxIndex();
+      const pct = max === 0 ? 100 : (Math.min(index, max) / max) * 100;
+      fill.style.width = pct + '%';
+      progress.setAttribute('aria-valuenow', String(Math.round(pct)));
+    }
+
+    function go(i: number) {
+      index = (i + cards.length) % cards.length;
+      if (index > maxIndex()) index = 0;
+      const card = cards[0];
+      const gap = parseFloat(getComputedStyle(track).columnGap || '18');
+      const step = card.getBoundingClientRect().width + gap;
+      track.style.transform = `translateX(${-index * step}px)`;
+      paintProgress();
+    }
+    function stepFn(dir: number) { go(index + dir > maxIndex() ? 0 : index + dir); }
+    function restart() {
+      if (timer) window.clearInterval(timer);
+      timer = null;
+      if (!reduced) timer = window.setInterval(() => stepFn(1), 4200);
+    }
+
+    prev.addEventListener('click', () => { stepFn(-1); restart(); });
+    next.addEventListener('click', () => { stepFn(1); restart(); });
+    root.addEventListener('pointerenter', () => { if (timer) window.clearInterval(timer); timer = null; });
+    root.addEventListener('pointerleave', restart);
+    root.addEventListener('focusin', () => { if (timer) window.clearInterval(timer); timer = null; });
+    root.addEventListener('focusout', restart);
+    window.addEventListener('resize', () => { measure(); go(Math.min(index, maxIndex())); });
+
+    measure(); go(0); restart();
+    progress.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') { stepFn(1); restart(); }
+      if (e.key === 'ArrowLeft') { stepFn(-1); restart(); }
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initCarousel);
+  else initCarousel();
+</script>
+
+<style>
+  .carousel-section { padding-block: clamp(48px, 7vw, 96px); overflow: clip; }
+  .carousel { margin-top: 34px; }
+  .carousel-viewport { overflow: hidden; padding: 6px max(20px, calc((100vw - 1240px) / 2 + 20px)) 18px; }
+  .carousel-track {
+    display: flex; column-gap: 18px;
+    transition: transform .8s cubic-bezier(.22,.8,.24,1);
+    will-change: transform;
+  }
+  .carousel-card {
+    flex: 0 0 calc((100% - 36px) / 3);
+    min-width: 0; text-decoration: none; color: inherit;
+    border: 1px solid var(--line); border-radius: 18px; overflow: clip;
+    background: var(--card-bg); box-shadow: var(--shadow-sm);
+    transition: transform .35s ease, box-shadow .35s ease;
+  }
+  .carousel-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+  .carousel-shot { display: block; aspect-ratio: 16 / 10; overflow: clip; background: var(--paper-2); }
+  .carousel-shot img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+  .carousel-meta { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 12px 16px 14px; }
+  .carousel-name { font-weight: 700; letter-spacing: -0.02em; font-size: 15px; }
+  .carousel-tone { font-size: 10px; letter-spacing: .1em; color: var(--muted); text-transform: uppercase; white-space: nowrap; }
+  .carousel-controls { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 6px; }
+  .carousel-btn {
+    width: 40px; height: 40px; border-radius: 99px; border: 1px solid var(--line);
+    background: var(--card-bg); color: var(--ink); cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .carousel-btn:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .carousel-btn svg { width: 16px; height: 16px; }
+  .carousel-progress { width: min(320px, 40vw); height: 4px; border-radius: 99px; background: var(--line); overflow: clip; cursor: default; }
+  .carousel-progress span { display: block; height: 100%; width: 0; background: var(--ink); border-radius: 99px; transition: width .5s ease; }
+  @media (max-width: 1100px) { .carousel-card { flex-basis: calc((100% - 18px) / 2); } }
+  @media (max-width: 700px) { .carousel-card { flex-basis: 100%; } }
+  @media (prefers-reduced-motion: reduce) { .carousel-track { transition: none; } }
+</style>
