@@ -1,6 +1,5 @@
 ---
 import CursorJourney from "../anim/CursorJourney.astro";
-import IntroSequence from "../anim/IntroSequence.astro";
 import { useTranslations, localizedPaths, type Locale } from "../../lib/i18n";
 
 interface Props {
@@ -14,11 +13,9 @@ const paths = localizedPaths[locale];
 const processId = locale === "fr" ? "processus" : "process";
 ---
 
-<!-- Signature intro: cursor flies in, hits the barrier, bounces, invites the
-     click, breaks through and hands the visitor to the primary CTA.
-     Only runs on the landing page, once per session, and never blocks the
-     site when disabled, reduced-motion, or JS-less. -->
-<IntroSequence slot="overlay" locale={locale} />
+<!-- The signature intro is rendered by the page into BaseLayout's `overlay`
+     slot (outside <main>), never here: <main> is transformed while the intro
+     plays, and a transformed ancestor would push the fixed overlay off-screen. -->
 
 <!-- HERO: watermark + parallax + split reveal -->
 <section class="hero grain" id="hero">
