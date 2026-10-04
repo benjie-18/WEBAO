@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import HomePage from "../../components/pages/HomePage.astro";
+import IntroSequence from "../../components/anim/IntroSequence.astro";
 import { useTranslations } from "../../lib/i18n";
 
 const locale = "fr" as const;
@@ -13,5 +14,6 @@ const t = useTranslations(locale);
   locale={locale}
   pageKey="home"
 >
+  <IntroSequence slot="overlay" locale={locale} />
   <HomePage locale={locale} />
 </BaseLayout>
