@@ -1,11 +1,12 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
 
-// Demo microsite: Atelier Nord · fictional premium auto studio, Brossard QC.
-// Rebuilt as dark "mission control". Standalone art direction, not connected
-// to the WEBAO theme system by design.
+// Demo microsite: Atelier Nord · premium auto studio, Brossard QC.
+// Rebuilt as a GARAGE BAY LOG: no hero. The page opens on the latest
+// stamped work order, then a ledger of past jobs, a pinned shop rate
+// card, and a "file a work order" form. Standalone art direction.
 const IMG = {
-  hero: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1800&auto=format&fit=crop",
+  hero: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop",
   garage: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1200&auto=format&fit=crop",
   detail: "/demos/atelier-nord/01.jpg",
   engine: "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?q=80&w=1200&auto=format&fit=crop",
@@ -17,8 +18,8 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Atelier Nord · Precision auto care in Brossard</title>
-  <meta name="description" content="Atelier Nord: dealer-level diagnostics, concours detailing and performance work in Brossard. By appointment only." />
+  <title>Atelier Nord · Bay log · Brossard</title>
+  <meta name="description" content="Atelier Nord bay log: real work orders, honest pricing and a shop you can read before you book. Brossard, QC." />
   <meta name="robots" content="noindex" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -26,462 +27,276 @@ const IMG = {
 </head>
 <body class="an">
 
-  <header class="an-nav">
-    <div class="an-nav-in">
-      <a class="an-logo" href="#top" aria-label="Atelier Nord · home">
+  <!-- Slim shop header: no hero, straight to the log -->
+  <header class="an-top">
+    <div class="an-wrap an-top-in">
+      <a class="an-logo" href="#top" aria-label="Atelier Nord · top">
         <span class="an-logo-mark" aria-hidden="true">N/</span>
         <span class="an-logo-text">ATELIER&nbsp;NORD</span>
+        <span class="an-logo-sub">bay log</span>
       </a>
       <nav class="an-links" aria-label="Primary">
-        <a href="#services"><span>01</span>Services</a>
-        <a href="#bays"><span>02</span>In the bays</a>
-        <a href="#process"><span>03</span>Process</a>
-        <a href="#contact"><span>04</span>Contact</a>
+        <a href="#latest">Latest job</a>
+        <a href="#log">The log</a>
+        <a href="#rates">Rate card</a>
       </nav>
-      <a class="an-btn an-btn-accent an-btn-sm" href="#contact">Book appointment</a>
-      <button class="an-burger" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
-    </div>
-    <div class="an-mobile" hidden>
-      <a href="#services">Services</a>
-      <a href="#bays">In the bays</a>
-      <a href="#process">Process</a>
-      <a href="#contact">Book appointment</a>
+      <a class="an-btn an-btn-amber an-btn-sm" href="#order">File a work order</a>
     </div>
   </header>
 
   <main id="top">
-    <!-- HERO: headline left, live bay status right -->
-    <section class="an-hero">
-      <div class="an-wrap an-hero-grid">
-        <div class="an-hero-copy">
-          <p class="an-mono an-hero-kicker"><span class="an-live" aria-hidden="true"></span>Brossard QC · by appointment only</p>
-          <h1 class="an-h1">Precision<br />has an address.</h1>
-          <p class="an-hero-sub">Dealer-level diagnostics, concours-grade detailing and honest performance work, for people who read the spec sheet.</p>
-          <div class="an-hero-cta">
-            <a class="an-btn an-btn-accent" href="#contact">Book an appointment</a>
-            <a class="an-btn an-btn-line" href="#bays">See the bays</a>
-          </div>
-          <p class="an-mono an-hero-note">Tue to Sat · 8:00 to 18:00 · 3 bays · 2 techs on shift</p>
+
+    <!-- LATEST JOB: a stamped work order, torn off the pad -->
+    <article class="an-wrap an-ticket" id="latest" aria-labelledby="ticket-title">
+      <div class="an-ticket-perf" aria-hidden="true"></div>
+      <div class="an-ticket-body">
+        <div class="an-ticket-head">
+          <p class="an-mono an-ticket-kicker">Work order #2481 · opened Oct 3, 2026</p>
+          <p class="an-stamp" aria-label="Job completed">Completed</p>
         </div>
-        <aside class="an-panel" aria-label="Live bay status">
-          <div class="an-panel-head">
-            <p class="an-mono"><span class="an-live" aria-hidden="true"></span>Live bay status</p>
-            <p class="an-mono an-panel-upd">Updated 10:42</p>
+        <h1 class="an-h1" id="ticket-title">Porsche 911 Carrera<span class="an-h1-sub">Stage-2 polish + 5-year ceramic</span></h1>
+        <dl class="an-ticket-meta">
+          <div><dt class="an-mono">Bay</dt><dd>01</dd></div>
+          <div><dt class="an-mono">Techs</dt><dd>M.L. + J.R.</dd></div>
+          <div><dt class="an-mono">Hours</dt><dd>34.5</dd></div>
+          <div><dt class="an-mono">Mileage</dt><dd>18,204 km</dd></div>
+          <div><dt class="an-mono">Total</dt><dd>$3,850</dd></div>
+        </dl>
+        <p class="an-ticket-note">Full paint decon, two-stage machine polish, panel-by-panel photo documentation, then a 5-year ceramic. Owner picked it up Saturday and stopped twice on the way home to look at it. That happens a lot.</p>
+        <figure class="an-beforeafter">
+          <div class="an-ba">
+            <img src={IMG.garage} alt="The 911 on arrival, paint dull under shop lights" loading="eager" />
+            <figcaption class="an-mono">Before · as dropped off</figcaption>
           </div>
-          <div class="an-bay">
-            <div class="an-bay-top"><span class="an-mono">Bay 01</span><span class="an-status an-status-busy">In progress</span></div>
-            <p class="an-bay-job">Ceramic coating · stage-2 polish</p>
-            <p class="an-mono an-bay-eta">Coating at 14:00</p>
+          <div class="an-ba">
+            <img src={IMG.hero} alt="The 911 after polishing, paint deep and reflective" loading="eager" />
+            <figcaption class="an-mono">After · 34.5 hours later</figcaption>
           </div>
-          <div class="an-bay">
-            <div class="an-bay-top"><span class="an-mono">Bay 02</span><span class="an-status an-status-qc">QC check</span></div>
-            <p class="an-bay-job">Full diagnostic · intermittent misfire</p>
-            <p class="an-mono an-bay-eta">Road test next</p>
-          </div>
-          <div class="an-bay">
-            <div class="an-bay-top"><span class="an-mono">Bay 03</span><span class="an-status an-status-open">Open</span></div>
-            <p class="an-bay-job">Available · all services</p>
-            <p class="an-mono an-bay-eta">Next slot today 14:30</p>
-          </div>
-          <a class="an-btn an-btn-accent an-btn-full an-panel-cta" href="#contact">Book Bay 03</a>
-        </aside>
+        </figure>
+        <p class="an-mono an-ticket-foot">Signed off M.L. · QC road test passed · invoice #INV-2481</p>
       </div>
+    </article>
+
+    <!-- THE LOG: chronological ledger of jobs -->
+    <section class="an-wrap an-logsec" id="log" aria-labelledby="log-title">
+      <div class="an-sec-head">
+        <h2 class="an-h2" id="log-title">The bay log</h2>
+        <p class="an-log-sub">Every job we sign off goes in the book. Names withheld, cars and numbers are real.</p>
+      </div>
+      <div class="an-ledger" role="table" aria-label="Recent jobs">
+        <div class="an-row an-row-head" role="row" aria-hidden="true">
+          <span class="an-mono">Date</span><span class="an-mono">WO</span><span class="an-mono">Vehicle</span><span class="an-mono">Work</span><span class="an-mono">Tech</span><span class="an-mono">Total</span>
+        </div>
+        <a class="an-row" role="row" href="#order">
+          <span class="an-mono an-date">Oct 2</span><span class="an-mono an-wo">#2480</span>
+          <span class="an-veh"><img src={IMG.engine} alt="" loading="lazy" />Audi RS6 Avant</span>
+          <span class="an-work">Full diagnostic, intermittent misfire. Coil packs 2 and 5 replaced, road test clean.</span>
+          <span class="an-mono an-tech">J.R.</span><span class="an-mono an-total">$1,240</span>
+        </a>
+        <a class="an-row" role="row" href="#order">
+          <span class="an-mono an-date">Oct 1</span><span class="an-mono an-wo">#2479</span>
+          <span class="an-veh"><img src={IMG.garage} alt="" loading="lazy" />BMW M4 Competition</span>
+          <span class="an-work">Pre-purchase inspection, 140 points. Two paint blends found, buyer walked away informed.</span>
+          <span class="an-mono an-tech">M.L.</span><span class="an-mono an-total">$380</span>
+        </a>
+        <a class="an-row" role="row" href="#order">
+          <span class="an-mono an-date">Sep 30</span><span class="an-mono an-wo">#2478</span>
+          <span class="an-veh"><img src={IMG.detail} alt="" loading="lazy" />Mercedes-AMG GT</span>
+          <span class="an-work">Interior reset plus paint decon and sealant. Alcantara wheel brought back from the dead.</span>
+          <span class="an-mono an-tech">J.R.</span><span class="an-mono an-total">$1,650</span>
+        </a>
+        <a class="an-row" role="row" href="#order">
+          <span class="an-mono an-date">Sep 27</span><span class="an-mono an-wo">#2477</span>
+          <span class="an-veh"><img src={IMG.hero} alt="" loading="lazy" />Tesla Model 3</span>
+          <span class="an-work">Performance alignment, brake service, cabin filter. In and out same day.</span>
+          <span class="an-mono an-tech">M.L.</span><span class="an-mono an-total">$520</span>
+        </a>
+      </div>
+      <p class="an-mono an-log-foot">Older entries live in the shop binder. Ask to flip through it when you visit.</p>
     </section>
 
-    <!-- SERVICES: spec-table rows -->
-    <section class="an-section" id="services">
+    <!-- RATE CARD: pinned shop price board -->
+    <section class="an-ratesec" id="rates" aria-labelledby="rates-title">
       <div class="an-wrap">
-        <div class="an-sec-head">
-          <p class="an-mono">01 / Services</p>
-          <h2 class="an-h2">Three disciplines.<br />Zero guesswork.</h2>
-        </div>
-        <div class="an-specs">
-          <article class="an-specrow">
-            <span class="an-mono an-specrow-code">S.01</span>
-            <div class="an-specrow-main">
-              <h3>Diagnostics</h3>
-              <p>Oscilloscope-level electrical diagnosis, module coding and 140-point pre-purchase inspections.</p>
-            </div>
-            <div class="an-chips">
-              <span class="an-chip">140-pt report</span>
-              <span class="an-chip">Same-day results</span>
-              <span class="an-chip">Fixed quote</span>
-            </div>
-          </article>
-          <article class="an-specrow">
-            <span class="an-mono an-specrow-code">S.02</span>
-            <div class="an-specrow-main">
-              <h3>Detailing</h3>
-              <p>Multi-stage paint correction, ceramic coatings and full interior resets, documented panel by panel.</p>
-            </div>
-            <div class="an-chips">
-              <span class="an-chip">Multi-stage polish</span>
-              <span class="an-chip">5-yr ceramic</span>
-              <span class="an-chip">Photo log</span>
-            </div>
-          </article>
-          <article class="an-specrow">
-            <span class="an-mono an-specrow-code">S.03</span>
-            <div class="an-specrow-main">
-              <h3>Performance</h3>
-              <p>Suspension geometry, brake upgrades and track preparation, measured on the rack.</p>
-            </div>
-            <div class="an-chips">
-              <span class="an-chip">0.01° accuracy</span>
-              <span class="an-chip">In-house dyno</span>
-              <span class="an-chip">Track checklist</span>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- NUMBERS BAND -->
-    <section class="an-numbers">
-      <div class="an-wrap an-numbers-in">
-        <div><strong>4.9</strong><span class="an-mono">avg rating / 186 reviews</span></div>
-        <div><strong>12</strong><span class="an-mono">years in operation</span></div>
-        <div><strong>3.2k</strong><span class="an-mono">cars through the shop</span></div>
-        <div><strong>0</strong><span class="an-mono">upsells you didn't ask for</span></div>
-      </div>
-    </section>
-
-    <!-- IN THE BAYS: workshop log -->
-    <section class="an-section" id="bays">
-      <div class="an-wrap">
-        <div class="an-sec-head">
-          <p class="an-mono">02 / In the bays</p>
-          <h2 class="an-h2">Workshop log.</h2>
-        </div>
-        <div class="an-log-grid">
-          <ol class="an-log">
-            <li>
-              <span class="an-mono an-log-t">10:20 · Bay 02</span>
-              <p>Alignment dialled to spec. Road test next.</p>
-            </li>
-            <li>
-              <span class="an-mono an-log-t">09:05 · Bay 03</span>
-              <p>Misfire traced to a failing coil driver. Customer approved the fix.</p>
-            </li>
-            <li>
-              <span class="an-mono an-log-t">08:12 · Bay 01</span>
-              <p>Stage-2 polish done. Ceramic goes on at 2pm.</p>
-            </li>
-            <li>
-              <span class="an-mono an-log-t">06:40 · Bay 02</span>
-              <p>Intake photos taken. GTI on the lift.</p>
-            </li>
-          </ol>
-          <div class="an-log-media">
-            <figure class="an-log-fig">
-              <img src={IMG.garage} alt="A classic car inside the Atelier Nord workshop" loading="lazy" />
-              <figcaption class="an-mono">Bay 02 · 06:40 AM</figcaption>
-            </figure>
-            <div class="an-log-pair">
-              <figure class="an-log-fig">
-                <img src={IMG.detail} alt="Paint correction in progress on a black coupe" loading="lazy" />
-                <figcaption class="an-mono">Bay 01 · correction</figcaption>
-              </figure>
-              <figure class="an-log-fig">
-                <img src={IMG.engine} alt="Engine bay during a diagnostic session" loading="lazy" />
-                <figcaption class="an-mono">Bay 03 · diagnostic</figcaption>
-              </figure>
-            </div>
+        <div class="an-board" role="region" aria-label="Shop rate card">
+          <span class="an-pin an-pin-1" aria-hidden="true"></span>
+          <span class="an-pin an-pin-2" aria-hidden="true"></span>
+          <div class="an-board-head">
+            <h2 class="an-h2 an-h2-board" id="rates-title">Rate card</h2>
+            <p class="an-mono an-board-note">Pinned to the shop wall since 2019 · prices before tax</p>
           </div>
+          <ul class="an-board-list">
+            <li><span>140-pt pre-purchase inspection</span><span class="an-dots" aria-hidden="true"></span><span class="an-mono">$380 flat</span></li>
+            <li><span>Stage-1 machine polish</span><span class="an-dots" aria-hidden="true"></span><span class="an-mono">from $650</span></li>
+            <li><span>Stage-2 polish + 5-yr ceramic</span><span class="an-dots" aria-hidden="true"></span><span class="an-mono">from $2,900</span></li>
+            <li><span>Interior reset</span><span class="an-dots" aria-hidden="true"></span><span class="an-mono">from $390</span></li>
+            <li><span>Paint decon + sealant</span><span class="an-dots" aria-hidden="true"></span><span class="an-mono">from $480</span></li>
+            <li><span>Performance alignment</span><span class="an-dots" aria-hidden="true"></span><span class="an-mono">from $220</span></li>
+            <li><span>Electrical diagnostic, per hour</span><span class="an-dots" aria-hidden="true"></span><span class="an-mono">$140 / hr</span></li>
+          </ul>
+          <p class="an-board-foot">Fixed quote before we touch the car. If we find more, we call before we fix.</p>
         </div>
       </div>
     </section>
 
-    <!-- PROCESS: numbered timeline -->
-    <section class="an-section an-process" id="process">
-      <div class="an-wrap">
-        <div class="an-sec-head">
-          <p class="an-mono">03 / Process</p>
-          <h2 class="an-h2">How a visit works.</h2>
-        </div>
-        <ol class="an-timeline">
-          <li>
-            <span class="an-mono an-timeline-n">P.01</span>
-            <div><h3>Book</h3><p>Pick a slot online or by phone. Tell us symptoms, not solutions. That's our job.</p></div>
-          </li>
-          <li>
-            <span class="an-mono an-timeline-n">P.02</span>
-            <div><h3>Inspect</h3><p>Photo intake and a digital inspection on your phone before we touch a bolt.</p></div>
-          </li>
-          <li>
-            <span class="an-mono an-timeline-n">P.03</span>
-            <div><h3>Approve</h3><p>Fixed quote, itemized parts. Nothing moves without your explicit yes.</p></div>
-          </li>
-          <li>
-            <span class="an-mono an-timeline-n">P.04</span>
-            <div><h3>Drive</h3><p>Torqued, tested, washed. Old parts in a box in the trunk if you want them.</p></div>
-          </li>
-        </ol>
-      </div>
-    </section>
-
-    <!-- CONTACT: split -->
-    <section class="an-section" id="contact">
-      <div class="an-wrap an-contact-grid">
+    <!-- FILE A WORK ORDER -->
+    <section class="an-wrap an-ordersec" id="order" aria-labelledby="order-title">
+      <div class="an-order-grid">
         <div>
-          <p class="an-mono">04 / Contact</p>
-          <h2 class="an-h2">Book the bay.</h2>
-          <p class="an-prose">Appointments Tuesday to Saturday. Emergencies (you know what those are): call.</p>
-          <dl class="an-contact-list">
-            <div><dt class="an-mono">Phone</dt><dd><a href="tel:+14505550177">(450) 555-0177</a></dd></div>
-            <div><dt class="an-mono">Email</dt><dd><a href="mailto:service@atelier-nord-demo.ca">service@atelier-nord-demo.ca</a></dd></div>
-            <div><dt class="an-mono">Shop</dt><dd>123, rue Fictive, Brossard QC</dd></div>
-            <div><dt class="an-mono">Hours</dt><dd>Tue to Sat · 8am to 6pm</dd></div>
-          </dl>
+          <h2 class="an-h2" id="order-title">File a work order</h2>
+          <p class="an-order-sub">Tell us the car and the complaint. We reply within one business day with a slot and a fixed quote.</p>
+          <p class="an-mono an-order-hours">Tue to Sat · 8:00 to 18:00 · 2150 boul. Lapinière, Brossard</p>
         </div>
-        <form class="an-form" id="an-form" novalidate>
-          <div class="an-form-row">
-            <label class="an-mono">Name<input type="text" name="name" required placeholder="Jane Doe" /></label>
-            <label class="an-mono">Phone<input type="tel" name="phone" required placeholder="(450) 555-0000" /></label>
+        <form class="an-form" id="order-form">
+          <label>Your name<input type="text" name="name" required autocomplete="name" /></label>
+          <div class="an-form-2col">
+            <label>Vehicle<input type="text" name="vehicle" placeholder="e.g. 2022 GR86" required /></label>
+            <label>Plate<input type="text" name="plate" placeholder="ABC 123" /></label>
           </div>
-          <label class="an-mono">Service
+          <label>Service needed
             <select name="service">
               <option>Diagnostics</option>
-              <option>Detailing</option>
-              <option>Performance</option>
+              <option>Stage-1 polish</option>
+              <option>Stage-2 polish + ceramic</option>
+              <option>Interior reset</option>
               <option>Pre-purchase inspection</option>
+              <option>Something else</option>
             </select>
           </label>
-          <label class="an-mono">Vehicle / symptoms<textarea name="details" rows="4" placeholder="2019 Golf GTI, vibration at 110 km/h…"></textarea></label>
-          <button class="an-btn an-btn-accent an-btn-full" type="submit">Request appointment</button>
-          <p class="an-form-note" role="status" aria-live="polite"></p>
+          <label>What is it doing (or not doing)?<textarea name="notes" rows="3" placeholder="Describe the issue in your own words"></textarea></label>
+          <button class="an-btn an-btn-amber an-btn-full" type="submit">Submit work order</button>
+          <p class="an-mono an-form-done" id="form-done" hidden>Received. We will call you back with a slot and a fixed quote.</p>
         </form>
       </div>
     </section>
   </main>
 
-  <footer class="an-footer">
-    <div class="an-wrap an-footer-in">
-      <p class="an-logo"><span class="an-logo-mark" aria-hidden="true">N/</span><span class="an-logo-text">ATELIER&nbsp;NORD</span></p>
-      <p class="an-footer-note an-mono">© 2026 Atelier Nord · Brossard, QC</p>
+  <footer class="an-foot">
+    <div class="an-wrap an-foot-in">
+      <p class="an-mono">Atelier Nord · Brossard QC · fictitious demo site</p>
+      <p class="an-mono">(450) 555-0147 · bonjour@ateliernord.example</p>
     </div>
   </footer>
 
   <EscapeHatch locale="en" />
 
+  <style>
+    .an { --bg: #12100c; --bg2: #1a1712; --paper: #f4efe3; --paper-dim: #d9d2bd; --ink: #ece7d8; --mut: #a39c86; --amber: #f2a71b; --amber-d: #c77f0a; --red: #d9483b; --line: #2c2820; --mono: "IBM Plex Mono", ui-monospace, monospace; --sans: "Space Grotesk", system-ui, sans-serif; background: var(--bg); color: var(--ink); font-family: var(--sans); margin: 0; min-height: 100vh; }
+    .an * { box-sizing: border-box; }
+    .an img { display: block; max-width: 100%; }
+    .an .an-wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+    .an .an-mono { font-family: var(--mono); font-size: 12px; letter-spacing: .04em; }
+    .an .an-h1 { font-size: clamp(34px, 6vw, 62px); line-height: 1.02; letter-spacing: -0.02em; margin: 18px 0 0; font-weight: 700; }
+    .an .an-h1-sub { display: block; font-size: clamp(16px, 2.4vw, 22px); font-weight: 500; color: var(--amber); letter-spacing: 0; margin-top: 10px; }
+    .an .an-h2 { font-size: clamp(26px, 4vw, 40px); letter-spacing: -0.02em; margin: 0; line-height: 1.05; }
+    .an .an-btn { display: inline-block; font-family: var(--sans); font-weight: 600; font-size: 15px; padding: 13px 22px; border-radius: 8px; text-decoration: none; border: 0; cursor: pointer; }
+    .an .an-btn-sm { padding: 9px 15px; font-size: 13px; }
+    .an .an-btn-full { width: 100%; text-align: center; }
+    .an .an-btn-amber { background: var(--amber); color: #171204; }
+    .an .an-btn-amber:hover { background: #ffba3a; }
+
+    /* slim header */
+    .an-top { position: sticky; top: 0; z-index: 50; background: rgba(18,16,12,.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+    .an-top-in { display: flex; align-items: center; gap: 22px; padding-top: 12px; padding-bottom: 12px; }
+    .an-logo { display: flex; align-items: baseline; gap: 8px; text-decoration: none; color: var(--ink); margin-right: auto; }
+    .an-logo-mark { font-weight: 700; color: var(--amber); font-size: 18px; }
+    .an-logo-text { font-weight: 700; letter-spacing: .12em; font-size: 14px; }
+    .an-logo-sub { font-family: var(--mono); font-size: 11px; color: var(--mut); }
+    .an-links { display: flex; gap: 20px; }
+    .an-links a { color: var(--mut); text-decoration: none; font-size: 14px; font-weight: 500; }
+    .an-links a:hover { color: var(--ink); }
+
+    /* ticket: torn work order */
+    .an-ticket { margin-top: 34px; }
+    .an-ticket-perf { height: 14px; background-image: radial-gradient(circle at 8px 50%, var(--bg) 6px, transparent 6.5px); background-size: 24px 14px; background-repeat: repeat-x; }
+    .an-ticket-body { background: var(--paper); color: #201b12; border-radius: 0 0 10px 10px; padding: clamp(22px, 4vw, 44px); position: relative; box-shadow: 0 24px 60px rgba(0,0,0,.45); }
+    .an-ticket-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .an-ticket-kicker { color: #6d6350; margin: 0; text-transform: uppercase; }
+    .an-stamp { font-family: var(--mono); font-weight: 600; font-size: 13px; letter-spacing: .18em; text-transform: uppercase; color: var(--red); border: 3px double var(--red); border-radius: 6px; padding: 7px 14px; transform: rotate(-4deg); margin: 0; }
+    .an-ticket-body .an-h1 { color: #171204; }
+    .an-ticket-meta { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin: 26px 0 0; padding: 18px 0; border-top: 2px solid #201b12; border-bottom: 2px solid #201b12; }
+    .an-ticket-meta div { margin: 0; }
+    .an-ticket-meta dt { color: #6d6350; text-transform: uppercase; margin-bottom: 4px; }
+    .an-ticket-meta dd { margin: 0; font-weight: 700; font-size: 17px; }
+    .an-ticket-note { font-size: 16px; line-height: 1.6; color: #3d362a; max-width: 62ch; }
+    .an-beforeafter { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 24px 0 0; }
+    .an-ba img { width: 100%; height: 240px; object-fit: cover; border-radius: 6px; }
+    .an-ba figcaption { margin-top: 8px; color: #6d6350; }
+    .an-ticket-foot { color: #6d6350; margin: 22px 0 0; padding-top: 14px; border-top: 1px dashed #b9ae93; }
+
+    /* ledger */
+    .an-logsec { margin-top: 72px; }
+    .an-sec-head { margin-bottom: 26px; }
+    .an-log-sub { color: var(--mut); margin: 10px 0 0; font-size: 15px; }
+    .an-ledger { border-top: 1px solid var(--line); }
+    .an-row { display: grid; grid-template-columns: 64px 70px 1.1fr 1.6fr 60px 80px; gap: 14px; align-items: center; padding: 16px 6px; border-bottom: 1px solid var(--line); text-decoration: none; color: var(--ink); }
+    a.an-row:hover { background: var(--bg2); }
+    .an-row-head { color: var(--mut); text-transform: uppercase; padding: 10px 6px; }
+    .an-row-head span { font-size: 11px; }
+    .an-date { color: var(--amber); }
+    .an-wo { color: var(--mut); }
+    .an-veh { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 15px; }
+    .an-veh img { width: 52px; height: 40px; object-fit: cover; border-radius: 5px; }
+    .an-work { color: var(--mut); font-size: 14px; line-height: 1.5; }
+    .an-total { font-weight: 600; text-align: right; }
+    .an-log-foot { color: var(--mut); margin-top: 16px; }
+
+    /* rate board */
+    .an-ratesec { margin-top: 72px; }
+    .an-board { position: relative; background: #20241f; border: 10px solid #3a2f22; border-radius: 6px; padding: clamp(24px, 4vw, 44px); box-shadow: 0 24px 60px rgba(0,0,0,.5); }
+    .an-pin { position: absolute; top: -14px; width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ff8a8a, var(--red) 60%, #8f1f14); box-shadow: 0 3px 6px rgba(0,0,0,.5); }
+    .an-pin-1 { left: 8%; } .an-pin-2 { right: 8%; }
+    .an-board-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+    .an-h2-board { color: #f5ecd7; font-family: var(--mono); letter-spacing: .06em; text-transform: uppercase; font-size: clamp(22px, 3vw, 30px); }
+    .an-board-note { color: #b9ac8c; margin: 0; }
+    .an-board-list { list-style: none; margin: 0; padding: 0; }
+    .an-board-list li { display: flex; align-items: baseline; gap: 10px; padding: 11px 0; border-bottom: 1px dashed #4a4232; color: #efe6cd; font-size: 16px; }
+    .an-board-list li .an-dots { flex: 1; border-bottom: 2px dotted #6b5f45; transform: translateY(-4px); }
+    .an-board-list li .an-mono { color: var(--amber); font-size: 14px; white-space: nowrap; }
+    .an-board-foot { color: #b9ac8c; font-size: 14px; margin: 20px 0 0; font-style: italic; }
+
+    /* order form */
+    .an-ordersec { margin: 72px auto 90px; }
+    .an-order-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 40px; align-items: start; }
+    .an-order-sub { color: var(--mut); line-height: 1.6; }
+    .an-order-hours { color: var(--amber); margin-top: 18px; }
+    .an-form { display: grid; gap: 14px; background: var(--bg2); border: 1px solid var(--line); border-radius: 12px; padding: 26px; }
+    .an-form label { display: grid; gap: 7px; font-size: 13px; font-weight: 600; color: var(--paper-dim); }
+    .an-form-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .an-form input, .an-form select, .an-form textarea { font-family: var(--sans); font-size: 15px; padding: 11px 12px; border-radius: 7px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); width: 100%; }
+    .an-form input:focus, .an-form select:focus, .an-form textarea:focus { outline: 2px solid var(--amber); outline-offset: 1px; }
+    .an-form-done { color: var(--amber); margin: 4px 0 0; }
+
+    .an-foot { border-top: 1px solid var(--line); padding: 22px 0 60px; }
+    .an-foot-in { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .an-foot p { color: var(--mut); margin: 0; }
+
+    @media (max-width: 860px) {
+      .an-links { display: none; }
+      .an-ticket-meta { grid-template-columns: repeat(2, 1fr); }
+      .an-beforeafter { grid-template-columns: 1fr; }
+      .an-ba img { height: 200px; }
+      .an-row { grid-template-columns: 56px 1fr 74px; grid-template-areas: "date veh total" "work work work" "wo tech tech"; row-gap: 6px; }
+      .an-row-head { display: none; }
+      .an-date { grid-area: date; } .an-wo { grid-area: wo; } .an-veh { grid-area: veh; }
+      .an-work { grid-area: work; } .an-tech { grid-area: tech; } .an-total { grid-area: total; }
+      .an-order-grid { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .an * { transition: none !important; }
+    }
+  </style>
+
   <script>
     (function () {
-      var btn = document.querySelector('.an-burger');
-      var menu = document.querySelector('.an-mobile');
-      btn?.addEventListener('click', function () {
-        var isHidden = menu?.hasAttribute('hidden') ?? false;
-        if (isHidden) { menu?.removeAttribute('hidden'); } else { menu?.setAttribute('hidden', ''); }
-        btn?.setAttribute('aria-expanded', String(isHidden));
-        btn?.setAttribute('aria-label', isHidden ? 'Close menu' : 'Open menu');
-      });
-      menu?.addEventListener('click', function (e) {
-        if ((e.target as HTMLElement).tagName === 'A') menu?.setAttribute('hidden', '');
-      });
-    })();
-    (function () {
-      var form = document.getElementById('an-form');
+      var form = document.getElementById('order-form') as HTMLFormElement | null;
+      var done = document.getElementById('form-done');
       form?.addEventListener('submit', function (e) {
         e.preventDefault();
-        var note = form?.querySelector('.an-form-note');
-        if (note) note.textContent = '✓ Received. We\u2019ll confirm your appointment shortly.';
+        if (done) done.hidden = false;
+        form?.reset();
       });
     })();
   </script>
-
-  <style>
-    .an {
-      --an-bg: #0A0F1A;
-      --an-bg-2: #0E1524;
-      --an-card: #121A2C;
-      --an-ink: #F2F5F9;
-      --an-ink-2: #9AA6BC;
-      --an-line: rgba(242, 245, 249, 0.12);
-      --an-accent: #3D7BFF;
-      --an-accent-soft: rgba(61, 123, 255, 0.14);
-      --an-green: #34D399;
-      --an-amber: #F5A623;
-      --an-font-d: "Space Grotesk", system-ui, sans-serif;
-      --an-font-m: "IBM Plex Mono", ui-monospace, monospace;
-      margin: 0;
-      background: var(--an-bg);
-      color: var(--an-ink);
-      font-family: var(--an-font-d);
-      -webkit-font-smoothing: antialiased;
-      overflow-x: clip;
-    }
-    .an *, .an *::before, .an *::after { box-sizing: border-box; }
-    .an img { display: block; max-width: 100%; }
-    .an-wrap { max-width: 1200px; margin: 0 auto; padding: 0 clamp(18px, 4vw, 40px); }
-    .an-mono { font-family: var(--an-font-m); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; }
-
-    .an-h1 { font-weight: 700; letter-spacing: -0.03em; font-size: clamp(3rem, 8.5vw, 6.2rem); line-height: 0.94; margin: 0; }
-    .an-h2 { font-weight: 700; letter-spacing: -0.025em; font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1; margin: 0; }
-    .an-prose { color: var(--an-ink-2); font-size: 15.5px; line-height: 1.7; max-width: 52ch; }
-
-    /* nav */
-    .an-nav { position: sticky; top: 0; z-index: 60; background: rgba(10, 15, 26, 0.88); backdrop-filter: blur(14px); border-bottom: 1px solid var(--an-line); }
-    .an-nav-in { max-width: 1320px; margin: 0 auto; padding: 14px clamp(18px, 4vw, 40px); display: flex; align-items: center; gap: 30px; }
-    .an-logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--an-ink); }
-    .an-logo-mark { font-family: var(--an-font-m); font-weight: 600; font-size: 15px; background: var(--an-accent); color: #fff; padding: 7px 9px; border-radius: 8px; }
-    .an-logo-text { font-weight: 700; font-size: 15px; letter-spacing: 0.14em; }
-    .an-links { display: flex; gap: 28px; margin-left: auto; }
-    .an-links a { color: var(--an-ink-2); text-decoration: none; font-size: 13.5px; font-weight: 500; display: inline-flex; gap: 8px; align-items: baseline; }
-    .an-links a span { font-family: var(--an-font-m); font-size: 10px; color: var(--an-accent); }
-    .an-links a:hover { color: var(--an-ink); }
-    .an-burger { display: none; margin-left: auto; background: none; border: 0; cursor: pointer; padding: 8px; }
-    .an-burger span { display: block; width: 22px; height: 2px; background: var(--an-ink); margin: 5px 0; }
-    .an-mobile { display: grid; border-top: 1px solid var(--an-line); }
-    .an-mobile[hidden] { display: none; }
-    .an-mobile a { padding: 14px 24px; color: var(--an-ink); text-decoration: none; font-weight: 600; border-bottom: 1px solid var(--an-line); }
-
-    .an-btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-      font-weight: 600; font-size: 14px; padding: 15px 28px; border-radius: 10px;
-      text-decoration: none; border: 0; cursor: pointer;
-      transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
-    }
-    .an-btn:hover { transform: translateY(-2px); }
-    .an-btn-accent { background: var(--an-accent); color: #fff; box-shadow: 0 12px 30px rgba(61, 123, 255, 0.35); }
-    .an-btn-accent:hover { background: #2F6BF0; }
-    .an-btn-line { background: transparent; color: var(--an-ink); border: 1px solid var(--an-line); }
-    .an-btn-line:hover { border-color: var(--an-ink-2); }
-    .an-btn-sm { padding: 11px 20px; font-size: 13px; }
-    .an-btn-full { width: 100%; }
-
-    /* hero: split headline / bay panel */
-    .an-hero { border-bottom: 1px solid var(--an-line); padding: clamp(56px, 8vw, 110px) 0; background:
-      radial-gradient(900px 480px at 12% 0%, rgba(61,123,255,0.10), transparent 60%),
-      var(--an-bg); }
-    .an-hero-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: clamp(32px, 5vw, 64px); align-items: center; }
-    .an-hero-kicker { color: var(--an-ink-2); display: inline-flex; align-items: center; gap: 10px; margin: 0 0 22px; }
-    .an-live { width: 8px; height: 8px; border-radius: 50%; background: var(--an-green); box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.18); animation: an-pulse 2s infinite; flex: none; }
-    @keyframes an-pulse { 50% { box-shadow: 0 0 0 7px rgba(52, 211, 153, 0.05); } }
-    .an-hero-sub { color: var(--an-ink-2); font-size: 17px; line-height: 1.6; max-width: 46ch; margin: 24px 0 32px; }
-    .an-hero-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 28px; }
-    .an-hero-note { color: var(--an-ink-2); margin: 0; line-height: 1.8; }
-
-    /* live bay status panel */
-    .an-panel {
-      background: var(--an-card); border: 1px solid var(--an-line); border-radius: 18px;
-      padding: 24px; display: grid; gap: 14px; align-content: start;
-      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45);
-    }
-    .an-panel-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--an-line); }
-    .an-panel-head .an-mono { margin: 0; display: inline-flex; align-items: center; gap: 10px; color: var(--an-ink); }
-    .an-panel-upd { color: var(--an-ink-2); margin: 0; }
-    .an-bay { border: 1px solid var(--an-line); border-radius: 12px; padding: 16px 18px; display: grid; gap: 6px; background: var(--an-bg-2); }
-    .an-bay-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-    .an-bay-top .an-mono { color: var(--an-ink-2); margin: 0; }
-    .an-bay-job { margin: 0; font-size: 15px; font-weight: 600; }
-    .an-bay-eta { margin: 0; color: var(--an-ink-2); font-size: 10.5px; }
-    .an-status {
-      font-family: var(--an-font-m); font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
-      padding: 6px 12px; border-radius: 999px; white-space: nowrap; border: 1px solid;
-    }
-    .an-status-busy { color: var(--an-accent); border-color: rgba(61,123,255,0.5); background: var(--an-accent-soft); }
-    .an-status-qc { color: var(--an-amber); border-color: rgba(245,166,35,0.5); background: rgba(245,166,35,0.1); }
-    .an-status-open { color: var(--an-green); border-color: rgba(52,211,153,0.5); background: rgba(52,211,153,0.08); }
-    .an-panel-cta { margin-top: 4px; }
-
-    /* sections */
-    .an-section { padding: clamp(64px, 9vw, 120px) 0; }
-    .an-sec-head { display: grid; gap: 16px; margin-bottom: 40px; }
-    .an-sec-head .an-mono { color: var(--an-accent); margin: 0; }
-
-    /* services: spec-table rows */
-    .an-specs { border-top: 1px solid var(--an-line); }
-    .an-specrow {
-      display: grid; grid-template-columns: 90px 1fr auto; gap: 24px; align-items: center;
-      padding: 30px 8px; border-bottom: 1px solid var(--an-line);
-    }
-    .an-specrow-code { color: var(--an-accent); margin: 0; }
-    .an-specrow-main h3 { margin: 0 0 8px; font-size: 23px; font-weight: 700; letter-spacing: -0.02em; }
-    .an-specrow-main p { margin: 0; color: var(--an-ink-2); font-size: 14.5px; line-height: 1.65; max-width: 60ch; }
-    .an-chips { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
-    .an-chip {
-      font-family: var(--an-font-m); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase;
-      color: var(--an-ink-2); border: 1px solid var(--an-line); border-radius: 999px; padding: 8px 14px; white-space: nowrap;
-    }
-
-    /* numbers band */
-    .an-numbers { border-block: 1px solid var(--an-line); background: var(--an-bg-2); }
-    .an-numbers-in { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding-top: 40px; padding-bottom: 40px; }
-    .an-numbers-in div { display: flex; flex-direction: column; gap: 8px; }
-    .an-numbers-in strong { font-size: clamp(2.2rem, 4vw, 3.2rem); font-weight: 700; letter-spacing: -0.03em; }
-    .an-numbers-in .an-mono { color: var(--an-ink-2); margin: 0; line-height: 1.7; }
-
-    /* workshop log */
-    .an-log-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(32px, 5vw, 64px); align-items: start; }
-    .an-log { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--an-line); }
-    .an-log li { display: grid; grid-template-columns: 170px 1fr; gap: 18px; padding: 20px 4px; border-bottom: 1px solid var(--an-line); align-items: baseline; }
-    .an-log-t { color: var(--an-accent); margin: 0; font-size: 11px; }
-    .an-log p { margin: 0; font-size: 15px; line-height: 1.6; }
-    .an-log-media { display: grid; gap: 14px; }
-    .an-log-fig { margin: 0; position: relative; }
-    .an-log-fig img { width: 100%; height: 300px; object-fit: cover; border-radius: 14px; border: 1px solid var(--an-line); }
-    .an-log-fig figcaption::before { content: ""; display: inline-block; width: 7px; height: 7px; background: var(--an-accent); margin-right: 9px; vertical-align: 1px; }
-    .an-log-fig figcaption { position: absolute; left: 14px; bottom: 14px; background: rgba(10,15,26,0.78); backdrop-filter: blur(8px); padding: 8px 14px; border-radius: 8px; border: 1px solid var(--an-line); margin: 0; }
-    .an-log-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    .an-log-pair img { height: 190px; }
-
-    /* process timeline */
-    .an-process { background: var(--an-bg-2); border-block: 1px solid var(--an-line); }
-    .an-timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; max-width: 760px; }
-    .an-timeline li { display: grid; grid-template-columns: 90px 1fr; gap: 24px; padding: 26px 0; border-bottom: 1px solid var(--an-line); position: relative; }
-    .an-timeline li:first-child { border-top: 1px solid var(--an-line); }
-    .an-timeline-n { color: var(--an-accent); margin: 0; padding-top: 4px; }
-    .an-timeline h3 { margin: 0 0 8px; font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
-    .an-timeline p { margin: 0; color: var(--an-ink-2); font-size: 14.5px; line-height: 1.65; max-width: 56ch; }
-
-    /* contact */
-    .an-contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 72px); align-items: start; }
-    .an-contact-grid > div > .an-mono { color: var(--an-accent); }
-    .an-contact-grid .an-h2 { margin: 16px 0 18px; }
-    .an-contact-list { margin: 30px 0 0; display: grid; gap: 16px; }
-    .an-contact-list div { display: grid; grid-template-columns: 90px 1fr; gap: 12px; align-items: baseline; }
-    .an-contact-list .an-mono { margin: 0; color: var(--an-ink-2); }
-    .an-contact-list dd { margin: 0; font-size: 15.5px; font-weight: 500; }
-    .an-contact-list a { text-decoration: none; color: var(--an-accent); }
-    .an-form { background: var(--an-card); border: 1px solid var(--an-line); border-radius: 18px; padding: clamp(24px, 3vw, 34px); display: grid; gap: 16px; }
-    .an-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .an-form label { display: grid; gap: 10px; color: var(--an-ink-2); }
-    .an-form input, .an-form select, .an-form textarea {
-      font-family: var(--an-font-d); font-size: 15px; letter-spacing: 0; text-transform: none;
-      padding: 13px 15px; border-radius: 10px; border: 1px solid var(--an-line);
-      background: var(--an-bg); color: var(--an-ink); width: 100%;
-    }
-    .an-form input::placeholder, .an-form textarea::placeholder { color: #5A6579; }
-    .an-form input:focus, .an-form select:focus, .an-form textarea:focus { outline: 2px solid var(--an-accent); outline-offset: 1px; border-color: var(--an-accent); }
-    .an-form select option { background: var(--an-bg); }
-    .an-form-note { margin: 0; font-size: 12.5px; color: var(--an-ink-2); text-align: center; font-family: var(--an-font-m); letter-spacing: 0.04em; }
-    .an-form-note:empty { display: none; }
-
-    /* footer */
-    .an-footer { border-top: 1px solid var(--an-line); padding: 44px 0; background: var(--an-bg-2); }
-    .an-footer-in { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
-    .an-footer .an-logo-text { font-size: 13px; }
-    .an-footer-note { margin: 0; color: var(--an-ink-2); }
-
-    @media (max-width: 960px) {
-      .an-hero-grid, .an-log-grid, .an-contact-grid { grid-template-columns: 1fr; }
-      .an-numbers-in { grid-template-columns: 1fr 1fr; }
-      .an-specrow { grid-template-columns: 70px 1fr; }
-      .an-chips { grid-column: 2; justify-content: flex-start; }
-    }
-    @media (max-width: 720px) {
-      .an-links, .an-nav .an-btn { display: none; }
-      .an-burger { display: block; }
-      .an-numbers-in { grid-template-columns: 1fr; }
-      .an-form-row { grid-template-columns: 1fr; }
-      .an-log li { grid-template-columns: 1fr; gap: 6px; }
-      .an-log-pair { grid-template-columns: 1fr; }
-      .an-timeline li { grid-template-columns: 64px 1fr; gap: 16px; }
-      .an-contact-list div { grid-template-columns: 1fr; gap: 4px; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .an-live { animation: none; }
-      .an-btn { transition: none; }
-    }
-  </style>
 </body>
 </html>
