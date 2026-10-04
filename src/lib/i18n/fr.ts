@@ -19,9 +19,9 @@ const fr = {
         "Parlez-nous de votre entreprise et on vous répond avec deux directions de démo et un échéancier honnête. Écrivez à hello@webao.ca ou utilisez le formulaire.",
     },
     demos: {
-      title: "Catalogue de démos · WEBAO · 15 directions artistiques",
+      title: "Catalogue de démos · WEBAO · 30 directions artistiques",
       description:
-        "Parcourez 15 directions de design pour des entreprises locales fictives. Filtrez par métier, ton ou ville. Chaque démo est un design différent, pas le même modèle en 15 couleurs.",
+        "Parcourez 30 directions de design pour des entreprises locales fictives. Filtrez par métier, ton ou ville. Chaque démo est un design différent, pas le même modèle en 30 couleurs.",
     },
     notfound: {
       title: "Page introuvable · WEBAO",
@@ -67,7 +67,7 @@ const fr = {
   intro: {
     captionBrand: "WEBAO",
     captionLeft: "WEBAO · WEBAO.CA",
-    captionRight: "STUDIO — MONTRÉAL",
+    captionRight: "STUDIO · MONTRÉAL",
     prompt: {
       pointer: "Cliquez pour entrer",
       touch: "Touchez pour entrer",
@@ -111,37 +111,10 @@ const fr = {
         included: "Inclus chaque mois",
         sendEmail: "Il suffit d’envoyer un courriel",
         captionLeft: "DÉMO 01 · ÉLECTRICIEN",
-        captionRight: "Une de 15 directions de design →",
+        captionRight: "Une de 30 directions de design →",
       },
     },
     marquee: "Électriciens <i></i> Plombiers <i></i> Couvreurs <i></i> Paysagistes <i></i> Restaurants <i></i> Cliniques",
-    why: {
-      eyebrow: "Pourquoi WEBAO existe",
-      title1: "Vous ne devriez",
-      title2: "pas avoir à devenir",
-      title3: "une personne web.",
-      p1: "La plupart des entreprises n’ont pas besoin d’une appli complexe. Elles ont besoin d’un site <strong>rapide, crédible et trouvable</strong> qui répond au téléphone, même quand vous êtes sur un chantier.",
-      p2: "WEBAO est un petit studio qui s’occupe de tout pour un frais mensuel unique : le domaine, l’hébergement, les mises à jour, les décisions techniques. Vous parlez à une vraie personne, pas à une file d’attente de billets.",
-      cta: "Voir ce qui est inclus →",
-      note: "Mensuel · Sans contrat à long terme",
-      features: [
-        {
-          icon: "◆",
-          title: "Ça a l’air sur mesure. Parce que ça l’est.",
-          desc: "Chaque site est conçu autour de votre métier, pas un modèle générique avec votre logo collé dessus. Typo, mise en page et imagerie choisies pour votre entreprise.",
-        },
-        {
-          icon: "◒",
-          title: "Conçu pour être trouvé.",
-          desc: "Pages rapides, accessibles, mobile d’abord, avec un balisage propre, un plan de site et les bases SEO. On peut aussi vous aider à configurer votre fiche d’entreprise Google. Des bases solides, pas de promesses de positionnement.",
-        },
-        {
-          icon: "◎",
-          title: "On le garde en vie.",
-          desc: "Hébergement, SSL, sécurité, sauvegardes et petites mises à jour comme les heures, les photos ou les changements de menu. Envoyez un courriel, on fait la modification.",
-        },
-      ],
-    },
     process: {
       eyebrow: "Fonctionnement · Trois étapes, sans réunions qui auraient pu être des courriels",
       title: "De l’idée au <span>en ligne</span>, habituellement en une semaine.",
@@ -182,35 +155,6 @@ const fr = {
       ctaNote: "Ou {link}, généralement répondu en un jour ouvrable",
       sendDetails: "envoyez vos infos",
     },
-    demosPreview: {
-      eyebrow: "Le catalogue de démos · 15 directions de design, pas 15 variations de couleur",
-      title: "À quoi pourrait ressembler <span>le vôtre</span> ?",
-      desc: "Chaque démo est une entreprise fictive avec son propre style, sa palette, sa mise en page et son ton. Trouvez la direction qui vous ressemble.",
-      browse: "Parcourir toutes les démos →",
-      cards: [
-        {
-          tag: "DÉMO 01 · MÉTIERS · FICTIVE",
-          name: "NORA ÉLECTRIQUE",
-          sub: "Contemporain épuré · Interventions d’urgence",
-        },
-        {
-          tag: "DÉMO 02 · RESTAURANT · FICTIVE",
-          name: "Mira Cantine",
-          sub: "Éditorial chaleureux · Menu au feu de bois",
-          reserve: "Réserver",
-          menu: "Menu",
-        },
-        {
-          tag: "DÉMO 03 · AUTOMOBILE · FICTIVE",
-          name: "ATELIER NORD",
-          sub: "Automobile haut de gamme · La précision d’abord",
-        },
-      ],
-      view: "Voir dans le catalogue →",
-      also: "Aussi dans le catalogue (tout est fictif)",
-      chips: ["Plomberie Leduc", "Boisé Paysage", "Clinique Sora", "Studio Forma", "Toit & Fils", "+ 6 autres"],
-      searchFilter: "Filtrer et chercher les démos",
-    },
     agency: {
       title: "Et maintenant ?",
       subtitle: "CHOISISSEZ UNE PORTE · CHAQUE COMPOSITION EST DIFFÉRENTE, MÊME STUDIO.",
@@ -232,10 +176,10 @@ const fr = {
       },
       demos: {
         top: "03 · DÉMOS",
-        title: "15 directions de design,<br />toutes fictives.",
+        title: "30 directions de design,<br />toutes fictives.",
         desc: "Parcourez le catalogue par métier : électricien, restaurant, clinique. Chaque démo est un concept à direction artistique pour une entreprise fictive, pour voir l’étendue avant de choisir.",
         cta: "Parcourir le catalogue de démos",
-        mini: ["Filtrable", "·", "Recherchable", "·", "15 styles"],
+        mini: ["Filtrable", "·", "Recherchable", "·", "30 styles"],
       },
       noteLeft: "FAIT À MONTRÉAL · CONÇU POUR LES MÉTIERS, COMMERCES ET ENTREPRISES LOCALES PARTOUT AU CANADA",
       noteRight: "→ Survolez, jetez un œil, puis choisissez votre chemin.",
@@ -475,7 +419,7 @@ const fr = {
       locationNote: "Au service des entreprises partout au Canada · Lun–ven, 9 h à 17 h, heure de l’Est",
       trust: ["◐ Une vraie personne lit chaque message", "·", "Vos infos servent juste à vous répondre"],
       browseText:
-        "Vous préférez voir le travail d’abord ? Le catalogue de démos a 15 directions pour des entreprises fictives dans les métiers qu’on dessert.",
+        "Vous préférez voir le travail d’abord ? Le catalogue de démos a 30 directions pour des entreprises fictives dans les métiers qu’on dessert.",
       browseCta: "Parcourir les démos →",
     },
     form: {
@@ -558,20 +502,22 @@ const fr = {
       eyebrow: "Démos · Directions de design pour entreprises fictives.",
       title: "À quoi pourrait ressembler <span>le vôtre</span> ?",
       desc: "Chaque démo a sa propre direction artistique avec sa typo, sa palette, sa mise en page et sa voix, créée pour une entreprise locale fictive. Cherchez par métier pour sentir l’étendue.",
-      countNote: "15 DIRECTIONS · ENTREPRISES TOUTES FICTIVES · AUCUNE N’EST CLIENTE DE WEBAO",
+      countNote: "30 DIRECTIONS · ENTREPRISES TOUTES FICTIVES · AUCUNE N’EST CLIENTE DE WEBAO",
       howTitle: "COMMENT UTILISER CE CATALOGUE",
       howSteps: [
         "Filtrez par métier : électricien, restaurant, clinique…",
         "Cherchez : « éditorial », « Laval », « audacieux »…",
         "Touchez une démo : voyez sa direction, puis dites-nous laquelle vous ressemble.",
       ],
-      pills: ["Recherchable", "Filtrable", "15 styles"],
+      pills: ["Recherchable", "Filtrable", "30 styles"],
       fictionalNote:
         "CHAQUE ENTREPRISE ICI EST INVENTÉE · NOMS, VILLES ET DÉTAILS SONT DES EXEMPLES SEULEMENT",
     },
     searchPlaceholder: "Chercher des démos : essayez « métiers », « éditorial », « Laval », « haut de gamme »…",
     searchCount: "{count} démos",
     filterLabel: "Filtrer par catégorie",
+    styleLabel: "Style",
+    allStyles: "Tous les styles",
     empty: "Aucune démo ne correspond. Essayez « métiers » ou « restaurant », ou effacez les filtres.",
     clear: "Effacer la recherche",
     details: "Détails →",
@@ -584,6 +530,7 @@ const fr = {
     ctaDesc: "Dites-nous quelle démo est la plus proche et on conçoit votre site autour de cette direction.",
     ctaPrimary: "Partir d’une démo →",
     ctaSecondary: "Voir les tarifs",
+    sourcesLink: "Sources / Crédits",
     toast: "{name} est une entreprise fictive et une de nos directions : {tone}, {palette}. Le site démo cliquable n’est pas encore publié. Vous aimez cette direction ? Mentionnez-la quand vous nous contactez.",
     categories: {
       All: "Tous",
@@ -627,7 +574,7 @@ const fr = {
     labels: [
       { t: "Tarifs", s: "→ 149 $/mois · tout inclus" },
       { t: "Contact", s: "→ hello@webao.ca" },
-      { t: "Démos", s: "→ 15 directions artistiques" },
+      { t: "Démos", s: "→ 30 directions artistiques" },
     ],
   },
 
