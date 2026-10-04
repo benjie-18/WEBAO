@@ -4,11 +4,11 @@ import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
 // Démo : MAXIMAL, collectif créatif maximaliste fictif, Montréal.
 // Direction artistique autonome. Fort, contrasté, « plus, c'est plus ». Sans lien avec le thème WEBAO.
 const IMG = {
-  heroA: "https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=800&auto=format&fit=crop",
-  heroB: "https://images.unsplash.com/photo-1550859492-d5da9d8e45f3?q=80&w=800&auto=format&fit=crop",
+  heroA: "/demos/maximal/01.jpg",
+  heroB: "/demos/maximal/02.jpg",
   work1: "https://images.unsplash.com/photo-1541701494587-cb58502866ab?q=80&w=900&auto=format&fit=crop",
-  work2: "https://images.unsplash.com/photo-1557672172-298e090bd0f1?q=80&w=900&auto=format&fit=crop",
-  work3: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=900&auto=format&fit=crop",
+  work2: "/demos/maximal/03.jpg",
+  work3: "/demos/maximal/04.jpg",
   work4: "https://images.unsplash.com/photo-1515405295579-ba7b45403062?q=80&w=900&auto=format&fit=crop",
 };
 ---
@@ -59,9 +59,9 @@ const IMG = {
           <a class="mx-btn mx-btn-pink" href="#tiers">Choisissez votre chaos</a>
           <a class="mx-btn mx-btn-ghost" href="#work">Voyez le beau gâchis</a>
         </div>
-        <div class="mx-polaroids" aria-hidden="true">
-          <figure class="mx-polaroid mx-p1"><img src={IMG.heroA} alt="" loading="eager" fetchpriority="high" /><figcaption>ambiance : FORT</figcaption></figure>
-          <figure class="mx-polaroid mx-p2"><img src={IMG.heroB} alt="" loading="lazy" /><figcaption>ambiance : PLUS FORT</figcaption></figure>
+        <div class="mx-polaroids">
+          <figure class="mx-polaroid mx-p1"><img src={IMG.heroA} alt="Salon maximaliste, murs verts, sofa bleu, mur de cadres" loading="eager" fetchpriority="high" /><figcaption>ambiance : FORT</figcaption></figure>
+          <figure class="mx-polaroid mx-p2"><img src={IMG.heroB} alt="Salon maximaliste rose et vert aux motifs superposés" loading="lazy" /><figcaption>ambiance : PLUS FORT</figcaption></figure>
         </div>
       </div>
       <div class="mx-burst mx-burst-1" aria-hidden="true"><span>WOW!</span></div>
@@ -110,11 +110,11 @@ const IMG = {
             <span class="mx-mini-burst" aria-hidden="true">TOP</span>
           </figure>
           <figure class="mx-tile mx-t2">
-            <img src={IMG.work2} alt="Œuvre 3D abstraite vive pour le site Chrome Dreams" loading="lazy" />
+            <img src={IMG.work2} alt="Intérieur éclectique, mur de cadres pour Chrome Dreams" loading="lazy" />
             <figcaption><strong>Chrome Dreams</strong><span>Site web · 47 animations, 0 regret</span></figcaption>
           </figure>
           <figure class="mx-tile mx-t3">
-            <img src={IMG.work3} alt="Murale abstraite aux néons sombres pour Neon District" loading="lazy" />
+            <img src={IMG.work3} alt="Salon maximaliste coloré pour Neon District" loading="lazy" />
             <figcaption><strong>Neon District</strong><span>Murale · visible de l'espace (soi-disant)</span></figcaption>
             <span class="mx-tape" aria-hidden="true"></span>
           </figure>
