@@ -10,7 +10,7 @@
   "kv_namespaces": [
     {
       "binding": "WEBAO_KV",
-      "id": "REPLACE_ME__WEBAO_KV"
+      "id": "42eb0707bb614686ad067fb7a82c3f81"
     }
   ],
   "main": "worker/index.ts",
