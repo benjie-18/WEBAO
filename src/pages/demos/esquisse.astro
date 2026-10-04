@@ -1,0 +1,550 @@
+---
+import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+
+// Demo microsite: Esquisse, fictional architecture concept studio, Montréal.
+// Standalone art direction. Conceptual sketch: paper, pencil, watercolor.
+const IMG = {
+  hero: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1400&auto=format&fit=crop",
+  maison: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?q=80&w=900&auto=format&fit=crop",
+  atelier: "https://images.unsplash.com/photo-1493397212122-2b85dda8106b?q=80&w=900&auto=format&fit=crop",
+  serre: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=900&auto=format&fit=crop",
+  pavillon: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=900&auto=format&fit=crop",
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Esquisse: Architecture Concepts, Sketched First</title>
+  <meta name="description" content="Esquisse is a Montréal concept studio. Every building starts as a doodle: napkin sketches, watercolor studies, then blueprints." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet" />
+</head>
+<body class="esq">
+
+  <!-- NAV -->
+  <header class="esq-navwrap">
+    <nav class="esq-nav" aria-label="Primary">
+      <a class="esq-logo" href="#top" aria-label="Esquisse, home">
+        <svg viewBox="0 0 40 40" width="34" height="34" aria-hidden="true"><path d="M6 30 L7 12 L20 6 L19 7 L33 13 L32 30 Z" fill="none" stroke="#3A3A3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 30 L17 20 L23 21 L22 30" fill="none" stroke="#3A3A3A" stroke-width="2" stroke-linecap="round"/></svg>
+        <span>Esquisse</span>
+      </a>
+      <button class="esq-burger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+      <div class="esq-nav-links">
+        <a href="#sketches">Sketches</a>
+        <a href="#process">Process</a>
+        <a href="#journal">Journal</a>
+        <a href="#pricing">Pricing</a>
+        <a class="esq-nav-cta" href="#contact">Book a session</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- HERO: a sketch sheet -->
+    <section class="esq-hero">
+      <div class="esq-blob esq-blob-blue" aria-hidden="true"></div>
+      <div class="esq-blob esq-blob-ochre" aria-hidden="true"></div>
+      <div class="esq-hero-in">
+        <div class="esq-hero-copy">
+          <p class="esq-eyebrow">Concept architecture studio · Montréal</p>
+          <h1 class="esq-h1">Every building<br />starts as <span class="esq-scribble">a doodle.</span></h1>
+          <p class="esq-lede">We are Esquisse, a small studio that designs houses, studios, and pavilions the slow way: pencil first, watercolor second, blueprints only when the idea has earned them.</p>
+          <div class="esq-hero-cta">
+            <a class="esq-btn esq-btn-ink" href="#sketches">See the sketches</a>
+            <a class="esq-btn esq-btn-line" href="#contact">Book a concept session</a>
+          </div>
+          <p class="esq-hero-note">No CAD on day one. We promise.</p>
+        </div>
+        <figure class="esq-sheet esq-hero-sheet">
+          <span class="esq-tape esq-tape-tl" aria-hidden="true"></span>
+          <span class="esq-tape esq-tape-tr" aria-hidden="true"></span>
+          <img src={IMG.hero} alt="Architect reviewing a large blueprint with a client" loading="eager" fetchpriority="high" />
+          <figcaption>
+            <svg viewBox="0 0 300 120" aria-hidden="true" class="esq-fig-sketch">
+              <path d="M20 90 C 60 88, 90 60, 120 62 S 200 40, 260 55" fill="none" stroke="#3A3A3A" stroke-width="2" stroke-linecap="round"/>
+              <path d="M248 48 L262 55 L250 63" fill="none" stroke="#3A3A3A" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="52" cy="42" r="14" fill="none" stroke="#D9A441" stroke-width="2.5"/>
+              <path d="M52 20 L52 12 M74 42 L82 42 M52 64 L52 72 M30 42 L22 42 M68 26 L74 20 M68 58 L74 64 M36 26 L30 20 M36 58 L30 64" stroke="#D9A441" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <span class="esq-hand">site visit no. 12, light from the west!</span>
+          </figcaption>
+        </figure>
+      </div>
+      <svg class="esq-divider" viewBox="0 0 1200 40" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 22 C 150 18, 300 28, 450 22 S 750 16, 900 24 S 1100 28, 1200 20" fill="none" stroke="#3A3A3A" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+      </svg>
+    </section>
+
+    <!-- STATS -->
+    <section class="esq-stats" aria-label="Studio in numbers">
+      <div><strong>214</strong><span>concepts sketched</span></div>
+      <div><strong>31</strong><span>built to date</span></div>
+      <div><strong>9</strong><span>design awards</span></div>
+      <div><strong>1</strong><span>favorite pencil</span></div>
+    </section>
+
+    <!-- SKETCHES -->
+    <section class="esq-section" id="sketches">
+      <div class="esq-wrap">
+        <p class="esq-kicker">from the drawing board</p>
+        <h2 class="esq-h2">Recent <span class="esq-scribble">sketches</span></h2>
+        <p class="esq-sec-lede">Four concepts currently on the boards. Each one began as a ten-minute thumbnail and survived a hundred revisions.</p>
+        <div class="esq-cards">
+          <article class="esq-card esq-tilt-l">
+            <span class="esq-tape esq-tape-tl" aria-hidden="true"></span>
+            <img src={IMG.maison} alt="White minimalist house facade study" loading="lazy" />
+            <div class="esq-card-in">
+              <p class="esq-card-no">no. 041</p>
+              <h3>Maison Brume</h3>
+              <p>A lakeside cabin in the Laurentians. One long window, one wood stove, zero hallways. Currently in watercolor.</p>
+              <p class="esq-tags">residential · 180 m² · concept</p>
+            </div>
+          </article>
+          <article class="esq-card esq-tilt-r">
+            <span class="esq-tape esq-tape-tr" aria-hidden="true"></span>
+            <img src={IMG.atelier} alt="Curved building facade concept" loading="lazy" />
+            <div class="esq-card-in">
+              <p class="esq-card-no">no. 038</p>
+              <h3>Atelier Lumen</h3>
+              <p>A painter's studio with a curved north wall that catches soft light all day. The roof lifts like a held breath.</p>
+              <p class="esq-tags">studio · 90 m² · in development</p>
+            </div>
+          </article>
+          <article class="esq-card esq-tilt-l">
+            <span class="esq-tape esq-tape-tl" aria-hidden="true"></span>
+            <img src={IMG.serre} alt="Desk covered with drawings and plans for a greenhouse project" loading="lazy" />
+            <div class="esq-card-in">
+              <p class="esq-card-no">no. 035</p>
+              <h3>Serre Urbaine</h3>
+              <p>A rooftop greenhouse for a Mile End café. Tomatoes upstairs, espresso downstairs, everybody happy.</p>
+              <p class="esq-tags">commercial · 60 m² · permitted</p>
+            </div>
+          </article>
+          <article class="esq-card esq-tilt-r">
+            <span class="esq-tape esq-tape-tr" aria-hidden="true"></span>
+            <img src={IMG.pavillon} alt="Warm wooden interior of a pavilion concept" loading="lazy" />
+            <div class="esq-card-in">
+              <p class="esq-card-no">no. 031</p>
+              <h3>Pavillon Cèdre</h3>
+              <p>A cedar reading pavilion for a public garden. Smells like a pencil box, seats twelve daydreamers.</p>
+              <p class="esq-tags">public · 45 m² · built 2025</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROCESS -->
+    <section class="esq-process" id="process">
+      <div class="esq-wrap">
+        <p class="esq-kicker">how we work</p>
+        <h2 class="esq-h2">Napkin <span class="esq-scribble">to blueprint</span></h2>
+        <ol class="esq-steps">
+          <li>
+            <span class="esq-step-no" aria-hidden="true">1</span>
+            <div><h3>The Napkin</h3><p>We walk your site with a pencil and no agenda. By coffee number two, the first lines appear. Ugly, honest, full of promise.</p></div>
+          </li>
+          <li>
+            <span class="esq-step-no" aria-hidden="true">2</span>
+            <div><h3>The Doodle Wall</h3><p>One week, one hundred thumbnails pinned to the studio wall. We keep the three that make us grin and recycle the rest.</p></div>
+          </li>
+          <li>
+            <span class="esq-step-no" aria-hidden="true">3</span>
+            <div><h3>The Watercolor</h3><p>Massing, light, and material studies in pale washes. You see how morning sun will actually land on your kitchen table.</p></div>
+          </li>
+          <li>
+            <span class="esq-step-no" aria-hidden="true">4</span>
+            <div><h3>The Blueprint</h3><p>Only now does CAD enter the room. Permit-ready drawings, faithful to the sketch that started it all.</p></div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- JOURNAL -->
+    <section class="esq-section" id="journal">
+      <div class="esq-wrap">
+        <p class="esq-kicker">studio journal</p>
+        <h2 class="esq-h2">Pinned <span class="esq-scribble">notes</span></h2>
+        <div class="esq-notes">
+          <blockquote class="esq-note esq-tilt-l">
+            <p>"A straight line is a decision you made too fast. We erase a lot, and we are proud of it."</p>
+            <cite>Simone Aubert, founder</cite>
+          </blockquote>
+          <blockquote class="esq-note esq-tilt-r">
+            <p>"They showed up with watercolors instead of renders. Six months later we moved into the sketch."</p>
+            <cite>Marc and Léa D., Maison Brume clients</cite>
+          </blockquote>
+          <blockquote class="esq-note esq-tilt-l">
+            <p>"The pavilion leaks a little when it rains sideways. We love it anyway. It was drawn in the rain."</p>
+            <cite>Journal entry, October 2025</cite>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="esq-pricing" id="pricing">
+      <div class="esq-wrap">
+        <p class="esq-kicker">concept packages</p>
+        <h2 class="esq-h2">Pick <span class="esq-scribble">a pencil</span></h2>
+        <div class="esq-plans">
+          <article class="esq-plan esq-tilt-l">
+            <h3>Esquisse Rapide</h3>
+            <p class="esq-price">$950</p>
+            <p class="esq-plan-sub">One big idea, fast.</p>
+            <ul>
+              <li>Site visit and napkin session</li>
+              <li>One concept, hand-drawn</li>
+              <li>Two weeks, start to finish</li>
+            </ul>
+            <a class="esq-btn esq-btn-line" href="#contact">Start sketching</a>
+          </article>
+          <article class="esq-plan esq-plan-hot esq-tilt-r">
+            <span class="esq-tape esq-tape-tl" aria-hidden="true"></span>
+            <p class="esq-plan-flag">most pinned</p>
+            <h3>Concept Complet</h3>
+            <p class="esq-price">$3,800</p>
+            <p class="esq-plan-sub">The full watercolor treatment.</p>
+            <ul>
+              <li>Three concepts to choose from</li>
+              <li>Watercolor renders and massing model</li>
+              <li>Light studies for every season</li>
+              <li>Cost estimate with a builder</li>
+            </ul>
+            <a class="esq-btn esq-btn-ink" href="#contact">Start sketching</a>
+          </article>
+          <article class="esq-plan esq-tilt-l">
+            <h3>Bâtiment Signature</h3>
+            <p class="esq-price">Custom</p>
+            <p class="esq-plan-sub">From sketch to site supervision.</p>
+            <ul>
+              <li>Everything in Concept Complet</li>
+              <li>Permit-ready drawing set</li>
+              <li>Site visits during construction</li>
+            </ul>
+            <a class="esq-btn esq-btn-line" href="#contact">Start sketching</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="esq-section" id="contact">
+      <div class="esq-wrap esq-contact-in">
+        <div>
+          <p class="esq-kicker">say hello</p>
+          <h2 class="esq-h2">Bring us <span class="esq-scribble">a napkin.</span></h2>
+          <p class="esq-sec-lede">Tell us about your site, your dreams, and your budget. A rough sketch on the back of an envelope counts as a brief.</p>
+          <p class="esq-contact-lines">412, rue Fictive, Montréal QC<br /><a href="tel:+15145550134">(514) 555-0134</a><br /><a href="mailto:bonjour@esquisse-demo.ca">bonjour@esquisse-demo.ca</a></p>
+        </div>
+        <form class="esq-form esq-tilt-r" id="esq-form" novalidate>
+          <span class="esq-tape esq-tape-tl" aria-hidden="true"></span>
+          <h3>Pin your note here</h3>
+          <label>Name<input type="text" name="name" required placeholder="Camille Roy" /></label>
+          <label>Email<input type="email" name="email" required placeholder="camille@example.com" /></label>
+          <label>Project
+            <select name="project">
+              <option>A house</option>
+              <option>A studio or workspace</option>
+              <option>Something public</option>
+              <option>Just an idea so far</option>
+            </select>
+          </label>
+          <label>Your napkin<textarea name="message" rows="4" placeholder="South-facing lot, two kids, one dog, big dreams..."></textarea></label>
+          <button class="esq-btn esq-btn-ink" type="submit">Pin it to the board</button>
+          <p class="esq-form-note" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="esq-footer">
+    <p class="esq-footer-giant" aria-hidden="true">esquisse</p>
+    <div class="esq-wrap esq-footer-in">
+      <p>© 2026 Esquisse Studio. Fictional demo. All buildings imaginary until permitted.</p>
+      <p>412, rue Fictive, Montréal QC · <a href="tel:+15145550134">(514) 555-0134</a> · <a href="mailto:bonjour@esquisse-demo.ca">bonjour@esquisse-demo.ca</a></p>
+    </div>
+  </footer>
+
+  <EscapeHatch locale="en" />
+
+  <script>
+    (function () {
+      var btn = document.querySelector('.esq-burger');
+      btn?.addEventListener('click', function () {
+        var open = btn?.getAttribute('aria-expanded') === 'true';
+        btn?.setAttribute('aria-expanded', String(!open));
+        btn?.setAttribute('aria-label', open ? 'Open menu' : 'Close menu');
+        document.body.classList.toggle('esq-menu-open', !open);
+      });
+      document.querySelectorAll('.esq-nav-links a').forEach(function (a) {
+        a.addEventListener('click', function () {
+          document.body.classList.remove('esq-menu-open');
+          btn?.setAttribute('aria-expanded', 'false');
+          btn?.setAttribute('aria-label', 'Open menu');
+        });
+      });
+    })();
+    // Demo form: never submits anywhere
+    (function () {
+      var form = document.getElementById('esq-form') as HTMLFormElement | null;
+      form?.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var note = form?.querySelector('.esq-form-note');
+        if (note) note.textContent = 'Pinned! Your note is on our board. We reply within two business days, usually with a sketch attached.';
+        form?.reset();
+      });
+    })();
+  </script>
+
+  <style>
+    .esq {
+      --esq-paper: #FBF8F1;
+      --esq-paper-2: #F5EFE2;
+      --esq-ink: #3A3A3A;
+      --esq-ink-soft: #6B655A;
+      --esq-blue: #D7E3EE;
+      --esq-blue-deep: #9DBBD4;
+      --esq-ochre: #D9A441;
+      --esq-ochre-soft: #F0DDAE;
+      --esq-hand: "Caveat", cursive;
+      --esq-serif: "Cormorant Garamond", Georgia, serif;
+      margin: 0;
+      background-color: var(--esq-paper);
+      background-image:
+        linear-gradient(rgba(58,58,58,0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(58,58,58,0.055) 1px, transparent 1px);
+      background-size: 30px 30px;
+      color: var(--esq-ink);
+      font-family: var(--esq-serif);
+      font-size: 19px;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: clip;
+    }
+    .esq *, .esq *::before, .esq *::after { box-sizing: border-box; }
+    .esq img { display: block; max-width: 100%; }
+    .esq-wrap { max-width: 1180px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px); }
+
+    /* sketchy helpers */
+    .esq-sketchy { border: 2px solid var(--esq-ink); border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; }
+    .esq-tilt-l { transform: rotate(-1.4deg); }
+    .esq-tilt-r { transform: rotate(1.2deg); }
+    .esq-tape {
+      position: absolute; width: 92px; height: 28px; z-index: 3;
+      background: linear-gradient(180deg, rgba(233,214,160,0.75), rgba(222,196,138,0.6));
+      box-shadow: 0 1px 3px rgba(58,58,58,0.15);
+      opacity: 0.9;
+    }
+    .esq-tape-tl { top: -14px; left: 26px; transform: rotate(-8deg); }
+    .esq-tape-tr { top: -14px; right: 26px; transform: rotate(7deg); }
+    .esq-scribble { position: relative; white-space: nowrap; }
+    .esq-scribble::after {
+      content: ""; position: absolute; left: -2%; right: -2%; bottom: 0.02em; height: 0.34em;
+      background: var(--esq-ochre-soft); z-index: -1; transform: rotate(-1deg);
+      border-radius: 40% 60% 55% 45% / 50% 45% 55% 50%;
+    }
+    .esq-hand { font-family: var(--esq-hand); font-size: 1.35rem; color: var(--esq-ink-soft); }
+
+    /* nav */
+    .esq-navwrap { position: fixed; top: 0; left: 0; right: 0; z-index: 60; }
+    .esq-nav {
+      display: flex; align-items: center; gap: 22px;
+      padding: 12px clamp(20px, 4vw, 40px);
+      background: rgba(251,248,241,0.92); backdrop-filter: blur(10px);
+      border-bottom: 2px solid var(--esq-ink);
+      border-bottom-left-radius: 40% 8px; border-bottom-right-radius: 55% 10px;
+    }
+    .esq-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--esq-ink); margin-right: auto; }
+    .esq-logo span { font-family: var(--esq-hand); font-size: 2.1rem; font-weight: 700; line-height: 1; }
+    .esq-nav-links { display: flex; align-items: center; gap: 4px; }
+    .esq-nav-links a {
+      font-family: var(--esq-hand); font-size: 1.35rem; font-weight: 600;
+      color: var(--esq-ink); text-decoration: none; padding: 8px 14px;
+    }
+    .esq-nav-links a:hover { color: var(--esq-ochre); transform: rotate(-2deg); }
+    .esq-nav-cta { border: 2px solid var(--esq-ink); border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; background: var(--esq-ochre-soft); }
+    .esq-burger { display: none; background: var(--esq-paper); border: 2px solid var(--esq-ink); border-radius: 12px 4px 14px 5px; cursor: pointer; padding: 9px 10px; margin-left: auto; }
+    .esq-burger span { display: block; width: 24px; height: 2.5px; background: var(--esq-ink); margin: 5px 0; border-radius: 2px; }
+
+    /* buttons */
+    .esq-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      font-family: var(--esq-hand); font-weight: 700; font-size: 1.4rem;
+      padding: 12px 30px; text-decoration: none; cursor: pointer;
+      border: 2.5px solid var(--esq-ink);
+      border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .esq-btn-ink { background: var(--esq-ink); color: var(--esq-paper); }
+    .esq-btn-ink:hover { transform: rotate(-1.5deg) translateY(-2px); box-shadow: 4px 5px 0 rgba(58,58,58,0.25); }
+    .esq-btn-line { background: transparent; color: var(--esq-ink); }
+    .esq-btn-line:hover { background: var(--esq-ochre-soft); transform: rotate(1.5deg) translateY(-2px); }
+
+    /* type */
+    .esq-kicker { font-family: var(--esq-hand); font-size: 1.5rem; font-weight: 600; color: var(--esq-ochre); margin: 0 0 10px; }
+    .esq-h1 { font-family: var(--esq-hand); font-weight: 700; font-size: clamp(3.4rem, 9vw, 6.4rem); line-height: 1.02; margin: 0 0 22px; }
+    .esq-h2 { font-family: var(--esq-hand); font-weight: 700; font-size: clamp(2.6rem, 6vw, 4.2rem); line-height: 1.05; margin: 0 0 14px; }
+    .esq-lede { font-size: 1.25rem; line-height: 1.65; max-width: 44ch; margin: 0 0 30px; font-weight: 400; }
+    .esq-sec-lede { font-size: 1.2rem; line-height: 1.65; max-width: 56ch; margin: 0 0 44px; color: var(--esq-ink-soft); font-style: italic; }
+    .esq-eyebrow { font-size: 0.85rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--esq-ink-soft); margin: 0 0 18px; font-weight: 500; }
+
+    /* hero */
+    .esq-hero { position: relative; padding: 150px 0 40px; overflow: hidden; }
+    .esq-blob { position: absolute; border-radius: 50%; filter: blur(70px); opacity: 0.55; pointer-events: none; animation: esq-drift 16s ease-in-out infinite alternate; }
+    .esq-blob-blue { width: 480px; height: 480px; left: -140px; top: 60px; background: radial-gradient(circle, var(--esq-blue) 0%, transparent 70%); }
+    .esq-blob-ochre { width: 420px; height: 420px; right: -120px; bottom: -60px; background: radial-gradient(circle, var(--esq-ochre-soft) 0%, transparent 70%); animation-delay: -8s; }
+    @keyframes esq-drift { to { transform: translate(46px, 34px) scale(1.08); } }
+    .esq-hero-in { position: relative; z-index: 2; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(36px, 5vw, 70px); align-items: center; max-width: 1180px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px); }
+    .esq-hero-cta { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
+    .esq-hero-note { font-family: var(--esq-hand); font-size: 1.3rem; color: var(--esq-ink-soft); margin: 0; transform: rotate(-1.5deg); }
+    .esq-sheet {
+      position: relative; background: #FFFDF8; margin: 0; padding: 14px 14px 10px;
+      border: 2px solid var(--esq-ink);
+      border-radius: 12px 60px 14px 55px / 55px 14px 60px 12px;
+      box-shadow: 8px 10px 0 rgba(58,58,58,0.12);
+    }
+    .esq-hero-sheet img { width: 100%; height: 340px; object-fit: cover; filter: sepia(0.28) contrast(0.96); border: 1px solid rgba(58,58,58,0.25); }
+    .esq-sheet figcaption { display: flex; align-items: center; gap: 14px; padding: 12px 6px 6px; }
+    .esq-fig-sketch { width: 120px; height: 48px; flex: none; }
+    .esq-divider { display: block; width: 100%; height: 40px; margin-top: 50px; }
+
+    /* stats */
+    .esq-stats { display: grid; grid-template-columns: repeat(4, 1fr); max-width: 1180px; margin: 0 auto; padding: 10px clamp(20px, 4vw, 40px) 0; }
+    .esq-stats div { text-align: center; padding: 18px 10px; display: grid; gap: 2px; }
+    .esq-stats strong { font-family: var(--esq-hand); font-size: clamp(2.6rem, 5vw, 3.8rem); font-weight: 700; color: var(--esq-ink); }
+    .esq-stats span { font-style: italic; color: var(--esq-ink-soft); font-size: 1.05rem; }
+
+    /* sections */
+    .esq-section { padding: clamp(70px, 9vw, 120px) 0; }
+
+    /* sketch cards */
+    .esq-cards { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 4vw, 48px); }
+    .esq-card {
+      position: relative; background: #FFFDF8; padding: 14px 14px 8px;
+      border: 2px solid var(--esq-ink);
+      border-radius: 14px 50px 12px 48px / 48px 12px 50px 14px;
+      box-shadow: 6px 8px 0 rgba(58,58,58,0.1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .esq-card:hover { transform: rotate(0deg) translateY(-6px) !important; box-shadow: 10px 14px 0 rgba(217,164,65,0.25); }
+    .esq-card img { width: 100%; height: 250px; object-fit: cover; filter: sepia(0.22) contrast(0.97); border: 1px solid rgba(58,58,58,0.25); }
+    .esq-card-in { padding: 18px 10px 14px; }
+    .esq-card-no { font-family: var(--esq-hand); font-size: 1.15rem; color: var(--esq-ochre); margin: 0 0 4px; font-weight: 600; }
+    .esq-card h3 { font-family: var(--esq-hand); font-size: 2rem; font-weight: 700; margin: 0 0 8px; }
+    .esq-card p { margin: 0 0 10px; line-height: 1.6; font-size: 1.08rem; }
+    .esq-tags { font-size: 0.85rem !important; letter-spacing: 0.14em; text-transform: uppercase; color: var(--esq-ink-soft); }
+
+    /* process */
+    .esq-process { background: var(--esq-paper-2); border-block: 2px dashed rgba(58,58,58,0.35); padding: clamp(70px, 9vw, 120px) 0; }
+    .esq-steps { list-style: none; margin: 30px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px; }
+    .esq-steps li { display: grid; gap: 14px; align-content: start; }
+    .esq-step-no {
+      width: 64px; height: 64px; display: grid; place-items: center;
+      font-family: var(--esq-hand); font-size: 2rem; font-weight: 700;
+      border: 2.5px solid var(--esq-ink); border-radius: 48% 52% 55% 45% / 52% 46% 54% 48%;
+      background: var(--esq-ochre-soft);
+    }
+    .esq-steps h3 { font-family: var(--esq-hand); font-size: 1.7rem; margin: 0 0 6px; }
+    .esq-steps p { margin: 0; line-height: 1.6; font-size: 1.05rem; color: var(--esq-ink-soft); }
+
+    /* journal notes */
+    .esq-notes { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(24px, 4vw, 44px); }
+    .esq-note {
+      position: relative; margin: 0; padding: 30px 26px;
+      background: linear-gradient(180deg, #FFFDF8, var(--esq-paper-2));
+      border: 2px solid var(--esq-ink);
+      border-radius: 6px 40px 8px 36px / 36px 8px 40px 6px;
+      box-shadow: 5px 7px 0 rgba(58,58,58,0.1);
+    }
+    .esq-note p { font-family: var(--esq-hand); font-size: 1.5rem; line-height: 1.35; margin: 0 0 14px; }
+    .esq-note cite { font-style: italic; font-size: 1rem; color: var(--esq-ink-soft); }
+
+    /* pricing */
+    .esq-pricing { background: var(--esq-paper-2); border-block: 2px dashed rgba(58,58,58,0.35); padding: clamp(70px, 9vw, 120px) 0; }
+    .esq-plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(24px, 4vw, 40px); align-items: start; }
+    .esq-plan {
+      position: relative; background: #FFFDF8; padding: 34px 30px;
+      border: 2.5px solid var(--esq-ink);
+      border-radius: 255px 18px 225px 18px / 18px 225px 18px 255px;
+      box-shadow: 6px 8px 0 rgba(58,58,58,0.1);
+      display: grid; gap: 10px; align-content: start;
+    }
+    .esq-plan-hot { background: #FFFDF8; border-width: 3px; box-shadow: 8px 10px 0 rgba(217,164,65,0.3); }
+    .esq-plan-flag { font-family: var(--esq-hand); font-size: 1.3rem; font-weight: 700; color: var(--esq-ochre); margin: 0; transform: rotate(-3deg); }
+    .esq-plan h3 { font-family: var(--esq-hand); font-size: 2rem; margin: 0; }
+    .esq-price { font-family: var(--esq-hand); font-size: 3rem; font-weight: 700; margin: 0; }
+    .esq-plan-sub { font-style: italic; color: var(--esq-ink-soft); margin: 0 0 6px; }
+    .esq-plan ul { list-style: none; margin: 0 0 14px; padding: 0; display: grid; gap: 10px; }
+    .esq-plan li { padding-left: 30px; position: relative; line-height: 1.5; font-size: 1.05rem; }
+    .esq-plan li::before { content: "✓"; position: absolute; left: 2px; font-family: var(--esq-hand); font-weight: 700; font-size: 1.3rem; color: var(--esq-ochre); }
+
+    /* contact */
+    .esq-contact-in { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(36px, 6vw, 80px); align-items: start; }
+    .esq-contact-lines { font-size: 1.15rem; line-height: 1.9; margin: 26px 0 0; }
+    .esq-contact-lines a { color: var(--esq-ink); font-weight: 500; }
+    .esq-form {
+      position: relative; background: #FFFDF8; padding: clamp(28px, 4vw, 40px);
+      border: 2.5px solid var(--esq-ink);
+      border-radius: 18px 60px 16px 55px / 55px 16px 60px 18px;
+      box-shadow: 8px 10px 0 rgba(58,58,58,0.12);
+      display: grid; gap: 16px;
+    }
+    .esq-form h3 { font-family: var(--esq-hand); font-size: 2rem; margin: 0; }
+    .esq-form label { display: grid; gap: 8px; font-family: var(--esq-hand); font-size: 1.3rem; font-weight: 600; }
+    .esq-form input, .esq-form select, .esq-form textarea {
+      font-family: var(--esq-serif); font-size: 1.05rem;
+      background: var(--esq-paper); border: 2px solid var(--esq-ink); color: var(--esq-ink);
+      padding: 12px 16px; width: 100%;
+      border-radius: 12px 4px 14px 5px / 5px 14px 4px 12px;
+    }
+    .esq-form input:focus, .esq-form select:focus, .esq-form textarea:focus { outline: 3px solid var(--esq-ochre-soft); outline-offset: 2px; }
+    .esq-form-note { margin: 0; font-family: var(--esq-hand); font-size: 1.35rem; color: var(--esq-ink); }
+    .esq-form-note:empty { display: none; }
+
+    /* footer */
+    .esq-footer { padding: 70px 0 90px; text-align: center; overflow: hidden; border-top: 2px dashed rgba(58,58,58,0.35); }
+    .esq-footer-giant { font-family: var(--esq-hand); font-weight: 700; font-size: clamp(4rem, 16vw, 11rem); line-height: 1; margin: 0 0 24px; color: transparent; -webkit-text-stroke: 2px rgba(58,58,58,0.4); }
+    .esq-footer-in { display: grid; gap: 10px; color: var(--esq-ink-soft); font-size: 1rem; font-style: italic; }
+    .esq-footer-in p { margin: 0; }
+    .esq-footer-in a { color: var(--esq-ink); }
+
+    @media (max-width: 960px) {
+      .esq-hero-in { grid-template-columns: 1fr; }
+      .esq-hero-sheet img { height: 280px; }
+      .esq-steps { grid-template-columns: 1fr 1fr; }
+      .esq-notes { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; }
+      .esq-plans { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; }
+      .esq-contact-in { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 860px) {
+      .esq-burger { display: block; }
+      .esq-nav-links {
+        display: none; position: absolute; top: 100%; left: 12px; right: 12px;
+        background: #FFFDF8; border: 2.5px solid var(--esq-ink);
+        border-radius: 14px 40px 12px 36px / 36px 12px 40px 14px;
+        box-shadow: 6px 8px 0 rgba(58,58,58,0.15);
+        padding: 14px; flex-direction: column; align-items: stretch; gap: 2px;
+      }
+      body.esq-menu-open .esq-nav-links { display: flex; }
+      .esq-nav-links a { padding: 12px 16px; font-size: 1.5rem; }
+      .esq-nav { position: relative; }
+    }
+    @media (max-width: 640px) {
+      .esq-cards { grid-template-columns: 1fr; }
+      .esq-stats { grid-template-columns: 1fr 1fr; }
+      .esq-steps { grid-template-columns: 1fr; }
+      .esq-blob-blue, .esq-blob-ochre { width: 300px; height: 300px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .esq-blob { animation: none; }
+      .esq-btn, .esq-card, .esq-nav-links a { transition: none; }
+      .esq-tilt-l, .esq-tilt-r { transform: none; }
+    }
+  </style>
+</body>
+</html>

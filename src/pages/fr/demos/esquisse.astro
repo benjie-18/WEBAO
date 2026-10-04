@@ -1,0 +1,550 @@
+---
+import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+
+// Démo : Esquisse, studio fictif de concepts architecturaux, Montréal.
+// Direction artistique autonome. Style esquisse conceptuelle : papier, crayon, aquarelle.
+const IMG = {
+  hero: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1400&auto=format&fit=crop",
+  maison: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?q=80&w=900&auto=format&fit=crop",
+  atelier: "https://images.unsplash.com/photo-1493397212122-2b85dda8106b?q=80&w=900&auto=format&fit=crop",
+  serre: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=900&auto=format&fit=crop",
+  pavillon: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=900&auto=format&fit=crop",
+};
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Esquisse : Concepts architecturaux, dessinés d'abord</title>
+  <meta name="description" content="Esquisse est un studio de concepts à Montréal. Chaque bâtiment commence par un gribouillis : croquis sur napperon, études à l'aquarelle, puis plans." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet" />
+</head>
+<body class="esq">
+
+  <!-- NAV -->
+  <header class="esq-navwrap">
+    <nav class="esq-nav" aria-label="Principal">
+      <a class="esq-logo" href="#top" aria-label="Esquisse, accueil">
+        <svg viewBox="0 0 40 40" width="34" height="34" aria-hidden="true"><path d="M6 30 L7 12 L20 6 L19 7 L33 13 L32 30 Z" fill="none" stroke="#3A3A3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 30 L17 20 L23 21 L22 30" fill="none" stroke="#3A3A3A" stroke-width="2" stroke-linecap="round"/></svg>
+        <span>Esquisse</span>
+      </a>
+      <button class="esq-burger" aria-label="Ouvrir le menu" aria-expanded="false"><span></span><span></span><span></span></button>
+      <div class="esq-nav-links">
+        <a href="#sketches">Croquis</a>
+        <a href="#process">Méthode</a>
+        <a href="#journal">Journal</a>
+        <a href="#pricing">Tarifs</a>
+        <a class="esq-nav-cta" href="#contact">Réserver une séance</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- HERO : une feuille d'esquisse -->
+    <section class="esq-hero">
+      <div class="esq-blob esq-blob-blue" aria-hidden="true"></div>
+      <div class="esq-blob esq-blob-ochre" aria-hidden="true"></div>
+      <div class="esq-hero-in">
+        <div class="esq-hero-copy">
+          <p class="esq-eyebrow">Studio de concepts architecturaux · Montréal</p>
+          <h1 class="esq-h1">Chaque bâtiment<br />commence par <span class="esq-scribble">un gribouillis.</span></h1>
+          <p class="esq-lede">Nous sommes Esquisse, un petit studio qui dessine maisons, ateliers et pavillons à l'ancienne : le crayon d'abord, l'aquarelle ensuite, les plans seulement quand l'idée l'a mérité.</p>
+          <div class="esq-hero-cta">
+            <a class="esq-btn esq-btn-ink" href="#sketches">Voir les croquis</a>
+            <a class="esq-btn esq-btn-line" href="#contact">Réserver une séance concept</a>
+          </div>
+          <p class="esq-hero-note">Pas de CAO le premier jour. Promis.</p>
+        </div>
+        <figure class="esq-sheet esq-hero-sheet">
+          <span class="esq-tape esq-tape-tl" aria-hidden="true"></span>
+          <span class="esq-tape esq-tape-tr" aria-hidden="true"></span>
+          <img src={IMG.hero} alt="Architecte présentant un grand plan à une cliente" loading="eager" fetchpriority="high" />
+          <figcaption>
+            <svg viewBox="0 0 300 120" aria-hidden="true" class="esq-fig-sketch">
+              <path d="M20 90 C 60 88, 90 60, 120 62 S 200 40, 260 55" fill="none" stroke="#3A3A3A" stroke-width="2" stroke-linecap="round"/>
+              <path d="M248 48 L262 55 L250 63" fill="none" stroke="#3A3A3A" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="52" cy="42" r="14" fill="none" stroke="#D9A441" stroke-width="2.5"/>
+              <path d="M52 20 L52 12 M74 42 L82 42 M52 64 L52 72 M30 42 L22 42 M68 26 L74 20 M68 58 L74 64 M36 26 L30 20 M36 58 L30 64" stroke="#D9A441" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <span class="esq-hand">visite no 12, lumière de l'ouest!</span>
+          </figcaption>
+        </figure>
+      </div>
+      <svg class="esq-divider" viewBox="0 0 1200 40" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 22 C 150 18, 300 28, 450 22 S 750 16, 900 24 S 1100 28, 1200 20" fill="none" stroke="#3A3A3A" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+      </svg>
+    </section>
+
+    <!-- STATS -->
+    <section class="esq-stats" aria-label="Le studio en chiffres">
+      <div><strong>214</strong><span>concepts dessinés</span></div>
+      <div><strong>31</strong><span>construits à ce jour</span></div>
+      <div><strong>9</strong><span>prix de design</span></div>
+      <div><strong>1</strong><span>crayon préféré</span></div>
+    </section>
+
+    <!-- CROQUIS -->
+    <section class="esq-section" id="sketches">
+      <div class="esq-wrap">
+        <p class="esq-kicker">sur la table à dessin</p>
+        <h2 class="esq-h2"><span class="esq-scribble">Croquis</span> récents</h2>
+        <p class="esq-sec-lede">Quatre concepts en cours au studio. Chacun a commencé comme une vignette de dix minutes et a survécu à cent révisions.</p>
+        <div class="esq-cards">
+          <article class="esq-card esq-tilt-l">
+            <span class="esq-tape esq-tape-tl" aria-hidden="true"></span>
+            <img src={IMG.maison} alt="Étude de façade d'une maison blanche minimaliste" loading="lazy" />
+            <div class="esq-card-in">
+              <p class="esq-card-no">no 041</p>
+              <h3>Maison Brume</h3>
+              <p>Un chalet au bord d'un lac des Laurentides. Une longue fenêtre, un poêle à bois, zéro corridor. En cours d'aquarelle.</p>
+              <p class="esq-tags">résidentiel · 180 m² · concept</p>
+            </div>
+          </article>
+          <article class="esq-card esq-tilt-r">
+            <span class="esq-tape esq-tape-tr" aria-hidden="true"></span>
+            <img src={IMG.atelier} alt="Concept de façade courbe d'un bâtiment" loading="lazy" />
+            <div class="esq-card-in">
+              <p class="esq-card-no">no 038</p>
+              <h3>Atelier Lumen</h3>
+              <p>L'atelier d'une peintre, avec un mur nord courbe qui capte une lumière douce toute la journée. Le toit se soulève comme un souffle retenu.</p>
+              <p class="esq-tags">atelier · 90 m² · en développement</p>
+            </div>
+          </article>
+          <article class="esq-card esq-tilt-l">
+            <span class="esq-tape esq-tape-tl" aria-hidden="true"></span>
+            <img src={IMG.serre} alt="Bureau couvert de dessins et de plans pour un projet de serre" loading="lazy" />
+            <div class="esq-card-in">
+              <p class="esq-card-no">no 035</p>
+              <h3>Serre Urbaine</h3>
+              <p>Une serre sur le toit d'un café du Mile End. Des tomates en haut, des espressos en bas, tout le monde est content.</p>
+              <p class="esq-tags">commercial · 60 m² · permis obtenu</p>
+            </div>
+          </article>
+          <article class="esq-card esq-tilt-r">
+            <span class="esq-tape esq-tape-tr" aria-hidden="true"></span>
+            <img src={IMG.pavillon} alt="Intérieur chaleureux en bois d'un concept de pavillon" loading="lazy" />
+            <div class="esq-card-in">
+              <p class="esq-card-no">no 031</p>
+              <h3>Pavillon Cèdre</h3>
+              <p>Un pavillon de lecture en cèdre pour un jardin public. Ça sent la boîte de crayons, ça accueille douze rêveurs.</p>
+              <p class="esq-tags">public · 45 m² · construit en 2025</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- MÉTHODE -->
+    <section class="esq-process" id="process">
+      <div class="esq-wrap">
+        <p class="esq-kicker">notre façon de travailler</p>
+        <h2 class="esq-h2">Du napperon <span class="esq-scribble">au plan</span></h2>
+        <ol class="esq-steps">
+          <li>
+            <span class="esq-step-no" aria-hidden="true">1</span>
+            <div><h3>Le Napperon</h3><p>On visite votre terrain, crayon en main, sans idée préconçue. Au deuxième café, les premières lignes apparaissent. Laides, honnêtes, pleines de promesses.</p></div>
+          </li>
+          <li>
+            <span class="esq-step-no" aria-hidden="true">2</span>
+            <div><h3>Le Mur à Gribouillis</h3><p>Une semaine, cent vignettes épinglées au mur du studio. On garde les trois qui nous font sourire et on recycle le reste.</p></div>
+          </li>
+          <li>
+            <span class="esq-step-no" aria-hidden="true">3</span>
+            <div><h3>L'Aquarelle</h3><p>Études de volumétrie, de lumière et de matériaux en lavis pâles. Vous voyez comment le soleil du matin tombera vraiment sur votre table de cuisine.</p></div>
+          </li>
+          <li>
+            <span class="esq-step-no" aria-hidden="true">4</span>
+            <div><h3>Le Plan</h3><p>C'est seulement là que la CAO entre en scène. Des dessins prêts pour le permis, fidèles au croquis du début.</p></div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- JOURNAL -->
+    <section class="esq-section" id="journal">
+      <div class="esq-wrap">
+        <p class="esq-kicker">journal du studio</p>
+        <h2 class="esq-h2">Notes <span class="esq-scribble">épinglées</span></h2>
+        <div class="esq-notes">
+          <blockquote class="esq-note esq-tilt-l">
+            <p>« Une ligne droite, c'est une décision prise trop vite. On gomme beaucoup, et on en est fiers. »</p>
+            <cite>Simone Aubert, fondatrice</cite>
+          </blockquote>
+          <blockquote class="esq-note esq-tilt-r">
+            <p>« Ils sont arrivés avec des aquarelles au lieu de rendus. Six mois plus tard, on emménageait dans le croquis. »</p>
+            <cite>Marc et Léa D., clients de la Maison Brume</cite>
+          </blockquote>
+          <blockquote class="esq-note esq-tilt-l">
+            <p>« Le pavillon coule un peu quand il pleut de côté. On l'aime quand même. Il a été dessiné sous la pluie. »</p>
+            <cite>Note de journal, octobre 2025</cite>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- TARIFS -->
+    <section class="esq-pricing" id="pricing">
+      <div class="esq-wrap">
+        <p class="esq-kicker">forfaits concept</p>
+        <h2 class="esq-h2">Choisissez <span class="esq-scribble">un crayon</span></h2>
+        <div class="esq-plans">
+          <article class="esq-plan esq-tilt-l">
+            <h3>Esquisse Rapide</h3>
+            <p class="esq-price">950 $</p>
+            <p class="esq-plan-sub">Une grande idée, vite.</p>
+            <ul>
+              <li>Visite du site et séance napperon</li>
+              <li>Un concept, dessiné à la main</li>
+              <li>Deux semaines, du début à la fin</li>
+            </ul>
+            <a class="esq-btn esq-btn-line" href="#contact">Commencer à dessiner</a>
+          </article>
+          <article class="esq-plan esq-plan-hot esq-tilt-r">
+            <span class="esq-tape esq-tape-tl" aria-hidden="true"></span>
+            <p class="esq-plan-flag">le plus épinglé</p>
+            <h3>Concept Complet</h3>
+            <p class="esq-price">3 800 $</p>
+            <p class="esq-plan-sub">Le grand traitement aquarelle.</p>
+            <ul>
+              <li>Trois concepts parmi lesquels choisir</li>
+              <li>Rendus aquarelle et maquette de volumétrie</li>
+              <li>Études de lumière pour chaque saison</li>
+              <li>Estimation des coûts avec un constructeur</li>
+            </ul>
+            <a class="esq-btn esq-btn-ink" href="#contact">Commencer à dessiner</a>
+          </article>
+          <article class="esq-plan esq-tilt-l">
+            <h3>Bâtiment Signature</h3>
+            <p class="esq-price">Sur mesure</p>
+            <p class="esq-plan-sub">Du croquis au suivi de chantier.</p>
+            <ul>
+              <li>Tout le Concept Complet</li>
+              <li>Jeu de dessins prêt pour le permis</li>
+              <li>Visites de chantier pendant la construction</li>
+            </ul>
+            <a class="esq-btn esq-btn-line" href="#contact">Commencer à dessiner</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="esq-section" id="contact">
+      <div class="esq-wrap esq-contact-in">
+        <div>
+          <p class="esq-kicker">dites bonjour</p>
+          <h2 class="esq-h2">Apportez-nous <span class="esq-scribble">un napperon.</span></h2>
+          <p class="esq-sec-lede">Parlez-nous de votre terrain, de vos rêves et de votre budget. Un croquis au dos d'une enveloppe compte comme un devis.</p>
+          <p class="esq-contact-lines">412, rue Fictive, Montréal QC<br /><a href="tel:+15145550134">(514) 555-0134</a><br /><a href="mailto:bonjour@esquisse-demo.ca">bonjour@esquisse-demo.ca</a></p>
+        </div>
+        <form class="esq-form esq-tilt-r" id="esq-form" novalidate>
+          <span class="esq-tape esq-tape-tl" aria-hidden="true"></span>
+          <h3>Épinglez votre note ici</h3>
+          <label>Nom<input type="text" name="name" required placeholder="Camille Roy" /></label>
+          <label>Courriel<input type="email" name="email" required placeholder="camille@exemple.com" /></label>
+          <label>Projet
+            <select name="project">
+              <option>Une maison</option>
+              <option>Un atelier ou un bureau</option>
+              <option>Quelque chose de public</option>
+              <option>Juste une idée pour l'instant</option>
+            </select>
+          </label>
+          <label>Votre napperon<textarea name="message" rows="4" placeholder="Terrain orienté sud, deux enfants, un chien, de grands rêves..."></textarea></label>
+          <button class="esq-btn esq-btn-ink" type="submit">Épingler au tableau</button>
+          <p class="esq-form-note" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="esq-footer">
+    <p class="esq-footer-giant" aria-hidden="true">esquisse</p>
+    <div class="esq-wrap esq-footer-in">
+      <p>© 2026 Studio Esquisse. Démo fictive. Tous les bâtiments sont imaginaires jusqu'au permis.</p>
+      <p>412, rue Fictive, Montréal QC · <a href="tel:+15145550134">(514) 555-0134</a> · <a href="mailto:bonjour@esquisse-demo.ca">bonjour@esquisse-demo.ca</a></p>
+    </div>
+  </footer>
+
+  <EscapeHatch locale="fr" />
+
+  <script>
+    (function () {
+      var btn = document.querySelector('.esq-burger');
+      btn?.addEventListener('click', function () {
+        var open = btn?.getAttribute('aria-expanded') === 'true';
+        btn?.setAttribute('aria-expanded', String(!open));
+        btn?.setAttribute('aria-label', open ? 'Ouvrir le menu' : 'Fermer le menu');
+        document.body.classList.toggle('esq-menu-open', !open);
+      });
+      document.querySelectorAll('.esq-nav-links a').forEach(function (a) {
+        a.addEventListener('click', function () {
+          document.body.classList.remove('esq-menu-open');
+          btn?.setAttribute('aria-expanded', 'false');
+          btn?.setAttribute('aria-label', 'Ouvrir le menu');
+        });
+      });
+    })();
+    // Formulaire démo : ne soumet rien nulle part
+    (function () {
+      var form = document.getElementById('esq-form') as HTMLFormElement | null;
+      form?.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var note = form?.querySelector('.esq-form-note');
+        if (note) note.textContent = 'Épinglé! Votre note est sur notre tableau. On répond en deux jours ouvrables, avec un croquis en pièce jointe.';
+        form?.reset();
+      });
+    })();
+  </script>
+
+  <style>
+    .esq {
+      --esq-paper: #FBF8F1;
+      --esq-paper-2: #F5EFE2;
+      --esq-ink: #3A3A3A;
+      --esq-ink-soft: #6B655A;
+      --esq-blue: #D7E3EE;
+      --esq-blue-deep: #9DBBD4;
+      --esq-ochre: #D9A441;
+      --esq-ochre-soft: #F0DDAE;
+      --esq-hand: "Caveat", cursive;
+      --esq-serif: "Cormorant Garamond", Georgia, serif;
+      margin: 0;
+      background-color: var(--esq-paper);
+      background-image:
+        linear-gradient(rgba(58,58,58,0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(58,58,58,0.055) 1px, transparent 1px);
+      background-size: 30px 30px;
+      color: var(--esq-ink);
+      font-family: var(--esq-serif);
+      font-size: 19px;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: clip;
+    }
+    .esq *, .esq *::before, .esq *::after { box-sizing: border-box; }
+    .esq img { display: block; max-width: 100%; }
+    .esq-wrap { max-width: 1180px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px); }
+
+    /* sketchy helpers */
+    .esq-sketchy { border: 2px solid var(--esq-ink); border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; }
+    .esq-tilt-l { transform: rotate(-1.4deg); }
+    .esq-tilt-r { transform: rotate(1.2deg); }
+    .esq-tape {
+      position: absolute; width: 92px; height: 28px; z-index: 3;
+      background: linear-gradient(180deg, rgba(233,214,160,0.75), rgba(222,196,138,0.6));
+      box-shadow: 0 1px 3px rgba(58,58,58,0.15);
+      opacity: 0.9;
+    }
+    .esq-tape-tl { top: -14px; left: 26px; transform: rotate(-8deg); }
+    .esq-tape-tr { top: -14px; right: 26px; transform: rotate(7deg); }
+    .esq-scribble { position: relative; white-space: nowrap; }
+    .esq-scribble::after {
+      content: ""; position: absolute; left: -2%; right: -2%; bottom: 0.02em; height: 0.34em;
+      background: var(--esq-ochre-soft); z-index: -1; transform: rotate(-1deg);
+      border-radius: 40% 60% 55% 45% / 50% 45% 55% 50%;
+    }
+    .esq-hand { font-family: var(--esq-hand); font-size: 1.35rem; color: var(--esq-ink-soft); }
+
+    /* nav */
+    .esq-navwrap { position: fixed; top: 0; left: 0; right: 0; z-index: 60; }
+    .esq-nav {
+      display: flex; align-items: center; gap: 22px;
+      padding: 12px clamp(20px, 4vw, 40px);
+      background: rgba(251,248,241,0.92); backdrop-filter: blur(10px);
+      border-bottom: 2px solid var(--esq-ink);
+      border-bottom-left-radius: 40% 8px; border-bottom-right-radius: 55% 10px;
+    }
+    .esq-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--esq-ink); margin-right: auto; }
+    .esq-logo span { font-family: var(--esq-hand); font-size: 2.1rem; font-weight: 700; line-height: 1; }
+    .esq-nav-links { display: flex; align-items: center; gap: 4px; }
+    .esq-nav-links a {
+      font-family: var(--esq-hand); font-size: 1.35rem; font-weight: 600;
+      color: var(--esq-ink); text-decoration: none; padding: 8px 14px;
+    }
+    .esq-nav-links a:hover { color: var(--esq-ochre); transform: rotate(-2deg); }
+    .esq-nav-cta { border: 2px solid var(--esq-ink); border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; background: var(--esq-ochre-soft); }
+    .esq-burger { display: none; background: var(--esq-paper); border: 2px solid var(--esq-ink); border-radius: 12px 4px 14px 5px; cursor: pointer; padding: 9px 10px; margin-left: auto; }
+    .esq-burger span { display: block; width: 24px; height: 2.5px; background: var(--esq-ink); margin: 5px 0; border-radius: 2px; }
+
+    /* buttons */
+    .esq-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      font-family: var(--esq-hand); font-weight: 700; font-size: 1.4rem;
+      padding: 12px 30px; text-decoration: none; cursor: pointer;
+      border: 2.5px solid var(--esq-ink);
+      border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .esq-btn-ink { background: var(--esq-ink); color: var(--esq-paper); }
+    .esq-btn-ink:hover { transform: rotate(-1.5deg) translateY(-2px); box-shadow: 4px 5px 0 rgba(58,58,58,0.25); }
+    .esq-btn-line { background: transparent; color: var(--esq-ink); }
+    .esq-btn-line:hover { background: var(--esq-ochre-soft); transform: rotate(1.5deg) translateY(-2px); }
+
+    /* type */
+    .esq-kicker { font-family: var(--esq-hand); font-size: 1.5rem; font-weight: 600; color: var(--esq-ochre); margin: 0 0 10px; }
+    .esq-h1 { font-family: var(--esq-hand); font-weight: 700; font-size: clamp(3.4rem, 9vw, 6.4rem); line-height: 1.02; margin: 0 0 22px; }
+    .esq-h2 { font-family: var(--esq-hand); font-weight: 700; font-size: clamp(2.6rem, 6vw, 4.2rem); line-height: 1.05; margin: 0 0 14px; }
+    .esq-lede { font-size: 1.25rem; line-height: 1.65; max-width: 44ch; margin: 0 0 30px; font-weight: 400; }
+    .esq-sec-lede { font-size: 1.2rem; line-height: 1.65; max-width: 56ch; margin: 0 0 44px; color: var(--esq-ink-soft); font-style: italic; }
+    .esq-eyebrow { font-size: 0.85rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--esq-ink-soft); margin: 0 0 18px; font-weight: 500; }
+
+    /* hero */
+    .esq-hero { position: relative; padding: 150px 0 40px; overflow: hidden; }
+    .esq-blob { position: absolute; border-radius: 50%; filter: blur(70px); opacity: 0.55; pointer-events: none; animation: esq-drift 16s ease-in-out infinite alternate; }
+    .esq-blob-blue { width: 480px; height: 480px; left: -140px; top: 60px; background: radial-gradient(circle, var(--esq-blue) 0%, transparent 70%); }
+    .esq-blob-ochre { width: 420px; height: 420px; right: -120px; bottom: -60px; background: radial-gradient(circle, var(--esq-ochre-soft) 0%, transparent 70%); animation-delay: -8s; }
+    @keyframes esq-drift { to { transform: translate(46px, 34px) scale(1.08); } }
+    .esq-hero-in { position: relative; z-index: 2; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(36px, 5vw, 70px); align-items: center; max-width: 1180px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px); }
+    .esq-hero-cta { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
+    .esq-hero-note { font-family: var(--esq-hand); font-size: 1.3rem; color: var(--esq-ink-soft); margin: 0; transform: rotate(-1.5deg); }
+    .esq-sheet {
+      position: relative; background: #FFFDF8; margin: 0; padding: 14px 14px 10px;
+      border: 2px solid var(--esq-ink);
+      border-radius: 12px 60px 14px 55px / 55px 14px 60px 12px;
+      box-shadow: 8px 10px 0 rgba(58,58,58,0.12);
+    }
+    .esq-hero-sheet img { width: 100%; height: 340px; object-fit: cover; filter: sepia(0.28) contrast(0.96); border: 1px solid rgba(58,58,58,0.25); }
+    .esq-sheet figcaption { display: flex; align-items: center; gap: 14px; padding: 12px 6px 6px; }
+    .esq-fig-sketch { width: 120px; height: 48px; flex: none; }
+    .esq-divider { display: block; width: 100%; height: 40px; margin-top: 50px; }
+
+    /* stats */
+    .esq-stats { display: grid; grid-template-columns: repeat(4, 1fr); max-width: 1180px; margin: 0 auto; padding: 10px clamp(20px, 4vw, 40px) 0; }
+    .esq-stats div { text-align: center; padding: 18px 10px; display: grid; gap: 2px; }
+    .esq-stats strong { font-family: var(--esq-hand); font-size: clamp(2.6rem, 5vw, 3.8rem); font-weight: 700; color: var(--esq-ink); }
+    .esq-stats span { font-style: italic; color: var(--esq-ink-soft); font-size: 1.05rem; }
+
+    /* sections */
+    .esq-section { padding: clamp(70px, 9vw, 120px) 0; }
+
+    /* sketch cards */
+    .esq-cards { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 4vw, 48px); }
+    .esq-card {
+      position: relative; background: #FFFDF8; padding: 14px 14px 8px;
+      border: 2px solid var(--esq-ink);
+      border-radius: 14px 50px 12px 48px / 48px 12px 50px 14px;
+      box-shadow: 6px 8px 0 rgba(58,58,58,0.1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .esq-card:hover { transform: rotate(0deg) translateY(-6px) !important; box-shadow: 10px 14px 0 rgba(217,164,65,0.25); }
+    .esq-card img { width: 100%; height: 250px; object-fit: cover; filter: sepia(0.22) contrast(0.97); border: 1px solid rgba(58,58,58,0.25); }
+    .esq-card-in { padding: 18px 10px 14px; }
+    .esq-card-no { font-family: var(--esq-hand); font-size: 1.15rem; color: var(--esq-ochre); margin: 0 0 4px; font-weight: 600; }
+    .esq-card h3 { font-family: var(--esq-hand); font-size: 2rem; font-weight: 700; margin: 0 0 8px; }
+    .esq-card p { margin: 0 0 10px; line-height: 1.6; font-size: 1.08rem; }
+    .esq-tags { font-size: 0.85rem !important; letter-spacing: 0.14em; text-transform: uppercase; color: var(--esq-ink-soft); }
+
+    /* process */
+    .esq-process { background: var(--esq-paper-2); border-block: 2px dashed rgba(58,58,58,0.35); padding: clamp(70px, 9vw, 120px) 0; }
+    .esq-steps { list-style: none; margin: 30px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px; }
+    .esq-steps li { display: grid; gap: 14px; align-content: start; }
+    .esq-step-no {
+      width: 64px; height: 64px; display: grid; place-items: center;
+      font-family: var(--esq-hand); font-size: 2rem; font-weight: 700;
+      border: 2.5px solid var(--esq-ink); border-radius: 48% 52% 55% 45% / 52% 46% 54% 48%;
+      background: var(--esq-ochre-soft);
+    }
+    .esq-steps h3 { font-family: var(--esq-hand); font-size: 1.7rem; margin: 0 0 6px; }
+    .esq-steps p { margin: 0; line-height: 1.6; font-size: 1.05rem; color: var(--esq-ink-soft); }
+
+    /* journal notes */
+    .esq-notes { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(24px, 4vw, 44px); }
+    .esq-note {
+      position: relative; margin: 0; padding: 30px 26px;
+      background: linear-gradient(180deg, #FFFDF8, var(--esq-paper-2));
+      border: 2px solid var(--esq-ink);
+      border-radius: 6px 40px 8px 36px / 36px 8px 40px 6px;
+      box-shadow: 5px 7px 0 rgba(58,58,58,0.1);
+    }
+    .esq-note p { font-family: var(--esq-hand); font-size: 1.5rem; line-height: 1.35; margin: 0 0 14px; }
+    .esq-note cite { font-style: italic; font-size: 1rem; color: var(--esq-ink-soft); }
+
+    /* pricing */
+    .esq-pricing { background: var(--esq-paper-2); border-block: 2px dashed rgba(58,58,58,0.35); padding: clamp(70px, 9vw, 120px) 0; }
+    .esq-plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(24px, 4vw, 40px); align-items: start; }
+    .esq-plan {
+      position: relative; background: #FFFDF8; padding: 34px 30px;
+      border: 2.5px solid var(--esq-ink);
+      border-radius: 255px 18px 225px 18px / 18px 225px 18px 255px;
+      box-shadow: 6px 8px 0 rgba(58,58,58,0.1);
+      display: grid; gap: 10px; align-content: start;
+    }
+    .esq-plan-hot { background: #FFFDF8; border-width: 3px; box-shadow: 8px 10px 0 rgba(217,164,65,0.3); }
+    .esq-plan-flag { font-family: var(--esq-hand); font-size: 1.3rem; font-weight: 700; color: var(--esq-ochre); margin: 0; transform: rotate(-3deg); }
+    .esq-plan h3 { font-family: var(--esq-hand); font-size: 2rem; margin: 0; }
+    .esq-price { font-family: var(--esq-hand); font-size: 3rem; font-weight: 700; margin: 0; }
+    .esq-plan-sub { font-style: italic; color: var(--esq-ink-soft); margin: 0 0 6px; }
+    .esq-plan ul { list-style: none; margin: 0 0 14px; padding: 0; display: grid; gap: 10px; }
+    .esq-plan li { padding-left: 30px; position: relative; line-height: 1.5; font-size: 1.05rem; }
+    .esq-plan li::before { content: "✓"; position: absolute; left: 2px; font-family: var(--esq-hand); font-weight: 700; font-size: 1.3rem; color: var(--esq-ochre); }
+
+    /* contact */
+    .esq-contact-in { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(36px, 6vw, 80px); align-items: start; }
+    .esq-contact-lines { font-size: 1.15rem; line-height: 1.9; margin: 26px 0 0; }
+    .esq-contact-lines a { color: var(--esq-ink); font-weight: 500; }
+    .esq-form {
+      position: relative; background: #FFFDF8; padding: clamp(28px, 4vw, 40px);
+      border: 2.5px solid var(--esq-ink);
+      border-radius: 18px 60px 16px 55px / 55px 16px 60px 18px;
+      box-shadow: 8px 10px 0 rgba(58,58,58,0.12);
+      display: grid; gap: 16px;
+    }
+    .esq-form h3 { font-family: var(--esq-hand); font-size: 2rem; margin: 0; }
+    .esq-form label { display: grid; gap: 8px; font-family: var(--esq-hand); font-size: 1.3rem; font-weight: 600; }
+    .esq-form input, .esq-form select, .esq-form textarea {
+      font-family: var(--esq-serif); font-size: 1.05rem;
+      background: var(--esq-paper); border: 2px solid var(--esq-ink); color: var(--esq-ink);
+      padding: 12px 16px; width: 100%;
+      border-radius: 12px 4px 14px 5px / 5px 14px 4px 12px;
+    }
+    .esq-form input:focus, .esq-form select:focus, .esq-form textarea:focus { outline: 3px solid var(--esq-ochre-soft); outline-offset: 2px; }
+    .esq-form-note { margin: 0; font-family: var(--esq-hand); font-size: 1.35rem; color: var(--esq-ink); }
+    .esq-form-note:empty { display: none; }
+
+    /* footer */
+    .esq-footer { padding: 70px 0 90px; text-align: center; overflow: hidden; border-top: 2px dashed rgba(58,58,58,0.35); }
+    .esq-footer-giant { font-family: var(--esq-hand); font-weight: 700; font-size: clamp(4rem, 16vw, 11rem); line-height: 1; margin: 0 0 24px; color: transparent; -webkit-text-stroke: 2px rgba(58,58,58,0.4); }
+    .esq-footer-in { display: grid; gap: 10px; color: var(--esq-ink-soft); font-size: 1rem; font-style: italic; }
+    .esq-footer-in p { margin: 0; }
+    .esq-footer-in a { color: var(--esq-ink); }
+
+    @media (max-width: 960px) {
+      .esq-hero-in { grid-template-columns: 1fr; }
+      .esq-hero-sheet img { height: 280px; }
+      .esq-steps { grid-template-columns: 1fr 1fr; }
+      .esq-notes { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; }
+      .esq-plans { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; }
+      .esq-contact-in { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 860px) {
+      .esq-burger { display: block; }
+      .esq-nav-links {
+        display: none; position: absolute; top: 100%; left: 12px; right: 12px;
+        background: #FFFDF8; border: 2.5px solid var(--esq-ink);
+        border-radius: 14px 40px 12px 36px / 36px 12px 40px 14px;
+        box-shadow: 6px 8px 0 rgba(58,58,58,0.15);
+        padding: 14px; flex-direction: column; align-items: stretch; gap: 2px;
+      }
+      body.esq-menu-open .esq-nav-links { display: flex; }
+      .esq-nav-links a { padding: 12px 16px; font-size: 1.5rem; }
+      .esq-nav { position: relative; }
+    }
+    @media (max-width: 640px) {
+      .esq-cards { grid-template-columns: 1fr; }
+      .esq-stats { grid-template-columns: 1fr 1fr; }
+      .esq-steps { grid-template-columns: 1fr; }
+      .esq-blob-blue, .esq-blob-ochre { width: 300px; height: 300px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .esq-blob { animation: none; }
+      .esq-btn, .esq-card, .esq-nav-links a { transition: none; }
+      .esq-tilt-l, .esq-tilt-r { transform: none; }
+    }
+  </style>
+</body>
+</html>
