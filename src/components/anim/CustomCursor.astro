@@ -1,0 +1,211 @@
+---
+// CustomCursor: a restrained dot + trailing ring.
+// - Fine pointers only: (hover: hover) and (pointer: fine)
+// - Disabled entirely under prefers-reduced-motion
+// - The native cursor is hidden only after the custom one is confirmed live
+//   (first mousemove -> html.cc-ready), so a JS failure never leaves the
+//   user without a cursor.
+// - Hidden while the intro plays and while the CursorJourney's own cursor
+//   is visible, so it never fights the existing animations.
+// - Theme-aware through --ink / --accent tokens.
+---
+
+<div class="cc" aria-hidden="true">
+  <div class="cc-ring" data-cc-ring><span class="cc-ring-i"></span></div>
+  <div class="cc-dot" data-cc-dot><span class="cc-dot-i"></span></div>
+</div>
+
+<style>
+  .cc { display: none; }
+  @media (hover: hover) and (pointer: fine) {
+    .cc { display: block; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cc { display: none !important; }
+  }
+  .cc-dot,
+  .cc-ring {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 8000;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    will-change: transform;
+  }
+  .cc-dot-i,
+  .cc-ring-i {
+    display: block;
+    border-radius: 50%;
+  }
+  .cc-dot-i {
+    width: 6px;
+    height: 6px;
+    margin: -3px 0 0 -3px;
+    background: var(--ink);
+    transition: transform 0.22s var(--ease-out);
+  }
+  .cc-ring-i {
+    width: 34px;
+    height: 34px;
+    margin: -17px 0 0 -17px;
+    border: 1.5px solid color-mix(in srgb, var(--ink) 32%, transparent);
+    transition:
+      transform 0.32s var(--ease-out),
+      border-color 0.25s ease,
+      background-color 0.25s ease;
+  }
+  html.cc-ready .cc-dot,
+  html.cc-ready .cc-ring { opacity: 1; }
+  /* Interactive hover: ring expands and tints with the accent, dot recedes */
+  html.cc-hot .cc-ring-i {
+    transform: scale(1.5);
+    border-color: color-mix(in srgb, var(--accent) 70%, transparent);
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+  }
+  html.cc-hot .cc-dot-i { transform: scale(0.5); }
+  html.cc-down .cc-ring-i { transform: scale(1.15); }
+  html.cc-down.cc-hot .cc-ring-i { transform: scale(1.3); }
+  /* Suppressed while the intro plays or the journey cursor is visible */
+  html.cc-off .cc-dot,
+  html.cc-off .cc-ring,
+  html.cc-away .cc-dot,
+  html.cc-away .cc-ring { opacity: 0 !important; }
+  /* Native cursor hides only once the custom one is live. Keep the native
+     I-beam over text fields for usability (the dot still tracks). */
+  html.cc-ready,
+  html.cc-ready *:not(input):not(textarea):not(select):not([contenteditable="true"]) {
+    cursor: none;
+  }
+</style>
+
+<script is:inline data-astro-rerun>
+  (function () {
+    if (window.__webaoCustomCursor) return;
+    window.__webaoCustomCursor = true;
+
+    var fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!fine || reduced) return;
+
+    var html = document.documentElement;
+    var HOT_SELECTOR =
+      "a, button, [role='button'], summary, label, .chip, input, select, textarea, [data-cc-hot]";
+
+    var dot, ring;
+    var mx = -100, my = -100;
+    var dx = -100, dy = -100, rx = -100, ry = -100;
+    var raf = 0;
+    var live = false;
+
+    function bind() {
+      if (dot && dot.isConnected && ring && ring.isConnected) return true;
+      dot = document.querySelector("[data-cc-dot]");
+      ring = document.querySelector("[data-cc-ring]");
+      return !!(dot && ring);
+    }
+
+    function place() {
+      if (!dot || !ring) return;
+      dot.style.transform = "translate3d(" + dx + "px," + dy + "px,0)";
+      ring.style.transform = "translate3d(" + rx + "px," + ry + "px,0)";
+    }
+
+    function tick() {
+      raf = 0;
+      dx += (mx - dx) * 0.42;
+      dy += (my - dy) * 0.42;
+      rx += (mx - rx) * 0.16;
+      ry += (my - ry) * 0.16;
+      place();
+      var active =
+        Math.abs(mx - dx) > 0.05 || Math.abs(my - dy) > 0.05 ||
+        Math.abs(mx - rx) > 0.05 || Math.abs(my - ry) > 0.05;
+      if (active) raf = requestAnimationFrame(tick);
+    }
+    function kick() {
+      if (!raf) raf = requestAnimationFrame(tick);
+    }
+
+    function updateOff() {
+      var introPlaying =
+        html.classList.contains("wi-run") &&
+        !html.classList.contains("wi-static") &&
+        !html.classList.contains("wi-released");
+      var journeyVisible = !!document.querySelector(".journey-cursor.is-visible");
+      html.classList.toggle("cc-off", introPlaying || journeyVisible);
+    }
+
+    function onMove(e) {
+      if (!bind()) return;
+      mx = e.clientX;
+      my = e.clientY;
+      html.classList.remove("cc-away");
+      if (!live) {
+        live = true;
+        dx = mx; dy = my; rx = mx; ry = my;
+        place();
+        html.classList.add("cc-ready");
+      }
+      var t = e.target;
+      var hot = !!(t && t.closest && t.closest(HOT_SELECTOR));
+      html.classList.toggle("cc-hot", hot);
+      updateOff();
+      kick();
+    }
+
+    document.addEventListener("mousemove", onMove, { passive: true });
+    document.addEventListener(
+      "mousedown",
+      function () { html.classList.add("cc-down"); },
+      { passive: true }
+    );
+    document.addEventListener(
+      "mouseup",
+      function () { html.classList.remove("cc-down"); },
+      { passive: true }
+    );
+    document.addEventListener("mouseleave", function () {
+      html.classList.add("cc-away");
+    });
+    document.addEventListener("mouseenter", function () {
+      html.classList.remove("cc-away");
+    });
+
+    // Re-evaluate suppression when the intro or journey toggles classes.
+    var mo = new MutationObserver(function (mutations) {
+      for (var i = 0; i < mutations.length; i++) {
+        var m = mutations[i];
+        if (m.type !== "attributes") continue;
+        var el = m.target;
+        if (el === html || (el.classList && el.classList.contains("journey-cursor"))) {
+          updateOff();
+          return;
+        }
+      }
+    });
+    mo.observe(html, { attributes: true, attributeFilter: ["class"] });
+    if (document.body) {
+      mo.observe(document.body, {
+        attributes: true,
+        subtree: true,
+        attributeFilter: ["class"],
+      });
+    }
+
+    // ClientRouter navigations: re-bind to the fresh DOM, keep it idempotent.
+    document.addEventListener("astro:page-load", function () {
+      live = false;
+      dx = dy = rx = ry = -100;
+      dot = null;
+      ring = null;
+      html.classList.remove("cc-ready", "cc-hot", "cc-down", "cc-away");
+      bind();
+      updateOff();
+    });
+
+    bind();
+    updateOff();
+  })();
+</script>
