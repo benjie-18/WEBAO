@@ -190,20 +190,44 @@ const paths = localizedPaths[locale];
           return;
         }
         const fields: Array<[string, string]> = [
-          ['Business', String(data.get('business') || '')],
-          ['Trade', String(data.get('trade') || '')],
-          ['City', String(data.get('city') || '')],
-          ['Name', String(data.get('name') || '')],
-          ['Email', email],
-          ['Phone', String(data.get('phone') || '')],
-          ['Goal', String(data.get('goal') || '')],
-          ['Details', String(data.get('details') || '')],
+          [form.getAttribute('data-label-business') || 'Business', String(data.get('business') || '')],
+          [form.getAttribute('data-label-trade') || 'Trade', String(data.get('trade') || '')],
+          [form.getAttribute('data-label-city') || 'City', String(data.get('city') || '')],
+          [form.getAttribute('data-label-name') || 'Name', String(data.get('name') || '')],
+          [form.getAttribute('data-label-email') || 'Email', email],
+          [form.getAttribute('data-label-phone') || 'Phone', String(data.get('phone') || '')],
+          [form.getAttribute('data-label-goal') || 'Goal', String(data.get('goal') || '')],
+          [form.getAttribute('data-label-details') || 'Details', String(data.get('details') || '')],
         ];
         const body = fields
           .filter(([, v]) => v.trim() !== '')
           .map(([k, v]) => `${k}: ${v}`)
           .join('\n');
-        const subject = `New website enquiry: ${fields[0][1] || 'WEBAO'}`;
+        const subjectPrefix = form.getAttribute('data-subject-prefix') || 'New website enquiry';
+        const subject = `${subjectPrefix}: ${fields[0][1] || 'WEBAO'}`;
+        // Catalog the submission for the admin panel (fail-silent; the mailto
+        // below remains the primary channel so nothing breaks if the API is down).
+        try {
+          fetch("/api/forms/submit", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            keepalive: true,
+            body: JSON.stringify({
+              form: "pricing",
+              fields: {
+                name: String(data.get('name') || ''),
+                email: email,
+                business: String(data.get('business') || ''),
+                trade: String(data.get('trade') || ''),
+                city: String(data.get('city') || ''),
+                phone: String(data.get('phone') || ''),
+                goal: String(data.get('goal') || ''),
+                details: String(data.get('details') || ''),
+                page: location.pathname,
+              },
+            }),
+          }).catch(() => {});
+        } catch (err) { /* never break the mailto flow */ }
         const mailto = `mailto:hello@webao.ca?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
         window.location.href = mailto;
         (status as HTMLElement).hidden = false;

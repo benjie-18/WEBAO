@@ -110,6 +110,125 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
       })();
     </script>
 
+    <!-- Analytics beacon: pageviews, clicks, time-on-page. Fail-silent and
+         non-blocking; never breaks the page if the API is unreachable.
+         Skipped entirely when Do Not Track is on. The session id persists in
+         localStorage (per the /api/track contract) so a returning visitor in
+         another tab still counts as one session. -->
+    <script is:inline>
+      (function () {
+        try {
+          if (navigator.doNotTrack === "1") return;
+
+          var SID_KEY = "webao.sid";
+          var sid = null;
+          try { sid = localStorage.getItem(SID_KEY); } catch (e) { sid = null; }
+          if (!sid) {
+            if (window.crypto && typeof window.crypto.randomUUID === "function") {
+              sid = window.crypto.randomUUID();
+            } else {
+              sid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+                var r = (Math.random() * 16) | 0;
+                return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
+              });
+            }
+            try { localStorage.setItem(SID_KEY, sid); } catch (e) {}
+          }
+
+          var startTs = 0;
+          var curPath = "";
+          var lastPv = "";
+
+          function post(url, body, useBeacon) {
+            try {
+              var payload = JSON.stringify(body);
+              if (useBeacon && navigator.sendBeacon) {
+                navigator.sendBeacon(url, payload);
+                return;
+              }
+              fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: payload,
+                keepalive: true,
+              }).catch(function () {});
+            } catch (e) {}
+          }
+
+          function pageview() {
+            var key = location.pathname + location.search;
+            if (key === lastPv) return;
+            lastPv = key;
+            startTs = Date.now();
+            curPath = location.pathname;
+            var body = { sid: sid, path: curPath };
+            if (document.referrer) body.referrer = document.referrer;
+            try { body.screen = window.screen.width + "x" + window.screen.height; } catch (e) {}
+            var lang = document.documentElement.getAttribute("lang");
+            if (lang) body.locale = lang;
+            var theme = document.documentElement.getAttribute("data-theme");
+            if (theme) body.theme = theme;
+            post("/api/track/pageview", body, false);
+          }
+
+          function heartbeat(useBeacon) {
+            if (!startTs) return;
+            post(
+              "/api/track/heartbeat",
+              { sid: sid, path: curPath, durationMs: Date.now() - startTs },
+              useBeacon
+            );
+          }
+
+          // Click tracking: kind comes from the closest [data-track], otherwise
+          // from the tag and its context (nav vs plain link, cta vs button).
+          document.addEventListener("click", function (e) {
+            try {
+              var t = e.target;
+              if (!t || !t.closest) return;
+              var el = t.closest("a, button, [data-track]");
+              if (!el) return;
+              var kind = null;
+              var label = "";
+              var tracked = el.closest("[data-track]");
+              if (tracked) {
+                kind = tracked.getAttribute("data-track") || "click";
+                label = tracked.getAttribute("data-track-label") || tracked.textContent || "";
+              } else if (el.tagName === "A") {
+                kind = el.closest("nav, header, footer") ? "nav" : "link";
+                label = el.textContent || "";
+              } else if (el.tagName === "BUTTON") {
+                var cls = typeof el.className === "string" ? el.className : "";
+                kind = /\b(cta|btn--primary)\b/.test(cls) ? "cta" : "button";
+                label = el.textContent || el.getAttribute("aria-label") || "";
+              }
+              label = String(label).replace(/\s+/g, " ").trim().slice(0, 120);
+              post(
+                "/api/track/click",
+                { sid: sid, path: curPath || location.pathname, kind: kind || "click", label: label },
+                false
+              );
+            } catch (err) {}
+          }, { passive: true, capture: true });
+
+          document.addEventListener("astro:page-load", pageview);
+          // Client-router navigation away: flush time-on-page before the DOM swaps.
+          document.addEventListener("astro:before-preparation", function () { heartbeat(true); });
+          document.addEventListener("visibilitychange", function () {
+            if (document.visibilityState === "hidden") heartbeat(true);
+          });
+          window.addEventListener("pagehide", function () { heartbeat(true); });
+          // Periodic heartbeat while the page stays open (backend keeps the max).
+          window.setInterval(function () {
+            if (document.visibilityState === "visible") heartbeat(false);
+          }, 25000);
+
+          if (document.readyState !== "loading") pageview();
+          else document.addEventListener("DOMContentLoaded", pageview, { once: true });
+        } catch (e) {}
+      })();
+    </script>
+
     <!-- Open Graph -->
     <meta property="og:site_name" content="WEBAO" />
     <meta property="og:type" content="website" />
@@ -174,7 +293,7 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
         <a href={navLinks.home} class="brand" aria-label={t.nav.homeAria}>
           <span class="brand-mark" aria-hidden="true"><span class="oglyph">W</span></span>
           <span>WEBAO</span>
-          <span class="mono" style="font-size: 10px; letter-spacing: .16em; opacity:.55; margin-left:2px; font-weight:500;">WEBAO.CA</span>
+          <span class="mono brand-domain" style="font-size: 10px; letter-spacing: .16em; opacity:.55; margin-left:2px; font-weight:500;">WEBAO.CA</span>
         </a>
 
         <div class="header-right">
@@ -182,7 +301,7 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
             <a href={navLinks.demos}>{t.nav.demos}</a>
             <a href={navLinks.pricing}>{t.nav.pricing}</a>
             <a href={navLinks.contact}>{t.nav.contact}</a>
-            <a href={navLinks.contact} class="cta">{t.nav.startSite}</a>
+            <a href={navLinks.contact} class="cta" data-track="cta" data-track-label={t.nav.startSite}>{t.nav.startSite}</a>
           </nav>
 
           <LanguageSwitcher locale={locale} currentPath={url.pathname} />
@@ -202,6 +321,8 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
       <a href={navLinks.contact}>{t.nav.contact} <span aria-hidden="true">→</span></a>
       <a
         href={navLinks.contact}
+        data-track="cta"
+        data-track-label={t.nav.startSite}
         style="background: var(--ink); color: var(--paper); border-radius: 12px; padding-inline: 16px; margin-top: 12px; border-bottom:0;"
         >{t.nav.startSite}</a
       >
@@ -221,6 +342,19 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
     </main>
 
     <CustomCursor />
+
+    <button
+      type="button"
+      class="to-top"
+      data-to-top
+      aria-label={t.nav.backToTop}
+      title={t.nav.backToTop}
+      hidden
+    >
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M8 13V3M3.5 7.5 8 3l4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
 
     <footer class="site-footer" role="contentinfo">
       <div class="shell">
@@ -257,8 +391,12 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
         </div>
         <div class="footer-bottom">
           <span set:html={t.footer.copyright.replace("{year}", String(new Date().getFullYear()))}></span>
-          <span style="display:flex; gap:16px;">
+          <span style="display:flex; gap:16px; align-items:center;">
             <span>{t.footer.fictionalNote}</span>
+            <a
+              href={locale === "fr" ? "/fr/admin" : "/admin"}
+              style="font-size:11px; color: rgba(248,245,239,.45); text-decoration: underline; text-underline-offset: 3px;"
+            >{t.footer.admin}</a>
           </span>
         </div>
       </div>
@@ -334,7 +472,14 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
 
         const header = document.querySelector('.site-header') as HTMLElement | null;
         const progress = document.querySelector('[data-progress]') as HTMLElement | null;
-        if (header || progress) {
+        const toTop = document.querySelector('[data-to-top]') as HTMLButtonElement | null;
+        if (toTop && !toTop.dataset.webaoBound) {
+          toTop.dataset.webaoBound = '1';
+          toTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: prefersReduced ? 'auto' : 'smooth' });
+          });
+        }
+        if (header || progress || toTop) {
           let ticking = false;
           const onScroll = () => {
             if (!ticking) {
@@ -353,6 +498,11 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
                   const h = document.documentElement.scrollHeight - window.innerHeight;
                   const p = h > 0 ? Math.min(y / h, 1) : 0;
                   progress.style.transform = `scaleX(${p})`;
+                }
+                if (toTop) {
+                  const show = y > window.innerHeight * 0.9;
+                  toTop.hidden = !show;
+                  toTop.classList.toggle('is-visible', show);
                 }
                 ticking = false;
               });
@@ -437,19 +587,5 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
       });
     </script>
 
-    <style>
-      /* Inlined critical for header/mobile */
-      .header-right {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-      }
-      @media (max-width: 860px) {
-        .header-right .lang-switcher { display: none; }
-      }
-      @media (prefers-reduced-motion: reduce) {
-        * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
-      }
-    </style>
   </body>
 </html>
