@@ -520,6 +520,8 @@ const categories = baseCategories.map(cat => ({
   .search { display:flex; align-items:center; gap:10px; background: var(--paper-3); border:1px solid var(--line); border-radius:12px; padding:10px 12px; }
   .search span:first-child { font-size:16px; opacity:.5; }
   .search input { flex:1; min-width:0; border:0; background:transparent; outline:none; font-size:14px; font-weight:500; }
+  .search input:focus-visible { outline:2px solid var(--accent); outline-offset:2px; border-radius:6px; }
+  .search:focus-within { border-color: var(--accent); }
   .filters { display:flex; gap:8px; flex-wrap:wrap; }
   .style-filter { display:inline-flex; align-items:center; gap:10px; margin-left:auto; }
   .style-filter .mono { font-size:11px; color: var(--muted); letter-spacing:.08em; }
