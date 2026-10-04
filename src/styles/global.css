@@ -15,6 +15,7 @@ html {
   scrollbar-gutter: stable;
   scrollbar-width: thin;
   scrollbar-color: var(--line-strong) transparent;
+  overflow-x: clip; /* safety net alongside body: never allow horizontal page scroll */
 }
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -43,6 +44,33 @@ button, input, textarea, select { font: inherit; }
   outline-offset: 2px;
 }
 ::selection { background: var(--ink); color: var(--paper); }
+
+/* --- Mobile overflow guards ---
+   Grid/flex children default to min-width:auto, which lets a single wide
+   child (long word, nowrap pill, input) force its track wider than the
+   viewport on phones. Let layout children shrink freely instead. */
+.hero-grid > *, .intro-grid > *, .feature-grid > *, .steps > *,
+.split-head > *, .demo-strip > *, .agency-grid > *, .pricing-teaser > *,
+.pricing-grid > *, .craft-grid > *, .faq-grid > *, .cta-inner > *,
+.compare-grid > *, .timeline-grid > *, .quote-card > *, .demos-hero-grid > *,
+.demo-grid > *, .contact-grid > *, .info-grid > *, .field-grid > *,
+.footer-grid > *, .faq-mini-grid > *, .shell > * {
+  min-width: 0;
+}
+/* Flex rows that carry text: keep them shrinkable */
+.browser-bar > *, .preview-meta > *, .search > *, .demo-browse > *,
+.demo-foot > *, .compare-foot > * {
+  min-width: 0;
+}
+
+/* Optical centering for single glyphs/digits inside badges.
+   Text sits on the baseline, so its ink renders a hair low inside a
+   geometrically-centered box; nudge it up for true optical centering. */
+.oglyph {
+  display: inline-block;
+  line-height: 1;
+  transform: translateY(-0.05em);
+}
 
 /* Scroll progress */
 .scroll-progress {
@@ -91,6 +119,14 @@ button, input, textarea, select { font: inherit; }
   /* Surfaces */
   --card-bg: #FFFFFF;
   --card-dark-bg: #10151F;
+  /* Accent card: inverts against its siblings in both themes.
+     Dedicated tokens (not [data-theme] overrides in scoped styles) so the
+     colors always resolve correctly regardless of CSS scoping. */
+  --accent-card-bg: #0A0F1C;
+  --accent-card-text: #F8F5EF;
+  --accent-card-soft: rgba(248,245,239,.68);
+  --accent-card-chip: rgba(248,245,239,.08);
+  --accent-card-chip-line: rgba(248,245,239,.10);
   --section-dark-bg: #0A0F1C;
   --section-ink2-bg: #141C2B;
   --section-dark-text: #F8F5EF;
@@ -190,6 +226,11 @@ button, input, textarea, select { font: inherit; }
   --success: #34D399;
   --card-bg: #0D1322;
   --card-dark-bg: #0A0F1C;
+  --accent-card-bg: #F8F5EF;
+  --accent-card-text: #070B14;
+  --accent-card-soft: rgba(7,11,20,.68);
+  --accent-card-chip: rgba(7,11,20,.06);
+  --accent-card-chip-line: rgba(7,11,20,.12);
   --section-dark-bg: #04060C;
   --section-ink2-bg: #0A0F1C;
   --section-dark-text: #F8F5EF;

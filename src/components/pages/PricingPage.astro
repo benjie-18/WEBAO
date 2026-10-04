@@ -55,7 +55,7 @@ const paths = localizedPaths[locale];
           <div class="compare-label mono">{t.pricing.compare.includedLabel}</div>
           <ul role="list">
             {t.pricing.compare.included.map(item => (
-              <li><span class="ic"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.2 8.6l3.4 3.4 6.2-7.2" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><strong>{item.title}</strong><span>{item.desc}</span></div></li>
+              <li><span class="ic"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.2l3.2 3.2 5.8-6.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><strong>{item.title}</strong><span>{item.desc}</span></div></li>
             ))}
           </ul>
         </div>
@@ -64,7 +64,7 @@ const paths = localizedPaths[locale];
           <div class="compare-label mono">{t.pricing.compare.notIncludedLabel}</div>
           <ul role="list">
             {t.pricing.compare.notIncluded.map(item => (
-              <li><span class="ic ic--dash">×</span><div><strong>{item.title}</strong><span>{item.desc}</span></div></li>
+              <li><span class="ic ic--dash"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.6 4.6l6.8 6.8M11.4 4.6l-6.8 6.8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span><div><strong>{item.title}</strong><span>{item.desc}</span></div></li>
             ))}
           </ul>
 
@@ -96,7 +96,7 @@ const paths = localizedPaths[locale];
       <div>
         <ol class="timeline" role="list">
           {t.pricing.timeline.steps.map((s, i) => (
-            <li><span class="t-n">{i+1}</span><div><strong>{s.title}</strong><span>{s.desc}</span></div></li>
+            <li><span class="t-n"><span class="oglyph">{i+1}</span></span><div><strong>{s.title}</strong><span>{s.desc}</span></div></li>
           ))}
         </ol>
         <p class="mono" style="margin-top:10px; font-size:11px; color: rgba(248,245,239,.5); line-height:1.6;">{t.pricing.timeline.note}</p>
