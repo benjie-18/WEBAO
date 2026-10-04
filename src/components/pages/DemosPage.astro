@@ -11,7 +11,7 @@ const paths = localizedPaths[locale];
 const demos = getDemos(locale);
 
 // Demos with published standalone microsites
-const liveDemos = new Set(["nora", "mira", "atelier-nord", "encre-brute", "boba-club", "kanso"]);
+const liveDemos = new Set(["nora", "mira", "atelier-nord", "encre-brute", "boba-club", "kanso", "leduc", "boise", "sora", "forma", "toit-fils", "verte", "lune", "maison-lune", "finition-r"]);
 const demoHref = (id: string) => `${paths.demos}/${id}`;
 
 // Categories with localized labels but keep base value for filtering
@@ -122,6 +122,92 @@ const categories = baseCategories.map(cat => ({
                     <div class="ks-name">Kanso</div>
                     <div class="ks-rule" aria-hidden="true"></div>
                     <div class="ks-sub">{locale === "fr" ? "maison de thé" : "tea house"}</div>
+                  </div>
+                </div>
+              )}
+              {d.id === "leduc" && (
+                <div class="dthumb-art">
+                  <div class="ld-seal" aria-hidden="true">
+                    <svg viewBox="0 0 100 100"><defs><path id="ld-circ" d="M50,50 m-36,0 a36,36 0 1,1 72,0 a36,36 0 1,1 -72,0" /></defs><text><textPath href="#ld-circ">SINCE 1987 ★ PLOMBERIE ★ </textPath></text></svg>
+                    <span class="ld-seal-core">LD</span>
+                  </div>
+                  <div class="ld-kicker">PLOMBERIE · LONGUEUIL</div>
+                  <div class="ld-name">Leduc</div>
+                  <div class="ld-bar" aria-hidden="true"></div>
+                  <div class="ld-pill">{locale === "fr" ? "URGENCE 24/7" : "24/7 EMERGENCY"}</div>
+                </div>
+              )}
+              {d.id === "boise" && (
+                <div class="dthumb-art">
+                  <svg class="bs-leaf" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4 C36 12 42 24 40 44 C28 42 12 34 8 20 C14 22 20 14 24 4 Z" /><path d="M24 10 L24 40" stroke-width="1.6" /></svg>
+                  <div class="bs-name">Boisé</div>
+                  <div class="bs-sub">PAYSAGE · GATINEAU</div>
+                  <div class="bs-seasons"><span>{locale === "fr" ? "printemps" : "spring"}</span><span>·</span><span>{locale === "fr" ? "été" : "summer"}</span><span>·</span><span>{locale === "fr" ? "automne" : "fall"}</span><span>·</span><span>{locale === "fr" ? "hiver" : "winter"}</span></div>
+                </div>
+              )}
+              {d.id === "sora" && (
+                <div class="dthumb-art">
+                  <div class="sr-kicker">CLINIQUE · BROSSARD</div>
+                  <div class="sr-name">Sora</div>
+                  <div class="sr-book">
+                    <span class="sr-book-dot" aria-hidden="true"></span>
+                    <span>{locale === "fr" ? "Prochaine dispo : demain 9h40" : "Next opening: tomorrow 9:40"}</span>
+                    <span class="sr-book-btn">{locale === "fr" ? "Réserver" : "Book"}</span>
+                  </div>
+                </div>
+              )}
+              {d.id === "forma" && (
+                <div class="dthumb-art">
+                  <div class="fm-kicker">ARCHITECTURE INTÉRIEURE · MONTRÉAL</div>
+                  <div class="fm-name">Forma</div>
+                  <div class="fm-rows" aria-hidden="true">
+                    <div><span>01</span><span>Villa Lumière</span></div>
+                    <div><span>02</span><span>Loft Canal</span></div>
+                    <div><span>03</span><span>Maison Cèdre</span></div>
+                  </div>
+                </div>
+              )}
+              {d.id === "toit-fils" && (
+                <div class="dthumb-art">
+                  <div class="tf-seal" aria-hidden="true"><span>25</span><span>ANS</span></div>
+                  <div class="tf-kicker">COUVREURS · QUÉBEC</div>
+                  <div class="tf-name">Toit &amp; Fils</div>
+                  <div class="tf-rule" aria-hidden="true"></div>
+                  <div class="tf-sub">{locale === "fr" ? "garantie 25 ans, par écrit" : "25-year warranty, in writing"}</div>
+                </div>
+              )}
+              {d.id === "verte" && (
+                <div class="dthumb-art">
+                  <div class="vt-stickers" aria-hidden="true"><span class="vt-stk vt-stk-t">VRAC</span><span class="vt-stk vt-stk-s">LOCAL</span></div>
+                  <div class="vt-kicker">ÉPICERIE · SHERBROOKE</div>
+                  <div class="vt-name">Verte</div>
+                  <div class="vt-tag">{locale === "fr" ? "zéro déchet, plein de goût" : "zero waste, full flavor"}</div>
+                </div>
+              )}
+              {d.id === "lune" && (
+                <div class="dthumb-art">
+                  <div class="lf-kicker">CROSSFIT · TROIS-RIVIÈRES</div>
+                  <div class="lf-name">LUNE</div>
+                  <div class="lf-sched" aria-hidden="true"><span>06:00</span><span class="lf-volt">WOD</span><span>12:15</span><span class="lf-volt">OPEN GYM</span></div>
+                </div>
+              )}
+              {d.id === "maison-lune" && (
+                <div class="dthumb-art">
+                  <div class="ml-moon" aria-hidden="true"></div>
+                  <div class="ml-kicker">GÎTE · MAGOG</div>
+                  <div class="ml-name">Maison Lune</div>
+                  <div class="ml-stars" aria-hidden="true">★ ★ ★ ★</div>
+                  <div class="ml-sub">{locale === "fr" ? "quatre chambres, bord du lac" : "four rooms, lakeside"}</div>
+                </div>
+              )}
+              {d.id === "finition-r" && (
+                <div class="dthumb-art">
+                  <div class="fnr-kicker">RÉNOVATION · MONTRÉAL</div>
+                  <div class="fnr-name">FINITION R<span class="fnr-dot" aria-hidden="true">.</span></div>
+                  <div class="fnr-rows" aria-hidden="true">
+                    <div><span>01</span><span>PLÂTRE</span></div>
+                    <div><span>02</span><span>PEINTURE</span></div>
+                    <div><span>03</span><span>BOISERIE</span></div>
                   </div>
                 </div>
               )}
@@ -356,6 +442,101 @@ const categories = baseCategories.map(cat => ({
   .ks-name { font-family: Georgia, "Hiragino Mincho ProN", serif; font-size: 36px; letter-spacing: .02em; }
   .ks-rule { width: 46px; height: 1px; background: #1A1815; opacity: .5; margin: 10px 0 8px; }
   .ks-sub { font-size: 10.5px; letter-spacing: .24em; text-transform: uppercase; color: #5A554B; }
+
+  /* Leduc: vintage Americana service badge */
+  .dthumb-leduc { background: #F6EFDD; color: #1F3A5C; }
+  .dthumb-leduc .dthumb-desc { background: #fffdf6; color: #5A6B85; border-top: 1px solid rgba(31,58,92,.14); }
+  .ld-seal { position: absolute; top: 14px; right: 16px; width: 74px; height: 74px; }
+  .ld-seal svg { width: 100%; height: 100%; animation: ld-spin 22s linear infinite; }
+  .ld-seal text { font-family: ui-monospace, Menlo, monospace; font-size: 10.5px; font-weight: 700; letter-spacing: .18em; fill: #B23A2E; }
+  .ld-seal-core { position: absolute; inset: 0; display: grid; place-items: center; font-family: "Archivo Black", system-ui, sans-serif; font-size: 19px; color: #1F3A5C; border: 2px solid #C9A227; border-radius: 50%; margin: 22px; background: #F6EFDD; }
+  @keyframes ld-spin { to { transform: rotate(360deg); } }
+  .ld-kicker { font-family: ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: .22em; color: #B23A2E; font-weight: 700; }
+  .ld-name { font-family: "Archivo Black", system-ui, sans-serif; font-size: 52px; line-height: 1; letter-spacing: -.01em; color: #1F3A5C; }
+  .ld-bar { height: 8px; width: 64px; background: #B23A2E; margin-top: 2px; }
+  .ld-pill { align-self: flex-start; background: #1F3A5C; color: #F6EFDD; font-family: ui-monospace, Menlo, monospace; font-size: 10px; font-weight: 700; letter-spacing: .18em; padding: 8px 13px; border-radius: 999px; }
+
+  /* Boise: organic botanical */
+  .dthumb-boise { background: #1E3D2B; color: #F4F1E6; }
+  .dthumb-boise .dthumb-desc { background: rgba(0,0,0,.22); color: #C9D2B8; border-top: 1px solid rgba(244,241,230,.14); }
+  .bs-leaf { width: 40px; height: 40px; fill: #7A8B5C; }
+  .bs-leaf path:last-child { stroke: #F4F1E6; fill: none; }
+  .bs-name { font-family: "Fraunces", Georgia, serif; font-style: italic; font-weight: 600; font-size: 50px; line-height: 1; }
+  .bs-sub { font-size: 10px; letter-spacing: .26em; color: #7A8B5C; font-weight: 700; }
+  .bs-seasons { display: flex; gap: 8px; font-size: 11px; color: #C9D2B8; font-style: italic; font-family: Georgia, serif; }
+
+  /* Sora: soft clinical */
+  .dthumb-sora { background: #EAF1F1; color: #23403F; }
+  .dthumb-sora .dthumb-desc { background: rgba(255,255,255,.7); color: #5A7675; border-top: 1px solid rgba(35,64,63,.1); }
+  .sr-kicker { font-size: 10px; letter-spacing: .24em; color: #5E8B8B; font-weight: 700; }
+  .sr-name { font-family: system-ui, -apple-system, sans-serif; font-weight: 700; font-size: 48px; letter-spacing: -.03em; line-height: 1; }
+  .sr-book { display: flex; align-items: center; gap: 10px; background: #fff; border-radius: 14px; padding: 10px 12px; box-shadow: 0 8px 22px rgba(35,64,63,.12); font-size: 11.5px; font-weight: 500; }
+  .sr-book-dot { width: 8px; height: 8px; border-radius: 50%; background: #5E8B8B; flex: none; }
+  .sr-book-btn { margin-left: auto; background: #5E8B8B; color: #fff; font-weight: 700; font-size: 11px; padding: 7px 14px; border-radius: 999px; white-space: nowrap; }
+
+  /* Forma: minimal luxury */
+  .dthumb-forma { background: #EFEAE2; color: #232220; }
+  .dthumb-forma .dthumb-desc { background: rgba(255,255,255,.5); color: #6E6A60; border-top: 1px solid rgba(35,34,32,.12); }
+  .fm-kicker { font-size: 9.5px; letter-spacing: .22em; color: #A68A5B; font-weight: 600; }
+  .fm-name { font-family: "Instrument Serif", Georgia, serif; font-size: 54px; line-height: 1; letter-spacing: .01em; }
+  .fm-rows { display: grid; gap: 0; margin-top: 2px; }
+  .fm-rows div { display: flex; gap: 14px; align-items: baseline; padding: 7px 0; border-top: 1px solid rgba(35,34,32,.16); font-size: 12.5px; }
+  .fm-rows div:last-child { border-bottom: 1px solid rgba(35,34,32,.16); }
+  .fm-rows span:first-child { font-family: ui-monospace, Menlo, monospace; font-size: 10px; color: #A68A5B; font-weight: 600; }
+
+  /* Toit & Fils: heritage craft */
+  .dthumb-toit-fils { background: #EFE6D2; color: #2E2620; }
+  .dthumb-toit-fils .dthumb-desc { background: rgba(255,255,255,.45); color: #6E5F4C; border-top: 1px solid rgba(46,38,32,.14); }
+  .tf-seal { width: 62px; height: 62px; border-radius: 50%; background: #A34A2A; color: #EFE6D2; display: grid; place-content: center; gap: 0; border: 3px dashed #B08D3E; font-family: Georgia, serif; font-weight: 700; line-height: 1.05; text-align: center; }
+  .tf-seal span:first-child { font-size: 20px; }
+  .tf-seal span:last-child { font-size: 9px; letter-spacing: .14em; }
+  .tf-kicker { font-family: ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: .2em; color: #A34A2A; font-weight: 700; }
+  .tf-name { font-family: Georgia, serif; font-weight: 700; font-size: 34px; line-height: 1.05; letter-spacing: -.01em; }
+  .tf-rule { width: 52px; height: 3px; background: #B08D3E; }
+  .tf-sub { font-size: 11.5px; font-style: italic; color: #6E5F4C; font-family: Georgia, serif; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ld-seal svg { animation: none; }
+  }
+
+  /* Verte: fresh market */
+  .dthumb-verte { background: #FFF8EC; color: #2E3A1F; }
+  .dthumb-verte .dthumb-desc { background: #22331C; color: #FFF8EC; }
+  .vt-stickers { position: absolute; top: 16px; right: 16px; display: flex; gap: 8px; }
+  .vt-stk { font-family: "Baloo 2", system-ui, sans-serif; font-weight: 700; font-size: 10px; letter-spacing: .08em; padding: 6px 11px; border-radius: 999px; color: #fff; transform: rotate(6deg); }
+  .vt-stk-t { background: #E4572E; }
+  .vt-stk-s { background: #3E8914; transform: rotate(-5deg); }
+  .vt-kicker { font-size: 10px; letter-spacing: .24em; color: #3E8914; font-weight: 700; }
+  .vt-name { font-family: "Baloo 2", system-ui, sans-serif; font-weight: 700; font-size: 56px; line-height: 1; letter-spacing: -.01em; color: #2E3A1F; }
+  .vt-tag { align-self: flex-start; background: #FFC53D; color: #2E3A1F; font-weight: 700; font-size: 12px; padding: 7px 14px; border-radius: 999px; }
+
+  /* Lune: after-dark neon */
+  .dthumb-lune { background: #0A0A0B; color: #F4F4F0; }
+  .dthumb-lune .dthumb-desc { background: #131315; color: #9A9AA0; border-top: 1px solid #26262A; }
+  .lf-kicker { font-family: ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: .22em; color: #9A9AA0; }
+  .lf-name { font-family: "Archivo Black", system-ui, sans-serif; font-size: 64px; line-height: .95; letter-spacing: .01em; color: #F4F4F0; text-shadow: 0 0 26px rgba(204,255,0,.35); }
+  .lf-sched { display: flex; gap: 10px; align-items: center; font-family: ui-monospace, Menlo, monospace; font-size: 10.5px; letter-spacing: .1em; color: #9A9AA0; border-top: 1px solid #26262A; padding-top: 12px; }
+  .lf-volt { background: #CCFF00; color: #0A0A0B; font-weight: 700; padding: 4px 9px; border-radius: 4px; }
+
+  /* Maison Lune: moonlit inn */
+  .dthumb-maison-lune { background: #141B34; color: #EDEAE2; }
+  .dthumb-maison-lune .dthumb-desc { background: rgba(0,0,0,.3); color: #C9D2E8; border-top: 1px solid rgba(201,210,232,.16); }
+  .ml-moon { position: absolute; top: 18px; right: 22px; width: 44px; height: 44px; border-radius: 50%; background: #EDEAE2; box-shadow: -9px 4px 0 0 #141B34, 0 0 24px rgba(237,234,226,.5); }
+  .ml-kicker { font-size: 10px; letter-spacing: .26em; color: #C9D2E8; font-weight: 600; }
+  .ml-name { font-family: "Fraunces", Georgia, serif; font-style: italic; font-weight: 600; font-size: 44px; line-height: 1.05; }
+  .ml-stars { color: #D9BE7E; font-size: 12px; letter-spacing: .3em; }
+  .ml-sub { font-size: 11.5px; color: #C9D2E8; font-style: italic; font-family: Georgia, serif; }
+
+  /* Finition R: Swiss grid */
+  .dthumb-finition-r { background: #FFFFFF; color: #0E0E0E; }
+  .dthumb-finition-r .dthumb-desc { background: #0E0E0E; color: #fff; }
+  .fnr-kicker { font-size: 10px; letter-spacing: .22em; color: #6E6E6E; font-weight: 600; }
+  .fnr-name { font-family: "Archivo Black", system-ui, sans-serif; font-size: 42px; line-height: 1; letter-spacing: -.01em; }
+  .fnr-dot { color: #FF6B00; }
+  .fnr-rows { display: grid; margin-top: 2px; }
+  .fnr-rows div { display: flex; gap: 12px; align-items: baseline; padding: 6px 0; border-top: 1px solid #E4E4E4; font-size: 11.5px; font-weight: 700; letter-spacing: .06em; }
+  .fnr-rows div:last-child { border-bottom: 1px solid #E4E4E4; }
+  .fnr-rows span:first-child { color: #FF6B00; font-family: ui-monospace, Menlo, monospace; font-size: 10px; }
   .empty { text-align:center; padding:32px; background: var(--paper-2); border:1px dashed var(--line-strong); border-radius:16px; font-size:13px; color: var(--muted); margin-top:12px; }
   .demos-note { margin-top:14px; display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; font-size:10px; color: var(--muted); border-top:1px solid var(--line); padding-top:12px; }
   @media (max-width: 960px) { .demos-hero-grid, .demo-grid { grid-template-columns: 1fr; } .demo-thumb { min-height: 180px; } }
