@@ -4,8 +4,8 @@ import EscapeHatch from "../../components/demos/EscapeHatch.astro";
 // Demo microsite: Lattice, fictional modular productivity SaaS, Toronto.
 // Standalone art direction. Full bento grid. Not connected to the WEBAO theme system.
 const IMG = {
-  desk: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1200&auto=format&fit=crop",
-  planner: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?q=80&w=800&auto=format&fit=crop",
+  desk: "/demos/lattice/01.jpg",
+  planner: "/demos/lattice/02.jpg",
   team: "https://images.unsplash.com/photo-1553877522-43269d4ea984?q=80&w=800&auto=format&fit=crop",
   notes: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=800&auto=format&fit=crop",
   office: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=800&auto=format&fit=crop",
@@ -145,7 +145,7 @@ const IMG = {
           <article class="lt-cell lt-span3">
             <div class="lt-cell-head"><h3>Automations</h3><span class="lt-tag lt-tag-lime">Pro</span></div>
             <p>If this, then sorted. Build rules in plain language, like "when a task is overdue, nudge me at 9am."</p>
-            <img src={IMG.planner} alt="Planner and laptop arranged in a neat grid" loading="lazy" />
+            <img src={IMG.planner} alt="Productivity dashboard interface in a clean grid layout" loading="lazy" />
           </article>
           <article class="lt-cell lt-span3">
             <div class="lt-cell-head"><h3>Insights</h3><span class="lt-tag lt-tag-lime">Pro</span></div>
@@ -407,6 +407,7 @@ const IMG = {
   .lt-flow-imgs { margin-top: 14px; }
   .lt-img-cell { padding: 0; overflow: hidden; }
   .lt-img-cell img { margin: 0; border: 0; border-radius: var(--radius); height: 230px; }
+  .lt-cell img { display: block; width: 100%; border-radius: 12px; border: 1px solid rgba(26,26,26,.1); margin-top: 12px; }
 
   /* Tiers */
   .lt-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; align-items: stretch; }

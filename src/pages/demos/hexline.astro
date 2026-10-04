@@ -4,10 +4,10 @@ import EscapeHatch from "../../components/demos/EscapeHatch.astro";
 // Demo microsite: Hexline Systems, fictional neural interface security startup, Montréal.
 // Standalone art direction: cybercore. Near-black, neon cyan/magenta, HUD motifs. Not connected to the WEBAO theme system.
 const IMG = {
-  hero: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=1600&auto=format&fit=crop",
+  hero: "/demos/hexline/01.jpg",
   lock: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800&auto=format&fit=crop",
   servers: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=800&auto=format&fit=crop",
-  ops: "https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=800&auto=format&fit=crop",
+  ops: "/demos/hexline/02.jpg",
   neon: "https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=800&auto=format&fit=crop",
 };
 ---
@@ -92,7 +92,7 @@ const IMG = {
               <li>Auto-isolation of hostile nodes</li>
               <li>DDoS absorption to 2.4 Tbps</li>
             </ul>
-            <img src={IMG.lock} alt="Digital lock representing perimeter encryption" loading="lazy" />
+            <div class="hx-feed"><span class="hx-rec" aria-hidden="true"></span><img src={IMG.lock} alt="Digital lock representing perimeter encryption" loading="lazy" /></div>
           </article>
           <article class="hx-panel">
             <span class="hx-panel-n" aria-hidden="true">P-02</span>
@@ -103,7 +103,7 @@ const IMG = {
               <li>Signal integrity attestation</li>
               <li>4ms anomaly response loop</li>
             </ul>
-            <img src={IMG.servers} alt="Server racks running the Hexline neural mesh" loading="lazy" />
+            <div class="hx-feed"><span class="hx-rec" aria-hidden="true"></span><img src={IMG.servers} alt="Server racks running the Hexline neural mesh" loading="lazy" /></div>
           </article>
           <article class="hx-panel">
             <span class="hx-panel-n" aria-hidden="true">P-03</span>
@@ -114,7 +114,7 @@ const IMG = {
               <li>Attribution tracing</li>
               <li>Forensic capture, court-ready</li>
             </ul>
-            <img src={IMG.ops} alt="Security operations analyst at a dark workstation" loading="lazy" />
+            <div class="hx-feed"><span class="hx-rec" aria-hidden="true"></span><img src={IMG.ops} alt="Security operations analyst at a dark workstation" loading="lazy" /></div>
           </article>
           <article class="hx-panel">
             <span class="hx-panel-n" aria-hidden="true">P-04</span>
@@ -125,7 +125,7 @@ const IMG = {
               <li>Hardware-bound identity keys</li>
               <li>Granular access policies</li>
             </ul>
-            <img src={IMG.neon} alt="Neon-lit abstract network visualization" loading="lazy" />
+            <div class="hx-feed"><span class="hx-rec" aria-hidden="true"></span><img src={IMG.neon} alt="Neon-lit abstract network visualization" loading="lazy" /></div>
           </article>
         </div>
       </div>
@@ -429,6 +429,15 @@ const IMG = {
     .hx-panel li { font-family: var(--hx-mono); font-size: 13px; color: var(--hx-text); padding-left: 22px; position: relative; }
     .hx-panel li::before { content: "▸"; position: absolute; left: 0; color: var(--hx-cyan); }
     .hx-panel img { width: 100%; height: 180px; object-fit: cover; border: 1px solid var(--hx-line); filter: saturate(1.2) contrast(1.05); }
+    .hx-feed { position: relative; border: 1px solid var(--hx-line); overflow: hidden; }
+    .hx-feed img { border: 0; display: block; }
+    .hx-feed::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+      background: repeating-linear-gradient(0deg, rgba(0,0,0,.28) 0 1px, transparent 1px 3px); }
+    .hx-rec { position: absolute; top: 10px; left: 12px; z-index: 2; display: inline-flex; align-items: center; gap: 6px;
+      font-family: var(--hx-mono); font-size: 10px; letter-spacing: .22em; color: #FF5C5C; }
+    .hx-rec::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #FF3B3B; box-shadow: 0 0 8px #FF3B3B; }
+    .hx-rec::after { content: "LIVE"; }
+    @media (prefers-reduced-motion: reduce) { .hx-rec::before { box-shadow: none; } }
 
     /* dashboard */
     .hx-dash { background: #02040A; border-block: 1px solid var(--hx-line); padding: clamp(70px, 9vw, 110px) 0; }

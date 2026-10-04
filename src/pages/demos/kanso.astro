@@ -4,9 +4,9 @@ import EscapeHatch from "../../components/demos/EscapeHatch.astro";
 // Demo microsite: Kanso, fictional Japanese tea house, Montréal QC.
 // Standalone art direction. Extreme restraint. Not connected to the WEBAO theme system.
 const IMG = {
-  hero: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=1600&auto=format&fit=crop",
+  hero: "/demos/kanso/01.jpg",
   philo: "https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?q=80&w=1000&auto=format&fit=crop",
-  visit: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=80&w=1200&auto=format&fit=crop",
+  visit: "/demos/kanso/02.jpg",
 };
 ---
 
@@ -40,7 +40,7 @@ const IMG = {
     </section>
 
     <figure class="ks-hero-media">
-      <img src={IMG.hero} alt="A single cup of green tea on a plain wooden table" loading="eager" fetchpriority="high" />
+      <img src={IMG.hero} alt="A serene Japanese tea room with tatami mats, a low table and a tea set" loading="eager" fetchpriority="high" />
     </figure>
 
     <!-- PHILOSOPHY -->
@@ -101,7 +101,7 @@ const IMG = {
         <p class="ks-kicker ks-center">Visit</p>
         <h2 class="ks-h2 ks-center">Come quietly.</h2>
         <figure class="ks-visit-media">
-          <img src={IMG.visit} alt="Matcha whisk and bowl resting on a linen cloth" loading="lazy" />
+          <img src={IMG.visit} alt="A hand whisking matcha with a bamboo chasen in a ceramic bowl" loading="lazy" />
         </figure>
         <dl class="ks-facts">
           <div><dt>Address</dt><dd>12, rue Fictive, Montréal QC</dd></div>
@@ -198,6 +198,7 @@ const IMG = {
     .ks-hero { text-align: center; padding: clamp(70px, 12vh, 150px) 24px clamp(50px, 8vh, 100px); display: flex; flex-direction: column; align-items: center; }
     .ks-hero-media { margin: 0 auto; max-width: 1280px; padding: 0 clamp(24px, 6vw, 64px); }
     .ks-hero-media img { width: 100%; height: min(64vh, 620px); object-fit: cover; }
+    .ks-hero-media img, .ks-philo-media img, .ks-visit-media img { filter: saturate(0.92) contrast(1.03); }
 
     /* sections */
     .ks-section { padding: clamp(80px, 12vh, 160px) 0; border-top: 1px solid var(--ks-rule); }
