@@ -1,0 +1,515 @@
+---
+import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+
+// Demo microsite: Studio Reve, fictional surreal brand-experience agency, Montreal.
+// Standalone art direction: surrealist night dream. Not connected to the WEBAO theme system.
+const IMG = {
+  sky: "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?q=80&w=1800&auto=format&fit=crop",
+  nebula: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=900&auto=format&fit=crop",
+  clouds: "https://images.unsplash.com/photo-1534088568595-a066f410bcda?q=80&w=900&auto=format&fit=crop",
+  mountains: "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=900&auto=format&fit=crop",
+  stars: "https://images.unsplash.com/photo-1520034475321-cbe63696469a?q=80&w=1200&auto=format&fit=crop",
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Studio Rêve: Surreal Brand Experiences in Montreal</title>
+  <meta name="description" content="Studio Rêve stages impossible brand experiences in Montreal. Pop-ups, installations and launches that feel like walking through a dream." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body class="rv">
+
+  <!-- NAV -->
+  <header class="rv-navwrap">
+    <nav class="rv-nav" aria-label="Primary">
+      <a class="rv-logo" href="#top" aria-label="Studio Rêve, home">
+        <span class="rv-moon-mini" aria-hidden="true"></span>
+        <span>Studio <em>Rêve</em></span>
+      </a>
+      <button class="rv-burger" id="rv-burger" aria-expanded="false" aria-controls="rv-links" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="rv-links" id="rv-links">
+        <a href="#dreams">Dreams staged</a>
+        <a href="#manifesto">Manifesto</a>
+        <a href="#process">Process</a>
+        <a class="rv-cta" href="#contact">Begin dreaming</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="rv-hero" id="rv-hero">
+      <div class="rv-sky" aria-hidden="true"><img src={IMG.sky} alt="" loading="eager" fetchpriority="high" /></div>
+      <div class="rv-moon" data-depth="0.03" aria-hidden="true"></div>
+      <div class="rv-stars" aria-hidden="true">
+        <i style="top:12%;left:8%"></i><i style="top:22%;left:22%"></i><i style="top:9%;left:44%"></i>
+        <i style="top:30%;left:63%"></i><i style="top:14%;left:78%"></i><i style="top:38%;left:88%"></i>
+        <i style="top:44%;left:12%"></i><i style="top:52%;left:33%"></i><i style="top:26%;left:55%"></i>
+        <i style="top:60%;left:70%"></i><i style="top:48%;left:82%"></i><i style="top:70%;left:18%"></i>
+      </div>
+
+      <!-- floating impossible objects -->
+      <div class="rv-float rv-door" data-depth="0.08" aria-hidden="true">
+        <div class="rv-door-frame"><div class="rv-door-sky"></div></div>
+        <p>door nº 7</p>
+      </div>
+      <svg class="rv-float rv-clock" data-depth="0.12" viewBox="0 0 120 100" aria-hidden="true">
+        <path d="M20 20 C 45 8, 80 12, 100 30 C 112 44, 104 66, 82 72 C 92 78, 90 90, 74 92 C 50 96, 18 84, 12 58 C 8 40, 10 26, 20 20 Z" fill="none" stroke="#E8B84B" stroke-width="3"/>
+        <circle cx="60" cy="50" r="3.5" fill="#E8B84B"/>
+        <path d="M60 50 L60 30 M60 50 L78 58" stroke="#E8B84B" stroke-width="3" stroke-linecap="round"/>
+        <path d="M82 72 C 88 82, 84 92, 74 92" fill="none" stroke="#E8B84B" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <svg class="rv-float rv-ladder" data-depth="0.06" viewBox="0 0 60 160" aria-hidden="true">
+        <path d="M18 0 V160 M42 0 V160" stroke="#F5F1E8" stroke-width="4" stroke-linecap="round"/>
+        <path d="M18 25 H42 M18 55 H42 M18 85 H42 M18 115 H42 M18 145 H42" stroke="#F5F1E8" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+      <div class="rv-float rv-stairs" data-depth="0.1" aria-hidden="true">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+
+      <div class="rv-hero-in">
+        <p class="rv-eyebrow">surreal brand experiences · montreal</p>
+        <h1 class="rv-h1">We build <em>dreams</em> you can walk through</h1>
+        <p class="rv-lede">Studio Rêve stages pop-ups, installations and launches that ignore physics and logic. Your brand, remembered like a beautiful strange dream.</p>
+        <div class="rv-hero-cta">
+          <a class="rv-btn" href="#contact">Commission a dream</a>
+          <a class="rv-btn rv-btn-ghost" href="#dreams">See past dreams</a>
+        </div>
+      </div>
+      <a class="rv-scroll" href="#manifesto" aria-label="Scroll to manifesto">↓</a>
+    </section>
+
+    <!-- MANIFESTO -->
+    <section class="rv-manifesto" id="manifesto">
+      <div class="rv-wrap">
+        <p class="rv-label">our manifesto</p>
+        <blockquote class="rv-mani-quote">
+          Reality is a <em>rough draft</em>. We prefer the version where staircases lead to the sky, doors open onto oceans, and your logo glows like the moon. Logic never made anyone <em>feel</em> anything.
+        </blockquote>
+        <p class="rv-mani-sign">written at 3:47 am, as all true things are</p>
+      </div>
+    </section>
+
+    <!-- DREAMS STAGED -->
+    <section class="rv-section" id="dreams">
+      <div class="rv-wrap">
+        <p class="rv-label">selected impossibilities</p>
+        <h2 class="rv-h2">Dreams we have <em>staged</em></h2>
+        <div class="rv-dreams">
+          <article class="rv-dream">
+            <div class="rv-dream-img">
+              <img src={IMG.nebula} alt="Teal and gold nebula cloud" loading="lazy" />
+              <span class="rv-dream-no" aria-hidden="true">I</span>
+            </div>
+            <div class="rv-dream-body">
+              <p class="rv-dream-client">for Maison Céleste · parfumerie</p>
+              <h3>The Drowning Gallery</h3>
+              <p>Guests walked through a corridor of floating scent orbs while the walls breathed nebula light. Nobody bought perfume. Everybody remembered it.</p>
+            </div>
+          </article>
+          <article class="rv-dream rv-dream-alt">
+            <div class="rv-dream-img">
+              <img src={IMG.clouds} alt="Dark dramatic storm clouds" loading="lazy" />
+              <span class="rv-dream-no" aria-hidden="true">II</span>
+            </div>
+            <div class="rv-dream-body">
+              <p class="rv-dream-client">for Orage Audio · launch event</p>
+              <h3>The Sky Below</h3>
+              <p>A listening room where the ceiling was a storm and the floor was glass. Three hundred guests lay down to hear an album. None of them checked their phones.</p>
+            </div>
+          </article>
+          <article class="rv-dream">
+            <div class="rv-dream-img">
+              <img src={IMG.mountains} alt="Snowy peaks under the milky way" loading="lazy" />
+              <span class="rv-dream-no" aria-hidden="true">III</span>
+            </div>
+            <div class="rv-dream-body">
+              <p class="rv-dream-client">for Nordalpine · winter campaign</p>
+              <h3>Summit at Midnight</h3>
+              <p>We rebuilt a mountaintop inside a warehouse, stars included. Visitors summited in evening wear and drank hot chocolate at 2,800 imaginary metres.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROCESS -->
+    <section class="rv-process" id="process">
+      <div class="rv-wrap">
+        <p class="rv-label rv-label-light">how the impossible gets built</p>
+        <h2 class="rv-h2 rv-h2-light">Dream, <em>distort</em>, deliver</h2>
+        <svg class="rv-path" viewBox="0 0 1000 60" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0 30 C 150 0, 250 60, 400 30 S 650 0, 800 30 S 950 55, 1000 30" fill="none" stroke="#E8B84B" stroke-width="2" stroke-dasharray="8 8" opacity="0.5"/>
+        </svg>
+        <ol class="rv-steps">
+          <li>
+            <span class="rv-step-no" aria-hidden="true">i.</span>
+            <h3>Dream</h3>
+            <p>We interview your team like therapists and your customers like novelists. Out of it comes the one image your brand secretly wants to be.</p>
+          </li>
+          <li>
+            <span class="rv-step-no" aria-hidden="true">ii.</span>
+            <h3>Distort</h3>
+            <p>Our scenographers bend that image until physics complains. Scale, gravity and common sense are all negotiable.</p>
+          </li>
+          <li>
+            <span class="rv-step-no" aria-hidden="true">iii.</span>
+            <h3>Deliver</h3>
+            <p>Engineers, lighting wizards and very patient carpenters make the impossible stand up, pass inspection, and open on time.</p>
+          </li>
+        </ol>
+        <blockquote class="rv-quote">
+          <p>"They built us a staircase to nowhere and our launch sold out in eleven minutes. I still do not understand how the staircase stayed up."</p>
+          <cite>Léa Moreau, creative director at Orage Audio</cite>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="rv-contact" id="contact">
+      <div class="rv-stars-bg" aria-hidden="true"><img src={IMG.stars} alt="" loading="lazy" /></div>
+      <div class="rv-wrap rv-contact-in">
+        <div>
+          <p class="rv-label">the consultation is free</p>
+          <h2 class="rv-h2 rv-h2-light">Tell us your <em>strangest</em> idea</h2>
+          <p class="rv-contact-copy">The weirder the better. We read every brief out loud at midnight, which is when the good decisions happen. Expect a reply within two sunrises.</p>
+          <ul class="rv-contact-facts">
+            <li><strong>27</strong> dreams staged</li>
+            <li><strong>4</strong> impossible awards</li>
+            <li><strong>0</strong> ordinary launches</li>
+          </ul>
+        </div>
+        <form class="rv-form" id="rv-form" novalidate>
+          <label>Your name
+            <input type="text" name="name" required placeholder="Salvador D." autocomplete="name" />
+          </label>
+          <label>Email address
+            <input type="email" name="email" required placeholder="you@dreamco.com" autocomplete="email" />
+          </label>
+          <label>Describe the dream
+            <textarea name="dream" rows="4" required placeholder="A door in the sky that opens onto..."></textarea>
+          </label>
+          <button class="rv-btn rv-btn-gold" type="submit">Send it into the night</button>
+          <p class="rv-form-note" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rv-footer">
+    <div class="rv-wrap rv-footer-in">
+      <div>
+        <p class="rv-footer-logo">Studio <em>Rêve</em></p>
+        <p>© 2026 Studio Rêve. Fictional demo. No ladders were harmed.</p>
+      </div>
+      <div>
+        <p class="rv-footer-head">The atelier</p>
+        <p>88, avenue Onirique<br />Montreal, QC H2W 1R4<br />By appointment, or by dream</p>
+      </div>
+      <div>
+        <p class="rv-footer-head">Whisper to us</p>
+        <p><a href="tel:+15145550166">(514) 555-0166</a><br /><a href="mailto:bonjour@studioreve.example">bonjour@studioreve.example</a></p>
+      </div>
+    </div>
+    <p class="rv-colophon" aria-hidden="true">☾ &nbsp;·&nbsp; reality is a rough draft &nbsp;·&nbsp; ☾</p>
+  </footer>
+
+  <EscapeHatch locale="en" />
+
+  <script>
+    (function () {
+      var burger = document.getElementById('rv-burger');
+      var links = document.getElementById('rv-links');
+      burger?.addEventListener('click', function () {
+        var open = links?.classList.toggle('rv-open');
+        burger?.setAttribute('aria-expanded', open ? 'true' : 'false');
+        burger?.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      });
+      links?.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () {
+          links?.classList.remove('rv-open');
+          burger?.setAttribute('aria-expanded', 'false');
+        });
+      });
+
+      // Gentle parallax on the floating objects (skipped for reduced motion / touch)
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var fine = window.matchMedia('(pointer: fine)').matches;
+      const hero = document.getElementById('rv-hero');
+      if (!reduce && fine && hero) {
+        var layers = hero.querySelectorAll('[data-depth]');
+        hero.addEventListener('mousemove', function (e) {
+          var r = hero.getBoundingClientRect();
+          var x = (e.clientX - r.left) / r.width - 0.5;
+          var y = (e.clientY - r.top) / r.height - 0.5;
+          layers.forEach(function (el) {
+            var d = parseFloat(el.getAttribute('data-depth') || '0');
+            (el as HTMLElement).style.translate = (-x * d * 400) + 'px ' + (-y * d * 400) + 'px';
+          });
+        });
+      }
+
+      var form = document.getElementById('rv-form') as HTMLFormElement | null;
+      form?.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var note = form?.querySelector('.rv-form-note');
+        if (note) note.textContent = 'Received. We will read it at midnight and reply within two sunrises.';
+        form?.reset();
+      });
+    })();
+  </script>
+
+  <style>
+    .rv {
+      --rv-night: #1A1440;
+      --rv-deep: #100C2E;
+      --rv-gold: #E8B84B;
+      --rv-cloud: #F5F1E8;
+      --rv-rose: #E88AA0;
+      --rv-ink: #0C0A24;
+      --rv-serif: "Cormorant Garamond", Georgia, serif;
+      --rv-sans: "Jost", "Avenir Next", system-ui, sans-serif;
+      margin: 0;
+      background: var(--rv-deep);
+      color: var(--rv-cloud);
+      font-family: var(--rv-sans);
+      font-weight: 300;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: clip;
+    }
+    .rv *, .rv *::before, .rv *::after { box-sizing: border-box; }
+    .rv img { display: block; max-width: 100%; }
+    .rv-wrap { max-width: 1140px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px); }
+
+    /* nav */
+    .rv-navwrap { position: fixed; top: 0; left: 0; right: 0; z-index: 60; }
+    .rv-nav {
+      display: flex; align-items: center; gap: 22px;
+      padding: 16px clamp(18px, 3vw, 36px);
+      background: rgba(16, 12, 46, 0.6); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(232, 184, 75, 0.22);
+    }
+    .rv-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--rv-cloud); margin-right: auto; }
+    .rv-logo span:last-child { font-family: var(--rv-serif); font-size: 30px; font-weight: 600; letter-spacing: 0.02em; }
+    .rv-logo em { font-style: italic; color: var(--rv-gold); }
+    .rv-moon-mini {
+      width: 22px; height: 22px; border-radius: 50%; flex: none;
+      background: radial-gradient(circle at 35% 35%, #FFF8E2, var(--rv-gold) 70%);
+      box-shadow: 0 0 16px rgba(232, 184, 75, 0.8);
+    }
+    .rv-links { display: flex; align-items: center; gap: 6px; }
+    .rv-links a {
+      color: var(--rv-cloud); text-decoration: none; font-size: 13px; font-weight: 400;
+      letter-spacing: 0.28em; text-transform: uppercase; padding: 10px 16px; opacity: 0.85;
+    }
+    .rv-links a:hover { color: var(--rv-gold); opacity: 1; }
+    .rv-links .rv-cta {
+      border: 1px solid var(--rv-gold); border-radius: 999px; color: var(--rv-gold);
+      margin-left: 10px; transition: background 0.2s ease, color 0.2s ease;
+    }
+    .rv-links .rv-cta:hover { background: var(--rv-gold); color: var(--rv-ink); }
+    .rv-burger { display: none; background: none; border: none; cursor: pointer; padding: 10px; }
+    .rv-burger span { display: block; width: 26px; height: 2px; background: var(--rv-cloud); margin: 6px 0; }
+
+    /* type */
+    .rv-label {
+      font-size: 12px; letter-spacing: 0.42em; text-transform: uppercase; color: var(--rv-gold);
+      margin: 0 0 20px; font-weight: 400;
+    }
+    .rv-h1, .rv-h2 { font-family: var(--rv-serif); font-weight: 500; line-height: 1.06; margin: 0; letter-spacing: 0.01em; }
+    .rv-h1 { font-size: clamp(3rem, 8vw, 6.4rem); }
+    .rv-h2 { font-size: clamp(2.4rem, 5.5vw, 4.2rem); margin-bottom: 18px; }
+    .rv-h1 em, .rv-h2 em, .rv-mani-quote em { font-style: italic; color: var(--rv-gold); }
+    .rv-h2-light { color: var(--rv-cloud); }
+
+    /* hero */
+    .rv-hero { position: relative; min-height: 100svh; display: flex; align-items: center; overflow: hidden; }
+    .rv-sky { position: absolute; inset: 0; }
+    .rv-sky img { width: 100%; height: 100%; object-fit: cover; }
+    .rv-sky::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(16,12,46,0.55) 0%, rgba(16,12,46,0.15) 45%, rgba(16,12,46,0.92) 100%);
+    }
+    .rv-moon {
+      position: absolute; top: 14%; right: 10%; width: clamp(120px, 16vw, 210px); aspect-ratio: 1; border-radius: 50%;
+      background: radial-gradient(circle at 38% 34%, #FFFBEF 0%, #F7E8C4 45%, var(--rv-gold) 78%, #C99A35 100%);
+      box-shadow: 0 0 60px 18px rgba(232, 184, 75, 0.35), 0 0 140px 60px rgba(232, 184, 75, 0.12);
+      animation: rv-moonrise 9s ease-in-out infinite;
+    }
+    @keyframes rv-moonrise { 50% { transform: translateY(-16px); } }
+    .rv-stars i {
+      position: absolute; width: 3px; height: 3px; border-radius: 50%; background: #fff;
+      animation: rv-twinkle 3.4s ease-in-out infinite;
+    }
+    .rv-stars i:nth-child(3n) { animation-delay: 1.1s; width: 2px; height: 2px; }
+    .rv-stars i:nth-child(4n) { animation-delay: 2.2s; }
+    @keyframes rv-twinkle { 50% { opacity: 0.15; transform: scale(0.7); } }
+
+    .rv-float { position: absolute; z-index: 2; }
+    .rv-door { top: 58%; left: 6%; transform: rotate(-6deg); animation: rv-drift 11s ease-in-out infinite; text-align: center; }
+    .rv-door-frame {
+      width: 74px; height: 118px; border: 5px solid var(--rv-gold); border-bottom: none; margin: 0 auto;
+      background: linear-gradient(180deg, #2B2566, #7A5FBF 60%, var(--rv-rose));
+      box-shadow: 0 0 34px rgba(232, 184, 75, 0.45);
+    }
+    .rv-door p { font-family: var(--rv-serif); font-style: italic; font-size: 15px; color: var(--rv-gold); margin: 8px 0 0; letter-spacing: 0.08em; }
+    .rv-clock { top: 24%; left: 44%; width: 110px; opacity: 0.9; animation: rv-drift 13s ease-in-out infinite reverse; filter: drop-shadow(0 0 14px rgba(232,184,75,0.4)); }
+    .rv-ladder { top: 52%; right: 26%; width: 52px; opacity: 0.75; animation: rv-drift 10s ease-in-out infinite; }
+    .rv-stairs { bottom: 16%; right: 8%; display: flex; align-items: flex-end; animation: rv-drift 12s ease-in-out infinite reverse; }
+    .rv-stairs span { display: block; width: 34px; background: rgba(245, 241, 232, 0.85); border: 1px solid rgba(232,184,75,0.5); }
+    .rv-stairs span:nth-child(1) { height: 26px; } .rv-stairs span:nth-child(2) { height: 48px; }
+    .rv-stairs span:nth-child(3) { height: 70px; } .rv-stairs span:nth-child(4) { height: 92px; }
+    .rv-stairs span:nth-child(5) { height: 114px; }
+    @keyframes rv-drift { 50% { margin-top: -18px; } }
+
+    .rv-hero-in { position: relative; z-index: 3; max-width: 1140px; width: 100%; margin: 0 auto; padding: 130px clamp(20px, 4vw, 40px) 90px; }
+    .rv-eyebrow { font-size: 12px; letter-spacing: 0.42em; text-transform: uppercase; color: var(--rv-gold); margin: 0 0 26px; }
+    .rv-h1 { max-width: 12ch; margin-bottom: 26px; text-shadow: 0 4px 40px rgba(12, 10, 36, 0.7); }
+    .rv-lede { font-size: 19px; line-height: 1.7; max-width: 44ch; color: rgba(245, 241, 232, 0.88); margin: 0 0 36px; font-weight: 300; }
+    .rv-hero-cta { display: flex; gap: 16px; flex-wrap: wrap; }
+    .rv-scroll {
+      position: absolute; bottom: 26px; left: 50%; translate: -50% 0; z-index: 3;
+      color: var(--rv-gold); font-size: 26px; text-decoration: none; animation: rv-bob 2.6s ease-in-out infinite;
+    }
+    @keyframes rv-bob { 50% { transform: translateY(8px); } }
+
+    /* buttons */
+    .rv-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      font-family: var(--rv-sans); font-weight: 500; font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase;
+      padding: 18px 38px; text-decoration: none; cursor: pointer;
+      background: transparent; color: var(--rv-cloud); border: 1px solid rgba(245, 241, 232, 0.5); border-radius: 999px;
+      transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+    }
+    .rv-btn:hover { border-color: var(--rv-gold); color: var(--rv-gold); }
+    .rv-btn-ghost { border-color: rgba(245, 241, 232, 0.28); }
+    .rv-btn-gold { background: var(--rv-gold); border-color: var(--rv-gold); color: var(--rv-ink); width: 100%; }
+    .rv-btn-gold:hover { background: transparent; color: var(--rv-gold); }
+
+    /* manifesto */
+    .rv-manifesto { background: var(--rv-deep); padding: clamp(90px, 12vw, 170px) 0; text-align: center; position: relative; overflow: hidden; }
+    .rv-manifesto::before {
+      content: "☾"; position: absolute; top: 8%; left: 6%; font-size: 90px; color: rgba(232,184,75,0.14);
+      animation: rv-moonrise 8s ease-in-out infinite;
+    }
+    .rv-mani-quote {
+      font-family: var(--rv-serif); font-style: italic; font-weight: 500;
+      font-size: clamp(1.7rem, 4.2vw, 3rem); line-height: 1.4; max-width: 26ch; margin: 0 auto 30px; color: var(--rv-cloud);
+    }
+    .rv-mani-sign { font-size: 12px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--rv-rose); margin: 0; }
+
+    /* dreams */
+    .rv-section { padding: clamp(80px, 10vw, 140px) 0; background: linear-gradient(180deg, var(--rv-deep), var(--rv-night) 30%, var(--rv-night)); }
+    .rv-dreams { display: grid; gap: clamp(40px, 6vw, 80px); margin-top: 50px; }
+    .rv-dream { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(28px, 5vw, 70px); align-items: center; }
+    .rv-dream-alt { direction: rtl; }
+    .rv-dream-alt > * { direction: ltr; }
+    .rv-dream-img { position: relative; }
+    .rv-dream-img img {
+      width: 100%; height: 380px; object-fit: cover; border-radius: 4px;
+      border: 1px solid rgba(232, 184, 75, 0.3);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 60px rgba(232, 184, 75, 0.08);
+      transition: transform 0.5s ease;
+    }
+    .rv-dream:hover .rv-dream-img img { transform: scale(1.02); }
+    .rv-dream-no {
+      position: absolute; top: -34px; left: -14px; font-family: var(--rv-serif); font-style: italic;
+      font-size: 120px; line-height: 1; color: transparent; -webkit-text-stroke: 1px rgba(232, 184, 75, 0.55);
+    }
+    .rv-dream-client { font-size: 12px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--rv-rose); margin: 0 0 14px; }
+    .rv-dream-body h3 { font-family: var(--rv-serif); font-size: clamp(2rem, 4vw, 3rem); font-weight: 600; margin: 0 0 16px; }
+    .rv-dream-body p { font-size: 17px; line-height: 1.75; color: rgba(245, 241, 232, 0.8); margin: 0; max-width: 46ch; font-weight: 300; }
+
+    /* process */
+    .rv-process { background: var(--rv-night); padding: clamp(80px, 10vw, 140px) 0; border-block: 1px solid rgba(232,184,75,0.18); }
+    .rv-path { width: 100%; height: 46px; margin: 10px 0 50px; }
+    .rv-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(26px, 4vw, 54px); }
+    .rv-step-no { font-family: var(--rv-serif); font-style: italic; font-size: 64px; color: var(--rv-gold); opacity: 0.85; }
+    .rv-steps h3 { font-family: var(--rv-serif); font-size: 30px; font-weight: 600; margin: 12px 0 12px; }
+    .rv-steps p { font-size: 15.5px; line-height: 1.75; color: rgba(245, 241, 232, 0.75); margin: 0; font-weight: 300; }
+    .rv-quote {
+      margin: 70px auto 0; max-width: 760px; text-align: center; padding: 46px clamp(24px, 5vw, 70px);
+      border: 1px solid rgba(232, 184, 75, 0.3); border-radius: 4px; background: rgba(16, 12, 46, 0.5);
+    }
+    .rv-quote p { font-family: var(--rv-serif); font-style: italic; font-size: clamp(1.3rem, 2.8vw, 1.8rem); line-height: 1.55; margin: 0 0 18px; }
+    .rv-quote cite { font-style: normal; font-size: 12px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--rv-gold); }
+
+    /* contact */
+    .rv-contact { position: relative; padding: clamp(80px, 10vw, 140px) 0; overflow: hidden; }
+    .rv-stars-bg { position: absolute; inset: 0; opacity: 0.35; }
+    .rv-stars-bg img { width: 100%; height: 100%; object-fit: cover; }
+    .rv-stars-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, var(--rv-night), transparent 40%, var(--rv-deep)); }
+    .rv-contact-in { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(34px, 6vw, 90px); align-items: center; }
+    .rv-contact-copy { font-size: 17px; line-height: 1.75; color: rgba(245, 241, 232, 0.8); max-width: 42ch; font-weight: 300; }
+    .rv-contact-facts { list-style: none; display: flex; gap: 34px; margin: 34px 0 0; padding: 0; flex-wrap: wrap; }
+    .rv-contact-facts li { font-size: 12px; letter-spacing: 0.26em; text-transform: uppercase; color: rgba(245,241,232,0.65); }
+    .rv-contact-facts strong { display: block; font-family: var(--rv-serif); font-size: 52px; font-weight: 600; color: var(--rv-gold); letter-spacing: 0; line-height: 1.1; }
+    .rv-form {
+      display: grid; gap: 18px; background: rgba(16, 12, 46, 0.72); backdrop-filter: blur(10px);
+      border: 1px solid rgba(232, 184, 75, 0.3); border-radius: 6px; padding: clamp(28px, 4vw, 46px);
+    }
+    .rv-form label { display: grid; gap: 10px; font-size: 12px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(245,241,232,0.7); }
+    .rv-form input, .rv-form textarea {
+      font-family: var(--rv-sans); font-weight: 300; font-size: 16px; color: var(--rv-cloud);
+      background: rgba(245, 241, 232, 0.06); border: 1px solid rgba(245, 241, 232, 0.25);
+      border-radius: 4px; padding: 15px 18px; width: 100%; resize: vertical;
+    }
+    .rv-form input:focus, .rv-form textarea:focus { outline: 2px solid var(--rv-gold); outline-offset: 2px; border-color: var(--rv-gold); }
+    .rv-form-note { margin: 0; font-family: var(--rv-serif); font-style: italic; font-size: 19px; color: var(--rv-gold); }
+    .rv-form-note:empty { display: none; }
+
+    /* footer */
+    .rv-footer { background: var(--rv-ink); padding: 70px 0 36px; border-top: 1px solid rgba(232,184,75,0.18); }
+    .rv-footer-in { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 32px; margin-bottom: 46px; }
+    .rv-footer-logo { font-family: var(--rv-serif); font-size: 36px; font-weight: 600; margin: 0 0 12px; }
+    .rv-footer-logo em { font-style: italic; color: var(--rv-gold); }
+    .rv-footer p { font-size: 14px; line-height: 1.75; margin: 0 0 8px; color: rgba(245,241,232,0.7); font-weight: 300; }
+    .rv-footer-head { font-size: 12px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--rv-gold); margin-bottom: 14px; }
+    .rv-footer a { color: var(--rv-cloud); }
+    .rv-colophon { text-align: center; font-family: var(--rv-serif); font-style: italic; font-size: 18px; color: rgba(232,184,75,0.55); margin: 0; letter-spacing: 0.2em; }
+
+    @media (max-width: 960px) {
+      .rv-dream, .rv-dream-alt { grid-template-columns: 1fr; direction: ltr; }
+      .rv-dream-img img { height: 300px; }
+      .rv-contact-in { grid-template-columns: 1fr; }
+      .rv-steps { grid-template-columns: 1fr; max-width: 560px; }
+      .rv-footer-in { grid-template-columns: 1fr 1fr; }
+      .rv-door { left: 2%; } .rv-stairs { right: 4%; }
+    }
+    @media (max-width: 760px) {
+      .rv-burger { display: block; margin-left: auto; }
+      .rv-logo { margin-right: 0; }
+      .rv-links {
+        display: none; position: absolute; top: 100%; left: 0; right: 0;
+        background: rgba(16, 12, 46, 0.97); border-bottom: 1px solid rgba(232,184,75,0.25);
+        flex-direction: column; align-items: stretch; padding: 12px 24px 24px;
+      }
+      .rv-links.rv-open { display: flex; }
+      .rv-links a { text-align: center; padding: 14px; }
+      .rv-links .rv-cta { margin: 8px 0 0; text-align: center; }
+      .rv-hero { min-height: 100svh; }
+      .rv-hero-in { padding-top: 120px; }
+      .rv-clock { left: auto; right: 6%; top: 16%; width: 84px; }
+      .rv-ladder { display: none; }
+      .rv-door { top: auto; bottom: 12%; }
+      .rv-stairs { display: none; }
+      .rv-moon { top: 11%; right: 6%; }
+      .rv-footer-in { grid-template-columns: 1fr; }
+      .rv-dream-no { font-size: 90px; top: -26px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .rv-moon, .rv-stars i, .rv-door, .rv-clock, .rv-ladder, .rv-stairs, .rv-scroll, .rv-manifesto::before { animation: none; }
+      .rv-btn, .rv-dream-img img { transition: none; }
+    }
+  </style>
+</body>
+</html>
