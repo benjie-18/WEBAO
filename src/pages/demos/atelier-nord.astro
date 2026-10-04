@@ -1,0 +1,448 @@
+---
+import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+
+// Demo microsite: Atelier Nord — fictional premium auto studio, Brossard QC.
+// Standalone art direction. Not connected to the WEBAO theme system by design.
+const IMG = {
+  hero: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1800&auto=format&fit=crop",
+  garage: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1200&auto=format&fit=crop",
+  detail: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=1200&auto=format&fit=crop",
+  engine: "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?q=80&w=1200&auto=format&fit=crop",
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Atelier Nord — Precision auto care in Brossard</title>
+  <meta name="description" content="Atelier Nord: dealer-level diagnostics, concours detailing and performance work in Brossard. By appointment only." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body class="an">
+
+  <header class="an-nav">
+    <div class="an-nav-in">
+      <a class="an-logo" href="#top" aria-label="Atelier Nord — home">
+        <span class="an-logo-mark" aria-hidden="true">N/</span>
+        <span class="an-logo-text">ATELIER&nbsp;NORD</span>
+      </a>
+      <nav class="an-links" aria-label="Primary">
+        <a href="#services"><span>01</span>Services</a>
+        <a href="#inventory"><span>02</span>Inventory</a>
+        <a href="#process"><span>03</span>Process</a>
+        <a href="#contact"><span>04</span>Contact</a>
+      </nav>
+      <a class="an-btn an-btn-accent an-btn-sm" href="#contact">Book appointment</a>
+      <button class="an-burger" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
+    </div>
+    <div class="an-mobile" hidden>
+      <a href="#services">Services</a>
+      <a href="#inventory">Inventory</a>
+      <a href="#process">Process</a>
+      <a href="#contact">Book appointment</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="an-hero">
+      <div class="an-hero-bg" aria-hidden="true">
+        <img src={IMG.hero} alt="" loading="eager" fetchpriority="high" />
+      </div>
+      <div class="an-wrap an-hero-in">
+        <p class="an-mono an-hero-kicker"><span class="an-live" aria-hidden="true"></span>BROSSARD QC · BY APPOINTMENT ONLY</p>
+        <h1 class="an-h1">Precision<br />has an address.</h1>
+        <p class="an-hero-sub">Dealer-level diagnostics, concours-grade detailing and honest performance work — for people who read the spec sheet.</p>
+        <div class="an-hero-cta">
+          <a class="an-btn an-btn-accent" href="#contact">Book an appointment</a>
+          <a class="an-btn an-btn-line" href="#services">Explore services</a>
+        </div>
+        <div class="an-ticker" aria-hidden="true">
+          <div class="an-ticker-row">
+            <span>DIAGNOSTICS</span><i>·</i><span>DETAILING</span><i>·</i><span>PERFORMANCE</span><i>·</i><span>ALIGNMENT</span><i>·</i><span>CERAMIC</span><i>·</i><span>TRACK PREP</span><i>·</i>
+            <span>DIAGNOSTICS</span><i>·</i><span>DETAILING</span><i>·</i><span>PERFORMANCE</span><i>·</i><span>ALIGNMENT</span><i>·</i><span>CERAMIC</span><i>·</i><span>TRACK PREP</span><i>·</i>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="an-section" id="services">
+      <div class="an-wrap">
+        <div class="an-sec-head">
+          <p class="an-mono">01 / SERVICES</p>
+          <h2 class="an-h2">Three disciplines.<br />Zero guesswork.</h2>
+        </div>
+        <div class="an-svc-grid">
+          <article class="an-svc">
+            <div class="an-svc-top"><span class="an-mono">S.01</span><span class="an-tag">Most booked</span></div>
+            <h3>Diagnostics</h3>
+            <p>Oscilloscope-level electrical diagnosis, module coding and pre-purchase inspections with a 140-point report.</p>
+            <ul class="an-spec">
+              <li><span>Inspection</span><b>140 pts</b></li>
+              <li><span>Report</span><b>same day</b></li>
+              <li><span>Estimate</span><b>fixed</b></li>
+            </ul>
+          </article>
+          <article class="an-svc">
+            <div class="an-svc-top"><span class="an-mono">S.02</span></div>
+            <h3>Detailing</h3>
+            <p>Multi-stage paint correction, ceramic coatings and interiors reset to factory — documented panel by panel.</p>
+            <ul class="an-spec">
+              <li><span>Correction</span><b>2–3 stages</b></li>
+              <li><span>Ceramic</span><b>up to 5 yrs</b></li>
+              <li><span>Interior</span><b>full reset</b></li>
+            </ul>
+          </article>
+          <article class="an-svc">
+            <div class="an-svc-top"><span class="an-mono">S.03</span></div>
+            <h3>Performance</h3>
+            <p>Suspension geometry, brake upgrades and track preparation. Measured on the alignment rack, not vibes.</p>
+            <ul class="an-spec">
+              <li><span>Alignment</span><b>0.01°</b></li>
+              <li><span>Dyno</span><b>in-house</b></li>
+              <li><span>Track prep</span><b>checklist</b></li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- NUMBERS -->
+    <section class="an-numbers">
+      <div class="an-wrap an-numbers-in">
+        <div><strong>4.9</strong><span class="an-mono">avg rating / 186 reviews</span></div>
+        <div><strong>12</strong><span class="an-mono">years in operation</span></div>
+        <div><strong>3.2k</strong><span class="an-mono">cars through the shop</span></div>
+        <div><strong>0</strong><span class="an-mono">upsells you didn't ask for</span></div>
+      </div>
+    </section>
+
+    <!-- GARAGE FEATURE -->
+    <section class="an-section an-feature">
+      <div class="an-wrap an-feature-grid">
+        <figure class="an-feature-img">
+          <img src={IMG.garage} alt="A classic car inside the Atelier Nord workshop" loading="lazy" />
+          <figcaption class="an-mono">BAY 02 — 06:40 AM</figcaption>
+        </figure>
+        <div>
+          <p class="an-mono">THE SHOP</p>
+          <h2 class="an-h2">A workshop,<br />not a waiting room.</h2>
+          <p class="an-prose">No coffee machine theatre, no service advisors upselling wipers. You talk to the technician. Every car gets photographed on intake, torqued to spec, and road-tested before pickup.</p>
+          <ul class="an-list">
+            <li>Photo intake &amp; digital inspection links</li>
+            <li>OEM or better parts, always itemized</li>
+            <li>Torque specs logged per wheel, per job</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- INVENTORY -->
+    <section class="an-section" id="inventory">
+      <div class="an-wrap">
+        <div class="an-sec-head">
+          <p class="an-mono">02 / INVENTORY</p>
+          <h2 class="an-h2">Currently in<br />the bays.</h2>
+        </div>
+        <div class="an-inv-grid">
+          <article class="an-inv">
+            <img src={IMG.detail} alt="Blue sports sedan after paint correction" loading="lazy" />
+            <div class="an-inv-body">
+              <p class="an-mono">BAY 01 · CERAMIC</p>
+              <h3>Paint correction, stage 2</h3>
+              <p>Two-stage polish + 5-year ceramic. 31 hours, documented.</p>
+            </div>
+          </article>
+          <article class="an-inv">
+            <img src={IMG.engine} alt="Engine bay during a diagnostic session" loading="lazy" />
+            <div class="an-inv-body">
+              <p class="an-mono">BAY 03 · DIAGNOSTIC</p>
+              <h3>Intermittent misfire, solved</h3>
+              <p>Scoped to a failing coil driver. Fixed same day, no parts cannon.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROCESS -->
+    <section class="an-section an-process" id="process">
+      <div class="an-wrap">
+        <div class="an-sec-head">
+          <p class="an-mono">03 / PROCESS</p>
+          <h2 class="an-h2">How a visit works.</h2>
+        </div>
+        <ol class="an-steps">
+          <li><span class="an-mono">P.01</span><h3>Book</h3><p>Pick a slot online or by phone. Tell us symptoms, not solutions — that's our job.</p></li>
+          <li><span class="an-mono">P.02</span><h3>Inspect</h3><p>Photo intake and digital inspection sent to your phone before we touch a bolt.</p></li>
+          <li><span class="an-mono">P.03</span><h3>Approve</h3><p>Fixed quote, itemized parts. Nothing moves without your explicit yes.</p></li>
+          <li><span class="an-mono">P.04</span><h3>Drive</h3><p>Torqued, tested, washed. Old parts in a box in the trunk if you want them.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="an-section" id="contact">
+      <div class="an-wrap an-contact-grid">
+        <div>
+          <p class="an-mono">04 / CONTACT</p>
+          <h2 class="an-h2">Book the bay.</h2>
+          <p class="an-prose">Appointments Tuesday to Saturday. Emergencies (you know what those are) — call.</p>
+          <dl class="an-contact-list">
+            <div><dt class="an-mono">PHONE</dt><dd><a href="tel:+14505550177">(450) 555-0177</a></dd></div>
+            <div><dt class="an-mono">EMAIL</dt><dd><a href="mailto:service@atelier-nord-demo.ca">service@atelier-nord-demo.ca</a></dd></div>
+            <div><dt class="an-mono">SHOP</dt><dd>123, rue Fictive, Brossard QC</dd></div>
+            <div><dt class="an-mono">HOURS</dt><dd>Tue–Sat · 8:00–18:00</dd></div>
+          </dl>
+        </div>
+        <form class="an-form" id="an-form" novalidate>
+          <div class="an-form-row">
+            <label class="an-mono">NAME<input type="text" name="name" required placeholder="Jane Doe" /></label>
+            <label class="an-mono">PHONE<input type="tel" name="phone" required placeholder="(450) 555-0000" /></label>
+          </div>
+          <label class="an-mono">SERVICE
+            <select name="service">
+              <option>Diagnostics</option>
+              <option>Detailing</option>
+              <option>Performance</option>
+              <option>Pre-purchase inspection</option>
+            </select>
+          </label>
+          <label class="an-mono">VEHICLE / SYMPTOMS<textarea name="details" rows="4" placeholder="2019 Golf GTI — vibration at 110 km/h…"></textarea></label>
+          <button class="an-btn an-btn-accent an-btn-full" type="submit">Request appointment</button>
+          <p class="an-form-note" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="an-footer">
+    <div class="an-wrap an-footer-in">
+      <p class="an-logo"><span class="an-logo-mark" aria-hidden="true">N/</span><span class="an-logo-text">ATELIER&nbsp;NORD</span></p>
+      <p class="an-footer-note an-mono">© 2026 ATELIER NORD — BROSSARD, QC</p>
+    </div>
+  </footer>
+
+  <EscapeHatch locale="en" />
+
+  <script>
+    (function () {
+      var btn = document.querySelector('.an-burger');
+      var menu = document.querySelector('.an-mobile');
+      btn?.addEventListener('click', function () {
+        var isHidden = menu?.hasAttribute('hidden') ?? false;
+        if (isHidden) { menu?.removeAttribute('hidden'); } else { menu?.setAttribute('hidden', ''); }
+        btn?.setAttribute('aria-expanded', String(isHidden));
+        btn?.setAttribute('aria-label', isHidden ? 'Close menu' : 'Open menu');
+      });
+      menu?.addEventListener('click', function (e) {
+        if ((e.target as HTMLElement).tagName === 'A') menu?.setAttribute('hidden', '');
+      });
+    })();
+    (function () {
+      var form = document.getElementById('an-form');
+      form?.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var note = form?.querySelector('.an-form-note');
+        if (note) note.textContent = '✓ Received. We\u2019ll confirm your appointment shortly.';
+      });
+    })();
+  </script>
+
+  <style>
+    .an {
+      --an-bg: #0A0F1A;
+      --an-bg-2: #0E1524;
+      --an-card: #121A2C;
+      --an-ink: #F2F5F9;
+      --an-ink-2: #9AA6BC;
+      --an-line: rgba(242, 245, 249, 0.12);
+      --an-accent: #3D7BFF;
+      --an-accent-soft: rgba(61, 123, 255, 0.14);
+      --an-font-d: "Space Grotesk", system-ui, sans-serif;
+      --an-font-m: "IBM Plex Mono", ui-monospace, monospace;
+      margin: 0;
+      background: var(--an-bg);
+      color: var(--an-ink);
+      font-family: var(--an-font-d);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: clip;
+    }
+    .an *, .an *::before, .an *::after { box-sizing: border-box; }
+    .an img { display: block; max-width: 100%; }
+    .an-wrap { max-width: 1200px; margin: 0 auto; padding: 0 clamp(18px, 4vw, 40px); }
+    .an-mono { font-family: var(--an-font-m); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; }
+
+    .an-h1 {
+      font-weight: 700; letter-spacing: -0.03em;
+      font-size: clamp(3rem, 9vw, 6.6rem); line-height: 0.94; margin: 0;
+    }
+    .an-h2 {
+      font-weight: 700; letter-spacing: -0.025em;
+      font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1; margin: 0;
+    }
+    .an-prose { color: var(--an-ink-2); font-size: 15.5px; line-height: 1.7; max-width: 52ch; }
+    .an-prose a, .an-contact-list a { color: var(--an-accent); }
+
+    /* nav */
+    .an-nav { position: sticky; top: 0; z-index: 60; background: rgba(10, 15, 26, 0.88); backdrop-filter: blur(14px); border-bottom: 1px solid var(--an-line); }
+    .an-nav-in { max-width: 1320px; margin: 0 auto; padding: 14px clamp(18px, 4vw, 40px); display: flex; align-items: center; gap: 30px; }
+    .an-logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--an-ink); }
+    .an-logo-mark {
+      font-family: var(--an-font-m); font-weight: 600; font-size: 15px;
+      background: var(--an-accent); color: #fff; padding: 7px 9px; border-radius: 8px;
+    }
+    .an-logo-text { font-weight: 700; font-size: 15px; letter-spacing: 0.14em; }
+    .an-links { display: flex; gap: 28px; margin-left: auto; }
+    .an-links a { color: var(--an-ink-2); text-decoration: none; font-size: 13.5px; font-weight: 500; display: inline-flex; gap: 8px; align-items: baseline; }
+    .an-links a span { font-family: var(--an-font-m); font-size: 10px; color: var(--an-accent); }
+    .an-links a:hover { color: var(--an-ink); }
+    .an-burger { display: none; margin-left: auto; background: none; border: 0; cursor: pointer; padding: 8px; }
+    .an-burger span { display: block; width: 22px; height: 2px; background: var(--an-ink); margin: 5px 0; }
+    .an-mobile { display: grid; border-top: 1px solid var(--an-line); }
+    .an-mobile[hidden] { display: none; }
+    .an-mobile a { padding: 14px 24px; color: var(--an-ink); text-decoration: none; font-weight: 600; border-bottom: 1px solid var(--an-line); }
+
+    .an-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      font-weight: 600; font-size: 14px; padding: 15px 28px; border-radius: 10px;
+      text-decoration: none; border: 0; cursor: pointer;
+      transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+    }
+    .an-btn:hover { transform: translateY(-2px); }
+    .an-btn-accent { background: var(--an-accent); color: #fff; box-shadow: 0 12px 30px rgba(61, 123, 255, 0.35); }
+    .an-btn-accent:hover { background: #2F6BF0; }
+    .an-btn-line { background: transparent; color: var(--an-ink); border: 1px solid var(--an-line); }
+    .an-btn-line:hover { border-color: var(--an-ink-2); }
+    .an-btn-sm { padding: 11px 20px; font-size: 13px; }
+    .an-btn-full { width: 100%; }
+
+    /* hero */
+    .an-hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--an-line); }
+    .an-hero-bg { position: absolute; inset: 0; margin: 0; }
+    .an-hero-bg img { width: 100%; height: 100%; object-fit: cover; opacity: 0.42; }
+    .an-hero-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,15,26,0.55) 0%, rgba(10,15,26,0.25) 40%, var(--an-bg) 100%); }
+    .an-hero-in { position: relative; z-index: 1; padding-top: clamp(70px, 10vw, 130px); padding-bottom: 0; }
+    .an-hero-kicker { color: var(--an-ink-2); display: inline-flex; align-items: center; gap: 10px; margin: 0 0 22px; }
+    .an-live { width: 8px; height: 8px; border-radius: 50%; background: #34D399; box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.18); animation: an-pulse 2s infinite; }
+    @keyframes an-pulse { 50% { box-shadow: 0 0 0 7px rgba(52, 211, 153, 0.05); } }
+    .an-hero-sub { color: var(--an-ink-2); font-size: 17px; line-height: 1.6; max-width: 48ch; margin: 24px 0 32px; }
+    .an-hero-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: clamp(48px, 7vw, 90px); }
+
+    .an-ticker { border-top: 1px solid var(--an-line); overflow: hidden; padding: 16px 0; margin: 0 calc(clamp(18px, 4vw, 40px) * -1); }
+    .an-ticker-row { display: flex; gap: 26px; width: max-content; animation: an-tick 30s linear infinite; font-family: var(--an-font-m); font-size: 12px; letter-spacing: 0.22em; color: var(--an-ink-2); }
+    .an-ticker-row i { font-style: normal; color: var(--an-accent); }
+    @keyframes an-tick { to { transform: translateX(-50%); } }
+
+    /* sections */
+    .an-section { padding: clamp(64px, 9vw, 120px) 0; }
+    .an-sec-head { display: grid; gap: 16px; margin-bottom: 44px; }
+    .an-sec-head .an-mono { color: var(--an-accent); margin: 0; }
+
+    .an-svc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .an-svc {
+      background: var(--an-card); border: 1px solid var(--an-line); border-radius: 16px; padding: 28px 26px;
+      display: flex; flex-direction: column; gap: 14px;
+      transition: transform 0.18s ease, border-color 0.18s ease;
+    }
+    .an-svc:hover { transform: translateY(-4px); border-color: rgba(61, 123, 255, 0.45); }
+    .an-svc-top { display: flex; justify-content: space-between; align-items: center; }
+    .an-svc-top .an-mono { color: var(--an-ink-2); margin: 0; }
+    .an-tag { font-size: 11px; font-weight: 600; background: var(--an-accent-soft); color: var(--an-accent); border: 1px solid rgba(61,123,255,0.35); padding: 5px 11px; border-radius: 999px; }
+    .an-svc h3 { font-size: 24px; font-weight: 700; letter-spacing: -0.02em; margin: 0; }
+    .an-svc > p { color: var(--an-ink-2); font-size: 14.5px; line-height: 1.65; margin: 0; }
+    .an-spec { list-style: none; margin: 8px 0 0; padding: 18px 0 0; border-top: 1px solid var(--an-line); display: grid; gap: 10px; }
+    .an-spec li { display: flex; justify-content: space-between; align-items: baseline; font-size: 13.5px; }
+    .an-spec li span { font-family: var(--an-font-m); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--an-ink-2); }
+    .an-spec li b { font-weight: 600; }
+
+    /* numbers */
+    .an-numbers { border-block: 1px solid var(--an-line); background: var(--an-bg-2); }
+    .an-numbers-in { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding-top: 40px; padding-bottom: 40px; }
+    .an-numbers-in div { display: flex; flex-direction: column; gap: 8px; }
+    .an-numbers-in strong { font-size: clamp(2.2rem, 4vw, 3.2rem); font-weight: 700; letter-spacing: -0.03em; }
+    .an-numbers-in .an-mono { color: var(--an-ink-2); margin: 0; line-height: 1.7; }
+
+    /* feature */
+    .an-feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 72px); align-items: center; }
+    .an-feature-img { margin: 0; position: relative; }
+    .an-feature-img img { width: 100%; height: min(520px, 75vw); object-fit: cover; border-radius: 16px; border: 1px solid var(--an-line); }
+    .an-feature-img figcaption { position: absolute; left: 14px; bottom: 14px; background: rgba(10,15,26,0.75); backdrop-filter: blur(8px); padding: 8px 14px; border-radius: 8px; border: 1px solid var(--an-line); margin: 0; }
+    .an-feature .an-mono { color: var(--an-accent); }
+    .an-feature .an-h2 { margin: 16px 0 20px; }
+    .an-list { list-style: none; padding: 0; margin: 26px 0 0; display: grid; gap: 12px; }
+    .an-list li { display: flex; gap: 12px; align-items: flex-start; font-size: 14.5px; color: var(--an-ink-2); }
+    .an-list li::before { content: "▸"; color: var(--an-accent); font-weight: 700; }
+
+    /* inventory */
+    .an-inv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .an-inv { background: var(--an-card); border: 1px solid var(--an-line); border-radius: 16px; overflow: hidden; }
+    .an-inv img { width: 100%; height: 300px; object-fit: cover; }
+    .an-inv-body { padding: 24px; display: grid; gap: 8px; }
+    .an-inv-body .an-mono { color: var(--an-accent); margin: 0; }
+    .an-inv-body h3 { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+    .an-inv-body p { margin: 0; color: var(--an-ink-2); font-size: 14px; line-height: 1.6; }
+
+    /* process */
+    .an-process { background: var(--an-bg-2); border-block: 1px solid var(--an-line); }
+    .an-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; counter-reset: step; }
+    .an-steps li { border-top: 2px solid var(--an-accent); padding-top: 22px; display: grid; gap: 10px; align-content: start; }
+    .an-steps .an-mono { color: var(--an-accent); margin: 0; }
+    .an-steps h3 { margin: 0; font-size: 19px; font-weight: 700; }
+    .an-steps p { margin: 0; color: var(--an-ink-2); font-size: 14px; line-height: 1.65; }
+
+    /* contact */
+    .an-contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 72px); align-items: start; }
+    .an-contact-grid .an-mono { color: var(--an-accent); }
+    .an-contact-grid .an-h2 { margin: 16px 0 18px; }
+    .an-contact-list { margin: 30px 0 0; display: grid; gap: 16px; }
+    .an-contact-list div { display: grid; grid-template-columns: 90px 1fr; gap: 12px; align-items: baseline; }
+    .an-contact-list .an-mono { margin: 0; color: var(--an-ink-2); }
+    .an-contact-list dd { margin: 0; font-size: 15.5px; font-weight: 500; }
+    .an-contact-list a { text-decoration: none; }
+    .an-form { background: var(--an-card); border: 1px solid var(--an-line); border-radius: 18px; padding: clamp(24px, 3vw, 34px); display: grid; gap: 16px; }
+    .an-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .an-form label { display: grid; gap: 10px; color: var(--an-ink-2); }
+    .an-form input, .an-form select, .an-form textarea {
+      font-family: var(--an-font-d); font-size: 15px; letter-spacing: 0; text-transform: none;
+      padding: 13px 15px; border-radius: 10px; border: 1px solid var(--an-line);
+      background: var(--an-bg); color: var(--an-ink); width: 100%;
+    }
+    .an-form input::placeholder, .an-form textarea::placeholder { color: #5A6579; }
+    .an-form input:focus, .an-form select:focus, .an-form textarea:focus { outline: 2px solid var(--an-accent); outline-offset: 1px; border-color: var(--an-accent); }
+    .an-form select option { background: var(--an-bg); }
+    .an-form-note { margin: 0; font-size: 12.5px; color: var(--an-ink-2); text-align: center; font-family: var(--an-font-m); letter-spacing: 0.04em; }
+    .an-form-note:empty { display: none; }
+
+    /* footer */
+    .an-footer { border-top: 1px solid var(--an-line); padding: 48px 0; background: var(--an-bg-2); }
+    .an-footer-in { display: grid; gap: 12px; }
+    .an-footer .an-logo-text { font-size: 13px; }
+    .an-footer-note { margin: 0; color: var(--an-ink-2); font-size: 12.5px; line-height: 1.6; }
+
+    @media (max-width: 960px) {
+      .an-svc-grid, .an-steps { grid-template-columns: 1fr 1fr; }
+      .an-feature-grid, .an-inv-grid, .an-contact-grid { grid-template-columns: 1fr; }
+      .an-numbers-in { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 720px) {
+      .an-links, .an-nav .an-btn { display: none; }
+      .an-burger { display: block; }
+      .an-svc-grid, .an-steps, .an-numbers-in { grid-template-columns: 1fr; }
+      .an-form-row { grid-template-columns: 1fr; }
+      .an-hero-cta { gap: 12px; }
+      .an-contact-list div { grid-template-columns: 1fr; gap: 4px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .an-ticker-row, .an-live { animation: none; }
+      .an-btn, .an-svc { transition: none; }
+    }
+  </style>
+</body>
+</html>
