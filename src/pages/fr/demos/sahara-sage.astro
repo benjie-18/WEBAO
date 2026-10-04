@@ -1,0 +1,519 @@
+---
+import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+
+// Démo : Sahara & Sage, studio fictif d'objets bohèmes, Montréal.
+// Direction artistique autonome. Bohème : terracotta, sauge, sable, arches,
+// motifs macramé. Non relié au système de thème WEBAO.
+const IMG = {
+  hero: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=1600&auto=format&fit=crop",
+  throw: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=1000&auto=format&fit=crop",
+  vase: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?q=80&w=1000&auto=format&fit=crop",
+  artisan: "https://images.unsplash.com/photo-1615873968403-89e068629265?q=80&w=1000&auto=format&fit=crop",
+  look1: "https://images.unsplash.com/photo-1567016432779-094069958ea5?q=80&w=1000&auto=format&fit=crop",
+  look2: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1000&auto=format&fit=crop",
+};
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sahara &amp; Sage : objets bohèmes faits main</title>
+  <meta name="description" content="Sahara & Sage : objets bohèmes tissés, tournés et noués à la main. Textiles, céramiques, macramé. Boîtes curatrices expédiées partout au Canada." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body class="ss">
+
+  <!-- NAV -->
+  <header class="ss-navwrap">
+    <nav class="ss-nav" aria-label="Navigation principale">
+      <a class="ss-logo" href="#top" aria-label="Sahara et Sage, accueil">
+        <svg class="ss-sun" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="7" fill="#C67B5C"/><g stroke="#6B4A35" stroke-width="2" stroke-linecap="round"><path d="M16 2v4M16 26v4M2 16h4M26 16h4M6 6l3 3M23 23l3 3M26 6l-3 3M9 23l-3 3"/></g></svg>
+        <span>Sahara <em>&amp;</em> Sage</span>
+      </a>
+      <div class="ss-nav-links">
+        <a href="#collection">Collection</a>
+        <a href="#artisans">Artisans</a>
+        <a href="#lookbook">Lookbook</a>
+        <a href="#boites">Boîtes</a>
+      </div>
+      <a class="ss-btn ss-btn-small" href="#contact">Voir la nouveauté</a>
+      <button class="ss-burger" id="ss-burger" aria-expanded="false" aria-controls="ss-menu" aria-label="Ouvrir le menu">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+    <div class="ss-menu" id="ss-menu" hidden>
+      <a href="#collection">Collection</a>
+      <a href="#artisans">Artisans</a>
+      <a href="#lookbook">Lookbook</a>
+      <a href="#boites">Boîtes</a>
+      <a class="ss-btn" href="#contact">Voir la nouveauté</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="ss-hero">
+      <div class="ss-blob ss-blob-a" aria-hidden="true"></div>
+      <div class="ss-blob ss-blob-b" aria-hidden="true"></div>
+      <div class="ss-hero-in">
+        <div class="ss-hero-copy">
+          <p class="ss-caveat">fait main, avec amour, toujours</p>
+          <h1 class="ss-h1">Tissé pour les <em>vagabonds,</em><br />pensé pour la maison</h1>
+          <p class="ss-lede">Textiles, céramiques et macramés fabriqués lentement par 24 artisans. Des palettes terreuses, des matières honnêtes et des pièces qui semblent déjà avoir des histoires.</p>
+          <div class="ss-hero-cta">
+            <a class="ss-btn" href="#collection">Voir la collection</a>
+            <a class="ss-btn ss-btn-line" href="#artisans">Rencontrer les makers</a>
+          </div>
+          <div class="ss-hero-badges">
+            <span>Livraison gratuite dès 75 $</span>
+            <span class="ss-moon" aria-hidden="true"></span>
+            <span>Petites séries, toujours</span>
+          </div>
+        </div>
+        <div class="ss-hero-arch">
+          <div class="ss-arch">
+            <img src={IMG.hero} alt="Salon bohème baigné de soleil, textiles superposés et plantes" loading="eager" fetchpriority="high" />
+          </div>
+          <svg class="ss-macrame" viewBox="0 0 200 60" aria-hidden="true">
+            <g fill="none" stroke="#6B4A35" stroke-width="2.5">
+              <path d="M10 4 C 30 20, 30 40, 10 56" />
+              <path d="M30 4 C 50 20, 50 40, 30 56" />
+              <path d="M50 4 C 70 20, 70 40, 50 56" />
+              <path d="M70 4 C 90 20, 90 40, 70 56" />
+              <path d="M90 4 C 110 20, 110 40, 90 56" />
+              <path d="M110 4 C 130 20, 130 40, 110 56" />
+              <path d="M130 4 C 150 20, 150 40, 130 56" />
+              <path d="M150 4 C 170 20, 170 40, 150 56" />
+              <path d="M170 4 C 190 20, 190 40, 170 56" />
+            </g>
+            <g fill="#C67B5C">
+              <circle cx="10" cy="56" r="4"/><circle cx="30" cy="56" r="4"/><circle cx="50" cy="56" r="4"/><circle cx="70" cy="56" r="4"/><circle cx="90" cy="56" r="4"/><circle cx="110" cy="56" r="4"/><circle cx="130" cy="56" r="4"/><circle cx="150" cy="56" r="4"/><circle cx="170" cy="56" r="4"/><circle cx="190" cy="56" r="4"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+      <div class="ss-strip" aria-hidden="true">
+        <span>Tissé</span><span>Tourné</span><span>Noué</span><span>Teinté</span><span>Cousu</span><span>Tissé</span><span>Tourné</span><span>Noué</span><span>Teinté</span><span>Cousu</span>
+      </div>
+    </section>
+
+    <!-- COLLECTION -->
+    <section class="ss-section" id="collection">
+      <div class="ss-wrap">
+        <p class="ss-caveat ss-center">tout droit sorti de l'atelier</p>
+        <h2 class="ss-h2 ss-center">La <em>collection</em></h2>
+        <div class="ss-grid">
+          <article class="ss-card">
+            <div class="ss-card-img"><img src={IMG.throw} alt="Jeté terracotta tissé à la main dans un salon chaleureux" loading="lazy" /></div>
+            <div class="ss-card-body">
+              <p class="ss-card-tag">Textiles</p>
+              <h3>Jeté Sahara</h3>
+              <p>Coton et laine tissés au métier, teints à la garance. À franges, généreux, fait pour les longues lectures.</p>
+              <p class="ss-price">129 $ <span>· 4 couleurs</span></p>
+            </div>
+          </article>
+          <article class="ss-card">
+            <div class="ss-card-img"><img src={IMG.vase} alt="Vases en céramique faits main, émaux terreux" loading="lazy" /></div>
+            <div class="ss-card-body">
+              <p class="ss-card-tag">Céramiques</p>
+              <h3>Trio Dune</h3>
+              <p>Grès tourné au tour, émaux sable et terracotta. Aucun identique, chacun signé en dessous.</p>
+              <p class="ss-price">84 $ <span>· ensemble de 3</span></p>
+            </div>
+          </article>
+          <article class="ss-card">
+            <div class="ss-card-img"><img src={IMG.look2} alt="Chambre bohème avec macramé et literie superposée" loading="lazy" /></div>
+            <div class="ss-card-body">
+              <p class="ss-card-tag">Macramé</p>
+              <h3>Suspension Lune</h3>
+              <p>Un croissant de corde de coton nouée à la main sur bois flotté. Environ six heures de nœuds.</p>
+              <p class="ss-price">96 $ <span>· fait sur commande</span></p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ARTISANS -->
+    <section class="ss-artisans" id="artisans">
+      <div class="ss-wrap ss-art-in">
+        <div class="ss-arch ss-arch-sm">
+          <img src={IMG.artisan} alt="Chambre chaleureuse aux textiles d'artisan" loading="lazy" />
+        </div>
+        <div>
+          <p class="ss-caveat">nos gens</p>
+          <h2 class="ss-h2">Fabriqué lentement par de <em>chers amis</em></h2>
+          <p class="ss-copy">Nous travaillons avec 24 artisans indépendants du Québec et des Maritimes. Chaque pièce est fabriquée en petites séries, avec de l'argile et du coton sourcés le plus près possible de chez nous. Nous payons juste, nous signons chaque pièce et nous connaissons chaque maker par son prénom.</p>
+          <div class="ss-stats">
+            <div><strong>24</strong><span>artisans partenaires</span></div>
+            <div><strong>100 %</strong><span>matières naturelles</span></div>
+            <div><strong>0</strong><span>pièce produite en masse</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOOKBOOK -->
+    <section class="ss-section" id="lookbook">
+      <div class="ss-wrap">
+        <p class="ss-caveat ss-center">stylé par vous</p>
+        <h2 class="ss-h2 ss-center">Le <em>lookbook</em></h2>
+        <div class="ss-look">
+          <figure>
+            <img src={IMG.look1} alt="Chambre bohème superposée aux tons chauds" loading="lazy" />
+            <figcaption>Le Nid, stylé par Camille à Verdun</figcaption>
+          </figure>
+          <figure>
+            <img src={IMG.look2} alt="Intérieur bohème avec tenture tissée" loading="lazy" />
+            <figcaption>Lumière du matin, stylé par Priya à Halifax</figcaption>
+          </figure>
+          <figure>
+            <img src={IMG.throw} alt="Textiles terracotta dans un coin lecture" loading="lazy" />
+            <figcaption>Coin lecture, stylé par nous (on n'a pas pu résister)</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOÎTES / PRIX -->
+    <section class="ss-boxes" id="boites">
+      <div class="ss-wrap">
+        <p class="ss-caveat ss-center">curatées, emballées avec soin</p>
+        <h2 class="ss-h2 ss-center">Boîtes <em>saisonnières</em></h2>
+        <p class="ss-copy ss-center ss-max">Quatre fois par année, nous emballons une boîte de pièces en petites séries autour d'un thème. Gardez tout ou offrez le reste. Les dernières boîtes se sont envolées en quelques jours.</p>
+        <div class="ss-tiers">
+          <article class="ss-tier">
+            <h3>La Vagabonde</h3>
+            <p class="ss-tier-price">89 $</p>
+            <ul>
+              <li>Une bougie de soya coulée à la main</li>
+              <li>Mini suspension macramé pour plante</li>
+              <li>Jeu de cartes postales d'artisan</li>
+              <li>Un textile surprise</li>
+            </ul>
+            <a class="ss-btn ss-btn-line" href="#contact">Réserver la mienne</a>
+          </article>
+          <article class="ss-tier ss-tier-hot">
+            <p class="ss-caveat">la préférée</p>
+            <h3>Le Nid</h3>
+            <p class="ss-tier-price">149 $</p>
+            <ul>
+              <li>Tout ce que contient La Vagabonde</li>
+              <li>Housse de coussin Sahara</li>
+              <li>Duo de tasses tournées à la main</li>
+              <li>Mini tenture tissée</li>
+            </ul>
+            <a class="ss-btn" href="#contact">Réserver la mienne</a>
+          </article>
+          <article class="ss-tier">
+            <h3>L'Oasis</h3>
+            <p class="ss-tier-price">219 $</p>
+            <ul>
+              <li>Tout ce que contient Le Nid</li>
+              <li>Suspension Lune</li>
+              <li>Grand vase Dune</li>
+              <li>Mot personnel d'un maker</li>
+            </ul>
+            <a class="ss-btn ss-btn-line" href="#contact">Réserver la mienne</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="ss-section" id="contact">
+      <div class="ss-wrap ss-contact-in">
+        <div>
+          <p class="ss-caveat">dites bonjour</p>
+          <h2 class="ss-h2">Passez à <em>l'atelier</em></h2>
+          <p class="ss-copy">On fait chauffer le thé et on vous laisse tout toucher. Commandes sur mesure, listes de mariage ou simple jasette autour de l'argile.</p>
+          <address class="ss-addr">
+            214, rue des Artisans<br />
+            Montréal, QC H2Y 1C6<br />
+            <a href="tel:+15145550142">(514) 555-0142</a><br />
+            <a href="mailto:hello@saharasage.ca">hello@saharasage.ca</a><br />
+            Mar à sam, 10 h à 18 h
+          </address>
+        </div>
+        <form class="ss-form" id="ss-form" novalidate>
+          <h3>Écrivez-nous</h3>
+          <label>Nom<input type="text" name="name" required placeholder="Amina Diallo" /></label>
+          <label>Courriel<input type="email" name="email" required placeholder="amina@exemple.com" /></label>
+          <label>De quoi rêvez-vous ?
+            <select name="topic">
+              <option>Une pièce sur mesure</option>
+              <option>Une boîte saisonnière</option>
+              <option>Demande de gros</option>
+              <option>Juste un petit bonjour</option>
+            </select>
+          </label>
+          <label>Message<textarea name="message" rows="4" placeholder="Parlez-nous de votre espace..."></textarea></label>
+          <button class="ss-btn" type="submit">Envoyer avec amour</button>
+          <p class="ss-form-note" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="ss-footer">
+    <p class="ss-footer-mark" aria-hidden="true">S&amp;S</p>
+    <div class="ss-wrap ss-footer-in">
+      <p>© 2026 Sahara &amp; Sage. Studio de démo fictif. Tous les métiers à tisser sont imaginaires.</p>
+      <p>214, rue des Artisans, Montréal QC · <a href="tel:+15145550142">(514) 555-0142</a> · <a href="mailto:hello@saharasage.ca">hello@saharasage.ca</a></p>
+    </div>
+  </footer>
+
+  <EscapeHatch locale="fr" />
+
+  <script>
+    (function () {
+      const burger = document.getElementById('ss-burger');
+      const menu = document.getElementById('ss-menu');
+      if (burger && menu) {
+        burger.addEventListener('click', function () {
+          var open = menu.hasAttribute('hidden');
+          if (open) { menu.removeAttribute('hidden'); } else { menu.setAttribute('hidden', ''); }
+          burger.setAttribute('aria-expanded', String(open));
+          burger.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+        });
+        menu.querySelectorAll('a').forEach(function (a) {
+          a.addEventListener('click', function () {
+            menu.setAttribute('hidden', '');
+            burger.setAttribute('aria-expanded', 'false');
+            burger.setAttribute('aria-label', 'Ouvrir le menu');
+          });
+        });
+      }
+      var form = document.getElementById('ss-form') as HTMLFormElement | null;
+      form?.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var note = form?.querySelector('.ss-form-note');
+        if (note) note.textContent = 'Merci, belle âme. Votre mot est en route et nous répondrons sous deux jours.';
+        form?.reset();
+      });
+    })();
+  </script>
+
+  <style>
+    .ss {
+      --ss-sand: #E8DCC8;
+      --ss-sand-deep: #DCCBAA;
+      --ss-terra: #C67B5C;
+      --ss-terra-deep: #A85F42;
+      --ss-sage: #9CAF88;
+      --ss-sage-deep: #7A8F68;
+      --ss-bark: #6B4A35;
+      --ss-bark-deep: #4A3428;
+      --ss-cream: #FBF6EC;
+      --ss-serif: "Fraunces", Georgia, serif;
+      --ss-hand: "Caveat", cursive;
+      margin: 0;
+      background: var(--ss-cream);
+      color: var(--ss-bark-deep);
+      font-family: var(--ss-serif);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: clip;
+    }
+    .ss *, .ss *::before, .ss *::after { box-sizing: border-box; }
+    .ss img { display: block; max-width: 100%; }
+    .ss-wrap { max-width: 1180px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px); }
+    .ss-center { text-align: center; }
+    .ss-max { max-width: 56ch; margin-left: auto; margin-right: auto; }
+
+    .ss-caveat {
+      font-family: var(--ss-hand); font-size: clamp(1.5rem, 3vw, 2rem);
+      color: var(--ss-terra-deep); margin: 0 0 10px; font-weight: 600;
+    }
+    .ss-h1 {
+      font-size: clamp(2.8rem, 7vw, 5.2rem); line-height: 1.02;
+      font-weight: 600; margin: 0 0 22px; letter-spacing: -0.01em;
+    }
+    .ss-h1 em, .ss-h2 em { font-style: italic; color: var(--ss-terra-deep); }
+    .ss-h2 { font-size: clamp(2.1rem, 5vw, 3.4rem); font-weight: 600; margin: 0 0 26px; line-height: 1.08; }
+    .ss-lede { font-size: 1.13rem; line-height: 1.75; color: var(--ss-bark); max-width: 44ch; margin: 0 0 30px; }
+    .ss-copy { font-size: 1.05rem; line-height: 1.75; color: var(--ss-bark); margin: 0 0 20px; max-width: 52ch; }
+
+    .ss-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--ss-terra); color: #fff; font-family: var(--ss-serif);
+      font-weight: 600; font-size: 1.02rem; padding: 15px 34px;
+      border-radius: 999px; border: 2px solid var(--ss-terra);
+      text-decoration: none; cursor: pointer;
+      transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+      box-shadow: 0 6px 18px rgba(198, 123, 92, 0.35);
+    }
+    .ss-btn:hover { background: var(--ss-terra-deep); border-color: var(--ss-terra-deep); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(198, 123, 92, 0.4); }
+    .ss-btn-line { background: transparent; color: var(--ss-bark-deep); border-color: var(--ss-bark); box-shadow: none; }
+    .ss-btn-line:hover { background: var(--ss-bark); color: var(--ss-cream); border-color: var(--ss-bark); }
+    .ss-btn-small { padding: 11px 24px; font-size: 0.95rem; }
+
+    .ss-navwrap { position: fixed; top: 0; left: 0; right: 0; z-index: 60; }
+    .ss-nav {
+      display: flex; align-items: center; gap: 22px;
+      padding: 14px clamp(20px, 4vw, 40px);
+      background: rgba(251, 246, 236, 0.9); backdrop-filter: blur(12px);
+      border-bottom: 2px solid var(--ss-sand-deep);
+    }
+    .ss-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ss-bark-deep); font-size: 1.35rem; font-weight: 700; margin-right: auto; }
+    .ss-logo em { font-style: italic; color: var(--ss-terra-deep); }
+    .ss-sun { width: 34px; height: 34px; animation: ss-spin 24s linear infinite; }
+    @keyframes ss-spin { to { transform: rotate(360deg); } }
+    .ss-nav-links { display: flex; gap: 4px; }
+    .ss-nav-links a { color: var(--ss-bark); text-decoration: none; font-weight: 600; font-size: 1rem; padding: 10px 14px; border-radius: 999px; }
+    .ss-nav-links a:hover { background: var(--ss-sand); color: var(--ss-bark-deep); }
+    .ss-burger { display: none; background: none; border: none; cursor: pointer; padding: 10px; }
+    .ss-burger span { display: block; width: 26px; height: 3px; border-radius: 3px; background: var(--ss-bark-deep); margin: 5px 0; }
+    .ss-menu { display: none; }
+
+    .ss-hero { position: relative; padding: 150px 0 0; overflow: hidden; }
+    .ss-blob { position: absolute; border-radius: 50%; filter: blur(2px); z-index: 0; }
+    .ss-blob-a { width: 420px; height: 420px; background: radial-gradient(circle, rgba(156, 175, 136, 0.4), transparent 70%); top: -80px; right: -100px; animation: ss-drift 12s ease-in-out infinite alternate; }
+    .ss-blob-b { width: 340px; height: 340px; background: radial-gradient(circle, rgba(198, 123, 92, 0.35), transparent 70%); bottom: 120px; left: -120px; animation: ss-drift 14s ease-in-out infinite alternate-reverse; }
+    @keyframes ss-drift { to { transform: translate(30px, 40px) scale(1.08); } }
+    .ss-hero-in {
+      position: relative; z-index: 1; max-width: 1180px; margin: 0 auto;
+      padding: 0 clamp(20px, 4vw, 40px);
+      display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(30px, 5vw, 70px); align-items: center;
+    }
+    .ss-hero-copy { padding-bottom: 40px; }
+    .ss-hero-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 28px; }
+    .ss-hero-badges { display: flex; align-items: center; gap: 14px; font-size: 0.95rem; font-weight: 600; color: var(--ss-bark); }
+    .ss-moon { width: 26px; height: 26px; border-radius: 50%; background: var(--ss-sage); box-shadow: 8px 4px 0 0 var(--ss-cream) inset; }
+    .ss-hero-arch { position: relative; }
+    .ss-arch {
+      border-radius: 999px 999px 24px 24px; overflow: hidden;
+      border: 6px solid var(--ss-sand-deep);
+      box-shadow: 0 24px 60px rgba(107, 74, 53, 0.25);
+      aspect-ratio: 4 / 5;
+    }
+    .ss-arch img { width: 100%; height: 100%; object-fit: cover; }
+    .ss-arch-sm { aspect-ratio: 4 / 5; }
+    .ss-macrame { position: absolute; left: 50%; transform: translateX(-50%); bottom: -34px; width: min(240px, 60%); }
+    .ss-strip {
+      margin-top: 70px; background: var(--ss-bark-deep); color: var(--ss-sand);
+      display: flex; gap: 44px; overflow: hidden; padding: 16px 0; width: max-content;
+      font-family: var(--ss-hand); font-size: 1.6rem; animation: ss-strip 22s linear infinite;
+    }
+    .ss-strip span { white-space: nowrap; }
+    @keyframes ss-strip { to { transform: translateX(-50%); } }
+
+    .ss-section { padding: clamp(70px, 9vw, 120px) 0; }
+
+    .ss-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; margin-top: 40px; }
+    .ss-card {
+      background: #fff; border-radius: 28px; overflow: hidden;
+      border: 2px solid var(--ss-sand-deep);
+      box-shadow: 0 14px 34px rgba(107, 74, 53, 0.12);
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+    .ss-card:hover { transform: translateY(-8px) rotate(-0.6deg); box-shadow: 0 22px 44px rgba(107, 74, 53, 0.2); }
+    .ss-card-img { aspect-ratio: 4 / 3; overflow: hidden; }
+    .ss-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+    .ss-card:hover .ss-card-img img { transform: scale(1.05); }
+    .ss-card-body { padding: 26px 26px 30px; }
+    .ss-card-tag { font-family: var(--ss-hand); font-size: 1.35rem; color: var(--ss-terra-deep); margin: 0 0 6px; }
+    .ss-card h3 { font-size: 1.5rem; margin: 0 0 10px; font-weight: 600; }
+    .ss-card p { margin: 0 0 12px; color: var(--ss-bark); font-size: 0.98rem; line-height: 1.65; }
+    .ss-price { font-size: 1.35rem; font-weight: 700; color: var(--ss-bark-deep); }
+    .ss-price span { font-size: 0.9rem; font-weight: 500; color: var(--ss-bark); }
+
+    .ss-artisans {
+      background:
+        repeating-linear-gradient(45deg, rgba(156, 175, 136, 0.12) 0 14px, transparent 14px 28px),
+        var(--ss-sand);
+      padding: clamp(70px, 9vw, 120px) 0;
+      border-block: 2px solid var(--ss-sand-deep);
+    }
+    .ss-art-in { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: clamp(30px, 5vw, 70px); align-items: center; }
+    .ss-stats { display: flex; gap: clamp(20px, 4vw, 50px); margin-top: 26px; flex-wrap: wrap; }
+    .ss-stats div { display: grid; gap: 4px; }
+    .ss-stats strong { font-size: 2.4rem; color: var(--ss-terra-deep); font-weight: 700; }
+    .ss-stats span { font-size: 0.92rem; color: var(--ss-bark); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+
+    .ss-look { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 40px; }
+    .ss-look figure { margin: 0; }
+    .ss-look img {
+      width: 100%; aspect-ratio: 3 / 4; object-fit: cover;
+      border-radius: 200px 200px 20px 20px;
+      border: 4px solid var(--ss-sage);
+      box-shadow: 0 16px 36px rgba(107, 74, 53, 0.16);
+    }
+    .ss-look figure:nth-child(2) img { border-color: var(--ss-terra); border-radius: 20px; transform: rotate(1.2deg); }
+    .ss-look figure:nth-child(3) img { border-radius: 50%; aspect-ratio: 1 / 1; border-color: var(--ss-sand-deep); }
+    .ss-look figcaption { font-family: var(--ss-hand); font-size: 1.4rem; color: var(--ss-bark); text-align: center; margin-top: 12px; }
+
+    .ss-boxes { background: var(--ss-bark-deep); color: var(--ss-cream); padding: clamp(70px, 9vw, 120px) 0; }
+    .ss-boxes .ss-h2 { color: var(--ss-cream); }
+    .ss-boxes .ss-h2 em { color: var(--ss-sand); }
+    .ss-boxes .ss-copy { color: var(--ss-sand); }
+    .ss-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 44px; }
+    .ss-tier {
+      background: var(--ss-cream); color: var(--ss-bark-deep);
+      border-radius: 28px; padding: 34px 30px; display: grid; gap: 14px; align-content: start;
+      border: 2px solid var(--ss-sand-deep);
+      transition: transform 0.22s ease;
+    }
+    .ss-tier:hover { transform: translateY(-6px); }
+    .ss-tier-hot { background: var(--ss-terra); color: #fff; border-color: var(--ss-terra-deep); transform: scale(1.03); }
+    .ss-tier-hot:hover { transform: scale(1.03) translateY(-6px); }
+    .ss-tier-hot .ss-caveat { color: #fff; margin: 0; }
+    .ss-tier h3 { font-size: 1.6rem; margin: 0; font-weight: 600; }
+    .ss-tier-price { font-size: 2.6rem; font-weight: 700; margin: 0; }
+    .ss-tier ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-size: 0.98rem; line-height: 1.5; }
+    .ss-tier ul li::before { content: "✿ "; color: var(--ss-sage-deep); }
+    .ss-tier-hot ul li::before { color: #fff; }
+
+    .ss-contact-in { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(30px, 5vw, 70px); align-items: start; }
+    .ss-addr { font-style: normal; font-size: 1.05rem; line-height: 1.9; color: var(--ss-bark); margin-top: 18px; }
+    .ss-addr a { color: var(--ss-terra-deep); font-weight: 600; }
+    .ss-form {
+      background: #fff; border: 2px solid var(--ss-sand-deep); border-radius: 28px;
+      padding: clamp(28px, 4vw, 42px); display: grid; gap: 16px;
+      box-shadow: 0 18px 44px rgba(107, 74, 53, 0.14);
+    }
+    .ss-form h3 { font-size: 1.7rem; margin: 0; font-weight: 600; }
+    .ss-form label { display: grid; gap: 8px; font-weight: 600; font-size: 0.95rem; color: var(--ss-bark); }
+    .ss-form input, .ss-form select, .ss-form textarea {
+      font-family: var(--ss-serif); font-size: 1rem;
+      background: var(--ss-cream); border: 2px solid var(--ss-sand-deep); border-radius: 16px;
+      padding: 13px 16px; width: 100%; color: var(--ss-bark-deep);
+    }
+    .ss-form input:focus, .ss-form select:focus, .ss-form textarea:focus { outline: 3px solid var(--ss-sage); outline-offset: 1px; }
+    .ss-form-note { margin: 0; font-family: var(--ss-hand); font-size: 1.5rem; color: var(--ss-sage-deep); }
+    .ss-form-note:empty { display: none; }
+
+    .ss-footer { background: var(--ss-sand); border-top: 2px solid var(--ss-sand-deep); padding: 60px 0 80px; text-align: center; }
+    .ss-footer-mark { font-family: var(--ss-hand); font-size: 3.4rem; color: var(--ss-terra-deep); margin: 0 0 18px; }
+    .ss-footer-in { display: grid; gap: 8px; color: var(--ss-bark); font-size: 0.95rem; }
+    .ss-footer-in p { margin: 0; }
+    .ss-footer-in a { color: var(--ss-terra-deep); }
+
+    @media (max-width: 900px) {
+      .ss-nav-links, .ss-nav > .ss-btn { display: none; }
+      .ss-burger { display: block; }
+      .ss-menu {
+        display: grid; gap: 4px; background: var(--ss-cream);
+        border-bottom: 2px solid var(--ss-sand-deep); padding: 14px clamp(20px, 4vw, 40px) 22px;
+      }
+      .ss-menu[hidden] { display: none; }
+      .ss-menu a:not(.ss-btn) { padding: 12px 6px; color: var(--ss-bark-deep); text-decoration: none; font-weight: 600; font-size: 1.1rem; border-bottom: 1px solid var(--ss-sand-deep); }
+      .ss-menu .ss-btn { margin-top: 12px; }
+      .ss-hero-in { grid-template-columns: 1fr; }
+      .ss-hero-arch { max-width: 440px; margin: 0 auto; width: 100%; }
+      .ss-grid, .ss-tiers, .ss-look { grid-template-columns: 1fr; max-width: 480px; margin-left: auto; margin-right: auto; }
+      .ss-art-in, .ss-contact-in { grid-template-columns: 1fr; }
+      .ss-art-in .ss-arch { max-width: 440px; margin: 0 auto; width: 100%; }
+      .ss-strip { font-size: 1.3rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ss-sun, .ss-strip, .ss-blob-a, .ss-blob-b { animation: none; }
+      .ss-btn, .ss-card, .ss-tier, .ss-card-img img { transition: none; }
+    }
+  </style>
+</body>
+</html>
