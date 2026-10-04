@@ -5,10 +5,10 @@ import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
 // Direction artistique autonome : claymorphism. Pastel, gonflé, moelleux. Non liée au système de thème WEBAO.
 const IMG = {
   hero: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1600&auto=format&fit=crop",
-  boba: "https://images.unsplash.com/photo-1620121692029-d088224ddc74?q=80&w=800&auto=format&fit=crop",
-  pup: "https://images.unsplash.com/photo-1614850715649-1d0106293bd1?q=80&w=800&auto=format&fit=crop",
-  bot: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?q=80&w=800&auto=format&fit=crop",
-  cat: "https://images.unsplash.com/photo-1587654780291-39c9404d746b?q=80&w=800&auto=format&fit=crop",
+  boba: "/demos/pouf/01.jpg",
+  pup: "/demos/pouf/02.jpg",
+  bot: "/demos/pouf/03.jpg",
+  cat: "/demos/pouf/04.jpg",
   lab: "https://images.unsplash.com/photo-1558060370-d644479cb6f7?q=80&w=800&auto=format&fit=crop",
   extra: "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?q=80&w=800&auto=format&fit=crop",
 };
@@ -426,6 +426,7 @@ const IMG = {
     .pf-hero-frame {
       border: 8px solid #fff; border-radius: 48px; overflow: hidden; transform: rotate(2deg);
       transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 16px 22px 0 rgba(255, 157, 122, 0.28), 16px 22px 44px rgba(90, 59, 46, 0.22);
     }
     .pf-hero-frame:hover { transform: rotate(0deg) scale(1.02); }
     .pf-hero-frame img { width: 100%; height: 480px; object-fit: cover; }
