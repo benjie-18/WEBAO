@@ -90,7 +90,7 @@ const paths = localizedPaths[locale];
     <div class="timeline-grid" data-reveal>
       <div>
         <div class="eyebrow" style="color: rgba(248,245,239,.5);">{t.pricing.timeline.eyebrow}</div>
-        <h2 class="display" style="font-size: clamp(1.9rem, 4vw, 3.2rem); margin-top:10px; line-height:.92; color: var(--paper);" set:html={t.pricing.timeline.title}></h2>
+        <h2 class="display" style="font-size: clamp(1.9rem, 4vw, 3.2rem); margin-top:10px; line-height:.92; color: var(--section-dark-text);" set:html={t.pricing.timeline.title}></h2>
         <p style="margin-top:14px; color: rgba(248,245,239,.64); font-size:14px; line-height:1.6; max-width: 42ch;">{t.pricing.timeline.desc}</p>
       </div>
       <div>
@@ -114,7 +114,7 @@ const paths = localizedPaths[locale];
           <div class="mono" style="font-size:10px; opacity:.5;">{t.pricing.quote.invoiceTitle}</div>
           <div style="margin-top:10px; display:flex; justify-content:space-between; align-items:baseline;">
             <span style="font-weight:750; letter-spacing:-0.02em;">{t.pricing.quote.plan}</span>
-            <span class="mono" style="font-size:11px; background: var(--ink); color:white; padding:4px 8px; border-radius:99px;">{t.pricing.quote.allIn}</span>
+            <span class="mono" style="font-size:11px; background: var(--ink); color: var(--paper); padding:4px 8px; border-radius:99px;">{t.pricing.quote.allIn}</span>
           </div>
           <div style="margin-top:12px; height:1px; background: var(--line);"></div>
           <div style="margin-top:12px; display:grid; gap:8px; font-size:13px;">
@@ -158,11 +158,11 @@ const paths = localizedPaths[locale];
   <div class="shell" style="display:flex; flex-wrap:wrap; gap:16px; align-items:center; justify-content:space-between;">
     <div>
       <div class="mono" style="color: rgba(248,245,239,.5); font-size:11px;">{t.pricing.ctaBand.eyebrow}</div>
-      <h2 class="display" style="font-size: clamp(1.8rem, 4vw, 2.8rem); margin-top:6px; color: var(--paper);" set:html={t.pricing.ctaBand.title}></h2>
+      <h2 class="display" style="font-size: clamp(1.8rem, 4vw, 2.8rem); margin-top:6px; color: var(--section-dark-text);" set:html={t.pricing.ctaBand.title}></h2>
     </div>
     <div class="cluster">
-      <a href={paths.contact} class="btn btn--primary" style="background: var(--paper); color: var(--ink);">{t.pricing.ctaBand.primary}</a>
-      <a href={paths.demos} class="btn" style="color: var(--paper); border-color: rgba(248,245,239,.18);">{t.pricing.ctaBand.secondary}</a>
+      <a href={paths.contact} class="btn btn--on-dark">{t.pricing.ctaBand.primary}</a>
+      <a href={paths.demos} class="btn btn--ghost-on-dark">{t.pricing.ctaBand.secondary}</a>
     </div>
   </div>
 </section>
@@ -170,36 +170,36 @@ const paths = localizedPaths[locale];
 <style>
   .pricing-hero { padding-block: clamp(32px, 6vw, 72px); background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%); border-bottom: 1px solid var(--line); }
   .pricing-hero-grid { display:grid; grid-template-columns: 1.15fr .85fr; gap: clamp(24px, 4vw, 40px); align-items: start; }
-  .pricing-hero-card { background: white; border:1px solid var(--line); border-radius:20px; padding:20px; box-shadow: var(--shadow-md); position: sticky; top: calc(var(--header-h) + 16px); }
+  .pricing-hero-card { background: var(--card-bg); border:1px solid var(--line); border-radius:20px; padding:20px; box-shadow: var(--shadow-md); position: sticky; top: calc(var(--header-h) + 16px); }
   .trust-row { margin-top:16px; display:flex; gap:8px; flex-wrap:wrap; font-family: var(--font-mono); font-size:10px; letter-spacing:.06em; color: var(--muted); }
   .trust-row span { background: var(--paper-2); border:1px solid var(--line); padding:6px 8px; border-radius:99px; }
   .compare { display:grid; gap:18px; }
   .compare-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); letter-spacing:-0.02em; font-weight:750; line-height:1.1; }
   .compare-head p { margin-top:6px; font-size:12px; color: var(--muted); }
   .compare-grid { display:grid; grid-template-columns: 1.15fr .85fr; gap:16px; align-items:start; }
-  .compare-card { background:white; border:1px solid var(--line); border-radius:18px; padding:18px; box-shadow: var(--shadow-sm); }
+  .compare-card { background: var(--card-bg); border:1px solid var(--line); border-radius:18px; padding:18px; box-shadow: var(--shadow-sm); }
   .compare-card--muted { background: var(--paper-2); }
   .compare-label { font-size:10px; color: var(--muted); margin-bottom:10px; }
   .compare-card ul { list-style:none; padding:0; display:grid; gap:14px; }
   .compare-card li { display:grid; grid-template-columns: 28px 1fr; gap:10px; align-items:start; }
-  .ic { width:26px; height:26px; border-radius:99px; background: var(--ink); color:white; display:grid; place-items:center; font-size:12px; font-weight:700; flex:none; }
+  .ic { width:26px; height:26px; border-radius:99px; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-size:12px; font-weight:700; flex:none; }
   .ic--dash { background: var(--paper-2); color: var(--ink); border:1px solid var(--line); }
   .compare-card li strong { display:block; font-size:14px; letter-spacing:-0.02em; line-height:1.25; }
   .compare-card li span { display:block; font-size:13px; line-height:1.55; color: var(--muted); margin-top:2px; }
-  .callout { margin-top:18px; background:white; border:1px solid var(--line); border-radius:14px; padding:14px; }
-  .compare-foot { display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; padding:12px 14px; background: var(--ink); color: rgba(248,245,239,.7); border-radius:12px; font-size:11px; }
+  .callout { margin-top:18px; background: var(--card-bg); border:1px solid var(--line); border-radius:14px; padding:14px; }
+  .compare-foot { display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; padding:12px 14px; background: var(--section-dark-bg); color: rgba(248,245,239,.7); border-radius:12px; font-size:11px; }
   .timeline-grid { display:grid; grid-template-columns: .9fr 1.1fr; gap: 24px; align-items:start; }
   .timeline { list-style:none; padding:0; display:grid; gap:10px; }
   .timeline li { display:grid; grid-template-columns: 44px 1fr; gap:14px; align-items:start; background: rgba(248,245,239,.06); border:1px solid var(--line-on-dark); border-radius:14px; padding:14px; }
-  .t-n { width:36px; height:36px; border-radius:10px; background: var(--paper); color: var(--ink); display:grid; place-items:center; font-weight:750; font-size:13px; }
-  .timeline li strong { display:block; color: var(--paper); font-size:14px; letter-spacing:-0.01em; }
+  .t-n { width:36px; height:36px; border-radius:10px; background: var(--paper-3); color: var(--ink); display:grid; place-items:center; font-weight:750; font-size:13px; }
+  .timeline li strong { display:block; color: var(--section-dark-text); font-size:14px; letter-spacing:-0.01em; }
   .timeline li span { display:block; color: rgba(248,245,239,.6); font-size:13px; line-height:1.5; margin-top:2px; }
-  .quote-card { display:grid; grid-template-columns: .9fr 1.1fr; gap:24px; align-items:center; background:white; border:1px solid var(--line); border-radius:18px; padding:18px; box-shadow: var(--shadow-sm); }
+  .quote-card { display:grid; grid-template-columns: .9fr 1.1fr; gap:24px; align-items:center; background: var(--card-bg); border:1px solid var(--line); border-radius:18px; padding:18px; box-shadow: var(--shadow-sm); }
   .invoice { background: var(--paper-3); border:1px solid var(--line); border-radius:14px; padding:16px; }
   .check-list { list-style:none; padding:0; margin-top:12px; display:grid; gap:6px; font-size:13px; color: var(--muted); }
   .faq-compact { background: var(--paper-2); border:1px solid var(--line); border-radius:16px; padding:18px; }
   .faq-mini-grid { margin-top:14px; display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
-  .faq-mini-grid details { background:white; border:1px solid var(--line); border-radius:12px; overflow:clip; }
+  .faq-mini-grid details { background: var(--card-bg); border:1px solid var(--line); border-radius:12px; overflow:clip; }
   .faq-mini-grid summary { padding:14px; font-weight:650; font-size:13.5px; cursor:pointer; list-style:none; }
   .faq-mini-grid summary::-webkit-details-marker{ display:none; }
   .faq-mini-grid details div { padding:0 14px 14px; font-size:13px; line-height:1.6; color: var(--muted); border-top:1px solid var(--line); margin-top:6px; padding-top:10px; }
