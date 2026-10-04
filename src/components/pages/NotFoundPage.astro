@@ -1,0 +1,24 @@
+---
+import { useTranslations, localizedPaths, type Locale } from "../../lib/i18n";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props as Props;
+const t = useTranslations(locale);
+const paths = localizedPaths[locale];
+---
+
+<section class="section grain" style="min-height: 60vh; display:grid; place-items:center; text-align:center;">
+  <div class="shell" style="max-width: 560px;">
+    <div class="eyebrow">{t.notfound.eyebrow}</div>
+    <h1 class="display" style="font-size: clamp(2.4rem, 5vw, 3.6rem); margin-top:12px; line-height:.9;" set:html={t.notfound.title}></h1>
+    <p class="prose" style="margin-top:16px; margin-inline:auto;">{t.notfound.desc}</p>
+    <div class="cluster" style="justify-content:center; margin-top: 20px;">
+      <a href={paths.home} class="btn btn--primary">{t.notfound.home}</a>
+      <a href={paths.demos} class="btn btn--ghost">{t.notfound.demos}</a>
+      <a href={paths.contact} class="btn btn--ghost">{t.notfound.contact}</a>
+    </div>
+    <div class="mono" style="margin-top:18px; font-size:11px; color: var(--muted);">{t.notfound.mistake} <a href="mailto:hello@webao.ca" style="color: var(--accent); font-weight:600; text-decoration: underline; text-underline-offset:3px;">hello@webao.ca</a></div>
+  </div>
+</section>

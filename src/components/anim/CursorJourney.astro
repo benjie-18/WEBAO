@@ -1,10 +1,15 @@
 ---
-// CursorJourney: guided animated cursor through agency cards
-// Respects prefers-reduced-motion, hover capability, and pointer type.
-// Performance: transform3d + will-change, rAF, no layout thrash.
+import { useTranslations, type Locale } from "../../lib/i18n";
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = "en" } = Astro.props as Props;
+const t = useTranslations(locale);
 ---
 
-<div class="cursor-journey" data-journey aria-hidden="true">
+<div class="cursor-journey" data-journey aria-hidden="true" data-labels={JSON.stringify(t.journey.labels)} data-hint={t.journey.hint} data-explore={t.journey.explore} data-hover={t.journey.hoverPeek}>
   <svg class="journey-trail" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <path class="journey-path" d="" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="6 8" opacity="0" />
     <path class="journey-path-progress" d="" fill="none" stroke="var(--paper)" stroke-width="1.5" stroke-linecap="round" opacity="0" />
@@ -12,10 +17,10 @@
   <div class="journey-cursor" data-cursor>
     <span class="journey-cursor-ring" aria-hidden="true"></span>
     <span class="journey-cursor-dot" aria-hidden="true"></span>
-    <span class="journey-cursor-label mono" data-cursor-label>Explore</span>
-    <span class="journey-cursor-sub mono" data-cursor-sub>→ hover to peek</span>
+    <span class="journey-cursor-label mono" data-cursor-label>{t.journey.explore}</span>
+    <span class="journey-cursor-sub mono" data-cursor-sub>{t.journey.hoverPeek}</span>
   </div>
-  <div class="journey-hint mono" data-journey-hint>✦ Guided tour: watch the cursor explore the studio doors</div>
+  <div class="journey-hint mono" data-journey-hint>{t.journey.hint}</div>
 </div>
 
 <style>
@@ -143,7 +148,6 @@
   }
   .cursor-journey.is-active .journey-hint { opacity: 1; }
 
-  /* Card hover state when cursor is over it */
   :global(.agency-card.is-cursor-active) {
     transform: translateY(-8px) rotate(.35deg) scale(1.012) !important;
     box-shadow: 0 24px 60px rgba(10,15,28,.22), 0 8px 24px rgba(10,15,28,.14) !important;
@@ -157,7 +161,6 @@
   :global(.agency-card--contact.is-cursor-active) { outline: 2px solid var(--ink); outline-offset: 2px; }
   :global(.agency-card--demos.is-cursor-active)  { outline: 2px solid rgba(248,245,239,.9); outline-offset: 2px; }
 
-  /* Hide on touch / coarse pointer / reduced motion / small */
   @media (hover: none), (pointer: coarse), (max-width: 960px) {
     .cursor-journey { display: none !important; }
   }
@@ -172,7 +175,6 @@
   const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
   const isSmall = window.innerWidth <= 960;
   if (prefersReduced || isTouch || isSmall) {
-    // do nothing, journey disabled
   } else {
     const journey = document.querySelector('[data-journey]') as HTMLElement | null;
     const cursor = document.querySelector('[data-cursor]') as HTMLElement | null;
@@ -190,16 +192,29 @@
       let rafId = 0;
       let mx = 0, my = 0, cx = 0, cy = 0;
 
-      const labels = [
+      let labels = [
         { t: 'Pricing', s: '→ $149/mo · all-in', bg: '#F8F5EF', color: '#0A0F1C' },
         { t: 'Contact', s: '→ hello@webao.ca', bg: '#0A0F1C', color: '#F8F5EF' },
         { t: 'Demos',   s: '→ 12 art directions', bg: '#F8F5EF', color: '#0A0F1C' },
       ];
+      try {
+        const raw = journey.getAttribute('data-labels');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed) && parsed.length >= 3) {
+            labels = parsed.map((l, i) => ({
+              t: l.t,
+              s: l.s,
+              bg: i === 1 ? '#0A0F1C' : '#F8F5EF',
+              color: i === 1 ? '#F8F5EF' : '#0A0F1C',
+            }));
+          }
+        }
+      } catch {}
 
       function getPos(el: HTMLElement) {
         const gr = grid!.getBoundingClientRect();
         const r = el.getBoundingClientRect();
-        // center of card relative to grid
         return {
           x: r.left - gr.left + r.width / 2,
           y: r.top - gr.top + r.height / 2,
@@ -209,14 +224,12 @@
       function updatePath() {
         if (cards.length < 3) return;
         const pts = cards.slice(0,3).map(getPos);
-        // Build smooth cubic path through points: M x0 y0 C ... -> use quadratic for simplicity
         const d = `M ${pts[0].x} ${pts[0].y} C ${pts[0].x + 80} ${pts[0].y - 20}, ${pts[1].x - 80} ${pts[1].y - 20}, ${pts[1].x} ${pts[1].y} C ${pts[1].x + 80} ${pts[1].y + 12}, ${pts[2].x - 80} ${pts[2].y + 12}, ${pts[2].x} ${pts[2].y}`;
         path.setAttribute('d', d);
         pathProgress.setAttribute('d', d);
         const len = (path as any).getTotalLength ? (path as any).getTotalLength() : 800;
         pathProgress.style.strokeDasharray = String(len);
         pathProgress.style.strokeDashoffset = String(len);
-        // trigger layout
         void path.getBoundingClientRect();
         path.style.opacity = '1';
         pathProgress.style.opacity = '1';
@@ -241,7 +254,6 @@
         journey!.classList.add('is-active');
         cursor!.classList.add('is-visible');
         updatePath();
-        // initial hide dash
         requestAnimationFrame(() => {
           pathProgress!.style.strokeDashoffset = '0';
         });
@@ -249,16 +261,13 @@
         for (let i = 0; i < 3; i++) {
           if (isManual) break;
           const p = getPos(cards[i]);
-          // update label
           label!.textContent = labels[i].t;
           sub!.textContent = labels[i].s;
           label!.style.background = labels[i].bg;
           label!.style.color = labels[i].color;
           cursor!.classList.add('is-label-active');
-          // move
           setCursor(p.x, p.y);
           setActiveCard(i);
-          // click pulse at middle of dwell
           await new Promise(r => setTimeout(r, 420));
           cursor!.classList.add('is-clicking');
           await new Promise(r => setTimeout(r, 180));
@@ -268,18 +277,15 @@
         if (!isManual) {
           cursor!.classList.remove('is-label-active');
           setActiveCard(null);
-          // fade trail then cursor
           pathProgress!.style.opacity = '0';
           path!.style.opacity = '0';
           await new Promise(r => setTimeout(r, 700));
           journey!.classList.remove('is-active');
           cursor!.classList.remove('is-visible');
-          // allow re-trigger after scroll away and back
           setTimeout(() => { hasRun = false; }, 8000);
         }
       }
 
-      // Manual mouse follow with lerp (magnetic), pauses autoplay
       let manualTimer: number | null = null;
       function lerp(a: number, b: number, t: number) { return a + (b - a) * t; }
       function loop() {
@@ -287,7 +293,6 @@
         cy = lerp(cy, my, 0.14);
         if (isManual && journey!.classList.contains('is-active')) {
           cursor!.style.transform = `translate3d(${cx}px, ${cy}px, 0) translate3d(-50%, -50%, 0)`;
-          // highlight nearest card
           let best = -1, bestDist = Infinity;
           cards.forEach((c,i) => {
             const p = getPos(c);
@@ -317,13 +322,10 @@
           if (hint) hint.style.opacity = '0';
         }
         if (manualTimer) clearTimeout(manualTimer);
-        manualTimer = window.setTimeout(() => {
-          // if mouse leaves, resume? keep manual until scroll
-        }, 2000);
+        manualTimer = window.setTimeout(() => {}, 2000);
       });
       grid.addEventListener('mouseleave', () => {
         if (isManual) {
-          // fade manual, allow autoplay later
           setTimeout(() => {
             isManual = false;
             cursor!.classList.remove('is-visible', 'is-label-active');
@@ -333,23 +335,19 @@
         }
       });
       grid.addEventListener('click', () => {
-        // click ripple
         cursor!.classList.add('is-clicking');
         setTimeout(() => cursor!.classList.remove('is-clicking'), 280);
       });
 
-      // IntersectionObserver to trigger autoplay once
       const io = new IntersectionObserver((entries) => {
         for (const en of entries) {
           if (en.isIntersecting && !hasRun && !isManual) {
-            // small delay so user sees page settle
             setTimeout(runJourney, 420);
           }
         }
       }, { threshold: 0.28, rootMargin: '0px 0px -10% 0px' });
       io.observe(grid);
 
-      // recompute path on resize
       let resizeT: number | null = null;
       window.addEventListener('resize', () => {
         if (resizeT) clearTimeout(resizeT);
@@ -358,7 +356,6 @@
         }, 120);
       }, { passive: true });
 
-      // initial position at first card (hidden)
       const first = getPos(cards[0]);
       setCursor(first.x, first.y, true);
       cx = first.x; cy = first.y; mx = first.x; my = first.y;

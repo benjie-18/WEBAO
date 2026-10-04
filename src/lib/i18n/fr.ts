@@ -1,0 +1,656 @@
+import type { Translation } from "./en";
+
+const fr = {
+
+  meta: {
+    home: {
+      title: "WEBAO · Sites web sur mesure pour PME · webao.ca",
+      description:
+        "Des sites web sur mesure pour les petites entreprises partout au Canada, à 149 $ CAD par mois. Design, domaine, hébergement, mises à jour et soutien inclus. Parcourez le catalogue de démos.",
+    },
+    pricing: {
+      title: "Tarifs · WEBAO · Un seul forfait simple à 149 $ CAD/mois",
+      description:
+        "Un forfait qui inclut tout : un site sur mesure de 3 à 5 pages, domaine, hébergement, bases SEO, analytique, mises à jour et soutien. Sans frais d’installation, sans contrat à long terme.",
+    },
+    contact: {
+      title: "Contact · WEBAO · Démarrez votre site web",
+      description:
+        "Parlez-nous de votre entreprise et on vous répond avec deux directions de démo et un échéancier honnête. Écrivez à hello@webao.ca ou utilisez le formulaire.",
+    },
+    demos: {
+      title: "Catalogue de démos · WEBAO · 12 directions artistiques",
+      description:
+        "Parcourez 12 directions de design pour des entreprises locales fictives. Filtrez par métier, ton ou ville. Chaque démo est un design différent, pas le même modèle en 12 couleurs.",
+    },
+    notfound: {
+      title: "Page introuvable · WEBAO",
+      description: "La page que vous cherchez n’existe pas. Parcourez nos démos ou nos tarifs.",
+    },
+  },
+
+  nav: {
+    demos: "Démos",
+    pricing: "Tarifs",
+    contact: "Contact",
+    startSite: "Démarrer mon site →",
+    openMenu: "Ouvrir le menu",
+    homeAria: "Accueil WEBAO",
+    skip: "Aller au contenu",
+  },
+
+  footer: {
+    tagline:
+      "Des sites web sur mesure pour les petites entreprises partout au Canada. Un seul frais mensuel. On s’occupe du domaine, de l’hébergement, de la maintenance et du soutien pour que vous puissiez vous concentrer sur votre entreprise.",
+    location: "BASÉ À MONTRÉAL · AU SERVICE DES ENTREPRISES PARTOUT AU CANADA",
+    studio: "Studio",
+    demoCatalog: "Catalogue de démos",
+    pricing: "Tarifs",
+    contact: "Contact",
+    howItWorks: "Fonctionnement",
+    services: "Services",
+    customSites: "Sites sur mesure 3 à 5 pages",
+    hostingSsl: "Hébergement et SSL",
+    seoAnalytics: "Bases SEO et analytique",
+    ongoingSupport: "Soutien continu",
+    contactTitle: "Contact",
+    replyTime: "On répond habituellement en un jour ouvrable.<br />Du lundi au vendredi, de 9 h à 17 h, heure de l’Est.",
+    copyright: "© {year} WEBAO · Fait à Montréal.",
+    fictionalNote: "Toutes les entreprises présentées en démo sur ce site sont fictives.",
+  },
+
+  intro: {
+    captionBrand: "WEBAO",
+    captionLeft: "WEBAO · WEBAO.CA",
+    captionRight: "STUDIO — MONTRÉAL",
+    prompt: {
+      pointer: "Cliquez pour entrer",
+      touch: "Touchez pour entrer",
+      key: "Entrée",
+    },
+    surface: "◇ SURFACE 01",
+    enter: "◆ ENTRER",
+    tap: "◆ TOUCHER",
+    static: {
+      sub: "Sites web sur mesure pour PME · 149 $ CAD / mois",
+      button: "Entrer sur le site",
+      live: "Intro (mouvement réduit). Appuyez sur Entrée pour ouvrir le site.",
+      liveTouch: "Intro : {action} pour entrer.",
+    },
+  },
+
+  home: {
+    hero: {
+      kicker: "UN PETIT STUDIO WEB À MONTRÉAL",
+      badge: "Nouveaux projets acceptés",
+      title1: "Des sites qui",
+      titleWork: "fonctionnent",
+      title2: "pour les",
+      title3: "petites entreprises.",
+      lead: "Un site pro, sur mesure, sans vous casser la tête avec les domaines, l’hébergement et les « peux-tu arranger ça ? ».",
+      leadStrong: "Un seul frais mensuel simple.",
+      leadRest: "On conçoit, on lance, on héberge et on entretient pendant que vous gérez votre entreprise.",
+      ctaPrimary: "Démarrer mon site",
+      ctaSecondary: "Voir les démos",
+      priceNote: "149 $ <span>CAD/mois</span> · Tout inclus",
+      visual: {
+        url: "nora-electrique (démo)",
+        live: "Exemple de site fictif",
+        demoLabel: "DÉMO 01 · NORA ÉLECTRIQUE (FICTIF)",
+        demoTone: "Contemporain épuré · Conçu pour générer des appels",
+        mobileReady: "Prêt mobile",
+        domainIncluded: "Domaine + hébergement inclus",
+        domainDesc: "Votre domaine · SSL · mises à jour continues",
+        smallUpdates: "PETITES MISES À JOUR",
+        hours: "Heures, photos,<br />tarifs.",
+        included: "Inclus chaque mois",
+        sendEmail: "Il suffit d’envoyer un courriel",
+        captionLeft: "DÉMO 01 · ÉLECTRICIEN",
+        captionRight: "Une de 12 directions de design →",
+      },
+    },
+    marquee: "Électriciens <i></i> Plombiers <i></i> Couvreurs <i></i> Paysagistes <i></i> Restaurants <i></i> Cliniques",
+    why: {
+      eyebrow: "Pourquoi WEBAO existe",
+      title1: "Vous ne devriez",
+      title2: "pas avoir à devenir",
+      title3: "une personne web.",
+      p1: "La plupart des petites entreprises n’ont pas besoin d’une appli complexe. Elles ont besoin d’un site <strong>rapide, crédible et trouvable</strong> qui répond au téléphone, même quand vous êtes sur un chantier.",
+      p2: "WEBAO est un petit studio qui s’occupe de tout pour un frais mensuel unique : le domaine, l’hébergement, les mises à jour, les décisions techniques. Vous parlez à une vraie personne, pas à une file d’attente de billets.",
+      cta: "Voir ce qui est inclus →",
+      note: "Mensuel · Sans contrat à long terme",
+      features: [
+        {
+          icon: "◆",
+          title: "Ça a l’air sur mesure. Parce que ça l’est.",
+          desc: "Chaque site est conçu autour de votre métier, pas un modèle générique avec votre logo collé dessus. Typo, mise en page et imagerie choisies pour votre entreprise.",
+        },
+        {
+          icon: "◒",
+          title: "Conçu pour être trouvé.",
+          desc: "Pages rapides, accessibles, mobile d’abord, avec un balisage propre, un plan de site et les bases SEO. On peut aussi vous aider à configurer votre fiche d’entreprise Google. Des bases solides, pas de promesses de positionnement.",
+        },
+        {
+          icon: "◎",
+          title: "On le garde en vie.",
+          desc: "Hébergement, SSL, sécurité, sauvegardes et petites mises à jour comme les heures, les photos ou les changements de menu. Envoyez un courriel, on fait la modification.",
+        },
+      ],
+    },
+    process: {
+      eyebrow: "Fonctionnement · Trois étapes, sans réunions qui auraient pu être des courriels",
+      title: "De l’idée au <span>en ligne</span>, habituellement en une semaine.",
+      steps: [
+        {
+          title: "Vous envoyez l’essentiel",
+          desc: "Photos (téléphone c’est parfait), services, zone desservie et ce que vous voulez que vos clients fassent : appeler, réserver ou demander un devis. On s’occupe du reste et on pose les bonnes questions.",
+          bullets: ["→ Appel de 15 min ou formulaire", "→ On choisit 2 directions parmi nos démos"],
+          visualInbox: "BOÎTE DE RÉCEPTION · HELLO@WEBAO.CA",
+          subject: "Objet :",
+          subjectText: "Un site pour mon entreprise de CVAC",
+          tags: ["Photos.zip", "Services.txt", "Logo.svg"],
+          reply: "Reçu. Première ébauche à venir bientôt.",
+        },
+        {
+          title: "On conçoit et on construit",
+          desc: "Vous recevez un lien d’aperçu privé en quelques jours. Naviguez une vraie page d’accueil sur votre téléphone. Un tour de commentaires clairs, puis on peaufine.",
+          bullets: ["→ URL d’aperçu privé", "→ Une ronde de révisions"],
+          preview: "APERÇU · ÉBAUCHE DE VOTRE SITE",
+          approve: "Approuver →",
+          comment: "Commenter",
+        },
+        {
+          title: "On lance et on entretient",
+          desc: "Votre domaine, hébergement, SSL, analytique et sauvegardes. Le site reste rapide et à jour. Besoin d’un changement de prix ou d’une nouvelle photo ? Écrivez-nous et c’est fait.",
+          bullets: ["→ Votre domaine, enregistré au nom de votre entreprise", "→ Petites mises à jour incluses"],
+          launchDay: "VOTRESITE.CA · JOUR DU LANCEMENT",
+          live: "● En ligne",
+          ssl: "SSL",
+          sslDesc: "Renouvellement auto",
+          backups: "Sauvegardes",
+          backupsDesc: "Incluses",
+          needChange: "Besoin d’un changement ?",
+          sendMessage: "Envoyez un message →",
+        },
+      ],
+      cta: "Commencer par un appel de 15 min",
+      ctaNote: "Ou {link}, généralement répondu en un jour ouvrable",
+      sendDetails: "envoyez vos infos",
+    },
+    demosPreview: {
+      eyebrow: "Le catalogue de démos · 12 directions de design, pas 12 variations de couleur",
+      title: "À quoi pourrait ressembler <span>le vôtre</span> ?",
+      desc: "Chaque démo est une entreprise fictive avec son propre style, sa palette, sa mise en page et son ton. Trouvez la direction qui vous ressemble.",
+      browse: "Parcourir toutes les démos →",
+      cards: [
+        {
+          tag: "DÉMO 01 · MÉTIERS · FICTIF",
+          name: "NORA ÉLECTRIQUE",
+          sub: "Contemporain épuré · Interventions d’urgence",
+        },
+        {
+          tag: "DÉMO 02 · RESTAURANT · FICTIF",
+          name: "Mira Cantine",
+          sub: "Éditorial chaleureux · Menu au feu de bois",
+          reserve: "Réserver",
+          menu: "Menu",
+        },
+        {
+          tag: "DÉMO 03 · AUTOMOBILE · FICTIF",
+          name: "ATELIER NORD",
+          sub: "Automobile haut de gamme · La précision d’abord",
+        },
+      ],
+      view: "Voir dans le catalogue →",
+      also: "Aussi dans le catalogue (tout est fictif)",
+      chips: ["Plomberie Leduc", "Boisé Paysage", "Clinique Sora", "Studio Forma", "Toit & Fils", "+ 6 autres"],
+      searchFilter: "Filtrer et chercher les démos",
+    },
+    agency: {
+      title: "Et maintenant ?",
+      subtitle: "CHOISISSEZ UNE PORTE · CHAQUE COMPOSITION EST DIFFÉRENTE, MÊME STUDIO.",
+      pricing: {
+        top: "01 · TARIFS",
+        price: "149 $",
+        priceSuffix: "CAD / mois<br />tout inclus",
+        title: "Un prix.<br />Tout est inclus.",
+        desc: "Site sur mesure de 3 à 5 pages, domaine, hébergement, SSL, bases SEO, analytique et soutien. Un seul forfait qui couvre tout.",
+        cta: "Voir ce qui est inclus",
+        mini: ["3–5 pages", "·", "Hébergement", "·", "Mises à jour incluses"],
+      },
+      contact: {
+        top: "02 · CONTACT",
+        title: "Parlez-nous de<br />votre entreprise.",
+        desc: "Envoyez-nous votre métier, votre ville et quelques photos. Une vraie personne lit chaque message et répond habituellement en un jour ouvrable.",
+        pills: ["hello@webao.ca", "Montréal · Heure de l’Est"],
+        cta: "Démarrer la conversation",
+      },
+      demos: {
+        top: "03 · DÉMOS",
+        title: "12 directions de design,<br />toutes fictives.",
+        desc: "Parcourez le catalogue par métier : électricien, restaurant, clinique. Chaque démo est un concept art-dirigé pour une entreprise fictive, pour voir l’étendue avant de choisir.",
+        cta: "Parcourir le catalogue de démos",
+        mini: ["Filtrable", "·", "Cherchable", "·", "12 styles"],
+      },
+      noteLeft: "FAIT À MONTRÉAL · CONÇU POUR LES MÉTIERS, COMMERCES ET ENTREPRISES LOCALES PARTOUT AU CANADA",
+      noteRight: "→ Survolez, jetez un œil, puis choisissez votre chemin.",
+    },
+    pricingTeaser: {
+      eyebrow: "Tarifs · Un seul forfait, tout inclus",
+      price: "149 $",
+      priceSuffix: "CAD / mois",
+      desc: "Un seul frais mensuel qui couvre tout : design, domaine, hébergement, mises à jour et soutien. Rien à décoder, et sans frais d’installation.",
+      cta: "Voir tout ce qui est inclus →",
+      note: "Mensuel · Sans contrat à long terme · Votre domaine vous appartient",
+      includedTitle: "INCLUS",
+      included: [
+        "Design sur mesure 3 à 5 pages",
+        "Domaine + redirection courriel",
+        "Hébergement, SSL, sauvegardes",
+        "Mobile d’abord, bases SEO, analytique",
+        "Formulaire de contact / demande de devis",
+        "Petites mises à jour de contenu",
+      ],
+      goodTitle: "BON À SAVOIR",
+      good: [
+        "Votre domaine appartient à votre entreprise",
+        "On gère le côté technique tant que vous êtes abonné",
+        "Redirection courriel, pas boîtes complètes",
+        "Si vous partez, on aide avec la transition",
+      ],
+      needMore: "Besoin de plus ?",
+      needMoreDesc:
+        "Pages supplémentaires, réservation ou autre langue : devis clair avant de commencer quoi que ce soit.",
+    },
+    craft: {
+      float: "PERFORMANCE · SEO · ACCESSIBILITÉ",
+      float2: "→ Vérifié avant le lancement",
+      eyebrow: "Savoir-faire · Les détails sur lesquels on capote",
+      title: "Rapide, trouvable<br />et <span>entretenu.</span>",
+      desc: "Vos visiteurs jugent votre entreprise en quelques secondes, habituellement sur un téléphone. On fait compter ces secondes, puis on garde le site à jour longtemps après le lancement.",
+      items: [
+        {
+          title: "Mobile d’abord, pour vrai.",
+          desc: "Gros pouces, connexions lentes, gros soleil. La mise en page est pensée pour de vrais téléphones, pas juste rétrécie dans un navigateur.",
+        },
+        {
+          title: "Les bases SEO, bien faites.",
+          desc: "URLs propres, plan de site, pages rapides et aide pour configurer votre fiche d’entreprise Google. Personne ne peut garantir des classements, on ne fera pas semblant.",
+        },
+        {
+          title: "De l’analytique que vous comprenez.",
+          desc: "Visites, pages populaires et provenance des demandes, expliquées simplement. Pas un tableau de bord que vous n’ouvrirez jamais.",
+        },
+        {
+          title: "Des mises à jour sans la danse.",
+          desc: "Nouvelles heures, nouvelle photo de camion, promo d’hiver : envoyez un courriel et on fait le changement. Ça fait partie du forfait.",
+        },
+      ],
+      cta: "Ce qui est inclus en détail →",
+      note: "Hébergement, SSL et CDN inclus",
+      built1: "Conçu pour durer,",
+      built2: "pas juste pour lancer.",
+      builtDesc1: "Rapide par défaut. Accessible. Testé sur de vrais",
+      builtDesc2: "téléphones, pas juste sur le portable d’un designer.",
+      badges: ["Statique + rapide", "Accessible"],
+    },
+    faq: {
+      eyebrow: "Questions avant d’écrire",
+      title: "Les <span>petits caractères</span><br />sans les petits caractères.",
+      contactPrompt: "Vous ne trouvez pas votre question ? {link}. Une vraie personne lit chaque message.",
+      askDirectly: "écrivez-nous directement",
+      items: [
+        {
+          q: "Dois-je acheter un domaine ou de l’hébergement ?",
+          a: "Non, les deux sont inclus. Votre domaine est enregistré au nom de votre entreprise et vous appartient ; on s’occupe de la config, du SSL et des renouvellements tant que vous êtes abonné. Vous avez déjà un domaine ? On vous aide à le transférer.",
+        },
+        {
+          q: "Et les courriels ?",
+          a: "On configure la redirection, donc info@votredomaine.ca arrive dans la boîte que vous utilisez déjà. C’est de la redirection, pas de l’hébergement complet de boîtes : si vous voulez des boîtes avec webmail et calendriers, ça vient d’un fournisseur de courriels, et on peut vous aider à les brancher.",
+        },
+        {
+          q: "Et les mises à jour et photos ?",
+          a: "Écrivez-nous. Les petites mises à jour comme les heures, services, photos et bannières promo sont incluses dans votre frais mensuel. Pas de CMS à apprendre et pas de facturation à la pièce.",
+        },
+        {
+          q: "Est-ce que je peux partir ? Est-ce que c’est mon site ?",
+          a: "C’est un abonnement mensuel sans contrat à long terme, et votre domaine appartient à votre entreprise. Si vous décidez de partir, on aide à transférer le domaine et vos fichiers de site.",
+        },
+        {
+          q: "C’est quoi « rapide » ?",
+          a: "Assez rapide pour que personne n’attende. Les sites sont statiques (pas de CMS lourd ou de constructeur de pages), les images sont optimisées et tout est servi depuis un CDN mondial, donc les pages chargent vite même sur des téléphones plus vieux. On vérifie chaque page sur de vrais appareils avant le lancement, et on ne lance pas de chiffres de vitesse qu’on ne peut pas assumer.",
+        },
+      ],
+    },
+    finalCta: {
+      eyebrow: "PRÊT QUAND VOUS L’ÊTES",
+      title: "Prêt pour un site<br /><span>qui marche tout simplement ?</span>",
+      desc: "Envoyez votre métier, votre ville et quelques photos. On vous répond avec deux directions de démo et un échéancier honnête pour votre site.",
+      ctaPrimary: "Démarrer mon site · 149 $/mois →",
+      ctaSecondary: "Parcourir les démos d’abord",
+      contact: "hello@webao.ca · Lun–ven, 9 h à 17 h, heure de l’Est",
+      preview: "APERÇU · VOTRE SITE",
+      yourBiz: "Votre<br />Entreprise",
+      call: "Appeler",
+      quote: "Devis",
+      live: "votreentreprise.ca · <span>●</span> En ligne",
+    },
+  },
+
+  pricing: {
+    hero: {
+      eyebrow: "Tarifs · Un seul forfait, rien à décoder",
+      title: "Un seul forfait.<br /><span>Tout</span> inclus.",
+      desc: "On a voulu garder ça simple. La plupart des petites entreprises ont besoin de la même chose : un site crédible, trouvable, qui reste à jour. Un forfait couvre ça pour 149 $ par mois, sans frais d’installation.",
+      cta: "Démarrer mon site →",
+      emailNote: "Des questions d’abord ? Écrivez à hello@webao.ca",
+      card: {
+        label: "LE FORFAIT WEBAO",
+        price: "149 $",
+        suffix: "CAD / mois<br />+ taxes applicables",
+        desc: "Pour la plupart des métiers, commerces, restos et services locaux. 3 à 5 pages, design pensé autour de votre entreprise.",
+        cta: "Commencer →",
+        note: "Sans frais d’installation · Sans contrat à long terme",
+        trust: ["◐ SSL", "◑ Sauvegardes", "◎ CDN"],
+      },
+    },
+    compare: {
+      title: "Ce que vous avez, et ce à quoi vous n’avez jamais à penser",
+      subtitle: "Tout ce qu’un site d’entreprise locale a vraiment besoin. Rien que vous n’utiliserez jamais.",
+      includedLabel: "INCLUS DANS VOTRE 149 $",
+      included: [
+        {
+          title: "Design sur mesure 3 à 5 pages",
+          desc: "Accueil plus 2 à 4 pages (Services, À propos, Contact, etc.). Conçu autour de votre métier, pas un modèle générique.",
+        },
+        {
+          title: "Votre propre domaine",
+          desc: "Enregistré pour votre entreprise et à vous. On gère la configuration, le SSL et les renouvellements tant que vous êtes abonné. Redirection courriel incluse.",
+        },
+        {
+          title: "Hébergement, SSL, CDN",
+          desc: "Servi depuis un CDN mondial, donc le site charge rapidement pour vos clients partout au Canada.",
+        },
+        {
+          title: "Mobile, bases SEO, analytique",
+          desc: "Design mobile d’abord, balisage propre, plan de site et analytique. On peut aussi aider pour votre fiche d’entreprise Google. Des bases, pas de promesses de classement.",
+        },
+        {
+          title: "Formulaire de contact / demande de devis",
+          desc: "Les messages arrivent dans votre boîte avec protection anti-spam de base. Pas de widget tiers qui brise.",
+        },
+        {
+          title: "Sauvegardes et sécurité",
+          desc: "Sauvegardes, mises à jour et surveillance font partie du service. Si quelque chose brise, on le répare.",
+        },
+        {
+          title: "Petites mises à jour incluses",
+          desc: "Heures, photos, tarifs, promos : envoyez un courriel et on fait le changement. Pas de CMS à apprendre, pas de facturation à la pièce.",
+        },
+        {
+          title: "Soutien humain",
+          desc: "Vous parlez directement avec la personne qui fait le travail, par courriel, du lundi au vendredi (heure de l’Est).",
+        },
+      ],
+      notIncludedLabel: "PAS DANS LE FORFAIT · SUR DEVIS SI BESOIN",
+      notIncluded: [
+        {
+          title: "Pages ou langues supplémentaires",
+          desc: "Plus de pages ou une deuxième langue : possible, sur devis au cas par cas, avec un prix clair avant de commencer.",
+        },
+        {
+          title: "Boutique en ligne / systèmes de réservation",
+          desc: "Les boutiques et réservations complexes ne font pas partie du forfait de base. Si vous en avez besoin, on discute des options et on fait un devis séparé.",
+        },
+        {
+          title: "Identité de marque complète",
+          desc: "Un mot-symbole et une palette qui s’agencent à votre site sont inclus. Une identité complète (suite de logos, guide de marque) ne l’est pas.",
+        },
+        {
+          title: "Rédaction complète",
+          desc: "On révise et façonne les textes que vous envoyez. Rédiger tout votre contenu à partir de zéro est un service séparé, avec devis à l’avance.",
+        },
+        {
+          title: "Publicités / médias sociaux",
+          desc: "On ne gère pas de pubs. On se concentre sur les bases organiques : votre site et votre fiche d’entreprise Google.",
+        },
+      ],
+      calloutTitle: "La plupart des entreprises locales n’ont pas besoin des extras.",
+      calloutDesc:
+        "Le forfait est conçu pour électriciens, plombiers, paysagistes, restos et cliniques. Si le vôtre a besoin de plus, on va vous le dire d’entrée de jeu et vous faire un devis clair.",
+      calloutCta: "Demander un devis sur mesure →",
+      foot1: "VOTRE SITE, VOTRE DOMAINE · Si vous partez un jour, on aide avec la transition.",
+      foot2: "→ Pas de compte de constructeur à démêler, pas d’hébergement à migrer seul.",
+    },
+    timeline: {
+      eyebrow: "L’échéancier typique",
+      title: "De « on a besoin d’un site »<br /><span>à « c’est en ligne ».</span>",
+      desc: "Vous envoyez l’essentiel. On fait le travail. Une ronde de commentaires. Puis on lance et on entretient.",
+      steps: [
+        { title: "Jour 0 · Vous envoyez l’essentiel", desc: "Photos, services, zone, logo (si vous en avez un). Appel de 15 minutes ou formulaire de contact." },
+        { title: "Jour 2 · Aperçu privé", desc: "Une vraie URL sur votre téléphone. Cliquez partout. Dites-nous ce qui cloche." },
+        { title: "Jour 4 · Révisions", desc: "On peaufine la typo, les textes, les photos et les bases SEO en une ronde concentrée." },
+        { title: "Jour 5–7 · Lancement", desc: "Domaine, hébergement, SSL, analytique. On pèse sur le bouton et on vous envoie le message « c’est en ligne »." },
+      ],
+      note: "TYPIQUE, PAS GARANTI · LE COMPTE À REBOURS COMMENCE QUAND ON A VOTRE CONTENU, ET LA VITESSE DE VOS RETOURS FAIT BOUGER LA DATE.",
+    },
+    quote: {
+      invoiceTitle: "VOTRE FACTURE · CHAQUE MOIS",
+      plan: "Le forfait WEBAO",
+      allIn: "TOUT INCLUS",
+      lines: [
+        { label: "Design, domaine, hébergement, mises à jour, soutien", value: "149,00 $" },
+        { label: "Frais d’installation", value: "0,00 $" },
+        { label: "Suppléments hébergement et SSL", value: "0,00 $" },
+        { label: "Frais pour petites mises à jour", value: "0,00 $" },
+      ],
+      totalLabel: "Total",
+      totalValue: "149 $ + taxes",
+      note: "Facturé mensuellement. Tout ce qui dépasse le forfait est soumis à devis et approuvé par vous d’abord.",
+      eyebrow: "Toute la facture, chaque mois",
+      title: "Prévisible.<br />Plate (dans le bon sens).",
+      desc: "Pas de prix d’intro qui double ensuite, pas de surprises détaillées. Vous connaissez le prix avant de commencer, et il reste le même à moins que vos besoins changent et que vous approuviez un devis.",
+      checks: [
+        "→ Facturation mensuelle, sans contrat à long terme",
+        "→ Votre domaine appartient à votre entreprise",
+        "→ Si vous partez, on aide avec la transition",
+      ],
+      cta: "Commencer à 149 $/mois →",
+    },
+    faq: {
+      title: "Questions fréquentes sur les tarifs",
+      items: [
+        {
+          q: "Et si j’ai besoin d’une 6ᵉ page plus tard ?",
+          a: "Dites-nous ce dont vous avez besoin et on vous donne un prix clair avant de faire le travail. Si vous voulez qu’on l’entretienne avec le reste, on l’intègre à votre forfait.",
+        },
+        {
+          q: "Vous chargez pour les photos ou les retouches de textes ?",
+          a: "Les petites mises à jour (changer une photo, corriger vos heures, ajouter un service) sont incluses. Les plus gros projets comme une réécriture complète ou des pages flambant neuves sont sur devis à l’avance, et c’est vous qui décidez.",
+        },
+        {
+          q: "Et les courriels (info@…) ?",
+          a: "On configure la redirection, donc info@votredomaine.ca arrive dans la boîte que vous utilisez déjà. C’est différent de l’hébergement complet de boîtes : si vous voulez des boîtes avec webmail et calendriers, ça vient d’un fournisseur comme Google ou Microsoft, payé directement à eux. On va vous aider à brancher ça.",
+        },
+        {
+          q: "Je peux payer à l’année ?",
+          a: "La facturation est mensuelle pour l’instant. Si l’annuel vous tient à cœur, mentionnez-le quand on se parle et on verra ce qu’on peut faire.",
+        },
+      ],
+    },
+    ctaBand: {
+      eyebrow: "PRÊT QUAND VOUS L’ÊTES",
+      title: "Commencez à 149 $. <span>Tout inclus.</span>",
+      primary: "Démarrer mon site →",
+      secondary: "Voir les démos d’abord",
+    },
+  },
+
+  contact: {
+    hero: {
+      eyebrow: "Contact · Parlez à une vraie personne",
+      title: "Parlez-nous de<br /><span>votre entreprise.</span>",
+      desc: "Pas besoin d’un brief parfait. Envoyez votre métier, votre ville et quelques photos prises au téléphone. On vous répond avec deux directions de démo et un échéancier honnête.",
+      email: "hello@webao.ca",
+      emailNote: "On répond habituellement en un jour ouvrable",
+      location: "Montréal, Québec",
+      locationNote: "Au service des entreprises partout au Canada · Lun–ven, 9 h à 17 h, heure de l’Est",
+      trust: ["◐ Une vraie personne lit chaque message", "·", "Vos infos servent juste à vous répondre"],
+      browseText:
+        "Vous préférez voir le travail d’abord ? Le catalogue de démos a 12 directions pour des entreprises fictives dans les métiers qu’on dessert.",
+      browseCta: "Parcourir les démos →",
+    },
+    form: {
+      title: "Envoyez vos infos",
+      subtitle: "Ouvre votre appli courriel avec tout prérempli · Sans engagement",
+      business: "Nom de l’entreprise",
+      businessPlaceholder: "Nom de votre entreprise",
+      trade: "Métier / Industrie",
+      tradePlaceholder: "Choisir",
+      trades: [
+        "Électricien",
+        "Plombier",
+        "CVAC",
+        "Toiture / Construction",
+        "Aménagement paysager",
+        "Restaurant / Café",
+        "Clinique / Mieux-être",
+        "Auto / Esthétique",
+        "Autre",
+      ],
+      city: "Ville",
+      cityPlaceholder: "p. ex. Laval",
+      name: "Votre nom",
+      namePlaceholder: "Votre nom",
+      email: "Courriel",
+      emailPlaceholder: "vous@entreprise.ca",
+      phone: "Téléphone",
+      optional: "(optionnel)",
+      phonePlaceholder: "Le meilleur numéro pour vous joindre",
+      goal: "Que doit faire le site ?",
+      goalPlaceholder:
+        "p. ex. Avoir plus de demandes de devis, montrer notre zone de service, permettre la réservation en ligne…",
+      details: "Autre chose ? Photos, services, lien vers le logo",
+      detailsPlaceholder:
+        "Collez un lien Google Drive / Photos, listez vos services, ajoutez des notes… (vous pouvez aussi nous écrire après)",
+      consent: "J’aimerais que WEBAO me contacte au sujet d’un site web.",
+      privacy: "Vos infos servent juste à vous répondre. Pas d’infolettre, pas de partage.",
+      submit: "Envoyer mes infos →",
+      submitNote: "Ça ouvre votre appli courriel avec le message prêt à envoyer. Vous préférez l’écrire vous-même ? Écrivez à",
+      submitNoteEmail: "hello@webao.ca",
+      lock: "Ce formulaire compose un courriel depuis votre propre appli. Rien n’est stocké sur nos serveurs et il n’y a aucun traqueur à l’envoi.",
+      validationError:
+        "Veuillez remplir les champs obligatoires avec un courriel valide et cocher la case de consentement.",
+      success:
+        "Votre appli courriel devrait s’ouvrir avec le message prêt à envoyer. Si rien ne s’ouvre, écrivez-nous directement à hello@webao.ca.",
+      ready: "Courriel prêt ✓",
+    },
+    info: {
+      reply: {
+        title: "Comment on répond",
+        desc: "Habituellement en un jour ouvrable, avec :",
+        bullets: [
+          "→ Deux directions de démo qui collent à votre métier",
+          "→ Un échéancier honnête et ce qu’on a besoin de vous",
+          "→ Le prix fixe (149 $/mois pour la plupart) ou un devis sur mesure",
+        ],
+        note: "Pas de script de vente. Juste le site, le prix et le travail.",
+      },
+      send: {
+        title: "Quoi envoyer maintenant (si vous l’avez)",
+        bullets: [
+          "→ 5 à 10 photos téléphone (travaux, camion, équipe)",
+          "→ Services + zone desservie",
+          "→ Logo (ou « on n’en a pas », c’est ben correct)",
+          "→ Un site que vous aimez (ou pas) et pourquoi",
+        ],
+        note: "Vous n’avez pas tout ? Envoyez ce que vous avez. On va poser les bonnes questions.",
+      },
+      plain: {
+        title: "Vous préférez un courriel tout simple ?",
+        desc: "Ça marche aussi. Joignez-nous directement :",
+        lines: ["✉ hello@webao.ca", "⌚ Lun–ven, 9 h à 17 h, heure de l’Est", "📍 Montréal · Partout au Canada"],
+        cta: "Nous écrire directement →",
+      },
+    },
+  },
+
+  demos: {
+    hero: {
+      eyebrow: "Démos · Directions de design pour entreprises fictives.",
+      title: "À quoi pourrait ressembler <span>le vôtre</span> ?",
+      desc: "Chaque démo a sa propre direction artistique avec sa typo, sa palette, sa mise en page et sa voix, créée pour une entreprise locale fictive. Cherchez par métier pour sentir l’étendue.",
+      countNote: "12 DIRECTIONS · ENTREPRISES TOUTES FICTIVES · AUCUNE N’EST CLIENTE DE WEBAO",
+      howTitle: "COMMENT UTILISER CE CATALOGUE",
+      howSteps: [
+        "Filtrez par métier : électricien, restaurant, clinique…",
+        "Cherchez : « éditorial », « Laval », « audacieux »…",
+        "Touchez une démo : voyez sa direction, puis dites-nous laquelle vous ressemble.",
+      ],
+      pills: ["Cherchable", "Filtrable", "12 styles"],
+      fictionalNote:
+        "CHAQUE ENTREPRISE ICI EST INVENTÉE · NOMS, VILLES ET DÉTAILS SONT DES EXEMPLES SEULEMENT",
+    },
+    searchPlaceholder: "Chercher des démos : essayez « métiers », « éditorial », « Laval », « haut de gamme »…",
+    searchCount: "{count} démos",
+    filterLabel: "Filtrer par catégorie",
+    empty: "Aucune démo ne correspond. Essayez « métiers » ou « restaurant », ou effacez les filtres.",
+    clear: "Effacer la recherche",
+    details: "Détails →",
+    fictional: "FICTIF",
+    noteLeft: "TOUTES LES DÉMOS SONT FICTIVES · PAS DE VRAIS CLIENTS WEBAO",
+    noteRight:
+      "→ Chaque carte montre une direction : typo, palette, mise en page et ton. Vous en aimez une ? Dites-le-nous et on bâtira votre site autour.",
+    ctaTitle: "Vous avez trouvé une direction qui vous plaît ?",
+    ctaDesc: "Dites-nous quelle démo est la plus proche et on conçoit votre site autour de cette direction.",
+    ctaPrimary: "Partir d’une démo →",
+    ctaSecondary: "Voir les tarifs",
+    toast: "{name} est une entreprise fictive et une de nos directions : {tone}, {palette}. Le site démo cliquable n’est pas encore publié. Vous aimez cette direction ? Mentionnez-la quand vous nous contactez.",
+    categories: {
+      All: "Tous",
+      Trades: "Métiers",
+      Restaurant: "Restaurant",
+      Automotive: "Automobile",
+      Health: "Santé",
+      Creative: "Créatif",
+      Retail: "Commerce",
+      Wellness: "Mieux-être",
+      Hospitality: "Hébergement",
+      Landscaping: "Aménagement",
+    },
+  },
+
+  notfound: {
+    eyebrow: "404 · Introuvable",
+    title: "Cette page<br /><span>n’est pas ici.</span>",
+    desc: "Vous avez peut-être suivi un vieux lien. On vous amène quelque part d’utile : démos, tarifs ou une conversation sur votre site.",
+    home: "Retour à l’accueil →",
+    demos: "Parcourir les démos",
+    contact: "Contact",
+    mistake: "Si vous pensez que c’est une erreur, écrivez à",
+  },
+
+  common: {
+    loading: "Chargement…",
+    error: "Un problème est survenu.",
+    search: "Rechercher",
+    filter: "Filtrer",
+    close: "Fermer",
+    next: "Suivant",
+    prev: "Précédent",
+    all: "Tous",
+  },
+
+  journey: {
+    explore: "Explorer",
+    hoverPeek: "→ survolez pour un aperçu",
+    hint: "✦ Visite guidée : regardez le curseur explorer les portes du studio",
+    labels: [
+      { t: "Tarifs", s: "→ 149 $/mois · tout inclus" },
+      { t: "Contact", s: "→ hello@webao.ca" },
+      { t: "Démos", s: "→ 12 directions artistiques" },
+    ],
+  },
+} as const;
+
+export default fr as unknown as Translation;

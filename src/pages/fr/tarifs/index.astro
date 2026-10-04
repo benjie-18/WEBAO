@@ -1,0 +1,12 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import PricingPage from "../../../components/pages/PricingPage.astro";
+import { useTranslations } from "../../../lib/i18n";
+
+const locale = "fr" as const;
+const t = useTranslations(locale);
+---
+
+<BaseLayout title={t.meta.pricing.title} description={t.meta.pricing.description} locale={locale} pageKey="pricing">
+  <PricingPage locale={locale} />
+</BaseLayout>

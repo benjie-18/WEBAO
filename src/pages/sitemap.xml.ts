@@ -1,22 +1,61 @@
 import type { APIRoute } from "astro";
+import { localizedPaths, type Locale } from "../lib/i18n/config";
 
-const pages = [
-  { url: "/", changefreq: "weekly", priority: "1.0" },
-  { url: "/pricing", changefreq: "monthly", priority: "0.8" },
-  { url: "/contact", changefreq: "monthly", priority: "0.8" },
-  { url: "/demos", changefreq: "weekly", priority: "0.9" },
-];
+const pagesByLocale: Record<Locale, { key: keyof typeof localizedPaths.en; changefreq: string; priority: string }[]> = {
+  en: [
+    { key: "home", changefreq: "weekly", priority: "1.0" },
+    { key: "pricing", changefreq: "monthly", priority: "0.8" },
+    { key: "contact", changefreq: "monthly", priority: "0.8" },
+    { key: "demos", changefreq: "weekly", priority: "0.9" },
+  ],
+  fr: [
+    { key: "home", changefreq: "weekly", priority: "1.0" },
+    { key: "pricing", changefreq: "monthly", priority: "0.8" },
+    { key: "contact", changefreq: "monthly", priority: "0.8" },
+    { key: "demos", changefreq: "weekly", priority: "0.9" },
+  ],
+};
 
 export const GET: APIRoute = () => {
   const site = "https://webao.ca";
+  const urls: { loc: string; changefreq: string; priority: string; alternates: { hreflang: string; href: string }[] }[] = [];
+
+  for (const locale of ["en", "fr"] as Locale[]) {
+    for (const p of pagesByLocale[locale]) {
+      const path = localizedPaths[locale][p.key];
+      const loc = `${site}${path}`;
+      const enPath = localizedPaths.en[p.key];
+      const frPath = localizedPaths.fr[p.key];
+      urls.push({
+        loc,
+        changefreq: p.changefreq,
+        priority: p.priority,
+        alternates: [
+          { hreflang: "en", href: `${site}${enPath}` },
+          { hreflang: "fr", href: `${site}${frPath}` },
+          { hreflang: "x-default", href: `${site}${enPath}` },
+        ],
+      });
+    }
+  }
+
+  // Deduplicate by loc
+  const seen = new Set<string>();
+  const deduped = urls.filter((u) => {
+    if (seen.has(u.loc)) return false;
+    seen.add(u.loc);
+    return true;
+  });
+
   const body = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${pages
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+${deduped
   .map(
-    (p) => `  <url>
-    <loc>${site}${p.url}</loc>
-    <changefreq>${p.changefreq}</changefreq>
-    <priority>${p.priority}</priority>
+    (u) => `  <url>
+    <loc>${u.loc}</loc>
+${u.alternates.map((a) => `    <xhtml:link rel="alternate" hreflang="${a.hreflang}" href="${a.href}" />`).join("\n")}
+    <changefreq>${u.changefreq}</changefreq>
+    <priority>${u.priority}</priority>
   </url>`
   )
   .join("\n")}
