@@ -1,0 +1,398 @@
+---
+// WEBAO admin panel — login gate + Stats / Forms / Config tabs.
+// Rendered statically (login card + tab structure are in the HTML); the
+// client app in ./admin-app.ts hydrates behavior and fetches data.
+import { useTranslations, type Locale } from "../../lib/i18n";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props as Props;
+const t = useTranslations(locale);
+const a = t.admin;
+---
+
+<div
+  id="admin-root"
+  class="admin"
+  data-locale={locale}
+  data-i18n={JSON.stringify(a)}
+>
+  <!-- ── Login gate (visible by default; also the no-JS state) ── -->
+  <section class="admin-login" data-view="login" aria-labelledby="admin-login-title">
+    <div class="admin-card admin-login-card">
+      <div class="admin-brand">
+        <span class="brand-mark" aria-hidden="true"><span class="oglyph">W</span></span>
+        <span class="mono">WEBAO · ADMIN</span>
+      </div>
+      <h1 id="admin-login-title">{a.login.title}</h1>
+      <p class="admin-muted">{a.login.subtitle}</p>
+      <div class="admin-notice" data-login-notice hidden role="status"></div>
+      <form data-login-form autocomplete="off">
+        <label class="admin-field">
+          <span>{a.login.passwordLabel}</span>
+          <input
+            type="password"
+            name="password"
+            required
+            autocomplete="current-password"
+            placeholder={a.login.passwordPlaceholder}
+            data-login-password
+          />
+        </label>
+        <button type="submit" class="btn btn--primary admin-submit" data-login-submit>
+          {a.login.submit}
+        </button>
+      </form>
+      <p class="admin-error" data-login-error hidden role="alert"></p>
+    </div>
+  </section>
+
+  <!-- ── App shell (revealed after login) ── -->
+  <section class="admin-app" data-view="app" hidden aria-label="WEBAO admin">
+    <header class="admin-topbar">
+      <div class="admin-brand">
+        <span class="brand-mark" aria-hidden="true"><span class="oglyph">W</span></span>
+        <span class="mono">WEBAO · ADMIN</span>
+      </div>
+      <button type="button" class="admin-ghost-btn" data-logout>{a.logout}</button>
+    </header>
+
+    <div class="admin-tabs" role="tablist" aria-label="Admin">
+      <button
+        type="button" role="tab" id="admin-tab-stats" aria-controls="admin-panel-stats"
+        aria-selected="true" data-tab="stats" class="admin-tab is-active"
+      >{a.tabs.stats}</button>
+      <button
+        type="button" role="tab" id="admin-tab-forms" aria-controls="admin-panel-forms"
+        aria-selected="false" tabindex="-1" data-tab="forms" class="admin-tab"
+      >{a.tabs.forms}</button>
+      <button
+        type="button" role="tab" id="admin-tab-config" aria-controls="admin-panel-config"
+        aria-selected="false" tabindex="-1" data-tab="config" class="admin-tab"
+      >{a.tabs.config}</button>
+    </div>
+
+    <!-- Tab 1 · Stats -->
+    <section
+      id="admin-panel-stats" role="tabpanel" aria-labelledby="admin-tab-stats"
+      data-panel="stats" class="admin-panel"
+    >
+      <div class="admin-controls">
+        <div class="admin-seg" role="group" aria-label={a.stats.rangeLabel}>
+          <button type="button" class="admin-seg-btn is-active" data-range="day">{a.stats.range.day}</button>
+          <button type="button" class="admin-seg-btn" data-range="week">{a.stats.range.week}</button>
+          <button type="button" class="admin-seg-btn" data-range="month">{a.stats.range.month}</button>
+          <button type="button" class="admin-seg-btn" data-range="year">{a.stats.range.year}</button>
+        </div>
+        <label class="admin-field admin-field--inline">
+          <span>{a.stats.pageLabel}</span>
+          <select data-page-filter>
+            <option value="all">{a.stats.allPages}</option>
+          </select>
+        </label>
+      </div>
+      <div data-stats-body>
+        <div class="admin-kpis" data-kpis></div>
+        <div class="admin-card">
+          <div class="admin-card-head">
+            <h2>{a.stats.chartTitle}</h2>
+            <div class="admin-legend">
+              <span><i class="dot dot--views"></i>{a.stats.chartViews}</span>
+              <span><i class="dot dot--visitors"></i>{a.stats.chartVisitors}</span>
+            </div>
+          </div>
+          <div class="admin-chart" data-chart></div>
+        </div>
+        <div class="admin-grid-3">
+          <div class="admin-card">
+            <h2>{a.stats.topPages}</h2>
+            <div data-top-pages></div>
+          </div>
+          <div class="admin-card">
+            <h2>{a.stats.devices}</h2>
+            <div data-devices></div>
+          </div>
+          <div class="admin-card">
+            <h2>{a.stats.countries}</h2>
+            <div data-countries></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 2 · Forms -->
+    <section
+      id="admin-panel-forms" role="tabpanel" aria-labelledby="admin-tab-forms"
+      data-panel="forms" class="admin-panel" hidden
+    >
+      <div class="admin-forms-list" data-forms-list></div>
+      <div class="admin-center">
+        <button type="button" class="admin-ghost-btn" data-forms-more hidden>{a.forms.loadMore}</button>
+      </div>
+    </section>
+
+    <!-- Tab 3 · Config -->
+    <section
+      id="admin-panel-config" role="tabpanel" aria-labelledby="admin-tab-config"
+      data-panel="config" class="admin-panel" hidden
+    >
+      <div class="admin-card">
+        <h2>{a.config.passwordTitle}</h2>
+        <form data-pw-form autocomplete="off">
+          <label class="admin-field">
+            <span>{a.config.current}</span>
+            <input type="password" name="current" required autocomplete="current-password" data-pw-current />
+          </label>
+          <label class="admin-field">
+            <span>{a.config.new}</span>
+            <input type="password" name="next" required minlength="5" autocomplete="new-password" data-pw-next />
+          </label>
+          <label class="admin-field">
+            <span>{a.config.confirm}</span>
+            <input type="password" name="confirm" required minlength="5" autocomplete="new-password" data-pw-confirm />
+          </label>
+          <button type="submit" class="btn btn--primary admin-submit">{a.config.change}</button>
+        </form>
+        <p class="admin-error" data-pw-error hidden role="alert"></p>
+      </div>
+      <div class="admin-card">
+        <h2>{a.config.siteTitle}</h2>
+        <form data-settings-form>
+          <label class="admin-field">
+            <span>{a.config.defaultTheme}</span>
+            <select data-setting-theme>
+              <option value="system">{a.config.themeOptions.system}</option>
+              <option value="light">{a.config.themeOptions.light}</option>
+              <option value="dark">{a.config.themeOptions.dark}</option>
+            </select>
+          </label>
+          <label class="admin-check">
+            <input type="checkbox" data-setting-tracking />
+            <span>
+              <strong>{a.config.tracking}</strong>
+              <small>{a.config.trackingDesc}</small>
+            </span>
+          </label>
+          <button type="submit" class="btn btn--primary admin-submit">{a.config.save}</button>
+        </form>
+        <p class="admin-error" data-settings-error hidden role="alert"></p>
+      </div>
+    </section>
+  </section>
+
+  <div class="admin-toasts" data-toasts aria-live="polite"></div>
+</div>
+
+<script>
+  import "./admin-app";
+</script>
+
+<style is:global>
+  /* Admin panel — global stylesheet (JS injects dynamic content, so Astro's
+     scoped styles would not reach it). Everything is prefixed with .admin. */
+  .admin {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: clamp(28px, 5vw, 64px) var(--content-pad) clamp(48px, 6vw, 96px);
+    color: var(--ink);
+  }
+  .admin h1 { font-size: clamp(1.5rem, 3vw, 2rem); letter-spacing: -0.02em; font-weight: 750; }
+  .admin h2 { font-size: 1.05rem; letter-spacing: -0.01em; font-weight: 700; }
+  .admin-muted { color: var(--muted); font-size: 14px; line-height: 1.55; }
+  .admin-brand { display: flex; align-items: center; gap: 10px; font-size: 12px; letter-spacing: 0.14em; font-weight: 600; }
+  .admin-brand .brand-mark { width: 30px; height: 30px; font-size: 15px; }
+
+  .admin-card {
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: clamp(16px, 3vw, 24px);
+    box-shadow: var(--shadow-sm);
+  }
+  .admin-card h2 { margin-bottom: 14px; }
+  .admin-card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+  .admin-card-head h2 { margin-bottom: 0; }
+
+  /* Login */
+  .admin-login { display: grid; place-items: center; min-height: min(62vh, 560px); }
+  .admin-login-card { width: min(420px, 100%); display: grid; gap: 14px; }
+  .admin-login-card h1 { margin-top: 2px; }
+  .admin-notice {
+    background: var(--accent-soft);
+    border: 1px solid var(--line);
+    color: var(--accent-soft-text);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .admin-error {
+    background: var(--error-bg);
+    border: 1px solid var(--error-border);
+    color: var(--error-text);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* Form fields */
+  .admin-field { display: grid; gap: 6px; font-size: 13px; font-weight: 600; color: var(--ink-3); }
+  .admin-field > span { letter-spacing: -0.01em; }
+  .admin-field input,
+  .admin-field select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    background: var(--paper-3);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    font-family: inherit;
+  }
+  .admin-field input:focus,
+  .admin-field select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+  }
+  .admin-field--inline { grid-template-columns: auto 1fr; align-items: center; gap: 10px; }
+  .admin-field--inline > span { white-space: nowrap; }
+  .admin-submit { width: 100%; justify-content: center; margin-top: 4px; }
+  .admin-submit:disabled { opacity: 0.6; cursor: wait; }
+  .admin-check { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; font-size: 14px; }
+  .admin-check input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--accent); flex: none; }
+  .admin-check strong { display: block; font-weight: 650; }
+  .admin-check small { display: block; color: var(--muted); font-size: 12.5px; margin-top: 2px; line-height: 1.5; }
+  .admin-ghost-btn {
+    border: 1px solid var(--line-strong);
+    background: transparent;
+    color: var(--ink-3);
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .admin-ghost-btn:hover { border-color: var(--accent); color: var(--accent-text); }
+  .admin-ghost-btn:disabled { opacity: 0.55; cursor: wait; }
+
+  /* Topbar + tabs */
+  .admin-topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+  .admin-tabs { display: flex; gap: 6px; padding: 4px; background: var(--paper-2); border: 1px solid var(--line); border-radius: 14px; margin-bottom: 20px; }
+  .admin-tab {
+    flex: 1;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 650;
+    padding: 10px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  .admin-tab:hover { color: var(--ink); }
+  .admin-tab.is-active { background: var(--card-bg); color: var(--ink); box-shadow: var(--shadow-sm); }
+  .admin-panel { display: grid; gap: 16px; }
+
+  /* Stats controls */
+  .admin-controls { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+  .admin-seg { display: flex; gap: 4px; padding: 4px; background: var(--paper-2); border: 1px solid var(--line); border-radius: 12px; }
+  .admin-seg-btn {
+    border: 0; background: transparent; color: var(--muted);
+    font: inherit; font-size: 13px; font-weight: 650;
+    padding: 8px 14px; border-radius: 8px; cursor: pointer;
+  }
+  .admin-seg-btn:hover { color: var(--ink); }
+  .admin-seg-btn.is-active { background: var(--accent); color: #fff; }
+
+  /* KPIs */
+  .admin-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .admin-kpi { background: var(--card-bg); border: 1px solid var(--line); border-radius: 14px; padding: 16px; box-shadow: var(--shadow-sm); }
+  .admin-kpi .kpi-value { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 750; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .admin-kpi .kpi-label { color: var(--muted); font-size: 12px; margin-top: 4px; letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600; }
+
+  /* Chart */
+  .admin-legend { display: flex; gap: 14px; font-size: 12px; color: var(--muted); font-weight: 600; }
+  .admin-legend .dot { display: inline-block; width: 10px; height: 10px; border-radius: 999px; margin-right: 6px; }
+  .admin-legend .dot--views { background: var(--accent); }
+  .admin-legend .dot--visitors { background: var(--muted); }
+  .admin-chart svg { width: 100%; height: auto; display: block; }
+  .admin-chart .chart-area { fill: var(--accent-soft); }
+  .admin-chart .chart-line { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+  .admin-chart .chart-line-vis { fill: none; stroke: var(--muted); stroke-width: 2; stroke-dasharray: 5 4; stroke-linecap: round; }
+  .admin-chart .chart-grid { stroke: var(--line); stroke-width: 1; }
+  .admin-chart .chart-tick { fill: var(--muted); font-size: 10px; font-family: "IBM Plex Mono", monospace; }
+  .admin-chart .chart-dot { fill: var(--accent); stroke: var(--card-bg); stroke-width: 2; }
+
+  /* Breakdown bars */
+  .bar-row { display: grid; gap: 6px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+  .bar-row:last-child { border-bottom: 0; }
+  .bar-top { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; }
+  .bar-label { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .bar-value { color: var(--muted); font-variant-numeric: tabular-nums; font-weight: 600; }
+  .bar-track { height: 6px; border-radius: 999px; background: var(--paper-3); overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 999px; background: var(--accent); }
+
+  /* Forms */
+  .admin-forms-list { display: grid; gap: 12px; }
+  .form-card { background: var(--card-bg); border: 1px solid var(--line); border-radius: 14px; padding: 16px; box-shadow: var(--shadow-sm); display: grid; gap: 10px; }
+  .form-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .form-card-head strong { display: block; font-size: 15px; letter-spacing: -0.01em; }
+  .form-card-head .mono { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .form-badge {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    background: var(--accent-soft); color: var(--accent-soft-text);
+    border-radius: 999px; padding: 4px 10px; white-space: nowrap;
+  }
+  .form-meta { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--muted); }
+  .form-meta b { color: var(--ink-3); font-weight: 600; }
+  .form-actions { display: flex; gap: 8px; }
+  .form-fields { border-top: 1px solid var(--line); padding-top: 10px; display: grid; gap: 6px; }
+  .form-fields .ff-row { display: grid; grid-template-columns: 130px 1fr; gap: 10px; font-size: 13px; }
+  .form-fields dt { color: var(--muted); font-weight: 600; }
+  .form-fields dd { margin: 0; white-space: pre-wrap; word-break: break-word; }
+  .admin-empty {
+    text-align: center; color: var(--muted); font-size: 14px; line-height: 1.6;
+    border: 1px dashed var(--line-strong); border-radius: 14px; padding: 36px 20px;
+  }
+  .admin-center { display: grid; place-items: center; }
+
+  /* Config */
+  [data-panel="config"] .admin-card form { display: grid; gap: 12px; margin-top: 4px; }
+
+  /* Loading / retry */
+  .admin-loading { color: var(--muted); font-size: 14px; padding: 24px 0; text-align: center; }
+  .admin-retry { display: grid; gap: 10px; place-items: center; padding: 24px 0; color: var(--muted); font-size: 14px; }
+
+  /* Toasts */
+  .admin-toasts { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); display: grid; gap: 8px; z-index: 200; width: min(420px, calc(100vw - 32px)); }
+  .admin-toast {
+    background: var(--ink); color: var(--paper);
+    border-radius: 12px; padding: 12px 16px; font-size: 13.5px; font-weight: 600;
+    box-shadow: var(--shadow-md); text-align: center;
+    animation: admin-toast-in 0.25s ease-out;
+  }
+  .admin-toast--err { background: var(--error-bg); color: var(--error-text); border: 1px solid var(--error-border); }
+  @keyframes admin-toast-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .admin-toast { animation: none; }
+  }
+
+  @media (max-width: 720px) {
+    .admin-kpis { grid-template-columns: 1fr; }
+    .admin-grid-3 { display: grid; gap: 16px; }
+    .admin-controls { align-items: stretch; flex-direction: column; }
+    .admin-seg { overflow-x: auto; }
+    .form-fields .ff-row { grid-template-columns: 1fr; gap: 2px; }
+  }
+  @media (min-width: 721px) {
+    .admin-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: start; }
+  }
+</style>

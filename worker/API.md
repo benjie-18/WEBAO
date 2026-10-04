@@ -1,0 +1,104 @@
+# WEBAO Worker API
+
+Base URL is the site itself (`https://webao.ca`); all endpoints are same-origin JSON.
+Every response is JSON. Errors look like `{ "ok": false, "error": "<message>" }`
+with an appropriate HTTP status (400 validation, 401 auth, 403 origin, 404 unknown,
+429 rate-limited, 500 internal).
+
+`POST`/`DELETE` endpoints require a matching `Origin` or `Referer` header
+(`webao.ca`, `www.webao.ca`, `webao.bnji.net`; `localhost`/`127.0.0.1` for dev).
+Admin `GET`s additionally accept requests with no origin headers — the Bearer token
+is the authentication there.
+
+## Tracking (public)
+
+Session id (`sid`) is generated client-side (uuid, stored in `localStorage`).
+IP comes from `CF-Connecting-IP`, country from `cf-ipcountry` — never from the body.
+
+### `POST /api/track/pageview`
+Body: `{ sid, path, referrer?, screen?, locale?, theme? }`
+→ `{ "ok": true }` (or `{ "ok": true, "tracking": false }` when the admin paused tracking).
+Creates the session on first call; increments the per-day view counters.
+Rate limit: 120 req/min per IP.
+
+### `POST /api/track/click`
+Body: `{ sid, path, kind, label }` — `kind` e.g. `"cta"`, `"nav"`, `"link"`;
+`label` is free text (max 120 chars).
+→ `{ "ok": true }`. Appends to the session's click log (capped at 200/session).
+Same rate limit as pageview.
+
+### `POST /api/track/heartbeat`
+Body: `{ sid, path, durationMs }`
+→ `{ "ok": true }`. Records time-on-page for the most recent visit of `path`
+(monotonic — the stored value never shrinks). Send every ~15–30s and on
+`visibilitychange`/`pagehide`.
+
+## Forms (public)
+
+### `POST /api/forms/submit`
+Body: `{ form: "pricing" | "contact", fields: { name, email, message?, ... } }`
+Validation: `name` required; `pricing` requires a valid `email`; `contact`
+requires `email` or `message`. Extra fields are kept (string values, capped).
+→ `{ "ok": true, "id": "<ts>:<rand>" }` (400 with an error message otherwise).
+
+## Admin (Bearer token)
+
+Login: `POST /api/admin/login` body `{ password }` → `{ "ok": true, "token": "<64-hex>" }`.
+Token is 256-bit, stored server-side with a 7-day TTL. Pass it as
+`Authorization: Bearer <token>`. Unknown/expired tokens → `401`.
+Login is throttled: 10 attempts/min per IP.
+Default password is `32560` (SHA-256 seeded into KV on first use; change it in the panel).
+
+### `GET /api/admin/stats?range=day|week|month|year&page=<path|all>`
+→
+```json
+{
+  "ok": true, "range": "week", "page": "all",
+  "labels": ["2026-09-28", "..."],
+  "views": [12, 45], "visitors": [3, 9],
+  "topPages": [{ "path": "/pricing", "views": 120 }],
+  "devices": { "mobile": 10, "tablet": 2, "desktop": 30 },
+  "countries": [{ "code": "CA", "count": 25 }]
+}
+```
+`day`/`week`/`month` return daily buckets (1/7/30 days); `year` returns 12 monthly
+buckets. `visitors` counts distinct sessions by `startedAt`; devices/countries are
+aggregated over sessions in range. `topPages` is always the global top 10 for the
+range (not filtered by `page`).
+
+### `GET /api/admin/forms?limit=50&cursor=`
+→ `{ "ok": true, "items": [{ id, form, fields, ip, country, ua, at }], "nextCursor": "50" | null }`
+Newest-first. `limit` clamped to 1–100. Pass `nextCursor` back as `cursor` for the
+next page; `null` means done.
+
+### `DELETE /api/admin/forms/:id`
+`:id` is the `<ts>:<rand>` part returned at submit time. → `{ "ok": true }`.
+
+### `GET /api/admin/config`
+→ `{ "ok": true, "settings": { "defaultTheme": "system"|"light"|"dark", "trackingEnabled": true } }`
+
+### `POST /api/admin/config`
+Body: any subset of `{ defaultTheme, trackingEnabled }` (keys are whitelisted;
+unknown keys ignored). → `{ "ok": true, "settings": { ... } }`.
+Setting `trackingEnabled: false` makes the tracking endpoints return
+`{ "ok": true, "tracking": false }` without recording anything.
+
+### `POST /api/admin/password`
+Body: `{ current, next }` — `next` must be ≥ 5 chars.
+Verifies `current` with a timing-safe SHA-256 compare, stores SHA-256 of `next`,
+and revokes all other admin tokens (the caller stays logged in).
+→ `{ "ok": true }` (401 if `current` is wrong).
+
+## KV layout (for reference)
+
+| Key | Value |
+|---|---|
+| `config:auth` | `{ passwordHash }` — SHA-256 hex |
+| `config:settings` | `{ defaultTheme, trackingEnabled }` |
+| `session:<uuid>` | session object (TTL 90 days) |
+| `views:<yyyy-mm-dd>:<urlenc-path>` | integer pageview counter |
+| `views:<yyyy-mm-dd>:__all` | integer total counter for the day |
+| `form:<ts>:<rand>` | form submission object |
+| `forms:index` | JSON array of form keys, newest-first, cap 1000 |
+| `admin:token:<64-hex>` | `{ createdAt, ip }` (TTL 7 days) |
+| `rl:<scope>:<ip>` | `{ c, r }` rate-limit window |

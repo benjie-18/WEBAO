@@ -1,0 +1,58 @@
+---
+// Demo escape hatch — small unobtrusive corner control back to the WEBAO demo catalog.
+// Self-contained: own prefixed styles, no dependency on the main site theme.
+interface Props {
+  locale?: "en" | "fr";
+  backHref?: string;
+}
+const { locale = "en", backHref } = Astro.props as Props;
+const href = backHref ?? (locale === "fr" ? "/fr/demos" : "/demos");
+const label = locale === "fr" ? "Retour aux démos · démo fictive" : "Back to demos · fictional demo";
+---
+
+<a href={href} class="demo-exit" aria-label={label} title={label}>
+  <svg class="demo-exit-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+    <path d="M7.5 2.5 4 6l3.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <span class="demo-exit-word">webao</span>
+  <span class="demo-exit-sep" aria-hidden="true">·</span>
+  <span class="demo-exit-note">{locale === "fr" ? "démo fictive" : "fictional demo"}</span>
+</a>
+
+<style>
+  .demo-exit {
+    position: fixed;
+    left: 14px;
+    bottom: 14px;
+    z-index: 9999;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(10, 15, 28, 0.72);
+    color: #f8f5ef;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    opacity: 0.82;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .demo-exit:hover {
+    opacity: 1;
+    transform: translateY(-1px);
+  }
+  .demo-exit-arrow { flex: none; }
+  .demo-exit-word { font-weight: 700; }
+  .demo-exit-sep { opacity: 0.45; }
+  .demo-exit-note { opacity: 0.72; }
+  @media (max-width: 640px) {
+    .demo-exit { left: 10px; bottom: 10px; padding: 7px 10px; }
+    .demo-exit-note { display: none; }
+    .demo-exit-sep { display: none; }
+  }
+</style>
