@@ -6,8 +6,8 @@ import EscapeHatch from "../../components/demos/EscapeHatch.astro";
 // not connected to the WEBAO theme system by design.
 const IMG = {
   hero: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=1600&auto=format&fit=crop",
-  about: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1200&auto=format&fit=crop",
-  panel: "https://images.unsplash.com/photo-1517420704952-d9f39e95b43e?q=80&w=1200&auto=format&fit=crop",
+  about: "/demos/nora/01.jpg",
+  panel: "/demos/nora/02.jpg",
 };
 ---
 
@@ -83,7 +83,7 @@ const IMG = {
             <img src={IMG.hero} alt="" loading="eager" fetchpriority="high" />
           </figure>
           <div class="nora-hero-in">
-            <p class="nora-eyebrow nora-eyebrow-light">Electrician · Laval &amp; North Shore · 24/7 dispatch</p>
+            <p class="nora-eyebrow nora-eyebrow-light"><span class="nora-live" aria-hidden="true"></span>Electrician · Laval &amp; North Shore · 24/7 dispatch</p>
             <h1 class="nora-h1">When the power's out,<br />we show up.</h1>
             <p class="nora-lede">Panel upgrades, troubleshooting, EV chargers and renovations. Written quotes, clean work, 5-year warranty on labour.</p>
             <div class="nora-hero-cta">
@@ -459,6 +459,9 @@ const IMG = {
     /* type */
     .nora-eyebrow { font-family: ui-monospace, Menlo, monospace; font-size: 11.5px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--nora-red); margin: 0 0 14px; }
     .nora-eyebrow-light { color: #FFD9D6; }
+    .nora-eyebrow-light { display: flex; align-items: center; gap: 10px; }
+    .nora-live { width: 9px; height: 9px; border-radius: 50%; background: var(--nora-red); flex: none; animation: nora-ping 1.8s ease-out infinite; }
+    @keyframes nora-ping { 0% { box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.55); } 70% { box-shadow: 0 0 0 10px rgba(255, 59, 48, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 59, 48, 0); } }
     .nora-h1 { font-family: var(--nora-font-d); font-weight: 900; letter-spacing: -0.03em; font-size: clamp(2.8rem, 7.5vw, 5.6rem); line-height: 0.94; margin: 0 0 20px; color: #FAF7F2; }
     .nora-h2 { font-family: var(--nora-font-d); font-weight: 800; letter-spacing: -0.025em; font-size: clamp(1.9rem, 4.4vw, 3rem); line-height: 1.02; margin: 0 0 18px; }
     .nora-lede { font-size: 17px; line-height: 1.6; color: rgba(250,247,242,0.85); max-width: 46ch; margin: 0 0 28px; }
@@ -607,7 +610,7 @@ const IMG = {
       .nora-area-list { grid-template-columns: 1fr; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .nora-dot, .nora-pill i { animation: none; }
+      .nora-dot, .nora-pill i, .nora-live { animation: none; }
       .nora-btn, .nora-acc-t strong, .nora-acc-x::after { transition: none; }
     }
   </style>
