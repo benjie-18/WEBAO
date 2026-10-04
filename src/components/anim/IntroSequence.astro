@@ -1610,24 +1610,26 @@ const promptKey = t.intro.prompt.key;
 
       // Aim where the visitor left the pointer, then take a small, visible step
       // back and draw the cursor's tip toward the barrier before the launch.
+      // NOTE: the camera is deliberately *not* re-centered here. It is already
+      // framed on the impact point from firstStrike, and sliding the whole
+      // world sideways at the click read as a visual glitch (the view jumping
+      // right just as the invitation lands). The breach happens where the
+      // cursor already is, so no re-framing is needed.
       launchX = clamp(cur.x, vw * 0.22, vw * 0.78);
       const direction = Math.sign(launchX - impactX) || 1;
       const startX = cur.x;
       const startY = cur.y;
-      const targetCameraX = vw * 0.5 - launchX;
-      const targetCameraY = vh * CFG.breach.camera.focusY - surfaceY;
       const margin = 34 * cursorScale;
       const backX = clamp(
         launchX - direction * vw * CFG.breach.prepare.stepBackX,
-        Math.max(vw * 0.16, margin - targetCameraX),
-        Math.min(vw * 0.84, vw - margin - targetCameraX)
+        Math.max(vw * 0.16, margin - cameraX),
+        Math.min(vw * 0.84, vw - margin - cameraX)
       );
       const backY = clamp(
         startY - vh * CFG.breach.prepare.stepBackY,
-        Math.max(vh * 0.18, margin - targetCameraY),
-        Math.min(surfaceY - floorH * 1.1, vh - margin - targetCameraY)
+        Math.max(vh * 0.18, margin - cameraY),
+        Math.min(surfaceY - floorH * 1.1, vh - margin - cameraY)
       );
-      cameraShiftTo(targetCameraX, targetCameraY, CFG.breach.camera.shiftMs);
       squashAlong = 0.91;
       squashAcross = 1.07;
       kick(2.2, 240, 22, 0.06);
