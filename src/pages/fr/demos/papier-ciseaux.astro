@@ -4,12 +4,12 @@ import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
 // Demo microsite: Papier Ciseaux, fictional artisan stationery brand, Quebec City.
 // Standalone art direction: scrapbook collage. Not connected to the WEBAO theme system.
 const IMG = {
-  pen: "https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=900&auto=format&fit=crop",
-  desk: "https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?q=80&w=1000&auto=format&fit=crop",
+  pen: "/demos/papier-ciseaux/01.jpg",
+  desk: "/demos/papier-ciseaux/02.jpg",
   journals: "https://images.unsplash.com/photo-1524578271613-d550eacf6090?q=80&w=800&auto=format&fit=crop",
   pens: "https://images.unsplash.com/photo-1456735190827-d1262f71b8a3?q=80&w=800&auto=format&fit=crop",
   washi: "https://images.unsplash.com/photo-1452860606245-08befc0ff44b?q=80&w=800&auto=format&fit=crop",
-  craft: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=1000&auto=format&fit=crop",
+  craft: "/demos/papier-ciseaux/03.jpg",
 };
 ---
 
@@ -70,12 +70,12 @@ const IMG = {
         <div class="pc-collage" aria-hidden="false">
           <figure class="pc-polaroid pc-p1">
             <span class="pc-tape pc-tape-pink"></span>
-            <img src={IMG.pen} alt="Plume d'un stylo plume écrivant sur du papier ligné" loading="eager" fetchpriority="high" />
+            <img src={IMG.pen} alt="Carnet ouvert garni d'autocollants vintage, de timbres et de notes manuscrites" loading="eager" fetchpriority="high" />
             <figcaption>notre plume signature, en action</figcaption>
           </figure>
           <figure class="pc-polaroid pc-p2">
             <span class="pc-tape pc-tape-blue"></span>
-            <img src={IMG.desk} alt="Bureau avec carnet, stylos et café" loading="lazy" />
+            <img src={IMG.desk} alt="Carnet de voyage ouvert avec billets, timbres et rouleaux de washi" loading="lazy" />
             <figcaption>mardi matin à l'atelier</figcaption>
           </figure>
           <div class="pc-sticker" aria-hidden="true">100%<br />fait<br />main!</div>
@@ -129,7 +129,7 @@ const IMG = {
       <div class="pc-wrap pc-story-in">
         <div class="pc-story-img">
           <span class="pc-tape pc-tape-blue"></span>
-          <img src={IMG.craft} alt="Pinceaux avec de la peinture vive à l'atelier" loading="lazy" />
+          <img src={IMG.craft} alt="Papier à lettres floral vintage de la collection atelier" loading="lazy" />
           <p class="pc-caption-hand">jour de marbrure, chaque vendredi</p>
         </div>
         <div class="pc-story-copy">
@@ -430,7 +430,7 @@ const IMG = {
     .pc-story { background: var(--pc-kraft); padding: clamp(70px, 9vw, 110px) 0 0; position: relative; }
     .pc-story-in { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(30px, 5vw, 70px); align-items: center; padding-bottom: clamp(60px, 7vw, 100px); }
     .pc-story-img { position: relative; transform: rotate(-2deg); }
-    .pc-story-img img { width: 100%; height: 420px; object-fit: cover; border: 12px solid #FFFDF6; box-shadow: 0 16px 40px rgba(42,33,24,0.3); }
+    .pc-story-img img { width: 100%; height: 420px; object-fit: cover; border: 12px solid #FFFDF6; box-shadow: 0 16px 40px rgba(42,33,24,0.3); filter: sepia(0.22) saturate(1.05); }
     .pc-caption-hand { font-family: var(--pc-hand); font-size: 22px; text-align: center; color: var(--pc-ink-soft); margin: 12px 0 0; transform: rotate(-1deg); }
     .pc-story-copy p { font-size: 16.5px; line-height: 1.75; color: #3E3226; }
     .pc-facts { list-style: none; display: flex; gap: 26px; margin: 28px 0 0; padding: 0; flex-wrap: wrap; }
