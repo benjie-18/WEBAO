@@ -1,18 +1,75 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
 
-// Demo microsite: Maison Lune, fictional boutique lakeside inn, Magog.
-// Standalone art direction. Moonlit dreaminess. Not connected to the WEBAO theme system.
+// Demo microsite: Maison Lune, fictional lakeside inn, Magog.
+// Standalone art direction. Night blues, moon silver. Not connected to the WEBAO theme system.
+// Structure: a cabin journal. Dated guest entries with photos; the four rooms are
+// revealed through stories, never as cards. The table of contents is the nav.
 const IMG = {
   hero: "/demos/maison-lune/01.jpg",
   cabin: "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?q=80&w=1200&auto=format&fit=crop",
   room1: "https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1000&auto=format&fit=crop",
   room2: "https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=1000&auto=format&fit=crop",
-  room3: "https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=1000&auto=format&fit=crop",
+  room3: "https://live.staticflickr.com/4094/4782854535_9d45e25d2c_b.jpg",
   room4: "https://images.unsplash.com/photo-1591088398332-8a7791972843?q=80&w=1000&auto=format&fit=crop",
   dining: "/demos/maison-lune/02.jpg",
   canoe: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=1000&auto=format&fit=crop",
 };
+
+const ENTRIES = [
+  {
+    id: "june-12", date: "June 12", year: "2026", no: "nº 04", phase: "●",
+    title: "The loons were loud this morning",
+    body: [
+      "Woke at five to a pair of loons arguing outside the window. In Full Moon the bed faces east, so the sunrise finished the job. I took the canoe out before breakfast while the lake was still deciding what color to be.",
+      "Back at the house, the long table was already loud. Someone had saved me the window seat and the last of the coffee, which is the closest thing to love this journal has recorded.",
+    ],
+    photo: IMG.canoe, photoAlt: "Canoe gliding on the calm morning lake",
+    caption: "The lake at six, before it made up its mind.",
+    room: "Full Moon", roomImg: IMG.room1, roomAlt: "The Full Moon room with a view of the lake",
+    roomLine: "The corner room, windows on two sides of the water. King bed, soaking tub, $285 a night.",
+    weather: "14°C, mist on the water", heard: "Loons, a screen door",
+  },
+  {
+    id: "july-30", date: "July 30", year: "2026", no: "nº 03", phase: "◐",
+    title: "The long breakfast ran till noon",
+    body: [
+      "Nobody left the table. The granola ran out, then the second batch did too, and still nobody moved. Breakfast here is served from eight to eleven, but the table keeps its own hours.",
+      "In the afternoon I finished a whole novel in the Half Moon reading chair, the one the house warns you about. Dinner was leftover pie on the dock, eaten with our feet in the water.",
+    ],
+    photo: IMG.dining, photoAlt: "Breakfast table set with local food",
+    caption: "One table, eleven strangers, zero hurry.",
+    room: "Half Moon", roomImg: IMG.room2, roomAlt: "The Half Moon room in soft morning light",
+    roomLine: "Half lake, half pine forest. The quietest room in the house. Queen bed, reading nook, $225 a night.",
+    weather: "28°C, not a breath of wind", heard: "Cutlery, pages turning",
+  },
+  {
+    id: "sept-8", date: "September 8", year: "2026", no: "nº 02", phase: "○",
+    title: "The lake turned to glass",
+    body: [
+      "Not a ripple by seven. We carried the telescope to the deck but the sky was still too bright, so we just watched the mountains double themselves in the water instead.",
+      "Then I slept ten hours straight in New Moon. Ten. I have small children; this simply never happens. The blackout shutters deserve their own entry.",
+    ],
+    photo: IMG.cabin, photoAlt: "The inn on the lake at dusk",
+    caption: "The house from the water, just after the loons go quiet.",
+    room: "New Moon", roomImg: IMG.room3, roomAlt: "The New Moon room, dark and cocoon-like",
+    roomLine: "Dark, cocooning, built for deep sleep. King bed, weighted blanket, $245 a night.",
+    weather: "18°C, clear all night", heard: "Nothing, gloriously",
+  },
+  {
+    id: "oct-3", date: "October 3", year: "2026", no: "nº 01", phase: "☾",
+    title: "First frost on the dock",
+    body: [
+      "Woke to white on the boards and steam rising off the water. The attic room keeps its warmth like a secret; we lay under the skylight and watched the stars thin out until the cold won.",
+      "Breakfast tasted like the end of something good. We are already arguing about which week to steal next year.",
+    ],
+    photo: IMG.hero, photoAlt: "Full moon over the lake at night",
+    caption: "October does the sky's best work.",
+    room: "Crescent", roomImg: IMG.room4, roomAlt: "The Crescent room with warm wood tones",
+    roomLine: "The attic under the eaves, all warm wood and low light. Writing desk, skylight for stargazing, $195 a night.",
+    weather: "2°C, frost on the dock", heard: "The dock creaking",
+  },
+];
 ---
 
 <!DOCTYPE html>
@@ -20,190 +77,104 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Maison Lune: Boutique Lakeside Inn in Magog</title>
-  <meta name="description" content="Maison Lune: a four-room boutique inn on Lake Memphremagog. Slow mornings, moonlit water, breakfasts worth waking for." />
+  <title>Maison Lune: a lakeside inn journal · Magog</title>
+  <meta name="description" content="The Cabin Journal of Maison Lune: dated notes from a four-room inn on Lake Memphremagog. Read the entries, then write your own." />
   <meta name="robots" content="noindex" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Jost:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@400;500;600&display=swap" rel="stylesheet" />
 </head>
 <body class="ml">
 
-  <!-- NAV -->
+  <!-- TOC NAV -->
   <header class="ml-navwrap">
-    <nav class="ml-nav" aria-label="Primary">
-      <div class="ml-nav-links">
-        <a href="#rooms">Rooms</a>
-        <a href="#experiences">Experiences</a>
+    <nav class="ml-nav" aria-label="Journal contents">
+      <a class="ml-brand" href="#top" aria-label="Maison Lune, back to the cover"><span aria-hidden="true">☾</span> Maison Lune</a>
+      <div class="ml-toc" role="list">
+        {ENTRIES.map((e) => (
+          <a role="listitem" href={"#" + e.id}>{e.date}</a>
+        ))}
       </div>
-      <a class="ml-logo" href="#top" aria-label="Maison Lune, home">
-        <span class="ml-moon" aria-hidden="true">☾</span>
-        <span>Maison Lune</span>
-      </a>
-      <div class="ml-nav-links">
-        <a href="#story">The house</a>
-        <a class="ml-nav-book" href="#book">Reserve</a>
-      </div>
+      <a class="ml-reserve" href="#book">Reserve</a>
     </nav>
   </header>
 
   <main id="top">
-    <!-- HERO -->
-    <section class="ml-hero">
-      <div class="ml-hero-bg" aria-hidden="true">
-        <img src={IMG.hero} alt="Full moon over the lake at night" loading="eager" fetchpriority="high" />
-      </div>
-      <span class="ml-star ml-s1" aria-hidden="true"></span>
-      <span class="ml-star ml-s2" aria-hidden="true"></span>
-      <span class="ml-star ml-s3" aria-hidden="true"></span>
-      <span class="ml-star ml-s4" aria-hidden="true"></span>
-      <span class="ml-star ml-s5" aria-hidden="true"></span>
-      <span class="ml-star ml-s6" aria-hidden="true"></span>
-      <div class="ml-moonglow" aria-hidden="true"></div>
-      <div class="ml-hero-in">
-        <p class="ml-eyebrow">A four-room inn · Lake Memphremagog · Magog</p>
-        <h1 class="ml-h1">Sleep under<br /><em>a bigger sky</em></h1>
-        <p class="ml-lede">Four rooms above the water, breakfasts worth waking for, and nights so quiet you can hear the lake thinking.</p>
-        <div class="ml-hero-cta">
-          <a class="ml-btn" href="#book">Check availability</a>
-          <a class="ml-link" href="#rooms">Meet the rooms ↓</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- STORY -->
-    <section class="ml-story" id="story">
+    <!-- COVER: typographic, no hero image -->
+    <section class="ml-cover" aria-label="Journal cover">
       <div class="ml-wrap-narrow">
-        <p class="ml-kicker">✦ the house ✦</p>
-        <p class="ml-dropcap">Built in 1928 as a summer house for a Montreal watchmaker, Maison Lune spent ninety years watching the lake change its mind. We kept the wide plank floors, the deep window seats, and the habit of doing one thing at a time. There are four rooms, one long breakfast table, and a dock that belongs to whoever wakes first.</p>
-        <figure class="ml-story-img">
-          <img src={IMG.cabin} alt="The inn on the lake at dusk" loading="lazy" />
-          <figcaption>The house from the water, just after the loons go quiet.</figcaption>
-        </figure>
+        <p class="ml-cover-kicker">Est. 1928 · Lake Memphremagog · Magog</p>
+        <h1 class="ml-h1">The Cabin<br /><em>Journal</em></h1>
+        <p class="ml-cover-sub">Notes from a four-room inn above the water. Guests write the entries; the lake edits them. Four rooms, one long breakfast table, and a dock that belongs to whoever wakes first.</p>
+        <p class="ml-cover-rule" aria-hidden="true">✦ ✦ ✦</p>
       </div>
     </section>
 
-    <!-- ROOMS -->
-    <section class="ml-section" id="rooms">
-      <div class="ml-wrap">
-        <p class="ml-kicker">✦ four rooms, four moods ✦</p>
-        <h2 class="ml-h2">Choose your <em>phase</em></h2>
-        <div class="ml-rooms">
-          <article class="ml-room">
-            <div class="ml-room-media"><img src={IMG.room1} alt="The Full Moon room with a view of the lake" loading="lazy" /><span class="ml-phase" aria-hidden="true">●</span></div>
-            <div class="ml-room-copy">
-              <p class="ml-room-no">Room one</p>
-              <h3>Full Moon</h3>
-              <p>The corner room, with windows on two sides of the water. Wakes with the sun, sleeps with the moon. The bed faces east for a reason.</p>
-              <ul><li>King bed, lake view</li><li>Soaking tub</li><li>Window seat for two</li></ul>
-              <p class="ml-room-price">$285 <span>/ night</span></p>
+    <!-- ENTRIES -->
+    {ENTRIES.map((e) => (
+      <article class="ml-entry" id={e.id} aria-labelledby={e.id + "-title"}>
+        <div class="ml-wrap-entry">
+          <header class="ml-entry-head">
+            <p class="ml-entry-no">{e.no} · {e.year}</p>
+            <h2 class="ml-entry-date" id={e.id + "-title"}><span class="ml-phase" aria-hidden="true">{e.phase}</span> {e.date}</h2>
+            <p class="ml-entry-title"><em>{e.title}</em></p>
+          </header>
+          <div class="ml-entry-grid">
+            <div class="ml-entry-body">
+              {e.body.map((p) => (<p>{p}</p>))}
+              <figure class="ml-entry-photo">
+                <img src={e.photo} alt={e.photoAlt} loading="lazy" />
+                <figcaption>{e.caption}</figcaption>
+              </figure>
             </div>
-          </article>
-          <article class="ml-room ml-room-flip">
-            <div class="ml-room-media"><img src={IMG.room2} alt="The Half Moon room in soft morning light" loading="lazy" /><span class="ml-phase" aria-hidden="true">◐</span></div>
-            <div class="ml-room-copy">
-              <p class="ml-room-no">Room two</p>
-              <h3>Half Moon</h3>
-              <p>Half lake, half pine forest. The quietest room in the house, with a reading chair that has ended more novels than we can count.</p>
-              <ul><li>Queen bed, forest side</li><li>Reading nook</li><li>Rain shower</li></ul>
-              <p class="ml-room-price">$225 <span>/ night</span></p>
-            </div>
-          </article>
-          <article class="ml-room">
-            <div class="ml-room-media"><img src={IMG.room3} alt="The New Moon room, dark and cocoon-like" loading="lazy" /><span class="ml-phase" aria-hidden="true">○</span></div>
-            <div class="ml-room-copy">
-              <p class="ml-room-no">Room three</p>
-              <h3>New Moon</h3>
-              <p>Dark, cocooning, made for deep sleep. Blackout shutters, a weighted blanket, and the best mattress we could find in the province.</p>
-              <ul><li>King bed, blackout</li><li>Weighted blanket</li><li>Deep soaker tub</li></ul>
-              <p class="ml-room-price">$245 <span>/ night</span></p>
-            </div>
-          </article>
-          <article class="ml-room ml-room-flip">
-            <div class="ml-room-media"><img src={IMG.room4} alt="The Crescent room with warm wood tones" loading="lazy" /><span class="ml-phase" aria-hidden="true">☾</span></div>
-            <div class="ml-room-copy">
-              <p class="ml-room-no">Room four</p>
-              <h3>Crescent</h3>
-              <p>The attic room under the eaves, all warm wood and low light. Made for writers, honeymooners, and anyone avoiding their inbox.</p>
-              <ul><li>Queen bed, attic</li><li>Writing desk</li><li>Skylight for stargazing</li></ul>
-              <p class="ml-room-price">$195 <span>/ night</span></p>
-            </div>
-          </article>
+            <aside class="ml-margin" aria-label={"Notes for the entry of " + e.date}>
+              <figure class="ml-roomfig">
+                <img src={e.roomImg} alt={e.roomAlt} loading="lazy" />
+                <figcaption><strong>Stayed in: {e.room}</strong><span>{e.roomLine}</span></figcaption>
+              </figure>
+              <dl class="ml-notes">
+                <div><dt>Weather</dt><dd>{e.weather}</dd></div>
+                <div><dt>Heard</dt><dd>{e.heard}</dd></div>
+              </dl>
+            </aside>
+          </div>
         </div>
-      </div>
-    </section>
+      </article>
+    ))}
 
-    <!-- EXPERIENCES -->
-    <section class="ml-exp" id="experiences">
-      <div class="ml-wrap">
-        <p class="ml-kicker">✦ slow days, well spent ✦</p>
-        <h2 class="ml-h2">The <em>rituals</em></h2>
-      </div>
-      <div class="ml-strip">
-        <figure>
-          <img src={IMG.canoe} alt="Canoe gliding on the calm morning lake" loading="lazy" />
-          <figcaption><strong>Dawn canoe</strong><span>We lend the canoe, the thermos, and the silence. Back by breakfast.</span></figcaption>
-        </figure>
-        <figure>
-          <img src={IMG.dining} alt="Breakfast table set with local food" loading="lazy" />
-          <figcaption><strong>The long breakfast</strong><span>Served 8 to 11 at one big table. Nobody is in a hurry, ever.</span></figcaption>
-        </figure>
-        <figure>
-          <img src={IMG.hero} alt="Stars over the mountains at night" loading="lazy" />
-          <figcaption><strong>Stargazing deck</strong><span>Blankets, a telescope, and some of the darkest skies south of the Laurentians.</span></figcaption>
-        </figure>
-      </div>
-    </section>
-
-    <!-- BOOKING -->
-    <section class="ml-section" id="book">
+    <!-- YOUR ENTRY: booking -->
+    <section class="ml-book" id="book">
       <div class="ml-wrap-narrow">
-        <div class="ml-book">
-          <p class="ml-kicker">✦ reserve directly ✦</p>
-          <h2 class="ml-h2">The lake is <em>waiting</em></h2>
-          <p class="ml-book-sub">Booking direct means the best rate, the best room, and a jar of our granola on arrival. Two-night minimum on weekends.</p>
-          <form class="ml-form" id="ml-form" novalidate>
-            <div class="ml-form-row">
-              <label>Check-in<input type="date" name="in" required /></label>
-              <label>Check-out<input type="date" name="out" required /></label>
-            </div>
-            <div class="ml-form-row">
-              <label>Guests
-                <select name="guests">
-                  <option>1 guest</option>
-                  <option selected>2 guests</option>
-                  <option>3 guests</option>
-                  <option>4 guests</option>
-                </select>
-              </label>
-              <label>Room
-                <select name="room">
-                  <option>Full Moon</option>
-                  <option>Half Moon</option>
-                  <option>New Moon</option>
-                  <option>Crescent</option>
-                </select>
-              </label>
-            </div>
-            <button class="ml-btn ml-btn-full" type="submit">Check availability</button>
-            <p class="ml-form-note" role="status" aria-live="polite"></p>
-          </form>
-          <p class="ml-book-alt">Prefer a human? Call <a href="tel:+18195550142">(819) 555-0142</a>, we answer between breakfasts.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- QUOTES -->
-    <section class="ml-quotes">
-      <div class="ml-wrap-narrow">
-        <blockquote>
-          <p>"We came for one night and stayed for four. I have never slept like that in my adult life."</p>
-          <cite>Hélène & Marc, Montréal</cite>
-        </blockquote>
-        <blockquote>
-          <p>"The breakfast alone is worth the drive. The lake at dawn is almost unfair."</p>
-          <cite>Priya, Toronto</cite>
-        </blockquote>
+        <p class="ml-kicker">✦ your turn ✦</p>
+        <h2 class="ml-h2">Your entry <em>starts here</em></h2>
+        <p class="ml-book-sub">Booking direct means the best rate, the best room, and a jar of our granola on arrival. Two-night minimum on weekends. Pick the room your story needs.</p>
+        <form class="ml-form" id="ml-form" novalidate>
+          <div class="ml-form-row">
+            <label>Check-in<input type="date" name="in" required /></label>
+            <label>Check-out<input type="date" name="out" required /></label>
+          </div>
+          <div class="ml-form-row">
+            <label>Guests
+              <select name="guests">
+                <option>1 guest</option>
+                <option selected>2 guests</option>
+                <option>3 guests</option>
+                <option>4 guests</option>
+              </select>
+            </label>
+            <label>Room
+              <select name="room">
+                <option>Full Moon</option>
+                <option>Half Moon</option>
+                <option>New Moon</option>
+                <option>Crescent</option>
+              </select>
+            </label>
+          </div>
+          <button class="ml-btn ml-btn-full" type="submit">Check availability</button>
+          <p class="ml-form-note" role="status" aria-live="polite"></p>
+        </form>
+        <p class="ml-book-alt">Prefer a human? Call <a href="tel:+18195550142">(819) 555-0142</a>, we answer between breakfasts.</p>
       </div>
     </section>
   </main>
@@ -238,8 +209,10 @@ const IMG = {
     .ml {
       --ml-night: #141B34;
       --ml-night-2: #1D2547;
+      --ml-page: #1A2140;
       --ml-ink: #EDEAE2;
       --ml-silver: #C9D2E8;
+      --ml-dim: #8E97B8;
       --ml-blush: #E8B4B8;
       --ml-gold: #D9BE7E;
       --ml-serif: "Cormorant Garamond", Georgia, serif;
@@ -254,167 +227,104 @@ const IMG = {
     .ml *, .ml *::before, .ml *::after { box-sizing: border-box; }
     .ml img { display: block; max-width: 100%; }
     .ml-wrap { max-width: 1180px; margin: 0 auto; padding: 0 clamp(22px, 4vw, 44px); }
-    .ml-wrap-narrow { max-width: 760px; margin: 0 auto; padding: 0 clamp(22px, 4vw, 44px); }
+    .ml-wrap-narrow { max-width: 720px; margin: 0 auto; padding: 0 clamp(22px, 4vw, 44px); }
+    .ml-wrap-entry { max-width: 1020px; margin: 0 auto; padding: 0 clamp(22px, 4vw, 44px); }
     .ml em { font-style: italic; color: var(--ml-blush); }
 
-    /* nav */
-    .ml-navwrap { position: fixed; top: 0; left: 0; right: 0; z-index: 60; }
-    .ml-nav {
-      display: flex; align-items: center; justify-content: space-between; gap: 20px;
-      padding: 18px clamp(22px, 4vw, 48px);
-      background: linear-gradient(180deg, rgba(20,27,52,0.85), rgba(20,27,52,0));
+    /* toc nav */
+    .ml-navwrap { position: sticky; top: 0; z-index: 60; background: rgba(20, 27, 52, 0.92); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(201, 210, 232, 0.16); }
+    .ml-nav { display: flex; align-items: center; gap: 22px; padding: 14px clamp(22px, 4vw, 48px); }
+    .ml-brand {
+      font-family: var(--ml-sans); font-size: 15px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--ml-ink); text-decoration: none; display: flex; align-items: center; gap: 10px; white-space: nowrap;
     }
-    .ml-nav-links { display: flex; gap: 28px; }
-    .ml-nav-links a {
-      font-family: var(--ml-sans); font-size: 12.5px; font-weight: 500;
-      letter-spacing: 0.24em; text-transform: uppercase; color: var(--ml-silver); text-decoration: none;
+    .ml-brand span { color: var(--ml-gold); font-size: 19px; }
+    .ml-toc { display: flex; gap: 4px; margin-left: auto; overflow-x: auto; }
+    .ml-toc a {
+      font-family: var(--ml-sans); font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--ml-dim); text-decoration: none; padding: 8px 12px; white-space: nowrap;
     }
-    .ml-nav-links a:hover { color: #fff; }
-    .ml-logo {
-      display: flex; align-items: center; gap: 10px; text-decoration: none;
-      font-size: 26px; font-weight: 500; letter-spacing: 0.12em; color: #fff;
+    .ml-toc a:hover { color: var(--ml-gold); }
+    .ml-reserve {
+      font-family: var(--ml-sans); font-size: 12.5px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--ml-night); background: var(--ml-gold); text-decoration: none; padding: 10px 20px; border-radius: 999px; white-space: nowrap;
     }
-    .ml-moon { color: var(--ml-gold); font-size: 24px; }
-    .ml-nav-book { border: 1px solid var(--ml-silver); padding: 10px 20px; border-radius: 999px; }
-    .ml-nav-book:hover { border-color: #fff; }
+    .ml-reserve:hover { filter: brightness(1.1); }
 
-    /* type */
-    .ml-kicker {
-      font-family: var(--ml-sans); font-size: 12px; font-weight: 500; letter-spacing: 0.3em;
-      text-transform: uppercase; color: var(--ml-gold); text-align: center; margin: 0 0 20px;
-    }
-    .ml-h2 { font-size: clamp(2.6rem, 6vw, 4.4rem); font-weight: 400; line-height: 1.05; text-align: center; margin: 0 0 54px; }
-    .ml-eyebrow {
-      font-family: var(--ml-sans); font-size: 12px; font-weight: 500; letter-spacing: 0.3em;
-      text-transform: uppercase; color: var(--ml-silver); margin: 0 0 26px;
-    }
+    /* cover */
+    .ml-cover { padding: clamp(90px, 12vw, 150px) 0 clamp(60px, 8vw, 100px); text-align: center; }
+    .ml-cover-kicker { font-family: var(--ml-sans); font-size: 12.5px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--ml-dim); margin: 0 0 28px; }
+    .ml-h1 { font-size: clamp(3.6rem, 11vw, 7.5rem); line-height: 0.95; font-weight: 500; margin: 0 0 30px; }
+    .ml-cover-sub { font-size: clamp(1.15rem, 2.4vw, 1.4rem); line-height: 1.7; color: var(--ml-silver); margin: 0 auto 34px; max-width: 44ch; }
+    .ml-cover-rule { color: var(--ml-gold); letter-spacing: 1.2em; margin: 0; text-indent: 1.2em; }
 
-    /* hero */
-    .ml-hero { position: relative; min-height: 100svh; display: grid; place-items: center; overflow: hidden; text-align: center; }
-    .ml-hero-bg { position: absolute; inset: -4%; }
-    .ml-hero-bg img { width: 100%; height: 100%; object-fit: cover; animation: ml-kenburns 26s ease-in-out infinite alternate; }
-    @keyframes ml-kenburns { from { transform: scale(1); } to { transform: scale(1.08); } }
-    .ml-hero::after {
-      content: ""; position: absolute; inset: 0;
-      background: linear-gradient(180deg, rgba(20,27,52,0.62) 0%, rgba(20,27,52,0.25) 45%, rgba(20,27,52,0.92) 100%);
+    /* entries */
+    .ml-entry { padding: clamp(56px, 8vw, 100px) 0; border-top: 1px solid rgba(201, 210, 232, 0.14); }
+    .ml-entry-head { text-align: center; margin-bottom: clamp(30px, 4vw, 48px); }
+    .ml-entry-no { font-family: var(--ml-sans); font-size: 12px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--ml-dim); margin: 0 0 14px; }
+    .ml-entry-date { font-size: clamp(2.6rem, 7vw, 4.6rem); font-weight: 500; margin: 0 0 10px; line-height: 1; }
+    .ml-phase { color: var(--ml-gold); font-size: 0.7em; vertical-align: 0.18em; margin-right: 0.25em; }
+    .ml-entry-title { font-size: clamp(1.3rem, 3vw, 1.7rem); margin: 0; color: var(--ml-silver); }
+    .ml-entry-grid { display: grid; grid-template-columns: 1fr 240px; gap: clamp(28px, 5vw, 70px); align-items: start; }
+    .ml-entry-body > p { font-size: 1.22rem; line-height: 1.85; margin: 0 0 1.4em; color: var(--ml-ink); }
+    .ml-entry-body > p:first-of-type::first-letter {
+      font-size: 3.4em; float: left; line-height: 0.82; padding: 0.08em 0.12em 0 0; color: var(--ml-gold); font-weight: 600;
     }
-    .ml-moonglow {
-      position: absolute; top: 16%; right: 14%; width: 220px; height: 220px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(237,234,226,0.5), rgba(237,234,226,0.12) 45%, transparent 70%);
-      filter: blur(6px); animation: ml-glow 7s ease-in-out infinite; z-index: 1;
-    }
-    @keyframes ml-glow { 50% { opacity: 0.65; transform: scale(1.06); } }
-    .ml-star { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: #fff; z-index: 1; animation: ml-twinkle 3.4s ease-in-out infinite; }
-    .ml-s1 { top: 12%; left: 18%; }
-    .ml-s2 { top: 22%; left: 64%; animation-delay: 1.1s; }
-    .ml-s3 { top: 8%; left: 42%; animation-delay: 2s; width: 2px; height: 2px; }
-    .ml-s4 { top: 30%; left: 30%; animation-delay: 0.6s; width: 2px; height: 2px; }
-    .ml-s5 { top: 18%; left: 82%; animation-delay: 2.6s; }
-    .ml-s6 { top: 36%; left: 74%; animation-delay: 1.7s; width: 2px; height: 2px; }
-    @keyframes ml-twinkle { 50% { opacity: 0.15; } }
-    .ml-hero-in { position: relative; z-index: 2; padding: 120px 24px 80px; }
-    .ml-h1 { font-size: clamp(3.4rem, 9vw, 7rem); font-weight: 300; line-height: 1.02; margin: 0 0 26px; letter-spacing: 0.01em; }
-    .ml-h1 em { font-weight: 400; }
-    .ml-lede { font-size: 21px; font-style: italic; color: var(--ml-silver); max-width: 34ch; margin: 0 auto 38px; line-height: 1.6; }
-    .ml-hero-cta { display: flex; gap: 26px; align-items: center; justify-content: center; flex-wrap: wrap; }
-    .ml-btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      font-family: var(--ml-sans); font-size: 13px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase;
-      color: var(--ml-night); background: var(--ml-ink); text-decoration: none; cursor: pointer;
-      padding: 18px 42px; border-radius: 999px; border: none;
-      transition: transform 0.2s ease, background 0.2s ease;
-    }
-    .ml-btn:hover { transform: translateY(-2px); background: #fff; }
-    .ml-btn-full { width: 100%; }
-    .ml-link { font-family: var(--ml-sans); font-size: 13px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ml-silver); text-decoration: none; border-bottom: 1px solid var(--ml-silver); padding-bottom: 4px; }
-    .ml-link:hover { color: #fff; border-color: #fff; }
+    .ml-entry-photo { margin: 2.2em 0 0; }
+    .ml-entry-photo img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border: 1px solid rgba(201, 210, 232, 0.2); }
+    .ml-entry-photo figcaption, .ml-roomfig figcaption span { font-family: var(--ml-sans); font-size: 13px; letter-spacing: 0.04em; color: var(--ml-dim); margin-top: 12px; line-height: 1.6; display: block; }
 
-    /* story */
-    .ml-story { padding: clamp(80px, 10vw, 140px) 0; background: linear-gradient(180deg, var(--ml-night), var(--ml-night-2)); }
-    .ml-dropcap { font-size: 23px; line-height: 1.75; font-weight: 400; color: var(--ml-ink); margin: 0 0 44px; }
-    .ml-dropcap::first-letter {
-      font-size: 4.6em; float: left; line-height: 0.82; padding: 6px 14px 0 0;
-      color: var(--ml-gold); font-weight: 500;
-    }
-    .ml-story-img { margin: 0; }
-    .ml-story-img img { border-radius: 4px; width: 100%; height: clamp(280px, 40vw, 460px); object-fit: cover; }
-    .ml-story-img figcaption { font-family: var(--ml-sans); font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ml-silver); margin-top: 14px; text-align: center; }
-
-    /* rooms */
-    .ml-section { padding: clamp(80px, 10vw, 140px) 0; }
-    .ml-rooms { display: grid; gap: clamp(60px, 8vw, 110px); }
-    .ml-room { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: clamp(30px, 5vw, 70px); align-items: center; }
-    .ml-room-flip .ml-room-media { order: 2; }
-    .ml-room-flip .ml-room-copy { order: 1; text-align: right; }
-    .ml-room-flip .ml-room-copy ul { justify-items: end; }
-    .ml-room-media { position: relative; margin: 0; }
-    .ml-room-media img { width: 100%; height: clamp(320px, 44vw, 520px); object-fit: cover; border-radius: 4px; box-shadow: 0 0 0 1px rgba(217, 190, 126, 0.4), 0 24px 60px rgba(0, 0, 0, 0.45); }
-    .ml-phase {
-      position: absolute; top: 22px; left: 22px; width: 58px; height: 58px; border-radius: 50%;
-      display: grid; place-items: center; font-size: 26px; color: var(--ml-night);
-      background: rgba(237, 234, 226, 0.92); backdrop-filter: blur(4px);
-    }
-    .ml-room-no { font-family: var(--ml-sans); font-size: 12px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ml-gold); margin: 0 0 14px; }
-    .ml-room-copy h3 { font-size: clamp(2.2rem, 4.5vw, 3.4rem); font-weight: 400; margin: 0 0 16px; }
-    .ml-room-copy p { font-size: 19px; line-height: 1.7; color: var(--ml-silver); margin: 0 0 20px; font-style: italic; }
-    .ml-room-copy ul { list-style: none; margin: 0 0 24px; padding: 0; display: grid; gap: 8px; font-family: var(--ml-sans); font-size: 13.5px; letter-spacing: 0.08em; color: var(--ml-ink); }
-    .ml-room-copy li::before { content: "✦ "; color: var(--ml-gold); }
-    .ml-room-price { font-size: 30px !important; font-style: normal !important; color: var(--ml-ink) !important; }
-    .ml-room-price span { font-size: 16px; color: var(--ml-silver); }
-
-    /* experiences strip */
-    .ml-exp { padding: clamp(80px, 10vw, 130px) 0; background: var(--ml-night-2); overflow: hidden; }
-    .ml-strip { display: flex; gap: 26px; overflow-x: auto; padding: 10px clamp(22px, 4vw, 44px) 30px; scrollbar-width: thin; }
-    .ml-strip figure { margin: 0; flex: none; width: min(400px, 80vw); }
-    .ml-strip img { width: 100%; height: 300px; object-fit: cover; border-radius: 200px 200px 4px 4px; }
-    .ml-strip figcaption { display: grid; gap: 8px; padding-top: 18px; text-align: center; }
-    .ml-strip figcaption strong { font-size: 24px; font-weight: 500; }
-    .ml-strip figcaption span { font-family: var(--ml-sans); font-size: 14px; color: var(--ml-silver); line-height: 1.6; }
+    /* marginalia */
+    .ml-margin { border-left: 1px solid rgba(201, 210, 232, 0.2); padding-left: 26px; display: grid; gap: 26px; position: sticky; top: 120px; }
+    .ml-roomfig { margin: 0; }
+    .ml-roomfig img { width: 100%; aspect-ratio: 4/5; object-fit: cover; border: 1px solid rgba(201, 210, 232, 0.2); filter: sepia(0.22) brightness(0.94); }
+    .ml-roomfig figcaption strong { font-family: var(--ml-sans); font-size: 12px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ml-gold); display: block; margin-top: 12px; }
+    .ml-notes { margin: 0; display: grid; gap: 14px; }
+    .ml-notes div { display: grid; gap: 4px; }
+    .ml-notes dt { font-family: var(--ml-sans); font-size: 11px; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase; color: var(--ml-dim); }
+    .ml-notes dd { margin: 0; font-size: 1.08rem; font-style: italic; color: var(--ml-silver); }
 
     /* booking */
-    .ml-book {
-      background: rgba(237, 234, 226, 0.05); border: 1px solid rgba(201, 210, 232, 0.25);
-      border-radius: 8px; padding: clamp(36px, 6vw, 64px); text-align: center;
-    }
-    .ml-book-sub { font-size: 19px; font-style: italic; color: var(--ml-silver); max-width: 44ch; margin: 0 auto 36px; line-height: 1.65; }
-    .ml-form { display: grid; gap: 18px; text-align: left; max-width: 560px; margin: 0 auto; }
+    .ml-kicker { font-family: var(--ml-sans); font-size: 12.5px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--ml-gold); margin: 0 0 18px; text-align: center; }
+    .ml-h2 { font-size: clamp(2.4rem, 6vw, 4rem); font-weight: 500; margin: 0 0 20px; text-align: center; line-height: 1.05; }
+    .ml-book { padding: clamp(70px, 10vw, 130px) 0; border-top: 1px solid rgba(201, 210, 232, 0.14); background: var(--ml-night-2); }
+    .ml-book-sub { text-align: center; font-size: 1.18rem; line-height: 1.75; color: var(--ml-silver); margin: 0 0 36px; }
+    .ml-form { display: grid; gap: 18px; background: var(--ml-night); border: 1px solid rgba(201, 210, 232, 0.18); padding: clamp(26px, 4vw, 40px); }
     .ml-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-    .ml-form label { display: grid; gap: 10px; font-family: var(--ml-sans); font-size: 12px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ml-silver); }
+    .ml-form label { display: grid; gap: 8px; font-family: var(--ml-sans); font-size: 11.5px; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase; color: var(--ml-dim); }
     .ml-form input, .ml-form select {
-      font-family: var(--ml-serif); font-size: 19px; color: var(--ml-ink);
-      background: transparent; border: none; border-bottom: 1px solid rgba(201, 210, 232, 0.4);
-      padding: 10px 2px; width: 100%; color-scheme: dark;
+      font-family: var(--ml-serif); font-size: 1.1rem; color: var(--ml-ink);
+      background: var(--ml-page); border: 1px solid rgba(201, 210, 232, 0.25); padding: 13px 16px; width: 100%; color-scheme: dark;
     }
-    .ml-form input:focus, .ml-form select:focus { outline: none; border-bottom-color: var(--ml-gold); }
-    .ml-form-note { margin: 0; text-align: center; font-size: 18px; font-style: italic; color: var(--ml-blush); }
+    .ml-form input:focus, .ml-form select:focus { outline: 2px solid var(--ml-gold); outline-offset: 2px; }
+    .ml-btn {
+      font-family: var(--ml-sans); font-size: 14px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase;
+      background: var(--ml-gold); color: var(--ml-night); border: none; padding: 18px 34px; cursor: pointer; text-decoration: none; display: inline-block;
+    }
+    .ml-btn:hover { filter: brightness(1.1); }
+    .ml-btn-full { width: 100%; }
+    .ml-form-note { margin: 0; color: var(--ml-gold); font-size: 1.1rem; font-style: italic; text-align: center; }
     .ml-form-note:empty { display: none; }
-    .ml-book-alt { margin: 28px 0 0; font-family: var(--ml-sans); font-size: 14px; letter-spacing: 0.06em; color: var(--ml-silver); }
+    .ml-book-alt { text-align: center; color: var(--ml-dim); font-size: 1.1rem; margin: 26px 0 0; font-style: italic; }
     .ml-book-alt a { color: var(--ml-gold); }
 
-    /* quotes */
-    .ml-quotes { padding: 0 0 clamp(80px, 10vw, 130px); }
-    .ml-quotes .ml-wrap-narrow { display: grid; gap: 44px; }
-    .ml-quotes blockquote { margin: 0; text-align: center; }
-    .ml-quotes blockquote p { font-size: clamp(1.5rem, 3.4vw, 2.1rem); font-style: italic; line-height: 1.5; margin: 0 0 14px; color: var(--ml-ink); }
-    .ml-quotes cite { font-family: var(--ml-sans); font-style: normal; font-size: 12.5px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ml-gold); }
-
     /* footer */
-    .ml-footer { border-top: 1px solid rgba(201, 210, 232, 0.18); padding: 70px 0 90px; text-align: center; }
-    .ml-footer-moon { font-size: 44px; color: var(--ml-gold); margin: 0 0 16px; }
-    .ml-footer-name { font-size: 30px; letter-spacing: 0.14em; margin: 0 0 26px; }
-    .ml-footer-in { display: grid; gap: 8px; font-family: var(--ml-sans); font-size: 13.5px; color: var(--ml-silver); }
+    .ml-footer { text-align: center; padding: 70px 0 90px; border-top: 1px solid rgba(201, 210, 232, 0.14); }
+    .ml-footer-moon { font-size: 44px; color: var(--ml-gold); margin: 0 0 10px; }
+    .ml-footer-name { font-size: 1.9rem; margin: 0 0 22px; }
+    .ml-footer-in { display: grid; gap: 8px; color: var(--ml-dim); font-family: var(--ml-sans); font-size: 13.5px; letter-spacing: 0.06em; }
     .ml-footer-in p { margin: 0; }
     .ml-footer-in a { color: var(--ml-gold); }
 
     @media (max-width: 900px) {
-      .ml-nav-links { display: none; }
-      .ml-room, .ml-room-flip .ml-room-media, .ml-room-flip .ml-room-copy { grid-template-columns: 1fr; order: initial; text-align: left; }
-      .ml-room-flip .ml-room-copy ul { justify-items: start; }
-      .ml-form-row { grid-template-columns: 1fr; }
+      .ml-entry-grid { grid-template-columns: 1fr; }
+      .ml-margin { border-left: none; padding-left: 0; border-top: 1px solid rgba(201, 210, 232, 0.2); padding-top: 26px; position: static; grid-template-columns: 200px 1fr; align-items: start; }
     }
-    @media (prefers-reduced-motion: reduce) {
-      .ml-hero-bg img, .ml-moonglow, .ml-star { animation: none; }
-      .ml-btn, .ml-link { transition: none; }
+    @media (max-width: 640px) {
+      .ml-toc { display: none; }
+      .ml-margin { grid-template-columns: 1fr; }
+      .ml-form-row { grid-template-columns: 1fr; }
+      .ml-entry-body > p { font-size: 1.12rem; }
     }
   </style>
 </body>
