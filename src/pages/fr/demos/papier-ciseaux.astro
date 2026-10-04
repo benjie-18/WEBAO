@@ -1,0 +1,559 @@
+---
+import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+
+// Demo microsite: Papier Ciseaux, fictional artisan stationery brand, Quebec City.
+// Standalone art direction: scrapbook collage. Not connected to the WEBAO theme system.
+const IMG = {
+  pen: "https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=900&auto=format&fit=crop",
+  desk: "https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?q=80&w=1000&auto=format&fit=crop",
+  journals: "https://images.unsplash.com/photo-1524578271613-d550eacf6090?q=80&w=800&auto=format&fit=crop",
+  pens: "https://images.unsplash.com/photo-1456735190827-d1262f71b8a3?q=80&w=800&auto=format&fit=crop",
+  washi: "https://images.unsplash.com/photo-1452860606245-08befc0ff44b?q=80&w=800&auto=format&fit=crop",
+  craft: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=1000&auto=format&fit=crop",
+};
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Papier Ciseaux : papeterie artisanale à Québec</title>
+  <meta name="description" content="Papier Ciseaux fabrique des carnets, du washi tape et des stylos en petites séries à Québec. De la papeterie avec une âme faite main." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+</head>
+<body class="pc">
+
+  <!-- NAV -->
+  <header class="pc-navwrap">
+    <nav class="pc-nav" aria-label="Navigation principale">
+      <a class="pc-logo" href="#top" aria-label="Papier Ciseaux, accueil">
+        <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="13.5" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="4 3"/><path d="M9 19c3-1 5-4 6-8M21 19c-3-1-5-4-6-8" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+        <span>Papier <em>Ciseaux</em></span>
+      </a>
+      <button class="pc-burger" id="pc-burger" aria-expanded="false" aria-controls="pc-links" aria-label="Ouvrir le menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="pc-links" id="pc-links">
+        <a href="#collection">Collection</a>
+        <a href="#story">Notre histoire</a>
+        <a href="#workshops">Ateliers</a>
+        <a href="#notes">Mots doux</a>
+        <a class="pc-cta" href="#newsletter">Recevoir le zine</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- HERO: desk collage -->
+    <section class="pc-hero">
+      <div class="pc-hero-paper" aria-hidden="true"></div>
+      <svg class="pc-doodle pc-doodle-1" viewBox="0 0 120 40" aria-hidden="true"><path d="M4 30 C 30 6, 60 36, 90 10 S 112 22, 116 14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+      <svg class="pc-doodle pc-doodle-2" viewBox="0 0 60 60" aria-hidden="true"><path d="M30 6 L36 22 L53 22 L40 32 L45 48 L30 38 L15 48 L20 32 L7 22 L24 22 Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg>
+
+      <div class="pc-hero-in">
+        <div class="pc-hero-copy">
+          <p class="pc-stamp">depuis 2019 · ville de québec</p>
+          <h1 class="pc-h1">De la papeterie avec une <span class="pc-hl">âme</span> faite main</h1>
+          <p class="pc-lede">Des carnets, du washi tape et des stylos en petites séries, fabriqués lentement dans notre petit atelier. Chaque carnet est cousu, collé et tamponné par de vraies mains humaines (les nôtres).</p>
+          <div class="pc-hero-btns">
+            <a class="pc-btn" href="#collection">Voir la collection</a>
+            <a class="pc-btn pc-btn-paper" href="#story">Notre savoir-faire</a>
+          </div>
+          <p class="pc-scribble">psst, chaque commande inclut une planche d'autocollants!
+            <svg viewBox="0 0 80 30" aria-hidden="true"><path d="M6 6 C 30 26, 50 26, 70 10 M62 6 l8 4 -9 5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+          </p>
+        </div>
+        <div class="pc-collage" aria-hidden="false">
+          <figure class="pc-polaroid pc-p1">
+            <span class="pc-tape pc-tape-pink"></span>
+            <img src={IMG.pen} alt="Plume d'un stylo plume écrivant sur du papier ligné" loading="eager" fetchpriority="high" />
+            <figcaption>notre plume signature, en action</figcaption>
+          </figure>
+          <figure class="pc-polaroid pc-p2">
+            <span class="pc-tape pc-tape-blue"></span>
+            <img src={IMG.desk} alt="Bureau avec carnet, stylos et café" loading="lazy" />
+            <figcaption>mardi matin à l'atelier</figcaption>
+          </figure>
+          <div class="pc-sticker" aria-hidden="true">100%<br />fait<br />main!</div>
+        </div>
+      </div>
+      <div class="pc-torn" aria-hidden="true"></div>
+    </section>
+
+    <!-- TAPE MARQUEE -->
+    <div class="pc-marquee" aria-hidden="true">
+      <div class="pc-marquee-track">
+        <span>carnets</span><i>✂</i><span>washi tape</span><i>✂</i><span>stylos plume</span><i>✂</i><span>autocollants</span><i>✂</i><span>trombonnes</span><i>✂</i><span>bonheur de bureau</span><i>✂</i>
+        <span>carnets</span><i>✂</i><span>washi tape</span><i>✂</i><span>stylos plume</span><i>✂</i><span>autocollants</span><i>✂</i><span>trombonnes</span><i>✂</i><span>bonheur de bureau</span><i>✂</i>
+      </div>
+    </div>
+
+    <!-- COLLECTION -->
+    <section class="pc-section" id="collection">
+      <div class="pc-wrap">
+        <p class="pc-kicker">tout frais de l'établi</p>
+        <h2 class="pc-h2">La collection</h2>
+        <p class="pc-sub">Trois petites familles d'objets en papier. Chacun est découpé, plié ou rempli à la main, en séries de cinquante exemplaires ou moins.</p>
+        <div class="pc-cards">
+          <article class="pc-card pc-rot-l">
+            <span class="pc-tape pc-tape-green"></span>
+            <div class="pc-card-img"><img src={IMG.journals} alt="Étagères de carnets artisanaux colorés" loading="lazy" /></div>
+            <h3>Carnets et cahiers</h3>
+            <p>Reliure cousue à plat, 160 pages de papier ami des stylos plume, couvertures en kraft, en lin ou en papier marbré.</p>
+            <p class="pc-price">dès 24 $</p>
+          </article>
+          <article class="pc-card pc-rot-r">
+            <span class="pc-tape pc-tape-yellow"></span>
+            <div class="pc-card-img"><img src={IMG.washi} alt="Rouleaux de washi tape colorés avec ciseaux" loading="lazy" /></div>
+            <h3>Washi tape</h3>
+            <p>Vingt motifs originaux dessinés à l'atelier, imprimés à Kyoto sur vrai papier de riz. Déchirable, repositionnable, adorable.</p>
+            <p class="pc-price">dès 6 $</p>
+          </article>
+          <article class="pc-card pc-rot-l2">
+            <span class="pc-tape pc-tape-pink"></span>
+            <div class="pc-card-img"><img src={IMG.pens} alt="Mallette remplie de stylos et crayons colorés" loading="lazy" /></div>
+            <h3>Stylos et crayons</h3>
+            <p>Stylos rechargeables en laiton, crayons en cèdre et notre stylo plume en verre adoré, chacun testé sur papier avant envoi.</p>
+            <p class="pc-price">dès 12 $</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- STORY -->
+    <section class="pc-story" id="story">
+      <div class="pc-wrap pc-story-in">
+        <div class="pc-story-img">
+          <span class="pc-tape pc-tape-blue"></span>
+          <img src={IMG.craft} alt="Pinceaux avec de la peinture vive à l'atelier" loading="lazy" />
+          <p class="pc-caption-hand">jour de marbrure, chaque vendredi</p>
+        </div>
+        <div class="pc-story-copy">
+          <p class="pc-kicker">notre histoire</p>
+          <h2 class="pc-h2">Deux amies, un pistolet à colle, aucun plan d'affaires</h2>
+          <p>Papier Ciseaux est né en 2019 quand Camille et June, deux graphistes fatiguées des écrans, ont loué une boutique au toit qui fuit et l'ont remplie de papier. Sept ans plus tard, le toit fuit toujours, mais les étagères débordent.</p>
+          <p>Nous imprimons, cousons, plions et tamponnons tout en petites séries. Aucune couverture marbrée ne ressemble à une autre, et c'est exactement ce que nous aimons. De la papeterie lente pour des vies rapides.</p>
+          <ul class="pc-facts">
+            <li><strong>7</strong> ans de coupures de papier</li>
+            <li><strong>48</strong> motifs de washi dessinés</li>
+            <li><strong>0</strong> machine plus grosse qu'un grille-pain</li>
+          </ul>
+        </div>
+      </div>
+      <div class="pc-torn pc-torn-flip" aria-hidden="true"></div>
+    </section>
+
+    <!-- WORKSHOPS -->
+    <section class="pc-section" id="workshops">
+      <div class="pc-wrap">
+        <p class="pc-kicker">venez mettre le bazar</p>
+        <h2 class="pc-h2">Ateliers du samedi</h2>
+        <p class="pc-sub">Les samedis après-midi à la boutique. Tabliers fournis, perfection non requise.</p>
+        <div class="pc-tickets">
+          <article class="pc-ticket">
+            <p class="pc-ticket-tag">2 heures</p>
+            <h3>Reliure pour débutants</h3>
+            <p>Cousez votre propre carnet à plat et repartez avec, encore parfumé à la colle.</p>
+            <p class="pc-ticket-price">45 $ <span>/ personne</span></p>
+            <a class="pc-btn pc-btn-small" href="#newsletter">Réserver ma place</a>
+          </article>
+          <article class="pc-ticket pc-ticket-hot">
+            <p class="pc-ticket-tag">3 heures</p>
+            <h3>Marbrure et washi</h3>
+            <p>Notre atelier le plus aimé. Faites tournoyer l'encre sur l'eau, tirez votre papier marbré, imprimez un rouleau de washi.</p>
+            <p class="pc-ticket-price">68 $ <span>/ personne</span></p>
+            <a class="pc-btn pc-btn-small" href="#newsletter">Réserver ma place</a>
+          </article>
+          <article class="pc-ticket">
+            <p class="pc-ticket-tag">privé</p>
+            <h3>Fêtes d'anniversaire</h3>
+            <p>Amenez six amis, nous apportons l'avalanche de papier. Le gâteau est optionnel mais encouragé.</p>
+            <p class="pc-ticket-price">180 $ <span>/ groupe</span></p>
+            <a class="pc-btn pc-btn-small" href="#newsletter">Réserver ma place</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOVE NOTES -->
+    <section class="pc-notes" id="notes">
+      <div class="pc-wrap">
+        <p class="pc-kicker">épinglés sur notre babillard</p>
+        <h2 class="pc-h2">Mots doux</h2>
+        <div class="pc-stickies">
+          <blockquote class="pc-sticky pc-s1">
+            <p>« Mon carnet a survécu à trois ans d'usage quotidien et s'ouvre encore à plat. De la sorcellerie. »</p>
+            <cite>Maya R., Montréal</cite>
+          </blockquote>
+          <blockquote class="pc-sticky pc-s2">
+            <p>« Washi commandé à minuit, arrivé avec une carte de remerciement dessinée à la main. J'ai failli pleurer. »</p>
+            <cite>Tom L., Toronto</cite>
+          </blockquote>
+          <blockquote class="pc-sticky pc-s3">
+            <p>« L'atelier de marbrure, c'est le plus de fun que j'ai eu tout habillé. Dix sur dix. »</p>
+            <cite>Priya S., Québec</cite>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section class="pc-news" id="newsletter">
+      <div class="pc-wrap pc-news-in">
+        <div>
+          <p class="pc-kicker">la trace de papier</p>
+          <h2 class="pc-h2">Notre zine mensuel, dans votre boîte</h2>
+          <p>Un courriel par mois. Nouveaux motifs de washi, dates d'ateliers et une planche d'autocollants à imprimer chaque saison. Zéro pourriel, que du papier.</p>
+        </div>
+        <form class="pc-form" id="pc-form" novalidate>
+          <label>Votre nom
+            <input type="text" name="name" required placeholder="Jo Papier" autocomplete="name" />
+          </label>
+          <label>Adresse courriel
+            <input type="email" name="email" required placeholder="jo@exemple.com" autocomplete="email" />
+          </label>
+          <button class="pc-btn" type="submit">Envoyez-moi le zine</button>
+          <p class="pc-form-note" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pc-footer">
+    <div class="pc-wrap pc-footer-in">
+      <div>
+        <p class="pc-footer-logo">Papier <em>Ciseaux</em></p>
+        <p>© 2026 Papier Ciseaux. Démo fictive, vraies coupures de papier.</p>
+      </div>
+      <div>
+        <p><strong>Visitez l'atelier</strong></p>
+        <p>14, rue des Lilas<br />Québec, QC G1K 3B7<br />Mar. à sam., 10 h à 18 h</p>
+      </div>
+      <div>
+        <p><strong>Dites bonjour</strong></p>
+        <p><a href="tel:+14185550132">(418) 555-0132</a><br /><a href="mailto:bonjour@papierciseaux.example">bonjour@papierciseaux.example</a></p>
+      </div>
+    </div>
+    <p class="pc-colophon" aria-hidden="true">✂ · ✎ · ❤ · couper, plier, recommencer · ✂ · ✎ · ❤</p>
+  </footer>
+
+  <EscapeHatch locale="fr" />
+
+  <script>
+    (function () {
+      var burger = document.getElementById('pc-burger');
+      var links = document.getElementById('pc-links');
+      burger?.addEventListener('click', function () {
+        var open = links?.classList.toggle('pc-open');
+        burger?.setAttribute('aria-expanded', open ? 'true' : 'false');
+        burger?.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+      });
+      links?.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () {
+          links?.classList.remove('pc-open');
+          burger?.setAttribute('aria-expanded', 'false');
+        });
+      });
+      var form = document.getElementById('pc-form') as HTMLFormElement | null;
+      form?.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var note = form?.querySelector('.pc-form-note');
+        if (note) note.textContent = 'C\'est noté! Le prochain zine (et votre planche d\'autocollants) arrive bientôt dans votre boîte.';
+        form?.reset();
+      });
+    })();
+  </script>
+
+  <style>
+    .pc {
+      --pc-cream: #F7F0E1;
+      --pc-cream-2: #F2E7CF;
+      --pc-kraft: #D9C39A;
+      --pc-ink: #2A2118;
+      --pc-ink-soft: #5A4C3B;
+      --pc-red: #C8452C;
+      --pc-pink: #F5B8C4;
+      --pc-green: #A8D5BA;
+      --pc-blue: #A9C6E8;
+      --pc-yellow: #F6D98B;
+      --pc-hand: "Caveat", cursive;
+      --pc-serif: "Libre Baskerville", Georgia, serif;
+      margin: 0;
+      background: var(--pc-cream);
+      color: var(--pc-ink);
+      font-family: var(--pc-serif);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: clip;
+      background-image:
+        radial-gradient(ellipse at 20% 10%, rgba(217,195,154,0.25), transparent 50%),
+        radial-gradient(ellipse at 85% 90%, rgba(200,69,44,0.06), transparent 45%);
+    }
+    .pc *, .pc *::before, .pc *::after { box-sizing: border-box; }
+    .pc img { display: block; max-width: 100%; }
+    .pc-wrap { max-width: 1140px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px); }
+
+    /* nav */
+    .pc-navwrap { position: fixed; top: 0; left: 0; right: 0; z-index: 60; }
+    .pc-nav {
+      display: flex; align-items: center; gap: 20px;
+      padding: 12px clamp(16px, 3vw, 32px);
+      background: rgba(247, 240, 225, 0.94);
+      border-bottom: 2px dashed rgba(42, 33, 24, 0.25);
+    }
+    .pc-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--pc-ink); margin-right: auto; }
+    .pc-logo svg { color: var(--pc-red); transform: rotate(-8deg); }
+    .pc-logo span { font-family: var(--pc-hand); font-size: 30px; font-weight: 700; line-height: 1; }
+    .pc-logo em { font-style: normal; color: var(--pc-red); }
+    .pc-links { display: flex; align-items: center; gap: 4px; }
+    .pc-links a {
+      font-family: var(--pc-hand); font-size: 21px; font-weight: 600; color: var(--pc-ink);
+      text-decoration: none; padding: 8px 14px; border-radius: 6px; transform: rotate(-1deg);
+    }
+    .pc-links a:nth-child(even) { transform: rotate(1.2deg); }
+    .pc-links a:hover { background: var(--pc-yellow); }
+    .pc-links .pc-cta {
+      font-family: var(--pc-serif); font-size: 14px; font-weight: 700; letter-spacing: 0.04em;
+      background: var(--pc-red); color: #FFF8EC; padding: 12px 20px; border-radius: 999px;
+      box-shadow: 2px 3px 0 rgba(42,33,24,0.85); transform: rotate(-1.5deg);
+    }
+    .pc-links .pc-cta:hover { background: var(--pc-ink); transform: rotate(0deg) translateY(-1px); }
+    .pc-burger { display: none; background: none; border: none; cursor: pointer; padding: 10px; }
+    .pc-burger span { display: block; width: 26px; height: 3px; background: var(--pc-ink); border-radius: 2px; margin: 5px 0; }
+
+    /* type */
+    .pc-kicker {
+      font-family: var(--pc-hand); font-size: 24px; font-weight: 600; color: var(--pc-red);
+      margin: 0 0 8px; transform: rotate(-1.5deg); display: inline-block;
+    }
+    .pc-h1, .pc-h2 { font-weight: 700; line-height: 1.12; margin: 0; letter-spacing: -0.01em; }
+    .pc-h1 { font-size: clamp(2.6rem, 6.5vw, 4.6rem); }
+    .pc-h2 { font-size: clamp(2rem, 4.5vw, 3.2rem); margin-bottom: 14px; }
+    .pc-hl {
+      background: linear-gradient(transparent 55%, var(--pc-yellow) 55%, var(--pc-yellow) 92%, transparent 92%);
+      padding: 0 6px;
+    }
+    .pc-sub { font-size: 17px; line-height: 1.7; color: var(--pc-ink-soft); max-width: 60ch; margin: 0 0 44px; }
+    .pc-lede { font-size: 18px; line-height: 1.7; color: var(--pc-ink-soft); max-width: 44ch; }
+
+    /* hero */
+    .pc-hero { position: relative; padding: 150px 0 0; }
+    .pc-hero-in {
+      position: relative; z-index: 2;
+      max-width: 1140px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px) 90px;
+      display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(30px, 5vw, 70px); align-items: center;
+    }
+    .pc-stamp {
+      display: inline-block; font-family: var(--pc-hand); font-size: 20px; font-weight: 600; color: var(--pc-red);
+      border: 2px solid var(--pc-red); border-radius: 6px; padding: 4px 14px; transform: rotate(-3deg);
+      margin: 0 0 22px; letter-spacing: 0.06em;
+    }
+    .pc-h1 { margin-bottom: 20px; }
+    .pc-hero-btns { display: flex; gap: 14px; flex-wrap: wrap; margin: 30px 0 18px; }
+    .pc-scribble { font-family: var(--pc-hand); font-size: 22px; color: var(--pc-ink-soft); margin: 0; display: flex; align-items: center; gap: 10px; }
+    .pc-scribble svg { width: 70px; height: 26px; color: var(--pc-red); flex: none; }
+
+    /* collage */
+    .pc-collage { position: relative; min-height: 480px; }
+    .pc-polaroid {
+      position: absolute; background: #FFFDF6; padding: 12px 12px 14px; margin: 0;
+      box-shadow: 0 14px 34px rgba(42, 33, 24, 0.28); width: min(72%, 320px);
+    }
+    .pc-polaroid img { width: 100%; height: 230px; object-fit: cover; filter: sepia(0.22) saturate(1.05); }
+    .pc-polaroid figcaption { font-family: var(--pc-hand); font-size: 21px; text-align: center; padding: 10px 4px 2px; color: var(--pc-ink-soft); }
+    .pc-p1 { top: 0; left: 2%; transform: rotate(-4deg); animation: pc-float 7s ease-in-out infinite; z-index: 2; }
+    .pc-p2 { bottom: 0; right: 0; transform: rotate(3deg); animation: pc-float 8.5s ease-in-out infinite reverse; }
+    @keyframes pc-float { 50% { translate: 0 -10px; } }
+    .pc-tape {
+      position: absolute; top: -14px; left: 50%; width: 110px; height: 30px; translate: -50% 0;
+      opacity: 0.75; z-index: 3;
+      background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.35) 0 6px, transparent 6px 12px);
+      box-shadow: 0 2px 4px rgba(42,33,24,0.15);
+    }
+    .pc-tape-pink { background-color: var(--pc-pink); transform: rotate(-6deg); }
+    .pc-tape-blue { background-color: var(--pc-blue); transform: rotate(5deg); }
+    .pc-tape-green { background-color: var(--pc-green); transform: rotate(-4deg); }
+    .pc-tape-yellow { background-color: var(--pc-yellow); transform: rotate(7deg); }
+    .pc-sticker {
+      position: absolute; top: 6%; right: 6%; z-index: 4;
+      width: 108px; height: 108px; border-radius: 50%;
+      background: var(--pc-red); color: #FFF8EC;
+      display: grid; place-content: center; text-align: center;
+      font-family: var(--pc-hand); font-size: 21px; font-weight: 700; line-height: 1.05;
+      transform: rotate(12deg); box-shadow: 0 8px 20px rgba(200,69,44,0.4);
+      animation: pc-spin-slow 14s linear infinite;
+    }
+    @keyframes pc-spin-slow { to { rotate: 372deg; } }
+    .pc-doodle { position: absolute; color: var(--pc-red); opacity: 0.55; z-index: 1; }
+    .pc-doodle-1 { width: 120px; top: 120px; left: 4%; transform: rotate(-8deg); }
+    .pc-doodle-2 { width: 54px; bottom: 130px; left: 44%; transform: rotate(10deg); }
+
+    /* torn edge */
+    .pc-torn {
+      height: 26px; margin-top: -2px;
+      background: var(--pc-kraft);
+      clip-path: polygon(0 100%, 0 45%, 3% 70%, 6% 40%, 9% 65%, 13% 35%, 17% 60%, 21% 42%, 25% 68%, 29% 38%, 33% 62%, 37% 44%, 41% 66%, 45% 36%, 49% 60%, 53% 42%, 57% 68%, 61% 40%, 65% 64%, 69% 38%, 73% 62%, 77% 44%, 81% 66%, 85% 36%, 89% 60%, 93% 42%, 97% 64%, 100% 40%, 100% 100%);
+    }
+    .pc-torn-flip { transform: scaleY(-1); background: var(--pc-cream); }
+
+    /* marquee */
+    .pc-marquee { background: var(--pc-red); color: #FFF3E2; overflow: hidden; padding: 13px 0; transform: rotate(-1deg) scale(1.02); }
+    .pc-marquee-track { display: flex; gap: 26px; width: max-content; animation: pc-slide 22s linear infinite; font-family: var(--pc-hand); font-size: 24px; font-weight: 600; }
+    .pc-marquee-track i { font-style: normal; opacity: 0.7; }
+    @keyframes pc-slide { to { transform: translateX(-50%); } }
+
+    /* sections */
+    .pc-section { padding: clamp(70px, 9vw, 120px) 0; }
+
+    /* collection cards */
+    .pc-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(22px, 3vw, 36px); }
+    .pc-card {
+      position: relative; background: #FFFDF6; padding: 18px 18px 26px;
+      box-shadow: 0 12px 30px rgba(42,33,24,0.18); border: 1px solid rgba(42,33,24,0.08);
+      transition: transform 0.25s ease;
+    }
+    .pc-card:hover { transform: translateY(-8px) rotate(0deg) !important; z-index: 2; }
+    .pc-rot-l { transform: rotate(-1.6deg); }
+    .pc-rot-r { transform: rotate(1.4deg); }
+    .pc-rot-l2 { transform: rotate(-1deg); }
+    .pc-card-img { overflow: hidden; margin-bottom: 16px; border: 6px solid #fff; outline: 1px solid rgba(42,33,24,0.12); }
+    .pc-card-img img { width: 100%; height: 210px; object-fit: cover; filter: sepia(0.18); transition: transform 0.4s ease; }
+    .pc-card:hover .pc-card-img img { transform: scale(1.05); }
+    .pc-card h3 { font-size: 21px; margin: 0 0 8px; }
+    .pc-card p { font-size: 14.5px; line-height: 1.65; color: var(--pc-ink-soft); margin: 0 0 10px; }
+    .pc-price { font-family: var(--pc-hand); font-size: 26px; font-weight: 700; color: var(--pc-red); margin: 0; }
+
+    /* story */
+    .pc-story { background: var(--pc-kraft); padding: clamp(70px, 9vw, 110px) 0 0; position: relative; }
+    .pc-story-in { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(30px, 5vw, 70px); align-items: center; padding-bottom: clamp(60px, 7vw, 100px); }
+    .pc-story-img { position: relative; transform: rotate(-2deg); }
+    .pc-story-img img { width: 100%; height: 420px; object-fit: cover; border: 12px solid #FFFDF6; box-shadow: 0 16px 40px rgba(42,33,24,0.3); }
+    .pc-caption-hand { font-family: var(--pc-hand); font-size: 22px; text-align: center; color: var(--pc-ink-soft); margin: 12px 0 0; transform: rotate(-1deg); }
+    .pc-story-copy p { font-size: 16.5px; line-height: 1.75; color: #3E3226; }
+    .pc-facts { list-style: none; display: flex; gap: 26px; margin: 28px 0 0; padding: 0; flex-wrap: wrap; }
+    .pc-facts li { font-family: var(--pc-hand); font-size: 20px; color: var(--pc-ink-soft); }
+    .pc-facts strong { display: block; font-size: 44px; font-weight: 700; color: var(--pc-red); line-height: 1; }
+
+    /* tickets */
+    .pc-tickets { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 3vw, 32px); }
+    .pc-ticket {
+      position: relative; background: #FFFDF6; border: 2px dashed rgba(42,33,24,0.35);
+      padding: 30px 26px; text-align: center; transform: rotate(-1deg);
+      transition: transform 0.25s ease;
+    }
+    .pc-ticket:nth-child(2) { transform: rotate(1.2deg); }
+    .pc-ticket:nth-child(3) { transform: rotate(-0.6deg); }
+    .pc-ticket:hover { transform: rotate(0deg) translateY(-6px); }
+    .pc-ticket-hot { background: var(--pc-yellow); }
+    .pc-ticket-tag {
+      display: inline-block; font-family: var(--pc-hand); font-size: 19px; font-weight: 600;
+      background: var(--pc-ink); color: var(--pc-cream); padding: 3px 14px; border-radius: 999px;
+      margin: 0 0 14px; transform: rotate(-2deg);
+    }
+    .pc-ticket h3 { font-size: 22px; margin: 0 0 10px; }
+    .pc-ticket p { font-size: 14.5px; line-height: 1.65; color: var(--pc-ink-soft); margin: 0 0 16px; }
+    .pc-ticket-price { font-family: var(--pc-hand); font-size: 40px; font-weight: 700; color: var(--pc-red); margin: 0 0 18px; }
+    .pc-ticket-price span { font-size: 20px; color: var(--pc-ink-soft); }
+
+    /* buttons */
+    .pc-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      font-family: var(--pc-serif); font-weight: 700; font-size: 16px;
+      background: var(--pc-red); color: #FFF8EC; text-decoration: none; cursor: pointer; border: none;
+      padding: 15px 30px; border-radius: 999px; box-shadow: 2px 3px 0 rgba(42,33,24,0.85);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .pc-btn:hover { transform: translateY(-2px) rotate(-1deg); box-shadow: 3px 5px 0 rgba(42,33,24,0.85); }
+    .pc-btn-paper { background: #FFFDF6; color: var(--pc-ink); }
+    .pc-btn-small { font-size: 14px; padding: 11px 24px; }
+
+    /* sticky notes */
+    .pc-notes { background: var(--pc-cream-2); padding: clamp(70px, 9vw, 120px) 0; border-block: 2px dashed rgba(42,33,24,0.2); }
+    .pc-stickies { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 3vw, 34px); margin-top: 10px; }
+    .pc-sticky {
+      margin: 0; padding: 34px 26px 26px; min-height: 230px;
+      font-family: var(--pc-hand); font-size: 22px; line-height: 1.45; color: #4A3D2E;
+      box-shadow: 0 10px 24px rgba(42,33,24,0.2); position: relative;
+      transition: transform 0.25s ease;
+    }
+    .pc-sticky:hover { transform: scale(1.04) rotate(0deg) !important; z-index: 2; }
+    .pc-s1 { background: var(--pc-yellow); transform: rotate(-2deg); }
+    .pc-s2 { background: var(--pc-pink); transform: rotate(1.6deg); }
+    .pc-s3 { background: var(--pc-green); transform: rotate(-1deg); }
+    .pc-sticky::before {
+      content: ""; position: absolute; top: -12px; left: 50%; translate: -50% 0;
+      width: 90px; height: 26px; background: rgba(255,255,255,0.55);
+      box-shadow: 0 1px 3px rgba(42,33,24,0.15); transform: rotate(-3deg);
+    }
+    .pc-sticky cite { display: block; margin-top: 14px; font-size: 19px; font-style: normal; font-weight: 700; color: var(--pc-red); }
+
+    /* newsletter */
+    .pc-news { padding: clamp(70px, 9vw, 120px) 0; }
+    .pc-news-in {
+      display: grid; grid-template-columns: 1fr 1fr; gap: clamp(30px, 5vw, 70px); align-items: center;
+      background: #FFFDF6; border: 1px solid rgba(42,33,24,0.12);
+      padding: clamp(30px, 5vw, 60px); box-shadow: 0 18px 44px rgba(42,33,24,0.16);
+      transform: rotate(-0.6deg); position: relative;
+    }
+    .pc-news-in::before, .pc-news-in::after {
+      content: ""; position: absolute; top: -14px; width: 110px; height: 30px; opacity: 0.75; z-index: 2;
+      background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.35) 0 6px, transparent 6px 12px);
+    }
+    .pc-news-in::before { left: 8%; background-color: var(--pc-blue); transform: rotate(-6deg); }
+    .pc-news-in::after { right: 8%; background-color: var(--pc-green); transform: rotate(5deg); }
+    .pc-news-in p { font-size: 16.5px; line-height: 1.7; color: var(--pc-ink-soft); }
+    .pc-form { display: grid; gap: 16px; }
+    .pc-form label { display: grid; gap: 8px; font-family: var(--pc-hand); font-size: 21px; font-weight: 600; color: var(--pc-ink-soft); }
+    .pc-form input {
+      font-family: var(--pc-serif); font-size: 16px; padding: 14px 18px; width: 100%;
+      background: var(--pc-cream); border: 2px solid rgba(42,33,24,0.25); border-radius: 4px; color: var(--pc-ink);
+    }
+    .pc-form input:focus { outline: 3px solid var(--pc-yellow); border-color: var(--pc-red); }
+    .pc-form-note { margin: 0; font-family: var(--pc-hand); font-size: 22px; font-weight: 600; color: var(--pc-red); }
+    .pc-form-note:empty { display: none; }
+
+    /* footer */
+    .pc-footer { background: var(--pc-ink); color: #EDE3CE; padding: 60px 0 30px; }
+    .pc-footer-in { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 30px; margin-bottom: 40px; }
+    .pc-footer-logo { font-family: var(--pc-hand); font-size: 34px; font-weight: 700; margin: 0 0 10px; }
+    .pc-footer-logo em { font-style: normal; color: var(--pc-yellow); }
+    .pc-footer p { font-size: 14px; line-height: 1.7; margin: 0 0 8px; }
+    .pc-footer strong { font-size: 15px; }
+    .pc-footer a { color: var(--pc-yellow); }
+    .pc-colophon { text-align: center; font-family: var(--pc-hand); font-size: 20px; opacity: 0.6; margin: 0; letter-spacing: 0.3em; }
+
+    @media (max-width: 960px) {
+      .pc-hero-in { grid-template-columns: 1fr; }
+      .pc-collage { min-height: 440px; max-width: 520px; }
+      .pc-cards, .pc-tickets, .pc-stickies { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; }
+      .pc-story-in, .pc-news-in { grid-template-columns: 1fr; }
+      .pc-footer-in { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 760px) {
+      .pc-burger { display: block; margin-left: auto; }
+      .pc-logo { margin-right: 0; }
+      .pc-links {
+        display: none; position: absolute; top: 100%; left: 0; right: 0;
+        background: var(--pc-cream); border-bottom: 2px dashed rgba(42,33,24,0.25);
+        flex-direction: column; align-items: stretch; padding: 10px 20px 20px; gap: 2px;
+      }
+      .pc-links.pc-open { display: flex; }
+      .pc-links a { transform: none; text-align: center; padding: 12px; }
+      .pc-links .pc-cta { text-align: center; margin-top: 8px; }
+      .pc-hero { padding-top: 120px; }
+      .pc-collage { min-height: 400px; }
+      .pc-polaroid img { height: 190px; }
+      .pc-sticker { width: 92px; height: 92px; font-size: 18px; }
+      .pc-footer-in { grid-template-columns: 1fr; }
+      .pc-facts { gap: 18px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .pc-p1, .pc-p2, .pc-sticker, .pc-marquee-track { animation: none; }
+      .pc-card, .pc-ticket, .pc-sticky, .pc-btn { transition: none; }
+    }
+  </style>
+</body>
+</html>
