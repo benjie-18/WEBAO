@@ -1,0 +1,647 @@
+---
+import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+
+// Demo microsite: Tactile, fictional smart home control brand, Portland.
+// Standalone art direction. Full neumorphism. Not connected to the WEBAO theme system.
+const IMG = {
+  living: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=1000&auto=format&fit=crop",
+  lounge: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=800&auto=format&fit=crop",
+  bedroom: "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=800&auto=format&fit=crop",
+  kitchen: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=800&auto=format&fit=crop",
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tactile: Smart Home That Feels Like Home</title>
+  <meta name="description" content="Tactile makes smart home controls you can feel. Soft-touch hubs, chunky toggles and calm automation for every room. Ships to the US and Canada." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+</head>
+<body class="tx">
+
+  <EscapeHatch locale="en" />
+
+  <!-- NAV -->
+  <header class="tx-navwrap">
+    <nav class="tx-nav" aria-label="Primary">
+      <a class="tx-logo" href="#top" aria-label="Tactile, home">
+        <span class="tx-logo-dot" aria-hidden="true"></span>tactile
+      </a>
+      <button class="tx-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tx-menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="tx-menu" id="tx-menu">
+        <div class="tx-nav-links">
+          <a href="#controls">Controls</a>
+          <a href="#rooms">Rooms</a>
+          <a href="#specs">Specs</a>
+          <a href="#pricing">Kits</a>
+        </div>
+        <a class="tx-btn" href="#contact">Get Tactile</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+
+    <!-- HERO -->
+    <section class="tx-hero">
+      <div class="tx-wrap tx-hero-grid">
+        <div class="tx-hero-copy">
+          <p class="tx-eyebrow">Smart home, soft touch</p>
+          <h1 class="tx-h1">Your home,<br />under your thumb.</h1>
+          <p class="tx-lede">Tactile replaces cold glass panels with controls you can actually feel. Press, slide, and twist your way to the perfect evening, no app digging required.</p>
+          <div class="tx-hero-cta">
+            <a class="tx-btn" href="#pricing">See the kits</a>
+            <a class="tx-btn-soft" href="#controls">Try the controls</a>
+          </div>
+          <div class="tx-hero-stats">
+            <div class="tx-stat"><strong>38k</strong><span>homes softened</span></div>
+            <div class="tx-stat"><strong>4.9</strong><span>average rating</span></div>
+            <div class="tx-stat"><strong>12ms</strong><span>press response</span></div>
+          </div>
+        </div>
+        <div class="tx-hero-device">
+          <div class="tx-hub" role="img" aria-label="Tactile Hub device mockup showing temperature and quick controls">
+            <div class="tx-hub-screen tx-inset">
+              <p class="tx-hub-label">Living room</p>
+              <p class="tx-hub-temp"><span id="tx-hero-temp">21</span>°</p>
+              <p class="tx-hub-sub">Feels just right</p>
+            </div>
+            <div class="tx-hub-row">
+              <button class="tx-chip tx-press" type="button" aria-pressed="true"><span class="tx-chip-dot tx-on" aria-hidden="true"></span>Lights</button>
+              <button class="tx-chip tx-press" type="button" aria-pressed="false"><span class="tx-chip-dot" aria-hidden="true"></span>Blinds</button>
+            </div>
+            <div class="tx-hub-row">
+              <button class="tx-chip tx-press" type="button" aria-pressed="true"><span class="tx-chip-dot tx-on" aria-hidden="true"></span>Music</button>
+              <button class="tx-chip tx-press" type="button" aria-pressed="false"><span class="tx-chip-dot" aria-hidden="true"></span>Away</button>
+            </div>
+            <div class="tx-hub-tempctl">
+              <button class="tx-round tx-press" type="button" data-temp="-1" aria-label="Cooler">−</button>
+              <button class="tx-round tx-press" type="button" data-temp="1" aria-label="Warmer">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTROLS -->
+    <section class="tx-section" id="controls">
+      <div class="tx-wrap">
+        <p class="tx-kicker">Touch everything</p>
+        <h2 class="tx-h2">Controls with a<br />satisfying click</h2>
+        <p class="tx-sub">Go ahead, press things. Every Tactile control is real hardware with a real press, and every demo below is live.</p>
+        <div class="tx-controls-grid">
+          <article class="tx-card">
+            <div class="tx-card-head"><h3>Porch light</h3><span class="tx-pill">Front door</span></div>
+            <p class="tx-card-desc">Dim from the couch, or tap twice for full bright when the dog needs out.</p>
+            <div class="tx-control-row">
+              <button class="tx-toggle" type="button" role="switch" aria-checked="true" aria-label="Porch light"><span class="tx-toggle-knob"></span></button>
+              <input class="tx-slider" type="range" min="0" max="100" value="72" aria-label="Porch light brightness" />
+              <span class="tx-slider-val">72%</span>
+            </div>
+          </article>
+          <article class="tx-card">
+            <div class="tx-card-head"><h3>Thermostat</h3><span class="tx-pill">Hallway</span></div>
+            <p class="tx-card-desc">Twist the ring or tap. Learns your routine in a week, keeps it simple forever.</p>
+            <div class="tx-control-row">
+              <button class="tx-round tx-press" type="button" data-room-temp="-1" aria-label="Cooler">−</button>
+              <p class="tx-big-num"><span data-room-display>21</span>°</p>
+              <button class="tx-round tx-press" type="button" data-room-temp="1" aria-label="Warmer">+</button>
+            </div>
+          </article>
+          <article class="tx-card">
+            <div class="tx-card-head"><h3>Front door</h3><span class="tx-pill">Security</span></div>
+            <p class="tx-card-desc">Locked, unlocked, and everything in between, with a press you can hear from the kitchen.</p>
+            <div class="tx-control-row">
+              <button class="tx-toggle" type="button" role="switch" aria-checked="false" aria-label="Front door lock"><span class="tx-toggle-knob"></span></button>
+              <p class="tx-lock-state">Unlocked</p>
+            </div>
+          </article>
+          <article class="tx-card">
+            <div class="tx-card-head"><h3>Blinds</h3><span class="tx-pill">Bedroom</span></div>
+            <p class="tx-card-desc">Slide for morning light, press and hold for blackout movie mode.</p>
+            <div class="tx-control-row">
+              <input class="tx-slider" type="range" min="0" max="100" value="35" aria-label="Blind openness" />
+              <span class="tx-slider-val">35%</span>
+            </div>
+          </article>
+          <article class="tx-card">
+            <div class="tx-card-head"><h3>Evening scene</h3><span class="tx-pill">One press</span></div>
+            <p class="tx-card-desc">Dims every light, drops the blinds, warms the thermostat. Dinner party in one tap.</p>
+            <div class="tx-control-row">
+              <button class="tx-btn-wide tx-press" type="button" data-scene>Start evening</button>
+            </div>
+          </article>
+          <article class="tx-card">
+            <div class="tx-card-head"><h3>Speaker</h3><span class="tx-pill">Kitchen</span></div>
+            <p class="tx-card-desc">A chunky volume ring, because nobody ever found the tiny plus button in a hurry.</p>
+            <div class="tx-control-row">
+              <button class="tx-toggle" type="button" role="switch" aria-checked="true" aria-label="Kitchen speaker"><span class="tx-toggle-knob"></span></button>
+              <input class="tx-slider" type="range" min="0" max="100" value="48" aria-label="Speaker volume" />
+              <span class="tx-slider-val">48%</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ROOMS -->
+    <section class="tx-section" id="rooms">
+      <div class="tx-wrap">
+        <p class="tx-kicker">Room by room</p>
+        <h2 class="tx-h2">Every room,<br />softly in control</h2>
+        <div class="tx-rooms-grid">
+          <article class="tx-room">
+            <div class="tx-img-frame tx-inset"><img src={IMG.living} alt="Calm living room with soft daylight" loading="lazy" /></div>
+            <h3>Living room</h3>
+            <p>6 devices · 21° · Evening scene ready</p>
+          </article>
+          <article class="tx-room">
+            <div class="tx-img-frame tx-inset"><img src={IMG.lounge} alt="Cozy lounge with warm lamp light" loading="lazy" /></div>
+            <h3>Lounge</h3>
+            <p>4 devices · 20° · Movie mode armed</p>
+          </article>
+          <article class="tx-room">
+            <div class="tx-img-frame tx-inset"><img src={IMG.bedroom} alt="Quiet bedroom in neutral tones" loading="lazy" /></div>
+            <h3>Bedroom</h3>
+            <p>5 devices · 19° · Wake-up at 7:00</p>
+          </article>
+          <article class="tx-room">
+            <div class="tx-img-frame tx-inset"><img src={IMG.kitchen} alt="Bright modern kitchen" loading="lazy" /></div>
+            <h3>Kitchen</h3>
+            <p>7 devices · 22° · Speaker playing</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- SPECS -->
+    <section class="tx-section" id="specs">
+      <div class="tx-wrap">
+        <p class="tx-kicker">Under the softness</p>
+        <h2 class="tx-h2">Serious tech,<br />gentle manners</h2>
+        <div class="tx-spec-list">
+          <div class="tx-spec"><span>Connectivity</span><strong>Wi-Fi 6, Thread, Matter</strong></div>
+          <div class="tx-spec"><span>Response time</span><strong>12 ms local press</strong></div>
+          <div class="tx-spec"><span>Battery</span><strong>2 years, coin cell</strong></div>
+          <div class="tx-spec"><span>Privacy</span><strong>On-device, no cloud mic</strong></div>
+          <div class="tx-spec"><span>Works with</span><strong>Apple Home, Google, Alexa</strong></div>
+          <div class="tx-spec"><span>Warranty</span><strong>3 years, no questions</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="tx-section" id="pricing">
+      <div class="tx-wrap">
+        <p class="tx-kicker">Starter kits</p>
+        <h2 class="tx-h2">Begin with<br />one soft press</h2>
+        <div class="tx-kits">
+          <article class="tx-kit">
+            <h3>Starter</h3>
+            <p class="tx-price">$149</p>
+            <p class="tx-kit-desc">One room, fully tactile.</p>
+            <ul>
+              <li>1 Tactile Hub</li>
+              <li>2 dimmer switches</li>
+              <li>1 thermostat ring</li>
+            </ul>
+            <a class="tx-btn-soft" href="#contact">Choose Starter</a>
+          </article>
+          <article class="tx-kit tx-kit-pop">
+            <p class="tx-flag">Most loved</p>
+            <h3>Home</h3>
+            <p class="tx-price">$349</p>
+            <p class="tx-kit-desc">The whole main floor.</p>
+            <ul>
+              <li>2 Tactile Hubs</li>
+              <li>6 dimmer switches</li>
+              <li>1 thermostat ring</li>
+              <li>2 blind sliders</li>
+            </ul>
+            <a class="tx-btn" href="#contact">Choose Home</a>
+          </article>
+          <article class="tx-kit">
+            <h3>Pro</h3>
+            <p class="tx-price">$699</p>
+            <p class="tx-kit-desc">Every room, plus install.</p>
+            <ul>
+              <li>4 Tactile Hubs</li>
+              <li>12 dimmer switches</li>
+              <li>2 thermostat rings</li>
+              <li>White-glove install</li>
+            </ul>
+            <a class="tx-btn-soft" href="#contact">Choose Pro</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROOF -->
+    <section class="tx-section">
+      <div class="tx-wrap">
+        <p class="tx-kicker">Soft words</p>
+        <h2 class="tx-h2">Homes that<br />feel the difference</h2>
+        <div class="tx-proof-grid">
+          <figure class="tx-quote">
+            <blockquote>"My kids fight over who gets to press the evening scene button. The click alone is worth it."</blockquote>
+            <figcaption><strong>Mara J.</strong><span>Portland, Home kit</span></figcaption>
+          </figure>
+          <figure class="tx-quote">
+            <blockquote>"Finally, smart home controls my grandmother can use without calling me. She just twists the ring."</blockquote>
+            <figcaption><strong>Devon A.</strong><span>Austin, Pro kit</span></figcaption>
+          </figure>
+          <figure class="tx-quote">
+            <blockquote>"It feels like pressing a cloud that does what you ask. My apartment has never been this calm."</blockquote>
+            <figcaption><strong>Priya S.</strong><span>Chicago, Starter kit</span></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="tx-section" id="contact">
+      <div class="tx-wrap tx-contact-grid">
+        <div>
+          <p class="tx-kicker">Say hello</p>
+          <h2 class="tx-h2">Let's soften<br />your home</h2>
+          <p class="tx-sub">Tell us about your place and we'll sketch the perfect kit. Real humans reply within a day.</p>
+          <address class="tx-address">
+            <p><strong>Tactile Home Co.</strong></p>
+            <p>418 Alder Street, Suite 200<br />Portland, OR 97204</p>
+            <p><a href="tel:+15035550194">(503) 555-0194</a></p>
+            <p><a href="mailto:hello@tactilehome.example">hello@tactilehome.example</a></p>
+          </address>
+        </div>
+        <form class="tx-form" id="tx-form" novalidate>
+          <label class="tx-field"><span>Your name</span><input class="tx-input" type="text" name="name" required autocomplete="name" placeholder="Ada Lovelace" /></label>
+          <label class="tx-field"><span>Email</span><input class="tx-input" type="email" name="email" required autocomplete="email" placeholder="ada@example.com" /></label>
+          <label class="tx-field"><span>Which kit caught your eye?</span>
+            <select class="tx-input" name="kit">
+              <option>Starter, $149</option>
+              <option>Home, $349</option>
+              <option>Pro, $699</option>
+              <option>Not sure yet</option>
+            </select>
+          </label>
+          <label class="tx-field"><span>About your home</span><textarea class="tx-input" name="message" rows="4" placeholder="Two-bedroom apartment, lots of lamps..."></textarea></label>
+          <button class="tx-btn" type="submit">Send it over</button>
+          <p class="tx-form-note" id="tx-form-note" role="status" hidden></p>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="tx-footer">
+    <div class="tx-wrap tx-footer-grid">
+      <div>
+        <a class="tx-logo" href="#top" aria-label="Tactile, home"><span class="tx-logo-dot" aria-hidden="true"></span>tactile</a>
+        <p>Soft controls for calm homes.<br />Designed in Portland.</p>
+      </div>
+      <nav aria-label="Footer">
+        <a href="#controls">Controls</a>
+        <a href="#rooms">Rooms</a>
+        <a href="#specs">Specs</a>
+        <a href="#pricing">Kits</a>
+      </nav>
+      <p class="tx-fine">Fictional demo site crafted by WEBAO. Tactile Home Co. does not exist.</p>
+    </div>
+  </footer>
+
+<style>
+  .tx {
+    --bg: #E0E5EC;
+    --ink: #4c566a;
+    --ink-soft: #7b8499;
+    --dark: #a3b1c6;
+    --light: #ffffff;
+    --sage: #A8C3A0;
+    --blue: #8FA8C8;
+    --radius: 26px;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Nunito", system-ui, sans-serif;
+    overflow-x: clip;
+    line-height: 1.6;
+  }
+  .tx *, .tx *::before, .tx *::after { box-sizing: border-box; }
+  .tx img { display: block; max-width: 100%; }
+  .tx a { color: inherit; }
+  .tx-wrap { width: min(1120px, 92%); margin-inline: auto; }
+
+  .tx-raised { background: var(--bg); box-shadow: 8px 8px 18px var(--dark), -8px -8px 18px var(--light); border-radius: var(--radius); }
+  .tx-inset { background: var(--bg); box-shadow: inset 6px 6px 14px var(--dark), inset -6px -6px 14px var(--light); border-radius: var(--radius); }
+
+  /* Nav */
+  .tx-navwrap { position: sticky; top: 0; z-index: 50; padding: 14px 0; }
+  .tx-nav { width: min(1120px, 92%); margin-inline: auto; background: var(--bg); border-radius: 999px;
+    box-shadow: 6px 6px 14px var(--dark), -6px -6px 14px var(--light);
+    display: flex; align-items: center; justify-content: space-between; padding: 10px 12px 10px 22px; position: relative; }
+  .tx-logo { display: inline-flex; align-items: center; gap: 10px; font-weight: 900; font-size: 1.35rem; letter-spacing: -0.02em; text-decoration: none; color: var(--ink); }
+  .tx-logo-dot { width: 18px; height: 18px; border-radius: 50%; background: var(--sage);
+    box-shadow: 3px 3px 6px var(--dark), -3px -3px 6px var(--light); }
+  .tx-menu { display: flex; align-items: center; gap: 26px; }
+  .tx-nav-links { display: flex; gap: 24px; }
+  .tx-nav-links a { text-decoration: none; font-weight: 700; font-size: 0.95rem; color: var(--ink-soft); padding: 8px 4px; }
+  .tx-nav-links a:hover { color: var(--ink); }
+  .tx-burger { display: none; background: var(--bg); border: 0; border-radius: 14px; padding: 12px;
+    box-shadow: 4px 4px 10px var(--dark), -4px -4px 10px var(--light); cursor: pointer; }
+  .tx-burger span { display: block; width: 22px; height: 3px; border-radius: 3px; background: var(--ink); margin: 4px 0; }
+
+  /* Buttons */
+  .tx-btn { display: inline-block; text-decoration: none; font-weight: 800; color: var(--ink);
+    background: var(--bg); border: 0; border-radius: 999px; padding: 14px 30px; cursor: pointer; font-family: inherit; font-size: 1rem;
+    box-shadow: 6px 6px 14px var(--dark), -6px -6px 14px var(--light); transition: box-shadow .15s ease, transform .15s ease; }
+  .tx-btn:hover { transform: translateY(-1px); }
+  .tx-btn:active, .tx-press:active { box-shadow: inset 5px 5px 12px var(--dark), inset -5px -5px 12px var(--light); transform: translateY(0); }
+  .tx-btn-soft { display: inline-block; text-decoration: none; font-weight: 800; color: var(--ink-soft);
+    border-radius: 999px; padding: 14px 30px; box-shadow: inset 5px 5px 12px var(--dark), inset -5px -5px 12px var(--light); }
+  .tx-btn-soft:hover { color: var(--ink); }
+  .tx-btn-wide { width: 100%; }
+
+  /* Hero */
+  .tx-hero { padding: 56px 0 70px; }
+  .tx-hero-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 48px; align-items: center; }
+  .tx-eyebrow { font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; font-size: 0.8rem; color: var(--ink-soft); margin: 0 0 18px; }
+  .tx-h1 { font-size: clamp(2.6rem, 5.5vw, 4.3rem); line-height: 1.04; letter-spacing: -0.02em; font-weight: 900; margin: 0 0 20px; color: #3d4657; }
+  .tx-lede { font-size: 1.12rem; color: var(--ink-soft); max-width: 44ch; margin: 0 0 28px; }
+  .tx-hero-cta { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 34px; }
+  .tx-hero-stats { display: flex; gap: 14px; flex-wrap: wrap; }
+  .tx-stat { border-radius: 20px; padding: 14px 20px; box-shadow: inset 5px 5px 12px var(--dark), inset -5px -5px 12px var(--light); text-align: center; }
+  .tx-stat strong { display: block; font-size: 1.5rem; font-weight: 900; color: #3d4657; }
+  .tx-stat span { font-size: 0.8rem; color: var(--ink-soft); font-weight: 700; }
+
+  /* Hub device mockup */
+  .tx-hero-device { display: flex; justify-content: center; }
+  .tx-hub { width: min(340px, 100%); border-radius: 40px; padding: 30px 26px;
+    background: var(--bg); box-shadow: 14px 14px 30px var(--dark), -14px -14px 30px var(--light); }
+  .tx-hub-screen { border-radius: 28px; padding: 26px 20px; text-align: center; margin-bottom: 22px; }
+  .tx-hub-label { margin: 0; font-weight: 800; font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); }
+  .tx-hub-temp { margin: 6px 0 0; font-size: 4.2rem; font-weight: 900; color: #3d4657; line-height: 1; }
+  .tx-hub-sub { margin: 4px 0 0; color: var(--ink-soft); font-weight: 700; }
+  .tx-hub-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .tx-chip { display: inline-flex; align-items: center; justify-content: center; gap: 9px; border: 0; cursor: pointer;
+    background: var(--bg); color: var(--ink); font-family: inherit; font-weight: 800; font-size: 0.9rem;
+    border-radius: 999px; padding: 13px 10px; box-shadow: 5px 5px 12px var(--dark), -5px -5px 12px var(--light); transition: box-shadow .15s ease; }
+  .tx-chip[aria-pressed="true"] { box-shadow: inset 4px 4px 10px var(--dark), inset -4px -4px 10px var(--light); color: #3d4657; }
+  .tx-chip-dot { width: 11px; height: 11px; border-radius: 50%; background: var(--dark); box-shadow: inset 2px 2px 4px rgba(0,0,0,.18); }
+  .tx-chip-dot.tx-on { background: var(--sage); box-shadow: 0 0 8px rgba(168,195,160,.9); }
+  .tx-hub-tempctl { display: flex; justify-content: center; gap: 18px; margin-top: 4px; }
+  .tx-round { width: 58px; height: 58px; border-radius: 50%; border: 0; cursor: pointer; background: var(--bg); color: var(--ink);
+    font-size: 1.6rem; font-weight: 900; font-family: inherit; line-height: 1;
+    box-shadow: 5px 5px 12px var(--dark), -5px -5px 12px var(--light); transition: box-shadow .15s ease; }
+
+  /* Sections */
+  .tx-section { padding: 64px 0; }
+  .tx-kicker { font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; font-size: 0.8rem; color: var(--ink-soft); margin: 0 0 14px; }
+  .tx-h2 { font-size: clamp(2rem, 4vw, 3rem); line-height: 1.08; letter-spacing: -0.02em; font-weight: 900; color: #3d4657; margin: 0 0 16px; }
+  .tx-sub { color: var(--ink-soft); max-width: 60ch; margin: 0 0 36px; font-size: 1.05rem; }
+
+  /* Controls */
+  .tx-controls-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+  .tx-card { border-radius: var(--radius); padding: 26px; background: var(--bg);
+    box-shadow: 9px 9px 20px var(--dark), -9px -9px 20px var(--light); }
+  .tx-card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+  .tx-card-head h3 { margin: 0; font-size: 1.25rem; font-weight: 900; color: #3d4657; }
+  .tx-pill { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft);
+    border-radius: 999px; padding: 6px 12px; box-shadow: inset 4px 4px 9px var(--dark), inset -4px -4px 9px var(--light); white-space: nowrap; }
+  .tx-card-desc { color: var(--ink-soft); font-size: 0.95rem; margin: 0 0 20px; }
+  .tx-control-row { display: flex; align-items: center; gap: 14px; }
+  .tx-toggle { width: 74px; height: 40px; border-radius: 999px; border: 0; cursor: pointer; background: var(--bg);
+    box-shadow: inset 4px 4px 10px var(--dark), inset -4px -4px 10px var(--light); position: relative; flex: none; transition: box-shadow .2s ease; }
+  .tx-toggle-knob { position: absolute; top: 6px; left: 7px; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--bg); box-shadow: 3px 3px 8px var(--dark), -3px -3px 8px var(--light); transition: left .22s ease, background .22s ease; }
+  .tx-toggle[aria-checked="true"] .tx-toggle-knob { left: 39px; background: var(--sage); }
+  .tx-toggle[aria-checked="true"] { box-shadow: inset 4px 4px 10px rgba(120,140,110,.55), inset -4px -4px 10px var(--light); }
+  .tx-slider { -webkit-appearance: none; appearance: none; flex: 1; height: 14px; border-radius: 999px; background: var(--bg);
+    box-shadow: inset 4px 4px 9px var(--dark), inset -4px -4px 9px var(--light); outline: none; cursor: pointer; }
+  .tx-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 30px; height: 30px; border-radius: 50%; background: var(--bg);
+    box-shadow: 3px 3px 8px var(--dark), -3px -3px 8px var(--light); cursor: grab; }
+  .tx-slider::-moz-range-thumb { width: 30px; height: 30px; border-radius: 50%; background: var(--bg); border: 0;
+    box-shadow: 3px 3px 8px var(--dark), -3px -3px 8px var(--light); cursor: grab; }
+  .tx-slider-val { font-weight: 900; color: #3d4657; min-width: 52px; text-align: right; }
+  .tx-big-num { margin: 0; font-size: 2.6rem; font-weight: 900; color: #3d4657; min-width: 90px; text-align: center; }
+  .tx-lock-state { margin: 0; font-weight: 800; color: var(--ink-soft); }
+
+  /* Rooms */
+  .tx-rooms-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px; }
+  .tx-room { border-radius: var(--radius); padding: 18px; background: var(--bg);
+    box-shadow: 9px 9px 20px var(--dark), -9px -9px 20px var(--light); }
+  .tx-img-frame { border-radius: 18px; overflow: hidden; padding: 10px; margin-bottom: 16px; }
+  .tx-img-frame img { border-radius: 12px; width: 100%; height: 170px; object-fit: cover; }
+  .tx-room h3 { margin: 0 0 4px; font-size: 1.15rem; font-weight: 900; color: #3d4657; }
+  .tx-room p { margin: 0; color: var(--ink-soft); font-size: 0.92rem; font-weight: 700; }
+
+  /* Specs */
+  .tx-spec-list { border-radius: var(--radius); background: var(--bg); padding: 14px;
+    box-shadow: 9px 9px 20px var(--dark), -9px -9px 20px var(--light); }
+  .tx-spec { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 18px 22px; border-radius: 18px; }
+  .tx-spec + .tx-spec { margin-top: 6px; box-shadow: inset 3px 3px 8px var(--dark), inset -3px -3px 8px var(--light); }
+  .tx-spec span { color: var(--ink-soft); font-weight: 700; }
+  .tx-spec strong { color: #3d4657; font-weight: 900; text-align: right; }
+
+  /* Kits */
+  .tx-kits { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; align-items: stretch; }
+  .tx-kit { border-radius: var(--radius); padding: 34px 30px; background: var(--bg); text-align: center;
+    box-shadow: 9px 9px 20px var(--dark), -9px -9px 20px var(--light); position: relative; display: flex; flex-direction: column; }
+  .tx-kit-pop { box-shadow: 12px 12px 28px var(--dark), -12px -12px 28px var(--light); }
+  .tx-flag { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); margin: 0; background: var(--sage); color: #3d4657;
+    font-weight: 900; font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 999px; padding: 6px 16px;
+    box-shadow: 4px 4px 10px var(--dark), -4px -4px 10px var(--light); }
+  .tx-kit h3 { margin: 0; font-size: 1.4rem; font-weight: 900; color: #3d4657; }
+  .tx-price { font-size: 2.8rem; font-weight: 900; color: #3d4657; margin: 10px 0 4px; }
+  .tx-kit-desc { color: var(--ink-soft); font-weight: 700; margin: 0 0 20px; }
+  .tx-kit ul { list-style: none; padding: 0; margin: 0 0 28px; display: grid; gap: 12px; }
+  .tx-kit li { border-radius: 14px; padding: 10px; font-weight: 700; color: var(--ink-soft);
+    box-shadow: inset 4px 4px 9px var(--dark), inset -4px -4px 9px var(--light); }
+  .tx-kit .tx-btn, .tx-kit .tx-btn-soft { margin-top: auto; }
+
+  /* Proof */
+  .tx-proof-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+  .tx-quote { margin: 0; border-radius: var(--radius); padding: 28px; background: var(--bg);
+    box-shadow: 9px 9px 20px var(--dark), -9px -9px 20px var(--light); }
+  .tx-quote blockquote { margin: 0 0 18px; font-size: 1.05rem; font-weight: 600; color: var(--ink); }
+  .tx-quote figcaption strong { display: block; color: #3d4657; }
+  .tx-quote figcaption span { color: var(--ink-soft); font-size: 0.9rem; font-weight: 700; }
+
+  /* Contact */
+  .tx-contact-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 48px; align-items: start; }
+  .tx-address { font-style: normal; color: var(--ink-soft); font-weight: 600; }
+  .tx-address a { font-weight: 800; color: #3d4657; }
+  .tx-form { border-radius: var(--radius); padding: 34px 30px; background: var(--bg);
+    box-shadow: 9px 9px 20px var(--dark), -9px -9px 20px var(--light); display: grid; gap: 18px; }
+  .tx-field { display: grid; gap: 8px; }
+  .tx-field span { font-weight: 800; font-size: 0.9rem; color: var(--ink-soft); }
+  .tx-input { width: 100%; border: 0; border-radius: 16px; padding: 14px 18px; background: var(--bg); color: var(--ink);
+    font-family: inherit; font-size: 1rem; font-weight: 600;
+    box-shadow: inset 5px 5px 11px var(--dark), inset -5px -5px 11px var(--light); }
+  .tx-input:focus { outline: 3px solid var(--blue); outline-offset: 2px; }
+  .tx-form-note { margin: 0; border-radius: 16px; padding: 14px 18px; font-weight: 800; color: #3d4657; background: var(--sage);
+    box-shadow: inset 4px 4px 9px rgba(0,0,0,.12); }
+
+  /* Footer */
+  .tx-footer { padding: 50px 0 90px; }
+  .tx-footer-grid { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 30px; align-items: start; }
+  .tx-footer-grid nav { display: grid; gap: 10px; }
+  .tx-footer-grid nav a { text-decoration: none; font-weight: 700; color: var(--ink-soft); }
+  .tx-footer p { color: var(--ink-soft); font-weight: 600; }
+  .tx-fine { font-size: 0.85rem; }
+
+  @media (max-width: 960px) {
+    .tx-hero-grid { grid-template-columns: 1fr; }
+    .tx-controls-grid, .tx-proof-grid { grid-template-columns: 1fr 1fr; }
+    .tx-rooms-grid { grid-template-columns: 1fr 1fr; }
+    .tx-kits { grid-template-columns: 1fr; max-width: 460px; margin-inline: auto; }
+    .tx-contact-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 700px) {
+    .tx-burger { display: block; }
+    .tx-menu { display: none; position: absolute; top: calc(100% + 10px); left: 0; right: 0; flex-direction: column; align-items: stretch;
+      gap: 6px; background: var(--bg); border-radius: 26px; padding: 18px;
+      box-shadow: 9px 9px 20px var(--dark), -9px -9px 20px var(--light); }
+    .tx-menu.tx-open { display: flex; }
+    .tx-nav-links { flex-direction: column; gap: 2px; }
+    .tx-nav-links a { padding: 12px 14px; border-radius: 14px; }
+    .tx-nav-links a:hover { box-shadow: inset 4px 4px 9px var(--dark), inset -4px -4px 9px var(--light); }
+    .tx-controls-grid, .tx-proof-grid, .tx-rooms-grid { grid-template-columns: 1fr; }
+    .tx-footer-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tx *, .tx *::before, .tx *::after { transition: none !important; animation: none !important; }
+    .tx-btn:hover { transform: none; }
+  }
+</style>
+
+<script>
+  (function () {
+    var rootEl = document.querySelector(".tx");
+    if (!(rootEl instanceof HTMLElement)) return;
+    const root = rootEl;
+
+    // Mobile menu
+    var burgerEl = root.querySelector(".tx-burger");
+    var menuEl = root.querySelector("#tx-menu");
+    if (burgerEl instanceof HTMLButtonElement && menuEl instanceof HTMLElement) {
+      const burger = burgerEl;
+      const menu = menuEl;
+      burger.addEventListener("click", function () {
+        var open = menu.classList.toggle("tx-open");
+        burger.setAttribute("aria-expanded", open ? "true" : "false");
+        burger.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      });
+      menu.querySelectorAll("a").forEach(function (a) {
+        a.addEventListener("click", function () {
+          menu.classList.remove("tx-open");
+          burger.setAttribute("aria-expanded", "false");
+        });
+      });
+    }
+
+    // Toggle switches
+    root.querySelectorAll(".tx-toggle").forEach(function (node) {
+      if (!(node instanceof HTMLButtonElement)) return;
+      const btn = node;
+      btn.addEventListener("click", function () {
+        var on = btn.getAttribute("aria-checked") === "true";
+        btn.setAttribute("aria-checked", on ? "false" : "true");
+        var card = btn.closest(".tx-card");
+        var lockEl = card ? card.querySelector(".tx-lock-state") : null;
+        if (lockEl instanceof HTMLElement) lockEl.textContent = on ? "Unlocked" : "Locked";
+      });
+    });
+
+    // Chips
+    root.querySelectorAll(".tx-chip").forEach(function (node) {
+      if (!(node instanceof HTMLButtonElement)) return;
+      const chip = node;
+      chip.addEventListener("click", function () {
+        var on = chip.getAttribute("aria-pressed") === "true";
+        chip.setAttribute("aria-pressed", on ? "false" : "true");
+        var dot = chip.querySelector(".tx-chip-dot");
+        if (dot instanceof HTMLElement) dot.classList.toggle("tx-on", !on);
+      });
+    });
+
+    // Sliders show their value
+    root.querySelectorAll(".tx-slider").forEach(function (node) {
+      if (!(node instanceof HTMLInputElement)) return;
+      const slider = node;
+      var valEl = slider.parentElement ? slider.parentElement.querySelector(".tx-slider-val") : null;
+      slider.addEventListener("input", function () {
+        if (valEl instanceof HTMLElement) valEl.textContent = slider.value + "%";
+      });
+    });
+
+    // Temperature steppers
+    var heroTempEl = root.querySelector("#tx-hero-temp");
+    const heroTemp = heroTempEl instanceof HTMLElement ? heroTempEl : null;
+    root.querySelectorAll("[data-temp]").forEach(function (node) {
+      if (!(node instanceof HTMLButtonElement)) return;
+      const b = node;
+      b.addEventListener("click", function () {
+        if (heroTemp) {
+          var n = parseInt(heroTemp.textContent || "21", 10) || 21;
+          n = Math.min(30, Math.max(15, n + parseInt(b.getAttribute("data-temp") || "0", 10)));
+          heroTemp.textContent = String(n);
+        }
+      });
+    });
+    root.querySelectorAll("[data-room-temp]").forEach(function (node) {
+      if (!(node instanceof HTMLButtonElement)) return;
+      const b = node;
+      b.addEventListener("click", function () {
+        var card = b.closest(".tx-card");
+        var dispEl = card ? card.querySelector("[data-room-display]") : null;
+        if (dispEl instanceof HTMLElement) {
+          var m = parseInt(dispEl.textContent || "21", 10) || 21;
+          m = Math.min(30, Math.max(15, m + parseInt(b.getAttribute("data-room-temp") || "0", 10)));
+          dispEl.textContent = String(m);
+        }
+      });
+    });
+
+    // Scene button
+    var sceneEl = root.querySelector("[data-scene]");
+    if (sceneEl instanceof HTMLButtonElement) {
+      const scene = sceneEl;
+      scene.addEventListener("click", function () {
+        var label = scene.textContent || "";
+        scene.textContent = label.indexOf("Running") === 0 ? "Start evening" : "Running: evening";
+      });
+    }
+
+    // Contact form
+    var formEl = root.querySelector("#tx-form");
+    var noteEl = root.querySelector("#tx-form-note");
+    if (formEl instanceof HTMLFormElement && noteEl instanceof HTMLElement) {
+      const form = formEl;
+      const note = noteEl;
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var nameEl = form.querySelector('[name="name"]');
+        var emailEl = form.querySelector('[name="email"]');
+        var name = nameEl instanceof HTMLInputElement ? nameEl.value.trim() : "";
+        var email = emailEl instanceof HTMLInputElement ? emailEl.value.trim() : "";
+        if (!name || !email) {
+          note.hidden = false;
+          note.textContent = "Please add your name and email so we can reply.";
+          return;
+        }
+        note.hidden = false;
+        note.textContent = "Thanks, " + name.split(" ")[0] + ". Your kit sketch is on its way, check your inbox soon.";
+        form.reset();
+      });
+    }
+  })();
+</script>
+</body>
+</html>
