@@ -63,6 +63,12 @@ const promptKey = t.intro.prompt.key;
       if (window.__wiStarted) return;
       window.__wiStarted = true;
       d.classList.add("wi-run");
+      // Pin the page offset in px up front: the rise animation must start from
+      // exactly the pixel value the CSS hold uses, otherwise 100dvh (live) vs
+      // window.innerHeight (snapshot) disagree on mobile and the page jumps.
+      try {
+        d.style.setProperty("--wi-page-y", window.innerHeight + "px");
+      } catch (e) {}
       if (reduced) {
         d.classList.add("wi-static");
       } else {
@@ -206,11 +212,13 @@ const promptKey = t.intro.prompt.key;
     overflow: hidden;
     overscroll-behavior: none;
   }
-  /* The site waits one viewport below the fold until the barrier is broken. */
+  /* The site waits one viewport below the fold until the barrier is broken.
+     The offset comes from --wi-page-y (px, set at boot and on resize) so the
+     CSS hold and the JS rise always agree exactly — no dvh/px mismatch jump. */
   html.wi-run:not(.wi-released):not(.wi-static) #main,
   html.wi-run:not(.wi-released):not(.wi-static) .site-footer,
   html.wi-run:not(.wi-released):not(.wi-static) .site-header {
-    transform: translateY(100dvh);
+    transform: translateY(var(--wi-page-y, 100dvh));
     will-change: transform;
   }
   html.wi-run:not(.wi-static):not(.wi-released),
@@ -418,6 +426,12 @@ const promptKey = t.intro.prompt.key;
     stroke-width: 1.6;
     stroke-linecap: round;
     opacity: 0.9;
+  }
+  /* Low-power mode (small/mobile): the per-frame drop-shadow re-rasterizes on
+     every cursor move and is the single most expensive paint in the flight.
+     The arrow reads cleanly without it. */
+  .wi-lowperf .wi-arrow {
+    filter: none;
   }
 
   .wi-trails {
@@ -1049,6 +1063,10 @@ const promptKey = t.intro.prompt.key;
     const rng = mulberry(20260214);
     const isSmallPerf = Math.min(window.innerWidth, window.innerHeight) < 760;
     const debrisScale = isSmallPerf ? 0.5 : 1;
+    /** Screen shake is scaled down on small viewports: full amplitude reads as
+        a glitch rather than an impact when the stage is 390px wide. */
+    const shakeScale = isSmallPerf ? 0.62 : 1;
+    if (isSmallPerf) root.classList.add("wi-lowperf");
 
     const debris = new Debris(refs.debris, wiPalette().debris);
     const ref = curveSampler(CFG.flight.path as unknown as { x: number; y: number }[], CFG.flight.pathTension);
@@ -1061,6 +1079,8 @@ const promptKey = t.intro.prompt.key;
     let vh = 1;
     let floorH = 72;
     let surfaceY = 0;
+    /** Pixel offset the page is held at pre-rise; mirrors --wi-page-y. */
+    let pageOffsetY = 0;
     let cursorScale = 1;
     let gravity = CFG.bounce.gravity;
     let currentTarget = "";
@@ -1070,6 +1090,12 @@ const promptKey = t.intro.prompt.key;
       const h = window.innerHeight;
       vw = w;
       vh = h;
+      pageOffsetY = h;
+      try {
+        document.documentElement.style.setProperty("--wi-page-y", h + "px");
+      } catch {
+        /* ignore */
+      }
       floorH = clamp(h * CFG.layout.floorHeight.ideal, CFG.layout.floorHeight.min, CFG.layout.floorHeight.max);
       surfaceY = h - floorH;
       cursorScale = clamp(Math.min(w / 1440, h / 900), CFG.cursor.scale.min, CFG.cursor.scale.max);
@@ -1078,7 +1104,7 @@ const promptKey = t.intro.prompt.key;
       root.style.setProperty("--wi-lip-h", `${r1(CFG.layout.lipHeight)}px`);
       root.style.setProperty("--wi-cu", `calc(${r2(cursorScale)} * 1px)`);
       root.style.setProperty("--wi-floor-h", `${r1(floorH)}px`);
-      debris.resize(w, Math.max(surfaceY, 1), surfaceY);
+      debris.resize(w, Math.max(surfaceY, 1), surfaceY, isSmallPerf ? 1.25 : 2);
       refs.debris.style.height = `${r1(surfaceY)}px`;
       if (!currentTarget) resolveTarget();
     }
@@ -1259,10 +1285,10 @@ const promptKey = t.intro.prompt.key;
 
     /** Move the whole stage for a beat — the impact must be felt, not seen. */
     function kick(amp: number, ms: number, freq: number, rot: number) {
-      shakeAmp = Math.max(shakeAmp, amp);
+      shakeAmp = Math.max(shakeAmp, amp * shakeScale);
       shakeT = 0;
       shakeFreq = freq;
-      shakeRot = Math.max(shakeRot, rot);
+      shakeRot = Math.max(shakeRot, rot * shakeScale);
       clock.tween({
         ms,
         ease: EASE.outQuart,
@@ -1810,7 +1836,9 @@ const promptKey = t.intro.prompt.key;
     function rise() {
       phase = "rise";
       cameraShiftTo(0, 0, CFG.breach.camera.returnMs);
-      const from = vh;
+      // Rise from exactly the pixel offset the CSS hold used (--wi-page-y):
+      // any dvh/innerHeight disagreement would read as a jump on the first frame.
+      const from = pageOffsetY > 0 ? pageOffsetY : vh;
       const dur = CFG.handoff.rise.duration;
       const veilFrom = CFG.handoff.rise.veil[0];
       const veilTo = CFG.handoff.rise.veil[1];
@@ -1829,19 +1857,12 @@ const promptKey = t.intro.prompt.key;
       wobble.vx = clamp(cur.vx, -1400, 1400) * 0.32;
       wobble.vy = clamp(cur.vy, -1400, 1400) * 0.32;
 
-      let framed = false;
       clock.tween({
         ms: dur * 1000,
         ease: "linear",
         onUpdate: (v) => {
           const p = riseEase(v);
           riseP = p;
-          // once the site is mostly visible, glide it until the CTA is framed —
-          // the captured cursor rides along, so the handoff stays aligned
-          if (!framed && p > 0.5) {
-            framed = true;
-            framing = frameCta();
-          }
           const mainY = from * (1 - p);
           pageShift = mainY;
           if (refs.main) refs.main.style.transform = `translate3d(0, ${r1(mainY)}px, 0)`;
@@ -1868,7 +1889,11 @@ const promptKey = t.intro.prompt.key;
           for (const el of [refs.main, refs.header, refs.footer]) {
             if (el && "inert" in el) el.inert = false;
           }
-          const waitFor = framing ? Math.max(0.1, CFG.handoff.scroll.ms / 1000 - CFG.handoff.rise.duration * 0.5 + 0.12) : 0.1;
+          // Frame the CTA only now that the page is released and scrollable.
+          // Measuring/scrolling earlier (while the page was translateY-held and
+          // overflow-locked) mis-framed short viewports and read as a jump.
+          framing = frameCta();
+          const waitFor = framing ? CFG.handoff.scroll.ms / 1000 + 0.15 : 0.15;
           clock.after(waitFor, () => {
             if (phase !== "rise") return;
             approachCta();
@@ -2301,7 +2326,8 @@ const promptKey = t.intro.prompt.key;
           const o = (CFG.cursor.trail.opacity[i] ?? 0.06) * (level / 4);
           g.style.opacity = String(r2(o));
           g.style.visibility = level === 0 ? "hidden" : "visible";
-          const b = (CFG.cursor.trail.blur[i] ?? 2) * (level / 4);
+          // low-power screens: opacity-only ghosts, no per-frame blur repaints
+          const b = isSmallPerf ? 0 : (CFG.cursor.trail.blur[i] ?? 2) * (level / 4);
           g.style.filter = b > 0.05 ? `blur(${r2(b)}px)` : "none";
         });
       }
