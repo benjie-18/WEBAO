@@ -3,14 +3,18 @@ import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
 
 // Démo : Pouf Studio, studio fictif de design de personnages 3D et jouets, Montréal.
 // Direction artistique autonome : claymorphism. Pastel, gonflé, moelleux. Non liée au système de thème WEBAO.
+// REFONTE : la page est un labo tout mou. Elle s'ouvre sur une aire de jeu de
+// blobs à écraser, les jouets sont des blobs tactiles éparpillés comme des
+// spécimens, le processus est un journal de labo, et chaque forfait est un
+// pouf qu'on peut pincer. Aucune section standard.
 const IMG = {
   hero: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1600&auto=format&fit=crop",
   boba: "/demos/pouf/01.jpg",
   pup: "/demos/pouf/02.jpg",
   bot: "/demos/pouf/03.jpg",
   cat: "/demos/pouf/04.jpg",
-  lab: "https://images.unsplash.com/photo-1558060370-d644479cb6f7?q=80&w=800&auto=format&fit=crop",
-  extra: "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?q=80&w=800&auto=format&fit=crop",
+  lab: "https://images.unsplash.com/photo-1559454403-b8fb88521f11?q=80&w=800&auto=format&fit=crop",
+  extra: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=800&auto=format&fit=crop",
 };
 ---
 
@@ -19,8 +23,8 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pouf Studio : Personnages 3D moelleux et jouets design</title>
-  <meta name="description" content="Pouf Studio designe des personnages 3D doux et dodus et des jouets design à Montréal. Sculpter, tripoter, expédier." />
+  <title>Pouf Studio : le labo tout mou | Personnages 3D et jouets</title>
+  <meta name="description" content="Bienvenue au labo tout mou de Pouf Studio. Pincez les blobs, rencontrez les jouets, lisez le journal de labo. Personnages 3D et jouets tout mous de Montréal." />
   <meta name="robots" content="noindex" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -35,10 +39,10 @@ const IMG = {
         <span class="pf-logo-blob" aria-hidden="true"></span>pouf studio
       </a>
       <div class="pf-nav-links" id="pf-menu">
-        <a href="#toys">Jouets</a>
-        <a href="#process">Processus</a>
-        <a href="#pricing">Tarifs</a>
-        <a href="#contact">Contact</a>
+        <a href="#lab">Le labo</a>
+        <a href="#specimens">Spécimens</a>
+        <a href="#log">Journal</a>
+        <a href="#puffs">Poufs</a>
       </div>
       <a class="pf-btn pf-btn-small pf-cta" href="#contact">Lancer un projet</a>
       <button class="pf-burger" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="pf-menu">
@@ -48,33 +52,18 @@ const IMG = {
   </header>
 
   <main id="top">
-    <!-- HERO -->
-    <section class="pf-hero">
-      <div class="pf-blob pf-blob-1" aria-hidden="true"></div>
-      <div class="pf-blob pf-blob-2" aria-hidden="true"></div>
-      <div class="pf-blob pf-blob-3" aria-hidden="true"></div>
-      <div class="pf-blob pf-blob-4" aria-hidden="true"></div>
-      <div class="pf-wrap pf-hero-in">
-        <div class="pf-hero-copy">
-          <p class="pf-pill">STUDIO DE DESIGN 3D + JOUETS · MONTRÉAL</p>
-          <h1 class="pf-h1">On crée des jouets <span class="pf-h1-pop">à serrer très fort.</span></h1>
-          <p class="pf-lede">Pouf Studio, c'est une équipe montréalaise de sculpteurs, de peintres et de testeurs professionnels de moelleux. On transforme vos idées les plus folles en personnages doux, dodus et prêts pour les étagères, pour les marques, les jeux et les collectionneurs.</p>
-          <div class="pf-hero-cta">
-            <a class="pf-btn pf-btn-peach" href="#toys">Voir les jouets</a>
-            <a class="pf-btn pf-btn-mint" href="#contact">Lancer votre projet</a>
-          </div>
-          <dl class="pf-hero-facts">
-            <div><dt>240+</dt><dd>personnages livrés</dd></div>
-            <div><dt>38</dt><dd>collabos de marques</dd></div>
-            <div><dt>0</dt><dd>angle vif, jamais</dd></div>
-          </dl>
-        </div>
-        <div class="pf-hero-art">
-          <div class="pf-hero-frame">
-            <img src={IMG.hero} alt="Formes 3D pastel douces dans le style Pouf Studio" loading="eager" fetchpriority="high" />
-          </div>
-          <div class="pf-sticker pf-sticker-1" aria-hidden="true">100 % moelleux</div>
-          <div class="pf-sticker pf-sticker-2" aria-hidden="true">dodu par design</div>
+    <!-- THE LAB: a squishable blob playground. No hero copy block. -->
+    <section class="pf-lab-open" id="lab" aria-label="Le labo tout mou">
+      <div class="pf-play" id="pf-play">
+        <button class="pf-blobbtn pf-bb1" type="button" aria-label="Écraser le blob pêche"><span aria-hidden="true"></span></button>
+        <button class="pf-blobbtn pf-bb2" type="button" aria-label="Écraser le blob lavande"><span aria-hidden="true"></span></button>
+        <button class="pf-blobbtn pf-bb3" type="button" aria-label="Écraser le blob menthe"><span aria-hidden="true"></span></button>
+        <button class="pf-blobbtn pf-bb4" type="button" aria-label="Écraser le blob ciel"><span aria-hidden="true"></span></button>
+        <div class="pf-lab-copy">
+          <p class="pf-pill">STUDIO DE PERSONNAGES 3D + JOUETS · MONTRÉAL</p>
+          <h1 class="pf-h1">Bienvenue au<br />labo <span class="pf-h1-pop">tout mou.</span></h1>
+          <p class="pf-lede">Ici, tout se pince. Allez-y, écrasez un blob. Pouf Studio dessine des personnages 3D tout mous et des jouets joufflus pour les marques, les jeux et les collectionneurs.</p>
+          <p class="pf-squish-count" role="status" aria-live="polite">Blobs écrasés : <strong id="pf-count">0</strong></p>
         </div>
       </div>
     </section>
@@ -82,158 +71,160 @@ const IMG = {
     <!-- TICKER -->
     <div class="pf-ticker" aria-hidden="true">
       <div class="pf-ticker-track">
-        <span>Sculpter</span><i>✦</i><span>Tripoter</span><i>✦</i><span>Expédier</span><i>✦</i><span>Peint à la main</span><i>✦</i><span>Dodu par design</span><i>✦</i>
-        <span>Sculpter</span><i>✦</i><span>Tripoter</span><i>✦</i><span>Expédier</span><i>✦</i><span>Peint à la main</span><i>✦</i><span>Dodu par design</span><i>✦</i>
+        <span>Sculpter</span><i>✦</i><span>Écraser</span><i>✦</i><span>Expédier</span><i>✦</i><span>Peint à la main</span><i>✦</i><span>Joufflu par design</span><i>✦</i>
+        <span>Sculpter</span><i>✦</i><span>Écraser</span><i>✦</i><span>Expédier</span><i>✦</i><span>Peint à la main</span><i>✦</i><span>Joufflu par design</span><i>✦</i>
       </div>
     </div>
 
-    <!-- GALERIE -->
-    <section class="pf-section" id="toys">
+    <!-- SPECIMENS: toys as tactile blobs, scattered -->
+    <section class="pf-specimens" id="specimens">
       <div class="pf-wrap">
-        <p class="pf-kicker">Frais sortis du labo à moelleux</p>
-        <h2 class="pf-h2">Nos récents <span class="pf-h2-pop">copains dodus</span></h2>
-        <div class="pf-toys">
-          <article class="pf-toy pf-tint-peach">
-            <div class="pf-toy-img"><img src={IMG.boba} alt="Bulle Boba, figurine vinyle pastel et douce" loading="lazy" /></div>
-            <h3>Bulle Boba</h3>
-            <p>Figurine vinyle pour une marque de thé aux perles. Épuisée en 9 minutes. On est encore un peu fiers.</p>
-            <p class="pf-toy-tag">Vinyle · 12 cm</p>
-          </article>
-          <article class="pf-toy pf-tint-lav">
-            <div class="pf-toy-img"><img src={IMG.pup} alt="Chiot Nuage, personnage en peluche pastel" loading="lazy" /></div>
-            <h3>Chiot Nuage</h3>
-            <p>Mascotte en peluche pour une appli de sommeil. Testée par 40 tout-petits et un corgi très sérieux.</p>
-            <p class="pf-toy-tag">Peluche · 30 cm</p>
-          </article>
-          <article class="pf-toy pf-tint-mint">
-            <div class="pf-toy-img"><img src={IMG.bot} alt="Mochi Bot, robot jouet designer tout en rondeurs" loading="lazy" /></div>
-            <h3>Mochi Bot</h3>
-            <p>Robot designer pour un lancement de jeu. Note de moelleux : 9,4 sur 10. Bip boup.</p>
-            <p class="pf-toy-tag">Résine · 15 cm</p>
-          </article>
-          <article class="pf-toy pf-tint-sky">
-            <div class="pf-toy-img"><img src={IMG.cat} alt="Chat Flan, jouet chat en forme de flan tout doux" loading="lazy" /></div>
-            <h3>Chat Flan</h3>
-            <p>Copain de bureau pour une fintech qui voulait avoir l'air moins fintech. Mission accomplie.</p>
-            <p class="pf-toy-tag">Sofubi · 10 cm</p>
-          </article>
-        </div>
+        <p class="pf-kicker">Frais sortis du labo</p>
+        <h2 class="pf-h2">Nos <span class="pf-h2-pop">spécimens</span></h2>
+        <p class="pf-lede-small">Quatre jouets, zéro arête vive. Pincez-en un pour lire sa fiche.</p>
+      </div>
+      <div class="pf-field">
+        <button class="pf-spec pf-tint-peach pf-sp1" type="button" aria-expanded="false">
+          <span class="pf-spec-img"><img src={IMG.boba} alt="Boba Blob, figurine en vinyle pastel toute douce" loading="lazy" /></span>
+          <span class="pf-spec-name">Boba Blob</span>
+          <span class="pf-spec-file">Vinyle · 12 cm. Figurine pour une marque de thé aux perles. Épuisée en 9 minutes. On est encore un peu fiers.</span>
+        </button>
+        <button class="pf-spec pf-tint-lav pf-sp2" type="button" aria-expanded="false">
+          <span class="pf-spec-img"><img src={IMG.pup} alt="Cloud Pup, personnage en peluche pastel" loading="lazy" /></span>
+          <span class="pf-spec-name">Cloud Pup</span>
+          <span class="pf-spec-file">Peluche · 30 cm. Mascotte pour une appli de sommeil. Testée par 40 tout-petits et un corgi très sérieux.</span>
+        </button>
+        <button class="pf-spec pf-tint-mint pf-sp3" type="button" aria-expanded="false">
+          <span class="pf-spec-img"><img src={IMG.bot} alt="Mochi Bot, robot jouet joufflu" loading="lazy" /></span>
+          <span class="pf-spec-name">Mochi Bot</span>
+          <span class="pf-spec-file">Résine · 15 cm. Robot design pour un lancement de jeu. Note de mollesse : 9,4 sur 10. Bip boup.</span>
+        </button>
+        <button class="pf-spec pf-tint-sky pf-sp4" type="button" aria-expanded="false">
+          <span class="pf-spec-img"><img src={IMG.cat} alt="Pudding Cat, jouet chat en forme de pouding tout mou" loading="lazy" /></span>
+          <span class="pf-spec-name">Pudding Cat</span>
+          <span class="pf-spec-file">Sofubi · 10 cm. Copain de bureau pour une fintech qui voulait se sentir moins fintech. Mission accomplie.</span>
+        </button>
       </div>
     </section>
 
-    <!-- PROCESSUS -->
-    <section class="pf-section pf-section-alt" id="process">
+    <!-- LAB LOG: the process as experiment notes -->
+    <section class="pf-log" id="log">
       <div class="pf-wrap">
-        <p class="pf-kicker">Comment la magie opère</p>
-        <h2 class="pf-h2">Sculpter. Tripoter. <span class="pf-h2-pop">Expédier.</span></h2>
-        <div class="pf-steps">
-          <article class="pf-step pf-tint-peach">
-            <span class="pf-step-n" aria-hidden="true">1</span>
-            <h3>Sculpter</h3>
-            <p>On dessine, on modélise et on imprime votre personnage en 3D. Vous recevez des aperçus chaque semaine et un nombre illimité de tours de « et si c'était plus rond ? ».</p>
-          </article>
-          <article class="pf-step pf-tint-lav">
-            <span class="pf-step-n" aria-hidden="true">2</span>
-            <h3>Tripoter</h3>
-            <p>Les prototypes sont tripotés, lâchés, câlinés et mâchouillés (par le corgi) jusqu'à ce que le facteur moelleux soit scientifiquement parfait.</p>
-          </article>
-          <article class="pf-step pf-tint-mint">
-            <span class="pf-step-n" aria-hidden="true">3</span>
-            <h3>Expédier</h3>
-            <p>Maîtres de peinture, emballage et soutien à la production. Votre jouet part conquérir le monde, prêt pour les étagères et les bureaux.</p>
-          </article>
-        </div>
+        <p class="pf-kicker">Expérience nº 047</p>
+        <h2 class="pf-h2">Le <span class="pf-h2-pop">journal de labo</span></h2>
+        <ol class="pf-log-list">
+          <li class="pf-tint-peach">
+            <p class="pf-log-day">Jours 1 à 12 · Sculpter</p>
+            <h3>Rendre ça rond</h3>
+            <p>On esquisse, on modélise et on imprime votre personnage en 3D. Vous avez des aperçus chaque semaine et des rondes illimitées de « et si c'était plus rond ? ».</p>
+          </li>
+          <li class="pf-tint-lav">
+            <p class="pf-log-day">Jours 13 à 20 · Écraser</p>
+            <h3>Pincer scientifiquement</h3>
+            <p>Les prototypes sont pincés, échappés, câlinés et mâchouillés (par le corgi) jusqu'à ce que le facteur mollesse soit scientifiquement parfait.</p>
+          </li>
+          <li class="pf-tint-mint">
+            <p class="pf-log-day">Jours 21 à 30 · Expédier</p>
+            <h3>L'envoyer dans le monde</h3>
+            <p>Maîtres de peinture, emballage et soutien à la production. Votre jouet est lancé, prêt pour les tablettes et les bureaux.</p>
+          </li>
+        </ol>
         <div class="pf-lab">
-          <img src={IMG.lab} alt="Prototypes de jouets colorés alignés dans le labo Pouf Studio" loading="lazy" />
+          <img src={IMG.lab} alt="Ourson en peluche tout mou, sujet de test au studio" loading="lazy" />
           <div>
-            <h3>Dans le labo à moelleux</h3>
-            <p>Notre studio du Mile End abrite deux imprimantes 3D, une cabine de peinture qui sent vaguement la vanille et une étagère de plus de 200 blobs de référence. Venez nous voir. Apportez des collations.</p>
-            <img class="pf-lab-small" src={IMG.extra} alt="Gros plan sur des matériaux de sculpture pastel" loading="lazy" />
+            <h3>Dans le labo</h3>
+            <p>Notre studio du Mile End abrite deux imprimantes 3D, une cabine de peinture qui sent vaguement la vanille et une étagère de plus de 200 blobs de référence. Venez visiter. Apportez des collations.</p>
+            <img class="pf-lab-small" src={IMG.extra} alt="Pinceaux et peinture vive au studio" loading="lazy" />
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- TÉMOIGNAGES -->
-    <section class="pf-section" id="love">
-      <div class="pf-wrap">
-        <p class="pf-kicker">Des mots doux de clients doux</p>
-        <h2 class="pf-h2">Les gens <span class="pf-h2-pop">adorent</span> le pouf</h2>
-        <div class="pf-quotes">
-          <blockquote class="pf-quote pf-tint-sky">
-            <p>« Pouf a transformé notre mascotte ennuyeuse en peluche que les gens s'arrachent dans les salons. Notre kiosque n'a jamais été aussi câlinable. »</p>
-            <cite>Maya R., directrice de marque</cite>
-          </blockquote>
-          <blockquote class="pf-quote pf-tint-peach">
-            <p>« Ils ont demandé "et si c'était plus rond ?" dix-sept fois. La dix-septième fois était la bonne. Notre sociofinancement a été bouclé en un jour. »</p>
-            <cite>Devon K., dev de jeux indépendant</cite>
-          </blockquote>
-          <blockquote class="pf-quote pf-tint-mint">
-            <p>« Le prototype est arrivé et tout le bureau a arrêté de travailler pour le tripoter. Chaque centime en valait la peine. Dix sur dix, je retripoterais. »</p>
-            <cite>Léa T., fondatrice de startup</cite>
-          </blockquote>
+        <div class="pf-facts">
+          <div><strong>240+</strong><span>personnages expédiés</span></div>
+          <div><strong>38</strong><span>collabos de marques</span></div>
+          <div><strong>0</strong><span>arête vive, jamais</span></div>
         </div>
       </div>
     </section>
 
-    <!-- TARIFS -->
-    <section class="pf-section pf-section-alt" id="pricing">
+    <!-- FIELD NOTES: testimonials as scattered notes -->
+    <section class="pf-notes">
       <div class="pf-wrap">
-        <p class="pf-kicker">Choisissez votre gonflé</p>
-        <h2 class="pf-h2">Forfaits <span class="pf-h2-pop">moelleux</span></h2>
-        <div class="pf-plans">
-          <article class="pf-plan pf-tint-lav">
-            <h3>Mini Dodu</h3>
+        <p class="pf-kicker">Épinglé au mur du labo</p>
+        <h2 class="pf-h2">Notes de <span class="pf-h2-pop">terrain</span></h2>
+      </div>
+      <div class="pf-notes-field">
+        <blockquote class="pf-note pf-tint-sky pf-n1">
+          <p>« Pouf a transformé notre mascotte ennuyante en peluche qu'on s'arrache dans les salons. Notre kiosque n'a jamais été aussi câlinable. »</p>
+          <cite>Maya R., directrice de marque</cite>
+        </blockquote>
+        <blockquote class="pf-note pf-tint-peach pf-n2">
+          <p>« Ils ont demandé "et si c'était plus rond ?" dix-sept fois. La dix-septième était la bonne. Notre Kickstarter s'est financé en un jour. »</p>
+          <cite>Devon K., dev de jeu indépendant</cite>
+        </blockquote>
+        <blockquote class="pf-note pf-tint-mint pf-n3">
+          <p>« Le prototype est arrivé et tout le bureau a arrêté de travailler pour l'écraser. Ça valait chaque sou. Dix sur dix, on réécraserait. »</p>
+          <cite>Léa T., fondatrice de startup</cite>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- PUFFS: pricing as pokeable puffs -->
+    <section class="pf-puffs" id="puffs">
+      <div class="pf-wrap">
+        <p class="pf-kicker">Choisissez votre pouf</p>
+        <h2 class="pf-h2">Forfaits <span class="pf-h2-pop">tout mous</span></h2>
+        <p class="pf-lede-small pf-center">Chaque forfait inclut des questions illimitées de type « et si c'était plus rond ? ». Pour vrai.</p>
+        <div class="pf-puff-row">
+          <article class="pf-puff pf-tint-lav">
+            <h3>Mouflon</h3>
             <p class="pf-price">2 900 $</p>
-            <p class="pf-plan-sub">Pour tâter le terrain</p>
+            <p class="pf-puff-sub">Pour tester l'eau</p>
             <ul>
               <li>Concept du personnage + vues</li>
               <li>Modèle 3D détaillé</li>
               <li>2 rondes de révisions</li>
-              <li>Rapport de moelleux (officiel)</li>
+              <li>Rapport de mollesse (officiel)</li>
             </ul>
-            <a class="pf-btn pf-btn-peach" href="#contact">Choisir Mini Dodu</a>
+            <a class="pf-btn pf-btn-peach" href="#contact">Choisir Mouflon</a>
           </article>
-          <article class="pf-plan pf-plan-hot pf-tint-peach">
-            <p class="pf-plan-badge">Le plus tripoté</p>
-            <h3>Dodu</h3>
+          <article class="pf-puff pf-puff-hot pf-tint-peach">
+            <p class="pf-puff-badge">Le plus écrasé</p>
+            <h3>Joufflu</h3>
             <p class="pf-price">7 500 $</p>
-            <p class="pf-plan-sub">Notre forfait signature</p>
+            <p class="pf-puff-sub">Notre forfait signature</p>
             <ul>
-              <li>Tout du Mini Dodu</li>
+              <li>Tout ce qu'il y a dans Mouflon</li>
               <li>Prototype physique</li>
-              <li>Maître de peinture à la main</li>
+              <li>Maître peint à la main</li>
               <li>Design d'emballage</li>
               <li>Test de mastication du corgi inclus</li>
             </ul>
-            <a class="pf-btn pf-btn-plum" href="#contact">Choisir Dodu</a>
+            <a class="pf-btn pf-btn-plum" href="#contact">Choisir Joufflu</a>
           </article>
-          <article class="pf-plan pf-tint-mint">
-            <h3>Méga Dodu</h3>
+          <article class="pf-puff pf-tint-mint">
+            <h3>Méga Joufflu</h3>
             <p class="pf-price">18 000 $</p>
-            <p class="pf-plan-sub">Soutien complet à la production</p>
+            <p class="pf-puff-sub">Soutien complet à la production</p>
             <ul>
-              <li>Tout du Dodu</li>
+              <li>Tout ce qu'il y a dans Joufflu</li>
               <li>Liaison usine + contrôle qualité</li>
               <li>Visuels de campagne de lancement</li>
-              <li>Variante édition collector</li>
+              <li>Variante édition collectionneur</li>
             </ul>
-            <a class="pf-btn pf-btn-peach" href="#contact">Choisir Méga Dodu</a>
+            <a class="pf-btn pf-btn-peach" href="#contact">Choisir Méga Joufflu</a>
           </article>
         </div>
-        <p class="pf-plans-note">Chaque forfait inclut un nombre illimité de questions « et si c'était plus rond ? ». Pour vrai.</p>
       </div>
     </section>
 
     <!-- CONTACT -->
-    <section class="pf-section" id="contact">
+    <section class="pf-contact" id="contact">
       <div class="pf-wrap pf-contact-in">
         <div class="pf-contact-copy">
           <p class="pf-kicker">Dites bonjour</p>
-          <h2 class="pf-h2">Prêt à devenir <span class="pf-h2-pop">moelleux ?</span></h2>
-          <p class="pf-lede-small">Parlez-nous de votre personnage, de votre marque ou de votre idée magnifiquement bizarre. On répond en deux jours ouvrables, généralement avec un croquis.</p>
+          <h2 class="pf-h2">Prêt à devenir <span class="pf-h2-pop">tout mou ?</span></h2>
+          <p class="pf-lede-small">Parlez-nous de votre personnage, de votre marque ou de votre belle idée bizarre. On répond sous deux jours ouvrables, d'habitude avec une esquisse.</p>
           <ul class="pf-contact-list">
-            <li><strong>Studio</strong> 418 Rue Imaginaire, Montréal QC</li>
+            <li><strong>Studio</strong> 418, rue Imaginaire, Montréal QC</li>
             <li><strong>Téléphone</strong> <a href="tel:+15145550142">(514) 555-0142</a></li>
             <li><strong>Courriel</strong> <a href="mailto:hello@pouf.studio">hello@pouf.studio</a></li>
             <li><strong>Heures</strong> Lun au ven, 9 h à 18 h</li>
@@ -241,18 +232,18 @@ const IMG = {
         </div>
         <form class="pf-form" id="pf-form" novalidate>
           <h3>Lancez votre projet</h3>
-          <label>Nom<input type="text" name="name" required placeholder="Sam Gonflé" /></label>
-          <label>Courriel<input type="email" name="email" required placeholder="sam@exemple.com" /></label>
+          <label>Nom<input type="text" name="name" required placeholder="Sam Puffington" /></label>
+          <label>Courriel<input type="email" name="email" required placeholder="sam@example.com" /></label>
           <label>Type de jouet
             <select name="type">
-              <option>Figurine vinyle</option>
+              <option>Figurine en vinyle</option>
               <option>Peluche</option>
               <option>Résine / sofubi</option>
               <option>Mascotte pour ma marque</option>
               <option>Quelque chose de glorieusement bizarre</option>
             </select>
           </label>
-          <label>Racontez-nous tout<textarea name="message" rows="4" placeholder="Mon personnage est un sorcier croissant endormi qui..."></textarea></label>
+          <label>Dites-nous tout<textarea name="message" rows="4" placeholder="Mon personnage est un sorcier croissant endormi qui..."></textarea></label>
           <button class="pf-btn pf-btn-plum" type="submit">Envoyer au labo</button>
           <p class="pf-form-note" role="status" aria-live="polite"></p>
         </form>
@@ -262,38 +253,72 @@ const IMG = {
 
   <footer class="pf-footer">
     <div class="pf-wrap">
-      <p class="pf-footer-logo" aria-hidden="true">pouf !</p>
+      <p class="pf-footer-logo" aria-hidden="true">pouf!</p>
       <p>© 2026 Pouf Studio. Démo fictive. Aucun jouet n'a été blessé (le corgi a essayé).</p>
-      <p>418 Rue Imaginaire, Montréal QC · <a href="tel:+15145550142">(514) 555-0142</a> · <a href="mailto:hello@pouf.studio">hello@pouf.studio</a></p>
+      <p>418, rue Imaginaire, Montréal QC · <a href="tel:+15145550142">(514) 555-0142</a> · <a href="mailto:hello@pouf.studio">hello@pouf.studio</a></p>
     </div>
   </footer>
 
   <EscapeHatch locale="fr" />
 
   <script>
-    // Formulaire de démo : ne s'envoie nulle part. Bascule du menu mobile.
     (function () {
-      var form = document.getElementById('pf-form') as HTMLFormElement | null;
-      form?.addEventListener('submit', function (e) {
-        e.preventDefault();
-        var note = form?.querySelector('.pf-form-note');
-        if (note) note.textContent = 'Moelleux reçu ! On vous répond en deux jours ouvrables, croquis en main.';
-        form?.reset();
-      });
-      var burger = document.querySelector('.pf-burger') as HTMLButtonElement | null;
-      var menu = document.getElementById('pf-menu');
-      burger?.addEventListener('click', function () {
-        var open = menu?.classList.toggle('pf-open') ?? false;
-        burger?.setAttribute('aria-expanded', String(open));
-        burger?.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
-      });
-      menu?.querySelectorAll('a').forEach(function (a) {
-        a.addEventListener('click', function () {
-          menu?.classList.remove('pf-open');
-          burger?.setAttribute('aria-expanded', 'false');
-          burger?.setAttribute('aria-label', 'Ouvrir le menu');
+      // Compteur de mollesse pour les blobs de l'aire de jeu
+      var count = 0;
+      var countEl = document.getElementById('pf-count');
+      document.querySelectorAll('.pf-blobbtn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          count += 1;
+          if (countEl) countEl.textContent = String(count);
         });
       });
+      // Spécimens : pincer pour ouvrir la fiche
+      document.querySelectorAll('.pf-spec').forEach(function (spec) {
+        spec.addEventListener('click', function () {
+          var open = spec.getAttribute('aria-expanded') === 'true';
+          document.querySelectorAll('.pf-spec').forEach(function (s) {
+            s.setAttribute('aria-expanded', 'false');
+            s.classList.remove('pf-spec-open');
+          });
+          if (!open) {
+            spec.setAttribute('aria-expanded', 'true');
+            spec.classList.add('pf-spec-open');
+          }
+        });
+      });
+      // Menu mobile
+      var burgerEl = document.querySelector('.pf-burger');
+      var menuEl = document.getElementById('pf-menu');
+      if (burgerEl instanceof HTMLButtonElement) {
+        var burger = burgerEl;
+        var menu = menuEl;
+        burger.addEventListener('click', function () {
+          var open = menu ? menu.classList.toggle('pf-open') : false;
+          burger.setAttribute('aria-expanded', String(open));
+          burger.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+        });
+        if (menu) {
+          var m = menu;
+          m.querySelectorAll('a').forEach(function (a) {
+            a.addEventListener('click', function () {
+              m.classList.remove('pf-open');
+              burger.setAttribute('aria-expanded', 'false');
+              burger.setAttribute('aria-label', 'Ouvrir le menu');
+            });
+          });
+        }
+      }
+      // Formulaire démo : ne soumet jamais rien
+      var formEl = document.getElementById('pf-form');
+      if (formEl instanceof HTMLFormElement) {
+        var form = formEl;
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var note = form.querySelector('.pf-form-note');
+          if (note) note.textContent = 'Mollesse reçue ! On répond sous deux jours ouvrables, esquisse en main.';
+          form.reset();
+        });
+      }
     })();
   </script>
 
@@ -319,9 +344,10 @@ const IMG = {
     .pf *, .pf *::before, .pf *::after { box-sizing: border-box; }
     .pf img { display: block; max-width: 100%; }
     .pf-wrap { max-width: 1180px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px); }
+    .pf-center { text-align: center; }
 
-    /* ombres argile */
-    .pf-btn, .pf-toy, .pf-step, .pf-plan, .pf-quote, .pf-form, .pf-hero-frame, .pf-pill, .pf-sticker {
+    /* clay shadows */
+    .pf-btn, .pf-blobbtn, .pf-spec, .pf-note, .pf-puff, .pf-form, .pf-pill, .pf-log-list li, .pf-lab > div {
       box-shadow:
         inset 3px 3px 6px rgba(255, 255, 255, 0.75),
         inset -4px -4px 8px rgba(122, 102, 92, 0.14),
@@ -358,7 +384,7 @@ const IMG = {
     .pf-burger { display: none; background: var(--pf-peach); border: 3px solid #fff; border-radius: 18px; width: 48px; height: 48px; cursor: pointer; flex-direction: column; align-items: center; justify-content: center; gap: 5px; }
     .pf-burger span { display: block; width: 22px; height: 3px; border-radius: 3px; background: var(--pf-ink); }
 
-    /* boutons */
+    /* buttons */
     .pf-btn {
       display: inline-flex; align-items: center; justify-content: center;
       font-family: var(--pf-display); font-weight: 700; font-size: 18px;
@@ -374,7 +400,7 @@ const IMG = {
     .pf-btn-small { font-size: 15px; padding: 12px 24px; }
     .pf-cta { background: var(--pf-lav); }
 
-    /* typo */
+    /* type */
     .pf-kicker {
       display: inline-block; font-weight: 700; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase;
       background: #fff; border: 3px solid #fff; border-radius: 999px; padding: 10px 22px; margin: 0 0 20px; color: var(--pf-plum);
@@ -390,7 +416,7 @@ const IMG = {
     }
     .pf-h2 {
       font-family: var(--pf-display); font-weight: 800; font-size: clamp(2.4rem, 5.5vw, 4rem);
-      line-height: 1.05; margin: 0 0 44px;
+      line-height: 1.05; margin: 0 0 30px;
     }
     .pf-h2-pop {
       display: inline-block; background: var(--pf-mint); border-radius: 22px; padding: 0 18px 4px;
@@ -401,119 +427,142 @@ const IMG = {
       display: inline-block; background: var(--pf-sky); border: 3px solid #fff; border-radius: 999px;
       font-weight: 700; font-size: 13px; letter-spacing: 0.14em; padding: 12px 24px; margin: 0 0 26px;
     }
-    .pf-lede { font-size: 19px; line-height: 1.65; font-weight: 500; color: var(--pf-ink-soft); max-width: 46ch; margin: 0 0 34px; }
-    .pf-lede-small { font-size: 17px; line-height: 1.65; color: var(--pf-ink-soft); font-weight: 500; max-width: 42ch; margin: 0 0 28px; }
+    .pf-lede { font-size: 19px; line-height: 1.65; font-weight: 500; color: var(--pf-ink-soft); max-width: 46ch; margin: 0 0 24px; }
+    .pf-lede-small { font-size: 17px; line-height: 1.65; color: var(--pf-ink-soft); font-weight: 500; max-width: 52ch; margin: 0 0 28px; }
+    .pf-squish-count { font-size: 18px; font-weight: 700; color: var(--pf-plum); margin: 0; }
+    .pf-squish-count strong { font-size: 26px; }
 
-    /* hero */
-    .pf-hero { position: relative; padding: 170px 0 90px; overflow: hidden; }
-    .pf-blob { position: absolute; border-radius: 46% 54% 55% 45% / 48% 45% 55% 52%; filter: blur(1px); animation: pf-float 9s ease-in-out infinite; z-index: 0; }
-    .pf-blob-1 { width: 340px; height: 340px; background: var(--pf-peach); top: -90px; right: -70px; opacity: 0.7; }
-    .pf-blob-2 { width: 220px; height: 220px; background: var(--pf-lav); bottom: 40px; left: -70px; opacity: 0.6; animation-delay: -3s; }
-    .pf-blob-3 { width: 130px; height: 130px; background: var(--pf-mint); top: 38%; left: 44%; opacity: 0.55; animation-delay: -6s; }
-    .pf-blob-4 { width: 170px; height: 170px; background: var(--pf-sky); bottom: -50px; right: 22%; opacity: 0.6; animation-delay: -1.5s; }
-    @keyframes pf-float { 50% { transform: translateY(-26px) rotate(10deg); } }
-    .pf-hero-in { position: relative; z-index: 1; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(36px, 6vw, 70px); align-items: center; }
-    .pf-hero-cta { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 44px; }
-    .pf-hero-facts { display: flex; gap: 14px; margin: 0; padding: 0; flex-wrap: wrap; }
-    .pf-hero-facts div {
-      background: #fff; border: 3px solid #fff; border-radius: 26px; padding: 16px 24px; text-align: center;
-      box-shadow: inset 2px 2px 5px rgba(255,255,255,0.9), 6px 8px 16px rgba(122,102,92,0.14);
-      display: grid; gap: 2px;
+    /* lab opener: blob playground */
+    .pf-lab-open { padding: 130px 0 70px; overflow: hidden; }
+    .pf-play {
+      position: relative; max-width: 1280px; margin: 0 auto; min-height: 88vh;
+      padding: 60px clamp(20px, 4vw, 40px);
+      display: grid; align-content: center;
     }
-    .pf-hero-facts dt { font-family: var(--pf-display); font-weight: 800; font-size: 34px; color: var(--pf-plum); }
-    .pf-hero-facts dd { margin: 0; font-size: 13.5px; font-weight: 600; color: var(--pf-ink-soft); }
-    .pf-hero-art { position: relative; }
-    .pf-hero-frame {
-      border: 8px solid #fff; border-radius: 48px; overflow: hidden; transform: rotate(2deg);
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      box-shadow: 16px 22px 0 rgba(255, 157, 122, 0.28), 16px 22px 44px rgba(90, 59, 46, 0.22);
+    .pf-lab-copy { position: relative; z-index: 5; max-width: 560px; }
+    .pf-blobbtn {
+      position: absolute; z-index: 1; border: 4px solid #fff; cursor: pointer; padding: 0;
+      transition: transform 0.45s cubic-bezier(0.34, 1.8, 0.5, 1);
+      animation: pf-float 8s ease-in-out infinite;
     }
-    .pf-hero-frame:hover { transform: rotate(0deg) scale(1.02); }
-    .pf-hero-frame img { width: 100%; height: 480px; object-fit: cover; }
-    .pf-sticker {
-      position: absolute; font-family: var(--pf-display); font-weight: 700; font-size: 17px;
-      background: #fff; border: 3px solid #fff; border-radius: 999px; padding: 12px 22px; color: var(--pf-ink);
-      animation: pf-bob 4s ease-in-out infinite;
+    .pf-blobbtn span { display: block; width: 100%; height: 100%; border-radius: inherit; }
+    .pf-blobbtn:active { transform: scale(0.72, 0.6) !important; transition-duration: 0.08s; }
+    .pf-bb1 {
+      width: 300px; height: 280px; top: 4%; right: 6%;
+      border-radius: 46% 54% 55% 45% / 48% 45% 55% 52%;
+      background: linear-gradient(135deg, var(--pf-peach), #FFB98A);
     }
-    .pf-sticker-1 { top: -24px; left: -14px; transform: rotate(-8deg); background: var(--pf-mint); }
-    .pf-sticker-2 { bottom: -20px; right: 6px; transform: rotate(6deg); background: var(--pf-peach); animation-delay: -2s; }
-    @keyframes pf-bob { 50% { translate: 0 -10px; } }
+    .pf-bb2 {
+      width: 200px; height: 220px; bottom: 8%; right: 22%;
+      border-radius: 55% 45% 46% 54% / 52% 55% 45% 48%;
+      background: linear-gradient(135deg, var(--pf-lav), #B79CFF);
+      animation-delay: -2.5s;
+    }
+    .pf-bb3 {
+      width: 150px; height: 150px; top: 12%; right: 34%;
+      border-radius: 50% 50% 52% 48% / 55% 48% 52% 45%;
+      background: linear-gradient(135deg, var(--pf-mint), #9FE8BC);
+      animation-delay: -5s;
+    }
+    .pf-bb4 {
+      width: 120px; height: 130px; bottom: 22%; right: 4%;
+      border-radius: 48% 52% 55% 45% / 50% 46% 54% 50%;
+      background: linear-gradient(135deg, var(--pf-sky), #9CCBFF);
+      animation-delay: -1.2s;
+    }
+    @keyframes pf-float { 50% { translate: 0 -24px; } }
 
-    /* bandeau */
+    /* ticker */
     .pf-ticker { background: var(--pf-plum); color: #fff; overflow: hidden; padding: 16px 0; border-block: 4px solid #fff; }
     .pf-ticker-track { display: flex; gap: 34px; width: max-content; animation: pf-tick 22s linear infinite; font-family: var(--pf-display); font-weight: 700; font-size: 22px; }
     .pf-ticker-track i { font-style: normal; color: var(--pf-peach); }
     @keyframes pf-tick { to { transform: translateX(-50%); } }
 
-    /* sections */
-    .pf-section { padding: clamp(70px, 9vw, 120px) 0; }
-    .pf-section-alt { background: #fff; border-block: 4px solid #fff; border-radius: 60px; margin: 0 clamp(10px, 3vw, 34px); }
-
-    /* jouets */
-    .pf-toys { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
-    .pf-toy {
-      border: 4px solid #fff; border-radius: 36px; padding: 18px 18px 26px;
+    /* specimens */
+    .pf-specimens { padding: clamp(70px, 9vw, 120px) 0 40px; }
+    .pf-field { position: relative; max-width: 1280px; margin: 20px auto 0; min-height: 700px; padding: 0 clamp(20px, 4vw, 40px); }
+    .pf-spec {
+      position: absolute; border: 4px solid #fff; cursor: pointer; padding: 22px;
+      display: grid; gap: 12px; justify-items: center; text-align: center;
+      font-family: var(--pf-body); color: var(--pf-ink);
       transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      width: min(300px, 70vw);
     }
-    .pf-toy:hover { transform: translateY(-10px) rotate(-1deg) scale(1.02); }
+    .pf-spec:hover { transform: scale(1.05) rotate(0deg) !important; z-index: 6; }
+    .pf-sp1 { border-radius: 48% 52% 55% 45% / 52% 48% 55% 45%; top: 0; left: 6%; transform: rotate(-4deg); }
+    .pf-sp2 { border-radius: 55% 45% 48% 52% / 48% 55% 45% 52%; top: 60px; right: 8%; transform: rotate(3deg); }
+    .pf-sp3 { border-radius: 52% 48% 45% 55% / 55% 52% 48% 45%; bottom: 40px; left: 14%; transform: rotate(2deg); }
+    .pf-sp4 { border-radius: 45% 55% 52% 48% / 48% 45% 55% 52%; bottom: 0; right: 16%; transform: rotate(-3deg); }
+    .pf-spec-img { width: 170px; height: 170px; border-radius: 50%; overflow: hidden; border: 4px solid #fff; }
+    .pf-spec-img img { width: 100%; height: 100%; object-fit: cover; }
+    .pf-spec-name { font-family: var(--pf-display); font-weight: 800; font-size: 26px; }
+    .pf-spec-file { display: none; font-size: 15px; line-height: 1.6; font-weight: 500; color: var(--pf-ink-soft); max-width: 34ch; }
+    .pf-spec-open { border-radius: 36px !important; z-index: 7; width: min(340px, 84vw); }
+    .pf-spec-open .pf-spec-file { display: block; }
     .pf-tint-peach { background: var(--pf-peach); }
     .pf-tint-lav { background: var(--pf-lav); }
     .pf-tint-mint { background: var(--pf-mint); }
     .pf-tint-sky { background: var(--pf-sky); }
-    .pf-toy-img { border: 4px solid #fff; border-radius: 26px; overflow: hidden; margin-bottom: 18px; }
-    .pf-toy-img img { width: 100%; height: 210px; object-fit: cover; transition: transform 0.35s ease; }
-    .pf-toy:hover .pf-toy-img img { transform: scale(1.08); }
-    .pf-toy h3 { font-family: var(--pf-display); font-weight: 800; font-size: 26px; margin: 0 0 8px; }
-    .pf-toy p { margin: 0 0 12px; font-size: 15px; line-height: 1.6; font-weight: 500; color: var(--pf-ink-soft); }
-    .pf-toy-tag { display: inline-block; background: #fff; border-radius: 999px; padding: 8px 18px; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
 
-    /* processus */
-    .pf-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-bottom: 56px; }
-    .pf-step { border: 4px solid #fff; border-radius: 36px; padding: 34px 30px; position: relative; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
-    .pf-step:hover { transform: translateY(-8px) rotate(1deg); }
-    .pf-step-n {
-      position: absolute; top: -26px; right: 22px; width: 62px; height: 62px; border-radius: 50%;
-      background: #fff; border: 4px solid #fff; display: grid; place-items: center;
-      font-family: var(--pf-display); font-weight: 800; font-size: 28px; color: var(--pf-plum);
-      box-shadow: inset 2px 2px 4px rgba(255,255,255,0.9), 5px 7px 14px rgba(122,102,92,0.18);
-    }
-    .pf-step h3 { font-family: var(--pf-display); font-weight: 800; font-size: 30px; margin: 0 0 12px; }
-    .pf-step p { margin: 0; font-size: 16px; line-height: 1.65; font-weight: 500; color: var(--pf-ink-soft); }
+    /* lab log */
+    .pf-log { background: #fff; border-block: 4px solid #fff; border-radius: 60px; margin: 40px clamp(10px, 3vw, 34px) 0; padding: clamp(70px, 9vw, 110px) 0; }
+    .pf-log-list { list-style: none; margin: 0 0 56px; padding: 0; display: grid; gap: 22px; }
+    .pf-log-list li { border: 4px solid #fff; border-radius: 36px; padding: 30px 34px; position: relative; }
+    .pf-log-list li:nth-child(odd) { transform: rotate(-0.6deg); }
+    .pf-log-list li:nth-child(even) { transform: rotate(0.6deg); }
+    .pf-log-day { font-weight: 700; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-plum); margin: 0 0 8px; }
+    .pf-log-list h3 { font-family: var(--pf-display); font-weight: 800; font-size: 30px; margin: 0 0 10px; }
+    .pf-log-list p { margin: 0; font-size: 16px; line-height: 1.65; font-weight: 500; color: var(--pf-ink-soft); }
     .pf-lab { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; align-items: stretch; }
-    .pf-lab > img { width: 100%; height: 100%; min-height: 320px; object-fit: cover; border: 6px solid #fff; border-radius: 40px; box-shadow: inset 2px 2px 5px rgba(255,255,255,0.6), 10px 12px 24px rgba(122,102,92,0.16); }
-    .pf-lab > div { background: var(--pf-cream); border: 4px solid #fff; border-radius: 40px; padding: clamp(28px, 4vw, 44px); box-shadow: inset 3px 3px 6px rgba(255,255,255,0.75), 10px 12px 24px rgba(122,102,92,0.14); }
+    .pf-lab > img { width: 100%; height: 100%; min-height: 320px; object-fit: cover; border: 6px solid #fff; border-radius: 40px; }
+    .pf-lab > div { background: var(--pf-cream); border: 4px solid #fff; border-radius: 40px; padding: clamp(28px, 4vw, 44px); }
     .pf-lab h3 { font-family: var(--pf-display); font-weight: 800; font-size: 30px; margin: 0 0 14px; }
     .pf-lab p { margin: 0 0 20px; font-size: 16px; line-height: 1.65; color: var(--pf-ink-soft); font-weight: 500; }
     .pf-lab-small { width: 100%; height: 170px; object-fit: cover; border: 4px solid #fff; border-radius: 26px; }
+    .pf-facts { display: flex; gap: 14px; margin: 44px 0 0; padding: 0; flex-wrap: wrap; justify-content: center; }
+    .pf-facts div {
+      background: #fff; border: 3px solid #fff; border-radius: 26px; padding: 16px 28px; text-align: center;
+      box-shadow: inset 2px 2px 5px rgba(255,255,255,0.9), 6px 8px 16px rgba(122,102,92,0.14);
+      display: grid; gap: 2px;
+    }
+    .pf-facts strong { font-family: var(--pf-display); font-weight: 800; font-size: 34px; color: var(--pf-plum); }
+    .pf-facts span { font-size: 13.5px; font-weight: 600; color: var(--pf-ink-soft); }
 
-    /* citations */
-    .pf-quotes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
-    .pf-quote { border: 4px solid #fff; border-radius: 36px; padding: 32px 30px; margin: 0; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
-    .pf-quote:hover { transform: scale(1.03) rotate(-1deg); }
-    .pf-quote p { font-size: 17px; line-height: 1.65; font-weight: 600; margin: 0 0 16px; }
-    .pf-quote cite { font-style: normal; font-weight: 700; font-size: 14px; letter-spacing: 0.06em; color: var(--pf-plum); }
+    /* field notes */
+    .pf-notes { padding: clamp(70px, 9vw, 110px) 0 20px; }
+    .pf-notes-field { position: relative; max-width: 1280px; margin: 0 auto; min-height: 420px; padding: 0 clamp(20px, 4vw, 40px); }
+    .pf-note { position: absolute; border: 4px solid #fff; border-radius: 30px; padding: 28px 30px; margin: 0; width: min(360px, 82vw); }
+    .pf-note p { font-size: 16.5px; line-height: 1.65; font-weight: 600; margin: 0 0 14px; }
+    .pf-note cite { font-style: normal; font-weight: 700; font-size: 14px; letter-spacing: 0.06em; color: var(--pf-plum); }
+    .pf-n1 { top: 0; left: 5%; transform: rotate(-3deg); }
+    .pf-n2 { top: 40px; right: 6%; transform: rotate(2.4deg); }
+    .pf-n3 { bottom: 0; left: 32%; transform: rotate(-1.6deg); }
 
-    /* tarifs */
-    .pf-plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: stretch; }
-    .pf-plan { border: 4px solid #fff; border-radius: 40px; padding: 38px 34px; display: grid; gap: 10px; align-content: start; position: relative; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
-    .pf-plan:hover { transform: translateY(-10px); }
-    .pf-plan-hot { transform: scale(1.04); }
-    .pf-plan-hot:hover { transform: scale(1.04) translateY(-10px); }
-    .pf-plan-badge {
-      position: absolute; top: -22px; left: 50%; translate: -50% 0; margin: 0;
+    /* puffs */
+    .pf-puffs { padding: clamp(70px, 9vw, 110px) 0; }
+    .pf-puff-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: stretch; margin-top: 20px; }
+    .pf-puff {
+      border: 4px solid #fff; border-radius: 44% 56% 52% 48% / 56% 48% 52% 44%; padding: 48px 36px;
+      display: grid; gap: 10px; align-content: start; justify-items: center; text-align: center;
+      position: relative; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .pf-puff:hover { transform: translateY(-10px) scale(1.02); }
+    .pf-puff-hot { border-radius: 52% 48% 46% 54% / 48% 54% 46% 52%; }
+    .pf-puff-badge {
+      position: absolute; top: -20px; left: 50%; translate: -50% 0; margin: 0;
       background: var(--pf-plum); color: #fff; font-family: var(--pf-display); font-weight: 700; font-size: 15px;
       border: 3px solid #fff; border-radius: 999px; padding: 8px 22px; white-space: nowrap;
       box-shadow: 4px 6px 12px rgba(122,102,92,0.2);
     }
-    .pf-plan h3 { font-family: var(--pf-display); font-weight: 800; font-size: 32px; margin: 0; }
+    .pf-puff h3 { font-family: var(--pf-display); font-weight: 800; font-size: 32px; margin: 0; }
     .pf-price { font-family: var(--pf-display); font-weight: 800; font-size: 52px; margin: 0; color: var(--pf-plum); }
-    .pf-plan-sub { margin: 0 0 8px; font-weight: 600; color: var(--pf-ink-soft); }
-    .pf-plan ul { list-style: none; margin: 0 0 18px; padding: 0; display: grid; gap: 10px; }
-    .pf-plan li { font-size: 15.5px; font-weight: 600; padding-left: 30px; position: relative; line-height: 1.5; }
-    .pf-plan li::before { content: "●"; position: absolute; left: 2px; color: var(--pf-plum); font-size: 13px; top: 3px; }
-    .pf-plans-note { text-align: center; margin: 34px 0 0; font-weight: 600; color: var(--pf-ink-soft); font-size: 16px; }
+    .pf-puff-sub { margin: 0 0 8px; font-weight: 600; color: var(--pf-ink-soft); }
+    .pf-puff ul { list-style: none; margin: 0 0 18px; padding: 0; display: grid; gap: 10px; }
+    .pf-puff li { font-size: 15.5px; font-weight: 600; line-height: 1.5; }
+    .pf-puff li::before { content: "● "; color: var(--pf-plum); font-size: 13px; }
 
     /* contact */
+    .pf-contact { padding: clamp(70px, 9vw, 110px) 0; }
     .pf-contact-in { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(36px, 6vw, 70px); align-items: start; }
     .pf-contact-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
     .pf-contact-list li { background: #fff; border: 3px solid #fff; border-radius: 22px; padding: 16px 22px; font-size: 16px; font-weight: 600; box-shadow: inset 2px 2px 5px rgba(255,255,255,0.9), 6px 8px 16px rgba(122,102,92,0.12); }
@@ -532,23 +581,24 @@ const IMG = {
     .pf-form-note { margin: 0; font-weight: 700; font-size: 16px; color: var(--pf-plum); }
     .pf-form-note:empty { display: none; }
 
-    /* pied de page */
+    /* footer */
     .pf-footer { background: var(--pf-plum); color: #fff; border-radius: 60px 60px 0 0; margin-top: 40px; padding: 70px 0 90px; text-align: center; }
     .pf-footer-logo { font-family: var(--pf-display); font-weight: 800; font-size: clamp(3.4rem, 10vw, 7rem); margin: 0 0 18px; transform: rotate(-2deg); }
     .pf-footer p { margin: 0 0 10px; font-weight: 600; font-size: 15px; opacity: 0.92; }
     .pf-footer a { color: #fff; }
 
     @media (max-width: 1020px) {
-      .pf-hero-in { grid-template-columns: 1fr; }
-      .pf-hero-frame img { height: 380px; }
-      .pf-toys { grid-template-columns: 1fr 1fr; }
-      .pf-steps, .pf-quotes { grid-template-columns: 1fr; max-width: 560px; margin-inline: auto; }
-      .pf-steps { margin-bottom: 56px; }
+      .pf-field { min-height: 0; display: grid; gap: 26px; padding-bottom: 20px; }
+      .pf-spec { position: relative; top: auto !important; left: auto !important; right: auto !important; bottom: auto !important; width: 100%; max-width: 420px; margin-inline: auto; border-radius: 36px !important; transform: none !important; }
+      .pf-notes-field { min-height: 0; display: grid; gap: 26px; }
+      .pf-note { position: relative; top: auto !important; left: auto !important; right: auto !important; bottom: auto !important; width: 100%; max-width: 520px; margin-inline: auto; }
       .pf-lab { grid-template-columns: 1fr; }
-      .pf-plans { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; }
-      .pf-plan-hot { transform: none; }
-      .pf-plan-hot:hover { transform: translateY(-10px); }
+      .pf-puff-row { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; }
       .pf-contact-in { grid-template-columns: 1fr; }
+      .pf-play { min-height: 0; }
+      .pf-bb1 { width: 190px; height: 180px; }
+      .pf-bb2 { width: 140px; height: 150px; }
+      .pf-bb3, .pf-bb4 { display: none; }
     }
     @media (max-width: 860px) {
       .pf-burger { display: flex; }
@@ -564,15 +614,14 @@ const IMG = {
       .pf-nav { position: relative; }
     }
     @media (max-width: 640px) {
-      .pf-hero { padding-top: 150px; }
-      .pf-toys { grid-template-columns: 1fr; }
-      .pf-hero-cta .pf-btn { width: 100%; }
-      .pf-section-alt { border-radius: 40px; }
+      .pf-lab-open { padding-top: 120px; }
+      .pf-bb1 { top: 0; right: 0; width: 140px; height: 130px; }
+      .pf-bb2 { bottom: 0; right: 8%; width: 110px; height: 120px; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .pf-ticker-track, .pf-blob, .pf-logo-blob, .pf-sticker { animation: none; }
-      .pf-btn, .pf-toy, .pf-step, .pf-plan, .pf-quote, .pf-hero-frame, .pf-nav-links a { transition: none; }
-      .pf-btn:hover, .pf-toy:hover, .pf-step:hover, .pf-plan:hover, .pf-quote:hover { transform: none; }
+      .pf-ticker-track, .pf-blobbtn, .pf-logo-blob { animation: none; }
+      .pf-btn, .pf-spec, .pf-puff, .pf-nav-links a { transition: none; }
+      .pf-btn:hover, .pf-spec:hover, .pf-puff:hover { transform: none; }
     }
   </style>
 </body>
