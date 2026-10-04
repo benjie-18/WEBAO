@@ -37,9 +37,15 @@ export default {
     // Demo/carousel imagery: served from static assets when present,
     // otherwise from KV (images are stored as base64 in the repo and
     // restored at build time, but KV is the durable fallback).
+    // NOTE: env.ASSETS.fetch() throws (rather than returning 404) for paths
+    // absent from the asset manifest, so it must stay inside try/catch.
     if (url.pathname.startsWith("/demos/") || url.pathname.startsWith("/carousel/")) {
-      const asset = await env.ASSETS.fetch(request);
-      if (asset.status !== 404) return asset;
+      try {
+        const asset = await env.ASSETS.fetch(request);
+        if (asset.status !== 404) return asset;
+      } catch (e) {
+        console.error("asset fetch error", (e as Error)?.message);
+      }
       try {
         const data = await env.WEBAO_KV.get("img:" + url.pathname, "arrayBuffer");
         if (data) {
@@ -56,7 +62,7 @@ export default {
       } catch (e) {
         console.error("kv image error", (e as Error)?.message);
       }
-      return asset;
+      return new Response("Not found", { status: 404 });
     }
 
     // Everything else: the static site, served by the assets binding.
