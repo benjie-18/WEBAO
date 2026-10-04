@@ -1,18 +1,31 @@
 ---
-// CustomCursor: a restrained dot + trailing ring.
+// CustomCursor: a morphing cursor that carries the intro's flying-pointer
+// identity across the site.
+// - Default state is a tiny fracture shard (rotated square), echoing the
+//   intro's barrier-break motif.
+// - Morphs per hovered element: links expand the ring, buttons get a bold
+//   ring + dot, text gets an I-beam, media gets viewfinder corners.
+// - The trailing ring uses spring physics (velocity integration) so it
+//   overshoots and settles, driven with --ease-spring on morphs.
 // - Fine pointers only: (hover: hover) and (pointer: fine)
 // - Disabled entirely under prefers-reduced-motion
 // - The native cursor is hidden only after the custom one is confirmed live
 //   (first mousemove -> html.cc-ready), so a JS failure never leaves the
-//   user without a cursor.
+//   user without a cursor. Native I-beam is kept over form fields.
 // - Hidden while the intro plays and while the CursorJourney's own cursor
 //   is visible, so it never fights the existing animations.
 // - Theme-aware through --ink / --accent tokens.
+// - All shape morphs are opacity + transform only (shapes cross-fade).
 ---
 
 <div class="cc" aria-hidden="true">
-  <div class="cc-ring" data-cc-ring><span class="cc-ring-i"></span></div>
-  <div class="cc-dot" data-cc-dot><span class="cc-dot-i"></span></div>
+  <div class="cc-layer" data-cc-ring><span class="cc-ring-i"></span></div>
+  <div class="cc-layer" data-cc-cur>
+    <span class="cc-shape cc-shard"></span>
+    <span class="cc-shape cc-dotm"></span>
+    <span class="cc-shape cc-ibeam"><i></i></span>
+    <span class="cc-shape cc-corners"><i></i><i></i><i></i><i></i></span>
+  </div>
 </div>
 
 <style>
@@ -23,8 +36,7 @@
   @media (prefers-reduced-motion: reduce) {
     .cc { display: none !important; }
   }
-  .cc-dot,
-  .cc-ring {
+  .cc-layer {
     position: fixed;
     top: 0;
     left: 0;
@@ -34,46 +46,123 @@
     transition: opacity 0.3s ease;
     will-change: transform;
   }
-  .cc-dot-i,
+  /* ---- Trailing ring (spring-driven in JS) ---- */
   .cc-ring-i {
     display: block;
-    border-radius: 50%;
-  }
-  .cc-dot-i {
-    width: 6px;
-    height: 6px;
-    margin: -3px 0 0 -3px;
-    background: var(--ink);
-    transition: transform 0.22s var(--ease-out);
-  }
-  .cc-ring-i {
     width: 34px;
     height: 34px;
     margin: -17px 0 0 -17px;
-    border: 1.5px solid color-mix(in srgb, var(--ink) 32%, transparent);
+    border-radius: 50%;
+    border: 1.5px solid color-mix(in srgb, var(--ink) 30%, transparent);
     transition:
-      transform 0.32s var(--ease-out),
+      transform 0.38s var(--ease-spring),
+      opacity 0.25s ease,
       border-color 0.25s ease,
       background-color 0.25s ease;
   }
-  html.cc-ready .cc-dot,
-  html.cc-ready .cc-ring { opacity: 1; }
-  /* Interactive hover: ring expands and tints with the accent, dot recedes */
-  html.cc-hot .cc-ring-i {
-    transform: scale(1.5);
-    border-color: color-mix(in srgb, var(--accent) 70%, transparent);
-    background: color-mix(in srgb, var(--accent) 8%, transparent);
+  /* ---- Morph shapes (cross-fade via opacity + transform only) ---- */
+  .cc-shape {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transform: scale(0.5);
+    transition:
+      opacity 0.22s ease,
+      transform 0.38s var(--ease-spring);
   }
-  html.cc-hot .cc-dot-i { transform: scale(0.5); }
-  html.cc-down .cc-ring-i { transform: scale(1.15); }
-  html.cc-down.cc-hot .cc-ring-i { transform: scale(1.3); }
+  /* Default: fracture shard, a rotated square echoing the intro */
+  .cc-shard {
+    width: 10px;
+    height: 10px;
+    margin: -5px 0 0 -5px;
+    border-radius: 2px;
+    background: var(--accent);
+    box-shadow: 0 0 14px color-mix(in srgb, var(--accent) 55%, transparent);
+    opacity: 1;
+    transform: scale(1) rotate(45deg);
+  }
+  /* Link / button: small ink dot at the pointer tip */
+  .cc-dotm {
+    width: 6px;
+    height: 6px;
+    margin: -3px 0 0 -3px;
+    border-radius: 50%;
+    background: var(--ink);
+  }
+  /* Text: I-beam built from a bar plus serif caps */
+  .cc-ibeam i {
+    display: block;
+    position: relative;
+    width: 2px;
+    height: 22px;
+    margin: -11px 0 0 -1px;
+    border-radius: 1px;
+    background: var(--ink);
+  }
+  .cc-ibeam i::before,
+  .cc-ibeam i::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    width: 11px;
+    height: 2px;
+    border-radius: 1px;
+    background: inherit;
+    transform: translateX(-50%);
+  }
+  .cc-ibeam i::before { top: 0; }
+  .cc-ibeam i::after { bottom: 0; }
+  /* Media: viewfinder corners */
+  .cc-corners { width: 0; height: 0; }
+  .cc-corners i {
+    position: absolute;
+    width: 11px;
+    height: 11px;
+    border: 0 solid var(--ink);
+  }
+  .cc-corners i:nth-child(1) { left: -19px; top: -19px; border-left-width: 2px; border-top-width: 2px; border-top-left-radius: 3px; }
+  .cc-corners i:nth-child(2) { left: 8px; top: -19px; border-right-width: 2px; border-top-width: 2px; border-top-right-radius: 3px; }
+  .cc-corners i:nth-child(3) { left: -19px; top: 8px; border-left-width: 2px; border-bottom-width: 2px; border-bottom-left-radius: 3px; }
+  .cc-corners i:nth-child(4) { left: 8px; top: 8px; border-right-width: 2px; border-bottom-width: 2px; border-bottom-right-radius: 3px; }
+
+  html.cc-ready .cc-layer { opacity: 1; }
+
+  /* ---- Morph state: link ---- */
+  html.cc-m-link .cc-shard { opacity: 0; transform: scale(0.5) rotate(45deg); }
+  html.cc-m-link .cc-dotm { opacity: 1; transform: scale(1); }
+  html.cc-m-link .cc-ring-i {
+    transform: scale(1.55);
+    border-color: color-mix(in srgb, var(--accent) 65%, transparent);
+    background: color-mix(in srgb, var(--accent) 7%, transparent);
+  }
+  /* ---- Morph state: button / control ---- */
+  html.cc-m-btn .cc-shard { opacity: 0; transform: scale(0.5) rotate(45deg); }
+  html.cc-m-btn .cc-dotm { opacity: 1; transform: scale(1); }
+  html.cc-m-btn .cc-ring-i {
+    transform: scale(1.28);
+    border-color: color-mix(in srgb, var(--accent) 85%, transparent);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+  }
+  /* ---- Morph state: text ---- */
+  html.cc-m-text .cc-shard { opacity: 0; transform: scale(0.5) rotate(45deg); }
+  html.cc-m-text .cc-ibeam { opacity: 1; transform: scale(1); }
+  html.cc-m-text .cc-ring-i { opacity: 0; transform: scale(0.7); }
+  /* ---- Morph state: media ---- */
+  html.cc-m-media .cc-shard { opacity: 0; transform: scale(0.5) rotate(45deg); }
+  html.cc-m-media .cc-corners { opacity: 1; transform: scale(1); }
+  html.cc-m-media .cc-ring-i { opacity: 0; transform: scale(0.7); }
+
+  /* Pressed: quick punch on every shape */
+  html.cc-down .cc-ring-i { transform: scale(0.92); }
+  html.cc-down.cc-m-link .cc-ring-i { transform: scale(1.35); }
+  html.cc-down.cc-m-btn .cc-ring-i { transform: scale(1.12); }
+
   /* Suppressed while the intro plays or the journey cursor is visible */
-  html.cc-off .cc-dot,
-  html.cc-off .cc-ring,
-  html.cc-away .cc-dot,
-  html.cc-away .cc-ring { opacity: 0 !important; }
+  html.cc-off .cc-layer,
+  html.cc-away .cc-layer { opacity: 0 !important; }
   /* Native cursor hides only once the custom one is live. Keep the native
-     I-beam over text fields for usability (the dot still tracks). */
+     I-beam over text fields for usability (the custom cursor still tracks). */
   html.cc-ready,
   html.cc-ready *:not(input):not(textarea):not(select):not([contenteditable="true"]) {
     cursor: none;
@@ -90,42 +179,76 @@
     if (!fine || reduced) return;
 
     var html = document.documentElement;
-    var HOT_SELECTOR =
-      "a, button, [role='button'], summary, label, .chip, input, select, textarea, [data-cc-hot]";
+    // Morph priority: controls/links first (an <img> icon inside a button
+    // is a button, not media), then standalone media, then text, then the
+    // default shard.
+    var BTN_SEL =
+      "button, [role='button'], summary, label, .chip, input, select, textarea, [data-cc-hot]";
+    var LINK_SEL = "a";
+    var MEDIA_SEL = "img, video, canvas, [data-cc-media]";
+    var TEXT_SEL =
+      "p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption, dd, dt, td, th, [data-cc-text]";
+    var MORPH_CLASSES = ["cc-m-link", "cc-m-btn", "cc-m-text", "cc-m-media"];
 
-    var dot, ring;
+    var cur, ring;
     var mx = -100, my = -100;
-    var dx = -100, dy = -100, rx = -100, ry = -100;
+    // Cursor layer: tight lerp. Ring layer: velocity spring (overshoots).
+    var cx = -100, cy = -100;
+    var rx = -100, ry = -100, rvx = 0, rvy = 0;
+    var STIFFNESS = 0.14;
+    var DAMPING = 0.72;
     var raf = 0;
     var live = false;
+    var morph = "";
 
     function bind() {
-      if (dot && dot.isConnected && ring && ring.isConnected) return true;
-      dot = document.querySelector("[data-cc-dot]");
+      if (cur && cur.isConnected && ring && ring.isConnected) return true;
+      cur = document.querySelector("[data-cc-cur]");
       ring = document.querySelector("[data-cc-ring]");
-      return !!(dot && ring);
+      return !!(cur && ring);
     }
 
     function place() {
-      if (!dot || !ring) return;
-      dot.style.transform = "translate3d(" + dx + "px," + dy + "px,0)";
+      if (!cur || !ring) return;
+      cur.style.transform = "translate3d(" + cx + "px," + cy + "px,0)";
       ring.style.transform = "translate3d(" + rx + "px," + ry + "px,0)";
     }
 
     function tick() {
       raf = 0;
-      dx += (mx - dx) * 0.42;
-      dy += (my - dy) * 0.42;
-      rx += (mx - rx) * 0.16;
-      ry += (my - ry) * 0.16;
+      cx += (mx - cx) * 0.45;
+      cy += (my - cy) * 0.45;
+      rvx = (rvx + (mx - rx) * STIFFNESS) * DAMPING;
+      rvy = (rvy + (my - ry) * STIFFNESS) * DAMPING;
+      rx += rvx;
+      ry += rvy;
       place();
       var active =
-        Math.abs(mx - dx) > 0.05 || Math.abs(my - dy) > 0.05 ||
-        Math.abs(mx - rx) > 0.05 || Math.abs(my - ry) > 0.05;
+        Math.abs(mx - cx) > 0.05 || Math.abs(my - cy) > 0.05 ||
+        Math.abs(mx - rx) > 0.05 || Math.abs(my - ry) > 0.05 ||
+        Math.abs(rvx) > 0.05 || Math.abs(rvy) > 0.05;
       if (active) raf = requestAnimationFrame(tick);
     }
     function kick() {
       if (!raf) raf = requestAnimationFrame(tick);
+    }
+
+    function setMorph(next) {
+      if (next === morph) return;
+      morph = next;
+      for (var i = 0; i < MORPH_CLASSES.length; i++) {
+        html.classList.remove(MORPH_CLASSES[i]);
+      }
+      if (next) html.classList.add(next);
+    }
+
+    function detectMorph(t) {
+      if (!t || !t.closest) return "";
+      if (t.closest(BTN_SEL)) return "cc-m-btn";
+      if (t.closest(LINK_SEL)) return "cc-m-link";
+      if (t.closest(MEDIA_SEL)) return "cc-m-media";
+      if (t.closest(TEXT_SEL)) return "cc-m-text";
+      return "";
     }
 
     function updateOff() {
@@ -144,13 +267,12 @@
       html.classList.remove("cc-away");
       if (!live) {
         live = true;
-        dx = mx; dy = my; rx = mx; ry = my;
+        cx = mx; cy = my; rx = mx; ry = my;
+        rvx = 0; rvy = 0;
         place();
         html.classList.add("cc-ready");
       }
-      var t = e.target;
-      var hot = !!(t && t.closest && t.closest(HOT_SELECTOR));
-      html.classList.toggle("cc-hot", hot);
+      setMorph(detectMorph(e.target));
       updateOff();
       kick();
     }
@@ -197,10 +319,15 @@
     // ClientRouter navigations: re-bind to the fresh DOM, keep it idempotent.
     document.addEventListener("astro:page-load", function () {
       live = false;
-      dx = dy = rx = ry = -100;
-      dot = null;
+      morph = "";
+      cx = cy = rx = ry = -100;
+      rvx = rvy = 0;
+      cur = null;
       ring = null;
-      html.classList.remove("cc-ready", "cc-hot", "cc-down", "cc-away");
+      for (var i = 0; i < MORPH_CLASSES.length; i++) {
+        html.classList.remove(MORPH_CLASSES[i]);
+      }
+      html.classList.remove("cc-ready", "cc-down", "cc-away");
       bind();
       updateOff();
     });
