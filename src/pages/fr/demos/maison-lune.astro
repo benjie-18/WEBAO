@@ -1,0 +1,421 @@
+---
+import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+
+// Demo microsite: Maison Lune, fictional boutique lakeside inn, Magog.
+// Standalone art direction. Moonlit dreaminess. Not connected to the WEBAO theme system.
+const IMG = {
+  hero: "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1600&auto=format&fit=crop",
+  cabin: "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?q=80&w=1200&auto=format&fit=crop",
+  room1: "https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1000&auto=format&fit=crop",
+  room2: "https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=1000&auto=format&fit=crop",
+  room3: "https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=1000&auto=format&fit=crop",
+  room4: "https://images.unsplash.com/photo-1591088398332-8a7791972843?q=80&w=1000&auto=format&fit=crop",
+  dining: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=1000&auto=format&fit=crop",
+  canoe: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=1000&auto=format&fit=crop",
+};
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maison Lune : auberge boutique au bord du lac à Magog</title>
+  <meta name="description" content="Maison Lune : une auberge boutique de quatre chambres au bord du lac Memphrémagog. Matins lents, eau au clair de lune, déjeuners qui valent le réveil." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Jost:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body class="ml">
+
+  <!-- NAV -->
+  <header class="ml-navwrap">
+    <nav class="ml-nav" aria-label="Principal">
+      <div class="ml-nav-links">
+        <a href="#rooms">Chambres</a>
+        <a href="#experiences">Expériences</a>
+      </div>
+      <a class="ml-logo" href="#top" aria-label="Maison Lune, accueil">
+        <span class="ml-moon" aria-hidden="true">☾</span>
+        <span>Maison Lune</span>
+      </a>
+      <div class="ml-nav-links">
+        <a href="#story">La maison</a>
+        <a class="ml-nav-book" href="#book">Réserver</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="ml-hero">
+      <div class="ml-hero-bg" aria-hidden="true">
+        <img src={IMG.hero} alt="" loading="eager" fetchpriority="high" />
+      </div>
+      <span class="ml-star ml-s1" aria-hidden="true"></span>
+      <span class="ml-star ml-s2" aria-hidden="true"></span>
+      <span class="ml-star ml-s3" aria-hidden="true"></span>
+      <span class="ml-star ml-s4" aria-hidden="true"></span>
+      <span class="ml-star ml-s5" aria-hidden="true"></span>
+      <span class="ml-star ml-s6" aria-hidden="true"></span>
+      <div class="ml-moonglow" aria-hidden="true"></div>
+      <div class="ml-hero-in">
+        <p class="ml-eyebrow">Une auberge de quatre chambres · Lac Memphrémagog · Magog</p>
+        <h1 class="ml-h1">Dormir sous<br /><em>un plus grand ciel</em></h1>
+        <p class="ml-lede">Quatre chambres au-dessus de l'eau, des déjeuners qui valent le réveil et des nuits si tranquilles qu'on entend le lac réfléchir.</p>
+        <div class="ml-hero-cta">
+          <a class="ml-btn" href="#book">Voir les disponibilités</a>
+          <a class="ml-link" href="#rooms">Découvrir les chambres ↓</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- STORY -->
+    <section class="ml-story" id="story">
+      <div class="ml-wrap-narrow">
+        <p class="ml-kicker">✦ la maison ✦</p>
+        <p class="ml-dropcap">Bâtie en 1928 comme maison d'été pour un horloger montréalais, la Maison Lune a passé quatre-vingt-dix ans à regarder le lac changer d'humeur. On a gardé les planchers de bois large, les banquettes profondes devant les fenêtres et l'habitude de faire une chose à la fois. Il y a quatre chambres, une longue table pour déjeuner et un quai qui appartient à qui se lève le premier.</p>
+        <figure class="ml-story-img">
+          <img src={IMG.cabin} alt="L'auberge au bord du lac à la tombée du jour" loading="lazy" />
+          <figcaption>La maison vue de l'eau, juste après que les huards se taisent.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ROOMS -->
+    <section class="ml-section" id="rooms">
+      <div class="ml-wrap">
+        <p class="ml-kicker">✦ quatre chambres, quatre humeurs ✦</p>
+        <h2 class="ml-h2">Choisissez votre <em>phase</em></h2>
+        <div class="ml-rooms">
+          <article class="ml-room">
+            <div class="ml-room-media"><img src={IMG.room1} alt="La chambre Pleine Lune avec vue sur le lac" loading="lazy" /><span class="ml-phase" aria-hidden="true">●</span></div>
+            <div class="ml-room-copy">
+              <p class="ml-room-no">Chambre un</p>
+              <h3>Pleine Lune</h3>
+              <p>La chambre d'angle, avec des fenêtres sur deux côtés de l'eau. Elle se réveille avec le soleil et s'endort avec la lune. Le lit fait face à l'est, et ce n'est pas un hasard.</p>
+              <ul><li>Lit king, vue sur le lac</li><li>Bain de détente</li><li>Banquette pour deux</li></ul>
+              <p class="ml-room-price">285 $ <span>/ nuit</span></p>
+            </div>
+          </article>
+          <article class="ml-room ml-room-flip">
+            <div class="ml-room-media"><img src={IMG.room2} alt="La chambre Demi-Lune dans la lumière douce du matin" loading="lazy" /><span class="ml-phase" aria-hidden="true">◐</span></div>
+            <div class="ml-room-copy">
+              <p class="ml-room-no">Chambre deux</p>
+              <h3>Demi-Lune</h3>
+              <p>Moitié lac, moitié pinède. La chambre la plus silencieuse de la maison, avec un fauteuil de lecture qui a terminé plus de romans qu'on ne peut compter.</p>
+              <ul><li>Lit queen, côté forêt</li><li>Coin lecture</li><li>Douche pluie</li></ul>
+              <p class="ml-room-price">225 $ <span>/ nuit</span></p>
+            </div>
+          </article>
+          <article class="ml-room">
+            <div class="ml-room-media"><img src={IMG.room3} alt="La chambre Nouvelle Lune, sombre et douillette" loading="lazy" /><span class="ml-phase" aria-hidden="true">○</span></div>
+            <div class="ml-room-copy">
+              <p class="ml-room-no">Chambre trois</p>
+              <h3>Nouvelle Lune</h3>
+              <p>Sombre, enveloppante, faite pour le sommeil profond. Stores occultants, couverture lestée et le meilleur matelas qu'on ait trouvé dans la province.</p>
+              <ul><li>Lit king, occultant</li><li>Couverture lestée</li><li>Grand bain profond</li></ul>
+              <p class="ml-room-price">245 $ <span>/ nuit</span></p>
+            </div>
+          </article>
+          <article class="ml-room ml-room-flip">
+            <div class="ml-room-media"><img src={IMG.room4} alt="La chambre Croissant aux tons de bois chaleureux" loading="lazy" /><span class="ml-phase" aria-hidden="true">☾</span></div>
+            <div class="ml-room-copy">
+              <p class="ml-room-no">Chambre quatre</p>
+              <h3>Croissant</h3>
+              <p>La chambre mansardée sous les combles, tout en bois chaud et lumière douce. Pour les écrivains, les amoureux et ceux qui fuient leur boîte courriel.</p>
+              <ul><li>Lit queen, mansarde</li><li>Bureau d'écriture</li><li>Puits de lumière pour les étoiles</li></ul>
+              <p class="ml-room-price">195 $ <span>/ nuit</span></p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPERIENCES -->
+    <section class="ml-exp" id="experiences">
+      <div class="ml-wrap">
+        <p class="ml-kicker">✦ des journées lentes, bien remplies ✦</p>
+        <h2 class="ml-h2">Les <em>rituels</em></h2>
+      </div>
+      <div class="ml-strip">
+        <figure>
+          <img src={IMG.canoe} alt="Canot qui glisse sur le lac calme du matin" loading="lazy" />
+          <figcaption><strong>Canot à l'aube</strong><span>On prête le canot, le thermos et le silence. De retour pour le déjeuner.</span></figcaption>
+        </figure>
+        <figure>
+          <img src={IMG.dining} alt="Table de déjeuner garnie de produits locaux" loading="lazy" />
+          <figcaption><strong>Le long déjeuner</strong><span>Servi de 8 h à 11 h à une grande table commune. Personne n'est pressé, jamais.</span></figcaption>
+        </figure>
+        <figure>
+          <img src={IMG.hero} alt="Étoiles au-dessus des montagnes la nuit" loading="lazy" />
+          <figcaption><strong>Terrasse aux étoiles</strong><span>Couvertures, télescope et l'un des ciels les plus noirs au sud des Laurentides.</span></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- BOOKING -->
+    <section class="ml-section" id="book">
+      <div class="ml-wrap-narrow">
+        <div class="ml-book">
+          <p class="ml-kicker">✦ réservez en direct ✦</p>
+          <h2 class="ml-h2">Le lac <em>vous attend</em></h2>
+          <p class="ml-book-sub">Réserver en direct, c'est le meilleur tarif, la meilleure chambre et un pot de notre granola à l'arrivée. Minimum de deux nuits la fin de semaine.</p>
+          <form class="ml-form" id="ml-form" novalidate>
+            <div class="ml-form-row">
+              <label>Arrivée<input type="date" name="in" required /></label>
+              <label>Départ<input type="date" name="out" required /></label>
+            </div>
+            <div class="ml-form-row">
+              <label>Voyageurs
+                <select name="guests">
+                  <option>1 voyageur</option>
+                  <option selected>2 voyageurs</option>
+                  <option>3 voyageurs</option>
+                  <option>4 voyageurs</option>
+                </select>
+              </label>
+              <label>Chambre
+                <select name="room">
+                  <option>Pleine Lune</option>
+                  <option>Demi-Lune</option>
+                  <option>Nouvelle Lune</option>
+                  <option>Croissant</option>
+                </select>
+              </label>
+            </div>
+            <button class="ml-btn ml-btn-full" type="submit">Voir les disponibilités</button>
+            <p class="ml-form-note" role="status" aria-live="polite"></p>
+          </form>
+          <p class="ml-book-alt">Vous préférez un humain? Appelez le <a href="tel:+18195550142">(819) 555-0142</a>, on répond entre deux déjeuners.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUOTES -->
+    <section class="ml-quotes">
+      <div class="ml-wrap-narrow">
+        <blockquote>
+          <p>« On est venus pour une nuit et on est restés quatre. Je n'ai jamais aussi bien dormi de ma vie d'adulte. »</p>
+          <cite>Hélène et Marc, Montréal</cite>
+        </blockquote>
+        <blockquote>
+          <p>« Le déjeuner vaut à lui seul la route. Le lac à l'aube, c'est presque indécent. »</p>
+          <cite>Priya, Toronto</cite>
+        </blockquote>
+      </div>
+    </section>
+  </main>
+
+  <footer class="ml-footer">
+    <p class="ml-footer-moon" aria-hidden="true">☾</p>
+    <p class="ml-footer-name">Maison Lune</p>
+    <div class="ml-wrap ml-footer-in">
+      <p>© 2026 Maison Lune. Une démo fictive, rêvée à dessein.</p>
+      <p>12, chemin du Lac Fictif, Magog QC · <a href="tel:+18195550142">(819) 555-0142</a></p>
+    </div>
+  </footer>
+
+  <EscapeHatch locale="fr" />
+
+  <script>
+    // Demo form: never submits anywhere
+    (function () {
+      var form = document.getElementById('ml-form') as HTMLFormElement | null;
+      form?.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var note = form?.querySelector('.ml-form-note');
+        var room = form?.querySelector('select[name="room"]') as HTMLSelectElement | null;
+        var name = room ? room.value : 'votre chambre';
+        if (note) note.textContent = 'Bonne nouvelle : ' + name + ' est libre à ces dates. On vous la garde 48 heures.';
+        form?.reset();
+      });
+    })();
+  </script>
+
+  <style>
+    .ml {
+      --ml-night: #141B34;
+      --ml-night-2: #1D2547;
+      --ml-ink: #EDEAE2;
+      --ml-silver: #C9D2E8;
+      --ml-blush: #E8B4B8;
+      --ml-gold: #D9BE7E;
+      --ml-serif: "Cormorant Garamond", Georgia, serif;
+      --ml-sans: "Jost", system-ui, sans-serif;
+      margin: 0;
+      background: var(--ml-night);
+      color: var(--ml-ink);
+      font-family: var(--ml-serif);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: clip;
+    }
+    .ml *, .ml *::before, .ml *::after { box-sizing: border-box; }
+    .ml img { display: block; max-width: 100%; }
+    .ml-wrap { max-width: 1180px; margin: 0 auto; padding: 0 clamp(22px, 4vw, 44px); }
+    .ml-wrap-narrow { max-width: 760px; margin: 0 auto; padding: 0 clamp(22px, 4vw, 44px); }
+    .ml em { font-style: italic; color: var(--ml-blush); }
+
+    /* nav */
+    .ml-navwrap { position: fixed; top: 0; left: 0; right: 0; z-index: 60; }
+    .ml-nav {
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
+      padding: 18px clamp(22px, 4vw, 48px);
+      background: linear-gradient(180deg, rgba(20,27,52,0.85), rgba(20,27,52,0));
+    }
+    .ml-nav-links { display: flex; gap: 28px; }
+    .ml-nav-links a {
+      font-family: var(--ml-sans); font-size: 12.5px; font-weight: 500;
+      letter-spacing: 0.24em; text-transform: uppercase; color: var(--ml-silver); text-decoration: none;
+    }
+    .ml-nav-links a:hover { color: #fff; }
+    .ml-logo {
+      display: flex; align-items: center; gap: 10px; text-decoration: none;
+      font-size: 26px; font-weight: 500; letter-spacing: 0.12em; color: #fff;
+    }
+    .ml-moon { color: var(--ml-gold); font-size: 24px; }
+    .ml-nav-book { border: 1px solid var(--ml-silver); padding: 10px 20px; border-radius: 999px; }
+    .ml-nav-book:hover { border-color: #fff; }
+
+    /* type */
+    .ml-kicker {
+      font-family: var(--ml-sans); font-size: 12px; font-weight: 500; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--ml-gold); text-align: center; margin: 0 0 20px;
+    }
+    .ml-h2 { font-size: clamp(2.6rem, 6vw, 4.4rem); font-weight: 400; line-height: 1.05; text-align: center; margin: 0 0 54px; }
+    .ml-eyebrow {
+      font-family: var(--ml-sans); font-size: 12px; font-weight: 500; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--ml-silver); margin: 0 0 26px;
+    }
+
+    /* hero */
+    .ml-hero { position: relative; min-height: 100svh; display: grid; place-items: center; overflow: hidden; text-align: center; }
+    .ml-hero-bg { position: absolute; inset: -4%; }
+    .ml-hero-bg img { width: 100%; height: 100%; object-fit: cover; animation: ml-kenburns 26s ease-in-out infinite alternate; }
+    @keyframes ml-kenburns { from { transform: scale(1); } to { transform: scale(1.08); } }
+    .ml-hero::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(20,27,52,0.62) 0%, rgba(20,27,52,0.25) 45%, rgba(20,27,52,0.92) 100%);
+    }
+    .ml-moonglow {
+      position: absolute; top: 16%; right: 14%; width: 220px; height: 220px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(237,234,226,0.5), rgba(237,234,226,0.12) 45%, transparent 70%);
+      filter: blur(6px); animation: ml-glow 7s ease-in-out infinite; z-index: 1;
+    }
+    @keyframes ml-glow { 50% { opacity: 0.65; transform: scale(1.06); } }
+    .ml-star { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: #fff; z-index: 1; animation: ml-twinkle 3.4s ease-in-out infinite; }
+    .ml-s1 { top: 12%; left: 18%; }
+    .ml-s2 { top: 22%; left: 64%; animation-delay: 1.1s; }
+    .ml-s3 { top: 8%; left: 42%; animation-delay: 2s; width: 2px; height: 2px; }
+    .ml-s4 { top: 30%; left: 30%; animation-delay: 0.6s; width: 2px; height: 2px; }
+    .ml-s5 { top: 18%; left: 82%; animation-delay: 2.6s; }
+    .ml-s6 { top: 36%; left: 74%; animation-delay: 1.7s; width: 2px; height: 2px; }
+    @keyframes ml-twinkle { 50% { opacity: 0.15; } }
+    .ml-hero-in { position: relative; z-index: 2; padding: 120px 24px 80px; }
+    .ml-h1 { font-size: clamp(3.4rem, 9vw, 7rem); font-weight: 300; line-height: 1.02; margin: 0 0 26px; letter-spacing: 0.01em; }
+    .ml-h1 em { font-weight: 400; }
+    .ml-lede { font-size: 21px; font-style: italic; color: var(--ml-silver); max-width: 34ch; margin: 0 auto 38px; line-height: 1.6; }
+    .ml-hero-cta { display: flex; gap: 26px; align-items: center; justify-content: center; flex-wrap: wrap; }
+    .ml-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      font-family: var(--ml-sans); font-size: 13px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--ml-night); background: var(--ml-ink); text-decoration: none; cursor: pointer;
+      padding: 18px 42px; border-radius: 999px; border: none;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+    .ml-btn:hover { transform: translateY(-2px); background: #fff; }
+    .ml-btn-full { width: 100%; }
+    .ml-link { font-family: var(--ml-sans); font-size: 13px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ml-silver); text-decoration: none; border-bottom: 1px solid var(--ml-silver); padding-bottom: 4px; }
+    .ml-link:hover { color: #fff; border-color: #fff; }
+
+    /* story */
+    .ml-story { padding: clamp(80px, 10vw, 140px) 0; background: linear-gradient(180deg, var(--ml-night), var(--ml-night-2)); }
+    .ml-dropcap { font-size: 23px; line-height: 1.75; font-weight: 400; color: var(--ml-ink); margin: 0 0 44px; }
+    .ml-dropcap::first-letter {
+      font-size: 4.6em; float: left; line-height: 0.82; padding: 6px 14px 0 0;
+      color: var(--ml-gold); font-weight: 500;
+    }
+    .ml-story-img { margin: 0; }
+    .ml-story-img img { border-radius: 4px; width: 100%; height: clamp(280px, 40vw, 460px); object-fit: cover; }
+    .ml-story-img figcaption { font-family: var(--ml-sans); font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ml-silver); margin-top: 14px; text-align: center; }
+
+    /* rooms */
+    .ml-section { padding: clamp(80px, 10vw, 140px) 0; }
+    .ml-rooms { display: grid; gap: clamp(60px, 8vw, 110px); }
+    .ml-room { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: clamp(30px, 5vw, 70px); align-items: center; }
+    .ml-room-flip .ml-room-media { order: 2; }
+    .ml-room-flip .ml-room-copy { order: 1; text-align: right; }
+    .ml-room-flip .ml-room-copy ul { justify-items: end; }
+    .ml-room-media { position: relative; margin: 0; }
+    .ml-room-media img { width: 100%; height: clamp(320px, 44vw, 520px); object-fit: cover; border-radius: 4px; }
+    .ml-phase {
+      position: absolute; top: 22px; left: 22px; width: 58px; height: 58px; border-radius: 50%;
+      display: grid; place-items: center; font-size: 26px; color: var(--ml-night);
+      background: rgba(237, 234, 226, 0.92); backdrop-filter: blur(4px);
+    }
+    .ml-room-no { font-family: var(--ml-sans); font-size: 12px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ml-gold); margin: 0 0 14px; }
+    .ml-room-copy h3 { font-size: clamp(2.2rem, 4.5vw, 3.4rem); font-weight: 400; margin: 0 0 16px; }
+    .ml-room-copy p { font-size: 19px; line-height: 1.7; color: var(--ml-silver); margin: 0 0 20px; font-style: italic; }
+    .ml-room-copy ul { list-style: none; margin: 0 0 24px; padding: 0; display: grid; gap: 8px; font-family: var(--ml-sans); font-size: 13.5px; letter-spacing: 0.08em; color: var(--ml-ink); }
+    .ml-room-copy li::before { content: "✦ "; color: var(--ml-gold); }
+    .ml-room-price { font-size: 30px !important; font-style: normal !important; color: var(--ml-ink) !important; }
+    .ml-room-price span { font-size: 16px; color: var(--ml-silver); }
+
+    /* experiences strip */
+    .ml-exp { padding: clamp(80px, 10vw, 130px) 0; background: var(--ml-night-2); overflow: hidden; }
+    .ml-strip { display: flex; gap: 26px; overflow-x: auto; padding: 10px clamp(22px, 4vw, 44px) 30px; scrollbar-width: thin; }
+    .ml-strip figure { margin: 0; flex: none; width: min(400px, 80vw); }
+    .ml-strip img { width: 100%; height: 300px; object-fit: cover; border-radius: 200px 200px 4px 4px; }
+    .ml-strip figcaption { display: grid; gap: 8px; padding-top: 18px; text-align: center; }
+    .ml-strip figcaption strong { font-size: 24px; font-weight: 500; }
+    .ml-strip figcaption span { font-family: var(--ml-sans); font-size: 14px; color: var(--ml-silver); line-height: 1.6; }
+
+    /* booking */
+    .ml-book {
+      background: rgba(237, 234, 226, 0.05); border: 1px solid rgba(201, 210, 232, 0.25);
+      border-radius: 8px; padding: clamp(36px, 6vw, 64px); text-align: center;
+    }
+    .ml-book-sub { font-size: 19px; font-style: italic; color: var(--ml-silver); max-width: 44ch; margin: 0 auto 36px; line-height: 1.65; }
+    .ml-form { display: grid; gap: 18px; text-align: left; max-width: 560px; margin: 0 auto; }
+    .ml-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .ml-form label { display: grid; gap: 10px; font-family: var(--ml-sans); font-size: 12px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ml-silver); }
+    .ml-form input, .ml-form select {
+      font-family: var(--ml-serif); font-size: 19px; color: var(--ml-ink);
+      background: transparent; border: none; border-bottom: 1px solid rgba(201, 210, 232, 0.4);
+      padding: 10px 2px; width: 100%; color-scheme: dark;
+    }
+    .ml-form input:focus, .ml-form select:focus { outline: none; border-bottom-color: var(--ml-gold); }
+    .ml-form-note { margin: 0; text-align: center; font-size: 18px; font-style: italic; color: var(--ml-blush); }
+    .ml-form-note:empty { display: none; }
+    .ml-book-alt { margin: 28px 0 0; font-family: var(--ml-sans); font-size: 14px; letter-spacing: 0.06em; color: var(--ml-silver); }
+    .ml-book-alt a { color: var(--ml-gold); }
+
+    /* quotes */
+    .ml-quotes { padding: 0 0 clamp(80px, 10vw, 130px); }
+    .ml-quotes .ml-wrap-narrow { display: grid; gap: 44px; }
+    .ml-quotes blockquote { margin: 0; text-align: center; }
+    .ml-quotes blockquote p { font-size: clamp(1.5rem, 3.4vw, 2.1rem); font-style: italic; line-height: 1.5; margin: 0 0 14px; color: var(--ml-ink); }
+    .ml-quotes cite { font-family: var(--ml-sans); font-style: normal; font-size: 12.5px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ml-gold); }
+
+    /* footer */
+    .ml-footer { border-top: 1px solid rgba(201, 210, 232, 0.18); padding: 70px 0 90px; text-align: center; }
+    .ml-footer-moon { font-size: 44px; color: var(--ml-gold); margin: 0 0 16px; }
+    .ml-footer-name { font-size: 30px; letter-spacing: 0.14em; margin: 0 0 26px; }
+    .ml-footer-in { display: grid; gap: 8px; font-family: var(--ml-sans); font-size: 13.5px; color: var(--ml-silver); }
+    .ml-footer-in p { margin: 0; }
+    .ml-footer-in a { color: var(--ml-gold); }
+
+    @media (max-width: 900px) {
+      .ml-nav-links { display: none; }
+      .ml-room, .ml-room-flip .ml-room-media, .ml-room-flip .ml-room-copy { grid-template-columns: 1fr; order: initial; text-align: left; }
+      .ml-room-flip .ml-room-copy ul { justify-items: start; }
+      .ml-form-row { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ml-hero-bg img, .ml-moonglow, .ml-star { animation: none; }
+      .ml-btn, .ml-link { transition: none; }
+    }
+  </style>
+</body>
+</html>
