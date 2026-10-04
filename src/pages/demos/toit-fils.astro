@@ -1,0 +1,520 @@
+---
+import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+
+// Demo microsite: Toit & Fils, fictional roofing company, Québec City QC.
+// Heritage craft: oxide/paper tones, generational family story, wax-seal emblem,
+// textured backgrounds, guarantee section.
+// Standalone art direction. Not connected to the WEBAO theme system.
+const IMG = {
+  hero: "https://images.unsplash.com/photo-1632759145351-1d592919f522?q=80&w=1800&auto=format&fit=crop",
+  house: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?q=80&w=1000&auto=format&fit=crop",
+  home: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=1000&auto=format&fit=crop",
+  craft: "https://images.unsplash.com/photo-1592595896551-12b371d546d5?q=80&w=1000&auto=format&fit=crop",
+  suburb: "https://images.unsplash.com/photo-1605146769289-440113cc3d00?q=80&w=1000&auto=format&fit=crop",
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Toit &amp; Fils: Roofers in Québec City Since 1962</title>
+  <meta name="description" content="Toit & Fils: Québec City roofers since 1962. Three generations of roofers. Asphalt shingles, metal roofing, flat roofs. 25-year workmanship guarantee." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body class="tf">
+
+  <!-- NAV -->
+  <header class="tf-nav">
+    <a class="tf-brand" href="#top" aria-label="Toit et Fils, home">
+      <svg class="tf-seal-mini" viewBox="0 0 48 48" aria-hidden="true">
+        <circle cx="24" cy="24" r="21" fill="#A34A2A" />
+        <circle cx="24" cy="24" r="16.5" fill="none" stroke="#EFE6D2" stroke-width="1.6" stroke-dasharray="3 2.4" />
+        <path d="M8 26l16-9 16 9-16 4z" fill="#EFE6D2" />
+        <path d="M14 30v6M24 32v6M34 30v6" stroke="#EFE6D2" stroke-width="2.4" stroke-linecap="round" />
+      </svg>
+      <span>Toit <em>&amp;</em> Fils</span>
+    </a>
+    <nav class="tf-links" aria-label="Primary">
+      <a href="#heritage">Heritage</a>
+      <a href="#services">Roofs</a>
+      <a href="#guarantee">Guarantee</a>
+      <a href="#quote">Quote</a>
+    </nav>
+    <a class="tf-nav-call" href="tel:+14185550129">(418) 555-0129</a>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="tf-hero">
+      <img class="tf-hero-img" src={IMG.hero} alt="A steep shingled roof against a bright sky, freshly finished" loading="eager" fetchpriority="high" />
+      <div class="tf-hero-veil" aria-hidden="true"></div>
+      <div class="tf-hero-card">
+        <div class="tf-seal" aria-hidden="true">
+          <svg viewBox="0 0 160 160" class="tf-seal-svg">
+            <circle cx="80" cy="80" r="74" fill="#A34A2A" />
+            <circle cx="80" cy="80" r="74" fill="none" stroke="#7E3519" stroke-width="5" />
+            <circle cx="80" cy="80" r="60" fill="none" stroke="#EFE6D2" stroke-width="2" stroke-dasharray="4 3" />
+            <text x="80" y="66" text-anchor="middle" font-size="17" fill="#EFE6D2" font-family="Bitter, serif" font-weight="800" letter-spacing="3">DEPUIS</text>
+            <text x="80" y="104" text-anchor="middle" font-size="34" fill="#EFE6D2" font-family="Bitter, serif" font-weight="800" letter-spacing="2">1962</text>
+          </svg>
+        </div>
+        <p class="tf-kicker">Roofers · Québec City · Since 1962</p>
+        <h1 class="tf-h1">Three generations<br />under one roof.</h1>
+        <p class="tf-lede">Henri started nailing shingles in 1962. His son and grandson still do, the same slow way: straight courses, honest flashing, and a roof you will never think about again.</p>
+        <div class="tf-hero-cta">
+          <a class="tf-btn" href="#quote">Get a free estimate</a>
+          <a class="tf-btn tf-btn-ghost" href="tel:+14185550129">Call (418) 555-0129</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CRAFT STRIP -->
+    <section class="tf-strip" aria-label="Credentials">
+      <span>RBQ licensed</span><i aria-hidden="true">◆</i>
+      <span>25-year workmanship guarantee</span><i aria-hidden="true">◆</i>
+      <span>4,800+ roofs completed</span><i aria-hidden="true">◆</i>
+      <span>Manufacturer certified</span><i aria-hidden="true">◆</i>
+    </section>
+
+    <!-- HERITAGE -->
+    <section class="tf-section" id="heritage">
+      <div class="tf-wrap">
+        <p class="tf-kicker tf-center">Heritage</p>
+        <h2 class="tf-h2 tf-center">The roof is the family<br />business. Literally.</h2>
+        <div class="tf-timeline">
+          <article class="tf-era tf-reveal">
+            <div class="tf-era-no" aria-hidden="true">1962</div>
+            <div>
+              <h3>Henri lays the first course</h3>
+              <p>Henri Tremblay, 19, starts roofing with his uncle's crew in Limoilou. He founds Toit Henri in a garage on 4e Avenue with a ladder, a hammer, and opinions about flashing.</p>
+            </div>
+          </article>
+          <article class="tf-era tf-reveal">
+            <div class="tf-era-no" aria-hidden="true">1989</div>
+            <div>
+              <h3>Michel joins, the name changes</h3>
+              <p>Henri's son Michel earns his compagnon card and the company becomes Toit &amp; Fils. They roof half of Sainte-Foy through the nineties, one straight course at a time.</p>
+            </div>
+          </article>
+          <article class="tf-era tf-reveal">
+            <div class="tf-era-no" aria-hidden="true">2016</div>
+            <div>
+              <h3>Antoine, third generation</h3>
+              <p>Antoine brings drone inspections and digital quotes, but the nailing pattern hasn't changed since 1962. Henri, 83, still inspects every tenth roof. He finds things.</p>
+            </div>
+          </article>
+        </div>
+        <figure class="tf-heritage-media tf-reveal">
+          <img src={IMG.craft} alt="Hands of a roofer carefully aligning shingles on a roof deck" loading="lazy" />
+          <figcaption>The nailing pattern hasn't changed since 1962.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="tf-section tf-services" id="services">
+      <div class="tf-wrap">
+        <p class="tf-kicker">What we roof</p>
+        <h2 class="tf-h2">Four roofs.<br />Done properly.</h2>
+        <div class="tf-cards">
+          <article class="tf-card tf-reveal">
+            <p class="tf-card-no">I</p>
+            <h3>Asphalt shingles</h3>
+            <p>Architectural shingles, six nails per shingle, ice-and-water shield at every eave. The honest workhorse, done right.</p>
+            <p class="tf-card-life">Lifespan: 25–30 years</p>
+          </article>
+          <article class="tf-card tf-reveal">
+            <p class="tf-card-no">II</p>
+            <h3>Metal roofing</h3>
+            <p>Standing seam steel that shrugs off ice dams and outlives the mortgage. Quiet, too, with proper underlayment.</p>
+            <p class="tf-card-life">Lifespan: 50+ years</p>
+          </article>
+          <article class="tf-card tf-reveal">
+            <p class="tf-card-no">III</p>
+            <h3>Flat and low-slope</h3>
+            <p>Elastomeric membranes, welded seams, drains that actually drain. For the city's flat-roofed plexes.</p>
+            <p class="tf-card-life">Lifespan: 25–35 years</p>
+          </article>
+          <article class="tf-card tf-reveal">
+            <p class="tf-card-no">IV</p>
+            <h3>Gutters and soffits</h3>
+            <p>Seamless aluminum gutters, vented soffits, fascia that doesn't rot. The details that protect the big investment.</p>
+            <p class="tf-card-life">Included with every roof</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- GUARANTEE -->
+    <section class="tf-guarantee" id="guarantee">
+      <div class="tf-wrap tf-guarantee-grid">
+        <div class="tf-guarantee-seal" aria-hidden="true">
+          <svg viewBox="0 0 200 200" class="tf-guarantee-svg">
+            <circle cx="100" cy="100" r="92" fill="#A34A2A" />
+            <circle cx="100" cy="100" r="92" fill="none" stroke="#7E3519" stroke-width="6" />
+            <circle cx="100" cy="100" r="76" fill="none" stroke="#EFE6D2" stroke-width="2.5" />
+            <text x="100" y="82" text-anchor="middle" font-size="20" fill="#EFE6D2" font-family="Bitter, serif" font-weight="800" letter-spacing="4">GARANTIE</text>
+            <text x="100" y="118" text-anchor="middle" font-size="40" fill="#EFE6D2" font-family="Bitter, serif" font-weight="800">25 ANS</text>
+            <text x="100" y="142" text-anchor="middle" font-size="13" fill="#EFE6D2" font-family="Bitter, serif" letter-spacing="3">MAIN-D'OEUVRE</text>
+          </svg>
+        </div>
+        <div>
+          <p class="tf-kicker tf-kicker-light">Our word, in writing</p>
+          <h2 class="tf-h2 tf-light">The 25-year<br />workmanship guarantee.</h2>
+          <p class="tf-prose-light">Manufacturers warranty the shingle. We warranty the hands that nailed it. If our workmanship fails within 25 years, we come back and make it right, at our cost. It has happened eleven times in sixty years. We remember every address.</p>
+          <ul class="tf-promise">
+            <li>Written estimate, fixed price, no extras without your signature</li>
+            <li>Site left broom-clean, with a magnetic nail sweep of the yard</li>
+            <li>Photos of every layer before it gets covered</li>
+            <li>A real human answers the phone, year-round</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section class="tf-section">
+      <div class="tf-wrap">
+        <p class="tf-kicker">Recent roofs</p>
+        <h2 class="tf-h2">Around the city.</h2>
+        <div class="tf-gallery">
+          <figure class="tf-g tf-reveal">
+            <img src={IMG.house} alt="A classic Québec home with a new dark shingle roof" loading="lazy" />
+            <figcaption><strong>Sainte-Foy</strong><span>Architectural shingles, 2025</span></figcaption>
+          </figure>
+          <figure class="tf-g tf-reveal">
+            <img src={IMG.home} alt="A suburban house with standing seam metal roof" loading="lazy" />
+            <figcaption><strong>Cap-Rouge</strong><span>Standing seam metal, 2024</span></figcaption>
+          </figure>
+          <figure class="tf-g tf-reveal">
+            <img src={IMG.suburb} alt="A row of homes with fresh flat membrane roofing" loading="lazy" />
+            <figcaption><strong>Limoilou</strong><span>Elastomeric membrane, 2024</span></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- REVIEWS -->
+    <section class="tf-section tf-reviews">
+      <div class="tf-wrap">
+        <p class="tf-kicker tf-center">Word of mouth</p>
+        <h2 class="tf-h2 tf-center">Québec keeps<br />our ladder.</h2>
+        <div class="tf-review-grid">
+          <blockquote class="tf-review tf-reveal">
+            <p>"They found rot the home inspector missed, showed me photos, and fixed it for the quoted price anyway. Old-school honesty."</p>
+            <cite>François G., Sillery</cite>
+          </blockquote>
+          <blockquote class="tf-review tf-reveal">
+            <p>"The crew was quiet, fast, and the yard was cleaner than before they came. My neighbour booked them the same week."</p>
+            <cite>Nathalie P., Beauport</cite>
+          </blockquote>
+          <blockquote class="tf-review tf-reveal">
+            <p>"Antoine answered on a Sunday during the ice storm, tarped the leak Monday, roofed in May. That's the whole review."</p>
+            <cite>Jean-Marc D., Charlesbourg</cite>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUOTE -->
+    <section class="tf-section" id="quote">
+      <div class="tf-wrap tf-quote-grid">
+        <div>
+          <p class="tf-kicker">Free estimate</p>
+          <h2 class="tf-h2">Tell us about<br />your roof.</h2>
+          <p class="tf-prose">Age of the roof, leaks, missing shingles, or just "it looks tired": it all helps. We reply within one business day with a site visit date. Estimates are free and fixed.</p>
+          <p class="tf-quote-phone">Prefer to talk? <a href="tel:+14185550129">(418) 555-0129</a></p>
+        </div>
+        <form class="tf-form" id="tf-form" novalidate>
+          <label>Your name<input type="text" name="name" required placeholder="Jane Doe" autocomplete="name" /></label>
+          <label>Phone<input type="tel" name="phone" required placeholder="(418) 555-0000" autocomplete="tel" /></label>
+          <label>Roof type
+            <select name="roof" required>
+              <option value="">Choose…</option>
+              <option>Asphalt shingles</option>
+              <option>Metal roofing</option>
+              <option>Flat / low-slope</option>
+              <option>Not sure</option>
+            </select>
+          </label>
+          <label>Approximate age of roof
+            <select name="age">
+              <option value="">Choose…</option>
+              <option>Under 10 years</option>
+              <option>10–20 years</option>
+              <option>Over 20 years</option>
+              <option>Unknown</option>
+            </select>
+          </label>
+          <label class="tf-form-wide">What is going on?<textarea name="message" rows="4" placeholder="Water stain on the bedroom ceiling after heavy rain…"></textarea></label>
+          <button class="tf-form-wide" type="submit">Request my free estimate</button>
+          <p class="tf-form-note" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="tf-footer">
+    <div class="tf-wrap tf-footer-grid">
+      <div>
+        <p class="tf-footer-brand">Toit <em>&amp;</em> Fils</p>
+        <p>321, rue Fictive<br />Québec QC G1K 1A1</p>
+        <p>RBQ licence: 0000-0000-00 (fictional)</p>
+      </div>
+      <div>
+        <p class="tf-footer-h">Hours</p>
+        <p>Mon–Fri 7:00–17:00<br />Estimates: evenings too</p>
+      </div>
+      <div>
+        <p class="tf-footer-h">Call the family</p>
+        <a class="tf-footer-phone" href="tel:+14185550129">(418) 555-0129</a>
+      </div>
+    </div>
+    <p class="tf-fine">© 2026 Toit &amp; Fils. Fictional demo site, not a real business.</p>
+  </footer>
+
+  <EscapeHatch locale="en" />
+
+  <script>
+    (function () {
+      var form = document.getElementById('tf-form') as HTMLFormElement | null;
+      form?.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var note = form?.querySelector('.tf-form-note');
+        if (note) note.textContent = 'Request received. We will call within one business day to schedule your free estimate.';
+        form?.reset();
+      });
+      var els = document.querySelectorAll('.tf-reveal');
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (en) {
+            if (en.isIntersecting) { en.target.classList.add('tf-in'); io.unobserve(en.target); }
+          });
+        }, { threshold: 0.1 });
+        els.forEach(function (el) { io.observe(el); });
+      } else {
+        els.forEach(function (el) { el.classList.add('tf-in'); });
+      }
+    })();
+  </script>
+
+  <style>
+    .tf {
+      --tf-paper: #EFE6D2;
+      --tf-paper-2: #E4D7BC;
+      --tf-cream: #F7F1E3;
+      --tf-oxide: #A34A2A;
+      --tf-oxide-dark: #7E3519;
+      --tf-bark: #2E2620;
+      --tf-brass: #B08D3E;
+      --tf-ink-soft: rgba(46, 38, 32, 0.72);
+      --tf-serif: "Bitter", Georgia, "Times New Roman", serif;
+      margin: 0;
+      background: var(--tf-paper);
+      color: var(--tf-bark);
+      font-family: var(--tf-serif);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: clip;
+      background-image:
+        radial-gradient(rgba(46,38,32,0.05) 1px, transparent 1px),
+        radial-gradient(rgba(46,38,32,0.04) 1px, transparent 1px);
+      background-size: 26px 26px, 13px 13px;
+      background-position: 0 0, 6px 8px;
+    }
+    .tf *, .tf *::before, .tf *::after { box-sizing: border-box; }
+    .tf img { display: block; max-width: 100%; }
+    .tf-wrap { max-width: 1180px; margin: 0 auto; padding: 0 clamp(22px, 5vw, 52px); }
+    .tf-center { text-align: center; }
+
+    .tf-kicker { font-size: 13.5px; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; color: var(--tf-oxide); margin: 0 0 20px; }
+    .tf-kicker-light { color: var(--tf-brass); }
+    .tf-h1 { font-size: clamp(2.7rem, 6vw, 4.9rem); font-weight: 800; line-height: 1.04; margin: 0 0 22px; letter-spacing: 0.005em; }
+    .tf-h2 { font-size: clamp(2rem, 4.4vw, 3.3rem); font-weight: 800; line-height: 1.06; margin: 0 0 20px; }
+    .tf-light { color: var(--tf-cream); }
+    .tf-lede { font-size: 18px; line-height: 1.7; font-weight: 400; max-width: 48ch; margin: 0 0 30px; }
+    .tf-prose { font-size: 17px; line-height: 1.75; font-weight: 400; max-width: 54ch; margin: 0 0 24px; }
+    .tf-prose-light { font-size: 17.5px; line-height: 1.75; color: rgba(247,241,227,0.88); max-width: 54ch; margin: 0 0 28px; }
+
+    /* nav */
+    .tf-nav {
+      position: sticky; top: 0; z-index: 20;
+      display: flex; align-items: center; gap: 30px;
+      padding: 14px clamp(22px, 5vw, 52px);
+      background: rgba(239,230,210,0.92); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      border-bottom: 3px double var(--tf-bark);
+    }
+    .tf-brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: var(--tf-bark); font-size: 23px; font-weight: 800; }
+    .tf-brand em { font-style: italic; font-weight: 400; }
+    .tf-seal-mini { width: 40px; height: 40px; }
+    .tf-links { display: flex; gap: 28px; margin-left: auto; }
+    .tf-links a { color: var(--tf-bark); text-decoration: none; font-weight: 700; font-size: 15.5px; letter-spacing: 0.04em; }
+    .tf-links a:hover { color: var(--tf-oxide); text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 2px; }
+    .tf-nav-call {
+      background: var(--tf-oxide); color: var(--tf-cream); text-decoration: none; font-weight: 800; font-size: 15.5px;
+      padding: 11px 22px; border-radius: 999px; transition: background 0.16s ease, transform 0.16s ease;
+      box-shadow: 3px 3px 0 var(--tf-bark);
+    }
+    .tf-nav-call:hover { background: var(--tf-oxide-dark); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--tf-bark); }
+
+    /* hero */
+    .tf-hero { position: relative; min-height: 94vh; display: flex; align-items: center; overflow: hidden; }
+    .tf-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .tf-hero-veil { position: absolute; inset: 0; background: linear-gradient(100deg, rgba(46,38,32,0.55) 0%, rgba(46,38,32,0.18) 55%, transparent 100%); }
+    .tf-hero-card {
+      position: relative; z-index: 2; max-width: 640px; margin: 0 auto 0 clamp(22px, 6vw, 90px);
+      background: var(--tf-cream); border: 3px solid var(--tf-bark); border-radius: 6px;
+      padding: clamp(30px, 4vw, 52px); box-shadow: 12px 12px 0 rgba(46,38,32,0.35);
+      width: calc(100% - 44px);
+    }
+    .tf-seal { position: absolute; top: -58px; right: 26px; width: 116px; height: 116px; filter: drop-shadow(0 8px 14px rgba(46,38,32,0.35)); }
+    .tf-seal-svg { width: 100%; height: auto; transition: transform 0.6s ease; }
+    .tf-hero-card:hover .tf-seal-svg { transform: rotate(18deg); }
+    .tf-hero-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px; }
+    .tf-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      font-family: var(--tf-serif); font-weight: 800; font-size: 16.5px;
+      padding: 15px 30px; border-radius: 8px; text-decoration: none; cursor: pointer;
+      background: var(--tf-oxide); color: var(--tf-cream); border: 3px solid var(--tf-bark);
+      box-shadow: 4px 4px 0 var(--tf-bark); transition: transform 0.14s ease, box-shadow 0.14s ease, background 0.14s ease;
+    }
+    .tf-btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--tf-bark); background: var(--tf-oxide-dark); }
+    .tf-btn-ghost { background: transparent; color: var(--tf-bark); box-shadow: none; }
+    .tf-btn-ghost:hover { background: var(--tf-paper-2); box-shadow: none; transform: translateY(-2px); }
+
+    /* strip */
+    .tf-strip {
+      background: var(--tf-bark); color: var(--tf-cream);
+      display: flex; justify-content: center; align-items: center; gap: 26px; flex-wrap: wrap;
+      padding: 18px 22px; font-size: 14.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+    }
+    .tf-strip i { color: var(--tf-brass); font-style: normal; font-size: 11px; }
+
+    /* sections */
+    .tf-section { padding: clamp(76px, 11vh, 140px) 0; }
+
+    /* heritage */
+    .tf-timeline { display: grid; gap: 8px; margin: 50px 0; border-left: 4px solid var(--tf-oxide); }
+    .tf-era { display: grid; grid-template-columns: 130px 1fr; gap: 30px; padding: 26px 0 26px 34px; position: relative; opacity: 0; transform: translateX(-26px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .tf-era.tf-in { opacity: 1; transform: none; }
+    .tf-era::before {
+      content: ""; position: absolute; left: -13px; top: 34px; width: 22px; height: 22px; border-radius: 50%;
+      background: var(--tf-oxide); border: 4px solid var(--tf-paper);
+    }
+    .tf-era-no { font-size: 34px; font-weight: 800; color: var(--tf-oxide); letter-spacing: 0.02em; }
+    .tf-era h3 { font-size: 22px; font-weight: 800; margin: 2px 0 10px; }
+    .tf-era p { font-size: 16.5px; line-height: 1.7; color: var(--tf-ink-soft); margin: 0; max-width: 62ch; }
+    .tf-heritage-media { margin: 0; border: 3px solid var(--tf-bark); border-radius: 8px; overflow: hidden; opacity: 0; transform: translateY(26px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .tf-heritage-media.tf-in { opacity: 1; transform: none; }
+    .tf-heritage-media img { width: 100%; height: min(420px, 60vw); object-fit: cover; }
+    .tf-heritage-media figcaption { background: var(--tf-bark); color: var(--tf-cream); padding: 14px 20px; font-size: 14px; font-style: italic; letter-spacing: 0.04em; }
+
+    /* services */
+    .tf-services { background: var(--tf-paper-2); border-block: 3px double var(--tf-bark); }
+    .tf-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 48px; }
+    .tf-card {
+      background: var(--tf-cream); border: 2.5px solid var(--tf-bark); border-radius: 10px; padding: 30px 26px;
+      opacity: 0; transform: translateY(26px); transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.18s ease;
+    }
+    .tf-card.tf-in { opacity: 1; transform: none; }
+    .tf-card:hover { box-shadow: 6px 6px 0 var(--tf-oxide); }
+    .tf-card-no { font-size: 15px; font-weight: 800; letter-spacing: 0.3em; color: var(--tf-brass); margin: 0 0 14px; }
+    .tf-card h3 { font-size: 20px; font-weight: 800; margin: 0 0 12px; }
+    .tf-card p { font-size: 15px; line-height: 1.65; color: var(--tf-ink-soft); margin: 0 0 16px; }
+    .tf-card-life { font-size: 13.5px !important; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--tf-oxide); margin: 0 !important; }
+
+    /* guarantee */
+    .tf-guarantee { background: var(--tf-bark); padding: clamp(80px, 12vh, 140px) 0; }
+    .tf-guarantee-grid { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: clamp(36px, 6vw, 80px); align-items: center; }
+    .tf-guarantee-seal { display: grid; justify-items: center; }
+    .tf-guarantee-svg { width: min(280px, 60vw); height: auto; animation: tf-sealspin 30s linear infinite; filter: drop-shadow(0 14px 26px rgba(0,0,0,0.4)); }
+    @keyframes tf-sealspin { to { transform: rotate(360deg); } }
+    .tf-promise { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+    .tf-promise li { display: flex; gap: 14px; align-items: flex-start; font-size: 16.5px; font-weight: 600; color: rgba(247,241,227,0.9); line-height: 1.55; }
+    .tf-promise li::before { content: "✓"; flex: none; width: 30px; height: 30px; border-radius: 50%; background: var(--tf-oxide); color: var(--tf-cream); display: grid; place-items: center; font-size: 15px; font-weight: 800; }
+
+    /* gallery */
+    .tf-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 48px; }
+    .tf-g { margin: 0; border: 2.5px solid var(--tf-bark); border-radius: 10px; overflow: hidden; background: var(--tf-cream); opacity: 0; transform: translateY(26px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .tf-g.tf-in { opacity: 1; transform: none; }
+    .tf-g img { width: 100%; height: 300px; object-fit: cover; transition: transform 0.7s ease; }
+    .tf-g:hover img { transform: scale(1.05); }
+    .tf-g figcaption { padding: 18px 20px; display: grid; gap: 4px; }
+    .tf-g figcaption strong { font-size: 18px; font-weight: 800; }
+    .tf-g figcaption span { font-size: 14px; color: var(--tf-ink-soft); font-style: italic; }
+
+    /* reviews */
+    .tf-reviews { background: var(--tf-paper-2); border-block: 3px double var(--tf-bark); }
+    .tf-review-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 48px; }
+    .tf-review {
+      margin: 0; background: var(--tf-cream); border: 2.5px solid var(--tf-bark); border-radius: 4px 26px 4px 26px;
+      padding: 30px 28px; opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .tf-review.tf-in { opacity: 1; transform: none; }
+    .tf-review p { font-size: 16.5px; line-height: 1.7; font-style: italic; margin: 0 0 18px; }
+    .tf-review cite { font-style: normal; font-weight: 800; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tf-oxide); }
+
+    /* quote */
+    .tf-quote-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(34px, 6vw, 70px); align-items: start; }
+    .tf-quote-phone { font-size: 18px; font-weight: 700; margin: 26px 0 0; }
+    .tf-quote-phone a { color: var(--tf-oxide); font-size: 22px; }
+    .tf-form { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; background: var(--tf-cream); border: 3px solid var(--tf-bark); border-radius: 12px; padding: clamp(26px, 4vw, 42px); box-shadow: 8px 8px 0 var(--tf-paper-2); }
+    .tf-form-wide { grid-column: 1 / -1; }
+    .tf-form label { display: grid; gap: 8px; font-weight: 800; font-size: 13.5px; letter-spacing: 0.1em; text-transform: uppercase; }
+    .tf-form input, .tf-form select, .tf-form textarea {
+      font-family: var(--tf-serif); font-size: 16px; font-weight: 400; color: var(--tf-bark);
+      border: 2px solid var(--tf-bark); border-radius: 8px; padding: 13px 15px; background: #fff; width: 100%;
+    }
+    .tf-form input:focus, .tf-form select:focus, .tf-form textarea:focus { outline: 3px solid var(--tf-brass); outline-offset: 1px; }
+    .tf-form button {
+      font-family: var(--tf-serif); font-size: 17px; font-weight: 800;
+      background: var(--tf-oxide); color: var(--tf-cream); border: 3px solid var(--tf-bark); border-radius: 8px;
+      padding: 16px; cursor: pointer; box-shadow: 4px 4px 0 var(--tf-bark);
+      transition: transform 0.14s ease, box-shadow 0.14s ease, background 0.14s ease;
+    }
+    .tf-form button:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--tf-bark); background: var(--tf-oxide-dark); }
+    .tf-form-note { margin: 0; font-weight: 700; font-size: 15.5px; color: var(--tf-oxide-dark); }
+    .tf-form-note:empty { display: none; }
+
+    /* footer */
+    .tf-footer { background: var(--tf-bark); color: var(--tf-cream); padding: clamp(52px, 8vh, 84px) 0 30px; }
+    .tf-footer-grid { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 34px; margin-bottom: 44px; }
+    .tf-footer-brand { font-size: 28px; font-weight: 800; margin: 0 0 14px; }
+    .tf-footer-brand em { font-style: italic; font-weight: 400; }
+    .tf-footer p { font-size: 15.5px; line-height: 1.7; opacity: 0.85; margin: 0 0 10px; }
+    .tf-footer-h { font-size: 12.5px !important; font-weight: 800; letter-spacing: 0.24em; text-transform: uppercase; color: var(--tf-brass); opacity: 1 !important; }
+    .tf-footer-phone { font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 800; color: var(--tf-cream); text-decoration: none; }
+    .tf-footer-phone:hover { color: var(--tf-brass); }
+    .tf-fine { text-align: center; font-size: 13px; opacity: 0.6; border-top: 1px solid rgba(247,241,227,0.2); padding-top: 24px; margin: 0; }
+
+    @media (max-width: 980px) {
+      .tf-cards { grid-template-columns: repeat(2, 1fr); }
+      .tf-gallery, .tf-review-grid { grid-template-columns: 1fr; max-width: 600px; margin-inline: auto; }
+      .tf-gallery { margin-top: 40px; }
+      .tf-review-grid { margin-top: 40px; }
+      .tf-guarantee-grid, .tf-quote-grid { grid-template-columns: 1fr; }
+      .tf-era { grid-template-columns: 90px 1fr; }
+    }
+    @media (max-width: 640px) {
+      .tf-links { display: none; }
+      .tf-nav { justify-content: space-between; }
+      .tf-cards { grid-template-columns: 1fr; }
+      .tf-form { grid-template-columns: 1fr; }
+      .tf-footer-grid { grid-template-columns: 1fr; }
+      .tf-seal { width: 92px; height: 92px; top: -46px; }
+      .tf-hero-card { margin-top: 60px; }
+      .tf-era { grid-template-columns: 1fr; gap: 8px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .tf-seal-svg, .tf-guarantee-svg { animation: none; }
+      .tf-era, .tf-heritage-media, .tf-card, .tf-g, .tf-review { opacity: 1; transform: none; transition: none; }
+      .tf-btn, .tf-nav-call, .tf-form button, .tf-g img { transition: none; }
+    }
+  </style>
+</body>
+</html>
