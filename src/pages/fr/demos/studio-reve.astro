@@ -4,10 +4,10 @@ import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
 // Demo microsite: Studio Reve, fictional surreal brand-experience agency, Montreal.
 // Standalone art direction: surrealist night dream. Not connected to the WEBAO theme system.
 const IMG = {
-  sky: "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?q=80&w=1800&auto=format&fit=crop",
-  nebula: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=900&auto=format&fit=crop",
-  clouds: "https://images.unsplash.com/photo-1534088568595-a066f410bcda?q=80&w=900&auto=format&fit=crop",
-  mountains: "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=900&auto=format&fit=crop",
+  sky: "/demos/studio-reve/01.jpg",
+  nebula: "/demos/studio-reve/04.jpg",
+  clouds: "/demos/studio-reve/02.jpg",
+  mountains: "/demos/studio-reve/03.jpg",
   stars: "https://images.unsplash.com/photo-1520034475321-cbe63696469a?q=80&w=1200&auto=format&fit=crop",
 };
 ---
@@ -107,7 +107,7 @@ const IMG = {
         <div class="rv-dreams">
           <article class="rv-dream">
             <div class="rv-dream-img">
-              <img src={IMG.nebula} alt="Nébuleuse turquoise et or" loading="lazy" />
+              <img src={IMG.nebula} alt="Escalier en spirale impossible s'élevant dans des nuages d'orage" loading="lazy" />
               <span class="rv-dream-no" aria-hidden="true">I</span>
             </div>
             <div class="rv-dream-body">
@@ -118,7 +118,7 @@ const IMG = {
           </article>
           <article class="rv-dream rv-dream-alt">
             <div class="rv-dream-img">
-              <img src={IMG.clouds} alt="Nuages d'orage sombres et dramatiques" loading="lazy" />
+              <img src={IMG.clouds} alt="Escalier de pierre ancien se dissipant dans la brume" loading="lazy" />
               <span class="rv-dream-no" aria-hidden="true">II</span>
             </div>
             <div class="rv-dream-body">
@@ -129,7 +129,7 @@ const IMG = {
           </article>
           <article class="rv-dream">
             <div class="rv-dream-img">
-              <img src={IMG.mountains} alt="Sommets enneigés sous la voie lactée" loading="lazy" />
+              <img src={IMG.mountains} alt="Escalier de bois flottant parmi les nuages" loading="lazy" />
               <span class="rv-dream-no" aria-hidden="true">III</span>
             </div>
             <div class="rv-dream-body">
