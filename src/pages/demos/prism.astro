@@ -1,0 +1,564 @@
+---
+import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+
+// Demo microsite: Prism, fictional modern banking app.
+// Standalone art direction. Frosted glass cards over an animated gradient.
+// Not connected to the WEBAO theme system.
+const IMG = {
+  phone: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=800&auto=format&fit=crop",
+  pay: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=800&auto=format&fit=crop",
+  dashboard: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop",
+  ava1: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop",
+  ava2: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop",
+  ava3: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&auto=format&fit=crop",
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prism: Modern Banking, Minus the Maze</title>
+  <meta name="description" content="Prism is a fictional modern banking app. Your money, cards, and goals in one clear place. No hidden fees, no branch lines." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
+</head>
+<body class="pr">
+
+  <!-- NAV -->
+  <header class="pr-navwrap">
+    <nav class="pr-nav" id="pr-nav" aria-label="Primary">
+      <a class="pr-logo" href="#top" aria-label="Prism, home"><span class="pr-logo-mark" aria-hidden="true"></span>Prism</a>
+      <button class="pr-burger" id="pr-burger" aria-label="Open menu" aria-expanded="false" aria-controls="pr-links">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="pr-links" id="pr-links">
+        <a href="#features">Features</a>
+        <a href="#pricing">Plans</a>
+        <a href="#reviews">Reviews</a>
+        <a class="pr-btn pr-btn-dark pr-links-cta" href="#download">Get the app</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="pr-hero" aria-label="Prism banking app">
+      <div class="pr-blob pr-blob-a" aria-hidden="true"></div>
+      <div class="pr-blob pr-blob-b" aria-hidden="true"></div>
+      <div class="pr-blob pr-blob-c" aria-hidden="true"></div>
+      <div class="pr-orb pr-orb-1" aria-hidden="true"></div>
+      <div class="pr-orb pr-orb-2" aria-hidden="true"></div>
+
+      <div class="pr-wrap pr-hero-grid">
+        <div class="pr-hero-copy">
+          <p class="pr-pill">New: Prism Metal cards are here</p>
+          <h1 class="pr-h1">Banking that feels like the <span class="pr-grad">future</span></h1>
+          <p class="pr-lede">Prism puts your money, cards, and goals in one clear place. No fees hiding in the fine print, no branch lines, just calm control from your phone.</p>
+          <div class="pr-hero-cta">
+            <a class="pr-btn pr-btn-dark" href="#download">Download the app</a>
+            <a class="pr-btn pr-btn-glass" href="#pricing">See plans</a>
+          </div>
+          <p class="pr-trust">4.9 on the App Store · 2M+ members · Member funds held with partner banks</p>
+        </div>
+
+        <div class="pr-phone-zone" aria-hidden="false">
+          <div class="pr-chip pr-chip-a">
+            <span class="pr-chip-dot pr-dot-in"></span>
+            <div><strong>+$250.00</strong><span>Freelance gig · just now</span></div>
+          </div>
+          <div class="pr-chip pr-chip-b">
+            <div><strong>Tokyo trip 78%</strong><span>$3,900 of $5,000 saved</span></div>
+            <div class="pr-chip-bar"><i style="width:78%"></i></div>
+          </div>
+          <div class="pr-phone" role="img" aria-label="Prism app showing a balance of $4,280.55">
+            <div class="pr-screen">
+              <p class="pr-screen-hello">Good morning, Alex</p>
+              <p class="pr-screen-label">Total balance</p>
+              <p class="pr-screen-balance">$4,280.55</p>
+              <div class="pr-screen-bars" aria-hidden="true">
+                <i style="height:38%"></i><i style="height:62%"></i><i style="height:45%"></i><i style="height:80%"></i><i style="height:55%"></i><i style="height:95%"></i><i style="height:70%"></i>
+              </div>
+              <ul class="pr-screen-tx">
+                <li><span class="pr-tx-ic">☕</span><span>Café Lumen</span><strong>-$6.40</strong></li>
+                <li><span class="pr-tx-ic">💼</span><span>Freelance gig</span><strong class="pr-in">+$250.00</strong></li>
+                <li><span class="pr-tx-ic">🎬</span><span>Cinema Beaubien</span><strong>-$18.00</strong></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="pr-section" id="features">
+      <div class="pr-wrap">
+        <p class="pr-kicker">Why Prism</p>
+        <h2 class="pr-h2">Everything in one <span class="pr-grad">clear place</span></h2>
+        <div class="pr-feats">
+          <article class="pr-glass pr-feat">
+            <div class="pr-feat-img"><img src={IMG.pay} alt="Paying with a phone at checkout" loading="lazy" /></div>
+            <span class="pr-ic" aria-hidden="true">⚡</span>
+            <h3>Instant transfers</h3>
+            <p>Send money to anyone in seconds, Prism member or not. Splitting dinner has never been this painless.</p>
+          </article>
+          <article class="pr-glass pr-feat">
+            <span class="pr-ic" aria-hidden="true">🎯</span>
+            <h3>Smart budgets</h3>
+            <p>Prism learns your habits and builds budgets that flex with real life, then nudges you before you overshoot.</p>
+          </article>
+          <article class="pr-glass pr-feat">
+            <span class="pr-ic" aria-hidden="true">🏖️</span>
+            <h3>Vaults</h3>
+            <p>Stash cash toward goals in separate vaults. Tokyo trip, new bike, rainy day: each gets its own jar.</p>
+          </article>
+          <article class="pr-glass pr-feat">
+            <div class="pr-feat-img"><img src={IMG.dashboard} alt="Spending analytics dashboard" loading="lazy" /></div>
+            <span class="pr-ic" aria-hidden="true">📊</span>
+            <h3>Spending insights</h3>
+            <p>Beautiful charts show exactly where your money goes each month, no spreadsheet required.</p>
+          </article>
+          <article class="pr-glass pr-feat">
+            <span class="pr-ic" aria-hidden="true">💳</span>
+            <h3>Virtual cards</h3>
+            <p>Spin up single-use cards for online shopping. If a store gets breached, your real card stays safe.</p>
+          </article>
+          <article class="pr-glass pr-feat">
+            <span class="pr-ic" aria-hidden="true">💬</span>
+            <h3>Humans, 24/7</h3>
+            <p>Real support people, day and night, with an average reply time under two minutes. Try us at 3am.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="pr-stats">
+      <div class="pr-wrap pr-stats-grid">
+        <div class="pr-glass"><strong>$4.2B</strong><span>moved every year</span></div>
+        <div class="pr-glass"><strong>2M+</strong><span>happy members</span></div>
+        <div class="pr-glass"><strong>4.9★</strong><span>average app rating</span></div>
+        <div class="pr-glass"><strong>$0</strong><span>hidden fees, ever</span></div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="pr-section" id="pricing">
+      <div class="pr-wrap">
+        <p class="pr-kicker">Plans</p>
+        <h2 class="pr-h2">Simple plans, <span class="pr-grad">honest prices</span></h2>
+        <div class="pr-plans">
+          <article class="pr-glass pr-plan">
+            <h3>Starter</h3>
+            <p class="pr-plan-price">$0<span>/mo</span></p>
+            <p class="pr-plan-sub">Everything you need to ditch your old bank.</p>
+            <ul>
+              <li>Free account + virtual card</li>
+              <li>Instant transfers</li>
+              <li>2 vaults</li>
+              <li>Basic spending insights</li>
+            </ul>
+            <a class="pr-btn pr-btn-glass" href="#download">Start free</a>
+          </article>
+          <article class="pr-glass pr-plan pr-plan-hot">
+            <p class="pr-plan-flag">Most popular</p>
+            <h3>Plus</h3>
+            <p class="pr-plan-price">$6<span>/mo</span></p>
+            <p class="pr-plan-sub">For savers who want their money working harder.</p>
+            <ul>
+              <li>Everything in Starter</li>
+              <li>Unlimited vaults + 3% boost</li>
+              <li>Smart budgets + insights pro</li>
+              <li>Free ATM withdrawals worldwide</li>
+            </ul>
+            <a class="pr-btn pr-btn-dark" href="#download">Go Plus</a>
+          </article>
+          <article class="pr-glass pr-plan">
+            <h3>Metal</h3>
+            <p class="pr-plan-price">$14<span>/mo</span></p>
+            <p class="pr-plan-sub">The full Prism experience, in brushed steel.</p>
+            <ul>
+              <li>Everything in Plus</li>
+              <li>Metal card, engraved</li>
+              <li>Travel insurance included</li>
+              <li>Priority 24/7 support line</li>
+            </ul>
+            <a class="pr-btn pr-btn-glass" href="#download">Go Metal</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- REVIEWS -->
+    <section class="pr-section" id="reviews">
+      <div class="pr-wrap">
+        <p class="pr-kicker">Reviews</p>
+        <h2 class="pr-h2">Loved by <span class="pr-grad">2M+ members</span></h2>
+        <div class="pr-quotes">
+          <figure class="pr-glass pr-quote">
+            <blockquote>"I switched in an afternoon and never looked back. The vaults finally made saving feel fun."</blockquote>
+            <figcaption><img src={IMG.ava1} alt="Portrait of reviewer Maya" loading="lazy" /><div><strong>Maya R.</strong><span>Member since 2023</span></div><span class="pr-stars" aria-label="5 out of 5 stars">★★★★★</span></figcaption>
+          </figure>
+          <figure class="pr-glass pr-quote">
+            <blockquote>"Support answered at 2am when my card got stuck abroad. An actual human, in under two minutes."</blockquote>
+            <figcaption><img src={IMG.ava2} alt="Portrait of reviewer Daniel" loading="lazy" /><div><strong>Daniel K.</strong><span>Member since 2024</span></div><span class="pr-stars" aria-label="5 out of 5 stars">★★★★★</span></figcaption>
+          </figure>
+          <figure class="pr-glass pr-quote">
+            <blockquote>"The spending insights showed me I was buying lunch out 19 times a month. Life changing, honestly."</blockquote>
+            <figcaption><img src={IMG.ava3} alt="Portrait of reviewer Sofia" loading="lazy" /><div><strong>Sofia L.</strong><span>Member since 2022</span></div><span class="pr-stars" aria-label="5 out of 5 stars">★★★★★</span></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- DOWNLOAD -->
+    <section class="pr-section" id="download">
+      <div class="pr-wrap">
+        <div class="pr-glass pr-dl">
+          <div>
+            <h2 class="pr-h2 pr-h2-tight">Get Prism in <span class="pr-grad">3 minutes</span></h2>
+            <p class="pr-copy">Scan, download, verify your ID, done. Your virtual card is ready before your coffee cools.</p>
+            <div class="pr-stores">
+              <a class="pr-store" href="#download" aria-label="Download on the App Store"><span class="pr-store-ic" aria-hidden="true">🍎</span><span><small>Download on the</small><strong>App Store</strong></span></a>
+              <a class="pr-store" href="#download" aria-label="Get it on Google Play"><span class="pr-store-ic" aria-hidden="true">▶</span><span><small>Get it on</small><strong>Google Play</strong></span></a>
+            </div>
+          </div>
+          <div class="pr-dl-phone"><img src={IMG.phone} alt="Hand holding a phone" loading="lazy" /></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="pr-section" id="contact">
+      <div class="pr-wrap pr-contact-grid">
+        <div>
+          <p class="pr-kicker">Contact</p>
+          <h2 class="pr-h2">Talk to a <span class="pr-grad">human</span></h2>
+          <p class="pr-copy">Questions about plans, a lost card, or just want to say hi. We reply fast.</p>
+          <ul class="pr-contact-list">
+            <li><strong>Email</strong><a href="mailto:hello@prismdemo.example">hello@prismdemo.example</a></li>
+            <li><strong>Phone</strong><a href="tel:+15145550142">(514) 555-0142</a></li>
+            <li><strong>Office</strong><span>400, avenue Fictive, Montréal QC</span></li>
+          </ul>
+        </div>
+        <form class="pr-glass pr-form" id="pr-form" novalidate>
+          <h3>Send a message</h3>
+          <label>Name<input type="text" name="name" required placeholder="Alex Tremblay" /></label>
+          <label>Email<input type="email" name="email" required placeholder="alex@example.com" /></label>
+          <label>Topic
+            <select name="topic">
+              <option>Plans and pricing</option>
+              <option>Lost or stolen card</option>
+              <option>Business accounts</option>
+              <option>Something else</option>
+            </select>
+          </label>
+          <button class="pr-btn pr-btn-dark" type="submit">Send message</button>
+          <p class="pr-form-note" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pr-footer">
+    <div class="pr-wrap pr-footer-in">
+      <a class="pr-logo" href="#top" aria-label="Prism, home"><span class="pr-logo-mark" aria-hidden="true"></span>Prism</a>
+      <p>© 2026 Prism. Fictional demo. Not a real bank, and your money is (sadly) imaginary here.</p>
+      <p>400, avenue Fictive, Montréal QC · <a href="tel:+15145550142">(514) 555-0142</a> · <a href="mailto:hello@prismdemo.example">hello@prismdemo.example</a></p>
+    </div>
+  </footer>
+
+  <EscapeHatch locale="en" />
+
+  <script>
+    (function () {
+      var nav = document.getElementById('pr-nav');
+      var burger = document.getElementById('pr-burger');
+      burger?.addEventListener('click', function () {
+        var open = nav?.classList.toggle('pr-open') ?? false;
+        burger?.setAttribute('aria-expanded', String(open));
+        burger?.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      });
+      nav?.querySelectorAll('.pr-links a').forEach(function (a) {
+        a.addEventListener('click', function () {
+          nav?.classList.remove('pr-open');
+          burger?.setAttribute('aria-expanded', 'false');
+          burger?.setAttribute('aria-label', 'Open menu');
+        });
+      });
+
+      var form = document.getElementById('pr-form') as HTMLFormElement | null;
+      form?.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var note = form?.querySelector('.pr-form-note');
+        if (note) note.textContent = 'Message sent. A human (yes, a real one) will reply within the hour.';
+        form?.reset();
+      });
+    })();
+  </script>
+
+  <style>
+    .pr {
+      --pr-violet: #7C3AED;
+      --pr-cyan: #06B6D4;
+      --pr-pink: #EC4899;
+      --pr-ink: #1E1B3A;
+      --pr-muted: #5B5878;
+      --pr-glass: rgba(255, 255, 255, 0.22);
+      --pr-border: rgba(255, 255, 255, 0.45);
+      --pr-body: "Plus Jakarta Sans", system-ui, sans-serif;
+      margin: 0;
+      font-family: var(--pr-body);
+      color: var(--pr-ink);
+      background: linear-gradient(135deg, #2E1065 0%, #4C1D95 30%, #6D28D9 55%, #0E7490 100%);
+      background-attachment: fixed;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: clip;
+      min-height: 100vh;
+    }
+    .pr *, .pr *::before, .pr *::after { box-sizing: border-box; }
+    .pr img { display: block; max-width: 100%; }
+    .pr-wrap { max-width: 1180px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px); position: relative; z-index: 2; }
+
+    /* glass primitive */
+    .pr-glass {
+      background: var(--pr-glass);
+      -webkit-backdrop-filter: blur(22px) saturate(1.5);
+      backdrop-filter: blur(22px) saturate(1.5);
+      border: 1px solid var(--pr-border);
+      border-radius: 26px;
+      box-shadow: 0 18px 50px rgba(30, 10, 80, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    }
+
+    /* nav */
+    .pr-navwrap { position: fixed; top: 0; left: 0; right: 0; z-index: 60; padding: 14px clamp(14px, 3vw, 32px); }
+    .pr-nav {
+      display: flex; align-items: center; gap: 22px;
+      max-width: 1180px; margin: 0 auto; padding: 12px 14px 12px 22px;
+      background: rgba(255, 255, 255, 0.32);
+      -webkit-backdrop-filter: blur(22px) saturate(1.5);
+      backdrop-filter: blur(22px) saturate(1.5);
+      border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 999px;
+      box-shadow: 0 12px 34px rgba(30, 10, 80, 0.25);
+      position: relative;
+    }
+    .pr-logo { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; font-size: 22px; letter-spacing: -0.02em; color: #fff; text-decoration: none; margin-right: auto; text-shadow: 0 2px 12px rgba(30,10,80,.4); }
+    .pr-logo-mark { width: 30px; height: 30px; border-radius: 10px; background: linear-gradient(135deg, var(--pr-cyan), var(--pr-violet) 55%, var(--pr-pink)); box-shadow: 0 4px 14px rgba(124, 58, 237, 0.5), inset 0 1px 0 rgba(255,255,255,.6); clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+    .pr-links { display: flex; align-items: center; gap: 4px; }
+    .pr-links a:not(.pr-btn) { color: rgba(255,255,255,.92); text-decoration: none; font-weight: 700; font-size: 14px; padding: 10px 16px; border-radius: 999px; }
+    .pr-links a:not(.pr-btn):hover { background: rgba(255,255,255,.25); }
+    .pr-burger { display: none; background: rgba(255,255,255,.25); border: 1px solid rgba(255,255,255,.5); border-radius: 12px; padding: 10px 12px; cursor: pointer; }
+    .pr-burger span { display: block; width: 22px; height: 2px; background: #fff; margin: 5px 0; border-radius: 2px; transition: transform .2s ease, opacity .2s ease; }
+    .pr-open .pr-burger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .pr-open .pr-burger span:nth-child(2) { opacity: 0; }
+    .pr-open .pr-burger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* buttons */
+    .pr-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      font-family: var(--pr-body); font-weight: 800; font-size: 15px; letter-spacing: -0.01em;
+      padding: 15px 30px; border-radius: 999px; text-decoration: none; cursor: pointer; border: none;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .pr-btn-dark { background: var(--pr-ink); color: #fff; box-shadow: 0 10px 26px rgba(30, 27, 58, 0.4); }
+    .pr-btn-dark:hover { transform: translateY(-2px); box-shadow: 0 16px 34px rgba(30, 27, 58, 0.5); }
+    .pr-btn-glass {
+      background: rgba(255, 255, 255, 0.35); color: var(--pr-ink);
+      -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 8px 22px rgba(30, 10, 80, 0.18);
+    }
+    .pr-btn-glass:hover { transform: translateY(-2px); background: rgba(255, 255, 255, 0.5); }
+
+    /* type */
+    .pr-kicker { font-weight: 800; font-size: 13px; letter-spacing: 0.28em; text-transform: uppercase; color: rgba(255,255,255,.85); margin: 0 0 14px; text-shadow: 0 2px 10px rgba(30,10,80,.4); }
+    .pr-h2 { font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; color: #fff; margin: 0 0 44px; text-shadow: 0 4px 24px rgba(30,10,80,.45); }
+    .pr-h2-tight { margin-bottom: 16px; }
+    .pr-grad { background: linear-gradient(92deg, #FDE68A, #F9A8D4 55%, #A5F3FC); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .pr-copy { color: rgba(255,255,255,.88); font-size: 17px; line-height: 1.65; max-width: 52ch; margin: 0 0 26px; }
+
+    /* hero */
+    .pr-hero { position: relative; overflow: hidden; padding: 170px 0 110px; }
+    .pr-blob { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.75; animation: pr-drift 16s ease-in-out infinite alternate; }
+    .pr-blob-a { width: 560px; height: 560px; left: -140px; top: -120px; background: radial-gradient(circle, var(--pr-pink), transparent 70%); }
+    .pr-blob-b { width: 640px; height: 640px; right: -160px; top: 8%; background: radial-gradient(circle, var(--pr-cyan), transparent 70%); animation-delay: -6s; }
+    .pr-blob-c { width: 520px; height: 520px; left: 30%; bottom: -220px; background: radial-gradient(circle, var(--pr-violet), transparent 70%); animation-delay: -11s; }
+    @keyframes pr-drift { to { transform: translate(60px, 50px) scale(1.12); } }
+    .pr-orb { position: absolute; border-radius: 50%; background: rgba(255,255,255,.18); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,.4); box-shadow: inset 0 2px 8px rgba(255,255,255,.35), 0 14px 34px rgba(30,10,80,.25); animation: pr-float 7s ease-in-out infinite; }
+    .pr-orb-1 { width: 90px; height: 90px; left: 6%; bottom: 18%; }
+    .pr-orb-2 { width: 56px; height: 56px; right: 8%; top: 22%; animation-delay: -3s; }
+    @keyframes pr-float { 50% { transform: translateY(-22px); } }
+    .pr-hero-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(40px, 6vw, 90px); align-items: center; }
+    .pr-pill {
+      display: inline-block; margin: 0 0 22px; font-size: 13px; font-weight: 700; color: #fff;
+      background: rgba(255,255,255,.22); border: 1px solid rgba(255,255,255,.45); border-radius: 999px; padding: 9px 18px;
+      -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+    }
+    .pr-h1 { font-size: clamp(2.8rem, 6.4vw, 4.8rem); font-weight: 800; letter-spacing: -0.035em; line-height: 1.02; color: #fff; margin: 0 0 22px; text-shadow: 0 4px 30px rgba(30,10,80,.5); }
+    .pr-lede { font-size: 18.5px; line-height: 1.65; color: rgba(255,255,255,.92); max-width: 46ch; margin: 0 0 34px; }
+    .pr-hero-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 26px; }
+    .pr-trust { font-size: 13.5px; font-weight: 600; color: rgba(255,255,255,.75); margin: 0; }
+
+    /* phone mockup */
+    .pr-phone-zone { position: relative; display: flex; justify-content: center; padding: 30px 0; }
+    .pr-phone {
+      width: min(300px, 72vw); border-radius: 52px; padding: 14px;
+      background: rgba(255,255,255,.28); border: 1px solid rgba(255,255,255,.55);
+      -webkit-backdrop-filter: blur(24px); backdrop-filter: blur(24px);
+      box-shadow: 0 30px 80px rgba(30,10,80,.45), inset 0 2px 2px rgba(255,255,255,.6);
+      animation: pr-float 8s ease-in-out infinite;
+    }
+    .pr-screen { background: rgba(255,255,255,.75); border-radius: 40px; padding: 28px 22px; display: grid; gap: 6px; }
+    .pr-screen-hello { margin: 0; font-size: 13px; font-weight: 600; color: var(--pr-muted); }
+    .pr-screen-label { margin: 6px 0 0; font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pr-muted); }
+    .pr-screen-balance { margin: 0 0 8px; font-size: 38px; font-weight: 800; letter-spacing: -0.03em; }
+    .pr-screen-bars { display: flex; align-items: flex-end; gap: 7px; height: 74px; margin: 8px 0 12px; }
+    .pr-screen-bars i { flex: 1; border-radius: 6px; background: linear-gradient(180deg, var(--pr-cyan), var(--pr-violet)); opacity: .85; }
+    .pr-screen-tx { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+    .pr-screen-tx li { display: flex; align-items: center; gap: 10px; font-size: 13.5px; font-weight: 600; padding: 9px 4px; border-top: 1px solid rgba(30,27,58,.08); }
+    .pr-tx-ic { width: 32px; height: 32px; flex: none; display: grid; place-items: center; background: rgba(124,58,237,.12); border-radius: 12px; font-size: 15px; }
+    .pr-screen-tx li span:nth-child(2) { flex: 1; }
+    .pr-screen-tx strong { font-variant-numeric: tabular-nums; }
+    .pr-in { color: #059669; }
+    .pr-chip {
+      position: absolute; z-index: 3; display: flex; align-items: center; gap: 12px;
+      background: rgba(255,255,255,.5); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px);
+      border: 1px solid rgba(255,255,255,.6); border-radius: 20px; padding: 14px 18px;
+      box-shadow: 0 16px 40px rgba(30,10,80,.3); animation: pr-float 6s ease-in-out infinite;
+    }
+    .pr-chip strong { display: block; font-size: 16px; letter-spacing: -0.01em; }
+    .pr-chip span { font-size: 12.5px; color: var(--pr-muted); font-weight: 600; }
+    .pr-chip-a { left: 0; top: 12%; }
+    .pr-chip-b { right: 0; bottom: 10%; flex-direction: column; align-items: stretch; gap: 8px; animation-delay: -3s; }
+    .pr-chip-dot { width: 40px; height: 40px; flex: none; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 800; }
+    .pr-dot-in { background: linear-gradient(135deg, #059669, #06B6D4); }
+    .pr-dot-in::after { content: "↓"; font-size: 18px; }
+    .pr-chip-bar { height: 8px; border-radius: 999px; background: rgba(30,27,58,.12); overflow: hidden; }
+    .pr-chip-bar i { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--pr-violet), var(--pr-pink)); }
+
+    /* sections */
+    .pr-section { padding: clamp(70px, 9vw, 120px) 0; position: relative; }
+
+    /* features */
+    .pr-feats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .pr-feat { padding: 30px 28px; transition: transform .2s ease; overflow: hidden; }
+    .pr-feat:hover { transform: translateY(-8px); }
+    .pr-feat-img { margin: -30px -28px 22px; }
+    .pr-feat-img img { width: 100%; height: 170px; object-fit: cover; }
+    .pr-ic { display: inline-grid; place-items: center; width: 52px; height: 52px; border-radius: 18px; font-size: 24px; background: rgba(255,255,255,.5); border: 1px solid rgba(255,255,255,.6); margin-bottom: 18px; }
+    .pr-feat h3 { margin: 0 0 10px; font-size: 20px; font-weight: 800; letter-spacing: -0.02em; color: #fff; text-shadow: 0 2px 12px rgba(30,10,80,.4); }
+    .pr-feat p { margin: 0; color: rgba(255,255,255,.88); font-size: 15px; line-height: 1.65; }
+
+    /* stats */
+    .pr-stats { padding: 10px 0 30px; position: relative; }
+    .pr-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+    .pr-stats-grid .pr-glass { padding: 30px 22px; text-align: center; display: grid; gap: 8px; }
+    .pr-stats-grid strong { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; letter-spacing: -0.03em; color: #fff; text-shadow: 0 3px 16px rgba(30,10,80,.4); }
+    .pr-stats-grid span { font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,.8); }
+
+    /* plans */
+    .pr-plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: stretch; }
+    .pr-plan { padding: 38px 32px; display: grid; gap: 8px; align-content: start; position: relative; transition: transform .2s ease; }
+    .pr-plan:hover { transform: translateY(-8px); }
+    .pr-plan-hot { background: rgba(255, 255, 255, 0.34); border: 2px solid rgba(255,255,255,.7); }
+    .pr-plan-flag {
+      position: absolute; top: -16px; left: 50%; transform: translateX(-50%); margin: 0; white-space: nowrap;
+      font-size: 12px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
+      background: linear-gradient(92deg, var(--pr-violet), var(--pr-pink)); color: #fff;
+      padding: 9px 20px; border-radius: 999px; box-shadow: 0 8px 22px rgba(124,58,237,.5);
+    }
+    .pr-plan h3 { margin: 4px 0 0; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: #fff; }
+    .pr-plan-price { margin: 0; font-size: 52px; font-weight: 800; letter-spacing: -0.04em; color: #fff; text-shadow: 0 3px 16px rgba(30,10,80,.4); }
+    .pr-plan-price span { font-size: 17px; font-weight: 600; color: rgba(255,255,255,.75); }
+    .pr-plan-sub { margin: 0 0 8px; color: rgba(255,255,255,.85); font-size: 15px; }
+    .pr-plan ul { list-style: none; margin: 0 0 22px; padding: 0; display: grid; gap: 11px; color: rgba(255,255,255,.92); font-size: 15px; font-weight: 500; }
+    .pr-plan li::before { content: "✓ "; color: #A5F3FC; font-weight: 800; }
+
+    /* quotes */
+    .pr-quotes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .pr-quote { margin: 0; padding: 30px 28px; display: grid; gap: 20px; align-content: start; }
+    .pr-quote blockquote { margin: 0; font-size: 16.5px; line-height: 1.65; color: #fff; font-weight: 500; }
+    .pr-quote figcaption { display: flex; align-items: center; gap: 14px; }
+    .pr-quote figcaption img { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,.6); }
+    .pr-quote figcaption div { display: grid; gap: 2px; margin-right: auto; }
+    .pr-quote figcaption strong { color: #fff; font-size: 15px; }
+    .pr-quote figcaption span { font-size: 13px; color: rgba(255,255,255,.75); }
+    .pr-stars { color: #FDE68A; letter-spacing: 2px; font-size: 14px; text-shadow: 0 2px 8px rgba(30,10,80,.4); }
+
+    /* download */
+    .pr-dl { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(30px, 5vw, 70px); align-items: center; padding: clamp(36px, 5vw, 64px); overflow: hidden; }
+    .pr-stores { display: flex; gap: 14px; flex-wrap: wrap; }
+    .pr-store {
+      display: inline-flex; align-items: center; gap: 14px; text-decoration: none; color: #fff;
+      background: rgba(30, 27, 58, 0.55); border: 1px solid rgba(255,255,255,.35); border-radius: 18px; padding: 12px 22px 12px 16px;
+      -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+      transition: transform .15s ease;
+    }
+    .pr-store:hover { transform: translateY(-3px); }
+    .pr-store-ic { font-size: 30px; }
+    .pr-store small { display: block; font-size: 11px; font-weight: 600; color: rgba(255,255,255,.7); }
+    .pr-store strong { font-size: 18px; letter-spacing: -0.01em; }
+    .pr-dl-phone img { width: 100%; height: 340px; object-fit: cover; border-radius: 22px; border: 1px solid rgba(255,255,255,.5); box-shadow: 0 20px 50px rgba(30,10,80,.35); }
+
+    /* contact */
+    .pr-contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(36px, 6vw, 80px); align-items: start; }
+    .pr-contact-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; }
+    .pr-contact-list li { display: grid; gap: 4px; }
+    .pr-contact-list strong { font-size: 12px; font-weight: 800; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(255,255,255,.7); }
+    .pr-contact-list a { color: #fff; font-weight: 700; font-size: 18px; }
+    .pr-contact-list a:hover { color: #A5F3FC; }
+    .pr-contact-list span { color: rgba(255,255,255,.88); font-size: 16px; }
+    .pr-form { padding: clamp(28px, 4vw, 44px); display: grid; gap: 16px; }
+    .pr-form h3 { margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.02em; color: #fff; }
+    .pr-form label { display: grid; gap: 8px; font-size: 12px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,.8); }
+    .pr-form input, .pr-form select {
+      font-family: var(--pr-body); font-size: 16px; font-weight: 500; color: var(--pr-ink);
+      background: rgba(255, 255, 255, 0.65); border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: 16px; padding: 14px 18px; width: 100%;
+    }
+    .pr-form input:focus, .pr-form select:focus { outline: 3px solid rgba(165, 243, 252, 0.8); outline-offset: 2px; }
+    .pr-form-note { margin: 0; color: #fff; font-weight: 700; font-size: 15px; text-shadow: 0 2px 10px rgba(30,10,80,.4); }
+    .pr-form-note:empty { display: none; }
+
+    /* footer */
+    .pr-footer { padding: 40px 0 90px; position: relative; }
+    .pr-footer-in { display: grid; gap: 10px; justify-items: center; text-align: center; }
+    .pr-footer-in .pr-logo { margin: 0 0 8px; }
+    .pr-footer-in p { margin: 0; color: rgba(255,255,255,.78); font-size: 14px; max-width: 60ch; }
+    .pr-footer-in a { color: #fff; font-weight: 700; }
+
+    @media (max-width: 1020px) {
+      .pr-hero-grid, .pr-contact-grid, .pr-dl { grid-template-columns: 1fr; }
+      .pr-feats, .pr-plans, .pr-quotes { grid-template-columns: 1fr 1fr; }
+      .pr-stats-grid { grid-template-columns: 1fr 1fr; }
+      .pr-dl-phone img { height: 260px; }
+    }
+    @media (max-width: 860px) {
+      .pr-burger { display: block; }
+      .pr-links {
+        display: none; position: absolute; top: calc(100% + 10px); left: 0; right: 0;
+        flex-direction: column; align-items: stretch; gap: 6px;
+        background: rgba(46, 16, 101, 0.92);
+        -webkit-backdrop-filter: blur(24px); backdrop-filter: blur(24px);
+        border: 1px solid rgba(255,255,255,.4); border-radius: 26px; padding: 16px;
+        box-shadow: 0 20px 50px rgba(30,10,80,.4);
+      }
+      .pr-open .pr-links { display: flex; }
+      .pr-links a:not(.pr-btn) { padding: 14px 18px; }
+      .pr-links-cta { margin-top: 6px; }
+      .pr-hero { padding-top: 150px; }
+    }
+    @media (max-width: 640px) {
+      .pr-feats, .pr-plans, .pr-quotes { grid-template-columns: 1fr; }
+      .pr-chip-a { left: -6px; }
+      .pr-chip-b { right: -6px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .pr-blob, .pr-orb, .pr-phone, .pr-chip { animation: none; }
+      .pr-btn, .pr-feat, .pr-plan, .pr-store { transition: none; }
+    }
+  </style>
+</body>
+</html>
