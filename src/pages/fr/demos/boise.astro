@@ -1,9 +1,12 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
 
-// Démo : Boisé Paysage, atelier d'aménagement paysager fictif, Gatineau QC.
-// Botanique organique : verts forêt profonds, crème, serif élégant, motifs de feuilles, rythme saisonnier.
-// Direction artistique autonome. Hors du système de thème WEBAO.
+// Demo microsite: Boisé Paysage, fictional landscaping atelier, Gatineau QC.
+// Standalone art direction. Deep forest greens, cream, elegant serif.
+// Not connected to the WEBAO theme system.
+// Structure : un calendrier saisonnier. La page est une année au jardin : printemps, été,
+// automne, hiver en chapitres. Les services sont ce qu'on fait chaque saison. Les saisons
+// sont la navigation.
 const IMG = {
   hero: "/demos/boise/01.jpg",
   hands: "/demos/boise/02.jpg",
@@ -12,6 +15,45 @@ const IMG = {
   design: "/demos/boise/03.jpg",
   lawn: "/demos/boise/04.jpg",
 };
+
+const SEASONS = [
+  {
+    id: "spring", name: "Printemps", months: "Avril – mai", fleuron: "❧",
+    img: IMG.hands, imgAlt: "Mains qui plantent des semis dans la terre noire",
+    caption: "Plantation de printemps, Chelsea",
+    intro: "La terre se réveille affamée. On nettoie, on divise, on plante, et toute l'année se joue en six semaines environ.",
+    ground: ["Nettoyage et bordures", "Division des vivaces", "Plantations et tourbe"],
+    wedo: ["Visites de nettoyage printanier", "Plans de plantation selon votre lumière", "Tourbe et nouvelles plates-bandes installées"],
+    note: "Le printemps se remplit dès mars. Les premiers messages ont les meilleures dates.",
+  },
+  {
+    id: "summer", name: "Été", months: "Juin – août", fleuron: "❧",
+    img: IMG.lawn, imgAlt: "Une pelouse verte et dense en été",
+    caption: "La grande pelouse, Chelsea",
+    intro: "Le jardin se pavane et demande très peu. On reste honnête : bordures nettes, eau réglée, et une pelouse qui ne voit jamais de produits chimiques.",
+    ground: ["Taille et pincement", "Réglage de l'irrigation", "Pelouse au naturel"],
+    wedo: ["Visites d'entretien saisonnier", "Irrigation installée et réglée", "Tournées de taille estivale"],
+    note: "Un jardin entretenu en août a l'air facile. Il ne l'est pas. C'est le but.",
+  },
+  {
+    id: "autumn", name: "Automne", months: "Septembre – octobre", fleuron: "❧",
+    img: IMG.path, imgAlt: "Une allée de jardin couverte de feuilles d'automne",
+    caption: "L'allée des fougères, Aylmer",
+    intro: "Le jardin paie ses dettes. On plante le printemps pour lequel vous nous remercierez, on borde tout le monde, et on laisse les feuilles travailler où elles tombent.",
+    ground: ["Bulbes pour le printemps", "Protection hivernale", "Paillis de feuilles, pas d'ensachage"],
+    wedo: ["Service de mise au lit d'automne", "Plantation de bulbes par centaines", "Protection hivernale des plantes fragiles"],
+    note: "Les feuilles sont de l'engrais gratuit. On les déchiquette sur place, sans sacs.",
+  },
+  {
+    id: "winter", name: "Hiver", months: "Novembre – mars", fleuron: "❧",
+    img: IMG.design, imgAlt: "Un plan d'aménagement esquissé sur papier",
+    caption: "Planification d'hiver, l'atelier",
+    intro: "Le jardin dort et on dessine. L'hiver, c'est quand on dessine les plates-bandes de l'an prochain, qu'on taille les fruitiers et qu'on gère la neige.",
+    ground: ["Déneigement et déglaçage", "Plan des plates-bandes de l'an prochain", "Taille des fruitiers"],
+    wedo: ["Séances de planification d'hiver", "Contrats de neige, en toute discrétion", "Taille des arbres fruitiers"],
+    note: "Les plus beaux jardins se dessinent en janvier et se plantent en mai.",
+  },
+];
 ---
 
 <!DOCTYPE html>
@@ -19,8 +61,8 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Boisé Paysage : atelier d'aménagement paysager à Gatineau</title>
-  <meta name="description" content="Boisé Paysage : atelier d'aménagement paysager à Gatineau. Jardins indigènes, sentiers de pierre, entretien saisonnier. Des jardins qui grandissent avec vous." />
+  <title>Boisé Paysage : une année au jardin · Gatineau</title>
+  <meta name="description" content="Boisé Paysage : un atelier d'aménagement à Gatineau, au rythme des saisons. Plantation printanière, entretien estival, mise au lit automnale, planification hivernale." />
   <meta name="robots" content="noindex" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -28,193 +70,99 @@ const IMG = {
 </head>
 <body class="bs">
 
-  <!-- NAVIGATION -->
-  <header class="bs-nav">
-    <a class="bs-brand" href="#top" aria-label="Boisé Paysage, accueil">
-      <svg class="bs-leaf-mark" viewBox="0 0 40 40" aria-hidden="true">
-        <path d="M20 3C10 12 7 24 20 37 33 24 30 12 20 3z" fill="none" stroke="currentColor" stroke-width="2.4" />
-        <path d="M20 8v26M20 16l-6-5M20 16l6-5M20 24l-7-4M20 24l7-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" />
-      </svg>
-      <span>Boisé <em>Paysage</em></span>
-    </a>
-    <nav class="bs-links" aria-label="Principal">
-      <a href="#atelier">L'atelier</a>
-      <a href="#seasons">Saisons</a>
-      <a href="#gardens">Jardins</a>
-      <a href="#contact">Contact</a>
+  <!-- SEASON NAV -->
+  <header class="bs-navwrap">
+    <nav class="bs-nav" aria-label="Les saisons">
+      <a class="bs-logo" href="#top" aria-label="Boisé Paysage, retour à la couverture">Boisé <em>Paysage</em></a>
+      <div class="bs-seasons-nav">
+        {SEASONS.map((s) => (
+          <a href={"#" + s.id}>{s.name}</a>
+        ))}
+      </div>
+      <a class="bs-cta" href="#begin">Créer un jardin</a>
     </nav>
-    <a class="bs-cta" href="#contact">Créer un jardin</a>
   </header>
 
   <main id="top">
-    <!-- HÉROS -->
-    <section class="bs-hero">
-      <img class="bs-hero-img" src={IMG.hero} alt="Un jardin luxuriant en paliers avec sentier de pierre dans la lumière douce du matin" loading="eager" fetchpriority="high" />
-      <div class="bs-hero-veil" aria-hidden="true"></div>
-      <div class="bs-hero-copy">
-        <p class="bs-eyebrow">Atelier d'aménagement · Gatineau, Outaouais</p>
-        <h1 class="bs-h1">Des jardins qui<br /><em>grandissent avec vous.</em></h1>
-        <p class="bs-hero-sub">On dessine, on plante et on entretient des pièces extérieures pensées pour le climat de l'Outaouais. Plantes indigènes, pierre honnête, et des jardins plus beaux chaque année.</p>
-        <div class="bs-hero-actions">
-          <a class="bs-btn" href="#gardens">Voir nos jardins</a>
-          <a class="bs-btn bs-btn-ghost" href="#contact">Réserver une visite</a>
+    <!-- COVER -->
+    <section class="bs-cover" aria-label="Une année au jardin">
+      <div class="bs-wrap-narrow">
+        <p class="bs-kicker">Atelier d'aménagement · Gatineau, Outaouais · depuis 2011</p>
+        <h1 class="bs-h1">Une année au<br /><em>jardin</em></h1>
+        <p class="bs-cover-sub">Un jardin n'est jamais fini. Il s'entretient. Notre travail suit l'année, pas la facture : quatre saisons, quatre chapitres, un jardin plus beau chaque année.</p>
+        <p class="bs-fleuron" aria-hidden="true">❧</p>
+      </div>
+    </section>
+
+    <!-- SEASON CHAPTERS -->
+    {SEASONS.map((s) => (
+      <section class="bs-season" id={s.id} aria-label={s.name}>
+        <div class="bs-wrap">
+          <header class="bs-season-head">
+            <p class="bs-fleuron" aria-hidden="true">{s.fleuron}</p>
+            <p class="bs-months">{s.months}</p>
+            <h2 class="bs-h2">{s.name}</h2>
+            <p class="bs-season-intro">{s.intro}</p>
+          </header>
+          <div class="bs-season-grid">
+            <figure class="bs-season-photo">
+              <img src={s.img} alt={s.imgAlt} loading="lazy" />
+              <figcaption>{s.caption}</figcaption>
+            </figure>
+            <div class="bs-season-cols">
+              <div>
+                <h3>Dans la terre</h3>
+                <ul>
+                  {s.ground.map((g) => (<li>{g}</li>))}
+                </ul>
+              </div>
+              <div>
+                <h3>Ce qu'on fait</h3>
+                <ul>
+                  {s.wedo.map((w) => (<li>{w}</li>))}
+                </ul>
+              </div>
+            </div>
+          </div>
+          <p class="bs-season-note"><em>{s.note}</em></p>
         </div>
-      </div>
-      <svg class="bs-hero-leaf" viewBox="0 0 40 40" aria-hidden="true">
-        <path d="M20 3C10 12 7 24 20 37 33 24 30 12 20 3z" fill="none" stroke="currentColor" stroke-width="1.6" />
-        <path d="M20 8v26" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
-      </svg>
-    </section>
+      </section>
+    ))}
 
-    <!-- ATELIER -->
-    <section class="bs-section" id="atelier">
-      <div class="bs-wrap bs-atelier">
-        <div class="bs-atelier-copy">
-          <p class="bs-eyebrow">L'atelier</p>
-          <h2 class="bs-h2">Planté pour ce lieu-ci,<br />pas pour<br />un catalogue.</h2>
-          <p class="bs-prose">Boisé est né en 2011 avec deux pelles et une conviction : un jardin de Gatineau doit survivre à un hiver de Gatineau. On plante surtout des indigènes et des cultivars rustiques, on bâtit avec la pierre d'ici, et on dessine pour que le jardin vous en demande moins chaque saison, pas plus.</p>
-          <p class="bs-prose">Chaque projet commence par une marche. On regarde votre lumière, votre sol, votre drainage, et votre vraie façon de vivre dehors. Ensuite on dessine. Ensuite on plante. Et si vous voulez, on reste pour entretenir.</p>
-          <p class="bs-sign">Camille Desjardins, fondatrice</p>
-        </div>
-        <figure class="bs-atelier-media">
-          <img src={IMG.hands} alt="Des mains plantant délicatement un semis dans la terre noire" loading="lazy" />
-          <figcaption>Plantation de printemps, Chelsea</figcaption>
-        </figure>
-      </div>
-    </section>
-
-    <!-- SAISONS -->
-    <section class="bs-section bs-seasons" id="seasons">
-      <div class="bs-wrap">
-        <p class="bs-eyebrow bs-center">Le rythme des saisons</p>
-        <h2 class="bs-h2 bs-center">Un jardin n'est jamais fini.<br />Il <em>s'entretient.</em></h2>
-        <p class="bs-prose bs-center bs-narrow">Nos forfaits d'entretien suivent l'année, pas la facture. Voici ce que chaque saison demande à un jardin bien fait.</p>
-        <div class="bs-season-grid">
-          <article class="bs-season">
-            <p class="bs-season-mark" aria-hidden="true">❧</p>
-            <h3>Printemps</h3>
-            <p class="bs-season-when">Avril – mai</p>
-            <ul>
-              <li>Nettoyage et bordures</li>
-              <li>Division des vivaces</li>
-              <li>Plantations et tourbe</li>
-            </ul>
-          </article>
-          <article class="bs-season">
-            <p class="bs-season-mark" aria-hidden="true">❧</p>
-            <h3>Été</h3>
-            <p class="bs-season-when">Juin – août</p>
-            <ul>
-              <li>Taille et pincement</li>
-              <li>Réglage de l'irrigation</li>
-              <li>Pelouse au naturel</li>
-            </ul>
-          </article>
-          <article class="bs-season">
-            <p class="bs-season-mark" aria-hidden="true">❧</p>
-            <h3>Automne</h3>
-            <p class="bs-season-when">Septembre – octobre</p>
-            <ul>
-              <li>Bulbes pour le printemps</li>
-              <li>Protection hivernale</li>
-              <li>Paillis de feuilles</li>
-            </ul>
-          </article>
-          <article class="bs-season">
-            <p class="bs-season-mark" aria-hidden="true">❧</p>
-            <h3>Hiver</h3>
-            <p class="bs-season-when">Novembre – mars</p>
-            <ul>
-              <li>Déneigement et déglaçage</li>
-              <li>Plan des plates-bandes</li>
-              <li>Taille des fruitiers</li>
-            </ul>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- JARDINS -->
-    <section class="bs-section" id="gardens">
-      <div class="bs-wrap">
-        <p class="bs-eyebrow">Jardins choisis</p>
-        <div class="bs-gallery-head">
-          <h2 class="bs-h2">Nos réalisations,<br />enracinées tout près.</h2>
-          <p class="bs-prose">Quelques jardins qu'on visite encore. Survolez pour lire leurs histoires.</p>
-        </div>
-        <div class="bs-gallery">
-          <figure class="bs-g">
-            <img src={IMG.path} alt="Sentier de pierre courbe à travers des plates-bandes de vivaces" loading="lazy" />
-            <figcaption><strong>L'allée des fougères</strong><span>Aylmer · jardin d'ombre, 2024</span></figcaption>
-          </figure>
-          <figure class="bs-g">
-            <img src={IMG.yard} alt="Cour arrière en paliers avec murets de pierre et nouvelles plantations" loading="lazy" />
-            <figcaption><strong>Les paliers du coteau</strong><span>Hull · plantation en pente, 2023</span></figcaption>
-          </figure>
-          <figure class="bs-g">
-            <img src={IMG.design} alt="Cour moderne aux lignes épurées avec graminées ornementales" loading="lazy" />
-            <figcaption><strong>La cour des graminées</strong><span>Plateau · indigène moderne, 2024</span></figcaption>
-          </figure>
-          <figure class="bs-g">
-            <img src={IMG.lawn} alt="Large pelouse en santé bordée de profondes plates-bandes" loading="lazy" />
-            <figcaption><strong>La grande pelouse</strong><span>Chelsea · jardin familial, 2022</span></figcaption>
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <!-- DÉMARCHE -->
-    <section class="bs-section bs-process">
-      <div class="bs-wrap">
-        <p class="bs-eyebrow bs-center">La démarche</p>
-        <h2 class="bs-h2 bs-center">De la première marche<br />à la première floraison.</h2>
-        <ol class="bs-steps">
-          <li><strong>Marche</strong><span>On visite, on écoute, on lit votre terrain. Gratuit à Gatineau.</span></li>
-          <li><strong>Dessin</strong><span>Un plan planté avec espèces, pierre et prix honnêtes.</span></li>
-          <li><strong>Plantation</strong><span>Notre propre équipe bâtit et plante, en une à trois semaines.</span></li>
-          <li><strong>Entretien</strong><span>Des suivis saisonniers pour que ça s'épanouisse pendant que vous en profitez.</span></li>
-        </ol>
-      </div>
-    </section>
-
-    <!-- TÉMOIGNAGE -->
-    <section class="bs-quote">
-      <div class="bs-wrap bs-narrow">
-        <p class="bs-quote-mark" aria-hidden="true">❧</p>
-        <blockquote>
-          <p>« Ils ont transformé notre pente boueuse en la pièce où on vit tout l'été. Deux ans plus tard, c'est encore plus beau que le jour où ils ont fini. »</p>
-          <cite>Marc-André L., Hull</cite>
-        </blockquote>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section class="bs-section" id="contact">
-      <div class="bs-wrap bs-contact-grid">
-        <div>
-          <p class="bs-eyebrow">Commencer</p>
-          <h2 class="bs-h2">Parlez-nous<br />de votre terrain.</h2>
-          <p class="bs-prose">Les visites sont gratuites à Gatineau, et on répond à chaque message en deux jours ouvrables. Le printemps se remplit dès mars, alors les premiers messages ont les meilleures dates.</p>
-          <dl class="bs-facts">
-            <div><dt>Atelier</dt><dd>456, rue Fictive, Gatineau QC</dd></div>
-            <div><dt>Téléphone</dt><dd><a href="tel:+18195550117">(819) 555-0117</a></dd></div>
-            <div><dt>Heures</dt><dd>Lun–Ven, 8 h à 17 h</dd></div>
-          </dl>
+    <!-- BEGIN -->
+    <section class="bs-begin" id="begin">
+      <div class="bs-begin-bg" aria-hidden="true"><img src={IMG.hero} alt="" loading="lazy" /></div>
+      <div class="bs-wrap bs-begin-in">
+        <div class="bs-begin-copy">
+          <p class="bs-kicker bs-kicker-light">Commencer</p>
+          <h2 class="bs-h2 bs-h2-light">Parlez-nous de<br /><em>votre terrain.</em></h2>
+          <p>Les visites sont gratuites à Gatineau, et on répond à chaque message en deux jours ouvrables. Chaque projet commence par une marche : on regarde votre lumière, votre sol, votre drainage, et votre vraie façon de vivre dehors.</p>
+          <div class="bs-gardens">
+            <figure>
+              <img src={IMG.yard} alt="L'allée des fougères, un jardin d'ombre à Aylmer" loading="lazy" />
+              <figcaption>L'allée des fougères · Aylmer</figcaption>
+            </figure>
+          </div>
+          <address class="bs-address">
+            Atelier · 456, rue Fictive, Gatineau QC<br />
+            <a href="tel:+18195550117">(819) 555-0117</a> · Lun–ven, 8 h–17 h
+          </address>
         </div>
         <form class="bs-form" id="bs-form" novalidate>
-          <label>Votre nom<input type="text" name="name" required placeholder="Jeanne Tremblay" autocomplete="name" /></label>
-          <label>Courriel<input type="email" name="email" required placeholder="jeanne@exemple.com" autocomplete="email" /></label>
-          <label class="bs-form-wide">Votre projet
-            <select name="project" required>
-              <option value="">Choisir…</option>
+          <h3>Créer un jardin</h3>
+          <label>Votre nom<input type="text" name="name" required placeholder="Alex Tremblay" /></label>
+          <label>Courriel<input type="email" name="email" required placeholder="alex@example.com" /></label>
+          <label>Votre projet
+            <select name="project">
+              <option>Choisir…</option>
               <option>Aménagement complet</option>
               <option>Forfait d'entretien saisonnier</option>
-              <option>Ouvrage de pierre ou sentiers</option>
+              <option>Pierre ou allées</option>
               <option>Autre chose</option>
             </select>
           </label>
-          <label class="bs-form-wide">À propos de votre terrain<textarea name="message" rows="4" placeholder="Une cour en pente à Aylmer, surtout à l'ombre, deux enfants et un chien…"></textarea></label>
-          <button class="bs-form-wide" type="submit">Envoyer à l'atelier</button>
+          <label>À propos de votre terrain<textarea name="land" rows="4" placeholder="Soleil, ombre, pente, rêves…"></textarea></label>
+          <button class="bs-btn" type="submit">Envoyer à l'atelier</button>
           <p class="bs-form-note" role="status" aria-live="polite"></p>
         </form>
       </div>
@@ -222,35 +170,25 @@ const IMG = {
   </main>
 
   <footer class="bs-footer">
-    <div class="bs-wrap bs-footer-grid">
-      <p class="bs-footer-brand">Boisé <em>Paysage</em></p>
-      <p>456, rue Fictive, Gatineau QC<br /><a href="tel:+18195550117">(819) 555-0117</a></p>
-      <p>© 2026 Boisé Paysage. Site de démonstration fictif.</p>
+    <p class="bs-fleuron" aria-hidden="true">❧</p>
+    <div class="bs-wrap bs-footer-in">
+      <p>© 2026 Boisé Paysage. Atelier fictif de démonstration. Aucune pelouse n'a été blessée.</p>
+      <p>456, rue Fictive, Gatineau QC · <a href="tel:+18195550117">(819) 555-0117</a></p>
     </div>
   </footer>
 
   <EscapeHatch locale="fr" />
 
   <script>
+    // Formulaire démo : ne soumet rien nulle part
     (function () {
       var form = document.getElementById('bs-form') as HTMLFormElement | null;
       form?.addEventListener('submit', function (e) {
         e.preventDefault();
         var note = form?.querySelector('.bs-form-note');
-        if (note) note.textContent = 'Merci. L\u2019atelier vous écrira en deux jours ouvrables.';
+        if (note) note.textContent = 'Reçu. Camille vous répondra sous deux jours ouvrables pour planifier la marche.';
         form?.reset();
       });
-      var els = document.querySelectorAll('.bs-season, .bs-g, .bs-steps li');
-      if ('IntersectionObserver' in window) {
-        var io = new IntersectionObserver(function (entries) {
-          entries.forEach(function (en) {
-            if (en.isIntersecting) { en.target.classList.add('bs-in'); io.unobserve(en.target); }
-          });
-        }, { threshold: 0.12 });
-        els.forEach(function (el) { io.observe(el); });
-      } else {
-        els.forEach(function (el) { el.classList.add('bs-in'); });
-      }
     })();
   </script>
 
@@ -273,161 +211,97 @@ const IMG = {
     }
     .bs *, .bs *::before, .bs *::after { box-sizing: border-box; }
     .bs img { display: block; max-width: 100%; }
-    .bs-wrap { max-width: 1180px; margin: 0 auto; padding: 0 clamp(22px, 5vw, 52px); }
-    .bs-narrow { max-width: 720px; }
-    .bs-center { text-align: center; }
+    .bs-wrap { max-width: 1120px; margin: 0 auto; padding: 0 clamp(22px, 4vw, 44px); }
+    .bs-wrap-narrow { max-width: 720px; margin: 0 auto; padding: 0 clamp(22px, 4vw, 44px); }
+    .bs em { font-style: italic; }
 
-    .bs-eyebrow { font-size: 13px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--bs-moss); margin: 0 0 20px; font-weight: 600; }
-    .bs-h1 { font-size: clamp(3rem, 7vw, 5.6rem); font-weight: 500; line-height: 1.02; margin: 0 0 24px; letter-spacing: 0.01em; }
-    .bs-h1 em, .bs-h2 em { font-style: italic; font-weight: 400; }
-    .bs-h2 { font-size: clamp(2.1rem, 4.6vw, 3.4rem); font-weight: 500; line-height: 1.06; margin: 0 0 22px; }
-    .bs-prose { font-size: 19px; line-height: 1.75; color: var(--bs-bark); margin: 0 0 22px; font-weight: 500; }
-    .bs-narrow.bs-prose { margin-inline: auto; }
-    .bs-sign { font-style: italic; font-size: 18px; color: var(--bs-forest); margin: 30px 0 0; }
-    .bs-prose a { color: var(--bs-forest); }
-
-    .bs-nav {
-      position: absolute; top: 0; left: 0; right: 0; z-index: 5;
-      display: flex; align-items: center; gap: 30px;
-      padding: 22px clamp(22px, 5vw, 52px); max-width: 1320px; margin: 0 auto;
-    }
-    .bs-brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: var(--bs-cream); font-size: 24px; font-weight: 600; letter-spacing: 0.04em; }
-    .bs-brand em { font-style: italic; font-weight: 400; }
-    .bs-leaf-mark { width: 34px; height: 34px; }
-    .bs-links { display: flex; gap: 28px; margin-left: auto; }
-    .bs-links a { color: var(--bs-cream); text-decoration: none; font-size: 17px; font-weight: 500; letter-spacing: 0.08em; opacity: 0.92; }
-    .bs-links a:hover { opacity: 1; text-decoration: underline; text-underline-offset: 6px; }
+    /* season nav */
+    .bs-navwrap { position: sticky; top: 0; z-index: 60; background: rgba(244, 241, 230, 0.92); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(30, 61, 43, 0.18); }
+    .bs-nav { display: flex; align-items: center; gap: 26px; max-width: 1120px; margin: 0 auto; padding: 14px clamp(22px, 4vw, 44px); }
+    .bs-logo { font-size: 24px; font-weight: 600; color: var(--bs-forest); text-decoration: none; margin-right: auto; }
+    .bs-logo em { color: var(--bs-moss); }
+    .bs-seasons-nav { display: flex; gap: 4px; }
+    .bs-seasons-nav a { font-size: 17px; font-weight: 500; color: var(--bs-bark); text-decoration: none; padding: 8px 14px; border-radius: 999px; }
+    .bs-seasons-nav a:hover { background: var(--bs-cream-2); color: var(--bs-forest-deep); }
     .bs-cta {
-      color: var(--bs-forest); background: var(--bs-cream); text-decoration: none; font-weight: 600;
-      font-size: 16.5px; padding: 12px 24px; border-radius: 999px; letter-spacing: 0.04em;
-      transition: transform 0.18s ease, background 0.18s ease;
+      font-size: 16.5px; font-weight: 600; color: var(--bs-cream); text-decoration: none;
+      background: var(--bs-forest); padding: 11px 24px; border-radius: 999px; white-space: nowrap;
     }
-    .bs-cta:hover { transform: translateY(-2px); background: #fff; }
+    .bs-cta:hover { background: var(--bs-forest-deep); }
 
-    .bs-hero { position: relative; min-height: 96vh; display: flex; align-items: flex-end; overflow: hidden; }
-    .bs-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-    .bs-hero-veil { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,42,30,0.25) 0%, rgba(20,42,30,0.05) 40%, rgba(20,42,30,0.72) 100%); }
-    .bs-hero-copy { position: relative; z-index: 2; max-width: 1180px; margin: 0 auto; padding: 0 clamp(22px, 5vw, 52px) clamp(70px, 10vh, 120px); width: 100%; color: var(--bs-cream); }
-    .bs-hero-copy .bs-eyebrow { color: var(--bs-sage); }
-    .bs-hero-sub { font-size: 20px; line-height: 1.6; max-width: 52ch; margin: 0 0 34px; color: rgba(244,241,230,0.92); font-weight: 500; }
-    .bs-hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
-    .bs-btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      font-family: var(--bs-serif); font-weight: 600; font-size: 18px; letter-spacing: 0.05em;
-      padding: 15px 34px; border-radius: 999px; text-decoration: none; cursor: pointer;
-      background: var(--bs-cream); color: var(--bs-forest); border: 1px solid var(--bs-cream);
-      transition: transform 0.18s ease, background 0.18s ease;
-    }
-    .bs-btn:hover { transform: translateY(-2px); background: #fff; }
-    .bs-btn-ghost { background: transparent; color: var(--bs-cream); border-color: rgba(244,241,230,0.7); }
-    .bs-btn-ghost:hover { background: rgba(244,241,230,0.14); }
-    .bs-hero-leaf { position: absolute; z-index: 2; right: clamp(24px, 6vw, 90px); top: 120px; width: 54px; height: 54px; color: var(--bs-sage); opacity: 0.9; transform-origin: 50% 0; animation: bs-sway 5s ease-in-out infinite; }
-    @keyframes bs-sway { 0%, 100% { transform: rotate(-7deg); } 50% { transform: rotate(7deg); } }
+    /* cover */
+    .bs-cover { padding: clamp(90px, 12vw, 150px) 0 clamp(60px, 8vw, 100px); text-align: center; }
+    .bs-kicker { font-size: 15px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--bs-moss); margin: 0 0 26px; font-weight: 600; }
+    .bs-kicker-light { color: var(--bs-sage); }
+    .bs-h1 { font-size: clamp(3.8rem, 12vw, 8rem); line-height: 0.95; font-weight: 500; margin: 0 0 28px; }
+    .bs-h1 em, .bs-h2 em { color: var(--bs-moss); }
+    .bs-cover-sub { font-size: clamp(1.2rem, 2.6vw, 1.45rem); line-height: 1.75; color: var(--bs-bark); margin: 0 auto 30px; max-width: 46ch; }
+    .bs-fleuron { font-size: 30px; color: var(--bs-moss); margin: 0; }
 
-    .bs-section { padding: clamp(84px, 12vh, 150px) 0; }
+    /* season chapters */
+    .bs-season { padding: clamp(64px, 9vw, 120px) 0; border-top: 1px solid rgba(30, 61, 43, 0.16); }
+    .bs-season:nth-of-type(even) { background: var(--bs-cream-2); }
+    .bs-season-head { text-align: center; margin-bottom: clamp(34px, 5vw, 56px); }
+    .bs-season-head .bs-fleuron { margin-bottom: 14px; }
+    .bs-months { font-size: 16px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--bs-moss); margin: 0 0 12px; font-weight: 600; }
+    .bs-h2 { font-size: clamp(3rem, 9vw, 5.6rem); line-height: 0.95; font-weight: 500; margin: 0 0 20px; }
+    .bs-h2-light { color: var(--bs-cream); }
+    .bs-h2-light em { color: var(--bs-sage); }
+    .bs-season-intro { font-size: clamp(1.2rem, 2.6vw, 1.45rem); line-height: 1.7; color: var(--bs-bark); margin: 0 auto; max-width: 52ch; font-style: italic; }
+    .bs-season-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(30px, 5vw, 70px); align-items: start; margin-bottom: 30px; }
+    .bs-season:nth-of-type(odd) .bs-season-photo { order: 2; }
+    .bs-season-photo { margin: 0; }
+    .bs-season-photo img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 4px; box-shadow: 0 24px 60px rgba(20, 42, 30, 0.18); }
+    .bs-season-photo figcaption { font-size: 16px; font-style: italic; color: var(--bs-bark); margin-top: 12px; }
+    .bs-season-cols { display: grid; gap: 34px; }
+    .bs-season-cols h3 { font-size: 15px; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: var(--bs-moss); margin: 0 0 14px; }
+    .bs-season-cols ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+    .bs-season-cols li { font-size: 21px; line-height: 1.45; padding-left: 30px; position: relative; }
+    .bs-season-cols li::before { content: "❧"; position: absolute; left: 0; color: var(--bs-moss); font-size: 17px; }
+    .bs-season-note { text-align: center; font-size: 20px; color: var(--bs-bark); margin: 0; }
 
-    .bs-atelier { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(34px, 6vw, 80px); align-items: center; }
-    .bs-atelier-media { margin: 0; }
-    .bs-atelier-media img { width: 100%; height: min(560px, 74vw); object-fit: cover; border-radius: 46% 54% 52% 48% / 8% 8% 8% 8%; }
-    .bs-atelier-media figcaption { text-align: center; font-style: italic; font-size: 16px; color: var(--bs-bark); margin-top: 16px; }
-
-    .bs-seasons { background: var(--bs-forest); color: var(--bs-cream); }
-    .bs-seasons .bs-eyebrow { color: var(--bs-sage); }
-    .bs-seasons .bs-prose { color: rgba(244,241,230,0.82); }
-    .bs-season-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; margin-top: 54px; }
-    .bs-season {
-      border: 1px solid rgba(183,196,168,0.35); border-radius: 18px; padding: 32px 28px;
-      background: rgba(244,241,230,0.04); opacity: 0; transform: translateY(26px);
-      transition: opacity 0.7s ease, transform 0.7s ease, background 0.25s ease;
-    }
-    .bs-season.bs-in { opacity: 1; transform: none; }
-    .bs-season:hover { background: rgba(244,241,230,0.09); }
-    .bs-season-mark { font-size: 30px; color: var(--bs-sage); margin: 0 0 16px; }
-    .bs-season h3 { font-size: 30px; font-weight: 500; margin: 0 0 4px; }
-    .bs-season-when { font-style: italic; color: var(--bs-sage); font-size: 16.5px; margin: 0 0 18px; }
-    .bs-season ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-size: 17.5px; font-weight: 500; color: rgba(244,241,230,0.88); }
-    .bs-season li::before { content: "· "; color: var(--bs-sage); font-weight: 700; }
-
-    .bs-gallery-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 30px; flex-wrap: wrap; margin-bottom: 44px; }
-    .bs-gallery-head .bs-prose { margin: 0; max-width: 34ch; }
-    .bs-gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 26px; }
-    .bs-g { margin: 0; position: relative; overflow: hidden; border-radius: 20px; opacity: 0; transform: translateY(26px); transition: opacity 0.7s ease, transform 0.7s ease; }
-    .bs-g.bs-in { opacity: 1; transform: none; }
-    .bs-g img { width: 100%; height: min(440px, 64vw); object-fit: cover; transition: transform 0.8s ease; }
-    .bs-g img { filter: saturate(1.06); }
-    .bs-g:hover img { transform: scale(1.05); }
-    .bs-g figcaption {
-      position: absolute; inset: auto 0 0 0; padding: 60px 26px 22px; color: var(--bs-cream);
-      background: linear-gradient(180deg, transparent, rgba(20,42,30,0.82));
-      display: grid; gap: 4px;
-    }
-    .bs-g figcaption strong { font-size: 24px; font-weight: 600; letter-spacing: 0.03em; }
-    .bs-g figcaption span { font-size: 15.5px; font-style: italic; opacity: 0.85; }
-
-    .bs-process { background: var(--bs-cream-2); }
-    .bs-steps { list-style: none; margin: 54px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px; counter-reset: bs-step; }
-    .bs-steps li { display: grid; gap: 10px; align-content: start; border-top: 2px solid var(--bs-moss); padding-top: 22px; opacity: 0; transform: translateY(22px); transition: opacity 0.6s ease, transform 0.6s ease; }
-    .bs-steps li.bs-in { opacity: 1; transform: none; }
-    .bs-steps li::before { counter-increment: bs-step; content: "0" counter(bs-step); font-size: 15px; letter-spacing: 0.3em; color: var(--bs-moss); font-weight: 600; }
-    .bs-steps strong { font-size: 26px; font-weight: 600; }
-    .bs-steps span { font-size: 16.5px; line-height: 1.6; color: var(--bs-bark); font-weight: 500; }
-
-    .bs-quote { padding: clamp(70px, 10vh, 120px) 0; text-align: center; }
-    .bs-quote-mark { font-size: 44px; color: var(--bs-moss); margin: 0 0 20px; }
-    .bs-quote blockquote { margin: 0; }
-    .bs-quote blockquote p { font-size: clamp(1.5rem, 3vw, 2.1rem); font-style: italic; line-height: 1.5; margin: 0 0 22px; font-weight: 500; }
-    .bs-quote cite { font-style: normal; font-size: 15px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--bs-moss); font-weight: 600; }
-
-    .bs-contact-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(34px, 6vw, 80px); align-items: start; }
-    .bs-facts { margin: 34px 0 0; display: grid; gap: 0; border-top: 1px solid var(--bs-sage); }
-    .bs-facts div { display: grid; grid-template-columns: 110px 1fr; gap: 18px; padding: 16px 2px; border-bottom: 1px solid var(--bs-sage); }
-    .bs-facts dt { font-size: 13px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--bs-moss); font-weight: 600; }
-    .bs-facts dd { margin: 0; font-size: 18px; font-weight: 500; }
-    .bs-facts a { color: var(--bs-forest); }
-    .bs-form { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; background: #fff; border: 1px solid var(--bs-sage); border-radius: 24px; padding: clamp(26px, 4vw, 44px); box-shadow: 0 24px 60px rgba(30,61,43,0.1); }
-    .bs-form-wide { grid-column: 1 / -1; }
-    .bs-form label { display: grid; gap: 9px; font-size: 14px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--bs-moss); font-weight: 600; }
+    /* begin */
+    .bs-begin { position: relative; padding: clamp(80px, 10vw, 130px) 0; overflow: hidden; background: var(--bs-forest-deep); }
+    .bs-begin-bg { position: absolute; inset: 0; opacity: 0.25; }
+    .bs-begin-bg img { width: 100%; height: 100%; object-fit: cover; }
+    .bs-begin-in { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(36px, 6vw, 80px); align-items: start; }
+    .bs-begin-copy { color: var(--bs-cream); }
+    .bs-begin-copy > p:not(.bs-kicker):not(.bs-fleuron) { font-size: 19px; line-height: 1.75; color: #DCD6C2; margin: 0 0 28px; max-width: 44ch; }
+    .bs-gardens { display: grid; gap: 14px; margin-bottom: 28px; }
+    .bs-gardens figure { margin: 0; }
+    .bs-gardens img { width: 100%; aspect-ratio: 16/8; object-fit: cover; border-radius: 4px; }
+    .bs-gardens figcaption { font-size: 15px; font-style: italic; color: var(--bs-sage); margin-top: 8px; }
+    .bs-address { font-style: normal; font-size: 18px; line-height: 1.8; color: #DCD6C2; }
+    .bs-address a { color: var(--bs-sage); }
+    .bs-form { background: var(--bs-cream); border-radius: 6px; padding: clamp(28px, 4vw, 44px); display: grid; gap: 18px; color: var(--bs-forest); }
+    .bs-form h3 { font-size: 30px; font-weight: 600; margin: 0; }
+    .bs-form label { display: grid; gap: 8px; font-size: 14px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--bs-bark); }
     .bs-form input, .bs-form select, .bs-form textarea {
-      font-family: var(--bs-serif); font-size: 18px; font-weight: 500; color: var(--bs-forest);
-      border: 1px solid var(--bs-sage); border-radius: 14px; padding: 13px 16px; background: var(--bs-cream); width: 100%;
+      font-family: var(--bs-serif); font-size: 18px; color: var(--bs-forest);
+      background: #fff; border: 1px solid var(--bs-sage); border-radius: 4px; padding: 13px 16px; width: 100%;
     }
-    .bs-form input:focus, .bs-form select:focus, .bs-form textarea:focus { outline: 2px solid var(--bs-moss); outline-offset: 1px; border-color: var(--bs-moss); }
-    .bs-form button {
-      font-family: var(--bs-serif); font-size: 18px; font-weight: 600; letter-spacing: 0.06em;
-      background: var(--bs-forest); color: var(--bs-cream); border: 0; border-radius: 999px;
-      padding: 17px; cursor: pointer; transition: background 0.2s ease, transform 0.2s ease;
+    .bs-form input:focus, .bs-form select:focus, .bs-form textarea:focus { outline: 2px solid var(--bs-moss); outline-offset: 2px; }
+    .bs-btn {
+      font-family: var(--bs-serif); font-size: 19px; font-weight: 600; letter-spacing: 0.06em;
+      background: var(--bs-forest); color: var(--bs-cream); border: none; border-radius: 999px;
+      padding: 16px 30px; cursor: pointer;
     }
-    .bs-form button:hover { background: var(--bs-forest-deep); transform: translateY(-2px); }
-    .bs-form-note { margin: 0; text-align: center; font-style: italic; font-size: 17px; color: var(--bs-moss); }
+    .bs-btn:hover { background: var(--bs-forest-deep); }
+    .bs-form-note { margin: 0; color: var(--bs-moss); font-size: 18px; font-style: italic; }
     .bs-form-note:empty { display: none; }
 
-    .bs-footer { background: var(--bs-forest-deep); color: var(--bs-cream); padding: 56px 0; }
-    .bs-footer-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 26px; align-items: center; }
-    .bs-footer-brand { font-size: 28px; font-weight: 600; margin: 0; }
-    .bs-footer-brand em { font-style: italic; font-weight: 400; }
-    .bs-footer p { margin: 0; font-size: 16.5px; line-height: 1.65; font-weight: 500; color: rgba(244,241,230,0.82); }
-    .bs-footer a { color: var(--bs-cream); }
-    .bs-footer-grid p:last-child { text-align: right; }
+    /* footer */
+    .bs-footer { text-align: center; padding: 70px 0 90px; }
+    .bs-footer .bs-fleuron { margin-bottom: 20px; }
+    .bs-footer-in { display: grid; gap: 8px; color: var(--bs-bark); font-size: 17px; }
+    .bs-footer-in p { margin: 0; }
+    .bs-footer-in a { color: var(--bs-forest); }
 
-    @media (max-width: 980px) {
-      .bs-season-grid, .bs-steps { grid-template-columns: repeat(2, 1fr); }
-      .bs-atelier, .bs-contact-grid { grid-template-columns: 1fr; }
-      .bs-gallery { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 640px) {
-      .bs-links { display: none; }
-      .bs-nav { justify-content: space-between; }
-      .bs-hero { min-height: 92vh; }
-      .bs-hero-leaf { display: none; }
-      .bs-form { grid-template-columns: 1fr; }
-      .bs-facts div { grid-template-columns: 1fr; gap: 4px; }
-      .bs-footer-grid { grid-template-columns: 1fr; text-align: center; }
-      .bs-footer-grid p:last-child { text-align: center; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .bs-hero-leaf { animation: none; }
-      .bs-season, .bs-g, .bs-steps li { opacity: 1; transform: none; transition: none; }
-      .bs-g img, .bs-btn, .bs-cta, .bs-form button { transition: none; }
+    @media (max-width: 900px) {
+      .bs-seasons-nav { display: none; }
+      .bs-season-grid { grid-template-columns: 1fr; }
+      .bs-season:nth-of-type(odd) .bs-season-photo { order: 0; }
+      .bs-begin-in { grid-template-columns: 1fr; }
     }
   </style>
 </body>
