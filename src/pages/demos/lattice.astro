@@ -1,0 +1,551 @@
+---
+import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+
+// Demo microsite: Lattice, fictional modular productivity SaaS, Toronto.
+// Standalone art direction. Full bento grid. Not connected to the WEBAO theme system.
+const IMG = {
+  desk: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1200&auto=format&fit=crop",
+  planner: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?q=80&w=800&auto=format&fit=crop",
+  team: "https://images.unsplash.com/photo-1553877522-43269d4ea984?q=80&w=800&auto=format&fit=crop",
+  notes: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=800&auto=format&fit=crop",
+  office: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=800&auto=format&fit=crop",
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lattice: Every Tool, One Grid</title>
+  <meta name="description" content="Lattice is the modular productivity platform. Snap tasks, docs, time and teams into one bento dashboard. Free for 14 days." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body class="lt">
+
+  <EscapeHatch locale="en" />
+
+  <!-- NAV -->
+  <header class="lt-navwrap">
+    <nav class="lt-nav" aria-label="Primary">
+      <a class="lt-logo" href="#top" aria-label="Lattice, home">
+        <span class="lt-logo-box" aria-hidden="true"></span>lattice
+      </a>
+      <button class="lt-burger" aria-label="Open menu" aria-expanded="false" aria-controls="lt-menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="lt-menu" id="lt-menu">
+        <div class="lt-nav-links">
+          <a href="#modules">Modules</a>
+          <a href="#workflows">Workflows</a>
+          <a href="#pricing">Pricing</a>
+        </div>
+        <a class="lt-btn lt-btn-dark" href="#cta">Start free</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+
+    <!-- HERO -->
+    <section class="lt-hero">
+      <div class="lt-wrap">
+        <p class="lt-eyebrow"><span class="lt-dot-live" aria-hidden="true"></span>14-day free trial, no card</p>
+        <h1 class="lt-h1">Every tool.<br />One <span class="lt-lime">grid.</span></h1>
+        <p class="lt-lede">Lattice snaps your tasks, docs, time and team into one tidy dashboard. Add a module when you need it, hide it when you don't. Your workflow, in boxes.</p>
+        <div class="lt-hero-cta">
+          <a class="lt-btn lt-btn-dark" href="#cta">Build your grid</a>
+          <a class="lt-btn lt-btn-line" href="#modules">See modules</a>
+        </div>
+
+        <!-- Live bento dashboard -->
+        <div class="lt-dash" aria-label="Lattice dashboard preview">
+          <div class="lt-cell lt-dash-main">
+            <div class="lt-cell-head"><h2>Focus score</h2><span class="lt-tag">This week</span></div>
+            <p class="lt-big">87<span class="lt-big-sub">/100</span></p>
+            <div class="lt-bars" aria-hidden="true">
+              <span style="--h:42%"></span><span style="--h:58%"></span><span style="--h:36%"></span><span style="--h:70%"></span>
+              <span style="--h:55%"></span><span style="--h:82%"></span><span style="--h:64%"></span><span style="--h:92%"></span>
+              <span style="--h:74%"></span><span style="--h:66%"></span><span style="--h:88%"></span><span style="--h:80%"></span>
+            </div>
+            <p class="lt-cell-note">Up 12 points since Monday. Deep work pays off.</p>
+          </div>
+          <div class="lt-cell lt-dash-tasks">
+            <div class="lt-cell-head"><h2>Today</h2><span class="lt-tag lt-tag-lime">4 open</span></div>
+            <ul class="lt-checks">
+              <li class="lt-done"><span aria-hidden="true"></span>Ship onboarding email</li>
+              <li class="lt-done"><span aria-hidden="true"></span>Review Q3 roadmap</li>
+              <li><span aria-hidden="true"></span>Draft launch notes</li>
+              <li><span aria-hidden="true"></span>1:1 with Priya</li>
+            </ul>
+          </div>
+          <div class="lt-cell lt-dash-stat">
+            <h2>Active projects</h2>
+            <p class="lt-stat-num">12</p>
+            <p class="lt-cell-note">3 due this week</p>
+          </div>
+          <div class="lt-cell lt-dash-stat">
+            <h2>Hours saved</h2>
+            <p class="lt-stat-num">31</p>
+            <p class="lt-cell-note">vs. last month</p>
+          </div>
+          <div class="lt-cell lt-dash-cal">
+            <div class="lt-cell-head"><h2>Calendar</h2><span class="lt-tag">Oct</span></div>
+            <div class="lt-cal" aria-hidden="true">
+              <span></span><span></span><span></span><span></span><span class="lt-busy"></span><span></span><span></span>
+              <span class="lt-busy"></span><span></span><span class="lt-busy"></span><span></span><span></span><span class="lt-busy"></span><span></span>
+              <span></span><span></span><span></span><span class="lt-today"></span><span></span><span></span><span></span>
+            </div>
+            <p class="lt-cell-note">Next: design sync, 2:00 PM</p>
+          </div>
+          <div class="lt-cell lt-dash-img">
+            <img src={IMG.desk} alt="Tidy desk with laptop and coffee, the Lattice way" loading="eager" fetchpriority="high" />
+          </div>
+          <div class="lt-cell lt-dash-team">
+            <div class="lt-cell-head"><h2>Team pulse</h2><span class="lt-tag lt-tag-lime">Live</span></div>
+            <div class="lt-pulse" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            <p class="lt-cell-note">6 online now, 0 blockers</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODULES -->
+    <section class="lt-section" id="modules">
+      <div class="lt-wrap">
+        <p class="lt-kicker">Modules</p>
+        <h2 class="lt-h2">Snap in what<br />you need. Nothing else.</h2>
+        <div class="lt-bento">
+          <article class="lt-cell lt-span4">
+            <div class="lt-cell-head"><h3>Tasks</h3><span class="lt-tag">Core</span></div>
+            <p>Kanban, list, or calendar. Tasks that surface themselves when they matter and stay quiet when they don't.</p>
+            <div class="lt-kanban" aria-hidden="true">
+              <div><i></i><i></i></div><div><i></i></div><div><i></i><i></i><i></i></div>
+            </div>
+          </article>
+          <article class="lt-cell lt-span2">
+            <div class="lt-cell-head"><h3>Docs</h3><span class="lt-tag">Core</span></div>
+            <p>Notes that link to tasks automatically.</p>
+          </article>
+          <article class="lt-cell lt-span2">
+            <div class="lt-cell-head"><h3>Time</h3><span class="lt-tag lt-tag-lime">New</span></div>
+            <p>One-tap tracking, honest reports.</p>
+          </article>
+          <article class="lt-cell lt-span2">
+            <div class="lt-cell-head"><h3>Habits</h3><span class="lt-tag">Add-on</span></div>
+            <p>Streaks without the guilt trip.</p>
+          </article>
+          <article class="lt-cell lt-span2">
+            <div class="lt-cell-head"><h3>CRM lite</h3><span class="lt-tag">Add-on</span></div>
+            <p>Contacts with context, not clutter.</p>
+          </article>
+          <article class="lt-cell lt-span3">
+            <div class="lt-cell-head"><h3>Automations</h3><span class="lt-tag lt-tag-lime">Pro</span></div>
+            <p>If this, then sorted. Build rules in plain language, like "when a task is overdue, nudge me at 9am."</p>
+            <img src={IMG.planner} alt="Planner and laptop arranged in a neat grid" loading="lazy" />
+          </article>
+          <article class="lt-cell lt-span3">
+            <div class="lt-cell-head"><h3>Insights</h3><span class="lt-tag lt-tag-lime">Pro</span></div>
+            <p>Where did the week actually go? Gentle charts, zero surveillance vibes.</p>
+            <img src={IMG.notes} alt="Handwritten notes and sketches on paper" loading="lazy" />
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- WORKFLOWS -->
+    <section class="lt-section" id="workflows">
+      <div class="lt-wrap">
+        <p class="lt-kicker">Workflows</p>
+        <h2 class="lt-h2">From chaos<br />to grid in three steps</h2>
+        <div class="lt-flow">
+          <article class="lt-cell">
+            <p class="lt-step">01</p>
+            <h3>Dump everything</h3>
+            <p>Forward emails, paste links, brain-dump voice notes. Lattice sorts the pile into candidate tasks.</p>
+          </article>
+          <article class="lt-cell">
+            <p class="lt-step">02</p>
+            <h3>Arrange the grid</h3>
+            <p>Drag modules into place. Your Monday grid can look nothing like your Friday grid, and that's the point.</p>
+          </article>
+          <article class="lt-cell">
+            <p class="lt-step">03</p>
+            <h3>Let it hum</h3>
+            <p>Automations handle the busywork. You get a calm dashboard and your evenings back.</p>
+          </article>
+        </div>
+        <div class="lt-bento lt-flow-imgs">
+          <div class="lt-cell lt-span3 lt-img-cell"><img src={IMG.team} alt="Team collaborating around a laptop" loading="lazy" /></div>
+          <div class="lt-cell lt-span3 lt-img-cell"><img src={IMG.office} alt="Bright organized office space" loading="lazy" /></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="lt-section" id="pricing">
+      <div class="lt-wrap">
+        <p class="lt-kicker">Pricing</p>
+        <h2 class="lt-h2">Pick your<br />box size</h2>
+        <div class="lt-tiers">
+          <article class="lt-cell lt-tier">
+            <h3>Solo</h3>
+            <p class="lt-tier-price">$0<span>/mo</span></p>
+            <p>For personal grids.</p>
+            <ul>
+              <li>5 modules</li>
+              <li>Unlimited tasks</li>
+              <li>1 GB storage</li>
+            </ul>
+            <a class="lt-btn lt-btn-line" href="#cta">Start free</a>
+          </article>
+          <article class="lt-cell lt-tier lt-tier-pop">
+            <p class="lt-pop-tag">Most popular</p>
+            <h3>Team</h3>
+            <p class="lt-tier-price">$12<span>/user/mo</span></p>
+            <p>For grids that collaborate.</p>
+            <ul>
+              <li>All modules</li>
+              <li>Shared dashboards</li>
+              <li>Automations</li>
+              <li>100 GB storage</li>
+            </ul>
+            <a class="lt-btn lt-btn-lime" href="#cta">Start 14-day trial</a>
+          </article>
+          <article class="lt-cell lt-tier">
+            <h3>Enterprise</h3>
+            <p class="lt-tier-price">Custom</p>
+            <p>For grids with compliance.</p>
+            <ul>
+              <li>SSO and audit logs</li>
+              <li>Dedicated success manager</li>
+              <li>Onboarding concierge</li>
+            </ul>
+            <a class="lt-btn lt-btn-line" href="#cta">Talk to us</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROOF -->
+    <section class="lt-section">
+      <div class="lt-wrap">
+        <p class="lt-kicker">Wall of love</p>
+        <h2 class="lt-h2">Small cells,<br />big opinions</h2>
+        <div class="lt-quotes">
+          <figure class="lt-cell lt-quote"><blockquote>"Replaced four apps in a week. My grid is the first tab I open."</blockquote><figcaption><strong>Lena K.</strong><span>Product lead, Fernway</span></figcaption></figure>
+          <figure class="lt-cell lt-quote"><blockquote>"The automations are scary good. It files my expense tasks before I remember them."</blockquote><figcaption><strong>Marcus T.</strong><span>Founder, Northloop</span></figcaption></figure>
+          <figure class="lt-cell lt-quote"><blockquote>"Finally, a dashboard my whole team actually checks."</blockquote><figcaption><strong>Amara O.</strong><span>Ops, Brightline Co.</span></figcaption></figure>
+          <figure class="lt-cell lt-quote"><blockquote>"Bento everything. My brain thinks in boxes now."</blockquote><figcaption><strong>Jonas P.</strong><span>Freelance designer</span></figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA + CONTACT -->
+    <section class="lt-section" id="cta">
+      <div class="lt-wrap">
+        <div class="lt-cta-box">
+          <p class="lt-kicker lt-kicker-light">Ready?</p>
+          <h2 class="lt-h2 lt-h2-light">Your grid is<br />one click away.</h2>
+          <p class="lt-cta-sub">Free 14 days on Team. Keep Solo free forever. Cancel in two clicks, we checked.</p>
+          <form class="lt-cta-form" id="lt-form" novalidate>
+            <label class="lt-sr" for="lt-email">Work email</label>
+            <input class="lt-cta-input" id="lt-email" type="email" name="email" required autocomplete="email" placeholder="you@company.com" />
+            <button class="lt-btn lt-btn-lime" type="submit">Start free</button>
+          </form>
+          <p class="lt-form-note" id="lt-form-note" role="status" hidden></p>
+          <div class="lt-contact-row">
+            <address>
+              <strong>Lattice Labs Inc.</strong><br />
+              77 King Street West, Suite 3200<br />
+              Toronto, ON M5K 1G8<br />
+              <a href="tel:+14165550187">(416) 555-0187</a> ·
+              <a href="mailto:hello@latticelabs.example">hello@latticelabs.example</a>
+            </address>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="lt-footer">
+    <div class="lt-wrap lt-footer-grid">
+      <div>
+        <a class="lt-logo" href="#top" aria-label="Lattice, home"><span class="lt-logo-box" aria-hidden="true"></span>lattice</a>
+        <p>Modular productivity, beautifully boxed.</p>
+      </div>
+      <nav aria-label="Footer">
+        <a href="#modules">Modules</a>
+        <a href="#workflows">Workflows</a>
+        <a href="#pricing">Pricing</a>
+      </nav>
+      <p class="lt-fine">Fictional demo site crafted by WEBAO. Lattice Labs Inc. does not exist.</p>
+    </div>
+  </footer>
+
+<style>
+  .lt {
+    --paper: #FAF9F6;
+    --ink: #1A1A1A;
+    --muted: #6f6d68;
+    --lime: #D4FF3F;
+    --line: #e7e4dc;
+    --card: #ffffff;
+    --radius: 22px;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    overflow-x: clip;
+    line-height: 1.55;
+  }
+  .lt *, .lt *::before, .lt *::after { box-sizing: border-box; }
+  .lt img { display: block; max-width: 100%; }
+  .lt a { color: inherit; }
+  .lt-wrap { width: min(1180px, 92%); margin-inline: auto; }
+  .lt-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+  /* Cells: the atomic unit */
+  .lt-cell { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; }
+  .lt-cell h2, .lt-cell h3 { margin: 0; font-size: 1rem; font-weight: 700; letter-spacing: -0.01em; }
+  .lt-cell p { color: var(--muted); margin: 10px 0 0; font-size: 0.95rem; }
+  .lt-cell-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
+  .lt-tag { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+    border: 1px solid var(--line); border-radius: 999px; padding: 5px 11px; white-space: nowrap; }
+  .lt-tag-lime { background: var(--lime); border-color: var(--lime); color: var(--ink); }
+  .lt-cell-note { font-size: 0.85rem !important; }
+
+  /* Nav */
+  .lt-navwrap { position: sticky; top: 12px; z-index: 50; }
+  .lt-nav { width: min(1180px, 92%); margin-inline: auto; background: rgba(250,249,246,.92); backdrop-filter: blur(12px);
+    border: 1px solid var(--line); border-radius: 18px; padding: 10px 12px 10px 18px;
+    display: flex; align-items: center; justify-content: space-between; position: relative; }
+  .lt-logo { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.3rem; letter-spacing: -0.03em; text-decoration: none; }
+  .lt-logo-box { width: 22px; height: 22px; border-radius: 7px; background: var(--lime); border: 1.5px solid var(--ink); }
+  .lt-menu { display: flex; align-items: center; gap: 28px; }
+  .lt-nav-links { display: flex; gap: 26px; }
+  .lt-nav-links a { text-decoration: none; font-weight: 500; font-size: 0.95rem; color: var(--muted); }
+  .lt-nav-links a:hover { color: var(--ink); }
+  .lt-burger { display: none; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 11px; cursor: pointer; }
+  .lt-burger span { display: block; width: 22px; height: 2.5px; border-radius: 3px; background: var(--ink); margin: 4.5px 0; }
+
+  /* Buttons */
+  .lt-btn { display: inline-block; text-decoration: none; font-weight: 700; font-family: inherit; font-size: 0.98rem;
+    border-radius: 14px; padding: 13px 26px; cursor: pointer; border: 1.5px solid var(--ink); transition: transform .15s ease, box-shadow .15s ease; }
+  .lt-btn-dark { background: var(--ink); color: var(--paper); }
+  .lt-btn-dark:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--lime); }
+  .lt-btn-line { background: var(--card); color: var(--ink); }
+  .lt-btn-line:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--ink); }
+  .lt-btn-lime { background: var(--lime); color: var(--ink); }
+  .lt-btn-lime:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--ink); }
+
+  /* Hero */
+  .lt-hero { padding: 64px 0 30px; }
+  .lt-eyebrow { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.85rem; color: var(--muted);
+    border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 8px 16px; margin: 0 0 22px; }
+  .lt-dot-live { width: 9px; height: 9px; border-radius: 50%; background: #22c55e; animation: lt-blink 1.6s ease-in-out infinite; }
+  @keyframes lt-blink { 50% { opacity: 0.35; } }
+  .lt-h1 { font-size: clamp(3rem, 7vw, 5.5rem); line-height: 0.98; letter-spacing: -0.045em; font-weight: 700; margin: 0 0 20px; }
+  .lt-lime { background: var(--lime); padding: 0 0.12em; border-radius: 0.12em; }
+  .lt-lede { font-size: 1.15rem; color: var(--muted); max-width: 52ch; margin: 0 0 28px; }
+  .lt-hero-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 44px; }
+
+  /* Dashboard bento */
+  .lt-dash { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; }
+  .lt-dash-main { grid-column: span 4; grid-row: span 2; }
+  .lt-dash-tasks { grid-column: span 2; grid-row: span 2; }
+  .lt-dash-stat { grid-column: span 2; }
+  .lt-dash-cal { grid-column: span 2; }
+  .lt-dash-img { grid-column: span 3; padding: 0; overflow: hidden; }
+  .lt-dash-img img { width: 100%; height: 100%; min-height: 190px; object-fit: cover; }
+  .lt-dash-team { grid-column: span 3; }
+  .lt-big { font-size: 3.6rem; font-weight: 700; letter-spacing: -0.04em; color: var(--ink) !important; margin: 8px 0 0 !important; }
+  .lt-big-sub { font-size: 1.2rem; color: var(--muted); font-weight: 500; }
+  .lt-stat-num { font-size: 2.6rem; font-weight: 700; letter-spacing: -0.03em; color: var(--ink) !important; margin: 8px 0 0 !important; }
+  .lt-bars { display: flex; align-items: flex-end; gap: 7px; height: 120px; margin: 18px 0 6px; }
+  .lt-bars span { flex: 1; border-radius: 6px; background: var(--line); height: var(--h); min-height: 8px; }
+  .lt-bars span:nth-child(8), .lt-bars span:nth-child(11) { background: var(--lime); border: 1px solid var(--ink); }
+  .lt-checks { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 10px; }
+  .lt-checks li { display: flex; align-items: center; gap: 12px; font-size: 0.95rem; font-weight: 500; color: var(--ink); }
+  .lt-checks li span { width: 20px; height: 20px; flex: none; border-radius: 7px; border: 1.5px solid var(--ink); background: var(--card); }
+  .lt-checks li.lt-done { color: var(--muted); text-decoration: line-through; }
+  .lt-checks li.lt-done span { background: var(--lime); border-color: var(--ink); }
+  .lt-cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin: 12px 0; }
+  .lt-cal span { aspect-ratio: 1; border-radius: 8px; background: var(--paper); border: 1px solid var(--line); }
+  .lt-cal span.lt-busy { background: var(--ink); border-color: var(--ink); }
+  .lt-cal span.lt-today { background: var(--lime); border-color: var(--ink); }
+  .lt-pulse { display: flex; align-items: flex-end; gap: 5px; height: 64px; margin: 14px 0 4px; }
+  .lt-pulse span { flex: 1; border-radius: 4px; background: var(--ink); animation: lt-pulse 1.8s ease-in-out infinite; }
+  .lt-pulse span:nth-child(1) { height: 40%; } .lt-pulse span:nth-child(2) { height: 70%; animation-delay: .1s; }
+  .lt-pulse span:nth-child(3) { height: 55%; animation-delay: .2s; } .lt-pulse span:nth-child(4) { height: 85%; animation-delay: .3s; }
+  .lt-pulse span:nth-child(5) { height: 60%; animation-delay: .4s; } .lt-pulse span:nth-child(6) { height: 90%; animation-delay: .5s; }
+  .lt-pulse span:nth-child(7) { height: 50%; animation-delay: .6s; } .lt-pulse span:nth-child(8) { height: 75%; animation-delay: .7s; }
+  .lt-pulse span:nth-child(9) { height: 45%; animation-delay: .8s; } .lt-pulse span:nth-child(10) { height: 65%; animation-delay: .9s; }
+  @keyframes lt-pulse { 50% { transform: scaleY(0.55); } }
+
+  /* Sections */
+  .lt-section { padding: 70px 0 10px; }
+  .lt-kicker { font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; font-size: 0.78rem; color: var(--muted); margin: 0 0 14px; }
+  .lt-h2 { font-size: clamp(2.2rem, 4.5vw, 3.6rem); line-height: 1; letter-spacing: -0.04em; font-weight: 700; margin: 0 0 34px; }
+
+  /* Modules bento */
+  .lt-bento { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; }
+  .lt-span4 { grid-column: span 4; } .lt-span3 { grid-column: span 3; } .lt-span2 { grid-column: span 2; }
+  .lt-kanban { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 16px; }
+  .lt-kanban div { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 10px; display: grid; gap: 8px; }
+  .lt-kanban i { display: block; height: 34px; border-radius: 8px; background: var(--card); border: 1px solid var(--line); }
+  .lt-kanban div:nth-child(2) i { background: var(--lime); }
+  .lt-bento img { border-radius: 14px; margin-top: 16px; width: 100%; height: 170px; object-fit: cover; border: 1px solid var(--line); }
+
+  /* Workflows */
+  .lt-flow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .lt-step { font-size: 2.4rem; font-weight: 700; letter-spacing: -0.03em; color: var(--ink) !important; margin: 0 0 8px !important;
+    display: inline-block; background: var(--lime); border: 1.5px solid var(--ink); border-radius: 14px; padding: 2px 16px; }
+  .lt-flow-imgs { margin-top: 14px; }
+  .lt-img-cell { padding: 0; overflow: hidden; }
+  .lt-img-cell img { margin: 0; border: 0; border-radius: var(--radius); height: 230px; }
+
+  /* Tiers */
+  .lt-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; align-items: stretch; }
+  .lt-tier { display: flex; flex-direction: column; position: relative; }
+  .lt-tier h3 { font-size: 1.3rem; }
+  .lt-tier-price { font-size: 2.8rem !important; font-weight: 700; letter-spacing: -0.04em; color: var(--ink) !important; margin: 12px 0 4px !important; }
+  .lt-tier-price span { font-size: 1rem; color: var(--muted); font-weight: 500; letter-spacing: 0; }
+  .lt-tier ul { list-style: none; padding: 0; margin: 16px 0 24px; display: grid; gap: 9px; }
+  .lt-tier li { font-size: 0.95rem; font-weight: 500; padding-left: 26px; position: relative; }
+  .lt-tier li::before { content: ""; position: absolute; left: 0; top: 4px; width: 14px; height: 14px; border-radius: 5px; background: var(--lime); border: 1.5px solid var(--ink); }
+  .lt-tier .lt-btn { margin-top: auto; text-align: center; }
+  .lt-tier-pop { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .lt-tier-pop h3, .lt-tier-pop .lt-tier-price { color: var(--paper) !important; }
+  .lt-tier-pop p { color: #b9b6ae !important; }
+  .lt-tier-pop li { color: var(--paper); }
+  .lt-tier-pop .lt-tier-price span { color: #b9b6ae; }
+  .lt-pop-tag { position: absolute; top: -13px; left: 24px; margin: 0; background: var(--lime); color: var(--ink); border: 1.5px solid var(--ink);
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 999px; padding: 5px 14px; }
+
+  /* Quotes */
+  .lt-quotes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .lt-quote blockquote { margin: 0 0 14px; font-size: 0.98rem; font-weight: 500; color: var(--ink); }
+  .lt-quote figcaption strong { display: block; font-size: 0.9rem; }
+  .lt-quote figcaption span { font-size: 0.82rem; color: var(--muted); }
+
+  /* CTA box */
+  .lt-cta-box { background: var(--ink); color: var(--paper); border-radius: 30px; padding: clamp(36px, 6vw, 72px); text-align: center; }
+  .lt-kicker-light { color: #b9b6ae; }
+  .lt-h2-light { color: var(--paper); }
+  .lt-cta-sub { color: #b9b6ae; max-width: 46ch; margin: 0 auto 30px; }
+  .lt-cta-form { display: flex; gap: 12px; max-width: 520px; margin: 0 auto; }
+  .lt-cta-input { flex: 1; border: 1.5px solid #3a3a3a; background: #242424; color: var(--paper); border-radius: 14px;
+    padding: 13px 18px; font-family: inherit; font-size: 1rem; }
+  .lt-cta-input::placeholder { color: #8a877f; }
+  .lt-cta-input:focus { outline: 3px solid var(--lime); outline-offset: 2px; }
+  .lt-form-note { margin: 18px auto 0; max-width: 520px; background: var(--lime); color: var(--ink); font-weight: 700;
+    border-radius: 14px; padding: 14px 18px; }
+  .lt-contact-row { margin-top: 34px; }
+  .lt-contact-row address { font-style: normal; color: #b9b6ae; font-size: 0.95rem; line-height: 1.7; }
+  .lt-contact-row a { color: var(--paper); font-weight: 600; }
+
+  /* Footer */
+  .lt-footer { padding: 60px 0 90px; }
+  .lt-footer-grid { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 30px; align-items: start; }
+  .lt-footer-grid nav { display: grid; gap: 10px; }
+  .lt-footer-grid nav a { text-decoration: none; font-weight: 500; color: var(--muted); }
+  .lt-footer p { color: var(--muted); }
+  .lt-fine { font-size: 0.85rem; }
+
+  @media (max-width: 960px) {
+    .lt-dash { grid-template-columns: repeat(4, 1fr); }
+    .lt-dash-main { grid-column: span 4; grid-row: auto; }
+    .lt-dash-tasks { grid-column: span 4; grid-row: auto; }
+    .lt-dash-stat { grid-column: span 2; }
+    .lt-dash-cal { grid-column: span 4; }
+    .lt-dash-img, .lt-dash-team { grid-column: span 2; }
+    .lt-bento { grid-template-columns: repeat(2, 1fr); }
+    .lt-span4, .lt-span3, .lt-span2 { grid-column: span 2; }
+    .lt-span4 { grid-column: span 2; }
+    .lt-flow { grid-template-columns: 1fr; }
+    .lt-tiers { grid-template-columns: 1fr; max-width: 460px; margin-inline: auto; }
+    .lt-quotes { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 700px) {
+    .lt-burger { display: block; }
+    .lt-menu { display: none; position: absolute; top: calc(100% + 8px); left: 0; right: 0; flex-direction: column; align-items: stretch;
+      gap: 8px; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px; }
+    .lt-menu.lt-open { display: flex; }
+    .lt-nav-links { flex-direction: column; gap: 2px; }
+    .lt-nav-links a { padding: 12px 14px; border-radius: 12px; }
+    .lt-dash { grid-template-columns: 1fr 1fr; }
+    .lt-dash-main, .lt-dash-tasks { grid-column: span 2; }
+    .lt-bento { grid-template-columns: 1fr; }
+    .lt-span4, .lt-span3, .lt-span2 { grid-column: span 1; }
+    .lt-quotes { grid-template-columns: 1fr; }
+    .lt-cta-form { flex-direction: column; }
+    .lt-footer-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lt *, .lt *::before, .lt *::after { transition: none !important; animation: none !important; }
+    .lt-btn:hover { transform: none; box-shadow: none; }
+  }
+</style>
+
+<script>
+  (function () {
+    var rootEl = document.querySelector(".lt");
+    if (!(rootEl instanceof HTMLElement)) return;
+    const root = rootEl;
+
+    // Mobile menu
+    var burgerEl = root.querySelector(".lt-burger");
+    var menuEl = root.querySelector("#lt-menu");
+    if (burgerEl instanceof HTMLButtonElement && menuEl instanceof HTMLElement) {
+      const burger = burgerEl;
+      const menu = menuEl;
+      burger.addEventListener("click", function () {
+        var open = menu.classList.toggle("lt-open");
+        burger.setAttribute("aria-expanded", open ? "true" : "false");
+        burger.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      });
+      menu.querySelectorAll("a").forEach(function (a) {
+        a.addEventListener("click", function () {
+          menu.classList.remove("lt-open");
+          burger.setAttribute("aria-expanded", "false");
+        });
+      });
+    }
+
+    // Checklist interactivity in the dashboard preview
+    root.querySelectorAll(".lt-checks li").forEach(function (node) {
+      if (!(node instanceof HTMLLIElement)) return;
+      const li = node;
+      li.style.cursor = "pointer";
+      li.addEventListener("click", function () { li.classList.toggle("lt-done"); });
+    });
+
+    // CTA form
+    var formEl = root.querySelector("#lt-form");
+    var noteEl = root.querySelector("#lt-form-note");
+    if (formEl instanceof HTMLFormElement && noteEl instanceof HTMLElement) {
+      const form = formEl;
+      const note = noteEl;
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var emailEl = form.querySelector('[name="email"]');
+        var val = emailEl instanceof HTMLInputElement ? emailEl.value.trim() : "";
+        if (!val || val.indexOf("@") < 0) {
+          note.hidden = false;
+          note.textContent = "Please enter a valid work email to start your trial.";
+          return;
+        }
+        note.hidden = false;
+        note.textContent = "You're in. Check " + val + " for your invite, your grid is waiting.";
+        form.reset();
+      });
+    }
+  })();
+</script>
+</body>
+</html>
