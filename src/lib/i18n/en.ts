@@ -16,9 +16,9 @@ const en = {
         "Tell us about your business and we’ll reply with two demo directions and an honest timeline. Email hello@webao.ca or send the form.",
     },
     demos: {
-      title: "Demo catalog · WEBAO · 12 art-directed site designs",
+      title: "Demo catalog · WEBAO · 15 art-directed site designs",
       description:
-        "Browse 12 art-directed design directions for fictional local businesses. Search by trade, tone, or city. Each demo is a different design, not the same template in 12 colors.",
+        "Browse 15 art-directed design directions for fictional local businesses. Search by trade, tone, or city. Each demo is a different design, not the same template in 15 colors.",
     },
     notfound: {
       title: "Page not found · WEBAO",
@@ -108,7 +108,7 @@ const en = {
         included: "Included every month",
         sendEmail: "Just send an email",
         captionLeft: "DEMO 01 · ELECTRICIAN",
-        captionRight: "One of 12 design directions →",
+        captionRight: "One of 15 design directions →",
       },
     },
     marquee: "Électriciens <i></i> Plombiers <i></i> Couvreurs <i></i> Paysagistes <i></i> Restaurants <i></i> Cliniques",
@@ -180,7 +180,7 @@ const en = {
       sendDetails: "send your details",
     },
     demosPreview: {
-      eyebrow: "The demo catalog · 12 design directions, not 12 color swaps",
+      eyebrow: "The demo catalog · 15 design directions, not 15 color swaps",
       title: "What could <span>yours</span> look like?",
       desc: "Each demo is a fictional business with its own type, palette, layout, and tone. Find the direction that feels like you.",
       browse: "Browse all demos →",
@@ -229,10 +229,10 @@ const en = {
       },
       demos: {
         top: "03 · DEMOS",
-        title: "12 design directions,<br />all fictional.",
+        title: "15 design directions,<br />all fictional.",
         desc: "Search the catalog by trade: electrician, restaurant, clinic. Each demo is an art-directed concept for a fictional business, so you can see the range before you choose.",
         cta: "Browse demo catalog",
-        mini: ["Filterable", "·", "Searchable", "·", "12 styles"],
+        mini: ["Filterable", "·", "Searchable", "·", "15 styles"],
       },
       noteLeft: "MADE IN MONTRÉAL · DESIGNED FOR TRADES, SHOPS & LOCAL BUSINESSES ACROSS CANADA",
       noteRight: "→ Hover, peek, then pick your path.",
@@ -467,7 +467,7 @@ const en = {
       location: "Montréal, Québec",
       locationNote: "Serving businesses across Canada · Mon–Fri, 9–5 Eastern",
       trust: ["◐ A person reads every message", "·", "Your details are used only to reply"],
-      browseText: "Prefer to see the work first? The demo catalog has 12 design directions for fictional businesses across the trades we serve.",
+      browseText: "Prefer to see the work first? The demo catalog has 15 design directions for fictional businesses across the trades we serve.",
       browseCta: "Browse the demos →",
     },
     form: {
@@ -547,14 +547,14 @@ const en = {
       eyebrow: "Demos · Design directions for fictional businesses.",
       title: "What could <span>yours</span> look like?",
       desc: "Each demo is its own design direction with its own type, palette, layout, and voice, created for a fictional local business. Search by trade to feel the range.",
-      countNote: "12 DIRECTIONS · ALL BUSINESSES FICTIONAL · NONE OF THEM ARE WEBAO CLIENTS",
+      countNote: "15 DIRECTIONS · ALL BUSINESSES FICTIONAL · NONE OF THEM ARE WEBAO CLIENTS",
       howTitle: "HOW TO USE THIS CATALOG",
       howSteps: [
         "Filter by trade: electrician, restaurant, clinic…",
         "Search: “editorial”, “Laval”, “bold”…",
         "Tap a demo: see its direction, then tell us which one feels like you.",
       ],
-      pills: ["Searchable", "Filterable", "12 styles"],
+      pills: ["Searchable", "Filterable", "15 styles"],
       fictionalNote: "EVERY BUSINESS HERE IS INVENTED · NAMES, CITIES, AND DETAILS ARE EXAMPLES ONLY",
     },
     searchPlaceholder: "Search demos: try “trades”, “editorial”, “Laval”, “premium”…",
@@ -614,7 +614,7 @@ const en = {
     labels: [
       { t: "Pricing", s: "→ $149/mo · all-in" },
       { t: "Contact", s: "→ hello@webao.ca" },
-      { t: "Demos", s: "→ 12 art directions" },
+      { t: "Demos", s: "→ 15 art directions" },
     ],
   },
 

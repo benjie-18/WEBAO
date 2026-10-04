@@ -19,9 +19,9 @@ const fr = {
         "Parlez-nous de votre entreprise et on vous répond avec deux directions de démo et un échéancier honnête. Écrivez à hello@webao.ca ou utilisez le formulaire.",
     },
     demos: {
-      title: "Catalogue de démos · WEBAO · 12 directions artistiques",
+      title: "Catalogue de démos · WEBAO · 15 directions artistiques",
       description:
-        "Parcourez 12 directions de design pour des entreprises locales fictives. Filtrez par métier, ton ou ville. Chaque démo est un design différent, pas le même modèle en 12 couleurs.",
+        "Parcourez 15 directions de design pour des entreprises locales fictives. Filtrez par métier, ton ou ville. Chaque démo est un design différent, pas le même modèle en 15 couleurs.",
     },
     notfound: {
       title: "Page introuvable · WEBAO",
@@ -111,7 +111,7 @@ const fr = {
         included: "Inclus chaque mois",
         sendEmail: "Il suffit d’envoyer un courriel",
         captionLeft: "DÉMO 01 · ÉLECTRICIEN",
-        captionRight: "Une de 12 directions de design →",
+        captionRight: "Une de 15 directions de design →",
       },
     },
     marquee: "Électriciens <i></i> Plombiers <i></i> Couvreurs <i></i> Paysagistes <i></i> Restaurants <i></i> Cliniques",
@@ -183,7 +183,7 @@ const fr = {
       sendDetails: "envoyez vos infos",
     },
     demosPreview: {
-      eyebrow: "Le catalogue de démos · 12 directions de design, pas 12 variations de couleur",
+      eyebrow: "Le catalogue de démos · 15 directions de design, pas 15 variations de couleur",
       title: "À quoi pourrait ressembler <span>le vôtre</span> ?",
       desc: "Chaque démo est une entreprise fictive avec son propre style, sa palette, sa mise en page et son ton. Trouvez la direction qui vous ressemble.",
       browse: "Parcourir toutes les démos →",
@@ -232,10 +232,10 @@ const fr = {
       },
       demos: {
         top: "03 · DÉMOS",
-        title: "12 directions de design,<br />toutes fictives.",
+        title: "15 directions de design,<br />toutes fictives.",
         desc: "Parcourez le catalogue par métier : électricien, restaurant, clinique. Chaque démo est un concept à direction artistique pour une entreprise fictive, pour voir l’étendue avant de choisir.",
         cta: "Parcourir le catalogue de démos",
-        mini: ["Filtrable", "·", "Recherchable", "·", "12 styles"],
+        mini: ["Filtrable", "·", "Recherchable", "·", "15 styles"],
       },
       noteLeft: "FAIT À MONTRÉAL · CONÇU POUR LES MÉTIERS, COMMERCES ET ENTREPRISES LOCALES PARTOUT AU CANADA",
       noteRight: "→ Survolez, jetez un œil, puis choisissez votre chemin.",
@@ -475,7 +475,7 @@ const fr = {
       locationNote: "Au service des entreprises partout au Canada · Lun–ven, 9 h à 17 h, heure de l’Est",
       trust: ["◐ Une vraie personne lit chaque message", "·", "Vos infos servent juste à vous répondre"],
       browseText:
-        "Vous préférez voir le travail d’abord ? Le catalogue de démos a 12 directions pour des entreprises fictives dans les métiers qu’on dessert.",
+        "Vous préférez voir le travail d’abord ? Le catalogue de démos a 15 directions pour des entreprises fictives dans les métiers qu’on dessert.",
       browseCta: "Parcourir les démos →",
     },
     form: {
@@ -558,14 +558,14 @@ const fr = {
       eyebrow: "Démos · Directions de design pour entreprises fictives.",
       title: "À quoi pourrait ressembler <span>le vôtre</span> ?",
       desc: "Chaque démo a sa propre direction artistique avec sa typo, sa palette, sa mise en page et sa voix, créée pour une entreprise locale fictive. Cherchez par métier pour sentir l’étendue.",
-      countNote: "12 DIRECTIONS · ENTREPRISES TOUTES FICTIVES · AUCUNE N’EST CLIENTE DE WEBAO",
+      countNote: "15 DIRECTIONS · ENTREPRISES TOUTES FICTIVES · AUCUNE N’EST CLIENTE DE WEBAO",
       howTitle: "COMMENT UTILISER CE CATALOGUE",
       howSteps: [
         "Filtrez par métier : électricien, restaurant, clinique…",
         "Cherchez : « éditorial », « Laval », « audacieux »…",
         "Touchez une démo : voyez sa direction, puis dites-nous laquelle vous ressemble.",
       ],
-      pills: ["Recherchable", "Filtrable", "12 styles"],
+      pills: ["Recherchable", "Filtrable", "15 styles"],
       fictionalNote:
         "CHAQUE ENTREPRISE ICI EST INVENTÉE · NOMS, VILLES ET DÉTAILS SONT DES EXEMPLES SEULEMENT",
     },
@@ -627,7 +627,7 @@ const fr = {
     labels: [
       { t: "Tarifs", s: "→ 149 $/mois · tout inclus" },
       { t: "Contact", s: "→ hello@webao.ca" },
-      { t: "Démos", s: "→ 12 directions artistiques" },
+      { t: "Démos", s: "→ 15 directions artistiques" },
     ],
   },
 
