@@ -458,7 +458,7 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
                 io.unobserve(e.target);
               }
             }
-          }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+          }, { threshold: 0.05, rootMargin: '0px 0px 12% 0px' });
           document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
         } else {
           document.querySelectorAll('[data-reveal]').forEach(el => el.classList.add('is-visible'));

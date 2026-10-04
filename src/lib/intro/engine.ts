@@ -404,8 +404,8 @@ export class Debris {
     return this.shards.length;
   }
 
-  resize(w: number, h: number, floorY: number) {
-    this.dpr = Math.min(window.devicePixelRatio || 1, 2);
+  resize(w: number, h: number, floorY: number, dprCap = 2) {
+    this.dpr = Math.min(window.devicePixelRatio || 1, dprCap);
     this.canvas.width = Math.max(1, Math.round(w * this.dpr));
     this.canvas.height = Math.max(1, Math.round(h * this.dpr));
     this.floorY = floorY;

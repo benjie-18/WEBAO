@@ -29,7 +29,7 @@ export function initReveal() {
         }
       }
     },
-    { threshold: 0.12, rootMargin: "0px 0px -6% 0px" }
+    { threshold: 0.05, rootMargin: "0px 0px 12% 0px" }
   );
   els.forEach((el) => io.observe(el));
 }
