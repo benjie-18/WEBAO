@@ -8,8 +8,8 @@ interface Props {
   headerVariant?: "light" | "dark";
 }
 const {
-  title = "WEBAO — Websites that work for small business",
-  description = "WEBAO designs, hosts and maintains custom websites for small businesses. One simple monthly fee. Custom domain, hosting, SEO, analytics and ongoing support included.",
+  title = "WEBAO · Websites that work for small business",
+  description = "WEBAO designs, hosts, and maintains custom websites for small businesses. One simple monthly fee. Domain, hosting, SEO basics, analytics, and ongoing support included.",
   ogImage = "/favicon.svg",
   noIndex = false,
   headerVariant = "light",
@@ -58,15 +58,14 @@ const canonical = Astro.url ? new URL(Astro.url.pathname, Astro.site).toString()
 
     <ClientRouter />
 
-    <!-- JSON-LD: Organization + LocalBusiness -->
+    <!-- JSON-LD: Organization -->
     <script is:inline type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
       "@type": "Organization",
       name: "WEBAO",
       url: "https://webao.ca",
       logo: "https://webao.ca/favicon.svg",
-      sameAs: [],
-      contactPoint: { "@type": "ContactPoint", email: "hello@webao.ca", telephone: "+1-514-555-0192", contactType: "customer service", availableLanguage: ["en","fr"], areaServed: "CA" },
+      contactPoint: { "@type": "ContactPoint", email: "hello@webao.ca", contactType: "customer service", availableLanguage: ["en","fr"], areaServed: "CA" },
       description: description,
     })} />
 
@@ -116,9 +115,9 @@ const canonical = Astro.url ? new URL(Astro.url.pathname, Astro.site).toString()
               <span class="brand-mark" style="background: var(--paper); color: var(--ink);">W</span>
               <span>WEBAO</span>
             </a>
-            <p>Custom websites for small businesses across Canada. One monthly fee. We handle domain, hosting, maintenance, and support — you run your business.</p>
+            <p>Custom websites for small businesses across Canada. One monthly fee. We handle the domain, hosting, maintenance, and support, so you can run your business.</p>
             <div class="cluster" style="margin-top: 20px;">
-              <span class="mono" style="font-size:10px; color: rgba(248,245,239,.5); letter-spacing:.14em;">MONTRÉAL — TORONTO — VANCOUVER</span>
+              <span class="mono" style="font-size:10px; color: rgba(248,245,239,.5); letter-spacing:.14em;">BASED IN MONTRÉAL · SERVING BUSINESSES ACROSS CANADA</span>
             </div>
           </div>
           <div class="footer-col">
@@ -132,23 +131,19 @@ const canonical = Astro.url ? new URL(Astro.url.pathname, Astro.site).toString()
             <h4>Services</h4>
             <a href="/pricing">Custom 3–5 page sites</a>
             <a href="/pricing">Hosting & SSL</a>
-            <a href="/pricing">SEO & Analytics</a>
+            <a href="/pricing">SEO basics & analytics</a>
             <a href="/pricing">Ongoing support</a>
           </div>
           <div class="footer-col">
             <h4>Contact</h4>
             <a href="mailto:hello@webao.ca">hello@webao.ca</a>
-            <a href="tel:+15145550192">+1 (514) 555-0192</a>
-            <span style="display:block; margin-top:10px; color: rgba(248,245,239,.55); font-size:13px; line-height:1.5;">Response within one business day.<br />Mon–Fri 9am–5pm ET.</span>
+            <span style="display:block; margin-top:10px; color: rgba(248,245,239,.55); font-size:13px; line-height:1.5;">We usually reply within one business day.<br />Monday to Friday, 9am to 5pm Eastern.</span>
           </div>
         </div>
         <div class="footer-bottom">
-          <span>© {new Date().getFullYear()} WEBAO Inc. — Crafted for small business.</span>
+          <span>© {new Date().getFullYear()} WEBAO · Made in Montréal.</span>
           <span style="display:flex; gap:16px;">
-            <a href="/contact" style="color: inherit;">Privacy</a>
-            <a href="/contact" style="color: inherit;">Terms</a>
-            <span aria-hidden="true">·</span>
-            <span>Built with Astro × Cloudflare</span>
+            <span>All demo businesses shown on this site are fictional.</span>
           </span>
         </div>
       </div>
@@ -187,7 +182,7 @@ const canonical = Astro.url ? new URL(Astro.url.pathname, Astro.site).toString()
         });
       }
 
-      // Reveal on scroll — respects prefers-reduced-motion
+      // Reveal on scroll, respects prefers-reduced-motion
       const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const isCoarse = window.matchMedia('(pointer: coarse), (hover: none)').matches;
       if (!prefersReduced && 'IntersectionObserver' in window) {
@@ -200,55 +195,6 @@ const canonical = Astro.url ? new URL(Astro.url.pathname, Astro.site).toString()
           }
         }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
         document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
-        // stagger bars in hero
-        const bars = document.querySelectorAll('.bars i');
-        if (bars.length) {
-          const barObserver = new IntersectionObserver((entries) => {
-            entries.forEach(ent => {
-              if (ent.isIntersecting) {
-                bars.forEach((b, idx) => {
-                  (b as HTMLElement).style.transform = 'scaleY(0)';
-                  (b as HTMLElement).style.transformOrigin = 'bottom';
-                  (b as HTMLElement).style.transition = `transform .6s var(--ease-out) ${idx*60}ms`;
-                  requestAnimationFrame(() => {
-                    (b as HTMLElement).style.transform = 'scaleY(1)';
-                  });
-                });
-                barObserver.disconnect();
-              }
-            });
-          }, { threshold: 0.3 });
-          const floatB = document.querySelector('.float-b');
-          if (floatB) barObserver.observe(floatB);
-        }
-        // animated stat counters — 48h, 12+, 80+
-        const stats = document.querySelectorAll('.stat-n');
-        if (stats.length) {
-          const statObserver = new IntersectionObserver((entries) => {
-            entries.forEach(ent => {
-              if (ent.isIntersecting) {
-                const el = ent.target as HTMLElement;
-                const raw = el.textContent || '';
-                const m = raw.match(/(\d+)/);
-                if (!m) { statObserver.unobserve(el); return; }
-                const target = parseInt(m[1], 10);
-                const suffix = raw.replace(m[1], '');
-                const start = performance.now();
-                const duration = 900;
-                const step = (now: number) => {
-                  const p = Math.min((now - start) / duration, 1);
-                  const eased = 1 - Math.pow(1 - p, 3);
-                  el.textContent = String(Math.round(eased * target)) + suffix;
-                  if (p < 1) requestAnimationFrame(step);
-                  else el.textContent = target + suffix;
-                };
-                requestAnimationFrame(step);
-                statObserver.unobserve(el);
-              }
-            });
-          }, { threshold: 0.6 });
-          stats.forEach(s => statObserver.observe(s));
-        }
       } else {
         document.querySelectorAll('[data-reveal]').forEach(el => el.classList.add('is-visible'));
       }
@@ -280,7 +226,7 @@ const canonical = Astro.url ? new URL(Astro.url.pathname, Astro.site).toString()
         onScroll();
       }
 
-      // Magnetic buttons — desktop only, respects reduced motion
+      // Magnetic buttons: desktop only, respects reduced motion
       if (!prefersReduced && !isCoarse && 'ontouchstart' in window === false) {
         const magnetics = document.querySelectorAll('.btn--primary, .btn--dark, .cta .btn');
         magnetics.forEach(btn => {

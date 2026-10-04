@@ -2,7 +2,7 @@
  * WEBAO Motion Architecture
  * - All animations are CSS-first (transform/opacity) for 60fps.
  * - JS only observes visibility via IntersectionObserver and toggles .is-visible.
- * - Respects prefers-reduced-motion: reduce — JS bails and CSS disables transitions.
+ * - Respects prefers-reduced-motion: reduce. JS bails and CSS disables transitions.
  * - No heavy libraries (no GSAP, Framer). Small, auditable, performant.
  *
  * Usage: add `data-reveal` (or data-reveal="fade|scale") to any element.

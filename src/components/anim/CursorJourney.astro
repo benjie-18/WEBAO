@@ -1,5 +1,5 @@
 ---
-// CursorJourney — guided animated cursor through agency cards
+// CursorJourney: guided animated cursor through agency cards
 // Respects prefers-reduced-motion, hover capability, and pointer type.
 // Performance: transform3d + will-change, rAF, no layout thrash.
 ---
@@ -15,7 +15,7 @@
     <span class="journey-cursor-label mono" data-cursor-label>Explore</span>
     <span class="journey-cursor-sub mono" data-cursor-sub>→ hover to peek</span>
   </div>
-  <div class="journey-hint mono" data-journey-hint>✦ Guided tour — watching cursor explore the studio doors</div>
+  <div class="journey-hint mono" data-journey-hint>✦ Guided tour: watch the cursor explore the studio doors</div>
 </div>
 
 <style>
@@ -172,7 +172,7 @@
   const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
   const isSmall = window.innerWidth <= 960;
   if (prefersReduced || isTouch || isSmall) {
-    // do nothing — journey disabled
+    // do nothing, journey disabled
   } else {
     const journey = document.querySelector('[data-journey]') as HTMLElement | null;
     const cursor = document.querySelector('[data-cursor]') as HTMLElement | null;
@@ -279,7 +279,7 @@
         }
       }
 
-      // Manual mouse follow with lerp (magnetic) — pauses autoplay
+      // Manual mouse follow with lerp (magnetic), pauses autoplay
       let manualTimer: number | null = null;
       function lerp(a: number, b: number, t: number) { return a + (b - a) * t; }
       function loop() {
