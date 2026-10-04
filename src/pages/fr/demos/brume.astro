@@ -1,14 +1,17 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
 
-// Démo : Brume Parfums, maison de parfum fictive, Grasse.
-// Direction artistique autonome. Éthéré : brume, orbes de lumière, pétales flottants.
+// Démo : Brume Parfums · maison de parfum fictive, Grasse.
+// Reconstruite comme un VOYAGE OLFACTIF : un récit linéaire à travers l'aube,
+// le jour, le crépuscule et la nuit. Ni cartes, ni grille. Chaque parfum est
+// un chapitre plein écran avec un rail de chapitres épinglé qui suit l'heure
+// du jour. Direction artistique autonome.
 const IMG = {
-  aube: "https://images.unsplash.com/photo-1541643600914-78b084683601?q=80&w=900&auto=format&fit=crop",
-  voile: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=900&auto=format&fit=crop",
-  heure: "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=900&auto=format&fit=crop",
-  nuit: "https://images.unsplash.com/photo-1594035910387-fea47794261f?q=80&w=900&auto=format&fit=crop",
-  flowers: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?q=80&w=1400&auto=format&fit=crop",
+  aube: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1600&auto=format&fit=crop",
+  voile: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1600&auto=format&fit=crop",
+  heure: "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1600&auto=format&fit=crop",
+  nuit: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=1600&auto=format&fit=crop",
+  flowers: "https://images.unsplash.com/photo-1522748906645-95d8adfd52c7?q=80&w=1400&auto=format&fit=crop",
 };
 ---
 
@@ -17,562 +20,240 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Brume Parfums : Des parfums comme la météo</title>
-  <meta name="description" content="Brume Parfums est une maison de parfum fictive à Grasse. Quatre parfums éthérés composés comme des matins : brume, lumière, pétales." />
+  <title>Brume · Une journée en quatre parfums</title>
+  <meta name="description" content="Brume Parfums : suivez une journée de l'aube à la nuit à travers quatre parfums. Maison de parfum fictive." />
   <meta name="robots" content="noindex" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
 </head>
 <body class="brm">
 
-  <!-- NAV -->
-  <header class="brm-navwrap">
-    <nav class="brm-nav" aria-label="Principal">
-      <a class="brm-logo" href="#top" aria-label="Brume Parfums, accueil">BRUME</a>
-      <button class="brm-burger" aria-label="Ouvrir le menu" aria-expanded="false"><span></span><span></span></button>
-      <div class="brm-nav-links">
-        <a href="#collection">Collection</a>
-        <a href="#notes">Notes</a>
-        <a href="#rituals">Rituels</a>
-        <a href="#discovery">Découverte</a>
-        <a class="brm-nav-cta" href="#contact">Nous écrire</a>
-      </div>
+  <header class="brm-top">
+    <a class="brm-logo" href="#prologue">Brume</a>
+    <nav class="brm-links" aria-label="Principale">
+      <a href="#aube">Aube</a>
+      <a href="#voile">Jour</a>
+      <a href="#heure">Crépuscule</a>
+      <a href="#nuit">Nuit</a>
     </nav>
+    <a class="brm-btn" href="#discovery">Coffret découverte · $45</a>
   </header>
 
-  <main id="top">
-    <!-- HERO : brume lumineuse -->
-    <section class="brm-hero">
-      <div class="brm-mist" aria-hidden="true"></div>
-      <div class="brm-orb brm-orb-1" aria-hidden="true"></div>
-      <div class="brm-orb brm-orb-2" aria-hidden="true"></div>
-      <div class="brm-orb brm-orb-3" aria-hidden="true"></div>
-      <div class="brm-orb brm-orb-4" aria-hidden="true"></div>
-      <div class="brm-petal brm-petal-1" aria-hidden="true"></div>
-      <div class="brm-petal brm-petal-2" aria-hidden="true"></div>
-      <div class="brm-petal brm-petal-3" aria-hidden="true"></div>
-      <div class="brm-petal brm-petal-4" aria-hidden="true"></div>
-      <div class="brm-petal brm-petal-5" aria-hidden="true"></div>
-      <div class="brm-petal brm-petal-6" aria-hidden="true"></div>
-      <div class="brm-hero-in">
-        <p class="brm-eyebrow">Maison de parfum · Grasse · depuis 2019</p>
-        <h1 class="brm-h1">Portez<br /><em>la météo.</em></h1>
-        <p class="brm-lede">Quatre parfums composés comme des matins : la bergamote à la première lumière, l'iris dans le brouillard, la figue au crépuscule, le jasmin après minuit. Rien de bruyant. Tout s'attarde.</p>
-        <div class="brm-hero-cta">
-          <a class="brm-btn brm-btn-gold" href="#collection">Découvrir la collection</a>
-          <a class="brm-btn brm-btn-ghost" href="#discovery">Essayer le coffret découverte</a>
-        </div>
-      </div>
-      <div class="brm-scroll" aria-hidden="true"><span></span></div>
+  <!-- Sticky chapter rail: the time of day, always present -->
+  <nav class="brm-rail" aria-label="Chapitres">
+    <a href="#aube" data-chapter="aube"><span class="brm-rail-time">05:47</span><span class="brm-rail-name">Aube</span></a>
+    <a href="#voile" data-chapter="voile"><span class="brm-rail-time">12:30</span><span class="brm-rail-name">Voile</span></a>
+    <a href="#heure" data-chapter="heure"><span class="brm-rail-time">19:05</span><span class="brm-rail-name">L'Heure Bleue</span></a>
+    <a href="#nuit" data-chapter="nuit"><span class="brm-rail-time">23:41</span><span class="brm-rail-name">Nuit</span></a>
+  </nav>
+
+  <main>
+    <!-- PROLOGUE: a breath, not a hero -->
+    <section class="brm-prologue" id="prologue">
+      <p class="brm-prologue-kicker">Brume Parfums · Grasse</p>
+      <h1 class="brm-prologue-title">Une journée,<br /><em>quatre parfums.</em></h1>
+      <p class="brm-prologue-sub">Portez la météo. Défilez lentement, de la première à la dernière lumière.</p>
+      <a class="brm-scrollcue" href="#aube" aria-label="Commencer le voyage">↓</a>
     </section>
 
-    <!-- COLLECTION -->
-    <section class="brm-section" id="collection">
-      <div class="brm-wrap">
-        <p class="brm-kicker">La collection</p>
-        <h2 class="brm-h2">Quatre <em>atmosphères</em></h2>
-        <p class="brm-sec-lede">Chaque parfum est une eau de parfum de 50 ml, assemblée à Grasse et reposée six semaines avant la mise en flacon.</p>
-        <div class="brm-grid">
-          <article class="brm-card">
-            <div class="brm-card-img"><img src={IMG.aube} alt="Flacon d'Aube Claire dans une douce lumière du matin" loading="lazy" /></div>
-            <div class="brm-card-in">
-              <p class="brm-card-no">N° 1 · Aube</p>
-              <h3>Aube Claire</h3>
-              <p class="brm-card-notes">Bergamote de Calabre · thé blanc · musc rosée</p>
-              <p>La première heure du jour, en flacon. Lumineux, transparent, doucement optimiste.</p>
-              <div class="brm-card-foot"><span class="brm-price">165 $</span><button class="brm-add" type="button">Ajouter au rituel</button></div>
-            </div>
-          </article>
-          <article class="brm-card">
-            <div class="brm-card-img"><img src={IMG.voile} alt="Brouillard dérivant dans une forêt pâle, l'ambiance de Voile de Brume" loading="lazy" /></div>
-            <div class="brm-card-in">
-              <p class="brm-card-no">N° 2 · Brume · signature</p>
-              <h3>Voile de Brume</h3>
-              <p class="brm-card-notes">Beurre d'iris · graine d'ambrette · pluie sur la pierre</p>
-              <p>Notre signature. Un iris poudré enveloppé de vapeur fraîche, comme traverser le brouillard en manteau de soie.</p>
-              <div class="brm-card-foot"><span class="brm-price">180 $</span><button class="brm-add" type="button">Ajouter au rituel</button></div>
-            </div>
-          </article>
-          <article class="brm-card">
-            <div class="brm-card-img"><img src={IMG.heure} alt="Crépuscule étoilé en montagne, l'ambiance d'Heure Bleue" loading="lazy" /></div>
-            <div class="brm-card-in">
-              <p class="brm-card-no">N° 3 · Crépuscule</p>
-              <h3>Heure Bleue</h3>
-              <p class="brm-card-notes">Figue sauvage · miel de lavande · feuille de violette</p>
-              <p>L'heure bleue avant le souper. Vert, doré, un peu mélancolique, de la plus belle façon.</p>
-              <div class="brm-card-foot"><span class="brm-price">175 $</span><button class="brm-add" type="button">Ajouter au rituel</button></div>
-            </div>
-          </article>
-          <article class="brm-card">
-            <div class="brm-card-img"><img src={IMG.nuit} alt="Flacon de Nuit Nacrée dans un halo rosé" loading="lazy" /></div>
-            <div class="brm-card-in">
-              <p class="brm-card-no">N° 4 · Nuit</p>
-              <h3>Nuit Nacrée</h3>
-              <p class="brm-card-notes">Jasmin de nuit · santal · ambre blanc</p>
-              <p>Nacré et chaleureux. Le parfum de rentrer un peu trop tard, exprès.</p>
-              <div class="brm-card-foot"><span class="brm-price">190 $</span><button class="brm-add" type="button">Ajouter au rituel</button></div>
-            </div>
-          </article>
-        </div>
+    <!-- CHAPTER 1: DAWN -->
+    <section class="brm-chapter brm-dawn" id="aube" data-chapter="aube" aria-labelledby="t-aube">
+      <div class="brm-chapter-bg"><img src={IMG.aube} alt="Première lumière sur un champ brumeux à l'aube" loading="eager" /></div>
+      <div class="brm-chapter-in">
+        <p class="brm-time">05:47 · Chapitre un</p>
+        <h2 class="brm-name" id="t-aube">Aube</h2>
+        <p class="brm-line">Première lumière à travers des rideaux de lin. La journée n'a encore rien décidé.</p>
+        <ul class="brm-notes">
+          <li><span>Tête</span>Bergamote, thé blanc</li>
+          <li><span>Cœur</span>Eau de fleur d'oranger</li>
+          <li><span>Fond</span>Pierre mouillée, musc pâle</li>
+        </ul>
+        <div class="brm-buy"><p class="brm-price">$180 · 50 ml</p><a class="brm-btn" href="#discovery">L'essayer dans le coffret</a></div>
       </div>
     </section>
 
-    <!-- NOTES -->
-    <section class="brm-notes" id="notes">
-      <div class="brm-orb brm-orb-5" aria-hidden="true"></div>
-      <div class="brm-wrap brm-notes-in">
-        <p class="brm-kicker">Notes</p>
-        <h2 class="brm-h2">Ce qui flotte <em>à l'intérieur</em></h2>
-        <p class="brm-sec-lede">Trente-deux matières premières, la plupart venues d'à moins de cent kilomètres de notre atelier. Voici celles que vous remarquerez vraiment.</p>
-        <div class="brm-chips" aria-label="Notes principales des parfums">
-          <span class="brm-chip">Bergamote de Calabre</span>
-          <span class="brm-chip">thé blanc</span>
-          <span class="brm-chip">beurre d'iris</span>
-          <span class="brm-chip">graine d'ambrette</span>
-          <span class="brm-chip">pluie sur la pierre</span>
-          <span class="brm-chip">figue sauvage</span>
-          <span class="brm-chip">miel de lavande</span>
-          <span class="brm-chip">feuille de violette</span>
-          <span class="brm-chip">jasmin de nuit</span>
-          <span class="brm-chip">santal</span>
-          <span class="brm-chip">ambre blanc</span>
-          <span class="brm-chip">musc rosée</span>
-        </div>
-        <figure class="brm-notes-img">
-          <img src={IMG.flowers} alt="Fleurs roses douces dans la lumière du matin" loading="lazy" />
-          <figcaption>Les pétales de la macération du N° 4, cueillis avant le lever du soleil.</figcaption>
-        </figure>
+    <!-- CHAPTER 2: DAY -->
+    <section class="brm-chapter brm-day" id="voile" data-chapter="voile" aria-labelledby="t-voile">
+      <div class="brm-chapter-bg"><img src={IMG.voile} alt="Douce lumière du jour sur des collines brumeuses" loading="lazy" /></div>
+      <div class="brm-chapter-in">
+        <p class="brm-time">12:30 · Chapitre deux</p>
+        <h2 class="brm-name" id="t-voile">Voile</h2>
+        <p class="brm-line">Midi, diaphane comme un rideau. Présent, mais jamais bruyant.</p>
+        <ul class="brm-notes">
+          <li><span>Tête</span>Néroli, figue verte</li>
+          <li><span>Cœur</span>Fleur d'oranger, sel de mer</li>
+          <li><span>Fond</span>Bois flotté, peau propre</li>
+        </ul>
+        <div class="brm-buy"><p class="brm-price">$165 · 50 ml</p><a class="brm-btn" href="#discovery">L'essayer dans le coffret</a></div>
       </div>
     </section>
 
-    <!-- RITUELS -->
-    <section class="brm-section" id="rituals">
-      <div class="brm-wrap">
-        <p class="brm-kicker">Rituels</p>
-        <h2 class="brm-h2">Comment <em>disparaître</em> avec grâce</h2>
-        <ol class="brm-rituals">
-          <li>
-            <span class="brm-ritual-no" aria-hidden="true">01</span>
-            <div><h3>Oindre</h3><p>Deux gouttes sur chaque point de pulsation à l'aube, avant que le jour ait des opinions. Laissez la peau décider, pas le papier.</p></div>
-          </li>
-          <li>
-            <span class="brm-ritual-no" aria-hidden="true">02</span>
-            <div><h3>Superposer</h3><p>Vaporisez d'abord sur la peau, puis dans les pointes des cheveux. Le parfum devrait arriver un instant avant vous.</p></div>
-          </li>
-          <li>
-            <span class="brm-ritual-no" aria-hidden="true">03</span>
-            <div><h3>S'attarder</h3><p>Renouvelez quand la lumière change. Le parfum est une météo : il a le droit de traverser la journée avec vous.</p></div>
-          </li>
-        </ol>
+    <!-- CHAPTER 3: DUSK -->
+    <section class="brm-chapter brm-dusk" id="heure" data-chapter="heure" aria-labelledby="t-heure">
+      <div class="brm-chapter-bg"><img src={IMG.heure} alt="Montagnes au crépuscule sous un ciel violet" loading="lazy" /></div>
+      <div class="brm-chapter-in">
+        <p class="brm-time">19:05 · Chapitre trois</p>
+        <h2 class="brm-name" id="t-heure">L'Heure Bleue</h2>
+        <p class="brm-line">L'heure bleue, quand la ville s'adoucit et que tout semble possible.</p>
+        <ul class="brm-notes">
+          <li><span>Tête</span>Feuille de violette, poivre rose</li>
+          <li><span>Cœur</span>Iris, peau de prune</li>
+          <li><span>Fond</span>Cèdre, ambre gris</li>
+        </ul>
+        <div class="brm-buy"><p class="brm-price">$195 · 50 ml</p><a class="brm-btn" href="#discovery">L'essayer dans le coffret</a></div>
       </div>
     </section>
 
-    <!-- ÉCHOS -->
-    <section class="brm-words">
-      <div class="brm-wrap">
-        <p class="brm-kicker">On en parle tout bas</p>
-        <div class="brm-quotes">
-          <blockquote>
-            <p>« Le plus proche d'embouteiller le brouillard. Je ne porte rien d'autre depuis un an. »</p>
-            <cite>Hélène V., Lyon</cite>
-          </blockquote>
-          <blockquote>
-            <p>« Aube Claire sent la minute exacte où le jour vous pardonne. »</p>
-            <cite>Journal Lueur, presse fictive</cite>
-          </blockquote>
-          <blockquote>
-            <p>« J'ai acheté le coffret découverte pour ma sœur et j'ai gardé les six fioles. »</p>
-            <cite>Daniel O., Montréal</cite>
-          </blockquote>
-        </div>
+    <!-- CHAPTER 4: NIGHT -->
+    <section class="brm-chapter brm-night" id="nuit" data-chapter="nuit" aria-labelledby="t-nuit">
+      <div class="brm-chapter-bg"><img src={IMG.nuit} alt="Ciel nocturne au-dessus d'une eau sombre" loading="lazy" /></div>
+      <div class="brm-chapter-in">
+        <p class="brm-time">23:41 · Chapitre quatre</p>
+        <h2 class="brm-name" id="t-nuit">Nuit</h2>
+        <p class="brm-line">Après minuit, rien à prouver. Fumée, épices, et le long chemin du retour.</p>
+        <ul class="brm-notes">
+          <li><span>Tête</span>Poivre noir, cardamome</li>
+          <li><span>Cœur</span>Rose sombre, encens</li>
+          <li><span>Fond</span>Oud, ambre, vétiver</li>
+        </ul>
+        <div class="brm-buy"><p class="brm-price">$220 · 50 ml</p><a class="brm-btn" href="#discovery">L'essayer dans le coffret</a></div>
       </div>
     </section>
 
-    <!-- DÉCOUVERTE / TARIFS -->
-    <section class="brm-section" id="discovery">
-      <div class="brm-wrap">
-        <p class="brm-kicker">Commencer en douceur</p>
-        <h2 class="brm-h2">Le coffret <em>découverte</em></h2>
-        <p class="brm-sec-lede">Vous ne savez pas quelle météo est la vôtre? Commencez par le coffret. Les 48 $ sont crédités sur tout flacon.</p>
-        <div class="brm-plans">
-          <article class="brm-plan">
-            <h3>Coffret Découverte</h3>
-            <p class="brm-plan-price">48 $</p>
-            <p class="brm-plan-sub">Six fioles de 2 ml, une carte rituel.</p>
-            <ul>
-              <li>Les quatre atmosphères, plus deux extras de saison</li>
-              <li>Notes de dégustation manuscrites</li>
-              <li>Crédité sur l'achat d'un flacon</li>
-            </ul>
-            <a class="brm-btn brm-btn-ghost" href="#contact">Commander le coffret</a>
-          </article>
-          <article class="brm-plan brm-plan-hot">
-            <p class="brm-plan-flag">Le plus aimé</p>
-            <h3>Signature 50 ml</h3>
-            <p class="brm-plan-price">175 $</p>
-            <p class="brm-plan-sub">Votre météo, en verre.</p>
-            <ul>
-              <li>Le parfum de votre choix, flacon 50 ml</li>
-              <li>Gravure de vos initiales offerte</li>
-              <li>Recharges à moitié prix, pour toujours</li>
-            </ul>
-            <a class="brm-btn brm-btn-gold" href="#contact">Choisir votre parfum</a>
-          </article>
-          <article class="brm-plan">
-            <h3>Sur mesure</h3>
-            <p class="brm-plan-price">420 $</p>
-            <p class="brm-plan-sub">Un parfum que vous seule portez.</p>
-            <ul>
-              <li>Consultation privée à Grasse ou en vidéo</li>
-              <li>Trois rondes de modifications</li>
-              <li>Votre formule, conservée au dossier</li>
-            </ul>
-            <a class="brm-btn brm-btn-ghost" href="#contact">Commencer le sur mesure</a>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section class="brm-contact" id="contact">
-      <div class="brm-orb brm-orb-6" aria-hidden="true"></div>
-      <div class="brm-wrap brm-contact-in">
+    <!-- EPILOGUE: discovery set + atelier -->
+    <section class="brm-epilogue" id="discovery" aria-labelledby="discovery-title">
+      <div class="brm-epi-in">
+        <figure class="brm-epi-img"><img src={IMG.flowers} alt="Fleurs blanches dans la douce lumière du matin" loading="lazy" /></figure>
         <div>
-          <p class="brm-kicker">Correspondance</p>
-          <h2 class="brm-h2">Écrire à <em>l'atelier</em></h2>
-          <p class="brm-sec-lede">Des questions sur les notes, la superposition ou une commande sur mesure. Nous répondons à chaque lettre en deux jours, avec une mouillette parfumée.</p>
-          <p class="brm-contact-lines">12, rue des Brumes, Grasse (fictif)<br /><a href="tel:+33455550198">+33 4 55 55 01 98</a><br /><a href="mailto:bonjour@brume-parfums-demo.fr">bonjour@brume-parfums-demo.fr</a></p>
+          <h2 class="brm-epi-title" id="discovery-title">Le coffret découverte</h2>
+          <p class="brm-epi-sub">Les quatre chapitres, 4 × 2 ml. <strong>$45</strong>, crédités sur l'achat d'un flacon.</p>
+          <form class="brm-form" id="brm-form">
+            <label>Nom<input type="text" name="name" required autocomplete="name" /></label>
+            <label>Courriel<input type="email" name="email" required autocomplete="email" /></label>
+            <label>Un mot pour l'atelier<textarea name="message" rows="3" placeholder="Quel chapitre vous intrigue le plus ?"></textarea></label>
+            <button class="brm-btn brm-btn-full" type="submit">Commander le coffret découverte</button>
+            <p class="brm-form-done" id="brm-done" hidden>Merci. L'atelier vous écrira d'ici deux jours.</p>
+          </form>
         </div>
-        <form class="brm-form" id="brm-form" novalidate>
-          <h3>Une courte lettre</h3>
-          <label>Nom<input type="text" name="name" required placeholder="Camille Roy" /></label>
-          <label>Courriel<input type="email" name="email" required placeholder="camille@exemple.com" /></label>
-          <label>Intérêt
-            <select name="interest">
-              <option>Le coffret découverte</option>
-              <option>Un flacon</option>
-              <option>Une commande sur mesure</option>
-              <option>Juste dire bonjour</option>
-            </select>
-          </label>
-          <label>Message<textarea name="message" rows="4" placeholder="J'ai adoré le brouillard du N° 2..."></textarea></label>
-          <button class="brm-btn brm-btn-gold" type="submit">Envoyer la lettre</button>
-          <p class="brm-form-note" role="status" aria-live="polite"></p>
-        </form>
       </div>
     </section>
   </main>
 
-  <footer class="brm-footer">
-    <p class="brm-footer-giant" aria-hidden="true">BRUME</p>
-    <div class="brm-wrap brm-footer-in">
-      <p>© 2026 Brume Parfums. Démo fictive. Aucune brume réelle n'a été embouteillée.</p>
-      <p>12, rue des Brumes, Grasse (fictif) · <a href="tel:+33455550198">+33 4 55 55 01 98</a> · <a href="mailto:bonjour@brume-parfums-demo.fr">bonjour@brume-parfums-demo.fr</a></p>
-    </div>
+  <footer class="brm-foot">
+    <p>Brume Parfums · site de démonstration fictif · Grasse</p>
+    <p>atelier@brume.example</p>
   </footer>
 
   <EscapeHatch locale="fr" />
 
+  <style>
+    .brm { --ink: #f4f1ea; --mut: rgba(244,241,234,.66); --serif: "Cormorant Garamond", serif; --sans: "Jost", system-ui, sans-serif; background: #101418; color: var(--ink); font-family: var(--sans); margin: 0; min-height: 100vh; font-weight: 300; }
+    .brm * { box-sizing: border-box; }
+    .brm img { display: block; max-width: 100%; }
+    .brm em { font-style: italic; }
+    .brm .brm-btn { display: inline-block; font-family: var(--sans); font-weight: 400; letter-spacing: .14em; text-transform: uppercase; font-size: 12px; color: var(--ink); text-decoration: none; border: 1px solid rgba(244,241,234,.45); padding: 13px 26px; border-radius: 999px; cursor: pointer; background: transparent; transition: background .3s, color .3s; }
+    .brm .brm-btn:hover { background: var(--ink); color: #101418; }
+    .brm .brm-btn-full { width: 100%; text-align: center; }
+
+    .brm-top { position: fixed; top: 0; left: 0; right: 0; z-index: 60; display: flex; align-items: center; gap: 26px; padding: 18px 34px; mix-blend-mode: difference; }
+    .brm-logo { font-family: var(--serif); font-size: 26px; font-style: italic; color: #fff; text-decoration: none; margin-right: auto; }
+    .brm-links { display: flex; gap: 24px; }
+    .brm-links a { color: #fff; text-decoration: none; font-size: 13px; letter-spacing: .18em; text-transform: uppercase; opacity: .8; }
+    .brm-links a:hover { opacity: 1; }
+    .brm-top .brm-btn { border-color: rgba(255,255,255,.5); color: #fff; padding: 10px 20px; }
+    .brm-top .brm-btn:hover { background: #fff; color: #000; }
+
+    /* chapter rail */
+    .brm-rail { position: fixed; z-index: 60; left: 30px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 4px; mix-blend-mode: difference; }
+    .brm-rail a { display: flex; align-items: baseline; gap: 12px; text-decoration: none; color: #fff; opacity: .35; padding: 8px 0; transition: opacity .3s; }
+    .brm-rail a.is-active { opacity: 1; }
+    .brm-rail-time { font-size: 12px; letter-spacing: .12em; font-variant-numeric: tabular-nums; }
+    .brm-rail-name { font-family: var(--serif); font-style: italic; font-size: 17px; }
+
+    /* prologue: a breath */
+    .brm-prologue { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 120px 24px 60px; background: radial-gradient(ellipse 80% 60% at 50% 110%, #2a3440 0%, #101418 65%); }
+    .brm-prologue-kicker { letter-spacing: .3em; text-transform: uppercase; font-size: 12px; color: var(--mut); margin: 0 0 26px; }
+    .brm-prologue-title { font-family: var(--serif); font-weight: 500; font-size: clamp(54px, 10vw, 120px); line-height: 1; margin: 0; letter-spacing: -0.01em; }
+    .brm-prologue-sub { color: var(--mut); font-size: 18px; margin: 26px 0 0; max-width: 40ch; line-height: 1.7; }
+    .brm-scrollcue { margin-top: 60px; color: var(--ink); text-decoration: none; font-size: 26px; opacity: .6; animation: brm-bob 2.4s ease-in-out infinite; }
+    @keyframes brm-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(10px); } }
+
+    /* chapters: full-bleed scenes */
+    .brm-chapter { position: relative; min-height: 108vh; display: flex; align-items: flex-end; overflow: hidden; }
+    .brm-chapter-bg { position: absolute; inset: 0; }
+    .brm-chapter-bg img { width: 100%; height: 100%; object-fit: cover; }
+    .brm-chapter-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(8,10,14,.88) 0%, rgba(8,10,14,.25) 55%, rgba(8,10,14,.15) 100%); }
+    .brm-dawn .brm-chapter-bg::after { background: linear-gradient(to top, rgba(30,20,16,.9) 0%, rgba(30,20,16,.2) 60%, rgba(30,20,16,.1) 100%); }
+    .brm-day .brm-chapter-bg::after { background: linear-gradient(to top, rgba(14,24,30,.9) 0%, rgba(14,24,30,.2) 60%, rgba(14,24,30,.1) 100%); }
+    .brm-dusk .brm-chapter-bg::after { background: linear-gradient(to top, rgba(26,16,34,.9) 0%, rgba(26,16,34,.22) 60%, rgba(26,16,34,.12) 100%); }
+    .brm-chapter-in { position: relative; z-index: 1; width: 100%; max-width: 900px; margin: 0 auto; padding: 40px 90px 90px 110px; }
+    .brm-time { letter-spacing: .28em; text-transform: uppercase; font-size: 12px; color: var(--mut); margin: 0 0 14px; font-variant-numeric: tabular-nums; }
+    .brm-name { font-family: var(--serif); font-style: italic; font-weight: 500; font-size: clamp(64px, 12vw, 150px); line-height: .9; margin: 0; letter-spacing: -0.015em; text-shadow: 0 4px 40px rgba(0,0,0,.4); }
+    .brm-line { font-family: var(--serif); font-size: clamp(20px, 3vw, 27px); font-style: italic; color: var(--ink); max-width: 34ch; line-height: 1.5; margin: 22px 0 0; }
+    .brm-notes { list-style: none; margin: 30px 0 0; padding: 0; display: grid; gap: 10px; max-width: 420px; }
+    .brm-notes li { display: grid; grid-template-columns: 64px 1fr; gap: 14px; font-size: 16px; padding: 10px 0; border-bottom: 1px solid rgba(244,241,234,.16); }
+    .brm-notes li span { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--mut); padding-top: 3px; }
+    .brm-buy { display: flex; align-items: center; gap: 22px; margin-top: 30px; flex-wrap: wrap; }
+    .brm-price { font-family: var(--serif); font-size: 24px; font-style: italic; margin: 0; }
+
+    /* epilogue */
+    .brm-epilogue { padding: 120px 24px; background: #0c0f13; }
+    .brm-epi-in { max-width: 1020px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.1fr; gap: 60px; align-items: center; }
+    .brm-epi-img img { width: 100%; height: 520px; object-fit: cover; border-radius: 200px 200px 12px 12px; }
+    .brm-epi-title { font-family: var(--serif); font-style: italic; font-weight: 500; font-size: clamp(38px, 5vw, 58px); margin: 0 0 14px; }
+    .brm-epi-sub { color: var(--mut); font-size: 17px; line-height: 1.7; margin: 0 0 26px; }
+    .brm-epi-sub strong { color: var(--ink); font-weight: 500; }
+    .brm-form { display: grid; gap: 14px; }
+    .brm-form label { display: grid; gap: 7px; font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: var(--mut); }
+    .brm-form input, .brm-form textarea { font-family: var(--sans); font-weight: 300; font-size: 16px; padding: 13px 14px; border-radius: 4px; border: 1px solid rgba(244,241,234,.25); background: rgba(244,241,234,.06); color: var(--ink); width: 100%; }
+    .brm-form input:focus, .brm-form textarea:focus { outline: 1px solid var(--ink); outline-offset: 2px; }
+    .brm-form-done { color: var(--ink); font-style: italic; font-family: var(--serif); font-size: 19px; margin: 4px 0 0; }
+
+    .brm-foot { padding: 30px 24px 70px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; background: #0c0f13; }
+    .brm-foot p { margin: 0; font-size: 13px; letter-spacing: .1em; color: var(--mut); }
+
+    @media (max-width: 900px) {
+      .brm-links { display: none; }
+      .brm-rail { left: 0; right: 0; top: auto; bottom: 0; transform: none; flex-direction: row; justify-content: center; background: rgba(10,12,16,.72); backdrop-filter: blur(10px); mix-blend-mode: normal; padding: 6px 4px; gap: 2px; }
+      .brm-rail a { flex-direction: column; align-items: center; gap: 2px; padding: 8px 10px; }
+      .brm-rail-time { font-size: 10px; }
+      .brm-rail-name { font-size: 13px; }
+      .brm-chapter-in { padding: 30px 22px 110px; }
+      .brm-epi-in { grid-template-columns: 1fr; gap: 36px; }
+      .brm-epi-img img { height: 340px; }
+      .brm-top { padding: 14px 18px; gap: 14px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .brm * { animation: none !important; transition: none !important; }
+    }
+  </style>
+
   <script>
     (function () {
-      var btn = document.querySelector('.brm-burger');
-      btn?.addEventListener('click', function () {
-        var open = btn?.getAttribute('aria-expanded') === 'true';
-        btn?.setAttribute('aria-expanded', String(!open));
-        btn?.setAttribute('aria-label', open ? 'Ouvrir le menu' : 'Fermer le menu');
-        document.body.classList.toggle('brm-menu-open', !open);
-      });
-      document.querySelectorAll('.brm-nav-links a').forEach(function (a) {
-        a.addEventListener('click', function () {
-          document.body.classList.remove('brm-menu-open');
-          btn?.setAttribute('aria-expanded', 'false');
-          btn?.setAttribute('aria-label', 'Ouvrir le menu');
-        });
-      });
-    })();
-    // Boutons "Ajouter au rituel"
-    (function () {
-      document.querySelectorAll('.brm-add').forEach(function (b) {
-        b.addEventListener('click', function () {
-          var added = b.getAttribute('data-added') === 'true';
-          b.setAttribute('data-added', String(!added));
-          b.textContent = added ? 'Ajouter au rituel' : 'Dans votre rituel';
-        });
-      });
-    })();
-    // Formulaire démo : ne soumet rien nulle part
-    (function () {
+      // Chapter rail highlight
+      var links = Array.prototype.slice.call(document.querySelectorAll('.brm-rail a'));
+      var chapters = Array.prototype.slice.call(document.querySelectorAll('.brm-chapter'));
+      function setActive(id: string) {
+        links.forEach(function (a) { a.classList.toggle('is-active', a.getAttribute('data-chapter') === id); });
+      }
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (en) {
+            if (en.isIntersecting) setActive(en.target.getAttribute('data-chapter') || '');
+          });
+        }, { rootMargin: '-45% 0px -45% 0px' });
+        chapters.forEach(function (c) { io.observe(c); });
+      }
+      // Form
       var form = document.getElementById('brm-form') as HTMLFormElement | null;
+      var done = document.getElementById('brm-done');
       form?.addEventListener('submit', function (e) {
         e.preventDefault();
-        var note = form?.querySelector('.brm-form-note');
-        if (note) note.textContent = 'Merci. Votre lettre dérive vers notre atelier; attendez une réponse en deux jours, avec une mouillette parfumée.';
+        if (done) done.hidden = false;
         form?.reset();
       });
     })();
   </script>
-
-  <style>
-    .brm {
-      --brm-mist: #FAFAFC;
-      --brm-lav: #E8E0F0;
-      --brm-blush: #F5DCE0;
-      --brm-silver: #C9CDD6;
-      --brm-gold: #C6A15B;
-      --brm-gold-soft: #EAD9B8;
-      --brm-ink: #4A4458;
-      --brm-ink-soft: #8A8496;
-      --brm-serif: "Cormorant Garamond", Georgia, serif;
-      --brm-sans: "Jost", system-ui, sans-serif;
-      margin: 0;
-      background:
-        radial-gradient(ellipse 80% 50% at 15% 8%, rgba(232,224,240,0.7), transparent 60%),
-        radial-gradient(ellipse 70% 45% at 88% 22%, rgba(245,220,224,0.6), transparent 60%),
-        radial-gradient(ellipse 90% 55% at 50% 100%, rgba(232,224,240,0.5), transparent 65%),
-        var(--brm-mist);
-      color: var(--brm-ink);
-      font-family: var(--brm-serif);
-      font-size: 20px;
-      font-weight: 400;
-      -webkit-font-smoothing: antialiased;
-      overflow-x: clip;
-    }
-    .brm *, .brm *::before, .brm *::after { box-sizing: border-box; }
-    .brm img { display: block; max-width: 100%; }
-    .brm-wrap { max-width: 1180px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px); }
-    .brm em { font-style: italic; font-weight: 300; }
-
-    /* floating decor */
-    .brm-orb { position: absolute; border-radius: 50%; filter: blur(34px); pointer-events: none; animation: brm-float 18s ease-in-out infinite alternate; }
-    .brm-orb-1 { width: 300px; height: 300px; left: 6%; top: 16%; background: radial-gradient(circle, rgba(245,220,224,0.85), transparent 70%); }
-    .brm-orb-2 { width: 220px; height: 220px; right: 10%; top: 30%; background: radial-gradient(circle, rgba(234,217,184,0.8), transparent 70%); animation-delay: -6s; }
-    .brm-orb-3 { width: 380px; height: 380px; left: 40%; bottom: 8%; background: radial-gradient(circle, rgba(232,224,240,0.9), transparent 70%); animation-delay: -12s; }
-    .brm-orb-4 { width: 160px; height: 160px; right: 26%; top: 8%; background: radial-gradient(circle, rgba(255,255,255,0.95), transparent 70%); animation-delay: -3s; }
-    .brm-orb-5 { width: 420px; height: 420px; right: -100px; top: -60px; background: radial-gradient(circle, rgba(245,220,224,0.7), transparent 70%); }
-    .brm-orb-6 { width: 360px; height: 360px; left: -120px; bottom: -80px; background: radial-gradient(circle, rgba(232,224,240,0.8), transparent 70%); }
-    @keyframes brm-float { to { transform: translate(30px, -44px) scale(1.1); } }
-    .brm-petal {
-      position: absolute; width: 26px; height: 16px; border-radius: 80% 20% 80% 20%;
-      background: rgba(245,220,224,0.75); filter: blur(1px); pointer-events: none;
-      animation: brm-petal-fall 14s linear infinite;
-    }
-    .brm-petal-1 { left: 12%; top: -30px; animation-delay: 0s; }
-    .brm-petal-2 { left: 32%; top: -30px; animation-delay: -4s; background: rgba(232,224,240,0.8); }
-    .brm-petal-3 { left: 58%; top: -30px; animation-delay: -8s; }
-    .brm-petal-4 { left: 74%; top: -30px; animation-delay: -2s; background: rgba(234,217,184,0.7); }
-    .brm-petal-5 { left: 88%; top: -30px; animation-delay: -10s; }
-    .brm-petal-6 { left: 45%; top: -30px; animation-delay: -6s; background: rgba(232,224,240,0.8); }
-    @keyframes brm-petal-fall {
-      0% { transform: translateY(-40px) rotate(0deg); opacity: 0; }
-      12% { opacity: 0.9; }
-      100% { transform: translateY(105vh) rotate(340deg); opacity: 0; }
-    }
-
-    /* nav */
-    .brm-navwrap { position: fixed; top: 0; left: 0; right: 0; z-index: 60; }
-    .brm-nav {
-      display: flex; align-items: center; gap: 26px;
-      padding: 18px clamp(20px, 4vw, 44px);
-      background: rgba(250,250,252,0.72); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-      border-bottom: 1px solid rgba(74,68,88,0.12);
-    }
-    .brm-logo {
-      font-family: var(--brm-sans); font-weight: 500; font-size: 1.05rem; letter-spacing: 0.55em;
-      color: var(--brm-ink); text-decoration: none; margin-right: auto; padding-left: 0.55em;
-    }
-    .brm-nav-links { display: flex; align-items: center; gap: 6px; }
-    .brm-nav-links a {
-      font-family: var(--brm-sans); font-weight: 400; font-size: 0.78rem; letter-spacing: 0.28em; text-transform: uppercase;
-      color: var(--brm-ink-soft); text-decoration: none; padding: 10px 16px; transition: color 0.2s ease;
-    }
-    .brm-nav-links a:hover { color: var(--brm-gold); }
-    .brm-nav-cta { border: 1px solid var(--brm-gold); border-radius: 999px; color: var(--brm-ink) !important; }
-    .brm-nav-cta:hover { background: rgba(198,161,91,0.14); }
-    .brm-burger { display: none; background: transparent; border: none; cursor: pointer; padding: 10px; margin-left: auto; }
-    .brm-burger span { display: block; width: 26px; height: 1.5px; background: var(--brm-ink); margin: 7px 0; }
-
-    /* buttons */
-    .brm-btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      font-family: var(--brm-sans); font-weight: 400; font-size: 0.82rem; letter-spacing: 0.3em; text-transform: uppercase;
-      padding: 18px 38px; text-decoration: none; cursor: pointer; border-radius: 999px;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-    }
-    .brm-btn-gold { background: linear-gradient(135deg, var(--brm-gold), #D9BC7E); color: #FFFDF8; border: none; box-shadow: 0 10px 30px rgba(198,161,91,0.35); }
-    .brm-btn-gold:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(198,161,91,0.45); }
-    .brm-btn-ghost { background: transparent; color: var(--brm-ink); border: 1px solid rgba(74,68,88,0.3); }
-    .brm-btn-ghost:hover { border-color: var(--brm-gold); color: var(--brm-gold); transform: translateY(-2px); }
-
-    /* type */
-    .brm-kicker { font-family: var(--brm-sans); font-size: 0.75rem; font-weight: 400; letter-spacing: 0.42em; text-transform: uppercase; color: var(--brm-gold); margin: 0 0 20px; }
-    .brm-h1 { font-weight: 300; font-size: clamp(3.6rem, 10vw, 7.5rem); line-height: 1.02; margin: 0 0 26px; letter-spacing: 0.01em; }
-    .brm-h2 { font-weight: 300; font-size: clamp(2.4rem, 5.5vw, 4rem); line-height: 1.08; margin: 0 0 18px; }
-    .brm-lede { font-size: 1.3rem; font-weight: 300; line-height: 1.7; max-width: 42ch; margin: 0 0 36px; color: var(--brm-ink-soft); font-style: italic; }
-    .brm-sec-lede { font-size: 1.2rem; font-weight: 300; font-style: italic; line-height: 1.7; max-width: 54ch; margin: 0 0 50px; color: var(--brm-ink-soft); }
-    .brm-eyebrow { font-family: var(--brm-sans); font-size: 0.75rem; letter-spacing: 0.42em; text-transform: uppercase; color: var(--brm-ink-soft); margin: 0 0 26px; }
-
-    /* hero */
-    .brm-hero { position: relative; min-height: 100svh; display: flex; align-items: center; overflow: hidden; }
-    .brm-mist {
-      position: absolute; inset: 0; pointer-events: none;
-      background:
-        radial-gradient(ellipse 60% 40% at 30% 60%, rgba(255,255,255,0.7), transparent 65%),
-        radial-gradient(ellipse 50% 35% at 75% 40%, rgba(232,224,240,0.55), transparent 65%);
-      filter: blur(50px); animation: brm-mist-move 22s ease-in-out infinite alternate;
-    }
-    @keyframes brm-mist-move { to { transform: translateX(60px) scale(1.06); } }
-    .brm-hero-in { position: relative; z-index: 2; max-width: 1180px; width: 100%; margin: 0 auto; padding: 130px clamp(20px, 4vw, 40px) 80px; text-align: center; }
-    .brm-hero-in .brm-lede { margin-inline: auto; }
-    .brm-hero-cta { display: flex; gap: 18px; flex-wrap: wrap; justify-content: center; }
-    .brm-scroll { position: absolute; bottom: 34px; left: 50%; transform: translateX(-50%); z-index: 2; }
-    .brm-scroll span { display: block; width: 1px; height: 64px; background: linear-gradient(180deg, var(--brm-gold), transparent); animation: brm-scroll-hint 2.4s ease-in-out infinite; }
-    @keyframes brm-scroll-hint { 0% { transform: scaleY(0); transform-origin: top; } 45% { transform: scaleY(1); transform-origin: top; } 55% { transform: scaleY(1); transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
-
-    /* sections */
-    .brm-section { padding: clamp(80px, 10vw, 140px) 0; position: relative; }
-
-    /* collection cards */
-    .brm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 4vw, 48px); }
-    .brm-card {
-      background: rgba(255,255,255,0.55); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255,255,255,0.85); border-radius: 28px;
-      box-shadow: 0 24px 60px rgba(74,68,88,0.1);
-      overflow: hidden; transition: transform 0.25s ease, box-shadow 0.25s ease;
-    }
-    .brm-card:hover { transform: translateY(-8px); box-shadow: 0 34px 80px rgba(198,161,91,0.22); }
-    .brm-card-img { position: relative; overflow: hidden; }
-    .brm-card-img img { width: 100%; height: 300px; object-fit: cover; filter: saturate(0.85) brightness(1.04); transition: transform 0.4s ease; }
-    .brm-card:hover .brm-card-img img { transform: scale(1.04); }
-    .brm-card-img::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(250,250,252,0.85)); }
-    .brm-card-in { padding: 30px 34px 34px; }
-    .brm-card-no { font-family: var(--brm-sans); font-size: 0.72rem; letter-spacing: 0.34em; text-transform: uppercase; color: var(--brm-gold); margin: 0 0 10px; }
-    .brm-card h3 { font-weight: 400; font-size: 2.2rem; margin: 0 0 8px; }
-    .brm-card-notes { font-style: italic; color: var(--brm-ink-soft); margin: 0 0 12px; font-size: 1.05rem; }
-    .brm-card-in > p { margin: 0 0 20px; line-height: 1.65; font-weight: 300; font-size: 1.08rem; }
-    .brm-card-foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; border-top: 1px solid rgba(74,68,88,0.12); padding-top: 20px; }
-    .brm-price { font-size: 1.6rem; font-weight: 400; }
-    .brm-add {
-      font-family: var(--brm-sans); font-size: 0.75rem; letter-spacing: 0.26em; text-transform: uppercase;
-      background: transparent; border: 1px solid rgba(74,68,88,0.3); color: var(--brm-ink);
-      border-radius: 999px; padding: 12px 24px; cursor: pointer; transition: all 0.2s ease;
-    }
-    .brm-add:hover { border-color: var(--brm-gold); color: var(--brm-gold); }
-    .brm-add[data-added="true"] { background: var(--brm-gold); border-color: var(--brm-gold); color: #FFFDF8; }
-
-    /* notes */
-    .brm-notes { position: relative; padding: clamp(80px, 10vw, 140px) 0; overflow: hidden; }
-    .brm-notes-in { position: relative; z-index: 2; text-align: center; }
-    .brm-notes-in .brm-sec-lede { margin-inline: auto; }
-    .brm-chips { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; max-width: 860px; margin: 0 auto 60px; }
-    .brm-chip {
-      font-family: var(--brm-sans); font-size: 0.8rem; letter-spacing: 0.22em; text-transform: uppercase;
-      padding: 14px 26px; border-radius: 999px; color: var(--brm-ink);
-      background: rgba(255,255,255,0.5); backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.9); box-shadow: 0 8px 24px rgba(74,68,88,0.08);
-      animation: brm-chip-float 7s ease-in-out infinite alternate;
-    }
-    .brm-chip:nth-child(3n) { animation-delay: -2.4s; }
-    .brm-chip:nth-child(4n) { animation-delay: -4.8s; }
-    @keyframes brm-chip-float { to { transform: translateY(-10px); } }
-    .brm-notes-img { max-width: 860px; margin: 0 auto; }
-    .brm-notes-img img { width: 100%; height: 380px; object-fit: cover; border-radius: 28px; filter: saturate(0.85) brightness(1.03); box-shadow: 0 30px 70px rgba(74,68,88,0.14); }
-    .brm-notes-img figcaption { font-style: italic; color: var(--brm-ink-soft); margin-top: 16px; font-size: 1.05rem; }
-
-    /* rituals */
-    .brm-rituals { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(30px, 5vw, 70px); }
-    .brm-rituals li { border-top: 1px solid rgba(74,68,88,0.2); padding-top: 28px; display: grid; gap: 12px; align-content: start; }
-    .brm-ritual-no { font-size: 1rem; letter-spacing: 0.4em; color: var(--brm-gold); font-family: var(--brm-sans); }
-    .brm-rituals h3 { font-weight: 400; font-size: 1.9rem; margin: 0; font-style: italic; }
-    .brm-rituals p { margin: 0; line-height: 1.7; font-weight: 300; color: var(--brm-ink-soft); }
-
-    /* words */
-    .brm-words { padding: clamp(60px, 8vw, 110px) 0; }
-    .brm-quotes { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(28px, 4vw, 48px); text-align: center; }
-    .brm-quotes blockquote { margin: 0; }
-    .brm-quotes p { font-size: 1.45rem; font-style: italic; font-weight: 300; line-height: 1.55; margin: 0 0 16px; }
-    .brm-quotes p::before { content: "\201C"; display: block; font-size: 3rem; color: var(--brm-gold-soft); line-height: 1; margin-bottom: 8px; }
-    .brm-quotes cite { font-family: var(--brm-sans); font-style: normal; font-size: 0.75rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--brm-ink-soft); }
-
-    /* pricing */
-    .brm-plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(24px, 4vw, 40px); align-items: start; }
-    .brm-plan {
-      background: rgba(255,255,255,0.5); backdrop-filter: blur(20px);
-      border: 1px solid rgba(255,255,255,0.85); border-radius: 28px;
-      box-shadow: 0 24px 60px rgba(74,68,88,0.1);
-      padding: 44px 38px; display: grid; gap: 12px; align-content: start; text-align: center;
-    }
-    .brm-plan-hot { border-color: rgba(198,161,91,0.55); box-shadow: 0 30px 70px rgba(198,161,91,0.25); }
-    .brm-plan-flag { font-family: var(--brm-sans); font-size: 0.72rem; letter-spacing: 0.34em; text-transform: uppercase; color: var(--brm-gold); margin: 0; }
-    .brm-plan h3 { font-weight: 400; font-size: 1.8rem; margin: 0; font-style: italic; }
-    .brm-plan-price { font-size: 3rem; font-weight: 300; margin: 0; }
-    .brm-plan-sub { font-style: italic; color: var(--brm-ink-soft); margin: 0 0 8px; }
-    .brm-plan ul { list-style: none; margin: 0 0 16px; padding: 0; display: grid; gap: 12px; }
-    .brm-plan li { line-height: 1.6; font-weight: 300; font-size: 1.05rem; }
-    .brm-plan li::before { content: "· "; color: var(--brm-gold); }
-
-    /* contact */
-    .brm-contact { position: relative; padding: clamp(80px, 10vw, 140px) 0; overflow: hidden; }
-    .brm-contact-in { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 6vw, 90px); align-items: start; }
-    .brm-contact-lines { font-size: 1.15rem; line-height: 2; margin: 30px 0 0; font-weight: 300; }
-    .brm-contact-lines a { color: var(--brm-ink); }
-    .brm-form {
-      background: rgba(255,255,255,0.6); backdrop-filter: blur(24px);
-      border: 1px solid rgba(255,255,255,0.9); border-radius: 28px;
-      box-shadow: 0 30px 70px rgba(74,68,88,0.12);
-      padding: clamp(32px, 4vw, 48px); display: grid; gap: 18px;
-    }
-    .brm-form h3 { font-weight: 400; font-style: italic; font-size: 1.9rem; margin: 0; }
-    .brm-form label { display: grid; gap: 10px; font-family: var(--brm-sans); font-size: 0.75rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--brm-ink-soft); }
-    .brm-form input, .brm-form select, .brm-form textarea {
-      font-family: var(--brm-serif); font-size: 1.1rem; font-weight: 400;
-      background: rgba(255,255,255,0.75); border: 1px solid rgba(74,68,88,0.18); color: var(--brm-ink);
-      padding: 14px 20px; width: 100%; border-radius: 16px;
-    }
-    .brm-form input:focus, .brm-form select:focus, .brm-form textarea:focus { outline: 2px solid var(--brm-gold-soft); outline-offset: 2px; border-color: var(--brm-gold); }
-    .brm-form-note { margin: 0; font-style: italic; font-size: 1.15rem; color: var(--brm-ink); }
-    .brm-form-note:empty { display: none; }
-
-    /* footer */
-    .brm-footer { padding: 80px 0 100px; text-align: center; overflow: hidden; border-top: 1px solid rgba(74,68,88,0.12); }
-    .brm-footer-giant {
-      font-family: var(--brm-sans); font-weight: 300; font-size: clamp(3.4rem, 15vw, 10rem);
-      letter-spacing: 0.4em; padding-left: 0.4em; line-height: 1; margin: 0 0 30px;
-      color: transparent; -webkit-text-stroke: 1px rgba(74,68,88,0.3);
-    }
-    .brm-footer-in { display: grid; gap: 10px; color: var(--brm-ink-soft); font-size: 1rem; font-weight: 300; font-style: italic; }
-    .brm-footer-in p { margin: 0; }
-    .brm-footer-in a { color: var(--brm-ink); }
-
-    @media (max-width: 960px) {
-      .brm-grid { grid-template-columns: 1fr; max-width: 560px; margin-inline: auto; }
-      .brm-rituals { grid-template-columns: 1fr; max-width: 560px; }
-      .brm-quotes { grid-template-columns: 1fr; max-width: 560px; margin-inline: auto; }
-      .brm-plans { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; }
-      .brm-contact-in { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 860px) {
-      .brm-burger { display: block; }
-      .brm-nav-links {
-        display: none; position: absolute; top: 100%; left: 12px; right: 12px;
-        background: rgba(250,250,252,0.96); backdrop-filter: blur(20px);
-        border: 1px solid rgba(74,68,88,0.14); border-radius: 20px;
-        box-shadow: 0 24px 60px rgba(74,68,88,0.16);
-        padding: 14px; flex-direction: column; align-items: stretch; gap: 2px;
-      }
-      body.brm-menu-open .brm-nav-links { display: flex; }
-      .brm-nav-links a { padding: 14px 18px; text-align: center; }
-      .brm-nav { position: relative; }
-    }
-    @media (max-width: 640px) {
-      .brm-card-img img { height: 240px; }
-      .brm-notes-img img { height: 260px; }
-      .brm-hero-cta .brm-btn { width: 100%; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .brm-orb, .brm-petal, .brm-mist, .brm-chip, .brm-scroll span { animation: none; }
-      .brm-btn, .brm-card, .brm-card-img img, .brm-add, .brm-nav-links a { transition: none; }
-    }
-  </style>
 </body>
 </html>
