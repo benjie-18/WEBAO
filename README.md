@@ -87,16 +87,18 @@ Project architecture:
 
 ## The intro sequence (`IntroSequence.astro`)
 
-The landing page opens with a signature interaction: a stylized pointer flies
-through the screen, hits the barrier at the bottom, bounces back, invites a
-click, breaks through, and hands the visitor to **"Start your site"** with a
-restrained glow. The site rises into place behind it — no `scrollTo()` jump.
+The landing page opens with a signature interaction: a stylized pointer eases
+into the frame, pauses to inspect the barrier, tests it with a first tap, then
+bounces back for a short thinking beat. After the visitor accepts the prompt,
+the pointer steps back and launches again; the barrier breaks into solid slabs
+that travel out of view instead of fading. The view gently follows the impacts,
+then the site rises into place and the pointer takes a measured path to **"Start
+your site"**, where it rests with a restrained glow. No `scrollTo()` jump.
 
 ```
-arrives  →  flies (real inertia)  →  impact (squash · shake · dent · debris)
-      →  bounce (gravity + restitution)  →  invite (ring pulse + prompt)
-      →  break through (fracture · hole · shockwave)  →  site rises
-      →  cursor locks onto the real CTA  →  glow pulse  →  releases the page
+arrives → slow flight → inspect → first tap (dent · debris · bounce)
+      → think → invite → step back → launch → fracture (solid shards · shockwave)
+      → camera eases back → site rises → cursor approaches the real CTA → glow
 ```
 
 ### Tuning it
@@ -108,11 +110,12 @@ re-aim, soften or exaggerate the sequence:
 | Want to change…            | Edit                                             |
 | -------------------------- | ------------------------------------------------ |
 | the flight path or speed   | `flight.path`, `flight.speedProfile`, `duration`  |
+| the first look / thinking  | `flight.lookMs`, `flight.firstHit`, `bounce.thinkMs` |
 | the weight / momentum      | `flight.chase`, `bounce.gravity`, `restitution`   |
 | cursor rotation behaviour  | `cursor.rotation`, `cursor.restAngle`             |
 | the hit                    | `impact.squash`, `shake`, `dent`, `debris`, `shock` |
 | the invitation             | `invite.pulse`, `halo`, `promptText`              |
-| the break                  | `breach.fracture`, `hole`, `flex`, `hold`         |
+| wind-up / camera / break   | `breach.prepare`, `breach.camera`, `fracture`, `hole`, `flex`, `hold` |
 | the handoff + CTA glow     | `handoff.rise`, `handoff.cta`, `handoff.scroll`, `handoff.glow` |
 | overall pace               | `master.timeScale`                                |
 
@@ -120,8 +123,8 @@ Positions are fractions of the viewport and the final cursor position is
 measured from the **actual** `"Start your site"` element (`.hero-actions
 .btn--primary`, overridable via the `target` prop or `[data-intro-target]`), so
 alignment stays pixel-true at every screen size — including short viewports,
-where the sequence deliberately glides the page until the CTA is in view and the
-captured cursor rides along.
+where the page glides until the CTA is in view, the cursor rides the reveal, and
+then closes the last gap with its own eased approach.
 
 ### Behaviour
 

@@ -4,9 +4,9 @@
  * ----------------------------------------------------------------------------
  * A cinematic, physics-driven intro for the WEBAO landing page:
  *
- *   arrives → flies → hits the barrier → bounces → invites the click →
- *   breaks through → the site rises into place → the cursor comes to rest
- *   exactly on "Start your site" with a restrained glow pulse.
+ *   arrives → eases through the frame → inspects the barrier → tests it →
+ *   bounces + thinks → invites a click → steps back → launches through →
+ *   the site rises → the cursor slowly lands on "Start your site" with a glow.
  *
  * Engineering notes
  *   • Zero new dependencies — a small internal motion engine
@@ -20,6 +20,8 @@
  *     alignment is pixel-true at every viewport size.
  */
 
+import { INTRO_CONFIG } from "../../lib/intro/config";
+
 interface Props {
   /** Element the cursor must finally rest on (defaults to the hero primary CTA). */
   target?: string;
@@ -27,6 +29,7 @@ interface Props {
 
 const { target } = Astro.props as Props;
 const targetSelector = target ?? "";
+const fracturePieceCount = INTRO_CONFIG.breach.fracture.pieces;
 ---
 
 <!--
@@ -122,9 +125,9 @@ const targetSelector = target ?? "";
 
     <!-- The barrier: a studio floor that can be hit and broken -->
     <div class="wi-floor" data-wi-floor aria-hidden="true">
-      <div class="wi-piece wi-piece--l" data-wi-piece="0"></div>
-      <div class="wi-piece wi-piece--c" data-wi-piece="1"></div>
-      <div class="wi-piece wi-piece--r" data-wi-piece="2"></div>
+      {Array.from({ length: fracturePieceCount }, (_, index) => (
+        <div class="wi-piece" data-wi-piece={index}></div>
+      ))}
       <div class="wi-lip" data-wi-lip>
         <svg class="wi-lip-svg" viewBox="0 0 1000 46" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
           <g data-wi-dent-g>
@@ -466,15 +469,24 @@ const targetSelector = target ?? "";
     bottom: 0;
     height: var(--wi-floor-h, 72px);
     z-index: 30;
-    overflow: hidden;
+    /* Let fractured slabs travel naturally; the intro viewport clips them only
+       once they actually leave the frame. */
+    overflow: visible;
   }
   .wi-piece {
     position: absolute;
-    top: 0;
-    bottom: 0;
+    inset: 0;
+    width: 100%;
+    height: 100%;
     background: linear-gradient(180deg, #0a0f1c 0%, #05080f 100%);
     border-top: 1px solid rgba(248, 245, 239, 0.2);
-    will-change: transform, opacity;
+    clip-path: inset(0);
+    transform-origin: 50% 50%;
+    backface-visibility: hidden;
+    will-change: transform, clip-path;
+  }
+  .wi-piece.is-fractured {
+    filter: drop-shadow(0 5px 8px rgba(5, 8, 15, 0.18));
   }
   .wi-piece::after {
     content: "";
@@ -482,18 +494,6 @@ const targetSelector = target ?? "";
     inset: 1px 0 auto 0;
     height: 6px;
     background: linear-gradient(180deg, rgba(248, 245, 239, 0.1), rgba(248, 245, 239, 0));
-  }
-  .wi-piece--l {
-    left: 0;
-    width: 33.34%;
-  }
-  .wi-piece--c {
-    left: 33.33%;
-    width: 33.34%;
-  }
-  .wi-piece--r {
-    left: 66.66%;
-    width: 33.34%;
   }
 
   .wi-lip {
@@ -1026,6 +1026,10 @@ const targetSelector = target ?? "";
     let dented = false;
     let cursorAlpha = 1;
     let framing = false;
+    /** Camera offset applied to the stage around each barrier collision. */
+    let cameraX = 0;
+    let cameraY = 0;
+    let cameraTween: { kill: () => void } | null = null;
     /** Current translateY applied to the page by the intro (px). */
     let pageShift = 0;
     let hole = 0;
@@ -1035,6 +1039,8 @@ const targetSelector = target ?? "";
     let phase: Phase = "compose";
     let invited = false;
     let clicked = false;
+    let thinkAt = 0;
+    let launchX = 0;
     let captureX = 0;
     let captureY = 0;
     const wobble: Vec = { x: 0, y: 0, vx: 0, vy: 0 };
@@ -1050,13 +1056,17 @@ const targetSelector = target ?? "";
     type Phase =
       | "compose"
       | "swoop"
+      | "inspect"
+      | "firstHit"
       | "bounce"
       | "settle"
+      | "think"
       | "invite"
-      | "press"
+      | "prepare"
       | "plunge"
       | "breach"
       | "rise"
+      | "approach"
       | "rest"
       | "done";
 
@@ -1065,8 +1075,11 @@ const targetSelector = target ?? "";
     const pointer = { x: 0, y: 0, seen: false };
     const onPointerMove = (e: PointerEvent) => {
       if (touch) return;
-      pointer.x = e.clientX;
-      pointer.y = e.clientY;
+      const margin = 34 * cursorScale;
+      // Pointer events are viewport-space; the intro world is camera-shifted.
+      // Convert back to world-space and clamp so the custom cursor stays visible.
+      pointer.x = clamp(e.clientX - cameraX, margin - cameraX, vw - margin - cameraX);
+      pointer.y = clamp(e.clientY - cameraY, margin - cameraY, vh - margin - cameraY);
       pointer.seen = true;
     };
     window.addEventListener("pointermove", onPointerMove, { passive: true });
@@ -1114,6 +1127,27 @@ const targetSelector = target ?? "";
     function resetStreaks() {
       const line = refs.cracks.querySelectorAll<HTMLElement>(".wi-crack");
       line.forEach((c) => c.remove());
+    }
+
+    /** Ease the stage camera to a new focus without snapping the barrier. */
+    function cameraShiftTo(x: number, y: number, ms: number) {
+      cameraTween?.kill();
+      const fromX = cameraX;
+      const fromY = cameraY;
+      const next = clock.tween({
+        ms,
+        ease: EASE.inOutCubic,
+        onUpdate: (v) => {
+          cameraX = lerp(fromX, x, v);
+          cameraY = lerp(fromY, y, v);
+        },
+        onComplete: () => {
+          cameraX = x;
+          cameraY = y;
+          if (cameraTween === next) cameraTween = null;
+        },
+      });
+      cameraTween = next;
     }
 
     /** Move the whole stage for a beat — the impact must be felt, not seen. */
@@ -1229,25 +1263,27 @@ const targetSelector = target ?? "";
       }
 
       /* --- the flight ---------------------------------------------------- */
-      // A physical chaser follows an authored curve, integrated in fixed
-      // substeps so the dive, the corners and the slam land the same way on
-      // every display. (No tween: the path is time-driven, not value-driven.)
+      // The cursor follows a gentle authored arc, then pauses to look at the
+      // floor before making a small first contact. Fixed substeps keep the
+      // inertia consistent across displays.
       const entry = Math.min(460, 240 + vh * 0.12) / 1000;
       clock.after(Math.max(entry, 0.22), () => {
         phase = "swoop";
         let elapsed = 0;
-        const un = clock.onFrame((dt) => {
+        let un = () => {};
+        un = clock.onFrame((dt) => {
           if (phase !== "swoop") return;
           substep(dt, (h) => {
             elapsed += h;
             const v = clamp(elapsed / CFG.flight.duration, 0, 1);
             const u = profile(v);
             const p = ref(u) as Frac;
-            const ahead = ref(Math.min(1, u + 0.012)) as Frac;
-            const span = CFG.flight.duration * 0.012;
+            const aheadV = Math.min(1, v + 0.01);
+            const ahead = ref(profile(aheadV)) as Frac;
+            const span = CFG.flight.duration * Math.max(aheadV - v, 0.001);
             const tvx = ((ahead.x - p.x) * vw) / span;
             const tvy = ((ahead.y - p.y) * vh) / span;
-            const speed = track(
+            track(
               cur,
               p.x * vw,
               p.y * vh,
@@ -1258,8 +1294,15 @@ const targetSelector = target ?? "";
               CFG.flight.chase.maxSpeed,
               h
             );
-            if (cur.y >= surfaceY && cur.vy > 0) {
-              hitBarrier(speed);
+            if (v >= 1) {
+              un();
+              stopFlight = null;
+              cur.vx = 0;
+              cur.vy = 0;
+              impactX = clamp(cur.x, vw * 0.2, vw * 0.8);
+              impactY = surfaceY;
+              phase = "inspect";
+              clock.after(CFG.flight.lookMs / 1000, firstStrike);
               return false;
             }
             return true;
@@ -1272,9 +1315,18 @@ const targetSelector = target ?? "";
       });
 
       /* --- invitation safety net (never auto-advances the story) ---------- */
-      clock.after(4.2, () => {
-        if (!invited && phase === "settle") invite();
+      clock.after(7.2, () => {
+        if (!invited && (phase === "settle" || phase === "think")) invite();
       });
+    }
+
+    /** A deliberate glance, followed by the first small test collision. */
+    function firstStrike() {
+      if (phase !== "inspect") return;
+      phase = "firstHit";
+      impactX = clamp(cur.x, vw * 0.2, vw * 0.8);
+      impactY = surfaceY;
+      cameraShiftTo(vw * 0.5 - impactX, vh * CFG.breach.camera.focusY - surfaceY, CFG.breach.camera.shiftMs);
     }
 
     /** IMPACT — squash, shake, dent, shock ring, debris, then the bounce. */
@@ -1329,7 +1381,7 @@ const targetSelector = target ?? "";
         },
       });
 
-      /* the rebound: real gravity, one small second tap, then the invitation */
+      /* rebound → gather its feet → pause to think → invitation */
       phase = "bounce";
       landed = false;
       const arcTime = (2 * Math.abs(bounceV)) / gravity;
@@ -1337,7 +1389,12 @@ const targetSelector = target ?? "";
         if (phase !== "bounce") return;
         phase = "settle";
         clock.after(CFG.bounce.settleHold, () => {
-          if (!invited) invite();
+          if (phase !== "settle") return;
+          phase = "think";
+          thinkAt = clock.time;
+          clock.after(CFG.bounce.thinkMs / 1000, () => {
+            if (!invited && phase === "think") invite();
+          });
         });
       });
     }
@@ -1373,8 +1430,8 @@ const targetSelector = target ?? "";
       refs.prompt.classList.add("is-live");
 
       if (clicked) {
-        // the visitor already asked to come in — honour it immediately
-        clock.after(0.12, plunge);
+        // Honour an early request, but keep the readable step-back wind-up.
+        clock.after(0.12, prepare);
         return;
       }
       // restrained interaction cue: one wide breath + two thin rings
@@ -1415,53 +1472,80 @@ const targetSelector = target ?? "";
 
     function interact() {
       if (!invited || phase !== "invite") {
-        // early interaction: rush the remaining story rather than freezing it
-        if (phase === "swoop" || phase === "bounce" || phase === "settle" || phase === "compose") {
+        // An early interaction gently speeds up the remaining choreography.
+        if (["compose", "swoop", "inspect", "firstHit", "bounce", "settle", "think"].includes(phase)) {
           clicked = true;
           clock.scale = CFG.master.timeScale * CFG.master.rushScale;
         }
         return;
       }
       clicked = true;
-      press();
+      prepare();
     }
 
-    function press() {
-      phase = "press";
+    function prepare() {
+      if (phase !== "invite") return;
+      phase = "prepare";
       refs.prompt.classList.remove("is-live");
       refs.prompt.style.opacity = "0";
       refs.halo.style.opacity = "0";
       refs.ring.style.opacity = "0";
-      squashAlong = 0.86;
-      squashAcross = 1.1;
+
+      // Aim where the visitor left the pointer, then take a small, visible step
+      // back and draw the cursor's tip toward the barrier before the launch.
+      launchX = clamp(cur.x, vw * 0.22, vw * 0.78);
+      const direction = Math.sign(launchX - impactX) || 1;
+      const startX = cur.x;
+      const startY = cur.y;
+      const targetCameraX = vw * 0.5 - launchX;
+      const targetCameraY = vh * CFG.breach.camera.focusY - surfaceY;
+      const margin = 34 * cursorScale;
+      const backX = clamp(
+        launchX - direction * vw * CFG.breach.prepare.stepBackX,
+        Math.max(vw * 0.16, margin - targetCameraX),
+        Math.min(vw * 0.84, vw - margin - targetCameraX)
+      );
+      const backY = clamp(
+        startY - vh * CFG.breach.prepare.stepBackY,
+        Math.max(vh * 0.18, margin - targetCameraY),
+        Math.min(surfaceY - floorH * 1.1, vh - margin - targetCameraY)
+      );
+      cameraShiftTo(targetCameraX, targetCameraY, CFG.breach.camera.shiftMs);
+      squashAlong = 0.91;
+      squashAcross = 1.07;
+      kick(2.2, 240, 22, 0.06);
+      let lastX = cur.x;
+      let lastY = cur.y;
       clock.tween({
-        ms: CFG.breach.press * 1000,
-        ease: EASE.outCubic,
-        onUpdate: (v) => {
-          squashAlong = lerp(squashAlong, 1, v);
-          squashAcross = lerp(squashAcross, 1, v);
-        },
-      });
-      // the barrier tenses for a beat before it gives
-      kick(3.2, 220, 30, 0.08);
-      clock.tween({
-        ms: CFG.breach.press * 1000,
-        ease: EASE.inOutSine,
-        onUpdate: (v) => {
-          refs.floor.style.transform = `translateY(${r1(Math.sin(v * Math.PI * 2) * 1.6)}px)`;
+        ms: CFG.breach.prepare.moveMs,
+        ease: EASE.inOutCubic,
+        onUpdate: (v, dt) => {
+          cur.x = lerp(startX, backX, v);
+          cur.y = lerp(startY, backY, v);
+          cur.vx = (cur.x - lastX) / Math.max(dt, 0.001);
+          cur.vy = (cur.y - lastY) / Math.max(dt, 0.001);
+          lastX = cur.x;
+          lastY = cur.y;
+          squashAlong = lerp(0.91, 1, v);
+          squashAcross = lerp(1.07, 1, v);
+          refs.floor.style.transform = `translateY(${r1(-Math.sin(v * Math.PI) * 2.2)}px)`;
         },
         onComplete: () => {
+          cur.vx = 0;
+          cur.vy = 0;
+          squashAlong = 1;
+          squashAcross = 1;
           refs.floor.style.transform = "";
+          clock.after(CFG.breach.prepare.holdMs / 1000, plunge);
         },
       });
-      clock.after(CFG.breach.press, plunge);
     }
 
     function plunge() {
       if (phase === "plunge" || phase === "breach") return;
       phase = "plunge";
-      // break where the visitor left the pointer — clamped to a good composition
-      const px = clamp(cur.x, vw * 0.22, vw * 0.78);
+      // Launch back through the surface where the visitor aimed the cursor.
+      const px = clamp(launchX || cur.x, vw * 0.22, vw * 0.78);
       const py = surfaceY + vh * 0.34;
       const un = clock.onFrame((dt) => {
         if (phase !== "plunge") return;
@@ -1490,35 +1574,65 @@ const targetSelector = target ?? "";
 
       const strength = clamp(speed / 2400, 0.6, 1.4);
 
-      /* 1 — the barrier fractures around the point of impact */
-      const marks: number[] = [];
-      for (let i = 0; i <= CFG.breach.fracture.pieces; i++) {
-        marks.push(clamp((i / CFG.breach.fracture.pieces + (i > 0 && i < CFG.breach.fracture.pieces ? (rng() - 0.5) * 0.12 : 0)) * 100, 0, 100));
-      }
+      /* 1 — split the barrier into irregular slabs around the impact point */
+      const pieceCount = refs.pieces.length;
+      const marks = Array.from({ length: pieceCount + 1 }, (_, i) => {
+        if (i === 0) return 0;
+        if (i === pieceCount) return 100;
+        const offset = ((rng() - 0.5) * 2 * CFG.breach.fracture.jitter * 100) / Math.max(vw, 1);
+        return clamp((i / pieceCount) * 100 + offset, 0, 100);
+      });
+      const edgeYs = [0, 28, 66, 100];
+      const edgePaths = marks.map((base, edgeIndex) =>
+        edgeYs.map((edgeY, pointIndex) => {
+          const outer = edgeIndex === 0 || edgeIndex === pieceCount;
+          const irregular = !outer && pointIndex > 0 && pointIndex < edgeYs.length - 1;
+          const offset = irregular
+            ? ((rng() - 0.5) * 2 * CFG.breach.fracture.jitter * 100) / Math.max(vw, 1)
+            : 0;
+          return [clamp(base + offset, 0, 100), edgeY] as [number, number];
+        })
+      );
+
+      const d = CFG.breach.fracture.drift;
       refs.pieces.forEach((piece, i) => {
-        const localX = clamp(((x / vw) * 100 - marks[i]) / (marks[i + 1] - marks[i]), 0.06, 0.94);
-        const j = CFG.breach.fracture.jitter;
-        const j1 = j * (rng() - 0.5) * 2;
-        const j2 = j * (rng() - 0.5) * 2;
-        const poly =
-          i === 0
-            ? [[0, 0], [localX * 100, 0], [clamp(localX * 100 + j1, 20, 100), 34], [clamp(localX * 100 + j2, 10, 100), 100], [0, 100]]
-            : i === 1
-              ? [[0, 0], [localX * 100, 0], [clamp(localX * 100 + j1, 8, 100), 30], [clamp(localX * 100 + j2 * 1.6, 4, 100), 100], [clamp(-j2 * 6, 0, 40), 100], [0, 42]]
-              : [[clamp(localX * 100 + j1, 0, 92), 0], [100, 0], [100, 100], [clamp(localX * 100 + j2, 0, 96), 100], [clamp(localX * 100 - 5, 0, 90), 40]];
+        const leftEdge = edgePaths[i];
+        const rightEdge = edgePaths[i + 1];
+        const poly: [number, number][] = [
+          leftEdge[0],
+          rightEdge[0],
+          ...rightEdge.slice(1),
+          ...leftEdge.slice(0, -1).reverse(),
+        ];
+        piece.classList.add("is-fractured");
+        piece.style.visibility = "visible";
         piece.style.clipPath = `polygon(${poly.map(([a, b]) => `${r1(a)}% ${r1(b)}%`).join(", ")})`;
-        piece.style.transformOrigin = i === 0 ? "100% 0%" : i === 1 ? `${r1(localX * 100)}% 0%` : "0% 0%";
-        const dir = i === 0 ? -1 : i === 1 ? 0.35 : 1;
-        const d = CFG.breach.fracture.drift;
-        const dx = vw * d.x * dir * strength;
-        const dy = floorH * d.y * (i === 1 ? 1.4 : 1);
-        const rot = d.rot * dir * strength;
+
+        const left = (marks[i] / 100) * vw;
+        const right = (marks[i + 1] / 100) * vw;
+        const pieceWidth = Math.max(right - left, 1);
+        const centerX = (left + right) / 2;
+        const centerY = surfaceY - floorH / 2;
+        const side = Math.sign(centerX - x) || (i % 2 === 0 ? -1 : 1);
+        const exitX = side < 0 ? -pieceWidth / 2 - vw * d.x : vw + pieceWidth / 2 + vw * d.x;
+        const upward = i % 4 !== 3 && rng() > 0.18;
+        const exitY = upward ? -floorH / 2 - vh * d.y : vh + floorH / 2 + vh * d.y;
+        const dx = exitX - centerX;
+        const dy = exitY - centerY;
+        const rot = (rng() > 0.5 ? 1 : -1) * d.rot * lerp(0.72, 1.35, rng()) * strength;
+        const ms = CFG.breach.fracture.pieceMs * lerp(0.88, 1.12, rng());
+        piece.style.transformOrigin = `${r1((centerX / Math.max(vw, 1)) * 100)}% 50%`;
         clock.tween({
-          ms: CFG.breach.fracture.pieceMs,
-          ease: EASE.inQuart,
+          delay: (i * CFG.breach.fracture.staggerMs) / 1000,
+          ms,
+          ease: EASE.inOutCubic,
           onUpdate: (v) => {
             piece.style.transform = `translate3d(${r1(dx * v)}px, ${r1(dy * v)}px, 0) rotate(${r1(rot * v)}deg)`;
-            piece.style.opacity = String(r2(1 - EASE.inCubic(v) * 0.98));
+          },
+          // No fade: the shard remains solid until its trajectory carries it out
+          // of the viewport, then it is simply no longer painted.
+          onComplete: () => {
+            piece.style.visibility = "hidden";
           },
         });
       });
@@ -1576,19 +1690,21 @@ const targetSelector = target ?? "";
 
     function rise() {
       phase = "rise";
+      cameraShiftTo(0, 0, CFG.breach.camera.returnMs);
       const from = vh;
       const dur = CFG.handoff.rise.duration;
       const veilFrom = CFG.handoff.rise.veil[0];
       const veilTo = CFG.handoff.rise.veil[1];
 
       // --- Capture ---------------------------------------------------------
-      // From here on the pointer is *attached to the page*: we remember where
-      // it sits relative to the real CTA and shrink that offset to zero as the
-      // site rises. The residual dive velocity becomes a damped wobble, so the
-      // motion still carries its weight but can never run away off-screen.
+      // As the site rises, the pointer follows the CTA's movement but keeps a
+      // small screen-space gap. A separate, slower approach closes that gap
+      // once the real button is fully in view.
       const tp0 = targetPoint();
-      captureX = cur.x - tp0.x;
-      captureY = cur.y - tp0.y;
+      // The world camera is returning to neutral at the same time; capture the
+      // cursor's *screen-space* offset so that neither motion causes a jump.
+      captureX = cur.x + cameraX - tp0.x;
+      captureY = cur.y + cameraY - tp0.y;
       wobble.x = 0;
       wobble.y = 0;
       wobble.vx = clamp(cur.vx, -1400, 1400) * 0.32;
@@ -1635,9 +1751,56 @@ const targetSelector = target ?? "";
           }
           const waitFor = framing ? Math.max(0.1, CFG.handoff.scroll.ms / 1000 - CFG.handoff.rise.duration * 0.5 + 0.12) : 0.1;
           clock.after(waitFor, () => {
-            phase = "rest";
-            glowPulse();
+            if (phase !== "rise") return;
+            approachCta();
           });
+        },
+      });
+    }
+
+    /** Guide the cursor from the break to the CTA, then lock the tip exactly. */
+    function approachCta() {
+      if (!targetEl) {
+        phase = "rest";
+        glowPulse();
+        return;
+      }
+      phase = "approach";
+      const startX = cur.x + cameraX;
+      const startY = cur.y + cameraY;
+      const firstTarget = targetPoint();
+      const dx = firstTarget.x - startX;
+      const dy = firstTarget.y - startY;
+      const length = Math.max(Math.hypot(dx, dy), 1);
+      const bend = Math.min(22, length * 0.035);
+      const bendX = (-dy / length) * bend;
+      const bendY = (dx / length) * bend;
+      let lastX = startX;
+      let lastY = startY;
+
+      clock.tween({
+        ms: CFG.handoff.cta.approachMs,
+        ease: EASE.inOutCubic,
+        onUpdate: (v, dt) => {
+          const target = targetPoint();
+          const arc = Math.sin(Math.PI * v);
+          const screenX = clamp(lerp(startX, target.x, v) + bendX * arc, 20, vw - 20);
+          const screenY = clamp(lerp(startY, target.y, v) + bendY * arc, 20, vh - 20);
+          cur.x = screenX - cameraX;
+          cur.y = screenY - cameraY;
+          cur.vx = (screenX - lastX) / Math.max(dt, 0.001);
+          cur.vy = (screenY - lastY) / Math.max(dt, 0.001);
+          lastX = screenX;
+          lastY = screenY;
+        },
+        onComplete: () => {
+          const target = targetPoint();
+          cur.x = target.x - cameraX;
+          cur.y = target.y - cameraY;
+          cur.vx = 0;
+          cur.vy = 0;
+          phase = "rest";
+          glowPulse();
         },
       });
     }
@@ -1741,6 +1904,12 @@ const targetSelector = target ?? "";
       rafId = 0;
       clock.reset();
       debris.clear();
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("orientationchange", onResize);
+      document.removeEventListener("visibilitychange", onVisibility);
+      refs.root.removeEventListener("pointerdown", onInteract);
       teardown(root, widgets);
     }
 
@@ -1759,7 +1928,7 @@ const targetSelector = target ?? "";
 
       // ---- read (before any writes: no layout thrash)
       let tp = { x: 0, y: 0 };
-      const trackingCta = phase === "breach" || phase === "rise" || phase === "rest";
+      const trackingCta = phase === "breach" || phase === "rise" || phase === "approach" || phase === "rest";
       if (trackingCta) {
         tp = targetPoint();
         const inst = { x: (tp.x - lastTarget.x) / Math.max(rawDt, 0.001), y: (tp.y - lastTarget.y) / Math.max(rawDt, 0.001) };
@@ -1777,6 +1946,31 @@ const targetSelector = target ?? "";
       switch (phase) {
         case "swoop":
           break; // driven by the flight substepper
+        case "inspect":
+          break; // the pointer holds its pose and looks down at the surface
+        case "firstHit": {
+          substep(dt, (h) => {
+            speed = track(
+              cur,
+              impactX,
+              surfaceY + floorH * 0.24,
+              0,
+              0,
+              CFG.flight.firstHit.stiffness,
+              CFG.flight.firstHit.damping,
+              CFG.flight.firstHit.maxSpeed,
+              h
+            );
+            if (cur.y >= surfaceY && cur.vy > 0) {
+              cur.y = surfaceY;
+              hitBarrier(speed);
+              return false;
+            }
+            return true;
+          });
+          speed = Math.hypot(cur.vx, cur.vy);
+          break;
+        }
         case "bounce": {
           substep(dt, (h) => {
             cur.vy += gravity * h;
@@ -1810,20 +2004,26 @@ const targetSelector = target ?? "";
           break;
         }
         case "settle":
+        case "think":
         case "invite": {
           if (phase === "invite" && invited && !touch && pointer.seen) {
             // the pointer is live: the cue follows the visitor's own hand
             substep(dt, (h) => {
               const k = smoothing(CFG.invite.follow.lerp * 60, h) * 0.16;
+              const px = cur.x;
+              const py = cur.y;
               cur.x = lerp(cur.x, pointer.x, k);
               cur.y = lerp(cur.y, pointer.y, k);
+              cur.vx = (cur.x - px) / Math.max(h, 0.001);
+              cur.vy = (cur.y - py) / Math.max(h, 0.001);
             });
           } else {
+            const bob = phase === "think" ? Math.sin((clock.time - thinkAt) * 3.1) * CFG.bounce.thinkBobPx : 0;
             substep(dt, (h) => {
               speed = track(
                 cur,
                 vw * CFG.layout.settle.x,
-                vh * CFG.layout.settle.y,
+                vh * CFG.layout.settle.y + bob,
                 0,
                 0,
                 CFG.bounce.settle.stiffness,
@@ -1836,6 +2036,9 @@ const targetSelector = target ?? "";
           speed = Math.hypot(cur.vx, cur.vy);
           break;
         }
+        case "prepare":
+          break; // the wind-up tween gives the cursor its measured step back
+
         case "breach": {
           // the dive continues behind the barrier: the site is already tearing
           // open above the pointer, so all we owe here is momentum
@@ -1855,17 +2058,18 @@ const targetSelector = target ?? "";
           break;
         }
         case "rise": {
-          // pointer rides the rising page: the offset from the real CTA shrinks
-          // to exactly zero, and the residual dive energy settles on a spring
+          // The pointer rides the page rise, retaining a small offset so its
+          // separate, deliberate CTA approach remains visible.
           const tp = targetPoint();
-          const rel = 1 - EASE.outCubic(clamp(riseP / 0.82, 0, 1));
+          const easedLock = EASE.outCubic(clamp(riseP / 0.82, 0, 1));
+          const rel = lerp(CFG.handoff.cta.captureRemaining, 1, 1 - easedLock);
           substep(dt, (h) => {
             springStep(wobble, 0, 0, CFG.handoff.cta.wobbleStiffness, 1, 2200, h);
           });
           const px = cur.x;
           const py = cur.y;
-          cur.x = tp.x + captureX * rel + wobble.x;
-          cur.y = tp.y + captureY * rel + wobble.y;
+          cur.x = tp.x + captureX * rel + wobble.x - cameraX;
+          cur.y = tp.y + captureY * rel + wobble.y - cameraY;
           cur.vx = (cur.x - px) / Math.max(dt, 0.001);
           cur.vy = (cur.y - py) / Math.max(dt, 0.001);
           speed = Math.hypot(cur.vx, cur.vy);
@@ -1876,8 +2080,8 @@ const targetSelector = target ?? "";
           // dissolves, so the glow always reads as "here is your next step"
           const px = cur.x;
           const py = cur.y;
-          cur.x = tp.x;
-          cur.y = tp.y;
+          cur.x = tp.x - cameraX;
+          cur.y = tp.y - cameraY;
           cur.vx = (cur.x - px) / Math.max(dt, 0.001);
           cur.vy = (cur.y - py) / Math.max(dt, 0.001);
           speed = Math.hypot(cur.vx, cur.vy);
@@ -1887,13 +2091,23 @@ const targetSelector = target ?? "";
           break;
       }
 
-      // rotation follows the travel direction — never a snapped angle
-      const rate = phase === "swoop" || phase === "plunge" ? CFG.cursor.rotation.rateFlying : CFG.cursor.rotation.rateSettling;
+      // The arrow follows travel gently, but slows further for a deliberate
+      // look, wind-up, and final CTA approach.
+      const rate =
+        phase === "approach"
+          ? CFG.cursor.rotation.rateApproaching
+          : phase === "inspect" || phase === "think" || phase === "prepare"
+            ? CFG.cursor.rotation.rateLooking
+            : phase === "swoop" || phase === "firstHit" || phase === "plunge"
+              ? CFG.cursor.rotation.rateFlying
+              : CFG.cursor.rotation.rateSettling;
       let want: number = theta;
       const followTravel = speed > CFG.cursor.rotation.restBelowSpeed && (cur.vx || cur.vy);
-      if (phase === "breach") {
-        // "rotate to follow its downward trajectory as it breaks through" —
-        // while it is still diving. Once captured, the head comes back level.
+      if (phase === "inspect" || phase === "think" || phase === "prepare") {
+        const gazeX = phase === "prepare" ? launchX : impactX;
+        want = Math.atan2(surfaceY - cur.y, gazeX - cur.x) * (180 / Math.PI);
+      } else if (phase === "breach") {
+        // Follow the final downward arc, then ease back to the resting angle.
         want = cur.vy > 40 ? Math.atan2(cur.vy, cur.vx) * (180 / Math.PI) : CFG.cursor.restAngle;
       } else if (phase === "rise") {
         want = CFG.cursor.restAngle;
@@ -1909,7 +2123,7 @@ const targetSelector = target ?? "";
 
       // smear along the travel axis
       const targetStretch =
-        phase === "swoop" || phase === "plunge"
+        phase === "swoop" || phase === "firstHit" || phase === "plunge"
           ? 1 + clamp(speed * CFG.cursor.stretch.perSpeed, 0, CFG.cursor.stretch.max)
           : phase === "breach"
             ? 1 + clamp(speed * CFG.cursor.stretch.perSpeed, 0, CFG.cursor.stretch.max) * 0.6
@@ -1925,9 +2139,11 @@ const targetSelector = target ?? "";
       const sx = Math.sin(shakeT * shakeFreq * 6.283) * sxAmp * 0.62 + Math.sin(shakeT * shakeFreq * 9.1) * sxAmp * 0.24;
       const sy = Math.sin(shakeT * shakeFreq * 7.4 + 1.7) * sxAmp * 0.42;
       const sr = Math.sin(shakeT * shakeFreq * 5.1 + 0.6) * shakeRot * decay;
-      if (sxAmp > 0.05 || Math.abs(sr) > 0.005) {
+      const worldX = cameraX + sx;
+      const worldY = cameraY + sy;
+      if (Math.abs(worldX) > 0.02 || Math.abs(worldY) > 0.02 || sxAmp > 0.05 || Math.abs(sr) > 0.005) {
         refs.world.classList.add("is-shaking");
-        refs.world.style.transform = `translate3d(${r2(sx)}px, ${r2(sy)}px, 0) rotate(${r2(sr)}deg)`;
+        refs.world.style.transform = `translate3d(${r2(worldX)}px, ${r2(worldY)}px, 0) rotate(${r2(sr)}deg)`;
       } else if (refs.world.style.transform) {
         refs.world.style.transform = "";
         refs.world.classList.remove("is-shaking");
@@ -2005,7 +2221,7 @@ const targetSelector = target ?? "";
       // the prompt follows the pointer tip, clamped inside the stage
       if (invited && phase === "invite") {
         const off = CFG.invite.promptOffset;
-        refs.prompt.style.transform = `translate3d(${r2(cur.x + off.x)}px, ${r2(cur.y + off.y)}px, 0)`;
+        refs.prompt.style.transform = `translate3d(${r2(cur.x + cameraX + off.x)}px, ${r2(cur.y + cameraY + off.y)}px, 0)`;
       }
 
       // dents
@@ -2106,6 +2322,9 @@ const targetSelector = target ?? "";
         impactY,
         impactSpeed: cur.vy,
         cursor: { x: r1(cur.x), y: r1(cur.y), speed: r1(Math.hypot(cur.vx, cur.vy)) },
+        screenCursor: { x: r1(cur.x + cameraX), y: r1(cur.y + cameraY) },
+        camera: { x: r1(cameraX), y: r1(cameraY) },
+        fracturePieces: refs.pieces.length,
         speed: r1(Math.hypot(cur.vx, cur.vy)),
         theta: r1(theta),
         riseP: r2(riseP),
