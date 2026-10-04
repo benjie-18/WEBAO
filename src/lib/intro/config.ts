@@ -50,7 +50,7 @@ export const INTRO_CONFIG = {
     /** Height of the deformable lip drawn on top of the barrier, in px. */
     lipHeight: 46,
     /** Where the cursor comes to rest between the bounce and the click. */
-    settle: { x: 0.5, y: 0.455 },
+    settle: { x: 0.5, y: 0.625 },
     /** Faint technical crosshair on the veil (fades before the invite). */
     crosshair: true,
     /** Frame captions on the veil. */
@@ -65,8 +65,10 @@ export const INTRO_CONFIG = {
     restAngle: -135,
     /** Velocity-derived rotation smoothing. */
     rotation: {
-      rateFlying: 15, // 1/s — higher snaps faster to the travel direction
-      rateSettling: 8.5, // 1/s — softer, so the settle reads as deliberate
+      rateFlying: 10.5, // 1/s — softer tracking keeps the arrow easy to follow
+      rateSettling: 6.8, // 1/s — deliberate return to its resting angle
+      rateLooking: 4.8, // 1/s — slow, readable glance toward the barrier
+      rateApproaching: 5.4, // 1/s — the final CTA landing feels guided, not snapped
       restBelowSpeed: 110, // px/s — under this the head eases to restAngle
       maxDegPerFrame: 26, // safety clamp so it can never spin unnaturally
     },
@@ -90,35 +92,41 @@ export const INTRO_CONFIG = {
   flight: {
     /**
      * Reference path the cursor chases — an authored curve, not a tween.
-     * The pointer has real inertia, so it leans out of the corners and
-     * overshoots the curve slightly: that is where the weight comes from.
+     * The route eases into the frame, makes one broad, readable sweep, then
+     * deliberately settles just above the barrier for a beat before the first
+     * gentle test impact.
      */
     path: [
-      { x: -0.12, y: -0.3 }, // off-screen entry (already at speed)
-      { x: 0.26, y: 0.2 }, // first visible swoop
-      { x: 0.775, y: 0.42 }, // wide sweep across the stage
-      { x: 0.3, y: 0.6 }, // the hook back — the moment that sells the physics
-      { x: 0.452, y: 0.96 }, // steepening descent
-      { x: 0.5, y: 1.42 }, // below the surface: drives the plunge
+      { x: -0.1, y: -0.18 }, // unhurried entry from just outside the frame
+      { x: 0.18, y: 0.12 }, // first visible arc
+      { x: 0.72, y: 0.25 }, // a broad, easy-to-follow sweep
+      { x: 0.82, y: 0.46 }, // soften the corner instead of snapping across it
+      { x: 0.64, y: 0.66 }, // turn back toward the barrier
+      { x: 0.56, y: 0.79 }, // inspection position, above the surface
     ] as Frac[],
     /** Curve sampling: higher = tighter tracking of the authored path. */
-    pathTension: 0.5, // 0 = polygonal, 0.5 = Catmull-Rom, 1 = very round
-    /** Duration of the whole chase (seconds) — the dive is inside this. */
-    duration: 1.42,
-    /** Speed profile [[t, relativeSpeed]] — normalised so it always arrives. */
+    pathTension: 0.42,
+    /** Duration of the whole chase (seconds), before the barrier is inspected. */
+    duration: 2.05,
+    /** Slow at both ends: ease into the frame and settle before the first hit. */
     speedProfile: [
-      [0, 0.62],
-      [0.16, 1],
-      [0.5, 1.02],
-      [0.76, 1.42],
-      [1, 2.5],
+      [0, 0.16],
+      [0.12, 0.48],
+      [0.34, 0.86],
+      [0.58, 1.02],
+      [0.76, 0.86],
+      [0.91, 0.48],
+      [1, 0.16],
     ] as [number, number][],
+    /** Pause for a quiet look, then approach the surface for a soft first tap. */
+    lookMs: 720,
+    firstHit: { stiffness: 148, damping: 0.88, maxSpeed: 1900 },
     /** Inertia of the pointer while it chases the curve. */
     chase: {
-      stiffness: 132, // spring constant (1/s²)
-      damping: 0.86, // 0 = no friction, 1 = critically damped
-      maxSpeed: 5400, // px/s
-      entryVelocity: { x: 0.78, y: 0.42 }, // × viewport / s
+      stiffness: 92, // gentler spring makes each direction change legible
+      damping: 0.9, // less overshoot, more intentional movement
+      maxSpeed: 3600, // px/s
+      entryVelocity: { x: 0.28, y: 0.16 }, // × viewport / s; a soft arrival
     },
   },
 
@@ -159,7 +167,10 @@ export const INTRO_CONFIG = {
     arcMin: 0.72,
     arcMax: 1.35,
     /** Beat between arriving in the settle pose and the invitation. */
-    settleHold: 0.45,
+    settleHold: 0.34,
+    /** A quiet, readable thinking pause before the invitation appears. */
+    thinkMs: 660,
+    thinkBobPx: 2.5,
     /** Small second tap on the floor before it settles. */
     secondTap: { enabled: true, restitution: 0.19 },
     /** Critically damped arrival at the settle point. */
@@ -183,32 +194,36 @@ export const INTRO_CONFIG = {
 
   /* ------------------------------------------------------------------ breach */
   breach: {
-    press: 0.14, // s of "press" feedback before the plunge
+    /** Wind-up: the cursor takes a small step back before launching. */
+    prepare: { moveMs: 520, holdMs: 180, stepBackX: 0.045, stepBackY: 0.1 },
+    /** The plunge: a committed, accelerating second dive. */
+    plunge: { stiffness: 96, damping: 0.88, maxSpeed: 4600 },
     /** Let the fracture read before the site starts rising. */
-    hold: 0.34,
-    /** The plunge: a hard, straight, accelerating dive. */
-    plunge: { stiffness: 88, damping: 0.9, maxSpeed: 5600 },
+    hold: 0.38,
+    /** Camera move is eased in/out, keeping the contact point near center. */
+    camera: { focusY: 0.58, shiftMs: 360, returnMs: 1050 },
     /** Fracture. */
     fracture: {
-      pieces: 3, // the barrier splits into three
-      jitter: 3.4, // px of jaggedness on the crack lines
-      cracks: 4, // crack flash lines drawn from the impact point
-      crackMs: 190,
-      pieceMs: 940,
-      drift: { x: 0.16, y: 0.5, rot: 3.4 }, // as fractions of the piece / deg
+      pieces: 7, // seven irregular slabs instead of three wide panels
+      jitter: 11, // px of jaggedness along each fracture edge
+      cracks: 7, // crack flash lines drawn from the impact point
+      crackMs: 240,
+      pieceMs: 1180,
+      staggerMs: 28,
+      drift: { x: 0.12, y: 0.1, rot: 24 }, // exit margin / viewport / degrees
     },
     debris: {
-      count: 42,
-      speed: [260, 1500],
-      spreadDeg: [-186, 6],
-      lifeMs: [700, 1700],
+      count: 54,
+      speed: [240, 1350],
+      spreadDeg: [-198, 18],
+      lifeMs: [700, 1650],
       size: [1.8, 7],
     },
-    shake: { amp: 15, ms: 560, rotDeg: 0.46, freq: 24 },
+    shake: { amp: 12, ms: 520, rotDeg: 0.34, freq: 21 },
     /** The hole torn in the veil — the landing page shows through it. */
-    hole: { ms: 1000, overshoot: 1.6, ease: "inOutCubic" },
+    hole: { ms: 1120, overshoot: 1.45, ease: "inOutCubic" },
     /** The veil flexes as the cursor punches through, then springs back. */
-    flex: { y: 14, ms: 460 },
+    flex: { y: 12, ms: 560 },
   },
 
   /* ----------------------------------------------------------------- handoff */
@@ -237,12 +252,14 @@ export const INTRO_CONFIG = {
       anchor: { x: 0.5, y: 0.56 },
       /** Spring that locks the tip onto the button, ramped across the rise. */
       lock: { stiffnessFrom: 15, stiffnessTo: 92, damping: 0.94, maxSpeed: 6200 },
-      /** Final exact positioning, so alignment is pixel-true on any screen. */
-      nudge: 0.32,
+      /** Leave a small, visible gap for the cursor's final guided approach. */
+      captureRemaining: 0.22,
+      /** Slow travel from the open break to the real CTA after the page lands. */
+      approachMs: 1080,
       /** Spring that absorbs the leftover dive energy during the capture. */
       wobbleStiffness: 30,
       /** Tiny landing acknowledgement (scale dip), 1 = off. */
-      landing: { dip: 0.965, ms: 260 },
+      landing: { dip: 0.97, ms: 300 },
     },
     /**
      * On short viewports the CTA can sit below the fold. Instead of dropping the
@@ -252,10 +269,10 @@ export const INTRO_CONFIG = {
      */
     scroll: { ms: 950, ease: "inOutCubic", band: [0.22, 0.9], focus: 0.58, min: 6 },
     /** The restrained glow that hands attention to the CTA. */
-    glow: { periodMs: 1250, alpha: 0.16, ringAlpha: 0.3, ringScale: 2.15 },
+    glow: { periodMs: 1500, alpha: 0.12, ringAlpha: 0.2, ringScale: 1.85 },
     /** How long the cursor rests on the CTA before it dissolves (ends early
      *  if the visitor starts interacting with the page). */
-    restMs: 2400,
+    restMs: 3000,
     fadeMs: 0.62,
   },
 
