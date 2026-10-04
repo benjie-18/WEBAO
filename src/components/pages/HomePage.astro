@@ -127,14 +127,14 @@ const processId = locale === "fr" ? "processus" : "process";
             <div style="font-weight: 700; font-size: 13px; letter-spacing:-0.02em;">{t.home.hero.visual.domainIncluded}</div>
             <div style="font-size: 12.5px; color: var(--muted);">{t.home.hero.visual.domainDesc}</div>
           </div>
-          <span class="check"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.2 8.6l3.4 3.4 6.2-7.2" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="check"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.2l3.2 3.2 5.8-6.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </div>
         <div class="float-card float-b" data-parallax="b">
           <div style="font-family: var(--font-mono); font-size:10px; letter-spacing:.12em; color: var(--muted);">{t.home.hero.visual.smallUpdates}</div>
           <div style="font-family: var(--font-display); font-size:24px; line-height:1.05; margin-top:6px;" set:html={t.home.hero.visual.hours}></div>
           <ul class="float-list" role="list">
-            <li><i><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.2 8.6l3.4 3.4 6.2-7.2" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i> {t.home.hero.visual.included}</li>
-            <li><i><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.2 8.6l3.4 3.4 6.2-7.2" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i> {t.home.hero.visual.sendEmail}</li>
+            <li><i><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.2l3.2 3.2 5.8-6.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i> {t.home.hero.visual.included}</li>
+            <li><i><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.2l3.2 3.2 5.8-6.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i> {t.home.hero.visual.sendEmail}</li>
           </ul>
         </div>
       </div>
@@ -191,7 +191,7 @@ const processId = locale === "fr" ? "processus" : "process";
     <div class="feature-grid" data-reveal style="--d:180ms">
       {t.home.why.features.map((f) => (
         <div class="f-card">
-          <div class="f-icon">{f.icon}</div>
+          <div class="f-icon"><span class="oglyph">{f.icon}</span></div>
           <h3>{f.title}</h3>
           <p>{f.desc}</p>
         </div>
@@ -212,7 +212,7 @@ const processId = locale === "fr" ? "processus" : "process";
     <div class="steps">
       {t.home.process.steps.map((step: any, idx: number) => (
         <div class="step" data-reveal style={`--d:${idx*100}ms`}>
-          <div class="step-n">0{idx+1}</div>
+          <div class="step-n"><span class="oglyph">0{idx+1}</span></div>
           <div class="step-body">
             <h3>{step.title}</h3>
             <p>{step.desc}</p>
@@ -227,7 +227,7 @@ const processId = locale === "fr" ? "processus" : "process";
                 <div style="margin-top:10px; font-size:13px; line-height:1.5;"><strong>{step.subject}</strong> {step.subjectText}</div>
                 <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">{step.tags?.map((tag: string) => <span class="tag">{tag}</span>)}</div>
                 <div style="margin-top:12px; height:1px; background: var(--line);"></div>
-                <div style="margin-top:10px; display:flex; align-items:center; gap:8px; font-size:13px;"><span style="width:28px;height:28px;border-radius:99px;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-size:11px;">W</span> {step.reply} <span style="margin-left:auto; color: var(--accent-text);">↗</span></div>
+                <div style="margin-top:10px; display:flex; align-items:center; gap:8px; font-size:13px;"><span style="width:28px;height:28px;border-radius:99px;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-size:11px;"><span class="oglyph">W</span></span> {step.reply} <span style="margin-left:auto; color: var(--accent-text);">↗</span></div>
               </div>
             )}
             {idx === 1 && (
@@ -250,8 +250,8 @@ const processId = locale === "fr" ? "processus" : "process";
                   <span style="font-size:11px; background:var(--ink); color:var(--paper); padding:4px 8px; border-radius:99px; font-weight:600;">{step.live}</span>
                 </div>
                 <div style="margin-top:12px; display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:12.5px;">
-                  <div style="background:#F8F5EF; border-radius:10px; padding:10px; text-align:center;"><div style="font-weight:700;">{step.ssl}</div><div style="opacity:.6; font-size:11px;">{step.sslDesc}</div></div>
-                  <div style="background:#F8F5EF; border-radius:10px; padding:10px; text-align:center;"><div style="font-weight:700;">{step.backups}</div><div style="opacity:.6; font-size:11px;">{step.backupsDesc}</div></div>
+                  <div style="background:#F8F5EF; color:#0A0F1C; border-radius:10px; padding:10px; text-align:center;"><div style="font-weight:700;">{step.ssl}</div><div style="opacity:.6; font-size:11px;">{step.sslDesc}</div></div>
+                  <div style="background:#F8F5EF; color:#0A0F1C; border-radius:10px; padding:10px; text-align:center;"><div style="font-weight:700;">{step.backups}</div><div style="opacity:.6; font-size:11px;">{step.backupsDesc}</div></div>
                 </div>
                 <div style="margin-top:10px; font-size:12.5px; color: var(--muted); text-align:center;">{step.needChange} <a href={paths.contact} style="color:var(--accent-text); font-weight:600; text-decoration:underline; text-underline-offset:3px;">{step.sendMessage}</a></div>
               </div>
@@ -422,38 +422,6 @@ const processId = locale === "fr" ? "processus" : "process";
   <div class="angle-divider" aria-hidden="true"></div>
 </section>
 
-<!-- PRICING TEASER -->
-<section class="section grain" style="padding-top: 72px;">
-  <div class="shell">
-    <div class="pricing-teaser" data-reveal>
-      <div class="pricing-left">
-        <div class="eyebrow">{t.home.pricingTeaser.eyebrow}</div>
-        <h2 class="display" style="font-size: clamp(2rem, 4.2vw, 3.6rem); margin-top: 10px; line-height:.94;">{t.home.pricingTeaser.price} <span style="font-size:.52em; vertical-align: middle; font-family: var(--font-sans); font-weight:600; letter-spacing:-0.02em; opacity:.7;">{t.home.pricingTeaser.priceSuffix}</span></h2>
-        <p class="prose" style="margin-top:12px; font-size: 15px;">{t.home.pricingTeaser.desc}</p>
-        <a href={paths.pricing} class="btn btn--primary" style="margin-top: 18px;">{t.home.pricingTeaser.cta}</a>
-        <div class="mono" style="margin-top:10px; font-size:11px; color: var(--muted);">{t.home.pricingTeaser.note}</div>
-      </div>
-      <div class="pricing-grid">
-        <div class="price-card">
-          <div class="mono" style="font-size:10px; color: var(--muted);">{t.home.pricingTeaser.includedTitle}</div>
-          <ul>
-            {t.home.pricingTeaser.included.map(item => <li><i><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.2 8.6l3.4 3.4 6.2-7.2" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i> {item}</li>)}
-          </ul>
-        </div>
-        <div class="price-card price-card--muted">
-          <div class="mono" style="font-size:10px; color: var(--muted);">{t.home.pricingTeaser.goodTitle}</div>
-          <ul>
-            {t.home.pricingTeaser.good.map(item => <li><i><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.2 8.6l3.4 3.4 6.2-7.2" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i> {item}</li>)}
-          </ul>
-          <div style="margin-top:16px; padding:10px 12px; background: var(--accent-soft); border-radius:10px; font-size:12.5px; line-height:1.5; color: var(--accent-soft-text);">
-            <strong>{t.home.pricingTeaser.needMore}</strong> {t.home.pricingTeaser.needMoreDesc}
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- CRAFT / EDITORIAL -->
 <section class="section section--tight">
   <div class="shell">
@@ -519,7 +487,7 @@ const processId = locale === "fr" ? "processus" : "process";
         <ul class="craft-list" role="list">
           {t.home.craft.items.map(item => (
             <li>
-              <span class="check-badge"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.2 8.6l3.4 3.4 6.2-7.2" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="check-badge"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.2l3.2 3.2 5.8-6.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
               <div><strong>{item.title}</strong> {item.desc}</div>
             </li>
           ))}
@@ -577,9 +545,9 @@ const processId = locale === "fr" ? "processus" : "process";
         <div style="margin-top:10px; font-family: var(--font-display); font-size: 1.6rem; line-height:.9;" set:html={t.home.finalCta.yourBiz}></div>
         <div style="margin-top:10px; height:1px; background: var(--line);"></div>
         <div style="margin-top:12px; display:flex; gap:8px;"><span style="flex:1; height:28px; border-radius:99px; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-size:11px; font-weight:650;">{t.home.finalCta.call}</span><span style="flex:1; height:28px; border-radius:99px; border:1px solid var(--line-strong); display:grid; place-items:center; font-size:11px; font-weight:600;">{t.home.finalCta.quote}</span></div>
-        <div style="margin-top:12px; background: #F8F5EF; border-radius:10px; padding:10px; font-size:12px; text-align:center;" set:html={t.home.finalCta.live}></div>
+        <div style="margin-top:12px; background: var(--paper-2); border:1px solid var(--line); border-radius:10px; padding:10px; font-size:12px; text-align:center;" set:html={t.home.finalCta.live}></div>
       </div>
-      <div class="cta-stamp">W</div>
+      <div class="cta-stamp"><span class="oglyph">W</span></div>
     </div>
   </div>
 </section>
@@ -599,7 +567,7 @@ const processId = locale === "fr" ? "processus" : "process";
   .visual-stack { position: relative; background: var(--card-bg); border: 1px solid var(--line); border-radius: 22px; box-shadow: var(--shadow-lg); overflow: clip; transform: rotate(.4deg); }
   .browser-bar { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid var(--line); background: var(--card-bg); }
   .dots { display:flex; gap:6px; } .dots i { width:10px; height:10px; border-radius:99px; background: #E6E0D6; display:block; } .dots i:nth-child(1){ background:#FF5F57; } .dots i:nth-child(2){ background:#FFBD2E; } .dots i:nth-child(3){ background:#28C940; }
-  .url { font-family: var(--font-mono); font-size:11px; letter-spacing:.04em; background: var(--paper-3); border:1px solid var(--line); padding:5px 10px; border-radius:99px; color: var(--ink-3); }
+  .url { font-family: var(--font-mono); font-size:11px; letter-spacing:.04em; background: var(--paper-3); border:1px solid var(--line); padding:5px 10px; border-radius:99px; color: var(--ink-3); min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .live { margin-left: auto; font-size:11px; color: var(--muted); font-weight:650; display:flex; align-items:center; gap:6px; } .live i { width:7px; height:7px; border-radius:99px; background: var(--muted); display:block; }
   .preview-main { padding: 14px; background: var(--paper-2); }
   .preview-media { border-radius: 14px; overflow: clip; border: 1px solid var(--line); background: var(--card-bg); }
@@ -639,12 +607,10 @@ const processId = locale === "fr" ? "processus" : "process";
   .intro-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(24px, 4vw, 56px); align-items: start; }
   .feature-grid { display:grid; grid-template-columns: repeat(3,1fr); gap:16px; margin-top: clamp(32px,5vw,56px); }
   .f-card { background: var(--card-bg); border:1px solid var(--line); border-radius: var(--radius-lg); padding: 22px; box-shadow: var(--shadow-sm); }
-  /* Accent card: inverts against its siblings in both themes */
-  .feature-grid .f-card:nth-child(2) { background: var(--ink); color: var(--paper); border-color: var(--line-strong); }
-  .feature-grid .f-card:nth-child(2) p { color: rgba(248,245,239,.68); }
-  .feature-grid .f-card:nth-child(2) .f-icon { background: rgba(248,245,239,.08); border-color: rgba(248,245,239,.10); color: var(--paper); }
-  [data-theme="dark"] .feature-grid .f-card:nth-child(2) p { color: rgba(7,11,20,.68); }
-  [data-theme="dark"] .feature-grid .f-card:nth-child(2) .f-icon { background: rgba(7,11,20,.06); border-color: rgba(7,11,20,.12); }
+  /* Accent card: inverts against its siblings in both themes (token-driven, no theme overrides needed) */
+  .feature-grid .f-card:nth-child(2) { background: var(--accent-card-bg); color: var(--accent-card-text); border-color: var(--line-strong); }
+  .feature-grid .f-card:nth-child(2) p { color: var(--accent-card-soft); }
+  .feature-grid .f-card:nth-child(2) .f-icon { background: var(--accent-card-chip); border-color: var(--accent-card-chip-line); color: var(--accent-card-text); }
   .f-icon { width:36px; height:36px; border-radius:10px; display:grid; place-items:center; background: var(--paper-2); border:1px solid var(--line); font-size:13px; transition: transform .35s var(--ease-out), background .2s; }
   .f-card { transition: transform .35s var(--ease-out), box-shadow .35s, border-color .2s; }
   .f-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
@@ -728,17 +694,6 @@ const processId = locale === "fr" ? "processus" : "process";
   .agency-note { margin-top:14px; display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; font-size:10px; color: rgba(248,245,239,.45); padding: 0 2px 22px; }
   .angle-divider { height: 28px; background: var(--paper); clip-path: polygon(0 100%, 100% 0, 100% 100%, 0 100%); margin-top: 10px; }
   @media (max-width: 960px) { .agency-grid { grid-template-columns: 1fr; } .agency-card { min-height: 380px; } }
-  .pricing-teaser { display:grid; grid-template-columns: .9fr 1.1fr; gap: 24px; align-items: start; }
-  .pricing-grid { display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
-  .price-card { background: var(--card-bg); border:1px solid var(--line); border-radius:16px; padding:16px; box-shadow: var(--shadow-sm); transition: transform .3s var(--ease-out), box-shadow .3s; }
-  .price-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
-  .price-card ul { list-style:none; padding:0; margin-top:10px; display:grid; gap:8px; }
-  .price-card li { display:flex; gap:8px; align-items:center; font-size:13.5px; line-height:1.45; }
-  .price-card li i { width:20px; height:20px; border-radius:99px; background: #00C950; color:white; display:grid; place-items:center; font-style:normal; flex:none; }
-  .price-card li i svg { width:10px; height:10px; display:block; }
-  .price-card--muted { background: var(--paper-2); }
-  .price-card--muted li { color: var(--muted); font-size:13px; }
-  @media (max-width: 900px) { .pricing-teaser { grid-template-columns: 1fr; } .pricing-grid { grid-template-columns: 1fr; } }
   .craft-grid { display:grid; grid-template-columns: .95fr 1.05fr; gap: clamp(24px, 4vw, 48px); align-items: center; }
   .craft-frame { position:relative; }
   .craft-img { border-radius:18px; overflow: clip; border:1px solid var(--line); box-shadow: var(--shadow-lg); background: var(--card-bg); }
