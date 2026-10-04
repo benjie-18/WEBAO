@@ -2,6 +2,7 @@
 import { ClientRouter } from "astro:transitions";
 import LanguageSwitcher from "../components/ui/LanguageSwitcher.astro";
 import ThemeToggle from "../components/ui/ThemeToggle.astro";
+import CustomCursor from "../components/anim/CustomCursor.astro";
 import {
   getLocaleFromUrl,
   getAlternateUrls,
@@ -171,7 +172,7 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
     <header class:list={["site-header", headerVariant === "dark" && "site-header--dark"]} role="banner">
       <div class="header-inner">
         <a href={navLinks.home} class="brand" aria-label={t.nav.homeAria}>
-          <span class="brand-mark" aria-hidden="true">W</span>
+          <span class="brand-mark" aria-hidden="true"><span class="oglyph">W</span></span>
           <span>WEBAO</span>
           <span class="mono" style="font-size: 10px; letter-spacing: .16em; opacity:.55; margin-left:2px; font-weight:500;">WEBAO.CA</span>
         </a>
@@ -219,12 +220,14 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
       <slot />
     </main>
 
+    <CustomCursor />
+
     <footer class="site-footer" role="contentinfo">
       <div class="shell">
         <div class="footer-grid">
           <div class="footer-brand">
             <a href={navLinks.home} class="brand" style="color: var(--section-dark-text);">
-              <span class="brand-mark" style="background: var(--section-dark-text); color: var(--section-dark-bg);">W</span>
+              <span class="brand-mark" style="background: var(--section-dark-text); color: var(--section-dark-bg);"><span class="oglyph">W</span></span>
               <span>WEBAO</span>
             </a>
             <p>{t.footer.tagline}</p>

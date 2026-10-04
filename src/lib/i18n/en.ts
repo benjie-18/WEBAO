@@ -1,7 +1,7 @@
 const en = {
   meta: {
     home: {
-      title: "WEBAO · Custom websites for business · webao.ca",
+      title: "WEBAO · Custom websites for businesses · webao.ca",
       description:
         "Custom websites for businesses across Canada, for $149 CAD a month. Design, domain, hosting, updates, and support included. See the demo catalog.",
     },
@@ -72,7 +72,7 @@ const en = {
     enter: "◆ ENTER",
     tap: "◆ TAP",
     static: {
-      sub: "Custom websites for business · $149 CAD / month",
+      sub: "Custom websites for businesses · $149 CAD / month",
       button: "Enter site",
       live: "Intro (reduced motion). Press Enter to open the site.",
       liveTouch: "Intro: {action} to enter.",
@@ -86,7 +86,7 @@ const en = {
       title1: "Websites that",
       titleWork: "work",
       title2: "for",
-      title3: "business.",
+      title3: "businesses.",
       lead: "A custom, professional website without the domains, hosting, and “can you fix this?” emails.",
       leadStrong: "One simple monthly fee.",
       leadRest: "We design, launch, host, and maintain it while you run your business.",
@@ -198,7 +198,7 @@ const en = {
         {
           tag: "DEMO 03 · AUTOMOTIVE · FICTIONAL",
           name: "ATELIER NORD",
-          sub: "Premium automotive · Précision first",
+          sub: "Premium automotive · Precision first",
         },
       ],
       view: "View in catalog →",
@@ -234,32 +234,6 @@ const en = {
       },
       noteLeft: "MADE IN MONTRÉAL · DESIGNED FOR TRADES, SHOPS & LOCAL BUSINESSES ACROSS CANADA",
       noteRight: "→ Hover, peek, then pick your path.",
-    },
-    pricingTeaser: {
-      eyebrow: "Pricing · One plan, everything included",
-      price: "$149",
-      priceSuffix: "CAD / month",
-      desc: "One monthly fee that covers the whole thing: design, domain, hosting, updates, and support. Nothing to decode, and no setup fee.",
-      cta: "See everything included →",
-      note: "Monthly · No long-term contract · Your domain is yours",
-      includedTitle: "INCLUDED",
-      included: [
-        "Custom 3–5 page design",
-        "Domain + email forwarding",
-        "Hosting, SSL, backups",
-        "Mobile-first, SEO basics, analytics",
-        "Contact / quote form",
-        "Small content updates",
-      ],
-      goodTitle: "GOOD TO KNOW",
-      good: [
-        "Your domain belongs to your business",
-        "We manage the technical side while you’re subscribed",
-        "Email forwarding, not full mailboxes",
-        "If you ever leave, we help with the handoff",
-      ],
-      needMore: "Need more?",
-      needMoreDesc: "Extra pages, booking, or another language get a clear quote before any work starts.",
     },
     craft: {
       float: "PERFORMANCE · SEO · ACCESSIBILITY",
@@ -329,10 +303,10 @@ const en = {
       ctaSecondary: "Browse demos first",
       contact: "hello@webao.ca · Mon–Fri, 9–5 Eastern",
       preview: "PREVIEW · YOUR SITE",
-      yourBiz: "Votre<br />Entreprise",
-      call: "Appeler",
-      quote: "Soumission",
-      live: "votreentreprise.ca · <span>●</span> Live",
+      yourBiz: "Your<br />Business",
+      call: "Call",
+      quote: "Get a quote",
+      live: "yourbusiness.ca · <span>●</span> Live",
     },
   },
 
@@ -355,7 +329,7 @@ const en = {
     },
     compare: {
       title: "What you get, and what you never have to think about",
-      subtitle: "Everything a local business site actually needs. Nothing you’ll never use.",
+      subtitle: "Everything a local business site actually needs. Nothing you won’t use.",
       includedLabel: "INCLUDED IN YOUR $149",
       included: [
         {
@@ -517,7 +491,7 @@ const en = {
       name: "Your name",
       namePlaceholder: "Your name",
       email: "Email",
-      emailPlaceholder: "you@entreprise.ca",
+      emailPlaceholder: "you@yourbusiness.ca",
       phone: "Phone",
       optional: "(optional)",
       phonePlaceholder: "The best number to reach you",

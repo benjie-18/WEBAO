@@ -99,7 +99,7 @@ const fr = {
       visual: {
         url: "nora-electrique (démo)",
         live: "Exemple de site fictif",
-        demoLabel: "DÉMO 01 · NORA ÉLECTRIQUE (FICTIF)",
+        demoLabel: "DÉMO 01 · NORA ÉLECTRIQUE (FICTIVE)",
         demoTone: "Contemporain épuré · Conçu pour générer des appels",
         mobileReady: "Prêt mobile",
         domainIncluded: "Domaine + hébergement inclus",
@@ -187,19 +187,19 @@ const fr = {
       browse: "Parcourir toutes les démos →",
       cards: [
         {
-          tag: "DÉMO 01 · MÉTIERS · FICTIF",
+          tag: "DÉMO 01 · MÉTIERS · FICTIVE",
           name: "NORA ÉLECTRIQUE",
           sub: "Contemporain épuré · Interventions d’urgence",
         },
         {
-          tag: "DÉMO 02 · RESTAURANT · FICTIF",
+          tag: "DÉMO 02 · RESTAURANT · FICTIVE",
           name: "Mira Cantine",
           sub: "Éditorial chaleureux · Menu au feu de bois",
           reserve: "Réserver",
           menu: "Menu",
         },
         {
-          tag: "DÉMO 03 · AUTOMOBILE · FICTIF",
+          tag: "DÉMO 03 · AUTOMOBILE · FICTIVE",
           name: "ATELIER NORD",
           sub: "Automobile haut de gamme · La précision d’abord",
         },
@@ -231,39 +231,12 @@ const fr = {
       demos: {
         top: "03 · DÉMOS",
         title: "12 directions de design,<br />toutes fictives.",
-        desc: "Parcourez le catalogue par métier : électricien, restaurant, clinique. Chaque démo est un concept art-dirigé pour une entreprise fictive, pour voir l’étendue avant de choisir.",
+        desc: "Parcourez le catalogue par métier : électricien, restaurant, clinique. Chaque démo est un concept à direction artistique pour une entreprise fictive, pour voir l’étendue avant de choisir.",
         cta: "Parcourir le catalogue de démos",
-        mini: ["Filtrable", "·", "Cherchable", "·", "12 styles"],
+        mini: ["Filtrable", "·", "Recherchable", "·", "12 styles"],
       },
       noteLeft: "FAIT À MONTRÉAL · CONÇU POUR LES MÉTIERS, COMMERCES ET ENTREPRISES LOCALES PARTOUT AU CANADA",
       noteRight: "→ Survolez, jetez un œil, puis choisissez votre chemin.",
-    },
-    pricingTeaser: {
-      eyebrow: "Tarifs · Un seul forfait, tout inclus",
-      price: "149 $",
-      priceSuffix: "CAD / mois",
-      desc: "Un seul frais mensuel qui couvre tout : design, domaine, hébergement, mises à jour et soutien. Rien à décoder, et sans frais d’installation.",
-      cta: "Voir tout ce qui est inclus →",
-      note: "Mensuel · Sans contrat à long terme · Votre domaine vous appartient",
-      includedTitle: "INCLUS",
-      included: [
-        "Design sur mesure 3 à 5 pages",
-        "Domaine + redirection courriel",
-        "Hébergement, SSL, sauvegardes",
-        "Mobile d’abord, bases SEO, analytique",
-        "Formulaire de contact / demande de devis",
-        "Petites mises à jour de contenu",
-      ],
-      goodTitle: "BON À SAVOIR",
-      good: [
-        "Votre domaine appartient à votre entreprise",
-        "On gère le côté technique tant que vous êtes abonné",
-        "Redirection courriel, pas boîtes complètes",
-        "Si vous partez, on aide avec la transition",
-      ],
-      needMore: "Besoin de plus ?",
-      needMoreDesc:
-        "Pages supplémentaires, réservation ou autre langue : devis clair avant de commencer quoi que ce soit.",
     },
     craft: {
       float: "PERFORMANCE · SEO · ACCESSIBILITÉ",
@@ -359,7 +332,7 @@ const fr = {
     },
     compare: {
       title: "Ce que vous avez, et ce à quoi vous n’avez jamais à penser",
-      subtitle: "Tout ce qu’un site d’entreprise locale a vraiment besoin. Rien que vous n’utiliserez jamais.",
+      subtitle: "Tout ce qu’un site d’entreprise locale a vraiment besoin. Rien que vous n’utiliserez.",
       includedLabel: "INCLUS DANS VOTRE 149 $",
       included: [
         {
@@ -526,7 +499,7 @@ const fr = {
       name: "Votre nom",
       namePlaceholder: "Votre nom",
       email: "Courriel",
-      emailPlaceholder: "vous@entreprise.ca",
+      emailPlaceholder: "vous@votreentreprise.ca",
       phone: "Téléphone",
       optional: "(optionnel)",
       phonePlaceholder: "Le meilleur numéro pour vous joindre",
@@ -590,7 +563,7 @@ const fr = {
         "Cherchez : « éditorial », « Laval », « audacieux »…",
         "Touchez une démo : voyez sa direction, puis dites-nous laquelle vous ressemble.",
       ],
-      pills: ["Cherchable", "Filtrable", "12 styles"],
+      pills: ["Recherchable", "Filtrable", "12 styles"],
       fictionalNote:
         "CHAQUE ENTREPRISE ICI EST INVENTÉE · NOMS, VILLES ET DÉTAILS SONT DES EXEMPLES SEULEMENT",
     },
@@ -600,7 +573,7 @@ const fr = {
     empty: "Aucune démo ne correspond. Essayez « métiers » ou « restaurant », ou effacez les filtres.",
     clear: "Effacer la recherche",
     details: "Détails →",
-    fictional: "FICTIF",
+    fictional: "FICTIVE",
     noteLeft: "TOUTES LES DÉMOS SONT FICTIVES · PAS DE VRAIS CLIENTS WEBAO",
     noteRight:
       "→ Chaque carte montre une direction : typo, palette, mise en page et ton. Vous en aimez une ? Dites-le-nous et on bâtira votre site autour.",
