@@ -161,6 +161,15 @@ const t = useTranslations(locale);
   :global(.agency-card--contact.is-cursor-active) { outline: 2px solid var(--ink); outline-offset: 2px; }
   :global(.agency-card--demos.is-cursor-active)  { outline: 2px solid rgba(248,245,239,.9); outline-offset: 2px; }
 
+  /* Dark theme: the journey's progress trail glows electric blue */
+  :global([data-theme="dark"]) .journey-path-progress {
+    stroke: #3D7BFF;
+    filter: drop-shadow(0 0 10px rgba(61,123,255,.5));
+  }
+  :global([data-theme="dark"]) .journey-path {
+    stroke: rgba(248,245,239,.16);
+  }
+
   @media (hover: none), (pointer: coarse), (max-width: 960px) {
     .cursor-journey { display: none !important; }
   }

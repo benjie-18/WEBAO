@@ -764,8 +764,89 @@ const promptKey = t.intro.prompt.key;
     border: 0;
   }
 
+  /* -- dark theme ----------------------------------------------------------
+     Deep-black veil, blue-tinted barrier, electric-blue accents. The cursor
+     arrow inverts via --wi-ink/--wi-paper/--wi-accent (set from the dark
+     palette in JS); everything below adapts the hard-coded light values. */
+  html[data-theme="dark"] .wi-grid {
+    background-image: radial-gradient(rgba(248, 245, 239, 0.13) 1px, transparent 1.2px);
+  }
+  html[data-theme="dark"] .wi-vignette {
+    background:
+      radial-gradient(130% 100% at 50% 34%, rgba(0, 0, 0, 0) 44%, rgba(0, 0, 0, 0.42) 100%),
+      linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0) 30%);
+  }
+  html[data-theme="dark"] .wi-cross::before,
+  html[data-theme="dark"] .wi-cross::after {
+    background: rgba(248, 245, 239, 0.22);
+  }
+  html[data-theme="dark"] .wi-frame-l,
+  html[data-theme="dark"] .wi-frame-r {
+    color: rgba(248, 245, 239, 0.5);
+  }
+  html[data-theme="dark"] .wi-frame-sep {
+    background: rgba(248, 245, 239, 0.22);
+  }
+  html[data-theme="dark"] .wi-arrow {
+    filter: drop-shadow(0 calc(3 * var(--wi-cs, 1) * 1px) calc(4 * var(--wi-cs, 1) * 1px) rgba(0, 0, 0, 0.55));
+  }
+  html[data-theme="dark"] .wi-ring {
+    border-color: rgba(248, 245, 239, 0.5);
+  }
+  html[data-theme="dark"] .wi-ring--soft {
+    border-color: rgba(0, 67, 224, 0.6);
+  }
+  html[data-theme="dark"] .wi-piece {
+    background: linear-gradient(180deg, #0b1326 0%, #04060c 100%);
+    border-top-color: rgba(64, 110, 255, 0.35);
+  }
+  html[data-theme="dark"] .wi-piece.is-fractured {
+    filter: drop-shadow(0 5px 8px rgba(0, 0, 0, 0.42));
+  }
+  html[data-theme="dark"] .wi-piece::after {
+    background: linear-gradient(180deg, rgba(64, 110, 255, 0.14), rgba(64, 110, 255, 0));
+  }
+  html[data-theme="dark"] .wi-dent-fill {
+    fill: #0b1326;
+  }
+  html[data-theme="dark"] .wi-crack {
+    background: rgba(248, 245, 239, 0.55);
+  }
+  html[data-theme="dark"] .wi-prompt {
+    border-color: rgba(248, 245, 239, 0.14);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.3);
+  }
+  html[data-theme="dark"] .wi-prompt:hover {
+    border-color: rgba(248, 245, 239, 0.3);
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.3);
+  }
+  html[data-theme="dark"] .wi-prompt-dot {
+    box-shadow: 0 0 0 0 rgba(0, 67, 224, 0.45);
+  }
+  html[data-theme="dark"] .wi-prompt.is-live .wi-prompt-dot {
+    animation-name: wi-dot-dark;
+  }
+  @keyframes wi-dot-dark {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 rgba(0, 67, 224, 0.4);
+    }
+    50% {
+      box-shadow: 0 0 0 5px rgba(0, 67, 224, 0);
+    }
+  }
+  html[data-theme="dark"] .wi-kbd {
+    border-color: rgba(248, 245, 239, 0.18);
+    background: rgba(248, 245, 239, 0.06);
+    color: rgba(248, 245, 239, 0.7);
+  }
+  html[data-theme="dark"] .wi-static-btn {
+    box-shadow: 0 8px 20px rgba(0, 67, 224, 0.38);
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .wi-prompt.is-live .wi-prompt-dot {
+    .wi-prompt.is-live .wi-prompt-dot,
+    html[data-theme="dark"] .wi-prompt.is-live .wi-prompt-dot {
       animation: none;
     }
   }
@@ -802,6 +883,14 @@ const promptKey = t.intro.prompt.key;
    */
   const coarse = () =>
     (navigator.maxTouchPoints ?? 0) > 0 || window.matchMedia("(pointer: coarse)").matches;
+
+  /**
+   * Theme-aware palette: the intro reads the site theme set by the <head>
+   * init script, so the veil, cursor, barrier and glow all follow the dark
+   * art direction (deep black + electric blue) when the site is dark.
+   */
+  const wiDark = () => document.documentElement.getAttribute("data-theme") === "dark";
+  const wiPalette = () => (wiDark() ? CFG.paletteDark : CFG.palette);
 
   /* ------------------------------------------------------------------- boot */
 
@@ -961,7 +1050,7 @@ const promptKey = t.intro.prompt.key;
     const isSmallPerf = Math.min(window.innerWidth, window.innerHeight) < 760;
     const debrisScale = isSmallPerf ? 0.5 : 1;
 
-    const debris = new Debris(refs.debris, CFG.palette.debris);
+    const debris = new Debris(refs.debris, wiPalette().debris);
     const ref = curveSampler(CFG.flight.path as unknown as { x: number; y: number }[], CFG.flight.pathTension);
     const profile = speedProfile(CFG.flight.speedProfile as unknown as readonly (readonly [number, number])[]);
     const riseEase = speedProfile(CFG.handoff.rise.profile as unknown as readonly (readonly [number, number])[]);
@@ -1231,10 +1320,11 @@ const promptKey = t.intro.prompt.key;
     function begin() {
       measure();
       // palette + caption copy come from INTRO_CONFIG, so art direction lives
-      // in exactly one file
-      root.style.setProperty("--wi-ink", CFG.palette.ink);
-      root.style.setProperty("--wi-paper", CFG.palette.paper);
-      root.style.setProperty("--wi-accent", CFG.palette.accent);
+      // in exactly one file. The dark palette is used when the site is dark.
+      const pal = wiPalette();
+      root.style.setProperty("--wi-ink", pal.ink);
+      root.style.setProperty("--wi-paper", pal.paper);
+      root.style.setProperty("--wi-accent", pal.accent);
       const brand = refs.root.querySelector<HTMLElement>(".wi-frame-brand");
       const left = refs.root.querySelector<HTMLElement>(".wi-frame-sep + .wi-frame-mono");
       const right = refs.root.querySelector<HTMLElement>(".wi-frame-r .wi-frame-mono");

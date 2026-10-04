@@ -291,6 +291,20 @@ export const INTRO_CONFIG = {
     /** Debris colours, weighted by repetition. */
     debris: ["#0A0F1C", "#0A0F1C", "#2A354A", "#0A0F1C", "#FF3B30", "#F8F5EF"],
   },
+  /**
+   * Dark-theme art direction for the intro: the veil becomes deep black, the
+   * cursor arrow inverts to paper with a dark outline, and the accent (halo,
+   * final CTA glow, pulse rings) switches to electric blue. Selected at boot
+   * from `document.documentElement.dataset.theme`.
+   */
+  paletteDark: {
+    paper: "#05070D",
+    ink: "#F8F5EF",
+    ink2: "#8A96A8",
+    accent: "#0043E0",
+    /** Debris colours, weighted by repetition (light shards + blue sparks). */
+    debris: ["#F8F5EF", "#F8F5EF", "#8A96A8", "#0043E0", "#F8F5EF", "#0043E0"],
+  },
 } as const;
 
 export type IntroConfig = typeof INTRO_CONFIG;
