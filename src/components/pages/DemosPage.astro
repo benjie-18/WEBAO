@@ -10,8 +10,8 @@ const t = useTranslations(locale);
 const paths = localizedPaths[locale];
 const demos = getDemos(locale);
 
-// Demos with published standalone microsites (first wave)
-const liveDemos = new Set(["nora", "mira", "atelier-nord"]);
+// Demos with published standalone microsites
+const liveDemos = new Set(["nora", "mira", "atelier-nord", "encre-brute", "boba-club", "kanso"]);
 const demoHref = (id: string) => `${paths.demos}/${id}`;
 
 // Categories with localized labels but keep base value for filtering
@@ -20,6 +20,10 @@ const categories = baseCategories.map(cat => ({
   label: (t.demos.categories as any)[cat] ?? cat,
 }));
 ---
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Baloo+2:wght@700&family=Fraunces:ital,wght@1,600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet" />
 
 <section class="demos-hero grain">
   <div class="shell">
@@ -72,19 +76,70 @@ const categories = baseCategories.map(cat => ({
     <div id="demo-grid" class="demo-grid" data-reveal>
       {demos.map((d, i) => (
         <a href={liveDemos.has(d.id) ? demoHref(d.id) : "#"} class="demo-card-demo" data-category={d.category} data-search={`${d.name} ${d.category} ${d.city} ${d.tone} ${d.palette} ${d.localizedDescription}`.toLowerCase()} data-reveal style={`--d:${(i%3)*80}ms`} data-demo-id={d.id} data-demo-tone={d.tone} data-demo-palette={d.palette} data-live={liveDemos.has(d.id) ? "true" : undefined} aria-label={`${t.demos.searchPlaceholder} ${d.name}`}>
-          <div class="demo-thumb" style={`background:${d.accent};`}>
-            <div class="thumb-inner">
-              <div class="thumb-bar mono">{d.city.toUpperCase()} · {((t.demos.categories as any)[d.category] ?? d.category).toUpperCase()}</div>
-              <div class="thumb-title display" style="font-size:1.35rem; line-height:.9; color:white;">{d.name.split(" ")[0]} <span style="font-weight:400; opacity:.8;">{d.name.split(" ").slice(1).join(" ")}</span></div>
-              <div class="thumb-tone mono" style="color: rgba(255,255,255,.7); font-size:10px; margin-top:6px;">{d.tone} · {d.palette}</div>
-              {d.id === "mira" && <div style="margin-top:14px; display:flex; gap:6px;"><span style="background:white; color:#431407; padding:5px 10px; border-radius:99px; font-size:11px; font-weight:700;">{locale==="fr" ? "Menu" : "Menu"}</span><span style="border:1px solid rgba(255,255,255,.4); color:white; padding:5px 10px; border-radius:99px; font-size:11px;">{locale==="fr" ? "Réserver" : "Reserve"}</span></div>}
-              {d.id === "nora" && <div style="margin-top:14px; display:flex; gap:8px;"><span style="background:white; color:var(--ink); padding:5px 10px; border-radius:99px; font-size:11px; font-weight:700;">{locale==="fr" ? "Devis" : "Get Quote"}</span><span style="background:rgba(255,255,255,.12); color:white; padding:5px 10px; border-radius:99px; font-size:11px; border:1px solid rgba(255,255,255,.18);">24h</span></div>}
-              {d.id !== "mira" && d.id !== "nora" && <div style="margin-top:14px; height:1px; background: rgba(255,255,255,.18);"></div>}
+          {liveDemos.has(d.id) ? (
+            <div class={`demo-thumb dthumb dthumb-${d.id}`}>
+              {d.id === "nora" && (
+                <div class="dthumb-art">
+                  <div class="dn-top"><span class="dn-dot" aria-hidden="true"></span>{locale === "fr" ? "LAVAL · ARTISANS" : "LAVAL · TRADES"}</div>
+                  <div class="dn-name">NORA<span aria-hidden="true">⚡</span></div>
+                  <div class="dn-bar">24/7 DISPATCH</div>
+                </div>
+              )}
+              {d.id === "mira" && (
+                <div class="dthumb-art">
+                  <div class="dm-kicker">{locale === "fr" ? "cantine · vieux-montréal" : "cantine · old montreal"}</div>
+                  <div class="dm-name">Mira</div>
+                  <div class="dm-pills"><span class="dm-pill-solid">Menu</span><span class="dm-pill-line">{locale === "fr" ? "Réserver" : "Reserve"}</span></div>
+                </div>
+              )}
+              {d.id === "atelier-nord" && (
+                <div class="dthumb-art">
+                  <div class="da-status"><span class="da-pulse" aria-hidden="true"></span>BAY 01 · IN PROGRESS</div>
+                  <div class="da-name">ATELIER NORD</div>
+                  <div class="da-chips"><span>140 PTS</span><span>0.01°</span><span>SAME DAY</span></div>
+                </div>
+              )}
+              {d.id === "encre-brute" && (
+                <div class="dthumb-art">
+                  <div class="eb-sticker" aria-hidden="true">WALK-INS OK</div>
+                  <div class="eb-name">ENCRE<br />BRUTE</div>
+                  <div class="eb-bar" aria-hidden="true"></div>
+                  <div class="eb-sub">TATTOO · MONTRÉAL</div>
+                </div>
+              )}
+              {d.id === "boba-club" && (
+                <div class="dthumb-art">
+                  <span class="bc-spark" aria-hidden="true">✦</span>
+                  <span class="bc-spark bc-spark2" aria-hidden="true">✦</span>
+                  <div class="bc-name">Boba Club</div>
+                  <div class="bc-tag">pearls. ice. repeat.</div>
+                </div>
+              )}
+              {d.id === "kanso" && (
+                <div class="dthumb-art dthumb-ks-art">
+                  <div class="ks-vert" aria-hidden="true">茶</div>
+                  <div>
+                    <div class="ks-name">Kanso</div>
+                    <div class="ks-rule" aria-hidden="true"></div>
+                    <div class="ks-sub">{locale === "fr" ? "maison de thé" : "tea house"}</div>
+                  </div>
+                </div>
+              )}
+              <div class="dthumb-desc">{d.localizedDescription}</div>
             </div>
-            <div class="thumb-meta mono" style="background: rgba(0,0,0,.22); backdrop-filter: blur(8px);">
-              <span>{d.localizedDescription}</span>
+          ) : (
+            <div class="demo-thumb" style={`background:${d.accent};`}>
+              <div class="thumb-inner">
+                <div class="thumb-bar mono">{d.city.toUpperCase()} · {((t.demos.categories as any)[d.category] ?? d.category).toUpperCase()}</div>
+                <div class="thumb-title display" style="font-size:1.35rem; line-height:.9; color:white;">{d.name.split(" ")[0]} <span style="font-weight:400; opacity:.8;">{d.name.split(" ").slice(1).join(" ")}</span></div>
+                <div class="thumb-tone mono" style="color: rgba(255,255,255,.7); font-size:10px; margin-top:6px;">{d.tone} · {d.palette}</div>
+                <div style="margin-top:14px; height:1px; background: rgba(255,255,255,.18);"></div>
+              </div>
+              <div class="thumb-meta mono" style="background: rgba(0,0,0,.22); backdrop-filter: blur(8px);">
+                <span>{d.localizedDescription}</span>
+              </div>
             </div>
-          </div>
+          )}
           <div class="demo-card-foot">
             <div>
               <div style="font-weight:750; letter-spacing:-0.02em; font-size:14px;">{d.name}</div>
@@ -242,6 +297,65 @@ const categories = baseCategories.map(cat => ({
   .thumb-meta { position:relative; z-index:1; margin-top:14px; color: rgba(255,255,255,.92); font-size:11px; line-height:1.5; border:1px solid rgba(255,255,255,.16); background: rgba(0,0,0,.18); border-radius:10px; padding:8px 10px; }
   .demo-card-foot { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 14px; background: var(--card-bg); border-top:1px solid var(--line); }
   .corner { position:absolute; top:10px; right:10px; z-index:2; font-size:9px; letter-spacing:.12em; background: rgba(0,0,0,.55); color:white; padding:4px 7px; border-radius:99px; border:1px solid rgba(255,255,255,.18); backdrop-filter: blur(6px); }
+
+  /* ---- Custom demo cards: each card speaks its demo's own design language ---- */
+  .dthumb { min-height: 230px; display: flex; flex-direction: column; }
+  .dthumb::after { display: none; }
+  .dthumb-art { flex: 1; padding: 20px 18px 16px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: center; gap: 10px; }
+  .dthumb-desc { padding: 10px 14px; font-size: 11px; line-height: 1.55; }
+
+  /* Nora: Swiss dispatch */
+  .dthumb-nora { background: #FAF7F2; color: #16130E; }
+  .dthumb-nora .dthumb-desc { background: #fff; border-top: 1px solid rgba(22,19,14,.1); color: #4A4438; }
+  .dn-top { font-family: ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: .2em; display: flex; align-items: center; gap: 8px; color: #4A4438; font-weight: 600; }
+  .dn-dot { width: 8px; height: 8px; border-radius: 50%; background: #FF3B30; flex: none; }
+  .dn-name { font-family: "Archivo Black", system-ui, sans-serif; font-size: 46px; letter-spacing: -.02em; line-height: 1; }
+  .dn-name span { color: #FF3B30; }
+  .dn-bar { margin-top: 2px; background: #16130E; color: #FAF7F2; font-family: ui-monospace, Menlo, monospace; font-size: 10px; font-weight: 600; letter-spacing: .24em; padding: 9px 13px; align-self: flex-start; }
+
+  /* Mira: warm editorial */
+  .dthumb-mira { background: #F6EFE1; color: #221610; }
+  .dthumb-mira .dthumb-desc { background: rgba(255,255,255,.55); color: #5C4B3E; border-top: 1px solid rgba(34,22,16,.12); }
+  .dm-kicker { font-size: 10px; letter-spacing: .28em; text-transform: uppercase; color: #C2481F; font-weight: 600; }
+  .dm-name { font-family: "Fraunces", Georgia, serif; font-style: italic; font-weight: 600; font-size: 54px; line-height: 1; letter-spacing: -.02em; }
+  .dm-pills { display: flex; gap: 8px; margin-top: 2px; }
+  .dm-pill-solid { background: #221610; color: #F6EFE1; border-radius: 999px; padding: 7px 15px; font-size: 11px; font-weight: 600; }
+  .dm-pill-line { border: 1.5px solid #221610; border-radius: 999px; padding: 6px 14px; font-size: 11px; font-weight: 600; }
+
+  /* Atelier Nord: dark technical */
+  .dthumb-atelier-nord { background: #0A0F1A; color: #F2F5F9; }
+  .dthumb-atelier-nord .dthumb-desc { background: rgba(255,255,255,.04); color: #9AA6BC; border-top: 1px solid rgba(242,245,249,.12); }
+  .da-status { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 10px; letter-spacing: .18em; color: #9AA6BC; display: flex; align-items: center; gap: 8px; }
+  .da-pulse { width: 8px; height: 8px; border-radius: 50%; background: #34D399; flex: none; }
+  .da-name { font-family: "Space Grotesk", system-ui, sans-serif; font-weight: 700; font-size: 29px; letter-spacing: .02em; line-height: 1.05; }
+  .da-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .da-chips span { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 9.5px; letter-spacing: .12em; border: 1px solid rgba(242,245,249,.22); padding: 5px 9px; border-radius: 6px; color: #9AA6BC; }
+
+  /* Encre Brute: neo-brutalism */
+  .dthumb-encre-brute { background: #fff; color: #000; }
+  .dthumb-encre-brute .dthumb-art { border: 3px solid #000; margin: 12px; padding: 18px 16px; box-shadow: 5px 5px 0 #000; background: #fff; }
+  .dthumb-encre-brute .dthumb-desc { background: #000; color: #fff; }
+  .eb-sticker { position: absolute; top: 22px; right: 20px; background: #FFFF00; border: 2px solid #000; font-family: "Archivo Black", system-ui, sans-serif; font-size: 9px; padding: 5px 8px; transform: rotate(8deg); box-shadow: 3px 3px 0 #000; white-space: nowrap; }
+  .eb-name { font-family: "Archivo Black", system-ui, sans-serif; font-size: 38px; line-height: .95; letter-spacing: -.01em; }
+  .eb-bar { height: 10px; background: #FF0000; margin-top: 4px; }
+  .eb-sub { font-family: ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: .2em; font-weight: 600; }
+
+  /* Boba Club: Y2K chrome */
+  .dthumb-boba-club { background: linear-gradient(135deg, #FFD6E8 0%, #E3D6FF 50%, #CDE7FF 100%); color: #3B2A55; }
+  .dthumb-boba-club .dthumb-desc { background: rgba(255,255,255,.65); color: #5A4A78; border-top: 1px solid rgba(59,42,85,.12); }
+  .bc-spark { position: absolute; top: 16px; right: 20px; color: #fff; font-size: 24px; text-shadow: 0 0 10px rgba(255,255,255,.95); }
+  .bc-spark2 { top: auto; right: auto; bottom: 58px; left: 20px; font-size: 16px; }
+  .bc-name { font-family: "Baloo 2", system-ui, sans-serif; font-weight: 700; font-size: 44px; line-height: 1; letter-spacing: -.01em; }
+  .bc-tag { font-family: "Baloo 2", system-ui, sans-serif; font-weight: 700; font-size: 13px; background: rgba(255,255,255,.85); border: 2px solid #fff; box-shadow: 0 4px 14px rgba(180,140,255,.45); align-self: flex-start; padding: 7px 15px; border-radius: 999px; }
+
+  /* Kanso: Japanese minimal */
+  .dthumb-kanso { background: #E9E4D8; color: #1A1815; }
+  .dthumb-ks-art { flex-direction: row; align-items: center; justify-content: flex-start; gap: 20px; }
+  .dthumb-kanso .dthumb-desc { background: rgba(255,255,255,.4); color: #5A554B; border-top: 1px solid rgba(26,24,21,.12); }
+  .ks-vert { writing-mode: vertical-rl; font-family: Georgia, "Hiragino Mincho ProN", serif; font-size: 36px; letter-spacing: .3em; }
+  .ks-name { font-family: Georgia, "Hiragino Mincho ProN", serif; font-size: 36px; letter-spacing: .02em; }
+  .ks-rule { width: 46px; height: 1px; background: #1A1815; opacity: .5; margin: 10px 0 8px; }
+  .ks-sub { font-size: 10.5px; letter-spacing: .24em; text-transform: uppercase; color: #5A554B; }
   .empty { text-align:center; padding:32px; background: var(--paper-2); border:1px dashed var(--line-strong); border-radius:16px; font-size:13px; color: var(--muted); margin-top:12px; }
   .demos-note { margin-top:14px; display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; font-size:10px; color: var(--muted); border-top:1px solid var(--line); padding-top:12px; }
   @media (max-width: 960px) { .demos-hero-grid, .demo-grid { grid-template-columns: 1fr; } .demo-thumb { min-height: 180px; } }

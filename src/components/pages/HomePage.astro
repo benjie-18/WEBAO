@@ -201,6 +201,88 @@ const processId = locale === "fr" ? "processus" : "process";
   </div>
 </section>
 
+<!-- AGENCY CARDS -->
+<section class="section section--ink2 grain" style="padding-bottom: 0;">
+  <div class="shell">
+    <div class="agency-head" data-reveal>
+      <h2 class="display" style="font-size: clamp(2.6rem, 6vw, 5.2rem); line-height:.9; color: var(--section-dark-text);">{t.home.agency.title}</h2>
+      <p class="mono" style="color: rgba(248,245,239,.5); margin-top:12px; font-size: 12px;">{t.home.agency.subtitle}</p>
+    </div>
+
+    <div class="agency-grid" style="position: relative;">
+      <CursorJourney locale={locale} />
+      <a href={paths.pricing} class="agency-card agency-card--pricing" data-reveal>
+        <div class="agency-top mono">
+          <span>{t.home.agency.pricing.top}</span><span aria-hidden="true">→</span>
+        </div>
+        <div class="agency-body">
+          <div class="agency-price">
+            <span class="display">{t.home.agency.pricing.price}</span>
+            <span class="mono" set:html={t.home.agency.pricing.priceSuffix}></span>
+          </div>
+          <h3 class="agency-title" set:html={t.home.agency.pricing.title}></h3>
+          <p>{t.home.agency.pricing.desc}</p>
+        </div>
+        <div class="agency-foot">
+          <span class="agency-cta">{t.home.agency.pricing.cta} <span aria-hidden="true">↗</span></span>
+          <div class="agency-mini">
+            {t.home.agency.pricing.mini.map(m => <span>{m}</span>)}
+          </div>
+        </div>
+        <div class="agency-art" aria-hidden="true">
+          <div class="art-price"></div>
+        </div>
+      </a>
+
+      <a href={paths.contact} class="agency-card agency-card--contact" data-reveal style="--d:120ms">
+        <div class="agency-top mono" style="color: var(--muted);">
+          <span>{t.home.agency.contact.top}</span><span aria-hidden="true">→</span>
+        </div>
+        <div class="agency-body" style="color: var(--ink);">
+          <h3 class="agency-title" style="color: var(--ink);" set:html={t.home.agency.contact.title}></h3>
+          <p style="color: var(--muted);">{t.home.agency.contact.desc}</p>
+          <div class="contact-pills">
+            {t.home.agency.contact.pills.map(p => <span>{p}</span>)}
+          </div>
+        </div>
+        <div class="agency-foot" style="border-top-color: var(--line); color: var(--ink);">
+          <span class="agency-cta" style="background: var(--ink); color: var(--paper);">{t.home.agency.contact.cta} <span aria-hidden="true">↗</span></span>
+        </div>
+        <div class="agency-art" aria-hidden="true">
+          <div class="art-contact"></div>
+        </div>
+      </a>
+
+      <a href={paths.demos} class="agency-card agency-card--demos" data-reveal style="--d:240ms">
+        <div class="agency-top mono">
+          <span>{t.home.agency.demos.top}</span><span aria-hidden="true">→</span>
+        </div>
+        <div class="agency-body">
+          <div class="demos-stack">
+            <span class="demos-thumb" style="background:#F8F5EF; color:#0A0F1C;">NORA</span>
+            <span class="demos-thumb" style="background:#FFF7ED; color:#431407; font-family: var(--font-display); font-style:italic;">Mira</span>
+            <span class="demos-thumb" style="background:#0F172A; color:white;">NORD</span>
+          </div>
+          <h3 class="agency-title" set:html={t.home.agency.demos.title}></h3>
+          <p>{t.home.agency.demos.desc}</p>
+        </div>
+        <div class="agency-foot">
+          <span class="agency-cta" style="background: var(--paper); color: var(--ink);">{t.home.agency.demos.cta} <span aria-hidden="true">↗</span></span>
+          <div class="agency-mini" style="color: rgba(248,245,239,.55);">
+            {t.home.agency.demos.mini.map(m => <span>{m}</span>)}
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <div class="agency-note mono" data-reveal>
+      <span>{t.home.agency.noteLeft}</span>
+      <span style="opacity:.4;">{t.home.agency.noteRight}</span>
+    </div>
+  </div>
+  <div class="angle-divider" aria-hidden="true"></div>
+</section>
+
 <!-- HOW IT WORKS -->
 <section id={processId} class="section section--dark grain" style="overflow: clip;">
   <div class="shell">
@@ -340,87 +422,6 @@ const processId = locale === "fr" ? "processus" : "process";
   </div>
 </section>
 
-<!-- AGENCY CARDS -->
-<section class="section section--ink2 grain" style="padding-bottom: 0;">
-  <div class="shell">
-    <div class="agency-head" data-reveal>
-      <h2 class="display" style="font-size: clamp(2.6rem, 6vw, 5.2rem); line-height:.9; color: var(--section-dark-text);">{t.home.agency.title}</h2>
-      <p class="mono" style="color: rgba(248,245,239,.5); margin-top:12px; font-size: 12px;">{t.home.agency.subtitle}</p>
-    </div>
-
-    <div class="agency-grid" style="position: relative;">
-      <CursorJourney locale={locale} />
-      <a href={paths.pricing} class="agency-card agency-card--pricing" data-reveal>
-        <div class="agency-top mono">
-          <span>{t.home.agency.pricing.top}</span><span aria-hidden="true">→</span>
-        </div>
-        <div class="agency-body">
-          <div class="agency-price">
-            <span class="display">{t.home.agency.pricing.price}</span>
-            <span class="mono" set:html={t.home.agency.pricing.priceSuffix}></span>
-          </div>
-          <h3 class="agency-title" set:html={t.home.agency.pricing.title}></h3>
-          <p>{t.home.agency.pricing.desc}</p>
-        </div>
-        <div class="agency-foot">
-          <span class="agency-cta">{t.home.agency.pricing.cta} <span aria-hidden="true">↗</span></span>
-          <div class="agency-mini">
-            {t.home.agency.pricing.mini.map(m => <span>{m}</span>)}
-          </div>
-        </div>
-        <div class="agency-art" aria-hidden="true">
-          <div class="art-price"></div>
-        </div>
-      </a>
-
-      <a href={paths.contact} class="agency-card agency-card--contact" data-reveal style="--d:120ms">
-        <div class="agency-top mono" style="color: var(--muted);">
-          <span>{t.home.agency.contact.top}</span><span aria-hidden="true">→</span>
-        </div>
-        <div class="agency-body" style="color: var(--ink);">
-          <h3 class="agency-title" style="color: var(--ink);" set:html={t.home.agency.contact.title}></h3>
-          <p style="color: var(--muted);">{t.home.agency.contact.desc}</p>
-          <div class="contact-pills">
-            {t.home.agency.contact.pills.map(p => <span>{p}</span>)}
-          </div>
-        </div>
-        <div class="agency-foot" style="border-top-color: var(--line); color: var(--ink);">
-          <span class="agency-cta" style="background: var(--ink); color: var(--paper);">{t.home.agency.contact.cta} <span aria-hidden="true">↗</span></span>
-        </div>
-        <div class="agency-art" aria-hidden="true">
-          <div class="art-contact"></div>
-        </div>
-      </a>
-
-      <a href={paths.demos} class="agency-card agency-card--demos" data-reveal style="--d:240ms">
-        <div class="agency-top mono">
-          <span>{t.home.agency.demos.top}</span><span aria-hidden="true">→</span>
-        </div>
-        <div class="agency-body">
-          <div class="demos-stack">
-            <span class="demos-thumb" style="background:#F8F5EF; color:#0A0F1C;">NORA</span>
-            <span class="demos-thumb" style="background:#FFF7ED; color:#431407; font-family: var(--font-display); font-style:italic;">Mira</span>
-            <span class="demos-thumb" style="background:#0F172A; color:white;">NORD</span>
-          </div>
-          <h3 class="agency-title" set:html={t.home.agency.demos.title}></h3>
-          <p>{t.home.agency.demos.desc}</p>
-        </div>
-        <div class="agency-foot">
-          <span class="agency-cta" style="background: var(--paper); color: var(--ink);">{t.home.agency.demos.cta} <span aria-hidden="true">↗</span></span>
-          <div class="agency-mini" style="color: rgba(248,245,239,.55);">
-            {t.home.agency.demos.mini.map(m => <span>{m}</span>)}
-          </div>
-        </div>
-      </a>
-    </div>
-
-    <div class="agency-note mono" data-reveal>
-      <span>{t.home.agency.noteLeft}</span>
-      <span style="opacity:.4;">{t.home.agency.noteRight}</span>
-    </div>
-  </div>
-  <div class="angle-divider" aria-hidden="true"></div>
-</section>
 
 <!-- CRAFT / EDITORIAL -->
 <section class="section section--tight">
