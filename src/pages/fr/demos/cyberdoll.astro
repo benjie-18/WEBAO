@@ -5,13 +5,13 @@ import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
 // Standalone art direction. Chrome gradients, sparkles, glossy bubbles.
 // Not connected to the WEBAO theme system.
 const IMG = {
-  hero: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1600&auto=format&fit=crop",
+  hero: "/demos/cyberdoll/01.jpg",
   cargo: "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=800&auto=format&fit=crop",
-  tee: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=800&auto=format&fit=crop",
+  tee: "/demos/cyberdoll/02.jpg",
   puffa: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=800&auto=format&fit=crop",
   sneakers: "https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=800&auto=format&fit=crop",
-  look1: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=900&auto=format&fit=crop",
-  look2: "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=900&auto=format&fit=crop",
+  look1: "/demos/cyberdoll/03.jpg",
+  look2: "/demos/cyberdoll/04.jpg",
 };
 ---
 
@@ -106,10 +106,10 @@ const IMG = {
             </div>
           </article>
           <article class="cd-card">
-            <div class="cd-card-img"><img src={IMG.tee} alt="Mannequin en t-shirt papillon" loading="lazy" /><span class="cd-tag cd-tag-blue">NOUVEAU !!</span></div>
+            <div class="cd-card-img"><img src={IMG.tee} alt="Mannequins en tenues métalliques Y3K sous des lettres chromées" loading="lazy" /><span class="cd-tag cd-tag-blue">NOUVEAU !!</span></div>
             <div class="cd-card-body">
-              <h3>T-shirt Papillon</h3>
-              <p>Court, orné de strass, et 100 % canon. Va avec absolument tout.</p>
+              <h3>Ensemble métallique Y3K</h3>
+              <p>Pièces en métal liquide tout droit du podium Y3K. Brillez avec modération.</p>
               <div class="cd-card-foot"><strong>45 $</strong><button class="cd-btn cd-btn-small" type="button">Ajouter</button></div>
             </div>
           </article>
@@ -140,15 +140,15 @@ const IMG = {
         <h2 class="cd-h2">LE <span class="cd-chrome">LOOKBOOK</span></h2>
         <div class="cd-look-grid">
           <figure class="cd-polaroid">
-            <img src={IMG.look1} alt="Style Y2K urbain en ville" loading="lazy" />
+            <img src={IMG.look1} alt="Flatlay Y2K rose avec sweat en velours, mini-jupe en jean et appareil photo" loading="lazy" />
             <figcaption>fit check nº 042 : diva du centre-ville</figcaption>
           </figure>
           <figure class="cd-polaroid cd-polaroid-tilt">
-            <img src={IMG.look2} alt="Look de journée magasinage avec accessoires" loading="lazy" />
+            <img src={IMG.look2} alt="Flatlay Y2K rose et blanc avec téléphone à clapet strassé et sac baguette" loading="lazy" />
             <figcaption>fit check nº 043 : couture de centre d'achat</figcaption>
           </figure>
           <figure class="cd-polaroid">
-            <img src={IMG.hero} alt="Look éditorial Y2K rose" loading="lazy" />
+            <img src={IMG.hero} alt="Look éditorial futuriste chromé" loading="lazy" />
             <figcaption>fit check nº 044 : personnage principal</figcaption>
           </figure>
         </div>
@@ -394,7 +394,7 @@ const IMG = {
     .cd-hero-cta { display: flex; gap: 14px; flex-wrap: wrap; }
     .cd-hero-photo { position: absolute; right: 4%; bottom: 120px; width: min(340px, 34vw); z-index: 2; transform: rotate(4deg);
       border: 10px solid #fff; border-bottom-width: 44px; box-shadow: 0 24px 60px rgba(0,0,0,0.5); }
-    .cd-hero-photo img { width: 100%; height: 380px; object-fit: cover; filter: saturate(1.25) contrast(1.05); }
+    .cd-hero-photo img { width: 100%; height: 380px; object-fit: cover; filter: saturate(1.25) contrast(1.05); border: 6px solid #fff; outline: 3px solid #FF6EC7; box-shadow: 0 14px 44px rgba(255,110,199,.45); }
     .cd-badge-new, .cd-badge-hot {
       position: absolute; z-index: 4; font-family: var(--cd-display); font-size: 15px; color: #fff;
       background: radial-gradient(circle at 35% 30%, #ff9ed8, var(--cd-pink) 65%, #d63f9c);
