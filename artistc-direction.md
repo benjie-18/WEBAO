@@ -6,7 +6,7 @@ The landing page should be **high-impact, memorable, and visually authored**. It
 
 ## Visual References
 
-These references are about **feel, pacing, interaction, composition, and presentation** - not copying their designs.
+These references are about **feel, pacing, interaction, composition, and presentation**, not copying their designs.
 
 - https://www.translate-wf.com/
   - Strong visual storytelling and scroll-driven presentation.
@@ -37,7 +37,7 @@ The home page is the **showcase piece** of WEBAO and should receive substantiall
 - Strong typography and unusual but usable compositions.
 - Large visual moments / hero artwork.
 - Scroll-based storytelling where it genuinely improves the experience.
-- Responsive behavior designed intentionally for desktop, tablet, and mobile — not simply scaled down.
+- Responsive behavior designed intentionally for desktop, tablet, and mobile, not simply scaled down.
 - Motion should support hierarchy and storytelling, not become visual noise.
 - Respect `prefers-reduced-motion`.
 - Maintain excellent loading performance despite the visual ambition.
@@ -50,9 +50,9 @@ The landing page should include prominent **cards or visual panels that present 
 
 Primary destinations:
 
-- **Pricing** — `/pricing`
-- **Contact** — `/contact`
-- **Demos** — `/demos`
+- **Pricing**: `/pricing`
+- **Contact**: `/contact`
+- **Demos**: `/demos`
 
 These should feel like designed components, not three ordinary CTA buttons.
 

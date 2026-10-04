@@ -68,7 +68,7 @@ export const demos: Demo[] = [
     tone: "Bold modern",
     palette: "Cobalt / White",
     accent: "#0B5FFF",
-    description: "Family plumbers since 1998. Dépannage rapide.",
+    description: "Plombiers de père en fils. Dépannage rapide.",
     pages: ["Home", "Services", "Emergency", "Reviews", "Contact"],
   },
   {
@@ -79,7 +79,7 @@ export const demos: Demo[] = [
     tone: "Calm natural",
     palette: "Sage / Stone / Ink",
     accent: "#6B7F59",
-    description: "Design, entretien, terrassement — du plan au paillis.",
+    description: "Design, entretien, terrassement: du plan au paillis.",
     pages: ["Home", "Services", "Realizations", "About", "Quote"],
   },
   {
@@ -101,7 +101,7 @@ export const demos: Demo[] = [
     tone: "Minimal luxury",
     palette: "Bone / Charcoal",
     accent: "#111111",
-    description: "Architecture intérieure — portfolio éditorial.",
+    description: "Architecture intérieure, portfolio éditorial.",
     pages: ["Home", "Projects", "Studio", "Services", "Contact"],
   },
   {
@@ -112,7 +112,7 @@ export const demos: Demo[] = [
     tone: "Heritage craft",
     palette: "Oxide / Paper",
     accent: "#9A3412",
-    description: "Couvreurs, membrane & tôle — garanties 10 ans.",
+    description: "Couvreurs, membrane & tôle, travail garanti.",
     pages: ["Home", "Services", "Guarantee", "Projects", "Contact"],
   },
   {
@@ -123,7 +123,7 @@ export const demos: Demo[] = [
     tone: "Playful organic",
     palette: "Leaf / Cream",
     accent: "#2E7D32",
-    description: "Vrac, local, zéro déchet — panier en ligne.",
+    description: "Vrac, local, zéro déchet, panier en ligne.",
     pages: ["Home", "Products", "About", "Panier", "Location"],
   },
   {
@@ -134,7 +134,7 @@ export const demos: Demo[] = [
     tone: "Energetic bold",
     palette: "Black / Neon",
     accent: "#CCFF00",
-    description: "Crossfit & coaching — horaires & essais.",
+    description: "Crossfit & coaching, horaires & essais.",
     pages: ["Home", "Classes", "Coaches", "Schedule", "Trial"],
   },
   {
@@ -145,7 +145,7 @@ export const demos: Demo[] = [
     tone: "Soft boutique",
     palette: "Blush / Linen",
     accent: "#E8B4B8",
-    description: "Gîte 4 chambres, bord du lac — réservez direct.",
+    description: "Gîte 4 chambres, bord du lac, réservez direct.",
     pages: ["Home", "Rooms", "Experience", "Location", "Book"],
   },
   {
@@ -156,7 +156,7 @@ export const demos: Demo[] = [
     tone: "Industrial precise",
     palette: "Concrete / Safety Orange",
     accent: "#FF6B00",
-    description: "Rénovation & finition — devis en 24h.",
+    description: "Rénovation & finition, devis rapide.",
     pages: ["Home", "Services", "Projects", "Process", "Contact"],
   },
 ];

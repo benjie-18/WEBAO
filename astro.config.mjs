@@ -13,7 +13,7 @@ export default defineConfig({
       enabled: false,
     },
     // Use Node prerender instead of Workerd to avoid CF Request.cf fetch in CI
-    // @ts-ignore — adapter supports this but types may lag
+    // @ts-ignore: adapter supports this but types may lag
     prerenderEnvironment: "node",
   }),
   vite: {

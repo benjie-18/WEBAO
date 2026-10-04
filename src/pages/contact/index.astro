@@ -3,20 +3,20 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout
-  title="Contact — WEBAO · Start your website"
-  description="Tell us about your business. We reply within one business day with two demo directions and a clear timeline. No forms that go nowhere."
+  title="Contact · WEBAO · Start your website"
+  description="Tell us about your business and we’ll reply with two demo directions and an honest timeline. Email hello@webao.ca or send the form."
 >
   <section class="contact-hero grain">
     <div class="shell">
       <div class="contact-grid">
         <div class="contact-copy" data-reveal>
-          <div class="eyebrow">Contact — a real conversation, not a queue</div>
+          <div class="eyebrow">Contact · Talk to a person</div>
           <h1 class="display" style="font-size: clamp(2.6rem, 6vw, 4.8rem); line-height:.88; margin-top:12px;">
             Tell us about<br />
             <span style="font-style: italic; font-weight:400; color: var(--accent);">your business.</span>
           </h1>
           <p class="prose" style="margin-top:14px; max-width:52ch;">
-            You don’t need a perfect brief. Send your trade, city, and a couple of phone photos — we’ll reply with two demo directions and a honest timeline.
+            You don’t need a perfect brief. Send your trade, your city, and a couple of phone photos. We’ll reply with two demo directions and an honest timeline.
           </p>
 
           <div class="contact-cards">
@@ -24,32 +24,28 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
               <span class="c-icon">✉</span>
               <span>
                 <strong>hello@webao.ca</strong>
-                <span class="mono">Reply within one business day</span>
+                <span class="mono">We usually reply within one business day</span>
               </span>
               <span aria-hidden="true">→</span>
             </a>
-            <a href="tel:+15145550192" class="c-card">
-              <span class="c-icon">☎</span>
+            <div class="c-card">
+              <span class="c-icon">📍</span>
               <span>
-                <strong>+1 (514) 555-0192</strong>
-                <span class="mono">Mon–Fri 9am–5pm ET</span>
+                <strong>Montréal, Québec</strong>
+                <span class="mono">Serving businesses across Canada · Mon–Fri, 9–5 Eastern</span>
               </span>
-              <span aria-hidden="true">→</span>
-            </a>
+            </div>
           </div>
 
           <div class="trust-mini mono">
-            <span>◐ SSL & hosting included</span>
+            <span>◐ A person reads every message</span>
             <span>·</span>
-            <span>Average reply 3 hours</span>
-            <span>·</span>
-            <span>No spam, ever</span>
+            <span>Your details are used only to reply</span>
           </div>
 
-          <div class="testi" aria-label="Testimonial">
-            <div class="stars">★★★★★</div>
-            <p>“I sent a Facebook page link and three photos. They sent back a preview in two days that looked like us — but better.”</p>
-            <span class="mono">— Nadia K., Clinique Sora · Brossard</span>
+          <div class="testi">
+            <p>Prefer to see the work first? The demo catalog has 12 design directions for fictional businesses across the trades we serve.</p>
+            <a href="/demos" class="mono" style="display:inline-block; margin-top:8px; font-size:12px; font-weight:600; color: var(--accent); text-decoration: underline; text-underline-offset:3px;">Browse the demos →</a>
           </div>
         </div>
 
@@ -57,7 +53,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
           <form class="form" id="contact-form" novalidate>
             <div class="form-head">
               <h2>Send your details</h2>
-              <p class="mono">We’ll reply same day · No commitment</p>
+              <p class="mono">Opens your email app with everything filled in · No commitment</p>
             </div>
 
             <div class="field-grid">
@@ -94,7 +90,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
             </label>
 
             <label>Phone <span class="optional mono">(optional)</span>
-              <input name="phone" type="tel" placeholder="+1 (514) 555-0192" autocomplete="tel" />
+              <input name="phone" type="tel" placeholder="The best number to reach you" autocomplete="tel" />
             </label>
 
             <label>What do you want the site to do?
@@ -102,25 +98,25 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
             </label>
 
             <label>Anything else? Photos, services, logo link
-              <textarea name="details" rows="3" placeholder="Paste a Google Drive / Photos link, list services, attach notes… (you can also just email us after)"></textarea>
+              <textarea name="details" rows="3" placeholder="Paste a Google Drive / Photos link, list your services, add notes… (you can also just email us after)"></textarea>
             </label>
 
             <div class="form-meta mono">
-              <label class="check-row"><input type="checkbox" required /> I understand this is a demo form — WEBAO will contact me about a website.</label>
-              <span>By continuing you agree to be contacted about your site. No spam. Unsubscribe anytime.</span>
+              <label class="check-row"><input type="checkbox" required /> I’d like WEBAO to contact me about a website.</label>
+              <span>Your details are used only to reply to you. No mailing list, no sharing.</span>
             </div>
 
             <button type="submit" class="btn btn--primary" style="width:100%; justify-content:center; margin-top:6px;">
               Send details →
             </button>
-            <div class="mono" style="text-align:center; font-size:11px; color: var(--muted); margin-top:8px;">Or email us directly at <a href="mailto:hello@webao.ca" style="color: var(--ink); font-weight:650; text-decoration: underline; text-underline-offset:3px;">hello@webao.ca</a></div>
+            <div class="mono" style="text-align:center; font-size:11px; color: var(--muted); margin-top:8px;">This opens your own email app with the message ready to send. Prefer to write it yourself? Email <a href="mailto:hello@webao.ca" style="color: var(--ink); font-weight:650; text-decoration: underline; text-underline-offset:3px;">hello@webao.ca</a></div>
 
             <div id="form-status" role="status" aria-live="polite" class="form-status mono" hidden></div>
           </form>
 
           <div class="form-foot mono">
             <span>🔒</span>
-            <span>Your info stays with WEBAO. Used only to reply about your website. No trackers on form submit.</span>
+            <span>This form composes an email from your own mail app. Nothing is stored on our servers and there are no trackers on submit.</span>
           </div>
         </div>
       </div>
@@ -133,32 +129,31 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
       <div class="info-grid" data-reveal>
         <div class="info-card">
           <h3>How we reply</h3>
-          <p>Within one business day we’ll send:</p>
+          <p>Usually within one business day, with:</p>
           <ul>
             <li>→ Two demo directions that fit your trade</li>
-            <li>→ Honest timeline & what we need from you</li>
-            <li>→ Fixed price (usually $149/mo) or tailored quote</li>
+            <li>→ An honest timeline and what we need from you</li>
+            <li>→ The fixed price ($149/mo for most sites) or a tailored quote</li>
           </ul>
-          <div class="mono" style="margin-top:10px; font-size:11px; color: var(--muted);">No “sales call” script — just the site, the price, the work.</div>
+          <div class="mono" style="margin-top:10px; font-size:11px; color: var(--muted);">No sales script. Just the site, the price, and the work.</div>
         </div>
         <div class="info-card">
           <h3>What to send now (if you have it)</h3>
           <ul>
             <li>→ 5–10 phone photos (work, truck, team)</li>
             <li>→ Services + service area</li>
-            <li>→ Logo (or “we don’t have one” — that’s fine)</li>
+            <li>→ Logo (or “we don’t have one”, that’s fine)</li>
             <li>→ One site you like (or don’t like) and why</li>
           </ul>
           <div class="mono" style="margin-top:10px; font-size:11px; color: var(--muted);">Don’t have it all? Send what you have. We’ll ask good questions.</div>
         </div>
         <div class="info-card">
-          <h3>Prefer email or call?</h3>
+          <h3>Prefer plain email?</h3>
           <p>That works too. Reach us directly:</p>
           <div class="mono" style="margin-top:10px; display:grid; gap:6px; font-size:12.5px;">
             <span>✉ hello@webao.ca</span>
-            <span>☎ +1 (514) 555-0192</span>
-            <span>⌚ Mon–Fri 9am–5pm ET</span>
-            <span>📍 Montréal · Serving all Canada</span>
+            <span>⌚ Mon–Fri, 9am–5pm Eastern</span>
+            <span>📍 Montréal · Serving all of Canada</span>
           </div>
           <a href="mailto:hello@webao.ca" class="btn btn--dark btn--sm" style="margin-top:14px; width:100%; justify-content:center;">Email us directly →</a>
         </div>
@@ -181,24 +176,41 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
         }
         const email = String(data.get('email') || '');
         if (!email.includes('@')) valid = false;
+        const consent = form.querySelector('.check-row input') as HTMLInputElement | null;
+        if (consent && !consent.checked) valid = false;
         if (!valid) {
           (status as HTMLElement).hidden = false;
-          status.textContent = 'Please fill the required fields with a valid email.';
+          status.textContent = 'Please fill in the required fields with a valid email, and tick the contact checkbox.';
           (status as HTMLElement).style.color = '#B91C1C';
           (status as HTMLElement).style.background = '#FFF0EF';
           (status as HTMLElement).style.borderColor = '#FFD4D0';
           return;
         }
-        // Demo-only: show success, no real submission
+        // Compose the message in the visitor's own mail app (no server, nothing stored here)
+        const fields: Array<[string, string]> = [
+          ['Business', String(data.get('business') || '')],
+          ['Trade', String(data.get('trade') || '')],
+          ['City', String(data.get('city') || '')],
+          ['Name', String(data.get('name') || '')],
+          ['Email', email],
+          ['Phone', String(data.get('phone') || '')],
+          ['Goal', String(data.get('goal') || '')],
+          ['Details', String(data.get('details') || '')],
+        ];
+        const body = fields
+          .filter(([, v]) => v.trim() !== '')
+          .map(([k, v]) => `${k}: ${v}`)
+          .join('\n');
+        const subject = `New website enquiry: ${fields[0][1] || 'WEBAO'}`;
+        const mailto = `mailto:hello@webao.ca?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        window.location.href = mailto;
         (status as HTMLElement).hidden = false;
-        status.textContent = 'Thanks — details captured (demo). In production this would email hello@webao.ca. We’d reply within one business day.';
+        status.textContent = 'Your email app should open with the message ready to send. If nothing opened, just email us directly at hello@webao.ca.';
         (status as HTMLElement).style.color = '#0E7A5A';
         (status as HTMLElement).style.background = '#ECFDF5';
         (status as HTMLElement).style.borderColor = '#A7F3D0';
-        (form as HTMLFormElement).reset();
-        // optionally disable button
         const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
-        if (btn) { btn.textContent = 'Sent ✓'; btn.disabled = true; (btn as HTMLElement).style.opacity = '.7'; }
+        if (btn) { btn.textContent = 'Email ready ✓'; }
       });
     }
   </script>
@@ -220,15 +232,13 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
       box-shadow: var(--shadow-sm);
       transition: transform .2s var(--ease-out), box-shadow .2s;
     }
-    .c-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    a.c-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
     .c-icon { width:36px; height:36px; border-radius:10px; background: var(--paper-2); border:1px solid var(--line); display:grid; place-items:center; font-size:14px; }
     .c-card strong { display:block; font-size:14.5px; letter-spacing:-0.02em; }
     .c-card .mono { display:block; font-size:11px; color: var(--muted); margin-top:2px; }
     .trust-mini { margin-top:14px; display:flex; gap:8px; flex-wrap:wrap; font-size:11px; color: var(--muted); }
     .testi { margin-top:18px; background: white; border:1px solid var(--line); border-radius:14px; padding:16px; box-shadow: var(--shadow-sm); }
-    .testi .stars { color:#FFB020; font-size:12px; }
-    .testi p { margin-top:8px; font-size:14px; line-height:1.6; color: var(--ink-3); font-style: italic; }
-    .testi .mono { display:block; margin-top:8px; font-size:11px; color: var(--muted); }
+    .testi p { font-size:14px; line-height:1.6; color: var(--ink-3); }
 
     .contact-form-wrap { display:grid; gap:10px; }
     .form {
