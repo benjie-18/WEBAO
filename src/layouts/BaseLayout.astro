@@ -154,127 +154,148 @@ const canonical = Astro.url ? new URL(Astro.url.pathname, Astro.site).toString()
     </footer>
 
     <script>
-      // Mobile menu
-      const toggle = document.querySelector('.menu-toggle');
-      const panel = document.getElementById('mobile-panel');
-      if (toggle && panel) {
-        toggle.addEventListener('click', () => {
-          const open = toggle.getAttribute('aria-expanded') === 'true';
-          toggle.setAttribute('aria-expanded', String(!open));
-          if (open) {
-            panel.setAttribute('hidden','');
-            panel.classList.remove('open');
-          } else {
-            panel.removeAttribute('hidden');
-            panel.classList.add('open');
-          }
-        });
-        // close on link click
-        panel.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      function initBaseLayout() {
+        // Clean up intro classes if not on a page with IntroSequence
+        const hasIntro = !!document.querySelector('[data-webao-intro]');
+        if (!hasIntro) {
+          document.documentElement.classList.remove('wi-run', 'wi-static', 'wi-released');
+          const main = document.getElementById('main');
+          const headerEl = document.querySelector('.site-header') as HTMLElement | null;
+          const footerEl = document.querySelector('.site-footer') as HTMLElement | null;
+          if (main) main.style.transform = '';
+          if (headerEl) headerEl.style.transform = '';
+          if (footerEl) footerEl.style.transform = '';
+        }
+
+        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const isCoarse = window.matchMedia('(pointer: coarse), (hover: none)').matches;
+
+        // Mobile menu
+        const toggle = document.querySelector('.menu-toggle');
+        const panel = document.getElementById('mobile-panel');
+        if (toggle && panel) {
           toggle.setAttribute('aria-expanded', 'false');
-          panel.setAttribute('hidden','');
+          panel.setAttribute('hidden', '');
           panel.classList.remove('open');
-        }));
-        // close on escape
-        document.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape' && panel.classList.contains('open')) {
-            toggle.setAttribute('aria-expanded', 'false');
-            panel.setAttribute('hidden','');
-            panel.classList.remove('open');
-            (toggle as HTMLElement).focus();
-          }
-        });
-      }
 
-      // Reveal on scroll, respects prefers-reduced-motion
-      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const isCoarse = window.matchMedia('(pointer: coarse), (hover: none)').matches;
-      if (!prefersReduced && 'IntersectionObserver' in window) {
-        const io = new IntersectionObserver((entries) => {
-          for (const e of entries) {
-            if (e.isIntersecting) {
-              e.target.classList.add('is-visible');
-              io.unobserve(e.target);
+          const handleToggleClick = () => {
+            const open = toggle.getAttribute('aria-expanded') === 'true';
+            toggle.setAttribute('aria-expanded', String(!open));
+            if (open) {
+              panel.setAttribute('hidden', '');
+              panel.classList.remove('open');
+            } else {
+              panel.removeAttribute('hidden');
+              panel.classList.add('open');
             }
-          }
-        }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
-        document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
-      } else {
-        document.querySelectorAll('[data-reveal]').forEach(el => el.classList.add('is-visible'));
-      }
+          };
 
-      // Subtle header shadow + scroll progress + header bg opacity
-      const header = document.querySelector('.site-header') as HTMLElement | null;
-      const progress = document.querySelector('[data-progress]') as HTMLElement | null;
-      if (header || progress) {
-        let ticking = false;
-        const onScroll = () => {
-          if (!ticking) {
-            requestAnimationFrame(() => {
-              const y = window.scrollY;
-              if (header) {
-                (header as HTMLElement).style.boxShadow = y > 8 ? '0 4px 24px rgba(10,15,28,.06), 0 1px 0 rgba(10,15,28,.04)' : 'none';
-                (header as HTMLElement).style.background = y > 8 ? 'color-mix(in srgb, var(--paper) 96%, transparent)' : 'color-mix(in srgb, var(--paper) 88%, transparent)';
+          toggle.replaceWith(toggle.cloneNode(true));
+          const newToggle = document.querySelector('.menu-toggle');
+          if (newToggle) {
+            newToggle.addEventListener('click', handleToggleClick);
+          }
+
+          // close on link click
+          panel.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+            const t = document.querySelector('.menu-toggle');
+            if (t) t.setAttribute('aria-expanded', 'false');
+            panel.setAttribute('hidden', '');
+            panel.classList.remove('open');
+          }));
+        }
+
+        // Reveal on scroll
+        const reveals = document.querySelectorAll('[data-reveal]');
+        if (!prefersReduced && 'IntersectionObserver' in window) {
+          const io = new IntersectionObserver((entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                e.target.classList.add('is-visible');
+                io.unobserve(e.target);
               }
-              if (progress) {
-                const h = document.documentElement.scrollHeight - window.innerHeight;
-                const p = h > 0 ? Math.min(y / h, 1) : 0;
-                progress.style.transform = `scaleX(${p})`;
-              }
-              ticking = false;
+            }
+          }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+          reveals.forEach(el => io.observe(el));
+        } else {
+          reveals.forEach(el => el.classList.add('is-visible'));
+        }
+
+        // Header shadow + scroll progress
+        const header = document.querySelector('.site-header') as HTMLElement | null;
+        const progress = document.querySelector('[data-progress]') as HTMLElement | null;
+        if (header || progress) {
+          let ticking = false;
+          const onScroll = () => {
+            if (!ticking) {
+              requestAnimationFrame(() => {
+                const y = window.scrollY;
+                if (header) {
+                  header.style.boxShadow = y > 8 ? '0 4px 24px rgba(10,15,28,.06), 0 1px 0 rgba(10,15,28,.04)' : 'none';
+                  header.style.background = y > 8 ? 'color-mix(in srgb, var(--paper) 96%, transparent)' : 'color-mix(in srgb, var(--paper) 88%, transparent)';
+                }
+                if (progress) {
+                  const h = document.documentElement.scrollHeight - window.innerHeight;
+                  const p = h > 0 ? Math.min(y / h, 1) : 0;
+                  progress.style.transform = `scaleX(${p})`;
+                }
+                ticking = false;
+              });
+              ticking = true;
+            }
+          };
+          window.addEventListener('scroll', onScroll, { passive: true });
+          onScroll();
+        }
+
+        // Magnetic buttons
+        if (!prefersReduced && !isCoarse && 'ontouchstart' in window === false) {
+          const magnetics = document.querySelectorAll('.btn--primary, .btn--dark, .cta .btn');
+          magnetics.forEach(btn => {
+            const el = btn as HTMLElement;
+            el.classList.add('btn--magnetic');
+            el.addEventListener('mousemove', (e: MouseEvent) => {
+              const r = el.getBoundingClientRect();
+              const x = (e.clientX - r.left - r.width / 2) * 0.18;
+              const y = (e.clientY - r.top - r.height / 2) * 0.28;
+              el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
             });
-            ticking = true;
-          }
-        };
-        window.addEventListener('scroll', onScroll, { passive: true });
-        onScroll();
-      }
+            el.addEventListener('mouseleave', () => {
+              el.style.transform = '';
+            });
+          });
+        }
 
-      // Magnetic buttons: desktop only, respects reduced motion
-      if (!prefersReduced && !isCoarse && 'ontouchstart' in window === false) {
-        const magnetics = document.querySelectorAll('.btn--primary, .btn--dark, .cta .btn');
-        magnetics.forEach(btn => {
-          const el = btn as HTMLElement;
-          el.classList.add('btn--magnetic');
-          el.addEventListener('mousemove', (e: MouseEvent) => {
-            const r = el.getBoundingClientRect();
-            const x = (e.clientX - r.left - r.width/2) * 0.18;
-            const y = (e.clientY - r.top - r.height/2) * 0.28;
-            el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+        // Smooth anchor offset
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+          a.addEventListener('click', (e) => {
+            const id = a.getAttribute('href');
+            if (!id || id === '#') return;
+            const target = document.querySelector(id);
+            if (target) {
+              e.preventDefault();
+              const top = target.getBoundingClientRect().top + window.scrollY - 72;
+              window.scrollTo({ top, behavior: prefersReduced ? 'auto' : 'smooth' });
+              history.pushState(null, '', id);
+            }
           });
-          el.addEventListener('mouseleave', () => {
-            el.style.transform = '';
-          });
+        });
+
+        // Prefetch hover
+        document.querySelectorAll('a[href^="/"]').forEach(a => {
+          a.addEventListener('mouseenter', () => {
+            const href = a.getAttribute('href');
+            if (href && !document.querySelector(`link[rel="prefetch"][href="${href}"]`)) {
+              const link = document.createElement('link');
+              link.rel = 'prefetch';
+              link.href = href;
+              document.head.appendChild(link);
+            }
+          }, { once: true });
         });
       }
 
-      // Smooth anchor offset for sticky header
-      document.querySelectorAll('a[href^="#"]').forEach(a => {
-        a.addEventListener('click', (e) => {
-          const id = a.getAttribute('href');
-          if (!id || id === '#') return;
-          const target = document.querySelector(id);
-          if (target) {
-            e.preventDefault();
-            const top = target.getBoundingClientRect().top + window.scrollY - 72;
-            window.scrollTo({ top, behavior: prefersReduced ? 'auto' : 'smooth' });
-            history.pushState(null,'',id);
-          }
-        });
-      });
-
-      // Prefetch hover for internal links (boost View Transitions)
-      document.querySelectorAll('a[href^="/"]').forEach(a => {
-        a.addEventListener('mouseenter', () => {
-          const href = a.getAttribute('href');
-          if (href && !document.querySelector(`link[rel="prefetch"][href="${href}"]`)) {
-            const link = document.createElement('link');
-            link.rel = 'prefetch';
-            link.href = href;
-            document.head.appendChild(link);
-          }
-        }, { once: true });
-      });
+      document.addEventListener('astro:page-load', initBaseLayout);
     </script>
 
     <style>

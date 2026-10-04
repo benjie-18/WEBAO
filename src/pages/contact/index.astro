@@ -162,9 +162,11 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
   </section>
 
   <script>
-    const form = document.getElementById('contact-form') as HTMLFormElement | null;
-    const status = document.getElementById('form-status') as HTMLElement | null;
-    if (form && status) {
+    function initContact() {
+      const form = document.getElementById('contact-form') as HTMLFormElement | null;
+      const status = document.getElementById('form-status') as HTMLElement | null;
+      if (!form || !status) return;
+
       form.addEventListener('submit', (e) => {
         e.preventDefault();
         const data = new FormData(form as HTMLFormElement);
@@ -213,6 +215,8 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
         if (btn) { btn.textContent = 'Email ready ✓'; }
       });
     }
+
+    document.addEventListener('astro:page-load', initContact);
   </script>
 
   <style>

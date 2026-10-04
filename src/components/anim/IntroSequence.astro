@@ -2136,6 +2136,16 @@ const targetSelector = target ?? "";
 
   const boot$ = () => boot();
   document.addEventListener("astro:page-load", boot$);
+  document.addEventListener("astro:before-swap", () => {
+    const html = document.documentElement;
+    html.classList.remove("wi-run", "wi-static", "wi-released");
+    const main = document.getElementById("main");
+    const header = document.querySelector(".site-header") as HTMLElement | null;
+    const footer = document.querySelector(".site-footer") as HTMLElement | null;
+    if (main) main.style.transform = "";
+    if (header) header.style.transform = "";
+    if (footer) footer.style.transform = "";
+  });
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot$, { once: true });
   else boot$();
   if (CFG.master.replay) {
