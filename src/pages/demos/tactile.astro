@@ -4,10 +4,10 @@ import EscapeHatch from "../../components/demos/EscapeHatch.astro";
 // Demo microsite: Tactile, fictional smart home control brand, Portland.
 // Standalone art direction. Full neumorphism. Not connected to the WEBAO theme system.
 const IMG = {
-  living: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=1000&auto=format&fit=crop",
-  lounge: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=800&auto=format&fit=crop",
-  bedroom: "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=800&auto=format&fit=crop",
-  kitchen: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=800&auto=format&fit=crop",
+  living: "/demos/tactile/01.jpg",
+  lounge: "/demos/tactile/02.jpg",
+  bedroom: "/demos/tactile/03.jpg",
+  kitchen: "/demos/tactile/04.jpg",
 };
 ---
 
@@ -436,7 +436,7 @@ const IMG = {
   .tx-room { border-radius: var(--radius); padding: 18px; background: var(--bg);
     box-shadow: 9px 9px 20px var(--dark), -9px -9px 20px var(--light); }
   .tx-img-frame { border-radius: 18px; overflow: hidden; padding: 10px; margin-bottom: 16px; }
-  .tx-img-frame img { border-radius: 12px; width: 100%; height: 170px; object-fit: cover; }
+  .tx-img-frame img { border-radius: 12px; width: 100%; height: 170px; object-fit: cover; filter: sepia(.14) saturate(.92) brightness(1.03); }
   .tx-room h3 { margin: 0 0 4px; font-size: 1.15rem; font-weight: 900; color: #3d4657; }
   .tx-room p { margin: 0; color: var(--ink-soft); font-size: 0.92rem; font-weight: 700; }
 
