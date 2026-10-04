@@ -2,7 +2,9 @@
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
 
 // Démo : Nora Électrique · électricienne fictive, Laval QC.
-// Reconstruite comme un « tableau de répartition » utilitaire.
+// Reconstruite comme un BON DE TRAVAIL. La page est le bon : talon avec
+// numéro de job, services en lignes facturées, répartition en notes de
+// technicienne, avis en tampons de signature, réservation en coupon détachable.
 // Direction artistique autonome, hors du système de thème WEBAO.
 const IMG = {
   hero: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=1600&auto=format&fit=crop",
@@ -16,592 +18,347 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nora Électrique · Électricienne à Laval | Urgence 24/7</title>
-  <meta name="description" content="Nora Électrique : électricienne agréée à Laval. Panneaux, dépannage, rénovations et urgences 24/7. Soumissions écrites gratuites." />
+  <title>Nora Électrique · Bon de travail #T-1047 · Électricienne à Laval</title>
+  <meta name="description" content="Nora Électrique : électricienne agréée à Laval. Remplissez un bon de travail : panneaux, dépannage, bornes de recharge, urgence 24/7. Devis écrits." />
   <meta name="robots" content="noindex" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800;900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
 </head>
-<body class="nora">
+<body class="tk">
 
-  <div class="nora-shell">
+  <div class="tk-desk">
+    <article class="tk-ticket" aria-label="Bon de travail">
 
-    <!-- RAIL LATÉRAL FIXE (bureau) -->
-    <aside class="nora-rail" aria-label="Site">
-      <a class="nora-logo" href="#top" aria-label="Nora Électrique · accueil">
-        <span class="nora-logo-bolt" aria-hidden="true">⚡</span>
-        <span class="nora-logo-text">NORA<em>ÉLECTRIQUE</em></span>
-      </a>
-      <nav class="nora-rail-links" aria-label="Navigation principale">
-        <a href="#board"><span>◈</span>Tableau de bord</a>
-        <a href="#services"><span>◈</span>Services</a>
-        <a href="#how"><span>◈</span>Fonctionnement</a>
-        <a href="#reviews"><span>◈</span>Avis</a>
-        <a href="#area"><span>◈</span>Zone desservie</a>
-        <a href="#contact"><span>◈</span>Contact</a>
-      </nav>
-      <div class="nora-rail-foot">
-        <a class="nora-btn nora-btn-red nora-btn-full" href="#contact">Devis gratuit</a>
-        <p class="nora-rail-tel"><a href="tel:+14505550134">(450) 555-0134</a></p>
-      </div>
-    </aside>
-
-    <div class="nora-main">
-      <!-- BARRE UTILITAIRE FINE -->
-      <div class="nora-topbar">
-        <span class="nora-topbar-item">RBQ 5678-1234-01 · Agréée et assurée</span>
-        <a class="nora-topbar-item nora-topbar-hot" href="tel:+14505550134">
-          <span class="nora-dot" aria-hidden="true"></span> Urgence 24/7 · (450) 555-0134
-        </a>
-      </div>
-
-      <!-- BARRE MOBILE + BURGER -->
-      <header class="nora-mobilebar">
-        <a class="nora-logo" href="#top" aria-label="Nora Électrique · accueil">
-          <span class="nora-logo-bolt" aria-hidden="true">⚡</span>
-          <span class="nora-logo-text">NORA<em>ÉLECTRIQUE</em></span>
-        </a>
-        <button class="nora-burger" aria-label="Ouvrir le menu" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
-        <nav class="nora-drawer" aria-label="Navigation principale" hidden>
-          <a href="#board">Tableau de bord</a>
-          <a href="#services">Services</a>
-          <a href="#how">Fonctionnement</a>
-          <a href="#reviews">Avis</a>
-          <a href="#area">Zone desservie</a>
-          <a href="#contact">Contact</a>
-          <a class="nora-btn nora-btn-red" href="#contact">Devis gratuit</a>
-        </nav>
+      <!-- TALON : l'en-tête du bon -->
+      <header class="tk-stub">
+        <div class="tk-stub-top">
+          <div>
+            <p class="tk-brand">Nora Électrique</p>
+            <p class="tk-brand-sub">Électricienne agréée · Laval QC · RBQ 5678-1234-01</p>
+          </div>
+          <p class="tk-stamp" aria-label="Statut : ouvert">Ouvert</p>
+        </div>
+        <div class="tk-stub-grid">
+          <div class="tk-field"><span>Bon de travail</span><strong>#T-1047</strong></div>
+          <div class="tk-field"><span>Date</span><strong data-tk-date>·</strong></div>
+          <div class="tk-field"><span>Technicienne</span><strong>Nora B.</strong></div>
+          <div class="tk-field"><span>Répartition</span><strong><a href="tel:+14505550134">(450) 555-0134</a></strong></div>
+        </div>
+        <p class="tk-stub-note">Gardez ce bon. C'est votre devis, votre reçu et votre garantie.</p>
       </header>
 
-      <main id="top">
-        <!-- HÉROS : image plein écran, voile sombre -->
-        <section class="nora-hero">
-          <figure class="nora-hero-bg" aria-hidden="true">
-            <img src={IMG.hero} alt="" loading="eager" fetchpriority="high" />
-          </figure>
-          <div class="nora-hero-in">
-            <p class="nora-eyebrow nora-eyebrow-light"><span class="nora-live" aria-hidden="true"></span>Électricienne · Laval et Rive-Nord · répartition 24/7</p>
-            <h1 class="nora-h1">Quand le courant lâche,<br />on se déplace.</h1>
-            <p class="nora-lede">Panneaux, dépannage, bornes de recharge et rénovations. Devis écrits, travail propre, garantie de 5 ans sur la main-d'œuvre.</p>
-            <div class="nora-hero-cta">
-              <a class="nora-btn nora-btn-red" href="#contact">Devis gratuit</a>
-              <a class="nora-btn nora-btn-white" href="tel:+14505550134">Appeler le (450) 555-0134</a>
-            </div>
-            <dl class="nora-stats">
-              <div><dt>24/7</dt><dd>répartition d'urgence</dd></div>
-              <div><dt>4,9★</dt><dd>212 avis</dd></div>
-              <div><dt>15 ans</dt><dd>de métier</dd></div>
-            </dl>
-          </div>
-        </section>
+      <div class="tk-perf" aria-hidden="true"></div>
 
-        <!-- FONCTIONNEMENT : bandeau en 4 étapes -->
-        <section class="nora-section" id="how">
-          <div class="nora-wrap">
-            <p class="nora-eyebrow">Fonctionnement</p>
-            <h2 class="nora-h2">Quatre étapes. Zéro surprise.</h2>
-            <ol class="nora-steps">
-              <li>
-                <span class="nora-step-n">01</span>
-                <h3>L'appel</h3>
-                <p>Vous décrivez le problème. On pose les bonnes questions et on vous donne une plage horaire, pas un haussement d'épaules.</p>
-              </li>
-              <li>
-                <span class="nora-step-n">02</span>
-                <h3>L'envoi</h3>
-                <p>On dépêche la technicienne la plus proche. Les urgences passent devant, jour et nuit.</p>
-              </li>
-              <li>
-                <span class="nora-step-n">03</span>
-                <h3>Le devis ferme</h3>
-                <p>Prix écrit avant qu'on touche un fil. Il ne bouge plus, sauf si le travail change, et là on demande d'abord.</p>
-              </li>
-              <li>
-                <span class="nora-step-n">04</span>
-                <h3>Le travail fini</h3>
-                <p>Testé, nettoyé, photos envoyées. Couvert par notre garantie de 5 ans sur la main-d'œuvre.</p>
-              </li>
-            </ol>
-          </div>
-        </section>
-
-        <!-- SERVICES : accordéon dépliable -->
-        <section class="nora-section nora-section-tint" id="services">
-          <div class="nora-wrap nora-svc-grid">
-            <div class="nora-svc-side">
-              <div class="nora-svc-stick">
-                <p class="nora-eyebrow">Services</p>
-                <h2 class="nora-h2">Choisissez un travail.<br />Voyez exactement<br />ce qu'il comprend.</h2>
-                <figure class="nora-svc-img">
-                  <img src={IMG.panel} alt="Un panneau 200 A installé par Nora Électrique" loading="lazy" />
-                  <figcaption>Un panneau 200 A installé à Fabreville, en une journée, du début à la fin.</figcaption>
-                </figure>
-              </div>
-            </div>
-            <div class="nora-acc">
-              <details class="nora-acc-item" open>
-                <summary class="nora-acc-head">
-                  <span class="nora-acc-n">01</span>
-                  <span class="nora-acc-t"><strong>Urgence 24/7</strong><span>Panne, odeur de brûlé, prise qui grésille. Jour et nuit.</span></span>
-                  <span class="nora-acc-x" aria-hidden="true"></span>
-                </summary>
-                <div class="nora-acc-body">
-                  <p>Appelez le (450) 555-0134 à toute heure. Une électricienne agréée arrive avec une camionnette bien stockée, et la plupart des urgences se règlent en une seule visite. Soirs, fins de semaine, jours fériés : même numéro, même équipe.</p>
-                </div>
-              </details>
-              <details class="nora-acc-item">
-                <summary class="nora-acc-head">
-                  <span class="nora-acc-n">02</span>
-                  <span class="nora-acc-t"><strong>Panneaux</strong><span>Boîtes à fusibles et entrées 60 A remplacées par du 200 A en une journée.</span></span>
-                  <span class="nora-acc-x" aria-hidden="true"></span>
-                </summary>
-                <div class="nora-acc-body">
-                  <p>On dimensionne l'entrée pour thermopompes, bornes de recharge et ateliers, on s'occupe du permis et du débranchement d'Hydro, et on vous envoie des photos avant et après. La plupart des maisons sont faites entre 8 h et 16 h.</p>
-                </div>
-              </details>
-              <details class="nora-acc-item">
-                <summary class="nora-acc-head">
-                  <span class="nora-acc-n">03</span>
-                  <span class="nora-acc-t"><strong>Rénovations</strong><span>Re-câblage complet ou partiel pour cuisines, sous-sols et agrandissements.</span></span>
-                  <span class="nora-acc-x" aria-hidden="true"></span>
-                </summary>
-                <div class="nora-acc-body">
-                  <p>On travaille à partir des plans de votre entrepreneur, on ouvre les murs proprement et on identifie chaque circuit au panneau. Les inspections pendant et après les travaux sont pour nous.</p>
-                </div>
-              </details>
-              <details class="nora-acc-item">
-                <summary class="nora-acc-head">
-                  <span class="nora-acc-n">04</span>
-                  <span class="nora-acc-t"><strong>Bornes de recharge</strong><span>Bornes résidentielles, permis et inspection inclus.</span></span>
-                  <span class="nora-acc-x" aria-hidden="true"></span>
-                </summary>
-                <div class="nora-acc-body">
-                  <p>On vérifie d'abord la capacité libre de votre panneau, on tire un circuit dédié et on programme la borne pour les tarifs de nuit. Compatible avec tous les véhicules électriques sur la route.</p>
-                </div>
-              </details>
-              <details class="nora-acc-item">
-                <summary class="nora-acc-head">
-                  <span class="nora-acc-n">05</span>
-                  <span class="nora-acc-t"><strong>Domotique</strong><span>Scènes d'éclairage, thermostats et panneaux qui fonctionnent, point.</span></span>
-                  <span class="nora-acc-x" aria-hidden="true"></span>
-                </summary>
-                <div class="nora-acc-body">
-                  <p>Pas de gadgets collés au mur qui dépendent du nuage. On câble de vrais interrupteurs, gradateurs et contrôleurs, puis on vous remet une seule application et une fiche d'une page.</p>
-                </div>
-              </details>
-              <details class="nora-acc-item">
-                <summary class="nora-acc-head">
-                  <span class="nora-acc-n">06</span>
-                  <span class="nora-acc-t"><strong>Commercial</strong><span>Aménagements, conformité et entretien pour commerces d'ici.</span></span>
-                  <span class="nora-acc-x" aria-hidden="true"></span>
-                </summary>
-                <div class="nora-acc-body">
-                  <p>Boutiques, bureaux, restaurants. On planifie hors des heures d'ouverture quand le travail l'exige, avec des contrats d'entretien qui vous gardent conforme toute l'année.</p>
-                </div>
-              </details>
-            </div>
-          </div>
-        </section>
-
-        <!-- TABLEAU DE BORD -->
-        <section class="nora-section" id="board">
-          <div class="nora-wrap">
-            <div class="nora-board-head">
-              <div>
-                <p class="nora-eyebrow">Tableau presque en direct</p>
-                <h2 class="nora-h2">Sur la route aujourd'hui.</h2>
-              </div>
-              <p class="nora-board-meta"><span class="nora-dot" aria-hidden="true"></span>Mis à jour à 10 h 42 · données fictives de démonstration</p>
-            </div>
-            <div class="nora-board" role="list">
-              <div class="nora-job" role="listitem">
-                <span class="nora-job-ticket">T-1039</span>
-                <span class="nora-job-loc">Repentigny</span>
-                <span class="nora-job-desc">Prises mortes dans la cuisine, DDFT remplacé <em>· Nora B.</em></span>
-                <span class="nora-pill nora-pill-done">Terminé · 08 h 12</span>
-              </div>
-              <div class="nora-job" role="listitem">
-                <span class="nora-job-ticket">T-1041</span>
-                <span class="nora-job-loc">Laval (Fabreville)</span>
-                <span class="nora-job-desc">Panneau, passage au 200 A <em>· Nora B.</em></span>
-                <span class="nora-pill nora-pill-site"><i aria-hidden="true"></i>Sur place</span>
-              </div>
-              <div class="nora-job" role="listitem">
-                <span class="nora-job-ticket">T-1042</span>
-                <span class="nora-job-loc">Terrebonne</span>
-                <span class="nora-job-desc">Borne de recharge, circuit de garage <em>· Karim T.</em></span>
-                <span class="nora-pill nora-pill-route">En route</span>
-              </div>
-              <div class="nora-job" role="listitem">
-                <span class="nora-job-ticket">T-1044</span>
-                <span class="nora-job-loc">Saint-Eustache</span>
-                <span class="nora-job-desc">Re-câblage du sous-sol, jour 2 de 3 <em>· Karim T.</em></span>
-                <span class="nora-pill nora-pill-route">En route</span>
-              </div>
-            </div>
-            <p class="nora-note">Deux camionnettes sur la route, une technicienne en attente. Urgence? Appelez le <a href="tel:+14505550134">(450) 555-0134</a> et passez devant.</p>
-          </div>
-        </section>
-
-        <!-- AVIS : bandeau à défilement horizontal -->
-        <section class="nora-section nora-section-tint" id="reviews">
-          <div class="nora-wrap">
-            <p class="nora-eyebrow">Avis</p>
-            <h2 class="nora-h2">L'avis du voisinage.</h2>
-          </div>
-          <div class="nora-reviews-track" aria-label="Avis clients, faites défiler horizontalement">
-            <blockquote class="nora-review">
-              <p>« Panneau changé en une journée. Photos de tout, zéro poussière. Le prix, c'était le devis. »</p>
-              <footer>Marc D., Laval <span>★★★★★</span></footer>
-            </blockquote>
-            <blockquote class="nora-review">
-              <p>« Panne à 23 h, technicienne sur place à minuit. On ne peut pas demander mieux. »</p>
-              <footer>Aisha K., Terrebonne <span>★★★★★</span></footer>
-            </blockquote>
-            <blockquote class="nora-review">
-              <p>« Elle a repéré deux non-conformités que notre inspecteur avait manquées. Rigoureuse et honnête. »</p>
-              <footer>Jean-François L., Blainville <span>★★★★★</span></footer>
-            </blockquote>
-            <blockquote class="nora-review">
-              <p>« Le re-câblage du sous-sol fini un jour d'avance, et le panneau est identifié comme une bibliothèque. »</p>
-              <footer>Sophie R., Saint-Eustache <span>★★★★★</span></footer>
-            </blockquote>
-            <blockquote class="nora-review">
-              <p>« Prix juste, arrivé à l'heure promise, garage laissé plus propre qu'à l'arrivée. »</p>
-              <footer>Daniel P., Mirabel <span>★★★★★</span></footer>
-            </blockquote>
-          </div>
-          <p class="nora-wrap nora-scroll-hint">← glissez pour lire la suite →</p>
-        </section>
-
-        <!-- ZONE DESSERVIE : liste compacte -->
-        <section class="nora-section" id="area">
-          <div class="nora-wrap">
-            <p class="nora-eyebrow">Zone desservie</p>
-            <h2 class="nora-h2">Où roule la camionnette.</h2>
-            <ul class="nora-area-list">
-              <li>Laval</li><li>Blainville</li><li>Mirabel</li><li>Terrebonne</li>
-              <li>Repentigny</li><li>Saint-Eustache</li><li>Boisbriand</li><li>Montréal-Nord</li>
-              <li>Rosemère</li><li>Lorraine</li><li>Deux-Montagnes</li><li>Sainte-Thérèse</li>
-            </ul>
-            <p class="nora-note">Hors zone? Appelez quand même. Pour les gros travaux, on se déplace.</p>
-          </div>
-        </section>
-
-        <!-- CONTACT : deux colonnes -->
-        <section class="nora-section nora-section-tint" id="contact">
-          <div class="nora-wrap nora-split">
-            <div>
-              <p class="nora-eyebrow">Devis</p>
-              <h2 class="nora-h2">Dites-nous ce<br />qui se passe.</h2>
-              <p class="nora-prose">Les devis sont gratuits et écrits. Urgence? Sautez le formulaire et appelez le <a href="tel:+14505550134">(450) 555-0134</a>.</p>
-              <ul class="nora-contact-list">
-                <li><strong>Téléphone</strong> (450) 555-0134</li>
-                <li><strong>Courriel</strong> bonjour@nora-electrique-demo.ca</li>
-                <li><strong>Atelier</strong> 123, rue Fictive, Laval QC</li>
-                <li><strong>Heures</strong> Lun. au ven., 7 h à 17 h · urgences 24/7</li>
-              </ul>
-              <figure class="nora-contact-img">
-                <img src={IMG.about} alt="Nora, maître électricienne, sur un chantier" loading="lazy" />
-              </figure>
-            </div>
-            <form class="nora-form" id="nora-form" novalidate>
-              <label>Votre nom<input type="text" name="name" required placeholder="Jeanne Tremblay" /></label>
-              <label>Téléphone<input type="tel" name="phone" required placeholder="(450) 555-0000" /></label>
-              <label>De quoi avez-vous besoin?
-                <select name="need">
-                  <option>Réparation d'urgence</option>
-                  <option>Changement de panneau</option>
-                  <option>Câblage de rénovation</option>
-                  <option>Borne de recharge</option>
-                  <option>Autre chose</option>
-                </select>
-              </label>
-              <label>Détails<textarea name="details" rows="4" placeholder="Le disjoncteur déclenche quand…"></textarea></label>
-              <button class="nora-btn nora-btn-red nora-btn-full" type="submit">Demander mon devis gratuit</button>
-              <p class="nora-form-note" role="status" aria-live="polite"></p>
-            </form>
-          </div>
-        </section>
-      </main>
-
-      <!-- PIED DE PAGE : grand numéro de téléphone -->
-      <footer class="nora-footer">
-        <div class="nora-wrap">
-          <p class="nora-eyebrow nora-eyebrow-light">Vous lisez encore? Appelez.</p>
-          <a class="nora-footer-big" href="tel:+14505550134">(450) 555-0134</a>
-          <div class="nora-footer-meta">
-            <span>RBQ 5678-1234-01</span>
-            <span>123, rue Fictive, Laval QC</span>
-            <span>© 2026 Nora Électrique · Laval, QC</span>
-          </div>
+      <!-- LIGNES : services en lignes facturées -->
+      <section class="tk-lines" aria-label="Services et prix">
+        <h2 class="tk-h">Lignes facturées</h2>
+        <div class="tk-row tk-row-head" aria-hidden="true">
+          <span>Code</span><span>Description</span><span>Prix</span>
         </div>
+        <div class="tk-row">
+          <span class="tk-code">E-01</span>
+          <span class="tk-desc"><strong>Urgence 24/7</strong><span>Panne, odeur de brûlé, prise qui grésille. Une technicienne agréée avec une camionnette bien stockée, jour et nuit.</span></span>
+          <span class="tk-price">149 $ <em>déplacement</em></span>
+        </div>
+        <div class="tk-row">
+          <span class="tk-code">E-02</span>
+          <span class="tk-desc"><strong>Panneau 200 A</strong><span>Boîtes à fusibles et entrées 60 A remplacées en une journée. Permis et débranchement d'Hydro inclus.</span></span>
+          <span class="tk-price">à partir de 1 899 $</span>
+        </div>
+        <div class="tk-row">
+          <span class="tk-code">E-03</span>
+          <span class="tk-desc"><strong>Câblage de rénovation</strong><span>Re-câblage complet ou partiel pour cuisines, sous-sols, agrandissements. Chaque circuit identifié.</span></span>
+          <span class="tk-price">devis <em>sur plan</em></span>
+        </div>
+        <div class="tk-row">
+          <span class="tk-code">E-04</span>
+          <span class="tk-desc"><strong>Borne de recharge</strong><span>Capacité du panneau vérifiée d'abord, circuit dédié, programmation aux tarifs de nuit. Avec permis.</span></span>
+          <span class="tk-price">à partir de 899 $</span>
+        </div>
+        <div class="tk-row">
+          <span class="tk-code">E-05</span>
+          <span class="tk-desc"><strong>Domotique câblée</strong><span>De vrais interrupteurs, gradateurs et contrôleurs. Une application, une fiche aide-mémoire, rien d'inutile.</span></span>
+          <span class="tk-price">à partir de 349 $</span>
+        </div>
+        <div class="tk-row">
+          <span class="tk-code">E-06</span>
+          <span class="tk-desc"><strong>Commercial</strong><span>Boutiques, bureaux, restaurants. Horaire hors des heures d'ouverture, contrats d'entretien.</span></span>
+          <span class="tk-price">devis</span>
+        </div>
+        <figure class="tk-attach">
+          <span class="tk-clip" aria-hidden="true"></span>
+          <img src={IMG.panel} alt="Un panneau 200 A installé par Nora Électrique" loading="lazy" />
+          <figcaption>Photo jointe · E-02, Fabreville : passage au 200 A, une journée, du début à la fin.</figcaption>
+        </figure>
+        <p class="tk-fineprint">Les prix sont écrits avant qu'on touche un fil et ne bougent plus, sauf si le travail change, et là on demande d'abord. Garantie de 5 ans sur la main-d'œuvre.</p>
+      </section>
+
+      <div class="tk-perf" aria-hidden="true"></div>
+
+      <!-- NOTES DE TECHNICIENNE -->
+      <section class="tk-notes" aria-label="Notes de technicienne">
+        <h2 class="tk-h">Notes de technicienne</h2>
+        <ul class="tk-log">
+          <li><span class="tk-code">T-1044</span><span>Saint-Eustache · re-câblage du sous-sol, jour 2 de 3 · <em>Karim T.</em></span><span class="tk-tag">en route</span></li>
+          <li><span class="tk-code">T-1042</span><span>Terrebonne · borne de recharge, circuit de garage · <em>Karim T.</em></span><span class="tk-tag">en route</span></li>
+          <li><span class="tk-code">T-1041</span><span>Laval (Fabreville) · panneau, passage au 200 A · <em>Nora B.</em></span><span class="tk-tag tk-tag-site">sur place</span></li>
+          <li><span class="tk-code">T-1039</span><span>Repentigny · prises mortes dans la cuisine, DDFT remplacé · <em>Nora B.</em></span><span class="tk-tag tk-tag-done">fini 08 h 12</span></li>
+        </ul>
+        <div class="tk-id">
+          <img src={IMG.about} alt="Nora, maître électricienne" loading="lazy" />
+          <div>
+            <p class="tk-id-name">Nora B. <span>· maître électricienne</span></p>
+            <p class="tk-id-note">15 ans de métier. La personne qui répond au téléphone est celle qui se présente. Photo de chantier, ce matin :</p>
+          </div>
+          <img class="tk-id-site" src={IMG.hero} alt="Nora au travail sur un chantier" loading="lazy" />
+        </div>
+        <p class="tk-fineprint">Deux camionnettes sur la route, une technicienne en attente. Urgence? Appelez le <a href="tel:+14505550134">(450) 555-0134</a> et passez devant.</p>
+      </section>
+
+      <div class="tk-perf" aria-hidden="true"></div>
+
+      <!-- SIGNATURES : avis en tampons -->
+      <section class="tk-signoff" aria-label="Approuvé par les clients">
+        <h2 class="tk-h">Approuvé</h2>
+        <div class="tk-signs">
+          <blockquote>
+            <p>« Panneau changé en une journée. Photos de tout, zéro poussière. Le prix, c'était le devis. »</p>
+            <footer><span class="tk-sig">Marc D.</span><span>Laval · mars 2026 · ★★★★★</span></footer>
+          </blockquote>
+          <blockquote>
+            <p>« Panne à 23 h, technicienne sur place à minuit. On ne peut pas demander mieux. »</p>
+            <footer><span class="tk-sig">Aisha K.</span><span>Terrebonne · fév. 2026 · ★★★★★</span></footer>
+          </blockquote>
+          <blockquote>
+            <p>« Elle a repéré deux non-conformités que notre inspecteur avait manquées. Rigoureuse et honnête. »</p>
+            <footer><span class="tk-sig">Jean-François L.</span><span>Blainville · janv. 2026 · ★★★★★</span></footer>
+          </blockquote>
+        </div>
+      </section>
+
+      <div class="tk-perf tk-perf-tear" aria-hidden="true"><span>Déchirez ici</span></div>
+
+      <!-- COUPON DÉTACHABLE : le formulaire -->
+      <section class="tk-slip" aria-label="Remplir un bon de travail">
+        <h2 class="tk-h">Remplir un bon de travail</h2>
+        <p class="tk-slip-sub">Remplissez le coupon. On vous rappelle dans l'heure avec un prix écrit.</p>
+        <form class="tk-form" id="tk-form" novalidate>
+          <div class="tk-form-grid">
+            <label>Nom<input type="text" name="name" required placeholder="Jeanne Tremblay" autocomplete="name" /></label>
+            <label>Téléphone<input type="tel" name="phone" required placeholder="(450) 555-0000" autocomplete="tel" /></label>
+            <label>Ligne désirée
+              <select name="item">
+                <option>E-01 · Urgence</option>
+                <option>E-02 · Panneau</option>
+                <option>E-03 · Câblage de rénovation</option>
+                <option>E-04 · Borne de recharge</option>
+                <option>E-05 · Domotique</option>
+                <option>E-06 · Commercial</option>
+              </select>
+            </label>
+            <label>Plage souhaitée
+              <select name="window">
+                <option>Dès que possible</option>
+                <option>Cette semaine</option>
+                <option>Fin de semaine</option>
+              </select>
+            </label>
+          </div>
+          <label>Décrivez le travail<textarea name="details" rows="3" placeholder="Le disjoncteur déclenche quand…"></textarea></label>
+          <button class="tk-submit" type="submit">Déposer le bon #T-1048</button>
+          <p class="tk-form-note" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <!-- TAMPON DE L'ATELIER -->
+      <footer class="tk-foot">
+        <p class="tk-foot-big"><a href="tel:+14505550134">(450) 555-0134</a></p>
+        <p>123, rue Fictive, Laval QC · bonjour@nora-electrique-demo.ca<br />Lun. au ven., 7 h à 17 h · urgences 24/7<br />© 2026 Nora Électrique · RBQ 5678-1234-01</p>
       </footer>
-    </div>
+    </article>
   </div>
 
   <EscapeHatch locale="fr" />
 
   <script>
     (function () {
-      var btn = document.querySelector('.nora-burger');
-      var drawer = document.querySelector('.nora-drawer');
-      btn?.addEventListener('click', function () {
-        var isHidden = drawer?.hasAttribute('hidden') ?? false;
-        if (isHidden) { drawer?.removeAttribute('hidden'); } else { drawer?.setAttribute('hidden', ''); }
-        btn?.setAttribute('aria-expanded', String(isHidden));
-        btn?.setAttribute('aria-label', isHidden ? 'Fermer le menu' : 'Ouvrir le menu');
-      });
-      drawer?.addEventListener('click', function (e) {
-        if ((e.target as HTMLElement).tagName === 'A') {
-          drawer?.setAttribute('hidden', '');
-          btn?.setAttribute('aria-expanded', 'false');
-          btn?.setAttribute('aria-label', 'Ouvrir le menu');
-        }
-      });
-    })();
-    // Formulaire de démo : ne part nulle part
-    (function () {
-      var form = document.getElementById('nora-form');
+      var d = document.querySelector('[data-tk-date]');
+      if (d) {
+        try {
+          d.textContent = new Date().toLocaleDateString('fr-CA', { year: 'numeric', month: 'short', day: 'numeric' });
+        } catch (e) { d.textContent = '2026-10-04'; }
+      }
+      var form = document.getElementById('tk-form');
       form?.addEventListener('submit', function (e) {
         e.preventDefault();
-        var note = form?.querySelector('.nora-form-note');
-        if (note) note.textContent = '✓ Merci! Nous vous recontacterons sous peu.';
+        var note = form?.querySelector('.tk-form-note');
+        if (note) note.textContent = '✓ Bon #T-1048 déposé. On vous appelle dans l\u2019heure.';
+        if (form instanceof HTMLFormElement) form.reset();
       });
     })();
   </script>
 
   <style>
-    .nora {
-      --nora-paper: #FAF7F2;
-      --nora-paper-2: #F1ECE2;
-      --nora-ink: #16130E;
-      --nora-ink-2: #4A4438;
-      --nora-red: #FF3B30;
-      --nora-red-dark: #D92B21;
-      --nora-line: rgba(22, 19, 14, 0.12);
-      --nora-font-d: "Archivo", system-ui, sans-serif;
-      --nora-font-b: "Inter", system-ui, sans-serif;
+    .tk {
+      --tk-paper: #F7F3EA;
+      --tk-card: #FFFDF7;
+      --tk-ink: #1C1A15;
+      --tk-ink2: #5C5546;
+      --tk-red: #D92B21;
+      --tk-line: #1C1A15;
+      --tk-faint: rgba(28, 26, 21, 0.16);
+      --tk-mono: "IBM Plex Mono", ui-monospace, monospace;
+      --tk-disp: "Archivo", system-ui, sans-serif;
       margin: 0;
-      background: var(--nora-paper);
-      color: var(--nora-ink);
-      font-family: var(--nora-font-b);
+      background: #2B2925;
+      color: var(--tk-ink);
+      font-family: var(--tk-mono);
       -webkit-font-smoothing: antialiased;
-      overflow-x: clip;
     }
-    .nora *, .nora *::before, .nora *::after { box-sizing: border-box; }
-    .nora img { display: block; max-width: 100%; }
-    .nora-wrap { max-width: 1180px; margin: 0 auto; padding: 0 clamp(18px, 4vw, 40px); }
+    .tk *, .tk *::before, .tk *::after { box-sizing: border-box; }
+    .tk img { display: block; max-width: 100%; }
+    .tk a { color: inherit; }
 
-    /* coquille + rail latéral */
-    .nora-shell { display: grid; grid-template-columns: 250px minmax(0, 1fr); align-items: start; }
-    .nora-rail {
-      position: sticky; top: 0; height: 100vh; height: 100dvh;
-      display: flex; flex-direction: column; gap: 30px;
-      padding: 22px 20px 76px;
-      background: #fff;
-      border-right: 1px solid var(--nora-line);
-      z-index: 40;
+    .tk-desk { padding: clamp(18px, 4vw, 48px) clamp(12px, 3vw, 32px) clamp(40px, 6vw, 80px); display: flex; justify-content: center; }
+    .tk-ticket {
+      width: min(880px, 100%);
+      background: var(--tk-paper);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+      transform: rotate(-0.4deg);
     }
-    .nora-rail-links { display: flex; flex-direction: column; gap: 2px; }
-    .nora-rail-links a {
-      display: flex; align-items: center; gap: 12px;
-      padding: 11px 12px; border-radius: 10px;
-      color: var(--nora-ink); text-decoration: none; font-weight: 600; font-size: 14px;
+
+    .tk-perf {
+      height: 22px;
+      background-image: radial-gradient(circle at 8px 11px, #2B2925 7px, transparent 7.5px);
+      background-size: 26px 22px;
+      background-repeat: repeat-x;
+      background-position: center;
     }
-    .nora-rail-links a span { color: var(--nora-red); font-size: 11px; }
-    .nora-rail-links a:hover { background: var(--nora-paper-2); }
-    .nora-rail-foot { margin-top: auto; display: grid; gap: 10px; }
-    .nora-rail-tel { margin: 0; text-align: center; font-size: 13px; font-weight: 600; }
-    .nora-rail-tel a { color: var(--nora-ink-2); text-decoration: none; }
-    .nora-main { min-width: 0; }
-
-    /* barre utilitaire */
-    .nora-topbar {
-      display: flex; justify-content: space-between; align-items: center; gap: 12px;
-      background: var(--nora-ink); color: #FAF7F2;
-      font-size: 11.5px; letter-spacing: 0.04em; font-weight: 500;
-      padding: 9px clamp(18px, 4vw, 40px);
+    .tk-perf-tear { position: relative; }
+    .tk-perf-tear span {
+      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) rotate(-0.4deg);
+      background: var(--tk-paper); padding: 2px 14px;
+      font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--tk-ink2);
     }
-    .nora-topbar-hot { color: #FAF7F2; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; }
-    .nora-dot { width: 8px; height: 8px; border-radius: 50%; background: #3DFF7A; box-shadow: 0 0 0 4px rgba(61,255,122,0.18); animation: nora-pulse 2s infinite; flex: none; }
-    @keyframes nora-pulse { 50% { box-shadow: 0 0 0 7px rgba(61,255,122,0.06); } }
 
-    /* barre mobile */
-    .nora-mobilebar { display: none; position: sticky; top: 0; z-index: 50; background: rgba(250,247,242,0.94); backdrop-filter: blur(12px); border-bottom: 1px solid var(--nora-line); padding: 12px clamp(18px, 4vw, 40px); align-items: center; }
-    .nora-burger { margin-left: auto; background: none; border: 0; cursor: pointer; padding: 8px; }
-    .nora-burger span { display: block; width: 22px; height: 2px; background: var(--nora-ink); margin: 5px 0; border-radius: 2px; }
-    .nora-drawer { position: absolute; top: 100%; left: 0; right: 0; background: var(--nora-paper); border-bottom: 1px solid var(--nora-line); padding: 10px 0 18px; display: grid; }
-    .nora-drawer[hidden] { display: none; }
-    .nora-drawer a:not(.nora-btn) { padding: 13px 24px; color: var(--nora-ink); text-decoration: none; font-weight: 600; border-top: 1px solid var(--nora-line); }
-    .nora-drawer .nora-btn { margin: 14px 24px 0; }
-
-    /* logo + boutons */
-    .nora-logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--nora-ink); }
-    .nora-logo-bolt { display: grid; place-items: center; width: 38px; height: 38px; background: var(--nora-red); color: #fff; border-radius: 10px; font-size: 20px; flex: none; }
-    .nora-logo-text { font-family: var(--nora-font-d); font-weight: 900; font-size: 17px; letter-spacing: -0.01em; line-height: 0.95; display: flex; flex-direction: column; }
-    .nora-logo-text em { font-style: normal; font-weight: 500; font-size: 11px; letter-spacing: 0.32em; color: var(--nora-ink-2); }
-    .nora-btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-      font-family: var(--nora-font-d); font-weight: 800; font-size: 14px; letter-spacing: 0.01em;
-      padding: 14px 26px; border-radius: 12px; text-decoration: none; cursor: pointer; border: 0;
-      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    .tk-stub { padding: clamp(26px, 4vw, 44px) clamp(20px, 4vw, 44px) clamp(20px, 3vw, 30px); }
+    .tk-stub-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; margin-bottom: 26px; }
+    .tk-brand { font-family: var(--tk-disp); font-weight: 900; font-size: clamp(2rem, 6vw, 3.4rem); letter-spacing: -0.03em; margin: 0; line-height: 0.95; }
+    .tk-brand-sub { margin: 10px 0 0; font-size: 12.5px; color: var(--tk-ink2); letter-spacing: 0.04em; }
+    .tk-stamp {
+      flex: none; margin: 0;
+      font-family: var(--tk-disp); font-weight: 900; font-size: 15px; letter-spacing: 0.24em; text-transform: uppercase;
+      color: var(--tk-red); border: 3px solid var(--tk-red); border-radius: 8px;
+      padding: 10px 18px 10px 22px; transform: rotate(7deg);
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.9 0'/%3E%3CfeComposite operator='in' in2='SourceGraphic'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+      mask-size: 120px;
     }
-    .nora-btn:hover { transform: translateY(-2px); }
-    .nora-btn-red { background: var(--nora-red); color: #fff; box-shadow: 0 10px 24px rgba(255, 59, 48, 0.32); }
-    .nora-btn-red:hover { background: var(--nora-red-dark); }
-    .nora-btn-white { background: #fff; color: var(--nora-ink); }
-    .nora-btn-full { width: 100%; }
+    .tk-stub-grid { display: grid; grid-template-columns: repeat(4, 1fr); border: 2px solid var(--tk-line); }
+    .tk-field { padding: 14px 16px; border-left: 2px solid var(--tk-line); display: grid; gap: 6px; }
+    .tk-field:first-child { border-left: 0; }
+    .tk-field span { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--tk-ink2); }
+    .tk-field strong { font-size: 17px; font-weight: 700; }
+    .tk-field strong a { text-decoration: none; border-bottom: 2px solid var(--tk-red); }
+    .tk-stub-note { margin: 16px 0 0; font-size: 12px; color: var(--tk-ink2); font-style: italic; }
 
-    /* typo */
-    .nora-eyebrow { font-family: ui-monospace, Menlo, monospace; font-size: 11.5px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--nora-red); margin: 0 0 14px; }
-    .nora-eyebrow-light { color: #FFD9D6; }
-    .nora-eyebrow-light { display: flex; align-items: center; gap: 10px; }
-    .nora-live { width: 9px; height: 9px; border-radius: 50%; background: var(--nora-red); flex: none; animation: nora-ping 1.8s ease-out infinite; }
-    @keyframes nora-ping { 0% { box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.55); } 70% { box-shadow: 0 0 0 10px rgba(255, 59, 48, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 59, 48, 0); } }
-    .nora-h1 { font-family: var(--nora-font-d); font-weight: 900; letter-spacing: -0.03em; font-size: clamp(2.8rem, 7.5vw, 5.6rem); line-height: 0.94; margin: 0 0 20px; color: #FAF7F2; }
-    .nora-h2 { font-family: var(--nora-font-d); font-weight: 800; letter-spacing: -0.025em; font-size: clamp(1.9rem, 4.4vw, 3rem); line-height: 1.02; margin: 0 0 18px; }
-    .nora-lede { font-size: 17px; line-height: 1.6; color: rgba(250,247,242,0.85); max-width: 46ch; margin: 0 0 28px; }
-    .nora-prose { font-size: 15.5px; line-height: 1.7; color: var(--nora-ink-2); max-width: 52ch; }
-    .nora-prose a { color: var(--nora-red); font-weight: 600; }
+    .tk-lines, .tk-notes, .tk-signoff { padding: clamp(26px, 4vw, 40px) clamp(20px, 4vw, 44px); }
+    .tk-h { font-size: 12px; font-weight: 700; letter-spacing: 0.26em; text-transform: uppercase; color: var(--tk-ink2); margin: 0 0 20px; display: flex; align-items: center; gap: 12px; }
+    .tk-h::after { content: ""; flex: 1; border-top: 1px dashed var(--tk-faint); }
 
-    /* héros */
-    .nora-hero { position: relative; overflow: clip; min-height: min(92vh, 860px); display: flex; align-items: flex-end; }
-    .nora-hero-bg { position: absolute; inset: 0; margin: 0; }
-    .nora-hero-bg img { width: 100%; height: 100%; object-fit: cover; }
-    .nora-hero-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,8,5,0.45) 0%, rgba(10,8,5,0.15) 35%, rgba(10,8,5,0.78) 100%); }
-    .nora-hero-in { position: relative; z-index: 1; width: 100%; max-width: 1180px; margin: 0 auto; padding: clamp(90px, 12vw, 150px) clamp(18px, 4vw, 40px) clamp(44px, 6vw, 80px); }
-    .nora-hero-cta { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 36px; }
-    .nora-stats { display: flex; gap: 36px; margin: 0; padding: 22px 0 0; border-top: 1px solid rgba(250,247,242,0.25); flex-wrap: wrap; }
-    .nora-stats div { display: flex; flex-direction: column; gap: 2px; }
-    .nora-stats dt { font-family: var(--nora-font-d); font-weight: 900; font-size: 26px; letter-spacing: -0.02em; color: #FAF7F2; }
-    .nora-stats dd { margin: 0; font-size: 12.5px; color: rgba(250,247,242,0.7); }
-
-    /* sections */
-    .nora-section { padding: clamp(56px, 8vw, 104px) 0; }
-    .nora-section-tint { background: var(--nora-paper-2); }
-
-    /* bandeau fonctionnement */
-    .nora-steps { list-style: none; margin: 40px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 2px solid var(--nora-ink); }
-    .nora-steps li { padding: 24px 22px 0 0; border-right: 1px solid var(--nora-line); margin-right: 22px; }
-    .nora-steps li:last-child { border-right: 0; margin-right: 0; }
-    .nora-step-n { font-family: ui-monospace, Menlo, monospace; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; color: var(--nora-red); }
-    .nora-steps h3 { font-family: var(--nora-font-d); font-weight: 800; font-size: 20px; margin: 10px 0 8px; letter-spacing: -0.01em; }
-    .nora-steps p { margin: 0; font-size: 14px; line-height: 1.6; color: var(--nora-ink-2); }
-
-    /* accordéon services */
-    .nora-svc-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(32px, 5vw, 72px); align-items: start; }
-    .nora-svc-stick { position: sticky; top: 32px; }
-    .nora-svc-img { margin: 30px 0 0; }
-    .nora-svc-img img { width: 100%; height: 300px; object-fit: cover; border-radius: 16px; }
-    .nora-svc-img figcaption { font-size: 12.5px; color: var(--nora-ink-2); margin-top: 10px; font-style: italic; }
-    .nora-acc { border-top: 2px solid var(--nora-ink); }
-    .nora-acc-item { border-bottom: 1px solid var(--nora-line); background: transparent; }
-    .nora-acc-head { list-style: none; display: grid; grid-template-columns: 52px 1fr 28px; gap: 14px; align-items: center; padding: 22px 4px; cursor: pointer; }
-    .nora-acc-head::-webkit-details-marker { display: none; }
-    .nora-acc-head:hover .nora-acc-t strong { color: var(--nora-red); }
-    .nora-acc-n { font-family: ui-monospace, Menlo, monospace; font-size: 12px; font-weight: 700; letter-spacing: 0.12em; color: var(--nora-red); }
-    .nora-acc-t strong { display: block; font-family: var(--nora-font-d); font-weight: 800; font-size: 19px; letter-spacing: -0.01em; transition: color 0.15s ease; }
-    .nora-acc-t > span:last-child { display: block; font-size: 13.5px; color: var(--nora-ink-2); margin-top: 4px; font-weight: 400; }
-    .nora-acc-x { position: relative; width: 20px; height: 20px; justify-self: end; }
-    .nora-acc-x::before, .nora-acc-x::after { content: ""; position: absolute; background: var(--nora-ink); border-radius: 2px; }
-    .nora-acc-x::before { left: 2px; right: 2px; top: 9px; height: 2px; }
-    .nora-acc-x::after { top: 2px; bottom: 2px; left: 9px; width: 2px; transition: transform 0.2s ease; }
-    .nora-acc-item[open] .nora-acc-x::after { transform: scaleY(0); }
-    .nora-acc-body { padding: 0 4px 26px 66px; }
-    .nora-acc-body p { margin: 0; font-size: 14.5px; line-height: 1.65; color: var(--nora-ink-2); max-width: 56ch; }
-
-    /* tableau de bord */
-    .nora-board-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap; margin-bottom: 8px; }
-    .nora-board-meta { display: inline-flex; align-items: center; gap: 8px; font-family: ui-monospace, Menlo, monospace; font-size: 11.5px; letter-spacing: 0.06em; color: var(--nora-ink-2); margin: 0 0 18px; }
-    .nora-board { border: 1.5px solid var(--nora-ink); border-radius: 16px; overflow: hidden; background: #fff; }
-    .nora-job { display: grid; grid-template-columns: 90px 170px 1fr auto; gap: 16px; align-items: center; padding: 18px 22px; border-bottom: 1px solid var(--nora-line); }
-    .nora-job:last-child { border-bottom: 0; }
-    .nora-job-ticket { font-family: ui-monospace, Menlo, monospace; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; }
-    .nora-job-loc { font-weight: 700; font-size: 14.5px; }
-    .nora-job-desc { font-size: 14px; color: var(--nora-ink-2); }
-    .nora-job-desc em { font-style: normal; font-weight: 600; color: var(--nora-ink); }
-    .nora-pill {
-      display: inline-flex; align-items: center; gap: 7px;
-      font-family: ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
-      padding: 8px 14px; border-radius: 999px; white-space: nowrap;
+    .tk-row {
+      display: grid; grid-template-columns: 64px 1fr auto; gap: 18px; align-items: baseline;
+      padding: 18px 4px; border-bottom: 1px solid var(--tk-faint);
     }
-    .nora-pill i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; animation: nora-pulse 2s infinite; }
-    .nora-pill-done { background: var(--nora-paper-2); color: var(--nora-ink-2); }
-    .nora-pill-site { background: #E4F7E9; color: #147A2E; }
-    .nora-pill-route { background: #FDEFD3; color: #A05E00; }
-    .nora-note { font-size: 13px; color: var(--nora-ink-2); margin-top: 18px; }
-    .nora-note a { color: var(--nora-red); font-weight: 600; }
+    .tk-row-head { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--tk-ink2); padding: 0 4px 10px; border-bottom: 2px solid var(--tk-line); }
+    .tk-code { font-weight: 700; font-size: 13px; color: var(--tk-red); }
+    .tk-desc strong { display: block; font-family: var(--tk-disp); font-weight: 800; font-size: 17px; letter-spacing: -0.01em; margin-bottom: 5px; }
+    .tk-desc > span { font-size: 13px; line-height: 1.6; color: var(--tk-ink2); }
+    .tk-price { font-weight: 700; font-size: 16px; text-align: right; white-space: nowrap; }
+    .tk-price em { display: block; font-style: normal; font-weight: 400; font-size: 11px; color: var(--tk-ink2); }
 
-    /* avis à défilement */
-    .nora-reviews-track { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 36px clamp(18px, 4vw, 40px) 8px; margin: 0; scrollbar-width: thin; }
-    .nora-review {
-      flex: 0 0 min(420px, 84vw); scroll-snap-align: start;
-      background: #fff; border: 1px solid var(--nora-line); border-radius: 16px;
-      padding: 28px 26px; margin: 0; display: flex; flex-direction: column; justify-content: space-between; gap: 20px;
+    .tk-attach { margin: 26px 0 0; background: var(--tk-card); border: 1px solid var(--tk-faint); padding: 14px 14px 12px; transform: rotate(0.8deg); max-width: 440px; position: relative; }
+    .tk-clip {
+      position: absolute; top: -14px; left: 50%; width: 54px; height: 30px; transform: translateX(-50%) rotate(-4deg);
+      border: 3px solid #9a958a; border-bottom: 0; border-radius: 12px 12px 0 0;
     }
-    .nora-review p { font-size: 17px; line-height: 1.55; font-weight: 500; margin: 0; }
-    .nora-review footer { font-size: 13px; color: var(--nora-ink-2); display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-    .nora-review footer span { color: var(--nora-red); letter-spacing: 0.1em; }
-    .nora-scroll-hint { font-family: ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.14em; color: var(--nora-ink-2); margin-top: 14px; text-transform: uppercase; }
+    .tk-attach img { width: 100%; height: 220px; object-fit: cover; filter: sepia(0.25); }
+    .tk-attach figcaption { font-size: 11.5px; color: var(--tk-ink2); padding: 10px 4px 2px; font-style: italic; }
+    .tk-fineprint { font-size: 12px; line-height: 1.7; color: var(--tk-ink2); margin: 22px 0 0; max-width: 62ch; }
+    .tk-fineprint a { color: var(--tk-red); font-weight: 600; }
 
-    /* zone desservie */
-    .nora-area-list { list-style: none; margin: 30px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 1px solid var(--nora-line); }
-    .nora-area-list li { padding: 14px 4px; border-bottom: 1px solid var(--nora-line); font-size: 14.5px; font-weight: 600; }
-    .nora-area-list li::before { content: "⚡"; color: var(--nora-red); margin-right: 10px; font-size: 12px; }
-
-    /* contact */
-    .nora-split { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 64px); align-items: start; }
-    .nora-contact-list { list-style: none; padding: 0; margin: 26px 0 0; display: grid; gap: 10px; font-size: 15px; }
-    .nora-contact-list strong { display: inline-block; min-width: 80px; font-family: ui-monospace, Menlo, monospace; font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--nora-ink-2); }
-    .nora-contact-img { margin: 28px 0 0; }
-    .nora-contact-img img { width: 100%; height: 220px; object-fit: cover; border-radius: 16px; }
-    .nora-form { background: #fff; border: 1px solid var(--nora-line); border-radius: 20px; padding: clamp(22px, 3vw, 34px); display: grid; gap: 16px; align-content: start; box-shadow: 0 24px 50px rgba(22, 19, 14, 0.08); }
-    .nora-form label { display: grid; gap: 8px; font-size: 13px; font-weight: 600; }
-    .nora-form input, .nora-form select, .nora-form textarea {
-      font: inherit; font-size: 15px; padding: 13px 15px; border-radius: 12px;
-      border: 1.5px solid var(--nora-line); background: var(--nora-paper); color: var(--nora-ink); width: 100%;
+    .tk-log { list-style: none; margin: 0 0 26px; padding: 0; display: grid; }
+    .tk-log li {
+      display: grid; grid-template-columns: 70px 1fr auto; gap: 16px; align-items: baseline;
+      padding: 13px 4px; border-bottom: 1px dashed var(--tk-faint); font-size: 13.5px;
     }
-    .nora-form input:focus, .nora-form select:focus, .nora-form textarea:focus { outline: 2px solid var(--nora-red); outline-offset: 1px; border-color: var(--nora-red); }
-    .nora-form-note { margin: 0; font-size: 12.5px; color: var(--nora-ink-2); text-align: center; }
-    .nora-form-note:empty { display: none; }
+    .tk-log li em { font-style: normal; font-weight: 600; }
+    .tk-tag { font-size: 10.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; border: 1.5px solid var(--tk-ink2); color: var(--tk-ink2); border-radius: 999px; padding: 4px 12px; white-space: nowrap; }
+    .tk-tag-site { border-color: #147A2E; color: #147A2E; }
+    .tk-tag-done { border-color: var(--tk-faint); }
+    .tk-id { display: grid; grid-template-columns: 92px 1fr 1fr; gap: 20px; align-items: center; background: var(--tk-card); border: 1px solid var(--tk-faint); padding: 16px; }
+    .tk-id img { width: 92px; height: 92px; object-fit: cover; border-radius: 50%; filter: sepia(0.3); }
+    .tk-id img.tk-id-site { width: 100%; height: 92px; border-radius: 4px; }
+    .tk-id-name { margin: 0 0 8px; font-weight: 700; font-size: 14px; }
+    .tk-id-name span { font-weight: 400; color: var(--tk-ink2); }
+    .tk-id-note { margin: 0; font-size: 12.5px; line-height: 1.6; color: var(--tk-ink2); }
 
-    /* pied de page */
-    .nora-footer { background: var(--nora-ink); color: rgba(250, 247, 242, 0.7); padding: clamp(56px, 8vw, 96px) 0 48px; }
-    .nora-footer-big { display: block; font-family: var(--nora-font-d); font-weight: 900; letter-spacing: -0.03em; font-size: clamp(2.6rem, 9vw, 6.5rem); line-height: 1; color: #FAF7F2; text-decoration: none; margin: 0 0 30px; }
-    .nora-footer-big:hover { color: var(--nora-red); }
-    .nora-footer-meta { display: flex; gap: 26px; flex-wrap: wrap; font-size: 12.5px; border-top: 1px solid rgba(250,247,242,0.16); padding-top: 22px; }
+    .tk-signs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .tk-signs blockquote {
+      margin: 0; background: var(--tk-card); border: 1px solid var(--tk-faint); padding: 22px 20px 18px;
+      position: relative; transform: rotate(-0.6deg);
+    }
+    .tk-signs blockquote:nth-child(2) { transform: rotate(0.7deg); }
+    .tk-signs blockquote:nth-child(3) { transform: rotate(-0.3deg); }
+    .tk-signs p { margin: 0 0 16px; font-size: 14px; line-height: 1.65; }
+    .tk-signs footer { display: grid; gap: 6px; font-size: 11.5px; color: var(--tk-ink2); }
+    .tk-sig {
+      font-family: "Segoe Script", "Bradley Hand", cursive; font-size: 21px; color: #1F3A8A;
+      transform: rotate(-4deg); display: inline-block;
+    }
 
-    @media (max-width: 1024px) {
-      .nora-shell { grid-template-columns: 1fr; }
-      .nora-rail { display: none; }
-      .nora-mobilebar { display: flex; }
+    .tk-slip { padding: clamp(26px, 4vw, 40px) clamp(20px, 4vw, 44px) clamp(30px, 4vw, 44px); background: var(--tk-card); }
+    .tk-slip-sub { margin: 0 0 24px; font-size: 13.5px; color: var(--tk-ink2); }
+    .tk-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .tk-form label { display: grid; gap: 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--tk-ink2); }
+    .tk-form input, .tk-form select, .tk-form textarea {
+      font-family: var(--tk-mono); font-size: 15px; letter-spacing: 0; text-transform: none; color: var(--tk-ink);
+      padding: 13px 14px; border: 2px solid var(--tk-line); border-radius: 0; background: var(--tk-paper); width: 100%;
     }
-    @media (max-width: 860px) {
-      .nora-steps { grid-template-columns: 1fr 1fr; gap: 26px 0; border-top: 0; }
-      .nora-steps li { border-top: 2px solid var(--nora-ink); padding-top: 20px; }
-      .nora-svc-grid, .nora-split { grid-template-columns: 1fr; }
-      .nora-svc-stick { position: static; }
-      .nora-area-list { grid-template-columns: 1fr 1fr; }
-      .nora-job { grid-template-columns: 80px 1fr; grid-template-areas: "ticket pill" "loc loc" "desc desc"; row-gap: 8px; }
-      .nora-job-ticket { grid-area: ticket; }
-      .nora-job-loc { grid-area: loc; }
-      .nora-job-desc { grid-area: desc; }
-      .nora-pill { grid-area: pill; justify-self: end; }
-      .nora-acc-body { padding-left: 4px; }
+    .tk-form input:focus, .tk-form select:focus, .tk-form textarea:focus { outline: 3px solid var(--tk-red); outline-offset: 1px; }
+    .tk-form > label { margin-bottom: 18px; }
+    .tk-submit {
+      width: 100%; font-family: var(--tk-disp); font-weight: 900; font-size: 17px; letter-spacing: 0.02em;
+      background: var(--tk-red); color: #fff; border: 0; padding: 18px; cursor: pointer;
+      box-shadow: 5px 5px 0 var(--tk-line); transition: transform 0.12s ease, box-shadow 0.12s ease;
     }
-    @media (max-width: 560px) {
-      .nora-steps { grid-template-columns: 1fr; }
-      .nora-topbar-item:first-child { display: none; }
-      .nora-topbar { justify-content: center; }
-      .nora-area-list { grid-template-columns: 1fr; }
+    .tk-submit:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 var(--tk-line); }
+    .tk-form-note { margin: 16px 0 0; font-size: 13.5px; font-weight: 600; color: #147A2E; text-align: center; }
+    .tk-form-note:empty { display: none; }
+
+    .tk-foot { padding: 34px clamp(20px, 4vw, 44px) 40px; text-align: center; border-top: 2px solid var(--tk-line); }
+    .tk-foot-big { margin: 0 0 18px; }
+    .tk-foot-big a { font-family: var(--tk-disp); font-weight: 900; font-size: clamp(2rem, 7vw, 3.6rem); letter-spacing: -0.03em; text-decoration: none; }
+    .tk-foot-big a:hover { color: var(--tk-red); }
+    .tk-foot p:last-child { margin: 0; font-size: 12px; line-height: 1.9; color: var(--tk-ink2); }
+
+    @media (max-width: 760px) {
+      .tk-stub-grid { grid-template-columns: 1fr 1fr; }
+      .tk-field:nth-child(3) { border-left: 0; }
+      .tk-field { border-top: 2px solid var(--tk-line); }
+      .tk-field:nth-child(-n+2) { border-top: 0; }
+      .tk-row { grid-template-columns: 52px 1fr; }
+      .tk-price { grid-column: 2; text-align: left; }
+      .tk-log li { grid-template-columns: 62px 1fr; }
+      .tk-tag { grid-column: 2; justify-self: start; }
+      .tk-id { grid-template-columns: 72px 1fr; }
+      .tk-id img.tk-id-site { grid-column: 1 / -1; height: 140px; }
+      .tk-signs { grid-template-columns: 1fr; }
+      .tk-form-grid { grid-template-columns: 1fr; }
+      .tk-ticket { transform: none; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .nora-dot, .nora-pill i, .nora-live { animation: none; }
-      .nora-btn, .nora-acc-t strong, .nora-acc-x::after { transition: none; }
+      .tk-submit { transition: none; }
     }
   </style>
 </body>
