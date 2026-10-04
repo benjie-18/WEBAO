@@ -2,8 +2,10 @@
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
 
 // Demo microsite: Plomberie Leduc, fictional plumber, Longueuil QC.
-// Vintage Americana service badge: cream/red/navy, star emblems, heritage since 1987.
-// Standalone art direction. Not connected to the WEBAO theme system.
+// Rebuilt EMERGENCY-FIRST. The entire above-fold is the emergency call to
+// action: giant phone number, 20-minute answer promise. Services are a plain
+// price list, the story is one paragraph, contact is the phone number again.
+// Vintage Americana service badge: cream/red/navy. Standalone art direction.
 const IMG = {
   hero: "/demos/leduc/01.jpg",
   portrait: "/demos/leduc/02.jpg",
@@ -17,456 +19,219 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Plomberie Leduc: Plumber in Longueuil Since 1987</title>
-  <meta name="description" content="Plomberie Leduc: Longueuil's family plumber since 1987. Drain unclogging, water heaters, leak repair. 24/7 emergency service. Fixed right the first time." />
+  <title>Plomberie Leduc · Burst pipe? (450) 555-0134 · Longueuil plumber</title>
+  <meta name="description" content="Plomberie Leduc: Longueuil's family plumber since 1987. Burst pipe, no hot water, blocked drain? We answer in 20 minutes, 24/7." />
   <meta name="robots" content="noindex" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&display=swap" rel="stylesheet" />
 </head>
-<body class="ld">
+<body class="em">
 
-  <!-- EMERGENCY TICKER -->
-  <div class="ld-ticker" role="note" aria-label="Emergency service notice">
-    <div class="ld-ticker-track">
-      <span>Burst pipe? No hot water? Call <a href="tel:+14505550134">(450) 555-0134</a></span><span class="ld-ticker-star" aria-hidden="true">★</span>
-      <span>24/7 emergency service, holidays included</span><span class="ld-ticker-star" aria-hidden="true">★</span>
-      <span>Burst pipe? No hot water? Call <a href="tel:+14505550134">(450) 555-0134</a></span><span class="ld-ticker-star" aria-hidden="true">★</span>
-      <span>24/7 emergency service, holidays included</span><span class="ld-ticker-star" aria-hidden="true">★</span>
-    </div>
-  </div>
-
-  <!-- HEADER -->
-  <header class="ld-header">
-    <a class="ld-brand" href="#top" aria-label="Plomberie Leduc, home">
-      <svg class="ld-brand-badge" viewBox="0 0 64 64" aria-hidden="true">
+  <!-- THE WHOLE ABOVE-FOLD IS THE EMERGENCY CALL -->
+  <header class="em-hero">
+    <p class="em-badge">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
         <circle cx="32" cy="32" r="29" fill="#B23A2E" />
         <circle cx="32" cy="32" r="24" fill="none" stroke="#F6EFDD" stroke-width="2" stroke-dasharray="4 3" />
         <path d="M32 14l4.9 10 11 1.6-8 7.8 1.9 11L32 39.4l-9.8 5 1.9-11-8-7.8 11-1.6z" fill="#F6EFDD" />
       </svg>
-      <span class="ld-brand-text">Plomberie <strong>Leduc</strong><small>Longueuil · Est. 1987</small></span>
-    </a>
-    <nav class="ld-nav" aria-label="Primary">
-      <a href="#services">Services</a>
-      <a href="#story">Our story</a>
-      <a href="#reviews">Reviews</a>
-      <a href="#quote">Get a quote</a>
-    </nav>
-    <a class="ld-phone" href="tel:+14505550134">
-      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg>
-      (450) 555-0134
-    </a>
+      Plomberie Leduc · Longueuil · since 1987
+    </p>
+    <h1 class="em-h1">Burst pipe?<br />No hot water?</h1>
+    <a class="em-number" href="tel:+14505550134">(450) 555-0134</a>
+    <p class="em-promise"><span class="em-dot" aria-hidden="true"></span>We answer in 20 minutes. Day, night, holidays.</p>
+    <p class="em-sub">A Leduc picks up, not a call center. If water is where it shouldn't be, call now and we'll talk you through shutting it off while the van rolls.</p>
   </header>
 
-  <main id="top">
-    <!-- HERO -->
-    <section class="ld-hero">
-      <div class="ld-hero-copy">
-        <p class="ld-kicker"><span aria-hidden="true">★ ★ ★</span> Since 1987 · Longueuil QC <span aria-hidden="true">★ ★ ★</span></p>
-        <h1 class="ld-h1">Fixed right<br />the first time.</h1>
-        <p class="ld-lede">Three generations of Leducs have kept Longueuil's water flowing. Upfront prices, shoe covers on every visit, and a workmanship warranty in writing.</p>
-        <div class="ld-hero-cta">
-          <a class="ld-btn ld-btn-red" href="tel:+14505550134">Call (450) 555-0134</a>
-          <a class="ld-btn ld-btn-outline" href="#quote">Get a free quote</a>
-        </div>
-        <ul class="ld-hero-points">
-          <li>Licensed RBQ · Fully insured</li>
-          <li>Upfront flat-rate pricing</li>
-          <li>5-year workmanship warranty</li>
-        </ul>
-      </div>
-      <div class="ld-hero-visual">
-        <div class="ld-seal" aria-hidden="true">
-          <svg viewBox="0 0 200 200" class="ld-seal-ring">
-            <defs><path id="ld-circle" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0" /></defs>
-            <circle cx="100" cy="100" r="96" fill="#1F3A5C" />
-            <circle cx="100" cy="100" r="88" fill="none" stroke="#C9A227" stroke-width="2" />
-            <text font-size="15.5" letter-spacing="4.5" fill="#F6EFDD" font-family="'Zilla Slab', serif" font-weight="700">
-              <textPath href="#ld-circle">PLOMBERIE LEDUC · SINCE 1987 · LONGUEUIL QC ·</textPath>
-            </text>
-            <path d="M100 58l12.6 25.6 28.2 4.1-20.4 19.9 4.8 28.1L100 122.2l-25.2 13.5 4.8-28.1-20.4-19.9 28.2-4.1z" fill="#C9A227" />
-          </svg>
-        </div>
-        <figure class="ld-hero-photo">
-          <img src={IMG.hero} alt="A Leduc plumber repairing a sink with professional tools" loading="eager" fetchpriority="high" />
-          <figcaption>On the job in Vieux-Longueuil</figcaption>
-        </figure>
-      </div>
+  <main>
+    <!-- PRICE LIST, not cards -->
+    <section class="em-list" aria-label="Price list">
+      <h2 class="em-h2">The price list</h2>
+      <p class="em-note">Flat rates, quoted before we lift a wrench.</p>
+      <dl>
+        <div><dt>Drain unclogging <span>sinks, toilets, main lines · camera inspection included</span></dt><dd>from $89</dd></div>
+        <div><dt>Leak detection &amp; repair <span>acoustic and thermal, no torn-up walls</span></dt><dd>from $129</dd></div>
+        <div><dt>Water heater <span>tank or tankless, installed · old one hauled away</span></dt><dd>from $1,190</dd></div>
+        <div><dt>Bathroom rough-in <span>permitted, inspected, coordinated with your contractor</span></dt><dd>from $2,400</dd></div>
+        <div><dt>Sump pump &amp; backwater valve <span>flood protection for the basement</span></dt><dd>from $640</dd></div>
+        <div><dt>Outdoor faucets &amp; gas lines <span>if water or gas runs through it</span></dt><dd>quoted</dd></div>
+      </dl>
+      <figure class="em-tools">
+        <img src={IMG.tools} alt="A vintage pipe wrench kept from years of service" loading="lazy" />
+        <img src={IMG.wrench} alt="The founder's original adjustable wrench" loading="lazy" />
+      </figure>
     </section>
 
-    <!-- TRUST BAR -->
-    <section class="ld-trust" aria-label="Why homeowners trust Leduc">
-      <div class="ld-trust-item"><strong>38</strong><span>years in business</span></div>
-      <div class="ld-trust-item"><strong>12,400+</strong><span>homes serviced</span></div>
-      <div class="ld-trust-item"><strong>4.9<span class="ld-star">★</span></strong><span>average rating</span></div>
-      <div class="ld-trust-item"><strong>3</strong><span>generations of Leducs</span></div>
-    </section>
-
-    <!-- SERVICES -->
-    <section class="ld-section" id="services">
-      <div class="ld-wrap">
-        <p class="ld-kicker ld-kicker-center">The service menu</p>
-        <h2 class="ld-h2 ld-center">What we fix, install,<br />and maintain.</h2>
-        <p class="ld-sub ld-center">Flat-rate prices quoted before we lift a wrench. No surprises, ever.</p>
-        <div class="ld-cards">
-          <article class="ld-card">
-            <div class="ld-card-tag">Most called</div>
-            <h3>Drain unclogging</h3>
-            <p>Sinks, toilets, main lines. Camera inspection included so you see the blockage yourself.</p>
-            <p class="ld-price">from <strong>$89</strong></p>
-          </article>
-          <article class="ld-card">
-            <h3>Water heaters</h3>
-            <p>Install and repair, tank and tankless. We haul the old one away and register your warranty.</p>
-            <p class="ld-price">from <strong>$1,190</strong></p>
-          </article>
-          <article class="ld-card">
-            <h3>Leak detection &amp; repair</h3>
-            <p>Acoustic and thermal detection finds hidden leaks without tearing your walls apart.</p>
-            <p class="ld-price">from <strong>$129</strong></p>
-          </article>
-          <article class="ld-card">
-            <h3>Bathroom rough-in</h3>
-            <p>New bathroom or full remodel plumbing, permitted and inspected, coordinated with your contractor.</p>
-            <p class="ld-price">from <strong>$2,400</strong></p>
-          </article>
-        </div>
-        <div class="ld-more">
-          <img src={IMG.tools} alt="A vintage pipe wrench kept from years of service" loading="lazy" />
-          <div>
-            <h3>Not on the menu? Ask anyway.</h3>
-            <p>If water runs through it, we have probably fixed it. Sump pumps, backwater valves, outdoor faucets, gas lines: one call covers it all.</p>
-            <a class="ld-btn ld-btn-navy" href="#quote">Describe your problem</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- STORY -->
-    <section class="ld-section ld-story" id="story">
-      <div class="ld-wrap ld-story-grid">
-        <figure class="ld-story-photo">
-          <img src={IMG.portrait} alt="A Leduc plumber in uniform holding a wrench, smiling" loading="lazy" />
-          <figcaption>Réal Leduc, founder, still answers the phone some mornings.</figcaption>
-        </figure>
+    <!-- ONE PARAGRAPH. That's the about section. -->
+    <section class="em-about">
+      <div class="em-about-in">
+        <img src={IMG.portrait} alt="Réal Leduc, founder, in uniform" loading="lazy" />
         <div>
-          <p class="ld-kicker">Our story</p>
-          <h2 class="ld-h2">Three generations<br />under one badge.</h2>
-          <p class="ld-prose">Réal Leduc started in 1987 with a used van, a toolbox his father gave him, and a rule he still repeats: leave every home cleaner than you found it. His son Marc joined in 2004. His granddaughter Léa, a licensed journeyman since 2021, runs the emergency line today.</p>
-          <ol class="ld-timeline">
-            <li><strong>1987</strong><span>Réal founds Plomberie Leduc in a Longueuil garage.</span></li>
-            <li><strong>2004</strong><span>Marc, second generation, earns his compagnon card.</span></li>
-            <li><strong>2021</strong><span>Léa, third generation, takes over the 24/7 line.</span></li>
-          </ol>
+          <h2 class="em-h2">Three generations, one badge.</h2>
+          <p>Réal Leduc started in 1987 with a used van and a rule he still repeats: leave every home cleaner than you found it. His son Marc joined in 2004; his granddaughter Léa, a licensed journeyman since 2021, runs the 24/7 line today. 12,400+ homes, 4.9 average rating, 5-year workmanship warranty in writing.</p>
         </div>
+        <img class="em-about-job" src={IMG.hero} alt="A Leduc plumber repairing a sink" loading="lazy" />
       </div>
     </section>
 
-    <!-- REVIEWS -->
-    <section class="ld-section" id="reviews">
-      <div class="ld-wrap">
-        <p class="ld-kicker ld-kicker-center">Word of mouth</p>
-        <h2 class="ld-h2 ld-center">Longueuil keeps<br />our number.</h2>
-        <div class="ld-reviews">
-          <blockquote class="ld-review">
-            <p class="ld-stars" aria-label="5 out of 5 stars">★★★★★</p>
-            <p>"Basement flooding at 2 a.m. Léa was here by 3, calm as anything. The bill matched the quote to the dollar."</p>
-            <cite>Chantal B., Fatima</cite>
-          </blockquote>
-          <blockquote class="ld-review">
-            <p class="ld-stars" aria-label="5 out of 5 stars">★★★★★</p>
-            <p>"They replaced our water heater and took the old one away. Shoe covers, drop cloths, the whole respectful routine."</p>
-            <cite>Robert D., Vieux-Longueuil</cite>
-          </blockquote>
-          <blockquote class="ld-review">
-            <p class="ld-stars" aria-label="5 out of 5 stars">★★★★★</p>
-            <p>"Third plumber we called for the same mystery leak. First one who actually found it. Enough said."</p>
-            <cite>Amina K., Greenfield Park</cite>
-          </blockquote>
-        </div>
-      </div>
+    <!-- NOT URGENT? A slim callback slip, then the number again -->
+    <section class="em-callback">
+      <h2 class="em-h2">Not urgent?</h2>
+      <p class="em-note">Leave your number. We call back within one business hour.</p>
+      <form class="em-form" id="em-form" novalidate>
+        <label class="em-sr" for="em-phone">Phone number</label>
+        <input id="em-phone" type="tel" name="phone" required placeholder="(450) 555-0000" autocomplete="tel" />
+        <button type="submit">Call me back</button>
+      </form>
+      <p class="em-form-note" role="status" aria-live="polite"></p>
     </section>
 
-    <!-- SERVICE AREA -->
-    <section class="ld-area">
-      <div class="ld-wrap">
-        <h2 class="ld-h2 ld-center">Proudly serving the South Shore.</h2>
-        <ul class="ld-area-list">
-          <li>Longueuil</li><li>Brossard</li><li>Boucherville</li><li>Saint-Lambert</li><li>Greenfield Park</li><li>Saint-Hubert</li><li>La Prairie</li><li>Candiac</li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- QUOTE -->
-    <section class="ld-section ld-quote" id="quote">
-      <div class="ld-wrap ld-quote-grid">
-        <div>
-          <p class="ld-kicker">Get a quote</p>
-          <h2 class="ld-h2">Tell us what's<br />going on.</h2>
-          <p class="ld-prose">Describe the problem and we will call back within one business hour with a flat-rate price. Emergencies skip the line: call <a href="tel:+14505550134">(450) 555-0134</a> directly.</p>
-          <img class="ld-quote-img" src={IMG.wrench} alt="A well-worn adjustable wrench, the founder's original" loading="lazy" />
-        </div>
-        <form class="ld-form" id="ld-form" novalidate>
-          <label>Your name<input type="text" name="name" required placeholder="Jane Doe" autocomplete="name" /></label>
-          <label>Phone<input type="tel" name="phone" required placeholder="(450) 555-0000" autocomplete="tel" /></label>
-          <label>What do you need?
-            <select name="service" required>
-              <option value="">Choose a service…</option>
-              <option>Drain unclogging</option>
-              <option>Water heater</option>
-              <option>Leak detection &amp; repair</option>
-              <option>Bathroom plumbing</option>
-              <option>Something else</option>
-            </select>
-          </label>
-          <label class="ld-form-wide">Describe the problem<textarea name="message" rows="4" placeholder="Kitchen sink drains slowly and gurgles…"></textarea></label>
-          <button class="ld-form-wide ld-btn ld-btn-red" type="submit">Request my callback</button>
-          <p class="ld-form-note" role="status" aria-live="polite"></p>
-        </form>
-      </div>
+    <section class="em-again">
+      <p class="em-again-k">Water where it shouldn't be?</p>
+      <a class="em-number em-number-sm" href="tel:+14505550134">(450) 555-0134</a>
     </section>
   </main>
 
-  <!-- FOOTER -->
-  <footer class="ld-footer">
-    <div class="ld-wrap ld-footer-grid">
-      <div>
-        <p class="ld-footer-brand">Plomberie <strong>Leduc</strong></p>
-        <p>1234, rue Fictive<br />Longueuil QC J4K 1A1</p>
-        <p>RBQ licence: 0000-0000-00 (fictional)</p>
-      </div>
-      <div>
-        <p class="ld-footer-h">Hours</p>
-        <p>Mon–Fri 7:00–18:00<br />Sat 8:00–14:00<br />Emergencies: 24/7</p>
-      </div>
-      <div>
-        <p class="ld-footer-h">Call the badge</p>
-        <a class="ld-footer-phone" href="tel:+14505550134">(450) 555-0134</a>
-      </div>
-    </div>
-    <p class="ld-fine">© 2026 Plomberie Leduc. Fictional demo site, not a real business.</p>
+  <footer class="em-foot">
+    <p>Plomberie Leduc · 1234, rue Fictive, Longueuil QC · RBQ licence 0000-0000-00 (fictional)<br />
+    Mon–Fri 7:00–18:00, Sat 8:00–14:00 · emergencies 24/7 · © 2026</p>
   </footer>
 
   <EscapeHatch locale="en" />
 
   <script>
     (function () {
-      var form = document.getElementById('ld-form') as HTMLFormElement | null;
+      var form = document.getElementById('em-form');
       form?.addEventListener('submit', function (e) {
         e.preventDefault();
-        var note = form?.querySelector('.ld-form-note');
-        if (note) note.textContent = 'Request received. We will call you back within one business hour.';
-        form?.reset();
+        var note = document.querySelector('.em-form-note');
+        if (note) note.textContent = 'Noted. We\u2019ll call you back within one business hour.';
+        if (form instanceof HTMLFormElement) form.reset();
       });
     })();
   </script>
 
   <style>
-    .ld {
-      --ld-cream: #F6EFDD;
-      --ld-cream-2: #EFE4CB;
-      --ld-red: #B23A2E;
-      --ld-red-dark: #8E2B22;
-      --ld-navy: #1F3A5C;
-      --ld-navy-dark: #152A45;
-      --ld-gold: #C9A227;
-      --ld-ink: #2A2118;
-      --ld-slab: "Zilla Slab", Georgia, "Times New Roman", serif;
+    .em {
+      --em-cream: #F6EFDD;
+      --em-red: #B23A2E;
+      --em-red-dark: #8E2B22;
+      --em-navy: #1F3A5C;
+      --em-gold: #C9A227;
+      --em-ink: #2A2118;
+      --em-slab: "Zilla Slab", Georgia, serif;
       margin: 0;
-      background: var(--ld-cream);
-      color: var(--ld-ink);
-      font-family: var(--ld-slab);
+      background: var(--em-cream);
+      color: var(--em-ink);
+      font-family: var(--em-slab);
       -webkit-font-smoothing: antialiased;
       overflow-x: clip;
     }
-    .ld *, .ld *::before, .ld *::after { box-sizing: border-box; }
-    .ld img { display: block; max-width: 100%; }
-    .ld-wrap { max-width: 1160px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px); }
-    .ld-center { text-align: center; }
+    .em *, .em *::before, .em *::after { box-sizing: border-box; }
+    .em img { display: block; max-width: 100%; filter: sepia(0.22) saturate(0.96); }
+    .em a { color: inherit; }
 
-    /* ticker */
-    .ld-ticker { background: var(--ld-red); color: var(--ld-cream); overflow: hidden; white-space: nowrap; border-bottom: 3px solid var(--ld-navy); }
-    .ld-ticker-track { display: inline-flex; align-items: center; gap: 28px; padding: 10px 0; animation: ld-tick 28s linear infinite; font-weight: 600; letter-spacing: 0.04em; font-size: 15px; }
-    .ld-ticker-track a { color: #fff; font-weight: 700; }
-    .ld-ticker-star { color: var(--ld-gold); }
-    @keyframes ld-tick { to { transform: translateX(-50%); } }
-
-    /* header */
-    .ld-header {
-      display: flex; align-items: center; gap: 28px;
-      padding: 16px clamp(20px, 5vw, 48px); max-width: 1280px; margin: 0 auto;
-      border-bottom: 2px solid var(--ld-ink);
+    /* THE hero: nothing but the emergency */
+    .em-hero {
+      background: var(--em-red);
+      color: #FFF8EC;
+      text-align: center;
+      padding: clamp(40px, 8vh, 84px) clamp(20px, 5vw, 48px) clamp(48px, 9vh, 96px);
+      border-bottom: 6px solid var(--em-navy);
     }
-    .ld-brand { display: flex; align-items: center; gap: 14px; text-decoration: none; color: var(--ld-ink); }
-    .ld-brand-badge { width: 52px; height: 52px; flex: none; }
-    .ld-brand-text { font-size: 21px; line-height: 1.05; display: grid; }
-    .ld-brand-text strong { font-weight: 700; letter-spacing: 0.06em; }
-    .ld-brand-text small { font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.65; font-weight: 500; }
-    .ld-nav { display: flex; gap: 26px; margin-left: auto; }
-    .ld-nav a { color: var(--ld-ink); text-decoration: none; font-weight: 600; font-size: 16.5px; letter-spacing: 0.02em; border-bottom: 2px solid transparent; }
-    .ld-nav a:hover { border-bottom-color: var(--ld-red); }
-    .ld-phone {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: var(--ld-navy); color: var(--ld-cream); text-decoration: none;
-      font-weight: 700; padding: 12px 20px; border-radius: 999px; font-size: 16px;
-      transition: background 0.15s ease, transform 0.15s ease;
+    .em-badge {
+      display: inline-flex; align-items: center; gap: 12px;
+      margin: 0 0 30px; font-weight: 600; font-size: 15px; letter-spacing: 0.12em;
     }
-    .ld-phone:hover { background: var(--ld-navy-dark); transform: translateY(-1px); }
-
-    /* hero */
-    .ld-hero {
-      display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(30px, 5vw, 70px); align-items: center;
-      max-width: 1280px; margin: 0 auto; padding: clamp(48px, 8vh, 96px) clamp(20px, 5vw, 48px);
-      background-image: repeating-linear-gradient(90deg, transparent 0 46px, rgba(31,58,92,0.045) 46px 48px);
+    .em-badge svg { width: 40px; height: 40px; }
+    .em-h1 {
+      margin: 0 0 10px;
+      font-size: clamp(3rem, 11vw, 7rem);
+      line-height: 0.95; letter-spacing: 0.01em; font-weight: 700;
     }
-    .ld-kicker { font-size: 14px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: var(--ld-red); margin: 0 0 18px; }
-    .ld-kicker-center { text-align: center; }
-    .ld-h1 { font-size: clamp(2.9rem, 6.4vw, 5.2rem); line-height: 0.98; letter-spacing: 0.01em; margin: 0 0 22px; font-weight: 700; }
-    .ld-lede { font-size: 18.5px; line-height: 1.65; max-width: 46ch; margin: 0 0 30px; font-weight: 500; }
-    .ld-hero-cta { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 30px; }
-    .ld-btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      font-family: var(--ld-slab); font-weight: 700; font-size: 17px; letter-spacing: 0.03em;
-      padding: 15px 30px; border-radius: 10px; text-decoration: none; cursor: pointer; border: 3px solid transparent;
-      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
-    }
-    .ld-btn-red { background: var(--ld-red); color: #fff; box-shadow: 4px 4px 0 var(--ld-navy); }
-    .ld-btn-red:hover { background: var(--ld-red-dark); transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ld-navy); }
-    .ld-btn-outline { border-color: var(--ld-navy); color: var(--ld-navy); background: transparent; }
-    .ld-btn-outline:hover { background: var(--ld-navy); color: var(--ld-cream); }
-    .ld-btn-navy { background: var(--ld-navy); color: var(--ld-cream); }
-    .ld-btn-navy:hover { background: var(--ld-navy-dark); transform: translateY(-2px); }
-    .ld-hero-points { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-weight: 600; font-size: 16px; }
-    .ld-hero-points li::before { content: "★ "; color: var(--ld-gold); }
-    .ld-hero-visual { position: relative; display: grid; justify-items: center; }
-    .ld-seal { width: min(210px, 44vw); position: absolute; top: -34px; right: 2%; z-index: 2; filter: drop-shadow(0 10px 18px rgba(31,58,92,0.3)); }
-    .ld-seal-ring { width: 100%; height: auto; animation: ld-spin 26s linear infinite; }
-    @keyframes ld-spin { to { transform: rotate(360deg); } }
-    .ld-hero-photo { margin: 46px 0 0; width: 100%; border: 4px solid var(--ld-ink); border-radius: 190px 190px 14px 14px; overflow: hidden; background: var(--ld-cream-2); }
-    .ld-hero-photo img { width: 100%; height: min(480px, 62vw); object-fit: cover; }
-    .ld img { filter: sepia(0.22) saturate(0.96) contrast(1.01); }
-    .ld-hero-photo figcaption { text-align: center; font-size: 13.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; padding: 12px; background: var(--ld-cream); }
-
-    /* trust */
-    .ld-trust { background: var(--ld-navy); color: var(--ld-cream); display: grid; grid-template-columns: repeat(4, 1fr); max-width: 1280px; margin: 0 auto; border-radius: 18px; overflow: hidden; }
-    .ld-trust-item { padding: 30px 18px; text-align: center; border-left: 1px dashed rgba(246,239,221,0.35); display: grid; gap: 6px; }
-    .ld-trust-item:first-child { border-left: 0; }
-    .ld-trust-item strong { font-size: clamp(1.7rem, 3vw, 2.5rem); font-weight: 700; letter-spacing: 0.02em; }
-    .ld-trust-item span { font-size: 13.5px; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.8; font-weight: 500; }
-    .ld-star { color: var(--ld-gold); }
-
-    /* sections */
-    .ld-section { padding: clamp(72px, 10vh, 130px) 0; }
-    .ld-h2 { font-size: clamp(2rem, 4.4vw, 3.3rem); line-height: 1.02; margin: 0 0 18px; font-weight: 700; letter-spacing: 0.01em; }
-    .ld-sub { font-size: 17px; font-weight: 500; opacity: 0.75; margin: 0 0 44px; }
-    .ld-prose { font-size: 17.5px; line-height: 1.75; font-weight: 500; max-width: 56ch; }
-    .ld-prose a { color: var(--ld-red); font-weight: 700; }
-
-    /* service cards */
-    .ld-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-    .ld-card {
-      background: #FFFDF6; border: 3px solid var(--ld-ink); border-radius: 14px; padding: 28px 24px;
-      position: relative; transition: transform 0.16s ease, box-shadow 0.16s ease;
-    }
-    .ld-card:hover { transform: translateY(-6px) rotate(-0.5deg); box-shadow: 7px 7px 0 var(--ld-red); }
-    .ld-card-tag {
-      position: absolute; top: -15px; left: 20px; background: var(--ld-gold); color: var(--ld-ink);
-      font-size: 12.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
-      padding: 5px 12px; border: 2px solid var(--ld-ink); border-radius: 999px; transform: rotate(-3deg);
-    }
-    .ld-card h3 { font-size: 21px; margin: 6px 0 12px; font-weight: 700; }
-    .ld-card p { font-size: 15.5px; line-height: 1.6; margin: 0 0 16px; font-weight: 500; opacity: 0.85; }
-    .ld-price { font-size: 15px !important; letter-spacing: 0.06em; }
-    .ld-price strong { font-size: 26px; color: var(--ld-red); }
-    .ld-more { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(26px, 4vw, 54px); align-items: center; margin-top: 56px; background: var(--ld-cream-2); border: 3px dashed var(--ld-navy); border-radius: 18px; padding: clamp(24px, 4vw, 44px); }
-    .ld-more img { width: 100%; height: 300px; object-fit: cover; border-radius: 12px; border: 3px solid var(--ld-ink); }
-    .ld-more h3 { font-size: 24px; margin: 0 0 12px; }
-    .ld-more p { font-size: 16.5px; line-height: 1.65; font-weight: 500; margin: 0 0 22px; }
-
-    /* story */
-    .ld-story { background: var(--ld-navy); color: var(--ld-cream); }
-    .ld-story .ld-kicker { color: var(--ld-gold); }
-    .ld-story-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(30px, 5vw, 70px); align-items: start; }
-    .ld-story-photo { margin: 0; border: 4px solid var(--ld-gold); border-radius: 14px; overflow: hidden; transform: rotate(-1.5deg); }
-    .ld-story-photo img { width: 100%; height: min(520px, 72vw); object-fit: cover; }
-    .ld-story-photo figcaption { background: var(--ld-navy-dark); padding: 12px 16px; font-size: 13.5px; letter-spacing: 0.06em; font-weight: 500; }
-    .ld-story .ld-prose { color: rgba(246,239,221,0.88); }
-    .ld-timeline { list-style: none; margin: 34px 0 0; padding: 0; display: grid; gap: 0; border-left: 3px solid var(--ld-gold); }
-    .ld-timeline li { padding: 4px 0 26px 26px; position: relative; display: grid; gap: 4px; }
-    .ld-timeline li::before { content: "★"; position: absolute; left: -14px; top: 2px; background: var(--ld-navy); color: var(--ld-gold); font-size: 18px; padding: 0 4px; }
-    .ld-timeline strong { font-size: 22px; color: var(--ld-gold); letter-spacing: 0.04em; }
-    .ld-timeline span { font-size: 16px; font-weight: 500; color: rgba(246,239,221,0.85); }
-
-    /* reviews */
-    .ld-reviews { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 44px; }
-    .ld-review {
-      margin: 0; background: #FFFDF6; border: 3px solid var(--ld-ink); border-radius: 6px 22px 6px 22px;
-      padding: 28px 26px; position: relative; transition: transform 0.16s ease;
-    }
-    .ld-review:hover { transform: rotate(0.6deg) scale(1.015); }
-    .ld-review::after {
-      content: "LEDUC ★ APPROVED"; position: absolute; bottom: 14px; right: 16px;
-      font-size: 11px; font-weight: 700; letter-spacing: 0.2em; color: var(--ld-red);
-      border: 2px solid var(--ld-red); border-radius: 6px; padding: 4px 8px; transform: rotate(-6deg); opacity: 0.85;
-    }
-    .ld-stars { color: var(--ld-gold); font-size: 19px; letter-spacing: 3px; margin: 0 0 14px; text-shadow: 1px 1px 0 var(--ld-ink); }
-    .ld-review p:nth-of-type(2) { font-size: 16.5px; line-height: 1.65; font-weight: 500; margin: 0 0 18px; }
-    .ld-review cite { font-style: normal; font-weight: 700; font-size: 14.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ld-navy); }
-
-    /* service area */
-    .ld-area { background: var(--ld-cream-2); border-block: 3px solid var(--ld-ink); padding: clamp(48px, 7vh, 80px) 0; }
-    .ld-area-list { list-style: none; margin: 30px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
-    .ld-area-list li {
-      font-weight: 700; font-size: 16px; letter-spacing: 0.05em;
-      border: 2.5px solid var(--ld-navy); border-radius: 999px; padding: 9px 20px; background: var(--ld-cream);
+    .em-number {
+      display: inline-block;
+      font-weight: 700; letter-spacing: 0.01em; text-decoration: none;
+      font-size: clamp(2.6rem, 10vw, 6.2rem);
+      margin: 18px 0 8px; padding: 6px 22px;
+      border: 4px solid #FFF8EC; border-radius: 18px;
       transition: background 0.15s ease, color 0.15s ease;
     }
-    .ld-area-list li:hover { background: var(--ld-navy); color: var(--ld-cream); }
-
-    /* quote */
-    .ld-quote-grid { display: grid; grid-template-columns: 0.95fr 1.05fr; gap: clamp(30px, 5vw, 64px); align-items: start; }
-    .ld-quote-img { width: 100%; height: 260px; object-fit: cover; border: 3px solid var(--ld-ink); border-radius: 14px; margin-top: 30px; }
-    .ld-form { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; background: #FFFDF6; border: 3px solid var(--ld-ink); border-radius: 16px; padding: clamp(24px, 4vw, 40px); box-shadow: 8px 8px 0 var(--ld-cream-2); }
-    .ld-form-wide { grid-column: 1 / -1; }
-    .ld-form label { display: grid; gap: 8px; font-weight: 700; font-size: 14.5px; letter-spacing: 0.06em; text-transform: uppercase; }
-    .ld-form input, .ld-form select, .ld-form textarea {
-      font-family: var(--ld-slab); font-size: 16px; font-weight: 500;
-      border: 2.5px solid var(--ld-ink); border-radius: 8px; padding: 12px 14px; background: #fff; color: var(--ld-ink); width: 100%;
+    .em-number:hover { background: #FFF8EC; color: var(--em-red); }
+    .em-promise {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      font-size: clamp(1.1rem, 3vw, 1.5rem); font-weight: 600; margin: 14px 0 22px;
     }
-    .ld-form input:focus, .ld-form select:focus, .ld-form textarea:focus { outline: 3px solid var(--ld-gold); outline-offset: 1px; }
-    .ld-form-note { margin: 0; font-weight: 600; font-size: 15.5px; color: var(--ld-navy); }
-    .ld-form-note:empty { display: none; }
+    .em-dot { width: 12px; height: 12px; border-radius: 50%; background: #3DFF7A; flex: none; animation: em-pulse 1.8s infinite; }
+    @keyframes em-pulse { 50% { box-shadow: 0 0 0 8px rgba(61,255,122,0.15); } }
+    .em-sub { max-width: 56ch; margin: 0 auto; font-size: 16.5px; line-height: 1.7; opacity: 0.92; font-weight: 500; }
 
-    /* footer */
-    .ld-footer { background: var(--ld-ink); color: var(--ld-cream); padding: clamp(48px, 7vh, 80px) 0 30px; }
-    .ld-footer-grid { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 34px; margin-bottom: 40px; }
-    .ld-footer-brand { font-size: 26px; margin: 0 0 14px; }
-    .ld-footer p { font-size: 15.5px; line-height: 1.7; font-weight: 500; opacity: 0.85; margin: 0 0 10px; }
-    .ld-footer-h { font-size: 13px !important; font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ld-gold); opacity: 1 !important; }
-    .ld-footer-phone { font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; color: var(--ld-cream); text-decoration: none; letter-spacing: 0.02em; }
-    .ld-footer-phone:hover { color: var(--ld-gold); }
-    .ld-fine { text-align: center; font-size: 13px; opacity: 0.6; border-top: 1px solid rgba(246,239,221,0.2); padding-top: 24px; margin: 0; }
-
-    @media (max-width: 980px) {
-      .ld-cards { grid-template-columns: repeat(2, 1fr); }
-      .ld-reviews { grid-template-columns: 1fr; max-width: 560px; margin-inline: auto; margin-top: 36px; }
-      .ld-story-grid, .ld-quote-grid, .ld-more { grid-template-columns: 1fr; }
-      .ld-hero { grid-template-columns: 1fr; }
-      .ld-hero-visual { max-width: 520px; margin: 0 auto; width: 100%; }
-      .ld-trust { grid-template-columns: repeat(2, 1fr); }
-      .ld-trust-item:nth-child(3) { border-left: 0; }
+    /* price list */
+    .em-list { max-width: 820px; margin: 0 auto; padding: clamp(48px, 8vh, 88px) clamp(20px, 5vw, 48px); }
+    .em-h2 { font-size: clamp(1.9rem, 5vw, 2.9rem); margin: 0 0 6px; letter-spacing: 0.01em; }
+    .em-note { font-size: 15.5px; opacity: 0.7; font-weight: 500; margin: 0 0 30px; }
+    .em-list dl { margin: 0; border-top: 3px solid var(--em-ink); }
+    .em-list dl div {
+      display: flex; justify-content: space-between; align-items: baseline; gap: 20px;
+      padding: 20px 2px; border-bottom: 1px solid rgba(42,33,24,0.18);
     }
-    @media (max-width: 640px) {
-      .ld-nav { display: none; }
-      .ld-header { justify-content: space-between; }
-      .ld-cards { grid-template-columns: 1fr; }
-      .ld-form { grid-template-columns: 1fr; }
-      .ld-footer-grid { grid-template-columns: 1fr; }
-      .ld-seal { top: -24px; }
+    .em-list dt { font-size: 18px; font-weight: 700; }
+    .em-list dt span { display: block; font-size: 14px; font-weight: 500; opacity: 0.65; margin-top: 4px; }
+    .em-list dd { margin: 0; font-size: 20px; font-weight: 700; color: var(--em-red); white-space: nowrap; }
+    .em-tools { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 34px 0 0; }
+    .em-tools img { width: 100%; height: 200px; object-fit: cover; border: 3px solid var(--em-ink); border-radius: 10px; }
+
+    /* about: one paragraph */
+    .em-about { background: var(--em-navy); color: var(--em-cream); }
+    .em-about-in {
+      max-width: 1080px; margin: 0 auto; padding: clamp(48px, 8vh, 88px) clamp(20px, 5vw, 48px);
+      display: grid; grid-template-columns: 200px 1fr 240px; gap: clamp(24px, 4vw, 48px); align-items: center;
+    }
+    .em-about img { border-radius: 12px; border: 3px solid var(--em-gold); }
+    .em-about-in > img:first-child { width: 200px; height: 240px; object-fit: cover; transform: rotate(-2deg); }
+    .em-about-job { width: 240px; height: 200px; object-fit: cover; transform: rotate(1.5deg); }
+    .em-about .em-h2 { color: var(--em-gold); }
+    .em-about p { font-size: 17.5px; line-height: 1.75; font-weight: 500; margin: 14px 0 0; max-width: 52ch; color: rgba(246,239,221,0.9); }
+
+    /* callback slip */
+    .em-callback { max-width: 620px; margin: 0 auto; padding: clamp(48px, 8vh, 88px) clamp(20px, 5vw, 48px) 0; text-align: center; }
+    .em-form { display: flex; gap: 10px; margin-top: 8px; }
+    .em-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .em-form input {
+      flex: 1; font-family: var(--em-slab); font-size: 18px; padding: 15px 18px;
+      border: 3px solid var(--em-ink); border-radius: 10px; background: #FFFDF6; color: var(--em-ink); min-width: 0;
+    }
+    .em-form input:focus { outline: 3px solid var(--em-gold); outline-offset: 1px; }
+    .em-form button {
+      font-family: var(--em-slab); font-weight: 700; font-size: 17px;
+      background: var(--em-navy); color: var(--em-cream); border: 0; border-radius: 10px;
+      padding: 15px 26px; cursor: pointer; white-space: nowrap;
+      box-shadow: 4px 4px 0 var(--em-ink); transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+    .em-form button:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--em-ink); }
+    .em-form-note { font-weight: 600; color: var(--em-navy); min-height: 1.6em; }
+    .em-form-note:empty { display: none; }
+
+    /* the number, again */
+    .em-again { text-align: center; padding: clamp(40px, 7vh, 72px) 20px clamp(48px, 8vh, 88px); }
+    .em-again-k { font-size: 20px; font-weight: 600; margin: 0 0 6px; }
+    .em-number-sm { font-size: clamp(2.2rem, 8vw, 4.4rem); border-color: var(--em-red); color: var(--em-red); }
+    .em-number-sm:hover { background: var(--em-red); color: #FFF8EC; }
+
+    .em-foot { background: var(--em-ink); color: rgba(246,239,221,0.75); text-align: center; padding: 36px 20px; font-size: 13.5px; line-height: 1.9; font-weight: 500; }
+    .em-foot p { margin: 0; }
+
+    @media (max-width: 860px) {
+      .em-about-in { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+      .em-about-in > img:first-child { width: 160px; height: 190px; }
+      .em-about-job { width: 100%; max-width: 420px; }
+      .em-about p { margin-inline: auto; }
+      .em-form { flex-direction: column; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .ld-ticker-track, .ld-seal-ring { animation: none; }
-      .ld-card, .ld-review, .ld-btn, .ld-phone { transition: none; }
+      .em-dot { animation: none; }
+      .em-number, .em-form button { transition: none; }
     }
   </style>
 </body>
