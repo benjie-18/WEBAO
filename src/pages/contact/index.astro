@@ -162,57 +162,61 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
   </section>
 
   <script>
-    const form = document.getElementById('contact-form') as HTMLFormElement | null;
-    const status = document.getElementById('form-status') as HTMLElement | null;
-    if (form && status) {
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const data = new FormData(form as HTMLFormElement);
-        const required = ['business','trade','city','name','email'];
-        let valid = true;
-        for (const k of required) {
-          const v = data.get(k);
-          if (!v || String(v).trim() === '') valid = false;
-        }
-        const email = String(data.get('email') || '');
-        if (!email.includes('@')) valid = false;
-        const consent = form.querySelector('.check-row input') as HTMLInputElement | null;
-        if (consent && !consent.checked) valid = false;
-        if (!valid) {
+    function initContactPage() {
+      const form = document.getElementById('contact-form') as HTMLFormElement | null;
+      const status = document.getElementById('form-status') as HTMLElement | null;
+      if (form && status) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const data = new FormData(form as HTMLFormElement);
+          const required = ['business','trade','city','name','email'];
+          let valid = true;
+          for (const k of required) {
+            const v = data.get(k);
+            if (!v || String(v).trim() === '') valid = false;
+          }
+          const email = String(data.get('email') || '');
+          if (!email.includes('@')) valid = false;
+          const consent = form.querySelector('.check-row input') as HTMLInputElement | null;
+          if (consent && !consent.checked) valid = false;
+          if (!valid) {
+            (status as HTMLElement).hidden = false;
+            status.textContent = 'Please fill in the required fields with a valid email, and tick the contact checkbox.';
+            (status as HTMLElement).style.color = '#B91C1C';
+            (status as HTMLElement).style.background = '#FFF0EF';
+            (status as HTMLElement).style.borderColor = '#FFD4D0';
+            return;
+          }
+          // Compose the message in the visitor's own mail app (no server, nothing stored here)
+          const fields: Array<[string, string]> = [
+            ['Business', String(data.get('business') || '')],
+            ['Trade', String(data.get('trade') || '')],
+            ['City', String(data.get('city') || '')],
+            ['Name', String(data.get('name') || '')],
+            ['Email', email],
+            ['Phone', String(data.get('phone') || '')],
+            ['Goal', String(data.get('goal') || '')],
+            ['Details', String(data.get('details') || '')],
+          ];
+          const body = fields
+            .filter(([, v]) => v.trim() !== '')
+            .map(([k, v]) => `${k}: ${v}`)
+            .join('\n');
+          const subject = `New website enquiry: ${fields[0][1] || 'WEBAO'}`;
+          const mailto = `mailto:hello@webao.ca?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+          window.location.href = mailto;
           (status as HTMLElement).hidden = false;
-          status.textContent = 'Please fill in the required fields with a valid email, and tick the contact checkbox.';
-          (status as HTMLElement).style.color = '#B91C1C';
-          (status as HTMLElement).style.background = '#FFF0EF';
-          (status as HTMLElement).style.borderColor = '#FFD4D0';
-          return;
-        }
-        // Compose the message in the visitor's own mail app (no server, nothing stored here)
-        const fields: Array<[string, string]> = [
-          ['Business', String(data.get('business') || '')],
-          ['Trade', String(data.get('trade') || '')],
-          ['City', String(data.get('city') || '')],
-          ['Name', String(data.get('name') || '')],
-          ['Email', email],
-          ['Phone', String(data.get('phone') || '')],
-          ['Goal', String(data.get('goal') || '')],
-          ['Details', String(data.get('details') || '')],
-        ];
-        const body = fields
-          .filter(([, v]) => v.trim() !== '')
-          .map(([k, v]) => `${k}: ${v}`)
-          .join('\n');
-        const subject = `New website enquiry: ${fields[0][1] || 'WEBAO'}`;
-        const mailto = `mailto:hello@webao.ca?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        window.location.href = mailto;
-        (status as HTMLElement).hidden = false;
-        status.textContent = 'Your email app should open with the message ready to send. If nothing opened, just email us directly at hello@webao.ca.';
-        (status as HTMLElement).style.color = '#0E7A5A';
-        (status as HTMLElement).style.background = '#ECFDF5';
-        (status as HTMLElement).style.borderColor = '#A7F3D0';
-        const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
-        if (btn) { btn.textContent = 'Email ready ✓'; }
-      });
+          status.textContent = 'Your email app should open with the message ready to send. If nothing opened, just email us directly at hello@webao.ca.';
+          (status as HTMLElement).style.color = '#0E7A5A';
+          (status as HTMLElement).style.background = '#ECFDF5';
+          (status as HTMLElement).style.borderColor = '#A7F3D0';
+          const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+          if (btn) { btn.textContent = 'Email ready ✓'; }
+        });
+      }
     }
+
+    document.addEventListener('astro:page-load', initContactPage);
   </script>
 
   <style>
