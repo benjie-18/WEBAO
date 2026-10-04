@@ -3,14 +3,17 @@ import EscapeHatch from "../../components/demos/EscapeHatch.astro";
 
 // Demo microsite: Pouf Studio, fictional 3D character & toy design studio, Montréal.
 // Standalone art direction: claymorphism. Pastel, puffy, squishy. Not connected to the WEBAO theme system.
+// REBUILD: the page is a soft lab. It opens on a squishable blob playground,
+// toys are tactile blobs scattered like specimens, the process is a lab log,
+// and every package is a puff you can poke. No standard sections.
 const IMG = {
   hero: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1600&auto=format&fit=crop",
   boba: "/demos/pouf/01.jpg",
   pup: "/demos/pouf/02.jpg",
   bot: "/demos/pouf/03.jpg",
   cat: "/demos/pouf/04.jpg",
-  lab: "https://images.unsplash.com/photo-1558060370-d644479cb6f7?q=80&w=800&auto=format&fit=crop",
-  extra: "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?q=80&w=800&auto=format&fit=crop",
+  lab: "https://images.unsplash.com/photo-1559454403-b8fb88521f11?q=80&w=800&auto=format&fit=crop",
+  extra: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=800&auto=format&fit=crop",
 };
 ---
 
@@ -19,8 +22,8 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pouf Studio: Squishy 3D Characters &amp; Designer Toys</title>
-  <meta name="description" content="Pouf Studio designs soft, chunky 3D characters and designer toys in Montréal. Sculpt, squish, ship." />
+  <title>Pouf Studio: The Soft Lab | Squishy 3D Characters &amp; Designer Toys</title>
+  <meta name="description" content="Welcome to the Pouf Studio soft lab. Poke the blobs, meet the toys, read the lab log. Squishy 3D characters and designer toys from Montréal." />
   <meta name="robots" content="noindex" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -35,10 +38,10 @@ const IMG = {
         <span class="pf-logo-blob" aria-hidden="true"></span>pouf studio
       </a>
       <div class="pf-nav-links" id="pf-menu">
-        <a href="#toys">Toys</a>
-        <a href="#process">Process</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#contact">Contact</a>
+        <a href="#lab">The lab</a>
+        <a href="#specimens">Specimens</a>
+        <a href="#log">Lab log</a>
+        <a href="#puffs">Puffs</a>
       </div>
       <a class="pf-btn pf-btn-small pf-cta" href="#contact">Start a project</a>
       <button class="pf-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="pf-menu">
@@ -48,33 +51,18 @@ const IMG = {
   </header>
 
   <main id="top">
-    <!-- HERO -->
-    <section class="pf-hero">
-      <div class="pf-blob pf-blob-1" aria-hidden="true"></div>
-      <div class="pf-blob pf-blob-2" aria-hidden="true"></div>
-      <div class="pf-blob pf-blob-3" aria-hidden="true"></div>
-      <div class="pf-blob pf-blob-4" aria-hidden="true"></div>
-      <div class="pf-wrap pf-hero-in">
-        <div class="pf-hero-copy">
+    <!-- THE LAB: a squishable blob playground. No hero copy block. -->
+    <section class="pf-lab-open" id="lab" aria-label="The soft lab">
+      <div class="pf-play" id="pf-play">
+        <button class="pf-blobbtn pf-bb1" type="button" aria-label="Squish the peach blob"><span aria-hidden="true"></span></button>
+        <button class="pf-blobbtn pf-bb2" type="button" aria-label="Squish the lavender blob"><span aria-hidden="true"></span></button>
+        <button class="pf-blobbtn pf-bb3" type="button" aria-label="Squish the mint blob"><span aria-hidden="true"></span></button>
+        <button class="pf-blobbtn pf-bb4" type="button" aria-label="Squish the sky blob"><span aria-hidden="true"></span></button>
+        <div class="pf-lab-copy">
           <p class="pf-pill">3D CHARACTER + TOY DESIGN STUDIO · MONTRÉAL</p>
-          <h1 class="pf-h1">We design toys you <span class="pf-h1-pop">want to squish.</span></h1>
-          <p class="pf-lede">Pouf Studio is a Montréal crew of sculptors, painters, and professional squish-testers. We turn wild ideas into soft, chunky, shelf-ready characters for brands, games, and collectors.</p>
-          <div class="pf-hero-cta">
-            <a class="pf-btn pf-btn-peach" href="#toys">Meet the toys</a>
-            <a class="pf-btn pf-btn-mint" href="#contact">Start your project</a>
-          </div>
-          <dl class="pf-hero-facts">
-            <div><dt>240+</dt><dd>characters shipped</dd></div>
-            <div><dt>38</dt><dd>brand collabs</dd></div>
-            <div><dt>0</dt><dd>sharp edges, ever</dd></div>
-          </dl>
-        </div>
-        <div class="pf-hero-art">
-          <div class="pf-hero-frame">
-            <img src={IMG.hero} alt="Soft pastel 3D abstract shapes in the Pouf Studio style" loading="eager" fetchpriority="high" />
-          </div>
-          <div class="pf-sticker pf-sticker-1" aria-hidden="true">100% squishable</div>
-          <div class="pf-sticker pf-sticker-2" aria-hidden="true">chunky by design</div>
+          <h1 class="pf-h1">Welcome to<br />the <span class="pf-h1-pop">soft lab.</span></h1>
+          <p class="pf-lede">Everything here is pokeable. Go ahead, squish a blob. Pouf Studio designs soft, chunky 3D characters and designer toys for brands, games, and collectors.</p>
+          <p class="pf-squish-count" role="status" aria-live="polite">Blobs squished: <strong id="pf-count">0</strong></p>
         </div>
       </div>
     </section>
@@ -87,105 +75,108 @@ const IMG = {
       </div>
     </div>
 
-    <!-- TOY GALLERY -->
-    <section class="pf-section" id="toys">
+    <!-- SPECIMENS: toys as tactile blobs, scattered -->
+    <section class="pf-specimens" id="specimens">
       <div class="pf-wrap">
         <p class="pf-kicker">Fresh out of the squish lab</p>
-        <h2 class="pf-h2">Recent <span class="pf-h2-pop">pouf pals</span></h2>
-        <div class="pf-toys">
-          <article class="pf-toy pf-tint-peach">
-            <div class="pf-toy-img"><img src={IMG.boba} alt="Boba Blob, a soft pastel vinyl figure" loading="lazy" /></div>
-            <h3>Boba Blob</h3>
-            <p>Vinyl figure for a bubble tea brand. Sold out in 9 minutes. We are still a little smug about it.</p>
-            <p class="pf-toy-tag">Vinyl · 12 cm</p>
-          </article>
-          <article class="pf-toy pf-tint-lav">
-            <div class="pf-toy-img"><img src={IMG.pup} alt="Cloud Pup, a pastel plush character" loading="lazy" /></div>
-            <h3>Cloud Pup</h3>
-            <p>Plush mascot for a sleep app. Tested by 40 toddlers and one very serious corgi.</p>
-            <p class="pf-toy-tag">Plush · 30 cm</p>
-          </article>
-          <article class="pf-toy pf-tint-mint">
-            <div class="pf-toy-img"><img src={IMG.bot} alt="Mochi Bot, a chunky designer robot toy" loading="lazy" /></div>
-            <h3>Mochi Bot</h3>
-            <p>Designer robot for a game launch. Squish rating: 9.4 out of 10. Beep boop.</p>
-            <p class="pf-toy-tag">Resin · 15 cm</p>
-          </article>
-          <article class="pf-toy pf-tint-sky">
-            <div class="pf-toy-img"><img src={IMG.cat} alt="Pudding Cat, a soft pudding-shaped cat toy" loading="lazy" /></div>
-            <h3>Pudding Cat</h3>
-            <p>Desk buddy for a fintech that wanted to feel less fintech. Mission accomplished.</p>
-            <p class="pf-toy-tag">Sofubi · 10 cm</p>
-          </article>
-        </div>
+        <h2 class="pf-h2">Recent <span class="pf-h2-pop">specimens</span></h2>
+        <p class="pf-lede-small">Four toys, zero sharp edges. Poke one to read its file.</p>
+      </div>
+      <div class="pf-field">
+        <button class="pf-spec pf-tint-peach pf-sp1" type="button" aria-expanded="false">
+          <span class="pf-spec-img"><img src={IMG.boba} alt="Boba Blob, a soft pastel vinyl figure" loading="lazy" /></span>
+          <span class="pf-spec-name">Boba Blob</span>
+          <span class="pf-spec-file">Vinyl · 12 cm. Figure for a bubble tea brand. Sold out in 9 minutes. We are still a little smug about it.</span>
+        </button>
+        <button class="pf-spec pf-tint-lav pf-sp2" type="button" aria-expanded="false">
+          <span class="pf-spec-img"><img src={IMG.pup} alt="Cloud Pup, a pastel plush character" loading="lazy" /></span>
+          <span class="pf-spec-name">Cloud Pup</span>
+          <span class="pf-spec-file">Plush · 30 cm. Mascot for a sleep app. Tested by 40 toddlers and one very serious corgi.</span>
+        </button>
+        <button class="pf-spec pf-tint-mint pf-sp3" type="button" aria-expanded="false">
+          <span class="pf-spec-img"><img src={IMG.bot} alt="Mochi Bot, a chunky designer robot toy" loading="lazy" /></span>
+          <span class="pf-spec-name">Mochi Bot</span>
+          <span class="pf-spec-file">Resin · 15 cm. Designer robot for a game launch. Squish rating: 9.4 out of 10. Beep boop.</span>
+        </button>
+        <button class="pf-spec pf-tint-sky pf-sp4" type="button" aria-expanded="false">
+          <span class="pf-spec-img"><img src={IMG.cat} alt="Pudding Cat, a soft pudding-shaped cat toy" loading="lazy" /></span>
+          <span class="pf-spec-name">Pudding Cat</span>
+          <span class="pf-spec-file">Sofubi · 10 cm. Desk buddy for a fintech that wanted to feel less fintech. Mission accomplished.</span>
+        </button>
       </div>
     </section>
 
-    <!-- PROCESS -->
-    <section class="pf-section pf-section-alt" id="process">
+    <!-- LAB LOG: the process as experiment notes -->
+    <section class="pf-log" id="log">
       <div class="pf-wrap">
-        <p class="pf-kicker">How the magic happens</p>
-        <h2 class="pf-h2">Sculpt. Squish. <span class="pf-h2-pop">Ship.</span></h2>
-        <div class="pf-steps">
-          <article class="pf-step pf-tint-peach">
-            <span class="pf-step-n" aria-hidden="true">1</span>
-            <h3>Sculpt</h3>
+        <p class="pf-kicker">Experiment nº 047</p>
+        <h2 class="pf-h2">The <span class="pf-h2-pop">lab log</span></h2>
+        <ol class="pf-log-list">
+          <li class="pf-tint-peach">
+            <p class="pf-log-day">Day 1–12 · Sculpt</p>
+            <h3>Make it round</h3>
             <p>We sketch, model, and 3D-print your character. You get weekly peeks and unlimited "what if it were rounder?" rounds.</p>
-          </article>
-          <article class="pf-step pf-tint-lav">
-            <span class="pf-step-n" aria-hidden="true">2</span>
-            <h3>Squish</h3>
+          </li>
+          <li class="pf-tint-lav">
+            <p class="pf-log-day">Day 13–20 · Squish</p>
+            <h3>Poke it scientifically</h3>
             <p>Prototypes get poked, dropped, hugged, and chewed (by the corgi) until the squish factor is scientifically perfect.</p>
-          </article>
-          <article class="pf-step pf-tint-mint">
-            <span class="pf-step-n" aria-hidden="true">3</span>
-            <h3>Ship</h3>
-            <p>Paint masters, packaging, and production support. Your toy launches into the world, ready for shelves and desks.</p>
-          </article>
-        </div>
+          </li>
+          <li class="pf-tint-mint">
+            <p class="pf-log-day">Day 21–30 · Ship</p>
+            <h3>Send it into the world</h3>
+            <p>Paint masters, packaging, and production support. Your toy launches, ready for shelves and desks.</p>
+          </li>
+        </ol>
         <div class="pf-lab">
-          <img src={IMG.lab} alt="Colorful toy prototypes lined up in the Pouf Studio lab" loading="lazy" />
+          <img src={IMG.lab} alt="Soft plush bear, a squish-test subject in the studio" loading="lazy" />
           <div>
             <h3>Inside the squish lab</h3>
             <p>Our Mile End studio houses two 3D printers, a paint booth that smells faintly of vanilla, and a shelf of 200+ reference blobs. Come visit. Bring snacks.</p>
-            <img class="pf-lab-small" src={IMG.extra} alt="Close-up of pastel sculpting materials" loading="lazy" />
+            <img class="pf-lab-small" src={IMG.extra} alt="Paint brushes and vibrant paint in the studio" loading="lazy" />
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- TESTIMONIALS -->
-    <section class="pf-section" id="love">
-      <div class="pf-wrap">
-        <p class="pf-kicker">Squishy words from squishy clients</p>
-        <h2 class="pf-h2">People <span class="pf-h2-pop">love</span> the pouf</h2>
-        <div class="pf-quotes">
-          <blockquote class="pf-quote pf-tint-sky">
-            <p>"Pouf turned our boring mascot into a plush people fight over at trade shows. Our booth has never been this huggable."</p>
-            <cite>Maya R., brand director</cite>
-          </blockquote>
-          <blockquote class="pf-quote pf-tint-peach">
-            <p>"They asked 'what if it were rounder?' seventeen times. The seventeenth time was the charm. Our Kickstarter funded in a day."</p>
-            <cite>Devon K., indie game dev</cite>
-          </blockquote>
-          <blockquote class="pf-quote pf-tint-mint">
-            <p>"The prototype arrived and our whole office stopped working to squish it. Worth every penny. Ten out of ten, would squish again."</p>
-            <cite>Léa T., startup founder</cite>
-          </blockquote>
+        <div class="pf-facts">
+          <div><strong>240+</strong><span>characters shipped</span></div>
+          <div><strong>38</strong><span>brand collabs</span></div>
+          <div><strong>0</strong><span>sharp edges, ever</span></div>
         </div>
       </div>
     </section>
 
-    <!-- PRICING -->
-    <section class="pf-section pf-section-alt" id="pricing">
+    <!-- FIELD NOTES: testimonials as scattered notes -->
+    <section class="pf-notes">
+      <div class="pf-wrap">
+        <p class="pf-kicker">Pinned to the lab wall</p>
+        <h2 class="pf-h2">Field <span class="pf-h2-pop">notes</span></h2>
+      </div>
+      <div class="pf-notes-field">
+        <blockquote class="pf-note pf-tint-sky pf-n1">
+          <p>"Pouf turned our boring mascot into a plush people fight over at trade shows. Our booth has never been this huggable."</p>
+          <cite>Maya R., brand director</cite>
+        </blockquote>
+        <blockquote class="pf-note pf-tint-peach pf-n2">
+          <p>"They asked 'what if it were rounder?' seventeen times. The seventeenth time was the charm. Our Kickstarter funded in a day."</p>
+          <cite>Devon K., indie game dev</cite>
+        </blockquote>
+        <blockquote class="pf-note pf-tint-mint pf-n3">
+          <p>"The prototype arrived and our whole office stopped working to squish it. Worth every penny. Ten out of ten, would squish again."</p>
+          <cite>Léa T., startup founder</cite>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- PUFFS: pricing as pokeable puffs -->
+    <section class="pf-puffs" id="puffs">
       <div class="pf-wrap">
         <p class="pf-kicker">Pick your puff</p>
         <h2 class="pf-h2">Squish <span class="pf-h2-pop">packages</span></h2>
-        <div class="pf-plans">
-          <article class="pf-plan pf-tint-lav">
+        <p class="pf-lede-small pf-center">Every package includes unlimited "what if it were rounder?" questions. Seriously.</p>
+        <div class="pf-puff-row">
+          <article class="pf-puff pf-tint-lav">
             <h3>Squishling</h3>
             <p class="pf-price">$2,900</p>
-            <p class="pf-plan-sub">For testing the waters</p>
+            <p class="pf-puff-sub">For testing the waters</p>
             <ul>
               <li>Character concept + turnarounds</li>
               <li>Detailed 3D model</li>
@@ -194,11 +185,11 @@ const IMG = {
             </ul>
             <a class="pf-btn pf-btn-peach" href="#contact">Pick Squishling</a>
           </article>
-          <article class="pf-plan pf-plan-hot pf-tint-peach">
-            <p class="pf-plan-badge">Most squished</p>
+          <article class="pf-puff pf-puff-hot pf-tint-peach">
+            <p class="pf-puff-badge">Most squished</p>
             <h3>Chonk</h3>
             <p class="pf-price">$7,500</p>
-            <p class="pf-plan-sub">Our signature package</p>
+            <p class="pf-puff-sub">Our signature package</p>
             <ul>
               <li>Everything in Squishling</li>
               <li>Physical prototype</li>
@@ -208,10 +199,10 @@ const IMG = {
             </ul>
             <a class="pf-btn pf-btn-plum" href="#contact">Pick Chonk</a>
           </article>
-          <article class="pf-plan pf-tint-mint">
+          <article class="pf-puff pf-tint-mint">
             <h3>Mega Chonk</h3>
             <p class="pf-price">$18,000</p>
-            <p class="pf-plan-sub">Full production support</p>
+            <p class="pf-puff-sub">Full production support</p>
             <ul>
               <li>Everything in Chonk</li>
               <li>Factory liaison + QC</li>
@@ -221,12 +212,11 @@ const IMG = {
             <a class="pf-btn pf-btn-peach" href="#contact">Pick Mega Chonk</a>
           </article>
         </div>
-        <p class="pf-plans-note">Every package includes unlimited "what if it were rounder?" questions. Seriously.</p>
       </div>
     </section>
 
     <!-- CONTACT -->
-    <section class="pf-section" id="contact">
+    <section class="pf-contact" id="contact">
       <div class="pf-wrap pf-contact-in">
         <div class="pf-contact-copy">
           <p class="pf-kicker">Say hello</p>
@@ -271,29 +261,63 @@ const IMG = {
   <EscapeHatch locale="en" />
 
   <script>
-    // Demo form: never submits anywhere. Mobile menu toggle.
     (function () {
-      var form = document.getElementById('pf-form') as HTMLFormElement | null;
-      form?.addEventListener('submit', function (e) {
-        e.preventDefault();
-        var note = form?.querySelector('.pf-form-note');
-        if (note) note.textContent = 'Squish received! We will reply within two business days, sketch in hand.';
-        form?.reset();
-      });
-      var burger = document.querySelector('.pf-burger') as HTMLButtonElement | null;
-      var menu = document.getElementById('pf-menu');
-      burger?.addEventListener('click', function () {
-        var open = menu?.classList.toggle('pf-open') ?? false;
-        burger?.setAttribute('aria-expanded', String(open));
-        burger?.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
-      });
-      menu?.querySelectorAll('a').forEach(function (a) {
-        a.addEventListener('click', function () {
-          menu?.classList.remove('pf-open');
-          burger?.setAttribute('aria-expanded', 'false');
-          burger?.setAttribute('aria-label', 'Open menu');
+      // Squish counter for the playground blobs
+      var count = 0;
+      var countEl = document.getElementById('pf-count');
+      document.querySelectorAll('.pf-blobbtn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          count += 1;
+          if (countEl) countEl.textContent = String(count);
         });
       });
+      // Specimens: poke to open the file
+      document.querySelectorAll('.pf-spec').forEach(function (spec) {
+        spec.addEventListener('click', function () {
+          var open = spec.getAttribute('aria-expanded') === 'true';
+          document.querySelectorAll('.pf-spec').forEach(function (s) {
+            s.setAttribute('aria-expanded', 'false');
+            s.classList.remove('pf-spec-open');
+          });
+          if (!open) {
+            spec.setAttribute('aria-expanded', 'true');
+            spec.classList.add('pf-spec-open');
+          }
+        });
+      });
+      // Mobile menu
+      var burgerEl = document.querySelector('.pf-burger');
+      var menuEl = document.getElementById('pf-menu');
+      if (burgerEl instanceof HTMLButtonElement) {
+        var burger = burgerEl;
+        var menu = menuEl;
+        burger.addEventListener('click', function () {
+          var open = menu ? menu.classList.toggle('pf-open') : false;
+          burger.setAttribute('aria-expanded', String(open));
+          burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        });
+        if (menu) {
+          var m = menu;
+          m.querySelectorAll('a').forEach(function (a) {
+            a.addEventListener('click', function () {
+              m.classList.remove('pf-open');
+              burger.setAttribute('aria-expanded', 'false');
+              burger.setAttribute('aria-label', 'Open menu');
+            });
+          });
+        }
+      }
+      // Demo form: never submits anywhere
+      var formEl = document.getElementById('pf-form');
+      if (formEl instanceof HTMLFormElement) {
+        var form = formEl;
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var note = form.querySelector('.pf-form-note');
+          if (note) note.textContent = 'Squish received! We will reply within two business days, sketch in hand.';
+          form.reset();
+        });
+      }
     })();
   </script>
 
@@ -319,9 +343,10 @@ const IMG = {
     .pf *, .pf *::before, .pf *::after { box-sizing: border-box; }
     .pf img { display: block; max-width: 100%; }
     .pf-wrap { max-width: 1180px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px); }
+    .pf-center { text-align: center; }
 
     /* clay shadows */
-    .pf-btn, .pf-toy, .pf-step, .pf-plan, .pf-quote, .pf-form, .pf-hero-frame, .pf-pill, .pf-sticker {
+    .pf-btn, .pf-blobbtn, .pf-spec, .pf-note, .pf-puff, .pf-form, .pf-pill, .pf-log-list li, .pf-lab > div {
       box-shadow:
         inset 3px 3px 6px rgba(255, 255, 255, 0.75),
         inset -4px -4px 8px rgba(122, 102, 92, 0.14),
@@ -390,7 +415,7 @@ const IMG = {
     }
     .pf-h2 {
       font-family: var(--pf-display); font-weight: 800; font-size: clamp(2.4rem, 5.5vw, 4rem);
-      line-height: 1.05; margin: 0 0 44px;
+      line-height: 1.05; margin: 0 0 30px;
     }
     .pf-h2-pop {
       display: inline-block; background: var(--pf-mint); border-radius: 22px; padding: 0 18px 4px;
@@ -401,43 +426,50 @@ const IMG = {
       display: inline-block; background: var(--pf-sky); border: 3px solid #fff; border-radius: 999px;
       font-weight: 700; font-size: 13px; letter-spacing: 0.14em; padding: 12px 24px; margin: 0 0 26px;
     }
-    .pf-lede { font-size: 19px; line-height: 1.65; font-weight: 500; color: var(--pf-ink-soft); max-width: 46ch; margin: 0 0 34px; }
-    .pf-lede-small { font-size: 17px; line-height: 1.65; color: var(--pf-ink-soft); font-weight: 500; max-width: 42ch; margin: 0 0 28px; }
+    .pf-lede { font-size: 19px; line-height: 1.65; font-weight: 500; color: var(--pf-ink-soft); max-width: 46ch; margin: 0 0 24px; }
+    .pf-lede-small { font-size: 17px; line-height: 1.65; color: var(--pf-ink-soft); font-weight: 500; max-width: 52ch; margin: 0 0 28px; }
+    .pf-squish-count { font-size: 18px; font-weight: 700; color: var(--pf-plum); margin: 0; }
+    .pf-squish-count strong { font-size: 26px; }
 
-    /* hero */
-    .pf-hero { position: relative; padding: 170px 0 90px; overflow: hidden; }
-    .pf-blob { position: absolute; border-radius: 46% 54% 55% 45% / 48% 45% 55% 52%; filter: blur(1px); animation: pf-float 9s ease-in-out infinite; z-index: 0; }
-    .pf-blob-1 { width: 340px; height: 340px; background: var(--pf-peach); top: -90px; right: -70px; opacity: 0.7; }
-    .pf-blob-2 { width: 220px; height: 220px; background: var(--pf-lav); bottom: 40px; left: -70px; opacity: 0.6; animation-delay: -3s; }
-    .pf-blob-3 { width: 130px; height: 130px; background: var(--pf-mint); top: 38%; left: 44%; opacity: 0.55; animation-delay: -6s; }
-    .pf-blob-4 { width: 170px; height: 170px; background: var(--pf-sky); bottom: -50px; right: 22%; opacity: 0.6; animation-delay: -1.5s; }
-    @keyframes pf-float { 50% { transform: translateY(-26px) rotate(10deg); } }
-    .pf-hero-in { position: relative; z-index: 1; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(36px, 6vw, 70px); align-items: center; }
-    .pf-hero-cta { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 44px; }
-    .pf-hero-facts { display: flex; gap: 14px; margin: 0; padding: 0; flex-wrap: wrap; }
-    .pf-hero-facts div {
-      background: #fff; border: 3px solid #fff; border-radius: 26px; padding: 16px 24px; text-align: center;
-      box-shadow: inset 2px 2px 5px rgba(255,255,255,0.9), 6px 8px 16px rgba(122,102,92,0.14);
-      display: grid; gap: 2px;
+    /* lab opener: blob playground */
+    .pf-lab-open { padding: 130px 0 70px; overflow: hidden; }
+    .pf-play {
+      position: relative; max-width: 1280px; margin: 0 auto; min-height: 88vh;
+      padding: 60px clamp(20px, 4vw, 40px);
+      display: grid; align-content: center;
     }
-    .pf-hero-facts dt { font-family: var(--pf-display); font-weight: 800; font-size: 34px; color: var(--pf-plum); }
-    .pf-hero-facts dd { margin: 0; font-size: 13.5px; font-weight: 600; color: var(--pf-ink-soft); }
-    .pf-hero-art { position: relative; }
-    .pf-hero-frame {
-      border: 8px solid #fff; border-radius: 48px; overflow: hidden; transform: rotate(2deg);
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      box-shadow: 16px 22px 0 rgba(255, 157, 122, 0.28), 16px 22px 44px rgba(90, 59, 46, 0.22);
+    .pf-lab-copy { position: relative; z-index: 5; max-width: 560px; }
+    .pf-blobbtn {
+      position: absolute; z-index: 1; border: 4px solid #fff; cursor: pointer; padding: 0;
+      transition: transform 0.45s cubic-bezier(0.34, 1.8, 0.5, 1);
+      animation: pf-float 8s ease-in-out infinite;
     }
-    .pf-hero-frame:hover { transform: rotate(0deg) scale(1.02); }
-    .pf-hero-frame img { width: 100%; height: 480px; object-fit: cover; }
-    .pf-sticker {
-      position: absolute; font-family: var(--pf-display); font-weight: 700; font-size: 17px;
-      background: #fff; border: 3px solid #fff; border-radius: 999px; padding: 12px 22px; color: var(--pf-ink);
-      animation: pf-bob 4s ease-in-out infinite;
+    .pf-blobbtn span { display: block; width: 100%; height: 100%; border-radius: inherit; }
+    .pf-blobbtn:active { transform: scale(0.72, 0.6) !important; transition-duration: 0.08s; }
+    .pf-bb1 {
+      width: 300px; height: 280px; top: 4%; right: 6%;
+      border-radius: 46% 54% 55% 45% / 48% 45% 55% 52%;
+      background: linear-gradient(135deg, var(--pf-peach), #FFB98A);
     }
-    .pf-sticker-1 { top: -24px; left: -14px; transform: rotate(-8deg); background: var(--pf-mint); }
-    .pf-sticker-2 { bottom: -20px; right: 6px; transform: rotate(6deg); background: var(--pf-peach); animation-delay: -2s; }
-    @keyframes pf-bob { 50% { translate: 0 -10px; } }
+    .pf-bb2 {
+      width: 200px; height: 220px; bottom: 8%; right: 22%;
+      border-radius: 55% 45% 46% 54% / 52% 55% 45% 48%;
+      background: linear-gradient(135deg, var(--pf-lav), #B79CFF);
+      animation-delay: -2.5s;
+    }
+    .pf-bb3 {
+      width: 150px; height: 150px; top: 12%; right: 34%;
+      border-radius: 50% 50% 52% 48% / 55% 48% 52% 45%;
+      background: linear-gradient(135deg, var(--pf-mint), #9FE8BC);
+      animation-delay: -5s;
+    }
+    .pf-bb4 {
+      width: 120px; height: 130px; bottom: 22%; right: 4%;
+      border-radius: 48% 52% 55% 45% / 50% 46% 54% 50%;
+      background: linear-gradient(135deg, var(--pf-sky), #9CCBFF);
+      animation-delay: -1.2s;
+    }
+    @keyframes pf-float { 50% { translate: 0 -24px; } }
 
     /* ticker */
     .pf-ticker { background: var(--pf-plum); color: #fff; overflow: hidden; padding: 16px 0; border-block: 4px solid #fff; }
@@ -445,75 +477,91 @@ const IMG = {
     .pf-ticker-track i { font-style: normal; color: var(--pf-peach); }
     @keyframes pf-tick { to { transform: translateX(-50%); } }
 
-    /* sections */
-    .pf-section { padding: clamp(70px, 9vw, 120px) 0; }
-    .pf-section-alt { background: #fff; border-block: 4px solid #fff; border-radius: 60px; margin: 0 clamp(10px, 3vw, 34px); }
-
-    /* toys */
-    .pf-toys { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
-    .pf-toy {
-      border: 4px solid #fff; border-radius: 36px; padding: 18px 18px 26px;
+    /* specimens */
+    .pf-specimens { padding: clamp(70px, 9vw, 120px) 0 40px; }
+    .pf-field { position: relative; max-width: 1280px; margin: 20px auto 0; min-height: 700px; padding: 0 clamp(20px, 4vw, 40px); }
+    .pf-spec {
+      position: absolute; border: 4px solid #fff; cursor: pointer; padding: 22px;
+      display: grid; gap: 12px; justify-items: center; text-align: center;
+      font-family: var(--pf-body); color: var(--pf-ink);
       transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      width: min(300px, 70vw);
     }
-    .pf-toy:hover { transform: translateY(-10px) rotate(-1deg) scale(1.02); }
+    .pf-spec:hover { transform: scale(1.05) rotate(0deg) !important; z-index: 6; }
+    .pf-sp1 { border-radius: 48% 52% 55% 45% / 52% 48% 55% 45%; top: 0; left: 6%; transform: rotate(-4deg); }
+    .pf-sp2 { border-radius: 55% 45% 48% 52% / 48% 55% 45% 52%; top: 60px; right: 8%; transform: rotate(3deg); }
+    .pf-sp3 { border-radius: 52% 48% 45% 55% / 55% 52% 48% 45%; bottom: 40px; left: 14%; transform: rotate(2deg); }
+    .pf-sp4 { border-radius: 45% 55% 52% 48% / 48% 45% 55% 52%; bottom: 0; right: 16%; transform: rotate(-3deg); }
+    .pf-spec-img { width: 170px; height: 170px; border-radius: 50%; overflow: hidden; border: 4px solid #fff; }
+    .pf-spec-img img { width: 100%; height: 100%; object-fit: cover; }
+    .pf-spec-name { font-family: var(--pf-display); font-weight: 800; font-size: 26px; }
+    .pf-spec-file { display: none; font-size: 15px; line-height: 1.6; font-weight: 500; color: var(--pf-ink-soft); max-width: 34ch; }
+    .pf-spec-open { border-radius: 36px !important; z-index: 7; width: min(340px, 84vw); }
+    .pf-spec-open .pf-spec-file { display: block; }
     .pf-tint-peach { background: var(--pf-peach); }
     .pf-tint-lav { background: var(--pf-lav); }
     .pf-tint-mint { background: var(--pf-mint); }
     .pf-tint-sky { background: var(--pf-sky); }
-    .pf-toy-img { border: 4px solid #fff; border-radius: 26px; overflow: hidden; margin-bottom: 18px; }
-    .pf-toy-img img { width: 100%; height: 210px; object-fit: cover; transition: transform 0.35s ease; }
-    .pf-toy:hover .pf-toy-img img { transform: scale(1.08); }
-    .pf-toy h3 { font-family: var(--pf-display); font-weight: 800; font-size: 26px; margin: 0 0 8px; }
-    .pf-toy p { margin: 0 0 12px; font-size: 15px; line-height: 1.6; font-weight: 500; color: var(--pf-ink-soft); }
-    .pf-toy-tag { display: inline-block; background: #fff; border-radius: 999px; padding: 8px 18px; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
 
-    /* process */
-    .pf-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-bottom: 56px; }
-    .pf-step { border: 4px solid #fff; border-radius: 36px; padding: 34px 30px; position: relative; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
-    .pf-step:hover { transform: translateY(-8px) rotate(1deg); }
-    .pf-step-n {
-      position: absolute; top: -26px; right: 22px; width: 62px; height: 62px; border-radius: 50%;
-      background: #fff; border: 4px solid #fff; display: grid; place-items: center;
-      font-family: var(--pf-display); font-weight: 800; font-size: 28px; color: var(--pf-plum);
-      box-shadow: inset 2px 2px 4px rgba(255,255,255,0.9), 5px 7px 14px rgba(122,102,92,0.18);
-    }
-    .pf-step h3 { font-family: var(--pf-display); font-weight: 800; font-size: 30px; margin: 0 0 12px; }
-    .pf-step p { margin: 0; font-size: 16px; line-height: 1.65; font-weight: 500; color: var(--pf-ink-soft); }
+    /* lab log */
+    .pf-log { background: #fff; border-block: 4px solid #fff; border-radius: 60px; margin: 40px clamp(10px, 3vw, 34px) 0; padding: clamp(70px, 9vw, 110px) 0; }
+    .pf-log-list { list-style: none; margin: 0 0 56px; padding: 0; display: grid; gap: 22px; }
+    .pf-log-list li { border: 4px solid #fff; border-radius: 36px; padding: 30px 34px; position: relative; }
+    .pf-log-list li:nth-child(odd) { transform: rotate(-0.6deg); }
+    .pf-log-list li:nth-child(even) { transform: rotate(0.6deg); }
+    .pf-log-day { font-weight: 700; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-plum); margin: 0 0 8px; }
+    .pf-log-list h3 { font-family: var(--pf-display); font-weight: 800; font-size: 30px; margin: 0 0 10px; }
+    .pf-log-list p { margin: 0; font-size: 16px; line-height: 1.65; font-weight: 500; color: var(--pf-ink-soft); }
     .pf-lab { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; align-items: stretch; }
-    .pf-lab > img { width: 100%; height: 100%; min-height: 320px; object-fit: cover; border: 6px solid #fff; border-radius: 40px; box-shadow: inset 2px 2px 5px rgba(255,255,255,0.6), 10px 12px 24px rgba(122,102,92,0.16); }
-    .pf-lab > div { background: var(--pf-cream); border: 4px solid #fff; border-radius: 40px; padding: clamp(28px, 4vw, 44px); box-shadow: inset 3px 3px 6px rgba(255,255,255,0.75), 10px 12px 24px rgba(122,102,92,0.14); }
+    .pf-lab > img { width: 100%; height: 100%; min-height: 320px; object-fit: cover; border: 6px solid #fff; border-radius: 40px; }
+    .pf-lab > div { background: var(--pf-cream); border: 4px solid #fff; border-radius: 40px; padding: clamp(28px, 4vw, 44px); }
     .pf-lab h3 { font-family: var(--pf-display); font-weight: 800; font-size: 30px; margin: 0 0 14px; }
     .pf-lab p { margin: 0 0 20px; font-size: 16px; line-height: 1.65; color: var(--pf-ink-soft); font-weight: 500; }
     .pf-lab-small { width: 100%; height: 170px; object-fit: cover; border: 4px solid #fff; border-radius: 26px; }
+    .pf-facts { display: flex; gap: 14px; margin: 44px 0 0; padding: 0; flex-wrap: wrap; justify-content: center; }
+    .pf-facts div {
+      background: #fff; border: 3px solid #fff; border-radius: 26px; padding: 16px 28px; text-align: center;
+      box-shadow: inset 2px 2px 5px rgba(255,255,255,0.9), 6px 8px 16px rgba(122,102,92,0.14);
+      display: grid; gap: 2px;
+    }
+    .pf-facts strong { font-family: var(--pf-display); font-weight: 800; font-size: 34px; color: var(--pf-plum); }
+    .pf-facts span { font-size: 13.5px; font-weight: 600; color: var(--pf-ink-soft); }
 
-    /* quotes */
-    .pf-quotes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
-    .pf-quote { border: 4px solid #fff; border-radius: 36px; padding: 32px 30px; margin: 0; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
-    .pf-quote:hover { transform: scale(1.03) rotate(-1deg); }
-    .pf-quote p { font-size: 17px; line-height: 1.65; font-weight: 600; margin: 0 0 16px; }
-    .pf-quote cite { font-style: normal; font-weight: 700; font-size: 14px; letter-spacing: 0.06em; color: var(--pf-plum); }
+    /* field notes */
+    .pf-notes { padding: clamp(70px, 9vw, 110px) 0 20px; }
+    .pf-notes-field { position: relative; max-width: 1280px; margin: 0 auto; min-height: 420px; padding: 0 clamp(20px, 4vw, 40px); }
+    .pf-note { position: absolute; border: 4px solid #fff; border-radius: 30px; padding: 28px 30px; margin: 0; width: min(360px, 82vw); }
+    .pf-note p { font-size: 16.5px; line-height: 1.65; font-weight: 600; margin: 0 0 14px; }
+    .pf-note cite { font-style: normal; font-weight: 700; font-size: 14px; letter-spacing: 0.06em; color: var(--pf-plum); }
+    .pf-n1 { top: 0; left: 5%; transform: rotate(-3deg); }
+    .pf-n2 { top: 40px; right: 6%; transform: rotate(2.4deg); }
+    .pf-n3 { bottom: 0; left: 32%; transform: rotate(-1.6deg); }
 
-    /* pricing */
-    .pf-plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: stretch; }
-    .pf-plan { border: 4px solid #fff; border-radius: 40px; padding: 38px 34px; display: grid; gap: 10px; align-content: start; position: relative; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
-    .pf-plan:hover { transform: translateY(-10px); }
-    .pf-plan-hot { transform: scale(1.04); }
-    .pf-plan-hot:hover { transform: scale(1.04) translateY(-10px); }
-    .pf-plan-badge {
-      position: absolute; top: -22px; left: 50%; translate: -50% 0; margin: 0;
+    /* puffs */
+    .pf-puffs { padding: clamp(70px, 9vw, 110px) 0; }
+    .pf-puff-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: stretch; margin-top: 20px; }
+    .pf-puff {
+      border: 4px solid #fff; border-radius: 44% 56% 52% 48% / 56% 48% 52% 44%; padding: 48px 36px;
+      display: grid; gap: 10px; align-content: start; justify-items: center; text-align: center;
+      position: relative; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .pf-puff:hover { transform: translateY(-10px) scale(1.02); }
+    .pf-puff-hot { border-radius: 52% 48% 46% 54% / 48% 54% 46% 52%; }
+    .pf-puff-badge {
+      position: absolute; top: -20px; left: 50%; translate: -50% 0; margin: 0;
       background: var(--pf-plum); color: #fff; font-family: var(--pf-display); font-weight: 700; font-size: 15px;
       border: 3px solid #fff; border-radius: 999px; padding: 8px 22px; white-space: nowrap;
       box-shadow: 4px 6px 12px rgba(122,102,92,0.2);
     }
-    .pf-plan h3 { font-family: var(--pf-display); font-weight: 800; font-size: 32px; margin: 0; }
+    .pf-puff h3 { font-family: var(--pf-display); font-weight: 800; font-size: 32px; margin: 0; }
     .pf-price { font-family: var(--pf-display); font-weight: 800; font-size: 52px; margin: 0; color: var(--pf-plum); }
-    .pf-plan-sub { margin: 0 0 8px; font-weight: 600; color: var(--pf-ink-soft); }
-    .pf-plan ul { list-style: none; margin: 0 0 18px; padding: 0; display: grid; gap: 10px; }
-    .pf-plan li { font-size: 15.5px; font-weight: 600; padding-left: 30px; position: relative; line-height: 1.5; }
-    .pf-plan li::before { content: "●"; position: absolute; left: 2px; color: var(--pf-plum); font-size: 13px; top: 3px; }
-    .pf-plans-note { text-align: center; margin: 34px 0 0; font-weight: 600; color: var(--pf-ink-soft); font-size: 16px; }
+    .pf-puff-sub { margin: 0 0 8px; font-weight: 600; color: var(--pf-ink-soft); }
+    .pf-puff ul { list-style: none; margin: 0 0 18px; padding: 0; display: grid; gap: 10px; }
+    .pf-puff li { font-size: 15.5px; font-weight: 600; line-height: 1.5; }
+    .pf-puff li::before { content: "● "; color: var(--pf-plum); font-size: 13px; }
 
     /* contact */
+    .pf-contact { padding: clamp(70px, 9vw, 110px) 0; }
     .pf-contact-in { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(36px, 6vw, 70px); align-items: start; }
     .pf-contact-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
     .pf-contact-list li { background: #fff; border: 3px solid #fff; border-radius: 22px; padding: 16px 22px; font-size: 16px; font-weight: 600; box-shadow: inset 2px 2px 5px rgba(255,255,255,0.9), 6px 8px 16px rgba(122,102,92,0.12); }
@@ -539,16 +587,17 @@ const IMG = {
     .pf-footer a { color: #fff; }
 
     @media (max-width: 1020px) {
-      .pf-hero-in { grid-template-columns: 1fr; }
-      .pf-hero-frame img { height: 380px; }
-      .pf-toys { grid-template-columns: 1fr 1fr; }
-      .pf-steps, .pf-quotes { grid-template-columns: 1fr; max-width: 560px; margin-inline: auto; }
-      .pf-steps { margin-bottom: 56px; }
+      .pf-field { min-height: 0; display: grid; gap: 26px; padding-bottom: 20px; }
+      .pf-spec { position: relative; top: auto !important; left: auto !important; right: auto !important; bottom: auto !important; width: 100%; max-width: 420px; margin-inline: auto; border-radius: 36px !important; transform: none !important; }
+      .pf-notes-field { min-height: 0; display: grid; gap: 26px; }
+      .pf-note { position: relative; top: auto !important; left: auto !important; right: auto !important; bottom: auto !important; width: 100%; max-width: 520px; margin-inline: auto; }
       .pf-lab { grid-template-columns: 1fr; }
-      .pf-plans { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; }
-      .pf-plan-hot { transform: none; }
-      .pf-plan-hot:hover { transform: translateY(-10px); }
+      .pf-puff-row { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; }
       .pf-contact-in { grid-template-columns: 1fr; }
+      .pf-play { min-height: 0; }
+      .pf-bb1 { width: 190px; height: 180px; }
+      .pf-bb2 { width: 140px; height: 150px; }
+      .pf-bb3, .pf-bb4 { display: none; }
     }
     @media (max-width: 860px) {
       .pf-burger { display: flex; }
@@ -564,15 +613,14 @@ const IMG = {
       .pf-nav { position: relative; }
     }
     @media (max-width: 640px) {
-      .pf-hero { padding-top: 150px; }
-      .pf-toys { grid-template-columns: 1fr; }
-      .pf-hero-cta .pf-btn { width: 100%; }
-      .pf-section-alt { border-radius: 40px; }
+      .pf-lab-open { padding-top: 120px; }
+      .pf-bb1 { top: 0; right: 0; width: 140px; height: 130px; }
+      .pf-bb2 { bottom: 0; right: 8%; width: 110px; height: 120px; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .pf-ticker-track, .pf-blob, .pf-logo-blob, .pf-sticker { animation: none; }
-      .pf-btn, .pf-toy, .pf-step, .pf-plan, .pf-quote, .pf-hero-frame, .pf-nav-links a { transition: none; }
-      .pf-btn:hover, .pf-toy:hover, .pf-step:hover, .pf-plan:hover, .pf-quote:hover { transform: none; }
+      .pf-ticker-track, .pf-blobbtn, .pf-logo-blob { animation: none; }
+      .pf-btn, .pf-spec, .pf-puff, .pf-nav-links a { transition: none; }
+      .pf-btn:hover, .pf-spec:hover, .pf-puff:hover { transform: none; }
     }
   </style>
 </body>
