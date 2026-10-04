@@ -127,14 +127,14 @@ const processId = locale === "fr" ? "processus" : "process";
             <div style="font-weight: 700; font-size: 13px; letter-spacing:-0.02em;">{t.home.hero.visual.domainIncluded}</div>
             <div style="font-size: 12.5px; color: var(--muted);">{t.home.hero.visual.domainDesc}</div>
           </div>
-          <span class="check">✓</span>
+          <span class="check"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.2 8.6l3.4 3.4 6.2-7.2" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </div>
         <div class="float-card float-b" data-parallax="b">
           <div style="font-family: var(--font-mono); font-size:10px; letter-spacing:.12em; color: var(--muted);">{t.home.hero.visual.smallUpdates}</div>
           <div style="font-family: var(--font-display); font-size:24px; line-height:1.05; margin-top:6px;" set:html={t.home.hero.visual.hours}></div>
           <ul class="float-list" role="list">
-            <li><i>✓</i> {t.home.hero.visual.included}</li>
-            <li><i>✓</i> {t.home.hero.visual.sendEmail}</li>
+            <li><i><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.2 8.6l3.4 3.4 6.2-7.2" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i> {t.home.hero.visual.included}</li>
+            <li><i><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.2 8.6l3.4 3.4 6.2-7.2" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i> {t.home.hero.visual.sendEmail}</li>
           </ul>
         </div>
       </div>
@@ -437,13 +437,13 @@ const processId = locale === "fr" ? "processus" : "process";
         <div class="price-card">
           <div class="mono" style="font-size:10px; color: var(--muted);">{t.home.pricingTeaser.includedTitle}</div>
           <ul>
-            {t.home.pricingTeaser.included.map(item => <li><i>✓</i> {item}</li>)}
+            {t.home.pricingTeaser.included.map(item => <li><i><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.2 8.6l3.4 3.4 6.2-7.2" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i> {item}</li>)}
           </ul>
         </div>
         <div class="price-card price-card--muted">
           <div class="mono" style="font-size:10px; color: var(--muted);">{t.home.pricingTeaser.goodTitle}</div>
           <ul>
-            {t.home.pricingTeaser.good.map(item => <li><i>✓</i> {item}</li>)}
+            {t.home.pricingTeaser.good.map(item => <li><i><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.2 8.6l3.4 3.4 6.2-7.2" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i> {item}</li>)}
           </ul>
           <div style="margin-top:16px; padding:10px 12px; background: var(--accent-soft); border-radius:10px; font-size:12.5px; line-height:1.5; color: var(--accent-soft-text);">
             <strong>{t.home.pricingTeaser.needMore}</strong> {t.home.pricingTeaser.needMoreDesc}
@@ -519,7 +519,7 @@ const processId = locale === "fr" ? "processus" : "process";
         <ul class="craft-list" role="list">
           {t.home.craft.items.map(item => (
             <li>
-              <span class="check-badge">✓</span>
+              <span class="check-badge"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.2 8.6l3.4 3.4 6.2-7.2" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
               <div><strong>{item.title}</strong> {item.desc}</div>
             </li>
           ))}
@@ -610,11 +610,13 @@ const processId = locale === "fr" ? "processus" : "process";
   .float-card { position: absolute; background: var(--card-bg); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow-md); padding: 12px 14px; display: flex; align-items: center; gap:12px; }
   .float-a { right: -10px; bottom: 54px; transform: rotate(1.2deg); max-width: 300px; }
   .float-icon { width:36px; height:36px; border-radius:10px; background: var(--paper-2); display:grid; place-items:center; font-size:14px; flex:none; }
-  .float-card .check { margin-left:auto; width:24px; height:24px; border-radius:99px; background:#00C950; color:white; display:grid; place-items:center; font-size:12px; font-weight:700; }
+  .float-card .check { margin-left:auto; width:24px; height:24px; border-radius:99px; background:#00C950; color:white; display:grid; place-items:center; }
+  .float-card .check svg { width:12px; height:12px; display:block; }
   .float-b { left: -14px; bottom: -18px; flex-direction: column; align-items: stretch; gap: 4px; width: 205px; transform: rotate(-1deg); }
   .float-list { list-style:none; padding:0; margin:8px 0 0; display:grid; gap:5px; }
   .float-list li { display:flex; align-items:center; gap:6px; font-size:11.5px; color: var(--ink-3); line-height:1.3; }
-  .float-list li i { width:16px; height:16px; border-radius:99px; background:#00C950; color:white; display:grid; place-items:center; font-size:9px; font-style:normal; flex:none; }
+  .float-list li i { width:16px; height:16px; border-radius:99px; background:#00C950; color:white; display:grid; place-items:center; font-style:normal; flex:none; }
+  .float-list li i svg { width:8px; height:8px; display:block; }
   .visual-caption { display:flex; justify-content:space-between; gap:12px; margin-top:10px; font-size:10px; color: var(--muted); padding-inline: 4px; }
   .hero-rail { display:flex; align-items:center; gap:14px; justify-content: center; padding: 10px 0 6px; color: var(--muted); font-family: var(--font-mono); font-size:10px; letter-spacing:.14em; }
   .rail-line { flex:1; height:1px; background: var(--line); max-width: 420px; }
@@ -732,7 +734,8 @@ const processId = locale === "fr" ? "processus" : "process";
   .price-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
   .price-card ul { list-style:none; padding:0; margin-top:10px; display:grid; gap:8px; }
   .price-card li { display:flex; gap:8px; align-items:center; font-size:13.5px; line-height:1.45; }
-  .price-card li i { width:20px; height:20px; border-radius:99px; background: #00C950; color:white; display:grid; place-items:center; font-size:10px; font-style:normal; flex:none; }
+  .price-card li i { width:20px; height:20px; border-radius:99px; background: #00C950; color:white; display:grid; place-items:center; font-style:normal; flex:none; }
+  .price-card li i svg { width:10px; height:10px; display:block; }
   .price-card--muted { background: var(--paper-2); }
   .price-card--muted li { color: var(--muted); font-size:13px; }
   @media (max-width: 900px) { .pricing-teaser { grid-template-columns: 1fr; } .pricing-grid { grid-template-columns: 1fr; } }
@@ -743,14 +746,15 @@ const processId = locale === "fr" ? "processus" : "process";
   .craft-float { position:absolute; right:12px; bottom:12px; background: var(--card-bg); border:1px solid var(--line); border-radius:99px; padding:8px 12px; font-size:10px; display:flex; gap:8px; box-shadow: var(--shadow-sm); }
   .craft-list { list-style:none; padding:0; margin-top:18px; display:grid; gap:14px; }
   .craft-list li { display:flex; gap:12px; align-items:start; font-size:14px; line-height:1.55; color: var(--ink-3); }
-  .check-badge { width:26px; height:26px; border-radius:99px; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-size:11px; flex:none; margin-top:1px; }
+  .check-badge { width:26px; height:26px; border-radius:99px; background: var(--ink); color: var(--paper); display:grid; place-items:center; flex:none; margin-top:1px; }
+  .check-badge svg { width:12px; height:12px; display:block; }
   @media (max-width: 880px) { .craft-grid { grid-template-columns: 1fr; } }
   .faq-grid { display:grid; grid-template-columns: .9fr 1.1fr; gap: clamp(24px, 4vw, 48px); align-items: start; }
   .faq-list { display:grid; gap:10px; }
   .faq-list details { background: var(--card-bg); border:1px solid var(--line); border-radius:14px; overflow:clip; box-shadow: var(--shadow-sm); }
   .faq-list summary { list-style:none; cursor:pointer; padding:16px 18px; font-weight:650; letter-spacing:-0.02em; font-size:14.5px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
   .faq-list summary::-webkit-details-marker{ display:none; }
-  .faq-list summary::after { content:"＋"; width:24px; height:24px; border-radius:99px; border:1px solid var(--line); display:grid; place-items:center; font-weight:500; flex:none; font-size:12px; }
+  .faq-list summary::after { content:"+"; width:24px; height:24px; border-radius:99px; border:1px solid var(--line); display:grid; place-items:center; font-weight:500; flex:none; font-size:12px; }
   .faq-list details[open] summary::after { content:"\\2212"; background: var(--ink); color: var(--paper); border-color: var(--ink); }
   .faq-list details div { padding: 0 18px 16px; color: var(--muted); font-size:14px; line-height:1.6; border-top:1px solid var(--line); margin-top:4px; padding-top:12px; }
   @media (max-width: 880px) { .faq-grid { grid-template-columns: 1fr; } }

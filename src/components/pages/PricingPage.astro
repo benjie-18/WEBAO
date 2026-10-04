@@ -55,7 +55,7 @@ const paths = localizedPaths[locale];
           <div class="compare-label mono">{t.pricing.compare.includedLabel}</div>
           <ul role="list">
             {t.pricing.compare.included.map(item => (
-              <li><span class="ic">✓</span><div><strong>{item.title}</strong><span>{item.desc}</span></div></li>
+              <li><span class="ic"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.2 8.6l3.4 3.4 6.2-7.2" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><strong>{item.title}</strong><span>{item.desc}</span></div></li>
             ))}
           </ul>
         </div>
@@ -183,6 +183,7 @@ const paths = localizedPaths[locale];
   .compare-card ul { list-style:none; padding:0; display:grid; gap:14px; }
   .compare-card li { display:grid; grid-template-columns: 28px 1fr; gap:10px; align-items:start; }
   .ic { width:26px; height:26px; border-radius:99px; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-size:12px; font-weight:700; flex:none; }
+  .ic svg { width:13px; height:13px; display:block; }
   .ic--dash { background: var(--paper-2); color: var(--ink); border:1px solid var(--line); }
   .compare-card li strong { display:block; font-size:14px; letter-spacing:-0.02em; line-height:1.25; }
   .compare-card li span { display:block; font-size:13px; line-height:1.55; color: var(--muted); margin-top:2px; }
