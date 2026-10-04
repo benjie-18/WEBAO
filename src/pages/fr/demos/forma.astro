@@ -10,8 +10,8 @@ const IMG = {
   p1: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=1200&auto=format&fit=crop",
   p2: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=1200&auto=format&fit=crop",
   p3: "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?q=80&w=1200&auto=format&fit=crop",
-  studio: "https://images.unsplash.com/photo-1617806118233-18e1de247200?q=80&w=1000&auto=format&fit=crop",
-  detail: "https://images.unsplash.com/photo-1615874959474-d609969a20ed?q=80&w=1000&auto=format&fit=crop",
+  studio: "/demos/forma/01.jpg",
+  detail: "/demos/forma/02.jpg",
 };
 ---
 
@@ -140,7 +140,7 @@ const IMG = {
     <section class="fm-studio" id="studio">
       <div class="fm-wrap fm-studio-grid">
         <figure class="fm-studio-media fm-reveal">
-          <img src={IMG.studio} alt="Une chambre apaisée avec literie de lin et douce lumière du matin" loading="lazy" />
+          <img src={IMG.studio} alt="L'équipe de Studio Forma au travail dans l'atelier de Montréal" loading="lazy" />
         </figure>
         <div>
           <p class="fm-meta">Le studio</p>
@@ -159,7 +159,7 @@ const IMG = {
     <!-- INTERMÈDE -->
     <section class="fm-interlude">
       <figure class="fm-interlude-media fm-reveal">
-        <img src={IMG.detail} alt="Gros plan d'un fauteuil sculptural devant un mur de plâtre" loading="lazy" />
+        <img src={IMG.detail} alt="Détail architectural en béton avec lumière naturelle dramatique" loading="lazy" />
         <figcaption>Détail, Résidence Atelier</figcaption>
       </figure>
     </section>
