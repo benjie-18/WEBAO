@@ -1,11 +1,13 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
 
-// Démo : Hexline Systems, startup fictive de sécurité des interfaces neurales, Montréal.
-// Direction artistique autonome : cybercore. Noir profond, cyan/magenta néon, motifs HUD. Non liée au système de thème WEBAO.
+// Démo : Hexline Systems, startup fictive de sécurité des interfaces neuronales.
+// Reconstruite comme un TERMINAL. Pas de héros marketing : la page s'ouvre sur
+// une séquence de démarrage, la navigation est une ligne de commande, et chaque
+// section se lit comme une sortie de terminal. Cybercore : noir, cyan/magenta.
 const IMG = {
   hero: "/demos/hexline/01.jpg",
-  lock: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800&auto=format&fit=crop",
+  lock: "https://images.unsplash.com/photo-1614064641938-3bbee52942c7?q=80&w=800&auto=format&fit=crop",
   servers: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=800&auto=format&fit=crop",
   ops: "/demos/hexline/02.jpg",
   neon: "https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=800&auto=format&fit=crop",
@@ -17,525 +19,331 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hexline Systems : Sécurité des interfaces neurales</title>
-  <meta name="description" content="Hexline Systems protège les interfaces neurales et les infrastructures connectées contre l'intrusion. Défense périmétrique, durcissement du maillage neural, identité zéro confiance." />
+  <title>hexline://systems · sécurité des interfaces neuronales</title>
+  <meta name="description" content="Hexline Systems sécurise les interfaces neuronales et les infrastructures connectées. Tapez help pour commencer." />
   <meta name="robots" content="noindex" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 </head>
-<body class="hx">
+<body class="tm">
 
-  <!-- NAV -->
-  <header class="hx-navwrap">
-    <nav class="hx-nav" aria-label="Navigation principale">
-      <a class="hx-logo" href="#top" aria-label="Hexline Systems, accueil">
-        <svg class="hx-hex" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2 29 9.5v13L16 30 3 22.5v-13Z" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="16" cy="16" r="4" fill="currentColor"/></svg>
-        HEXLINE
-      </a>
-      <div class="hx-nav-links" id="hx-menu">
-        <a href="#protocols">Protocoles</a>
-        <a href="#intel">Renseignement</a>
-        <a href="#access">Accès</a>
-        <a href="#uplink">Liaison</a>
-      </div>
-      <p class="hx-sys"><span class="hx-dot" aria-hidden="true"></span>SYSTÈMES NOMINAUX</p>
-      <button class="hx-burger" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="hx-menu">
-        <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
-      </button>
-    </nav>
-  </header>
+  <div class="tm-scan" aria-hidden="true"></div>
 
-  <main id="top">
-    <!-- HERO -->
-    <section class="hx-hero">
-      <div class="hx-hero-bg" aria-hidden="true"><img src={IMG.hero} alt="" loading="eager" fetchpriority="high" /></div>
-      <div class="hx-scanlines" aria-hidden="true"></div>
-      <div class="hx-wrap hx-hero-in">
-        <p class="hx-eyebrow">// SÉCURITÉ DES INTERFACES NEURALES · FONDÉ EN 2024</p>
-        <p class="hx-term" aria-hidden="true">&gt; hexline --init --secure<span class="hx-caret">▌</span></p>
-        <h1 class="hx-h1">LE PÉRIMÈTRE,<br /><span class="hx-grad">C'EST VOUS.</span></h1>
-        <p class="hx-lede">Hexline protège les interfaces neurales et les infrastructures connectées contre l'intrusion, l'usurpation et le vol de signal. Cryptographie de niveau militaire. Déploiement simple.</p>
-        <div class="hx-hero-cta">
-          <a class="hx-btn hx-btn-cyan" href="#access">Demander l'accès</a>
-          <a class="hx-btn hx-btn-ghost" href="#protocols">Lire les protocoles</a>
-        </div>
-        <div class="hx-readouts">
-          <div class="hx-read"><span class="hx-read-k">DISPONIBILITÉ</span><span class="hx-read-v">99,98 %</span></div>
-          <div class="hx-read"><span class="hx-read-k">NŒUDS</span><span class="hx-read-v">4 096</span></div>
-          <div class="hx-read"><span class="hx-read-k">MENACES/J</span><span class="hx-read-v">1,2 M</span></div>
-          <div class="hx-read"><span class="hx-read-k">LATENCE</span><span class="hx-read-v">4 ms</span></div>
-        </div>
+  <!-- SÉQUENCE DE DÉMARRAGE -->
+  <section class="tm-boot" aria-label="Démarrage du système">
+    <div class="tm-boot-in">
+      <pre class="tm-lines" id="tm-boot" aria-live="polite"></pre>
+      <p class="tm-skip"><a href="#cmd">passer le démarrage ↓</a></p>
+    </div>
+  </section>
+
+  <!-- NAVIGATION EN LIGNE DE COMMANDE -->
+  <div class="tm-cmdwrap" id="cmd">
+    <div class="tm-cmd">
+      <span class="tm-ps1">visiteur@hexline:~$</span>
+      <nav class="tm-cmds" aria-label="Commandes">
+        <button type="button" data-tm-go="protocols">protocoles</button>
+        <button type="button" data-tm-go="intel">renseignement</button>
+        <button type="button" data-tm-go="access">acces</button>
+        <button type="button" data-tm-go="uplink">liaison</button>
+        <button type="button" data-tm-go="help">aide</button>
+      </nav>
+      <span class="tm-caret" aria-hidden="true">▌</span>
+    </div>
+  </div>
+
+  <main class="tm-main">
+    <!-- AIDE -->
+    <section class="tm-out" id="help" aria-label="Sortie d'aide">
+      <p class="tm-echo"><span class="tm-ps1">visiteur@hexline:~$</span> aide</p>
+      <div class="tm-block">
+        <p><span class="tm-c">protocoles</span> · la pile défensive. ce qu'on fait tourner, en clair.</p>
+        <p><span class="tm-c">renseignement</span> · télémétrie en direct de la grille de démo.</p>
+        <p><span class="tm-c">acces</span> · niveaux d'habilitation et tarifs.</p>
+        <p><span class="tm-c">liaison</span> · ouvrir un canal sécurisé vers un humain.</p>
+        <br />
+        <p>Hexline sécurise les interfaces neuronales et les infrastructures connectées contre l'intrusion, l'usurpation et le vol de signal. Cryptographie de niveau militaire, déploiement simple. Montréal, depuis 2024.</p>
       </div>
     </section>
-
-    <!-- BANDEAU MENACES -->
-    <div class="hx-ticker" aria-hidden="true">
-      <div class="hx-ticker-track">
-        <span>[14:02:11] INTRUSION BLOQUÉE :: NŒUD 7</span><span>[14:02:08] USURPATION NEUTRALISÉE :: MAILLAGE C</span><span>[14:01:57] INTÉGRITÉ DU SIGNAL 100 %</span><span>[14:01:44] SIGNATURE ZERO-DAY DÉPLOYÉE</span><span>[14:01:31] RELAIS FANTÔME ÉLIMINÉ</span>
-        <span>[14:02:11] INTRUSION BLOQUÉE :: NŒUD 7</span><span>[14:02:08] USURPATION NEUTRALISÉE :: MAILLAGE C</span><span>[14:01:57] INTÉGRITÉ DU SIGNAL 100 %</span><span>[14:01:44] SIGNATURE ZERO-DAY DÉPLOYÉE</span><span>[14:01:31] RELAIS FANTÔME ÉLIMINÉ</span>
-      </div>
-    </div>
 
     <!-- PROTOCOLES -->
-    <section class="hx-section" id="protocols">
-      <div class="hx-wrap">
-        <p class="hx-kicker">// PILE DÉFENSIVE</p>
-        <h2 class="hx-h2">PROTOCOLES</h2>
-        <div class="hx-panels">
-          <article class="hx-panel">
-            <span class="hx-panel-n" aria-hidden="true">P-01</span>
-            <h3>Défense périmétrique</h3>
-            <p>Pare-feu adaptatif en maillage qui apprend les tactiques des attaquants en temps réel. Déploiement en moins de 20 minutes. Il tient la ligne pendant que vous dormez.</p>
-            <ul>
-              <li>Modélisation comportementale des menaces</li>
-              <li>Isolation automatique des nœuds hostiles</li>
-              <li>Absorption DDoS jusqu'à 2,4 Tbps</li>
-            </ul>
-            <div class="hx-feed"><span class="hx-rec" aria-hidden="true"></span><img src={IMG.lock} alt="Cadenas numérique représentant le chiffrement périmétrique" loading="lazy" /></div>
-          </article>
-          <article class="hx-panel">
-            <span class="hx-panel-n" aria-hidden="true">P-02</span>
-            <h3>Durcissement neural</h3>
-            <p>Chiffrement de bout en bout pour les interfaces cerveau-machine. Chaque signal signé, chaque canal vérifié, chaque anomalie signalée en quelques millisecondes.</p>
-            <ul>
-              <li>Échange de clés post-quantique</li>
-              <li>Attestation d'intégrité du signal</li>
-              <li>Boucle de réponse de 4 ms</li>
-            </ul>
-            <div class="hx-feed"><span class="hx-rec" aria-hidden="true"></span><img src={IMG.servers} alt="Baies de serveurs exécutant le maillage neural Hexline" loading="lazy" /></div>
-          </article>
-          <article class="hx-panel">
-            <span class="hx-panel-n" aria-hidden="true">P-03</span>
-            <h3>Contre-mesures</h3>
-            <p>Défense active qui n'attend pas la permission. Leurres, injection de traceurs et riposte automatisée dans les limites légales.</p>
-            <ul>
-              <li>Déploiement de grille de leurres</li>
-              <li>Traçage d'attribution</li>
-              <li>Capture forensique recevable en cour</li>
-            </ul>
-            <div class="hx-feed"><span class="hx-rec" aria-hidden="true"></span><img src={IMG.ops} alt="Analyste en cybersécurité devant un poste de travail sombre" loading="lazy" /></div>
-          </article>
-          <article class="hx-panel">
-            <span class="hx-panel-n" aria-hidden="true">P-04</span>
-            <h3>Identité zéro confiance</h3>
-            <p>Aucune confiance implicite. Chaque utilisateur, appareil et processus se réauthentifie en continu. Les identifiants sont vérifiés, jamais présumés.</p>
-            <ul>
-              <li>Réauthentification continue</li>
-              <li>Clés d'identité liées au matériel</li>
-              <li>Politiques d'accès granulaires</li>
-            </ul>
-            <div class="hx-feed"><span class="hx-rec" aria-hidden="true"></span><img src={IMG.neon} alt="Visualisation abstraite de réseau aux néons" loading="lazy" /></div>
-          </article>
-        </div>
+    <section class="tm-out" id="protocols" aria-label="Sortie des protocoles">
+      <p class="tm-echo"><span class="tm-ps1">visiteur@hexline:~$</span> protocoles --liste</p>
+      <div class="tm-block">
+        <p class="tm-ok">4 protocoles chargés.</p>
+        <br />
+        <p><span class="tm-mag">P-01</span> <span class="tm-w">DÉFENSE DU PÉRIMÈTRE</span></p>
+        <p class="tm-dim">Maillage de pare-feu adaptatif qui apprend les tactiques d'attaque en temps réel. Déployé en moins de 20 minutes.</p>
+        <p class="tm-dim">· modélisation comportementale des menaces · isolement auto des nœuds hostiles · absorption DDoS jusqu'à 2,4 Tbps</p>
+        <figure class="tm-feed">
+          <span class="tm-rec" aria-hidden="true"></span>
+          <img src={IMG.lock} alt="Flux de surveillance : verrou de périmètre chiffré" loading="lazy" />
+          <figcaption>flux 01 · nœud de périmètre</figcaption>
+        </figure>
+        <br />
+        <p><span class="tm-mag">P-02</span> <span class="tm-w">DURCISSEMENT DU MAILLAGE NEURONAL</span></p>
+        <p class="tm-dim">Chiffrement de bout en bout pour les interfaces cerveau-machine. Chaque signal signé, chaque canal vérifié.</p>
+        <p class="tm-dim">· échange de clés post-quantique · attestation d'intégrité du signal · réponse en 4 ms</p>
+        <figure class="tm-feed">
+          <span class="tm-rec" aria-hidden="true"></span>
+          <img src={IMG.servers} alt="Flux de surveillance : serveurs du maillage neuronal" loading="lazy" />
+          <figcaption>flux 02 · cœur du maillage</figcaption>
+        </figure>
+        <br />
+        <p><span class="tm-mag">P-03</span> <span class="tm-w">CONTRE-MESURES D'INTRUSION</span></p>
+        <p class="tm-dim">Défense active qui n'attend pas la permission. Leurres, injection de traceurs, criminalistique recevable.</p>
+        <p class="tm-dim">· grille de leurres · traçage d'attribution · représailles automatiques dans les limites légales</p>
+        <figure class="tm-feed">
+          <span class="tm-rec" aria-hidden="true"></span>
+          <img src={IMG.ops} alt="Flux de surveillance : analyste en opérations de sécurité" loading="lazy" />
+          <figcaption>flux 03 · table des opérations</figcaption>
+        </figure>
+        <br />
+        <p><span class="tm-mag">P-04</span> <span class="tm-w">IDENTITÉ ZÉRO-CONFIANCE</span></p>
+        <p class="tm-dim">Aucune confiance implicite. Chaque utilisateur, appareil et processus se ré-authentifie en continu.</p>
+        <p class="tm-dim">· clés d'identité liées au matériel · politiques d'accès granulaires</p>
+        <figure class="tm-feed">
+          <span class="tm-rec" aria-hidden="true"></span>
+          <img src={IMG.neon} alt="Flux de surveillance : visualisation du réseau" loading="lazy" />
+          <figcaption>flux 04 · graphe d'identité</figcaption>
+        </figure>
       </div>
     </section>
 
-    <!-- TABLEAU DE BORD -->
-    <section class="hx-dash">
-      <div class="hx-wrap">
-        <p class="hx-kicker">// TÉLÉMÉTRIE EN DIRECT</p>
-        <h2 class="hx-h2">TABLEAU DE BORD</h2>
-        <div class="hx-meters">
-          <div class="hx-meter">
-            <p class="hx-meter-k">Menaces bloquées aujourd'hui</p>
-            <p class="hx-meter-v">1 204 883</p>
-            <div class="hx-bar"><span style="width: 92%"></span></div>
-          </div>
-          <div class="hx-meter">
-            <p class="hx-meter-k">Intégrité du maillage</p>
-            <p class="hx-meter-v">100 %</p>
-            <div class="hx-bar"><span style="width: 100%"></span></div>
-          </div>
-          <div class="hx-meter">
-            <p class="hx-meter-k">Temps de réponse moyen</p>
-            <p class="hx-meter-v">4 ms</p>
-            <div class="hx-bar"><span style="width: 18%"></span></div>
-          </div>
-          <div class="hx-meter">
-            <p class="hx-meter-k">Brèches à ce jour</p>
-            <p class="hx-meter-v hx-magenta">0</p>
-            <div class="hx-bar"><span class="hx-bar-magenta" style="width: 2%"></span></div>
-          </div>
-        </div>
+    <!-- RENSEIGNEMENT -->
+    <section class="tm-out" id="intel" aria-label="Sortie du renseignement">
+      <p class="tm-echo"><span class="tm-ps1">visiteur@hexline:~$</span> renseignement --direct</p>
+      <div class="tm-block">
+        <p><span class="tm-t">[14:02:11]</span> INTRUSION BLOQUÉE :: origine 185.220.x.x :: nœud 7 :: action : REJET</p>
+        <p><span class="tm-t">[14:02:08]</span> TENTATIVE D'USURPATION :: canal neuronal C :: signature non conforme :: neutralisée</p>
+        <p><span class="tm-t">[14:01:57]</span> VÉRIFICATION D'INTÉGRITÉ :: 4 096 nœuds :: <span class="tm-ok">tous verts</span></p>
+        <p><span class="tm-t">[14:01:44]</span> SIGNATURE ZÉRO-JOUR v88.2 déployée sur le parc en 3,1 s</p>
+        <p><span class="tm-t">[14:01:31]</span> RELAIS FANTÔME :: tracé jusqu'au nœud de sortie :: terminé</p>
+        <p><span class="tm-t">[14:01:02]</span> ROTATION DES CLÉS :: maillage complet :: terminée, zéro interruption</p>
+        <br />
+        <figure class="tm-feed tm-feed-wide">
+          <span class="tm-rec" aria-hidden="true"></span>
+          <img src={IMG.hero} alt="Flux de surveillance : salle des opérations Hexline" loading="lazy" />
+          <figcaption>flux 00 · salle des opérations, Montréal</figcaption>
+        </figure>
+        <br />
+        <p class="tm-dim">menaces bloquées aujourd'hui : <span class="tm-w">1 204 883</span> · intégrité du maillage : <span class="tm-ok">100 %</span> · réponse moyenne : <span class="tm-w">4 ms</span> · brèches à ce jour : <span class="tm-mag">0</span></p>
+        <p class="tm-dim">chiffres illustratifs de la grille de démo. les déploiements réels rapportent à votre SIEM.</p>
       </div>
     </section>
 
-    <!-- FLUX RENSEIGNEMENT -->
-    <section class="hx-section" id="intel">
-      <div class="hx-wrap">
-        <p class="hx-kicker">// FLUX BRUT · NON CLASSIFIÉ</p>
-        <h2 class="hx-h2">RENSEIGNEMENT</h2>
-        <div class="hx-terminal">
-          <p><span class="hx-t-time">[14:02:11]</span> INTRUSION BLOQUÉE :: origine 185.220.x.x :: nœud 7 :: action : REJET</p>
-          <p><span class="hx-t-time">[14:02:08]</span> TENTATIVE D'USURPATION :: canal neural C :: signature non concordante :: neutralisée</p>
-          <p><span class="hx-t-time">[14:01:57]</span> VÉRIFICATION D'INTÉGRITÉ :: 4 096 nœuds :: tout au vert</p>
-          <p><span class="hx-t-time">[14:01:44]</span> SIGNATURE ZERO-DAY v88.2 déployée sur la flotte en 3,1 s</p>
-          <p><span class="hx-t-time">[14:01:31]</span> RELAIS FANTÔME :: tracé jusqu'au nœud de sortie :: éliminé</p>
-          <p><span class="hx-t-time">[14:01:02]</span> ROTATION DES CLÉS :: maillage complet :: terminée, zéro interruption</p>
-          <p class="hx-t-prompt" aria-hidden="true">&gt; en attente du prochain événement<span class="hx-caret">▌</span></p>
-        </div>
-        <p class="hx-note">Les chiffres présentés sont une télémétrie illustrative de la grille de démonstration. Les déploiements réels alimentent votre propre SIEM.</p>
-      </div>
-    </section>
-
-    <!-- TARIFS -->
-    <section class="hx-section hx-section-dim" id="access">
-      <div class="hx-wrap">
-        <p class="hx-kicker">// NIVEAUX D'HABILITATION</p>
-        <h2 class="hx-h2">NIVEAUX D'ACCÈS</h2>
-        <div class="hx-tiers">
-          <article class="hx-tier">
-            <p class="hx-tier-n">NIVEAU 01</p>
-            <h3>Éclaireur</h3>
-            <p class="hx-tier-price">490 $<span>/mois</span></p>
-            <ul>
-              <li>Défense périmétrique, 1 site</li>
-              <li>Digest quotidien des menaces</li>
-              <li>SLA de soutien standard</li>
-            </ul>
-            <a class="hx-btn hx-btn-ghost" href="#uplink">Demander Éclaireur</a>
-          </article>
-          <article class="hx-tier hx-tier-hot">
-            <p class="hx-tier-n">NIVEAU 02</p>
-            <h3>Sentinelle</h3>
-            <p class="hx-tier-price">1 900 $<span>/mois</span></p>
-            <ul>
-              <li>Pile complète, 5 sites</li>
-              <li>Durcissement du maillage neural</li>
-              <li>Tableau de bord en direct</li>
-              <li>SLA de soutien prioritaire</li>
-            </ul>
-            <a class="hx-btn hx-btn-cyan" href="#uplink">Demander Sentinelle</a>
-          </article>
-          <article class="hx-tier">
-            <p class="hx-tier-n">NIVEAU 03</p>
-            <h3>Suzerain</h3>
-            <p class="hx-tier-price">Sur mesure</p>
-            <ul>
-              <li>Sites illimités + option isolée</li>
-              <li>Équipe dédiée de contre-mesures</li>
-              <li>Intégrations sur mesure</li>
-            </ul>
-            <a class="hx-btn hx-btn-ghost" href="#uplink">Nous contacter</a>
-          </article>
-        </div>
+    <!-- ACCÈS -->
+    <section class="tm-out" id="access" aria-label="Sortie des niveaux d'accès">
+      <p class="tm-echo"><span class="tm-ps1">visiteur@hexline:~$</span> acces --niveaux</p>
+      <div class="tm-block">
+        <p class="tm-ok">3 niveaux d'habilitation offerts.</p>
+        <br />
+        <p><span class="tm-mag">NIVEAU 01</span> <span class="tm-w">ÉCLAIREUR</span> <span class="tm-dim">······</span> <span class="tm-c">490 $/mois</span></p>
+        <p class="tm-dim">défense du périmètre, 1 site · résumé quotidien des menaces · soutien standard</p>
+        <br />
+        <p><span class="tm-mag">NIVEAU 02</span> <span class="tm-w">SENTINELLE</span> <span class="tm-dim">····</span> <span class="tm-c">1 900 $/mois</span> <span class="tm-tag">le plus déployé</span></p>
+        <p class="tm-dim">pile complète, 5 sites · durcissement du maillage neuronal · tableau de télémétrie · soutien prioritaire</p>
+        <br />
+        <p><span class="tm-mag">NIVEAU 03</span> <span class="tm-w">SEIGNEUR</span> <span class="tm-dim">····</span> <span class="tm-c">sur mesure</span></p>
+        <p class="tm-dim">sites illimités + option isolée · équipe de contre-mesures dédiée · intégrations sur mesure</p>
+        <br />
+        <p class="tm-dim">lancez <span class="tm-c">liaison</span> pour demander un niveau.</p>
       </div>
     </section>
 
     <!-- LIAISON -->
-    <section class="hx-section" id="uplink">
-      <div class="hx-wrap hx-uplink-in">
-        <div>
-          <p class="hx-kicker">// CANAL SÉCURISÉ</p>
-          <h2 class="hx-h2">ÉTABLIR LA LIAISON</h2>
-          <p class="hx-lede">Envoyez une transmission. Un opérateur Hexline répond en un jour ouvrable. Aucun appel à froid. Aucune infolettre. Jamais.</p>
-          <ul class="hx-contact-list">
-            <li><span>QG</span>Unité 7, 1010 Allée du Circuit, Montréal QC</li>
-            <li><span>VOIX</span><a href="tel:+15145550917">(514) 555-0917</a></li>
-            <li><span>COURRIEL</span><a href="mailto:uplink@hexline.systems">uplink@hexline.systems</a></li>
-          </ul>
-        </div>
-        <form class="hx-form" id="hx-form" novalidate>
-          <p class="hx-form-head" aria-hidden="true">// FORMULAIRE DE TRANSMISSION</p>
-          <label>Indicatif<input type="text" name="callsign" required placeholder="fantome.reel" /></label>
-          <label>Courriel<input type="email" name="email" required placeholder="vous@entreprise.com" /></label>
-          <label>Habilitation
-            <select name="tier">
-              <option>Éclaireur</option>
-              <option>Sentinelle</option>
-              <option>Suzerain</option>
-              <option>Incertain, conseillez-moi</option>
-            </select>
-          </label>
-          <label>Objectif<textarea name="message" rows="4" placeholder="Décrivez l'actif à protéger."></textarea></label>
-          <button class="hx-btn hx-btn-cyan hx-btn-full" type="submit">Établir la liaison</button>
-          <p class="hx-form-note" role="status" aria-live="polite"></p>
+    <section class="tm-out" id="uplink" aria-label="Sortie de liaison">
+      <p class="tm-echo"><span class="tm-ps1">visiteur@hexline:~$</span> liaison --ouvrir</p>
+      <div class="tm-block">
+        <p class="tm-ok">canal sécurisé prêt. un humain répond dans un jour ouvrable.</p>
+        <p class="tm-dim">aucun appel à froid. aucune infolettre. jamais.</p>
+        <br />
+        <form class="tm-form" id="tm-form" novalidate>
+          <label>indicatif<input type="text" name="callsign" required placeholder="fantome.reel" autocomplete="nickname" /></label>
+          <label>courriel<input type="email" name="email" required placeholder="vous@entreprise.com" autocomplete="email" /></label>
+          <label>objectif<textarea name="message" rows="3" placeholder="décrivez l'actif à protéger"></textarea></label>
+          <button type="submit">transmettre_</button>
+          <p class="tm-form-note" role="status" aria-live="polite"></p>
         </form>
+        <br />
+        <p class="tm-dim">voix : <a href="tel:+15145550917">(514) 555-0917</a> · courriel : <a href="mailto:uplink@hexline.systems">uplink@hexline.systems</a></p>
+        <p class="tm-dim">unité 7, 1010 circuit lane, montréal qc</p>
       </div>
+    </section>
+
+    <section class="tm-out tm-end" aria-label="Fin de transmission">
+      <p class="tm-echo"><span class="tm-ps1">visiteur@hexline:~$</span> <span class="tm-caret" aria-hidden="true">▌</span></p>
     </section>
   </main>
 
-  <footer class="hx-footer">
-    <div class="hx-wrap">
-      <p class="hx-footer-logo" aria-hidden="true">HEXLINE</p>
-      <p>© 2026 Hexline Systems. Démo fictive. Aucun réseau n'a été endommagé.</p>
-      <p>Unité 7, 1010 Allée du Circuit, Montréal QC · <a href="tel:+15145550917">(514) 555-0917</a></p>
-    </div>
+  <footer class="tm-foot">
+    <p>hexline systems · © 2026 · démo fictive · aucun réseau n'a été blessé</p>
   </footer>
 
   <EscapeHatch locale="fr" />
 
   <script>
-    // Formulaire de démo : ne s'envoie nulle part. Bascule du menu mobile.
     (function () {
-      var form = document.getElementById('hx-form') as HTMLFormElement | null;
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var bootEl = document.getElementById('tm-boot');
+      var lines = [
+        'hexline secure boot v4.2.0',
+        'vérification du maillage ............ OK (4 096 nœuds)',
+        'chargement des protocoles ........... OK (4 chargés)',
+        'vérification de l\u2019identité ........ INVITÉ',
+        '',
+        'bienvenue, visiteur. tapez une commande ci-dessus, ou défilez.',
+      ];
+      function renderAll() {
+        if (!bootEl) return;
+        bootEl.textContent = lines.join('\n');
+      }
+      if (reduced || !bootEl) { renderAll(); }
+      else {
+        var li = 0, ci = 0, out = '';
+        bootEl.textContent = '';
+        (function tick() {
+          if (li >= lines.length) return;
+          var line = lines[li];
+          if (ci <= line.length) {
+            out += line.charAt(ci) || '';
+            ci++;
+            bootEl.textContent = out;
+            setTimeout(tick, line.charAt(ci - 1) === '.' ? 8 : 26);
+          } else {
+            out += '\n'; li++; ci = 0;
+            setTimeout(tick, 160);
+          }
+        })();
+      }
+      document.querySelectorAll('[data-tm-go]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var id = btn.getAttribute('data-tm-go');
+          var target = id && document.getElementById(id);
+          if (target) target.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+        });
+      });
+      var form = document.getElementById('tm-form');
       form?.addEventListener('submit', function (e) {
         e.preventDefault();
-        var note = form?.querySelector('.hx-form-note');
-        if (note) note.textContent = 'LIAISON ÉTABLIE. Un opérateur répondra en un jour ouvrable.';
-        form?.reset();
-      });
-      var burger = document.querySelector('.hx-burger') as HTMLButtonElement | null;
-      var menu = document.getElementById('hx-menu');
-      burger?.addEventListener('click', function () {
-        var open = menu?.classList.toggle('hx-open') ?? false;
-        burger?.setAttribute('aria-expanded', String(open));
-        burger?.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
-      });
-      menu?.querySelectorAll('a').forEach(function (a) {
-        a.addEventListener('click', function () {
-          menu?.classList.remove('hx-open');
-          burger?.setAttribute('aria-expanded', 'false');
-          burger?.setAttribute('aria-label', 'Ouvrir le menu');
-        });
+        var note = form?.querySelector('.tm-form-note');
+        if (note) note.textContent = '> transmission reçue. liaison établie.';
+        if (form instanceof HTMLFormElement) form.reset();
       });
     })();
   </script>
 
   <style>
-    .hx {
-      --hx-bg: #05070D;
-      --hx-panel: #0A0F1C;
-      --hx-line: #1B2740;
-      --hx-cyan: #00F0FF;
-      --hx-magenta: #FF2EA6;
-      --hx-chrome1: #E8F4FF;
-      --hx-chrome2: #7A8CA8;
-      --hx-text: #D7E2F2;
-      --hx-dim: #8A93A6;
-      --hx-display: "Orbitron", "Arial Black", sans-serif;
-      --hx-body: "Space Grotesk", system-ui, sans-serif;
-      --hx-mono: "JetBrains Mono", ui-monospace, monospace;
+    .tm {
+      --tm-bg: #05070D;
+      --tm-panel: #090D17;
+      --tm-line: #1B2740;
+      --tm-cyan: #00F0FF;
+      --tm-mag: #FF2EA6;
+      --tm-text: #C9D6E8;
+      --tm-dim: #6E7A90;
+      --tm-mono: "JetBrains Mono", ui-monospace, monospace;
       margin: 0;
-      background: var(--hx-bg);
-      color: var(--hx-text);
-      font-family: var(--hx-body);
+      background: var(--tm-bg);
+      color: var(--tm-text);
+      font-family: var(--tm-mono);
+      font-size: 15px;
+      line-height: 1.9;
       -webkit-font-smoothing: antialiased;
       overflow-x: clip;
     }
-    .hx *, .hx *::before, .hx *::after { box-sizing: border-box; }
-    .hx img { display: block; max-width: 100%; }
-    .hx-wrap { max-width: 1200px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px); }
+    .tm *, .tm *::before, .tm *::after { box-sizing: border-box; }
+    .tm img { display: block; max-width: 100%; }
+    .tm a { color: var(--tm-cyan); }
+    .tm-scan {
+      position: fixed; inset: 0; z-index: 90; pointer-events: none;
+      background: repeating-linear-gradient(180deg, rgba(255,255,255,0.025) 0 1px, transparent 1px 4px);
+    }
 
-    /* nav */
-    .hx-navwrap { position: fixed; top: 0; left: 0; right: 0; z-index: 60; }
-    .hx-nav {
-      display: flex; align-items: center; gap: 22px;
-      padding: 14px clamp(20px, 4vw, 40px);
-      background: rgba(5, 7, 13, 0.88); backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--hx-line);
-    }
-    .hx-logo {
-      font-family: var(--hx-display); font-weight: 800; font-size: 20px; letter-spacing: 0.14em;
-      color: var(--hx-text); text-decoration: none; display: flex; align-items: center; gap: 10px; margin-right: auto;
-    }
-    .hx-hex { width: 30px; height: 30px; color: var(--hx-cyan); filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.7)); }
-    .hx-nav-links { display: flex; gap: 4px; }
-    .hx-nav-links a {
-      color: var(--hx-dim); text-decoration: none; font-family: var(--hx-mono); font-size: 13px;
-      letter-spacing: 0.12em; text-transform: uppercase; padding: 10px 14px; border: 1px solid transparent;
-      transition: color 0.15s ease, border-color 0.15s ease;
-    }
-    .hx-nav-links a:hover { color: var(--hx-cyan); border-color: var(--hx-line); background: rgba(0, 240, 255, 0.05); }
-    .hx-sys { font-family: var(--hx-mono); font-size: 12px; letter-spacing: 0.14em; color: var(--hx-cyan); margin: 0; display: flex; align-items: center; gap: 8px; }
-    .hx-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--hx-cyan); box-shadow: 0 0 10px var(--hx-cyan); animation: hx-blink 1.6s steps(2, start) infinite; }
-    @keyframes hx-blink { 50% { opacity: 0.25; } }
-    .hx-burger { display: none; background: transparent; border: 1px solid var(--hx-line); width: 44px; height: 44px; cursor: pointer; flex-direction: column; align-items: center; justify-content: center; gap: 5px; }
-    .hx-burger span { display: block; width: 20px; height: 2px; background: var(--hx-cyan); }
+    .tm-boot { min-height: 92svh; display: flex; align-items: center; padding: 40px 0; }
+    .tm-boot-in { width: min(860px, 100%); margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px); }
+    .tm-lines { margin: 0; white-space: pre-wrap; font-size: clamp(13px, 2.6vw, 16px); color: var(--tm-cyan); min-height: 12em; text-shadow: 0 0 12px rgba(0,240,255,0.35); }
+    .tm-skip { margin: 26px 0 0; }
+    .tm-skip a { color: var(--tm-dim); font-size: 13px; text-decoration: none; border-bottom: 1px solid var(--tm-line); }
 
-    /* boutons */
-    .hx-btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      font-family: var(--hx-mono); font-weight: 700; font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase;
-      padding: 16px 30px; text-decoration: none; cursor: pointer; border: 1px solid;
-      clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
-      transition: filter 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+    .tm-cmdwrap {
+      position: sticky; top: 0; z-index: 60;
+      background: rgba(5, 7, 13, 0.94); backdrop-filter: blur(10px);
+      border-block: 1px solid var(--tm-line);
     }
-    .hx-btn-cyan { background: var(--hx-cyan); border-color: var(--hx-cyan); color: #05070D; }
-    .hx-btn-cyan:hover { filter: brightness(1.12); box-shadow: 0 0 26px rgba(0, 240, 255, 0.45); transform: translateY(-2px); }
-    .hx-btn-ghost { background: transparent; border-color: var(--hx-line); color: var(--hx-text); }
-    .hx-btn-ghost:hover { border-color: var(--hx-cyan); color: var(--hx-cyan); }
-    .hx-btn-full { width: 100%; }
+    .tm-cmd {
+      width: min(1180px, 100%); margin: 0 auto; padding: 14px clamp(20px, 4vw, 40px);
+      display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    }
+    .tm-ps1 { color: var(--tm-mag); font-weight: 700; white-space: nowrap; }
+    .tm-cmds { display: flex; gap: 4px; flex-wrap: wrap; }
+    .tm-cmds button {
+      font: inherit; background: transparent; border: 1px solid transparent; cursor: pointer;
+      color: var(--tm-cyan); padding: 8px 14px; letter-spacing: 0.06em;
+    }
+    .tm-cmds button:hover { border-color: var(--tm-line); background: rgba(0,240,255,0.06); }
+    .tm-caret { color: var(--tm-cyan); animation: tm-blink 1s steps(2, start) infinite; margin-left: auto; }
+    @keyframes tm-blink { 50% { opacity: 0; } }
 
-    /* typo */
-    .hx-kicker { font-family: var(--hx-mono); font-size: 13px; letter-spacing: 0.3em; color: var(--hx-cyan); margin: 0 0 16px; }
-    .hx-h1 {
-      font-family: var(--hx-display); font-weight: 900; font-size: clamp(2.8rem, 8.5vw, 6.4rem);
-      line-height: 1.02; letter-spacing: 0.02em; margin: 0 0 24px;
+    .tm-main { width: min(1180px, 100%); margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px) 40px; }
+    .tm-out { padding: clamp(36px, 6vh, 64px) 0; border-bottom: 1px dashed var(--tm-line); scroll-margin-top: 76px; }
+    .tm-end { border-bottom: 0; }
+    .tm-echo { margin: 0 0 18px; color: var(--tm-text); font-size: 14px; }
+    .tm-block { background: var(--tm-panel); border: 1px solid var(--tm-line); padding: clamp(22px, 3.5vw, 36px); }
+    .tm-block p { margin: 0; }
+    .tm-block br { display: block; content: ""; margin: 6px 0; }
+    .tm-c { color: var(--tm-cyan); }
+    .tm-mag { color: var(--tm-mag); }
+    .tm-w { color: #fff; font-weight: 700; }
+    .tm-dim { color: var(--tm-dim); }
+    .tm-ok { color: var(--tm-cyan); }
+    .tm-t { color: var(--tm-mag); }
+    .tm-tag {
+      display: inline-block; font-size: 11px; letter-spacing: 0.14em;
+      border: 1px solid var(--tm-cyan); color: var(--tm-cyan); padding: 2px 10px; margin-left: 8px;
     }
-    .hx-grad {
-      background: linear-gradient(100deg, var(--hx-chrome1) 10%, var(--hx-chrome2) 45%, var(--hx-cyan) 90%);
-      -webkit-background-clip: text; background-clip: text; color: transparent;
-    }
-    .hx-h2 { font-family: var(--hx-display); font-weight: 800; font-size: clamp(2rem, 5.5vw, 3.6rem); letter-spacing: 0.06em; margin: 0 0 40px; }
-    .hx-eyebrow { font-family: var(--hx-mono); font-size: 12.5px; letter-spacing: 0.3em; color: var(--hx-dim); margin: 0 0 18px; }
-    .hx-term { font-family: var(--hx-mono); font-size: 15px; color: var(--hx-cyan); margin: 0 0 14px; }
-    .hx-caret { animation: hx-blink 1s steps(2, start) infinite; }
-    .hx-lede { font-size: 17.5px; line-height: 1.65; color: var(--hx-dim); max-width: 52ch; margin: 0 0 32px; }
 
-    /* hero */
-    .hx-hero { position: relative; min-height: 100svh; display: flex; align-items: center; overflow: hidden; padding: 130px 0 80px; }
-    .hx-hero-bg { position: absolute; inset: 0; }
-    .hx-hero-bg img { width: 100%; height: 100%; object-fit: cover; opacity: 0.32; filter: saturate(1.3); }
-    .hx-hero-bg::after {
-      content: ""; position: absolute; inset: 0;
-      background:
-        radial-gradient(ellipse 80% 55% at 75% 30%, rgba(0, 240, 255, 0.12), transparent 60%),
-        radial-gradient(ellipse 60% 45% at 15% 80%, rgba(255, 46, 166, 0.1), transparent 60%),
-        linear-gradient(180deg, rgba(5,7,13,0.7) 0%, rgba(5,7,13,0.35) 45%, rgba(5,7,13,0.95) 100%);
+    .tm-feed { margin: 18px 0 6px; position: relative; border: 1px solid var(--tm-line); max-width: 520px; }
+    .tm-feed-wide { max-width: 720px; }
+    .tm-feed img { width: 100%; height: 240px; object-fit: cover; filter: saturate(1.25) contrast(1.05) brightness(0.85); }
+    .tm-feed-wide img { height: 320px; }
+    .tm-feed::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+      background: repeating-linear-gradient(0deg, rgba(0,0,0,.3) 0 1px, transparent 1px 3px); }
+    .tm-feed figcaption { font-size: 11px; letter-spacing: 0.2em; color: var(--tm-dim); padding: 8px 12px; background: #02040A; }
+    .tm-rec {
+      position: absolute; top: 10px; left: 12px; z-index: 2;
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 10px; letter-spacing: 0.22em; color: #FF5C5C;
     }
-    .hx-scanlines {
-      position: absolute; inset: 0; pointer-events: none; z-index: 1;
-      background: repeating-linear-gradient(180deg, rgba(255,255,255,0.028) 0 1px, transparent 1px 4px);
-    }
-    .hx-hero-in { position: relative; z-index: 2; width: 100%; }
-    .hx-hero-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 48px; }
-    .hx-readouts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; max-width: 860px; }
-    .hx-read {
-      background: rgba(10, 15, 28, 0.78); border: 1px solid var(--hx-line); padding: 18px 20px;
-      display: grid; gap: 6px; position: relative;
-    }
-    .hx-read::before, .hx-read::after { content: ""; position: absolute; width: 12px; height: 12px; border: 2px solid var(--hx-cyan); }
-    .hx-read::before { top: -2px; left: -2px; border-right: none; border-bottom: none; }
-    .hx-read::after { bottom: -2px; right: -2px; border-left: none; border-top: none; }
-    .hx-read-k { font-family: var(--hx-mono); font-size: 11px; letter-spacing: 0.24em; color: var(--hx-dim); }
-    .hx-read-v { font-family: var(--hx-display); font-weight: 700; font-size: 28px; color: var(--hx-cyan); text-shadow: 0 0 18px rgba(0, 240, 255, 0.5); }
+    .tm-rec::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #FF3B3B; box-shadow: 0 0 8px #FF3B3B; }
+    .tm-rec::after { content: "EN DIRECT"; }
 
-    /* bandeau */
-    .hx-ticker { background: #02040A; border-block: 1px solid var(--hx-line); overflow: hidden; padding: 12px 0; }
-    .hx-ticker-track { display: flex; gap: 44px; width: max-content; animation: hx-tick 30s linear infinite; font-family: var(--hx-mono); font-size: 13px; letter-spacing: 0.08em; color: var(--hx-magenta); white-space: nowrap; }
-    @keyframes hx-tick { to { transform: translateX(-50%); } }
-
-    /* sections */
-    .hx-section { padding: clamp(70px, 9vw, 120px) 0; }
-    .hx-section-dim { background: var(--hx-panel); border-block: 1px solid var(--hx-line); }
-
-    /* panneaux */
-    .hx-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-    .hx-panel {
-      background: var(--hx-panel); border: 1px solid var(--hx-line); padding: 34px 32px;
-      position: relative; display: grid; gap: 14px; align-content: start;
-      transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    .tm-form { display: grid; gap: 14px; max-width: 560px; margin-top: 8px; }
+    .tm-form label { display: grid; gap: 8px; font-size: 12px; letter-spacing: 0.18em; color: var(--tm-dim); }
+    .tm-form input, .tm-form textarea {
+      font: inherit; font-size: 14px; color: var(--tm-text);
+      background: #02040A; border: 1px solid var(--tm-line); padding: 13px 15px; width: 100%;
     }
-    .hx-panel::before, .hx-panel::after { content: ""; position: absolute; width: 18px; height: 18px; border: 2px solid var(--hx-cyan); transition: border-color 0.2s ease; }
-    .hx-panel::before { top: 10px; left: 10px; border-right: none; border-bottom: none; }
-    .hx-panel::after { bottom: 10px; right: 10px; border-left: none; border-top: none; }
-    .hx-panel:hover { border-color: var(--hx-cyan); transform: translateY(-4px); box-shadow: 0 14px 44px rgba(0, 240, 255, 0.1); }
-    .hx-panel-n { font-family: var(--hx-mono); font-size: 12px; letter-spacing: 0.3em; color: var(--hx-magenta); }
-    .hx-panel h3 { font-family: var(--hx-display); font-weight: 700; font-size: 24px; letter-spacing: 0.04em; margin: 0; }
-    .hx-panel p { margin: 0; color: var(--hx-dim); font-size: 15.5px; line-height: 1.65; }
-    .hx-panel ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-    .hx-panel li { font-family: var(--hx-mono); font-size: 13px; color: var(--hx-text); padding-left: 22px; position: relative; }
-    .hx-panel li::before { content: "▸"; position: absolute; left: 0; color: var(--hx-cyan); }
-    .hx-panel img { width: 100%; height: 180px; object-fit: cover; border: 1px solid var(--hx-line); filter: saturate(1.2) contrast(1.05); }
-    .hx-feed { position: relative; border: 1px solid var(--hx-line); overflow: hidden; }
-    .hx-feed img { border: 0; display: block; }
-    .hx-feed::after { content: ""; position: absolute; inset: 0; pointer-events: none;
-      background: repeating-linear-gradient(0deg, rgba(0,0,0,.28) 0 1px, transparent 1px 3px); }
-    .hx-rec { position: absolute; top: 10px; left: 12px; z-index: 2; display: inline-flex; align-items: center; gap: 6px;
-      font-family: var(--hx-mono); font-size: 10px; letter-spacing: .22em; color: #FF5C5C; }
-    .hx-rec::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #FF3B3B; box-shadow: 0 0 8px #FF3B3B; }
-    .hx-rec::after { content: "EN DIRECT"; }
-    @media (prefers-reduced-motion: reduce) { .hx-rec::before { box-shadow: none; } }
-
-    /* tableau de bord */
-    .hx-dash { background: #02040A; border-block: 1px solid var(--hx-line); padding: clamp(70px, 9vw, 110px) 0; }
-    .hx-meters { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-    .hx-meter { background: var(--hx-panel); border: 1px solid var(--hx-line); padding: 26px 24px; display: grid; gap: 10px; }
-    .hx-meter-k { margin: 0; font-family: var(--hx-mono); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--hx-dim); }
-    .hx-meter-v { margin: 0; font-family: var(--hx-display); font-weight: 800; font-size: clamp(1.8rem, 3.4vw, 2.8rem); color: var(--hx-cyan); text-shadow: 0 0 20px rgba(0, 240, 255, 0.45); }
-    .hx-magenta { color: var(--hx-magenta) !important; text-shadow: 0 0 20px rgba(255, 46, 166, 0.45) !important; }
-    .hx-bar { height: 8px; background: #141C30; position: relative; overflow: hidden; }
-    .hx-bar span { position: absolute; inset: 0 auto 0 0; background: linear-gradient(90deg, var(--hx-cyan), rgba(0, 240, 255, 0.4)); box-shadow: 0 0 12px rgba(0, 240, 255, 0.6); }
-    .hx-bar-magenta { background: linear-gradient(90deg, var(--hx-magenta), rgba(255, 46, 166, 0.4)) !important; box-shadow: 0 0 12px rgba(255, 46, 166, 0.6) !important; }
-
-    /* terminal */
-    .hx-terminal {
-      background: #02040A; border: 1px solid var(--hx-line); padding: clamp(24px, 4vw, 40px);
-      font-family: var(--hx-mono); font-size: 14px; line-height: 2; color: var(--hx-text);
-      box-shadow: inset 0 0 60px rgba(0, 240, 255, 0.04);
+    .tm-form input:focus, .tm-form textarea:focus { outline: none; border-color: var(--tm-cyan); box-shadow: 0 0 14px rgba(0,240,255,0.22); }
+    .tm-form button {
+      font: inherit; font-weight: 700; letter-spacing: 0.1em; cursor: pointer;
+      background: var(--tm-cyan); color: #05070D; border: 0; padding: 15px;
+      transition: filter 0.15s ease;
     }
-    .hx-terminal p { margin: 0; }
-    .hx-t-time { color: var(--hx-magenta); }
-    .hx-t-prompt { color: var(--hx-cyan); margin-top: 8px; }
-    .hx-note { color: var(--hx-dim); font-size: 13.5px; font-family: var(--hx-mono); margin: 18px 0 0; }
+    .tm-form button:hover { filter: brightness(1.12); }
+    .tm-form-note { color: var(--tm-cyan); }
+    .tm-form-note:empty { display: none; }
 
-    /* niveaux */
-    .hx-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; align-items: stretch; }
-    .hx-tier {
-      background: var(--hx-bg); border: 1px solid var(--hx-line); padding: 36px 32px;
-      display: grid; gap: 12px; align-content: start; position: relative;
-      transition: border-color 0.2s ease, transform 0.2s ease;
-    }
-    .hx-tier:hover { border-color: var(--hx-cyan); transform: translateY(-6px); }
-    .hx-tier-hot { border-color: var(--hx-cyan); box-shadow: 0 0 40px rgba(0, 240, 255, 0.12), inset 0 0 40px rgba(0, 240, 255, 0.03); }
-    .hx-tier-n { margin: 0; font-family: var(--hx-mono); font-size: 12px; letter-spacing: 0.3em; color: var(--hx-magenta); }
-    .hx-tier h3 { margin: 0; font-family: var(--hx-display); font-weight: 800; font-size: 30px; letter-spacing: 0.05em; }
-    .hx-tier-price { margin: 0; font-family: var(--hx-display); font-weight: 700; font-size: 40px; color: var(--hx-cyan); }
-    .hx-tier-price span { font-size: 16px; color: var(--hx-dim); font-family: var(--hx-mono); }
-    .hx-tier ul { list-style: none; margin: 0 0 14px; padding: 0; display: grid; gap: 10px; }
-    .hx-tier li { font-size: 15px; color: var(--hx-dim); padding-left: 22px; position: relative; line-height: 1.5; }
-    .hx-tier li::before { content: "+"; position: absolute; left: 0; color: var(--hx-cyan); font-family: var(--hx-mono); font-weight: 700; }
+    .tm-foot { text-align: center; padding: 44px 20px 60px; color: var(--tm-dim); font-size: 12.5px; }
 
-    /* liaison */
-    .hx-uplink-in { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(36px, 6vw, 70px); align-items: start; }
-    .hx-contact-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-family: var(--hx-mono); font-size: 14px; }
-    .hx-contact-list li { border: 1px solid var(--hx-line); background: var(--hx-panel); padding: 14px 18px; display: flex; gap: 16px; }
-    .hx-contact-list span { color: var(--hx-magenta); letter-spacing: 0.2em; font-size: 12px; min-width: 52px; }
-    .hx-contact-list a { color: var(--hx-cyan); }
-    .hx-form { background: var(--hx-panel); border: 1px solid var(--hx-line); padding: clamp(28px, 4vw, 42px); display: grid; gap: 16px; position: relative; }
-    .hx-form::before, .hx-form::after { content: ""; position: absolute; width: 18px; height: 18px; border: 2px solid var(--hx-magenta); }
-    .hx-form::before { top: 10px; left: 10px; border-right: none; border-bottom: none; }
-    .hx-form::after { bottom: 10px; right: 10px; border-left: none; border-top: none; }
-    .hx-form-head { margin: 0; font-family: var(--hx-mono); font-size: 12px; letter-spacing: 0.3em; color: var(--hx-magenta); }
-    .hx-form label { display: grid; gap: 8px; font-family: var(--hx-mono); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--hx-dim); }
-    .hx-form input, .hx-form select, .hx-form textarea {
-      font-family: var(--hx-mono); font-size: 15px; color: var(--hx-text);
-      background: #02040A; border: 1px solid var(--hx-line); padding: 14px 16px; width: 100%;
-    }
-    .hx-form input:focus, .hx-form select:focus, .hx-form textarea:focus { outline: none; border-color: var(--hx-cyan); box-shadow: 0 0 14px rgba(0, 240, 255, 0.25); }
-    .hx-form textarea { resize: vertical; }
-    .hx-form-note { margin: 0; font-family: var(--hx-mono); font-size: 14px; color: var(--hx-cyan); }
-    .hx-form-note:empty { display: none; }
-
-    /* pied de page */
-    .hx-footer { border-top: 1px solid var(--hx-line); padding: 70px 0 90px; text-align: center; background: #02040A; }
-    .hx-footer-logo {
-      font-family: var(--hx-display); font-weight: 900; font-size: clamp(3rem, 12vw, 8rem); letter-spacing: 0.1em; margin: 0 0 24px;
-      background: linear-gradient(180deg, var(--hx-chrome1), var(--hx-chrome2)); -webkit-background-clip: text; background-clip: text; color: transparent;
-    }
-    .hx-footer p { margin: 0 0 10px; color: var(--hx-dim); font-family: var(--hx-mono); font-size: 13.5px; }
-    .hx-footer a { color: var(--hx-cyan); }
-
-    @media (max-width: 1020px) {
-      .hx-readouts, .hx-meters { grid-template-columns: 1fr 1fr; }
-      .hx-panels { grid-template-columns: 1fr; }
-      .hx-tiers { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; }
-      .hx-uplink-in { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 860px) {
-      .hx-burger { display: flex; }
-      .hx-sys { display: none; }
-      .hx-nav-links {
-        display: none; position: absolute; top: 100%; left: 0; right: 0;
-        background: rgba(5, 7, 13, 0.98); border-bottom: 1px solid var(--hx-line);
-        flex-direction: column; padding: 12px 20px 20px; gap: 2px;
-      }
-      .hx-nav-links.hx-open { display: flex; }
-      .hx-nav-links a { font-size: 15px; padding: 14px 10px; border-bottom: 1px solid var(--hx-line); }
-      .hx-nav { position: relative; }
-    }
     @media (max-width: 640px) {
-      .hx-readouts { grid-template-columns: 1fr 1fr; }
-      .hx-meters { grid-template-columns: 1fr; }
-      .hx-hero-cta .hx-btn { width: 100%; }
-      .hx-terminal { font-size: 12px; }
+      .tm { font-size: 13.5px; }
+      .tm-caret { display: none; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .hx-ticker-track, .hx-dot, .hx-caret { animation: none; }
-      .hx-btn, .hx-panel, .hx-tier, .hx-nav-links a { transition: none; }
-      .hx-btn:hover, .hx-panel:hover, .hx-tier:hover { transform: none; box-shadow: none; }
+      .tm-caret { animation: none; }
+      .tm-form button { transition: none; }
     }
   </style>
 </body>
