@@ -1,8 +1,10 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
 
-// Démo : Kanso, maison de thé japonaise fictive, Montréal QC.
-// Direction artistique autonome. Retenue extrême. Hors du système de thème WEBAO.
+// Demo microsite: Kanso, fictional Japanese tea house, Montréal QC.
+// Rebuilt as CEREMONY: one idea per screen, vast whitespace, a vertical meditative rhythm.
+// No cards. The tea menu is a single vertical list. The visit is a quiet footer.
+// Standalone art direction. Extreme restraint. Not connected to the WEBAO theme system.
 const IMG = {
   hero: "/demos/kanso/01.jpg",
   philo: "https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?q=80&w=1000&auto=format&fit=crop",
@@ -21,111 +23,90 @@ const IMG = {
 </head>
 <body class="ks">
 
-  <!-- NAVIGATION MURMURÉE -->
   <header class="ks-nav">
     <a class="ks-logo" href="#top" aria-label="Kanso, accueil">簡 素</a>
     <nav class="ks-links" aria-label="Navigation principale">
-      <a href="#philosophy">Philosophie</a>
       <a href="#menu">Thés</a>
       <a href="#visit">Nous trouver</a>
     </nav>
   </header>
 
   <main id="top">
-    <!-- HÉROS, PRESQUE VIDE -->
-    <section class="ks-hero">
+    <!-- I. LE NOM -->
+    <section class="ks-screen">
       <p class="ks-vertical" lang="ja" aria-hidden="true">茶</p>
       <h1 class="ks-h1">Kanso</h1>
       <p class="ks-sub">Une maison de thé paisible à Montréal.</p>
     </section>
 
-    <figure class="ks-hero-media">
+    <!-- II. LA SALLE -->
+    <figure class="ks-screen ks-media">
       <img src={IMG.hero} alt="Un salon de thé japonais serein avec tatamis, table basse et service à thé" loading="eager" fetchpriority="high" />
     </figure>
 
-    <!-- PHILOSOPHIE -->
-    <section class="ks-section" id="philosophy">
-      <div class="ks-wrap ks-philo">
-        <p class="ks-vertical ks-vertical-body" lang="ja">侘 寂</p>
-        <div class="ks-philo-copy">
-          <p class="ks-kicker">Philosophie</p>
-          <h2 class="ks-h2">Moins, avec intention.</h2>
-          <p class="ks-prose">Kanso veut dire simplicité. La salle compte douze places et un long comptoir en cèdre. Il n'y a ni musique, ni tableau de menu, ni hâte. L'eau est chauffée au degré exact que chaque thé demande, puis versée lentement, à la main.</p>
-          <p class="ks-prose">On sert le thé comme on le sert depuis quatre cents ans : fouetté, pas pressé. La plupart des invités restent une heure. Certains restent pour la pluie. Les deux nous vont.</p>
-          <p class="ks-sign">Aiko et Marc, vos hôtes</p>
-        </div>
-        <figure class="ks-philo-media">
-          <img src={IMG.philo} alt="Thé chaud versé lentement dans une tasse en céramique" loading="lazy" />
-        </figure>
-      </div>
+    <!-- III. LA SIMPLICITÉ -->
+    <section class="ks-screen">
+      <p class="ks-idea">Kanso veut dire simplicité.</p>
     </section>
 
-    <!-- MENU DES THÉS -->
-    <section class="ks-section" id="menu">
-      <div class="ks-wrap ks-narrow">
-        <p class="ks-kicker ks-center">Thés</p>
-        <h2 class="ks-h2 ks-center">Ce que nous versons.</h2>
-        <p class="ks-prose ks-center ks-note-top">La liste suit les saisons. Ce qui est écrit ici, c'est ce que nous avons aujourd'hui.</p>
-        <ul class="ks-teas">
-          <li>
-            <div><h3>Gyokuro <span lang="ja">玉露</span></h3><p>Cultivé à l'ombre, brièvement étuvé. Doux, corsé, presque immobile. Servi en petite tasse, trois versements.</p></div>
-            <span class="ks-price">14 $</span>
-          </li>
-          <li>
-            <div><h3>Sencha <span lang="ja">煎茶</span></h3><p>Première récolte d'Uji. Vif et végétal, avec une finale nette et courte.</p></div>
-            <span class="ks-price">9 $</span>
-          </li>
-          <li>
-            <div><h3>Matcha de cérémonie <span lang="ja">抹茶</span></h3><p>Tencha moulu à la pierre, fouetté à la commande dans une eau à 70 °C. Dense, vif, silencieux.</p></div>
-            <span class="ks-price">11 $</span>
-          </li>
-          <li>
-            <div><h3>Hojicha <span lang="ja">ほうじ茶</span></h3><p>Bancha torréfié. Chaud, noisette, peu de caféine. Le thé du soir.</p></div>
-            <span class="ks-price">8 $</span>
-          </li>
-          <li>
-            <div><h3>Genmaicha <span lang="ja">玄米茶</span></h3><p>Sencha au riz brun grillé. Grillé et doux. Un bon premier thé.</p></div>
-            <span class="ks-price">7 $</span>
-          </li>
-          <li>
-            <div><h3>Wagashi du jour <span lang="ja">和菓子</span></h3><p>Une petite douceur, faite chaque matin. Aujourd'hui : mochi au yomogi et kinako.</p></div>
-            <span class="ks-price">6 $</span>
-          </li>
-        </ul>
-      </div>
+    <!-- IV. LA PRATIQUE -->
+    <section class="ks-screen">
+      <p class="ks-vertical" lang="ja" aria-hidden="true">侘 寂</p>
+      <p class="ks-prose">La salle compte douze places et un long comptoir en cèdre. Il n'y a ni musique, ni tableau de menu, ni hâte. L'eau est chauffée au degré exact que chaque thé demande, puis versée lentement, à la main.</p>
     </section>
 
-    <!-- VISITE -->
-    <section class="ks-section" id="visit">
-      <div class="ks-wrap ks-narrow">
-        <p class="ks-kicker ks-center">Visite</p>
-        <h2 class="ks-h2 ks-center">Venez doucement.</h2>
-        <figure class="ks-visit-media">
-          <img src={IMG.visit} alt="Une main fouettant le matcha avec un chasen en bambou dans un bol en céramique" loading="lazy" />
-        </figure>
-        <dl class="ks-facts">
-          <div><dt>Adresse</dt><dd>12, rue Fictive, Montréal QC</dd></div>
-          <div><dt>Heures</dt><dd>Mar–dim, 10 h–18 h. Fermé le lundi.</dd></div>
-          <div><dt>Téléphone</dt><dd><a href="tel:+15145550180">(514) 555-0180</a></dd></div>
-          <div><dt>Places</dt><dd>Douze places. Sans réservation bienvenus; les week-ends se remplissent avant midi.</dd></div>
-        </dl>
-        <p class="ks-prose ks-center">Pour les groupes de cinq et plus, ou la cérémonie du thé du dimanche, écrivez-nous à l'avance. On répond en un jour.</p>
-        <form class="ks-form" id="ks-form" novalidate>
-          <label>Votre nom<input type="text" name="name" required placeholder="Jeanne Tremblay" /></label>
-          <label>Courriel<input type="email" name="email" required placeholder="jeanne@exemple.com" /></label>
-          <label class="ks-form-wide">Quelques mots<textarea name="message" rows="3" placeholder="Cérémonie du dimanche pour six, fin octobre…"></textarea></label>
-          <button class="ks-form-wide" type="submit">Envoyer</button>
-          <p class="ks-form-note" role="status" aria-live="polite"></p>
-        </form>
-      </div>
+    <!-- V. LE VERSEMENT -->
+    <figure class="ks-screen ks-media">
+      <img src={IMG.philo} alt="Une théière en céramique et une tasse de thé chaud sur un plateau en bois" loading="lazy" />
+    </figure>
+
+    <!-- VI. LE TEMPS -->
+    <section class="ks-screen">
+      <p class="ks-prose">On sert le thé comme on le sert depuis quatre cents ans : fouetté, pas pressé. La plupart des invités restent une heure. Certains restent pour la pluie. Les deux nous vont.</p>
+      <p class="ks-sign">Aiko et Marc, vos hôtes</p>
+    </section>
+
+    <!-- VII. LES THÉS -->
+    <section class="ks-screen ks-screen-tea" id="menu">
+      <p class="ks-idea">Ce que nous versons.</p>
+      <p class="ks-note">La liste suit les saisons. Ce qui est écrit ici, c'est ce que nous avons aujourd'hui.</p>
+      <ul class="ks-teas">
+        <li><div><h2>Gyokuro <span lang="ja">玉露</span></h2><p>Cultivé à l'ombre, brièvement étuvé. Doux, corsé, presque immobile. Servi en petite tasse, trois versements.</p></div><span class="ks-price">14 $</span></li>
+        <li><div><h2>Sencha <span lang="ja">煎茶</span></h2><p>Première récolte d'Uji. Vif et végétal, avec une finale nette et courte.</p></div><span class="ks-price">9 $</span></li>
+        <li><div><h2>Matcha de cérémonie <span lang="ja">抹茶</span></h2><p>Tencha moulu à la pierre, fouetté à la commande dans une eau à 70 °C. Dense, vif, silencieux.</p></div><span class="ks-price">11 $</span></li>
+        <li><div><h2>Hojicha <span lang="ja">ほうじ茶</span></h2><p>Bancha torréfié. Chaud, noisette, peu de caféine. Le thé du soir.</p></div><span class="ks-price">8 $</span></li>
+        <li><div><h2>Genmaicha <span lang="ja">玄米茶</span></h2><p>Sencha au riz brun grillé. Grillé et doux. Un bon premier thé.</p></div><span class="ks-price">7 $</span></li>
+        <li><div><h2>Wagashi du jour <span lang="ja">和菓子</span></h2><p>Une petite douceur, faite chaque matin. Aujourd'hui : mochi au yomogi et kinako.</p></div><span class="ks-price">6 $</span></li>
+      </ul>
+    </section>
+
+    <!-- VIII. LE FOUET -->
+    <figure class="ks-screen ks-media">
+      <img src={IMG.visit} alt="Une main fouettant le matcha avec un chasen en bambou dans un bol en céramique" loading="lazy" />
+    </figure>
+
+    <!-- IX. ÉCRIRE À L'AVANCE -->
+    <section class="ks-screen" id="visit">
+      <p class="ks-idea">Venez doucement.</p>
+      <p class="ks-prose ks-prose-center">Pour les groupes de cinq et plus, ou la cérémonie du thé du dimanche, écrivez-nous à l'avance. On répond en un jour.</p>
+      <form class="ks-form" id="ks-form" novalidate>
+        <label>Votre nom<input type="text" name="name" required placeholder="Jeanne Tremblay" /></label>
+        <label>Courriel<input type="email" name="email" required placeholder="jeanne@exemple.com" /></label>
+        <label class="ks-form-wide">Quelques mots<textarea name="message" rows="3" placeholder="Cérémonie du dimanche pour six, fin octobre…"></textarea></label>
+        <button class="ks-form-wide" type="submit">Envoyer</button>
+        <p class="ks-form-note" role="status" aria-live="polite"></p>
+      </form>
     </section>
   </main>
 
-  <!-- PIED DE PAGE SILENCIEUX -->
+  <!-- X. LE PIED DE PAGE SILENCIEUX -->
   <footer class="ks-footer">
-    <p class="ks-footer-mark" lang="ja" aria-hidden="true">簡素</p>
-    <p class="ks-footer-line">Kanso · 12, rue Fictive, Montréal QC</p>
-    <p class="ks-footer-line">© 2026 Kanso. Démo fictive.</p>
+    <p class="ks-fact">12, rue Fictive, Montréal QC</p>
+    <p class="ks-fact">Mar–dim, 10 h–18 h. Fermé le lundi.</p>
+    <p class="ks-fact"><a href="tel:+15145550180">(514) 555-0180</a></p>
+    <p class="ks-fact">Douze places. Sans réservation bienvenus; les week-ends se remplissent avant midi.</p>
+    <p class="ks-mark" lang="ja" aria-hidden="true">簡素</p>
+    <p class="ks-fine">© 2026 Kanso. Démo fictive.</p>
   </footer>
 
   <EscapeHatch locale="fr" />
@@ -145,7 +126,6 @@ const IMG = {
   <style>
     .ks {
       --ks-paper: #E9E4D8;
-      --ks-paper-2: #DFD8C6;
       --ks-ink: #1A1815;
       --ks-ink-soft: rgba(26, 24, 21, 0.62);
       --ks-rule: rgba(26, 24, 21, 0.22);
@@ -159,11 +139,7 @@ const IMG = {
     }
     .ks *, .ks *::before, .ks *::after { box-sizing: border-box; }
     .ks img { display: block; max-width: 100%; }
-    .ks-wrap { max-width: 1120px; margin: 0 auto; padding: 0 clamp(24px, 6vw, 64px); }
-    .ks-narrow { max-width: 760px; }
-    .ks-center { text-align: center; }
 
-    /* nav */
     .ks-nav {
       display: flex; align-items: baseline; justify-content: space-between;
       padding: 30px clamp(24px, 6vw, 64px);
@@ -171,72 +147,40 @@ const IMG = {
     }
     .ks-logo { text-decoration: none; color: var(--ks-ink); font-size: 22px; letter-spacing: 0.5em; }
     .ks-links { display: flex; gap: clamp(20px, 4vw, 48px); }
-    .ks-links a {
-      color: var(--ks-ink-soft); text-decoration: none;
-      font-size: 12.5px; letter-spacing: 0.32em; text-transform: uppercase;
-    }
+    .ks-links a { color: var(--ks-ink-soft); text-decoration: none; font-size: 12.5px; letter-spacing: 0.32em; text-transform: uppercase; }
     .ks-links a:hover { color: var(--ks-ink); }
 
-    /* type */
-    .ks-kicker { font-size: 11.5px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--ks-ink-soft); margin: 0 0 22px; }
-    .ks-h1 {
-      font-size: clamp(2.6rem, 6vw, 4.4rem); font-weight: 400; letter-spacing: 0.28em;
-      margin: 0 0 18px; text-indent: 0.28em;
+    /* une idée par écran */
+    .ks-screen {
+      min-height: 88vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 40px clamp(24px, 8vw, 80px);
     }
-    .ks-h2 { font-size: clamp(1.6rem, 3.4vw, 2.4rem); font-weight: 400; letter-spacing: 0.06em; margin: 0 0 26px; }
+    .ks-media { padding: 0; }
+    .ks-media img { width: 100%; height: 88vh; object-fit: cover; filter: saturate(0.92) contrast(1.03); }
+
+    .ks-vertical { writing-mode: vertical-rl; font-size: 15px; letter-spacing: 0.6em; color: var(--ks-ink-soft); margin: 0 0 44px; }
+    .ks-h1 { font-size: clamp(2.6rem, 6vw, 4.4rem); font-weight: 400; letter-spacing: 0.28em; text-indent: 0.28em; margin: 0 0 20px; }
     .ks-sub { font-size: 15px; color: var(--ks-ink-soft); letter-spacing: 0.12em; margin: 0; font-style: italic; }
-    .ks-prose { font-size: 16px; line-height: 2.05; color: var(--ks-ink-soft); margin: 0 0 26px; max-width: 60ch; }
-    .ks-center.ks-prose { margin-inline: auto; }
-    .ks-sign { font-style: italic; color: var(--ks-ink); font-size: 15px; margin: 34px 0 0; }
-    .ks-vertical {
-      writing-mode: vertical-rl; font-size: 15px; letter-spacing: 0.6em;
-      color: var(--ks-ink-soft); margin: 0 0 40px;
-    }
-    .ks-vertical-body { font-size: 26px; margin: 0; letter-spacing: 0.5em; }
+    .ks-idea { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 400; letter-spacing: 0.08em; margin: 0 0 26px; }
+    .ks-prose { font-size: 17px; line-height: 2.1; color: var(--ks-ink-soft); margin: 0; max-width: 52ch; }
+    .ks-prose-center { text-align: center; }
+    .ks-sign { font-style: italic; color: var(--ks-ink); font-size: 15px; margin: 40px 0 0; }
+    .ks-note { font-size: 14px; font-style: italic; color: var(--ks-ink-soft); margin: 0 0 60px; }
 
-    /* hero */
-    .ks-hero { text-align: center; padding: clamp(70px, 12vh, 150px) 24px clamp(50px, 8vh, 100px); display: flex; flex-direction: column; align-items: center; }
-    .ks-hero-media { margin: 0 auto; max-width: 1280px; padding: 0 clamp(24px, 6vw, 64px); }
-    .ks-hero-media img { width: 100%; height: min(64vh, 620px); object-fit: cover; }
-    .ks-hero-media img, .ks-philo-media img, .ks-visit-media img { filter: saturate(0.92) contrast(1.03); }
-
-    /* sections */
-    .ks-section { padding: clamp(80px, 12vh, 160px) 0; border-top: 1px solid var(--ks-rule); }
-
-    /* philosophy */
-    .ks-philo { display: grid; grid-template-columns: auto 1fr 0.9fr; gap: clamp(30px, 5vw, 70px); align-items: start; }
-    .ks-philo-copy { padding-top: 8px; }
-    .ks-philo-media { margin: 0; }
-    .ks-philo-media img { width: 100%; height: min(520px, 70vw); object-fit: cover; }
-
-    /* tea menu */
-    .ks-note-top { margin-bottom: 50px; }
-    .ks-teas { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ks-rule); }
-    .ks-teas li {
-      display: flex; justify-content: space-between; gap: 30px; align-items: baseline;
-      padding: 30px 4px; border-bottom: 1px solid var(--ks-rule);
-      transition: background 0.2s ease;
-    }
-    .ks-teas li:hover { background: var(--ks-paper-2); }
-    .ks-teas h3 { margin: 0 0 10px; font-size: 20px; font-weight: 400; letter-spacing: 0.08em; }
-    .ks-teas h3 span { font-size: 15px; color: var(--ks-ink-soft); letter-spacing: 0.3em; margin-left: 12px; }
+    /* la liste des thés */
+    .ks-screen-tea { min-height: 0; padding-top: 14vh; padding-bottom: 14vh; text-align: left; align-items: stretch; max-width: 760px; margin: 0 auto; }
+    .ks-screen-tea .ks-idea, .ks-screen-tea .ks-note { text-align: center; }
+    .ks-teas { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ks-rule); width: 100%; }
+    .ks-teas li { display: flex; justify-content: space-between; gap: 30px; align-items: baseline; padding: 34px 4px; border-bottom: 1px solid var(--ks-rule); }
+    .ks-teas h2 { margin: 0 0 10px; font-size: 21px; font-weight: 400; letter-spacing: 0.08em; }
+    .ks-teas h2 span { font-size: 15px; color: var(--ks-ink-soft); letter-spacing: 0.3em; margin-left: 12px; }
     .ks-teas p { margin: 0; font-size: 14.5px; line-height: 1.9; color: var(--ks-ink-soft); max-width: 52ch; }
     .ks-price { font-size: 17px; letter-spacing: 0.06em; white-space: nowrap; }
 
-    /* visit */
-    .ks-visit-media { margin: 0 0 50px; }
-    .ks-visit-media img { width: 100%; height: min(420px, 60vw); object-fit: cover; }
-    .ks-facts { margin: 0 0 44px; border-top: 1px solid var(--ks-rule); }
-    .ks-facts div {
-      display: grid; grid-template-columns: 130px 1fr; gap: 20px;
-      padding: 18px 4px; border-bottom: 1px solid var(--ks-rule);
-    }
-    .ks-facts dt { font-size: 11.5px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ks-ink-soft); }
-    .ks-facts dd { margin: 0; font-size: 15.5px; letter-spacing: 0.04em; }
-    .ks-facts a { color: var(--ks-ink); }
-
-    /* form */
-    .ks-form { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 46px; border-top: 1px solid var(--ks-rule); padding-top: 46px; }
+    /* le formulaire */
+    #visit .ks-prose { margin-bottom: 60px; }
+    .ks-form { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; width: 100%; max-width: 640px; margin: 0 auto; text-align: left; }
     .ks-form-wide { grid-column: 1 / -1; }
     .ks-form label { display: grid; gap: 10px; font-size: 11.5px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ks-ink-soft); }
     .ks-form input, .ks-form textarea {
@@ -247,34 +191,29 @@ const IMG = {
     .ks-form input:focus, .ks-form textarea:focus { outline: none; border-bottom-color: var(--ks-ink); }
     .ks-form button {
       font-family: var(--ks-serif); font-size: 13px; letter-spacing: 0.34em; text-transform: uppercase;
-      background: transparent; color: var(--ks-ink);
-      border: 1px solid var(--ks-ink); padding: 18px; cursor: pointer;
-      transition: background 0.2s ease, color 0.2s ease;
+      background: transparent; color: var(--ks-ink); border: 1px solid var(--ks-ink);
+      padding: 18px; cursor: pointer; transition: background 0.2s ease, color 0.2s ease;
       justify-self: center; min-width: 240px;
     }
     .ks-form button:hover { background: var(--ks-ink); color: var(--ks-paper); }
     .ks-form-note { grid-column: 1 / -1; margin: 0; text-align: center; font-style: italic; font-size: 14.5px; color: var(--ks-ink-soft); }
     .ks-form-note:empty { display: none; }
 
-    /* footer */
-    .ks-footer { border-top: 1px solid var(--ks-rule); padding: 70px 24px 90px; text-align: center; }
-    .ks-footer-mark { font-size: 26px; letter-spacing: 0.6em; text-indent: 0.6em; margin: 0 0 26px; color: var(--ks-ink-soft); }
-    .ks-footer-line { margin: 6px 0; font-size: 12.5px; letter-spacing: 0.22em; color: var(--ks-ink-soft); }
+    /* pied de page silencieux */
+    .ks-footer { padding: 16vh 24px 12vh; text-align: center; border-top: 1px solid var(--ks-rule); }
+    .ks-fact { margin: 10px 0; font-size: 14px; letter-spacing: 0.18em; color: var(--ks-ink-soft); }
+    .ks-fact a { color: var(--ks-ink); }
+    .ks-mark { font-size: 24px; letter-spacing: 0.6em; text-indent: 0.6em; margin: 44px 0 30px; color: var(--ks-ink-soft); }
+    .ks-fine { font-size: 12px; letter-spacing: 0.22em; color: var(--ks-ink-soft); margin: 0; }
 
-    @media (max-width: 900px) {
-      .ks-philo { grid-template-columns: auto 1fr; }
-      .ks-philo-media { grid-column: 1 / -1; }
-    }
     @media (max-width: 620px) {
       .ks-nav { flex-direction: column; gap: 18px; align-items: center; }
-      .ks-philo { grid-template-columns: 1fr; }
-      .ks-vertical-body { writing-mode: horizontal-tb; letter-spacing: 0.5em; }
-      .ks-facts div { grid-template-columns: 1fr; gap: 6px; }
+      .ks-screen { min-height: 80vh; }
       .ks-form { grid-template-columns: 1fr; }
       .ks-form button { width: 100%; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .ks-teas li, .ks-form button { transition: none; }
+      .ks-form button { transition: none; }
     }
   </style>
 </body>
