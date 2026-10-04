@@ -376,11 +376,17 @@ type Shard = {
   maxLife: number;
   color: string;
   sliver: boolean;
+  /** True for fracture triangles: sharper physics, no floor settle. */
+  triangle?: boolean;
 };
 
 /**
  * Canvas debris field. Starts on demand, stops itself when the last fragment
  * dies, so nothing keeps running (and nothing paints) after the intro.
+ *
+ * Fracture shards (spawned via fractureBurst) are pure triangles with their
+ * own physics: they fly outward from the impact, spin fast, fade over ~1.2s,
+ * and are gently repelled by the live pointer position (set via setPointer).
  */
 export class Debris {
   private canvas: HTMLCanvasElement;
@@ -392,6 +398,8 @@ export class Debris {
   private palette: readonly string[];
   private painted = false;
   private dirty = { x0: 0, y0: 0, x1: 0, y1: 0 };
+  /** Live pointer in canvas CSS pixels; null when unknown. Drives repulsion. */
+  private pointer: { x: number; y: number } | null = null;
 
   constructor(canvas: HTMLCanvasElement, palette: readonly string[], seed = 7) {
     this.canvas = canvas;
@@ -443,6 +451,49 @@ export class Debris {
     }
   }
 
+  /**
+   * Fracture burst: 12-18 pure triangle shards that fly outward from the
+   * impact point with sharp physics. They fade over ~1.2s and are gently
+   * repelled by the pointer (see setPointer). Canvas-only, no DOM.
+   */
+  fractureBurst(x: number, y: number, count = 15) {
+    const n = Math.max(12, Math.min(18, Math.round(count)));
+    for (let i = 0; i < n; i++) {
+      // Distribute around the impact, biased upward so shards arc over the break
+      const a = ((i / n) * 360 + (this.rng() - 0.5) * 44 - 90) * (Math.PI / 180);
+      const sp = 420 + this.rng() * 620;
+      const size = 9 + this.rng() * 22;
+      // Irregular triangle: three radii for a fractured-glass read
+      const r1 = size * (0.7 + this.rng() * 0.6);
+      const r2 = size * (0.7 + this.rng() * 0.6);
+      const r3 = size * (0.7 + this.rng() * 0.6);
+      this.shards.push({
+        x,
+        y,
+        vx: Math.cos(a) * sp,
+        vy: Math.sin(a) * sp,
+        rot: this.rng() * Math.PI * 2,
+        vrot: (this.rng() - 0.5) * 22,
+        w: r1,
+        h: r2,
+        life: 0,
+        maxLife: 1.05 + this.rng() * 0.35,
+        color: this.palette[Math.floor(this.rng() * this.palette.length)] ?? "#0A0F1C",
+        sliver: false,
+        triangle: true,
+      });
+      // stash the third radius on the shard via w/h overload: reuse vrot sign
+      const s = this.shards[this.shards.length - 1];
+      (s as { r3?: number }).r3 = r3;
+    }
+  }
+
+  /** Live pointer position in canvas CSS pixels; drives shard repulsion. */
+  setPointer(x: number | null, y: number | null) {
+    if (x === null || y === null) this.pointer = null;
+    else this.pointer = { x, y };
+  }
+
   step(dt: number) {
     const ctx = this.ctx;
     if (!ctx) return;
@@ -478,12 +529,27 @@ export class Debris {
     this.painted = true;
     const gravity = 2500;
     const drag = 0.86;
+    const px = this.pointer?.x ?? null;
+    const py = this.pointer?.y ?? null;
     for (let i = this.shards.length - 1; i >= 0; i--) {
       const s = this.shards[i];
       s.life += dt;
       if (s.life >= s.maxLife) {
         this.shards.splice(i, 1);
         continue;
+      }
+      // pointer repulsion: shards within ~140px are nudged away, gently
+      if (px !== null && py !== null && s.triangle) {
+        const dx = s.x - px;
+        const dy = s.y - py;
+        const distSq = dx * dx + dy * dy;
+        const radius = 140;
+        if (distSq < radius * radius && distSq > 1) {
+          const dist = Math.sqrt(distSq);
+          const force = (1 - dist / radius) * 900;
+          s.vx += (dx / dist) * force * dt;
+          s.vy += (dy / dist) * force * dt;
+        }
       }
       s.vy += gravity * dt;
       const d = Math.pow(drag, dt * 60);
@@ -493,7 +559,8 @@ export class Debris {
       s.y += s.vy * dt;
       s.rot += s.vrot * dt;
       // settle on the barrier lip instead of falling through it
-      if (s.y > this.floorY) {
+      // (fracture triangles keep flying: they arc over the break)
+      if (!s.triangle && s.y > this.floorY) {
         s.y = this.floorY;
         s.vy *= -0.34;
         s.vx *= 0.7;
@@ -504,14 +571,26 @@ export class Debris {
         }
       }
       const k = s.life / s.maxLife;
-      const alpha = k < 0.72 ? 1 : 1 - (k - 0.72) / 0.28;
+      // triangles fade over the last ~35% of their 1.2s life
+      const alpha = s.triangle
+        ? (k < 0.65 ? 1 : 1 - (k - 0.65) / 0.35)
+        : (k < 0.72 ? 1 : 1 - (k - 0.72) / 0.28);
       track(s.x, s.y, Math.max(s.w, s.h) * 1.6 + 4);
       ctx.save();
       ctx.globalAlpha = Math.max(alpha, 0) * 0.95;
       ctx.translate(s.x, s.y);
       ctx.rotate(s.rot);
       ctx.fillStyle = s.color;
-      if (s.sliver) {
+      if (s.triangle) {
+        // irregular fracture triangle from three stored radii
+        const r3 = (s as { r3?: number }).r3 ?? s.w;
+        ctx.beginPath();
+        ctx.moveTo(s.w, 0);
+        ctx.lineTo(s.h * Math.cos(2.4), s.h * Math.sin(2.4));
+        ctx.lineTo(r3 * Math.cos(4.4), r3 * Math.sin(4.4));
+        ctx.closePath();
+        ctx.fill();
+      } else if (s.sliver) {
         ctx.fillRect(-s.w / 2, -s.h / 2, s.w, s.h);
       } else {
         ctx.beginPath();
