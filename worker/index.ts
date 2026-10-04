@@ -1,6 +1,6 @@
 // WEBAO worker entry: JSON API under /api/*, static-asset fallthrough otherwise.
 // The site itself is a static Astro build (dist/client); this handler preserves
-// its behavior exactly and only intercepts /api/* requests.
+// its behavior and serves KV-backed demo/carousel images when absent from assets.
 
 import { handlePageview, handleClick, handleHeartbeat } from "./track";
 import { handleFormSubmit } from "./forms";
@@ -35,10 +35,9 @@ export default {
     }
 
     // Demo/carousel imagery: served from static assets when present,
-    // otherwise from KV (images are stored as base64 in the repo and
-    // restored at build time, but KV is the durable fallback).
-    // NOTE: env.ASSETS.fetch() throws (rather than returning 404) for paths
-    // absent from the asset manifest, so it must stay inside try/catch.
+    // otherwise from KV under img:<pathname>. The repository currently has no
+    // demo/carousel binaries or .b64 files, so KV must be provisioned separately.
+    // Handle both missing assets (404) and asset-binding failures.
     if (url.pathname.startsWith("/demos/") || url.pathname.startsWith("/carousel/")) {
       try {
         const asset = await env.ASSETS.fetch(request);

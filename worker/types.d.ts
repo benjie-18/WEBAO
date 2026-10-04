@@ -32,6 +32,7 @@ interface KVNamespaceListResult {
 
 interface KVNamespace {
   get(key: string): Promise<string | null>;
+  get(key: string, type: "arrayBuffer"): Promise<ArrayBuffer | null>;
   get(key: string, options: { type: "text" }): Promise<string | null>;
   get<T = unknown>(key: string, options: { type: "json" }): Promise<T | null>;
   put(key: string, value: string | ArrayBuffer, options?: KVNamespacePutOptions): Promise<void>;
@@ -39,7 +40,7 @@ interface KVNamespace {
   list(options?: KVNamespaceListOptions): Promise<KVNamespaceListResult>;
 }
 
-/** Static-asset fetcher automatically bound when `assets` is configured. */
+/** Static-asset fetcher bound explicitly by `assets.binding`. */
 interface Fetcher {
   fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
 }

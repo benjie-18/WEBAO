@@ -37,7 +37,7 @@ Replace the placeholder in the `kv_namespaces` block:
 
 ```bash
 npm run build          # Astro → dist/client (unchanged behavior)
-npx wrangler deploy    # uploads worker + static assets
+npx wrangler deploy --config wrangler.jsonc    # uploads worker + static assets
 ```
 
 `wrangler.jsonc` already points `main` at `worker/index.ts` and serves the static
@@ -66,7 +66,7 @@ curl -s 'https://webao.ca/api/admin/stats?range=week' \
 
 ```bash
 npm run build
-npx wrangler dev --assets ./dist/client
+npx wrangler dev --config wrangler.jsonc
 ```
 
 KV works in dev via local emulation (add `--persist-to` to keep state between runs).
@@ -78,7 +78,15 @@ Note: `CF-Connecting-IP` / `cf-ipcountry` are absent locally, so IP shows as
 - No npm dependencies were added; the worker uses Web APIs only.
 - Type-check the worker any time with: `npx tsc --noEmit -p worker/tsconfig.json`
 - `worker/` is excluded from Astro's own `tsconfig`/`astro check` (only `src/` is included), so the site build is unaffected.
-- If wrangler ever prints "Using redirected Wrangler configuration" pointing at
-  `dist/client/wrangler.json` (a stale artifact from an earlier adapter build),
-  delete `.wrangler/deploy/config.json` and re-run — plain `wrangler deploy`
-  from the repo root will then use `wrangler.jsonc` directly.
+- Astro’s static build generates `.wrangler/deploy/config.json` on every build.
+  Plain `wrangler deploy` follows it to `dist/client/wrangler.json`, an assets-only
+  configuration that omits this Worker. Always pass `--config wrangler.jsonc`
+  (or use `npm run cf:deploy` / `npm run cf:dev`). Do not rely on deleting the
+  redirect; it will be recreated.
+- Demo/carousel images not present in `public/` require raw binary KV values under
+  `img:<pathname>`, e.g. `img:/demos/tactile/01.jpg`. The repository has no demo
+  binaries or `.b64` restoration inputs; building does not populate remote KV.
+- `npm run test:integration` builds and verifies real Workerd HTTP serving with an
+  isolated, locally seeded KV fixture. It does not access or modify production.
+  After deploying, check actual production image URLs and confirm the image bytes
+  decode; passing local tests cannot establish that remote KV has the artwork.

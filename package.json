@@ -8,11 +8,13 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "cf:dev": "wrangler dev --assets ./dist/client",
-    "cf:deploy": "npm run build && wrangler deploy",
-    "cf:build": "astro build",
+    "cf:dev": "wrangler dev --config wrangler.jsonc",
+    "cf:deploy": "npm run build && wrangler deploy --config wrangler.jsonc",
+    "cf:build": "npm run build",
     "lint": "astro check",
-    "prebuild": "node scripts/restore-images.mjs"
+    "prebuild": "node scripts/restore-images.mjs",
+    "test": "tsx --test tests/*.test.ts",
+    "test:integration": "npm run build && tsx --test tests/cloudflare.integration.ts"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.3.3",
@@ -20,6 +22,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "tsx": "^4.23.15",
     "typescript": "^5.9.3",
     "wrangler": "^4.147.0"
   }
