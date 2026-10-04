@@ -3,15 +3,87 @@ import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
 
 // Demo microsite: Lune Fitness, fictional crossfit gym, Trois-Rivières.
 // Standalone art direction. After-dark neon. Not connected to the WEBAO theme system.
+// Structure : un programme d'entraînement. La semaine EST la navigation; chaque jour ouvre
+// un carnet de séance (mouvements, séries x reps), pas des cartes.
 const IMG = {
   hero: "/demos/lune/01.jpg",
   gym: "/demos/lune/02.jpg",
-  weights: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=800&auto=format&fit=crop",
-  workout: "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=800&auto=format&fit=crop",
-  barbell: "https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?q=80&w=800&auto=format&fit=crop",
+  weights: "https://images.unsplash.com/photo-1518310383802-640c2de311b2?q=80&w=800&auto=format&fit=crop",
+  workout: "https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=800&auto=format&fit=crop",
+  barbell: "https://images.unsplash.com/photo-1517963879433-6ad2b056d712?q=80&w=800&auto=format&fit=crop",
   deadlift: "https://images.unsplash.com/photo-1605296867304-46d5465a13f1?q=80&w=800&auto=format&fit=crop",
   training: "https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=800&auto=format&fit=crop",
 };
+
+const DAYS = [
+  { id: "mon", short: "LUN", name: "Lundi", focus: "Jour de squat", coach: "Jo", dur: "75 min", img: IMG.barbell, imgAlt: "Athlète qui soulève une barre chargée",
+    note: "Lourd, lent, parfait. Cinq séries de cinq, c'est toute la religion du lundi.",
+    rows: [
+      ["Squat arrière", "5 x 5 @ 80%", "2 min de repos, assume ta profondeur"],
+      ["Squat avant", "3 x 3", "Pause de 2 sec en bas"],
+      ["Fentes marchées", "3 x 20 steps", "Haltères le long du corps"],
+      ["GHD sit-up", "3 x 20", "Adapte avec des redressements lestés"],
+    ] },
+  { id: "tue", short: "MAR", name: "Mardi", focus: "Jour de poussée", coach: "Marie", dur: "70 min", img: null, imgAlt: "",
+    note: "Pousse lourd, tire plus fort. Termine avec un brûleur qui teste ton moteur.",
+    rows: [
+      ["Développé couché", "5 x 5", "Pareur sur les deux dernières séries"],
+      ["Développé militaire strict", "4 x 8", "Sans les jambes, côtes basses"],
+      ["Dips lestés", "3 x 8", "Ajoute du poids quand 8 devient facile"],
+      ["Tractions", "4 x max", "Strictes, amplitude complète"],
+      ["Metcon, EMOM 10 min", "12 cal vélo + 10 pompes", "Min impaires vélo, min paires pompes"],
+    ] },
+  { id: "wed", short: "MER", name: "Mercredi", focus: "Prépa Hyrox", coach: "Sam", dur: "75 min", img: null, imgAlt: "",
+    note: "Huit stations, deux rondes, nulle part où se cacher. Le rythme de course commence ici.",
+    rows: [
+      ["SkiErg", "500 m", "Rondes 1 et 2"],
+      ["Poussée de traîneau", "2 x 25 m", "Ton poids sur le traîneau"],
+      ["Wall balls", "20 reps", "Sans pause si tu peux"],
+      ["Burpees sauts en longueur", "40 m", "Poitrine au sol à chaque rep"],
+      ["Rameur", "500 m", "Tiens ton allure 2k + 5 sec"],
+      ["Marche du fermier", "2 x 50 m", "Lourd, épaules basses"],
+    ] },
+  { id: "thu", short: "JEU", name: "Jeudi", focus: "Jour de soulevé de terre", coach: "Jo", dur: "75 min", img: IMG.deadlift, imgAlt: "Athlète en plein soulevé de terre dans un gym sombre",
+    note: "Le roi des mouvements a sa propre journée. Dos plat, verrouillage bruyant, craie partout.",
+    rows: [
+      ["Soulevé de terre", "5 x 3 @ 85%", "Repose la barre à chaque rep, pas de touch-and-go"],
+      ["Soulevé roumain", "4 x 8", "Charnière lente, sens tes ischios"],
+      ["Rowing barre", "4 x 10", "Poitrine appuyée si le banc est libre"],
+      ["Conditionnement, 5 rondes", "15 swings KB + 10 burpees", "Contre la montre, limite 18 min"],
+    ] },
+  { id: "fri", short: "VEN", name: "Vendredi", focus: "Friday Night Lights", coach: "Marie", dur: "60 min", img: null, imgAlt: "",
+    note: "Une séance, tout le box, musique trop forte. En équipe ou en solo, à toi de voir.",
+    rows: [
+      ["Course", "1 mille", "Ensemble, allure facile"],
+      ["Tractions", "100 reps", "Répartis comme tu veux"],
+      ["Pompes", "200 reps", "Poitrine au sol"],
+      ["Squats au poids du corps", "300 reps", "Sous le parallèle"],
+      ["Course", "1 mille", "Terminez ensemble, encouragez fort"],
+    ] },
+  { id: "sat", short: "SAM", name: "Samedi", focus: "WOD en équipe", coach: "Sam", dur: "60 min", img: null, imgAlt: "",
+    note: "Amène un ami, on fournit la souffrance. Les nouveaux s'entraînent gratis le samedi.",
+    rows: [
+      ["WOD en équipe", "AMRAP 30 min, équipes de 3", "Un travaille, deux reposent, rotation des stations"],
+      ["Intro On-Ramp", "45 min", "Les débutants apprennent les neuf mouvements de base"],
+      ["Gym libre", "Dès 12 h 00", "Coach sur le plancher"],
+    ] },
+  { id: "sun", short: "DIM", name: "Dimanche", focus: "Moteur et mobilité", coach: "Marie", dur: "60 min", img: null, imgAlt: "",
+    note: "Long, lent, ennuyant exprès. Ton cœur te remerciera jeudi.",
+    rows: [
+      ["Long moteur", "40 min vélo ou rameur", "Allure conversation, respiration nasale"],
+      ["Séance de mobilité", "20 min", "Hanches, épaules, thoracique"],
+    ] },
+];
+const COACHES = [
+  { img: IMG.weights, alt: "Coach Marie qui soulève des haltères", name: "Marie « Motor » Côté", role: "Coach en chef, CF-L3", line: "Se souvient de ton PR mieux que toi." },
+  { img: IMG.workout, alt: "Coach Sam aux battle ropes", name: "Sam « Sled » Bérubé", role: "Responsable Hyrox, ex-sprinteur", line: "Pense que les jours de repos sont une rumeur." },
+  { img: IMG.training, alt: "Coach Jo qui démontre un mouvement", name: "Jo « Technique » Lachance", role: "Haltérophilie, 9 ans", line: "Corrige ton arraché et ton attitude." },
+];
+const TIERS = [
+  { name: "À la séance", price: "$25", classes: "1 cours", gym: "Non", extra: "Craie incluse" },
+  { name: "Mensuel", price: "$149", classes: "Illimité", gym: "Oui, 05 h 30-24 h 00", extra: "Pause en tout temps" },
+  { name: "Annuel", price: "$1,490", classes: "Illimité", gym: "Oui, 05 h 30-24 h 00", extra: "4 laissez-passer invités" },
+];
 ---
 
 <!DOCTYPE html>
@@ -20,7 +92,7 @@ const IMG = {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lune Fitness : CrossFit à Trois-Rivières</title>
-  <meta name="description" content="Lune Fitness : le box de CrossFit de Trois-Rivières qui vit la nuit. Cours à 5 h 30, prépa Hyrox, gym libre jusqu'à minuit. Première semaine gratuite." />
+  <meta name="description" content="Lune Fitness : le box de CrossFit nocturne de Trois-Rivières. Cours dès 5 h 30, prépa Hyrox, gym libre jusqu'à minuit. Première semaine gratuite." />
   <meta name="robots" content="noindex" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -28,34 +100,72 @@ const IMG = {
 </head>
 <body class="lf">
 
-  <!-- NAV -->
+  <!-- NAV: the week IS the nav -->
   <header class="lf-navwrap">
     <nav class="lf-nav" aria-label="Principal">
       <a class="lf-logo" href="#top" aria-label="Lune Fitness, accueil">LUNE<span class="lf-dot" aria-hidden="true"></span></a>
       <div class="lf-nav-links">
-        <a href="#programs">Programmes</a>
-        <a href="#schedule">Horaire</a>
-        <a href="#coaches">Coach</a>
+        <a href="#trainers">Coach</a>
+        <a href="#membership">Abonnements</a>
       </div>
       <a class="lf-btn-volt lf-btn-small" href="#trial">Semaine gratuite</a>
     </nav>
+    <div class="lf-weeknav" role="tablist" aria-label="Semaine d'entraînement : choisissez un jour">
+      {DAYS.map((d, i) => (
+        <button
+          class="lf-daytab"
+          role="tab"
+          id={"tab-" + d.id}
+          aria-controls={"panel-" + d.id}
+          aria-selected={i === 0 ? "true" : "false"}
+          tabindex={i === 0 ? 0 : -1}
+          data-day={d.id}
+        >
+          <span class="lf-daytab-short">{d.short}</span>
+          <span class="lf-daytab-focus">{d.focus}</span>
+        </button>
+      ))}
+    </div>
   </header>
 
   <main id="top">
-    <!-- HERO -->
-    <section class="lf-hero">
-      <div class="lf-hero-bg" aria-hidden="true">
-        <img src={IMG.hero} alt="Gym sombre baigné de néons cyan la nuit" loading="eager" fetchpriority="high" />
+    <!-- THE PROGRAM -->
+    <section class="lf-week" id="week" aria-label="Programme d'entraînement de la semaine">
+      <div class="lf-band" aria-hidden="true">
+        <img src={IMG.hero} alt="" loading="eager" fetchpriority="high" />
       </div>
-      <div class="lf-hero-in">
-        <p class="lf-eyebrow">BOX DE CROSSFIT · TROIS-RIVIÈRES · OUVERT JUSQU'À MINUIT</p>
-        <h1 class="lf-h1">SUER<br /><span class="lf-volt">APRÈS</span> MINUIT</h1>
-        <p class="lf-lede">Le box qui ne dort jamais. Des barres à 5 h 30, de la prépa Hyrox sur l'heure du lunch, du gym libre jusqu'à minuit. Musique forte, craie partout, zéro miroir.</p>
-        <div class="lf-hero-cta">
-          <a class="lf-btn-volt" href="#trial">Réclamer ma semaine gratuite</a>
-          <a class="lf-btn-ghost" href="#schedule">Voir l'horaire</a>
-        </div>
+      <div class="lf-wrap lf-band-in">
+        <p class="lf-eyebrow">SAISON 04 · CYCLE DE FORCE DE 8 SEMAINES · TROIS-RIVIÈRES</p>
+        <h1 class="lf-h1">CETTE SEMAINE<br />CHEZ <span class="lf-volt">LUNE</span></h1>
+        <p class="lf-lede">Pas de philosophie, pas de flafla. Choisis un jour ci-dessus et vois exactement ce que tu soulèves, combien de reps, et qui va te crier après. Le programme change toutes les 8 semaines; la craie ne part jamais.</p>
       </div>
+
+      <div class="lf-wrap">
+        {DAYS.map((d, i) => (
+          <div class="lf-panel" role="tabpanel" id={"panel-" + d.id} aria-labelledby={"tab-" + d.id} hidden={i !== 0}>
+            <div class="lf-panel-head">
+              <div>
+                <h2 class="lf-h2">{d.name} <span class="lf-volt">/ {d.focus}</span></h2>
+                <p class="lf-panel-meta">Coach {d.coach} · {d.dur} · Les portes ouvrent 30 min avant</p>
+              </div>
+              {d.img && <img class="lf-panel-img" src={d.img} alt={d.imgAlt} loading="lazy" />}
+            </div>
+            <table class="lf-ledger">
+              <caption class="lf-sr">Séance du {d.name} : {d.focus}</caption>
+              <thead>
+                <tr><th scope="col">Mouvement</th><th scope="col">Séries x reps</th><th scope="col">Notes</th></tr>
+              </thead>
+              <tbody>
+                {d.rows.map((r) => (
+                  <tr><td class="lf-move">{r[0]}</td><td class="lf-scheme">{r[1]}</td><td class="lf-note">{r[2]}</td></tr>
+                ))}
+              </tbody>
+            </table>
+            <p class="lf-panel-note">{d.note}</p>
+          </div>
+        ))}
+      </div>
+
       <div class="lf-ticker" aria-hidden="true">
         <div class="lf-ticker-track">
           <span>ZÉRO MIROIR</span><span>✦</span><span>CRAIE PARTOUT</span><span>✦</span><span>CLUB DES 5 H 30</span><span>✦</span><span>PRÉPA HYROX</span><span>✦</span><span>GYM LIBRE JUSQU'À MINUIT</span><span>✦</span>
@@ -64,154 +174,55 @@ const IMG = {
       </div>
     </section>
 
-    <!-- STATS -->
-    <section class="lf-stats">
-      <div><strong>850</strong><span>membres en forme</span></div>
-      <div><strong>14</strong><span>coach sur le plancher</span></div>
-      <div><strong>1400</strong><span>m² de fonte</span></div>
-      <div><strong>05:30</strong><span>premier cours du jour</span></div>
-    </section>
-
-    <!-- PROGRAMS -->
-    <section class="lf-section" id="programs">
+    <!-- TRAINERS: a roster, not cards -->
+    <section class="lf-section" id="trainers">
       <div class="lf-wrap">
-        <p class="lf-kicker">/// Choisis ton poison</p>
-        <h2 class="lf-h2">Trois façons<br />de souffrir <span class="lf-volt">heureux</span></h2>
-        <div class="lf-programs">
-          <article class="lf-prog">
-            <span class="lf-prog-n" aria-hidden="true">01</span>
-            <div>
-              <h3>CrossFit</h3>
-              <p>Le classique. Toujours varié, dirigé par un coach, 60 minutes. Ça s'adapte à tous les niveaux et ça remet tous les egos à leur place. Les débutants commencent par notre On-Ramp en 3 séances.</p>
-              <p class="lf-prog-meta">60 MIN · TOUS NIVEAUX · 32 COURS / SEMAINE</p>
-            </div>
-            <img src={IMG.barbell} alt="Athlète qui soulève une barre chargée" loading="lazy" />
-          </article>
-          <article class="lf-prog">
-            <span class="lf-prog-n" aria-hidden="true">02</span>
-            <div>
-              <h3>Prépa Hyrox</h3>
-              <p>Huit stations, une course brutale. Notre cycle de 8 semaines bâtit ton moteur avec des traîneaux, des wall balls et des intervalles de course qui mordent.</p>
-              <p class="lf-prog-meta">75 MIN · INTERMÉDIAIRE · CYCLES DE 8 SEMAINES</p>
-            </div>
-            <img src={IMG.deadlift} alt="Athlète en plein soulevé de terre dans un gym sombre" loading="lazy" />
-          </article>
-          <article class="lf-prog">
-            <span class="lf-prog-n" aria-hidden="true">03</span>
-            <div>
-              <h3>Gym libre</h3>
-              <p>Ton programme, notre équipement. Quatorze racks, deux rigs, un mur complet d'haltères et un coach sur le plancher si ta technique devient créative.</p>
-              <p class="lf-prog-meta">05 H 30-24 H · 7 JOURS · COACH SUR PLACE</p>
-            </div>
-            <img src={IMG.gym} alt="Gym sombre vide avec racks et poids" loading="lazy" />
-          </article>
-        </div>
+        <h2 class="lf-h2">TES <span class="lf-volt">COACH</span></h2>
+        <p class="lf-sec-lede">Ceux qui crient avec un sifflet. Des fous certifiés, tous autant qu'ils sont.</p>
+        <ol class="lf-roster">
+          {COACHES.map((c, i) => (
+            <li class="lf-roster-row">
+              <span class="lf-roster-n" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+              <img src={c.img} alt={c.alt} loading="lazy" />
+              <div>
+                <h3>{c.name}</h3>
+                <p class="lf-roster-role">{c.role}</p>
+                <p class="lf-roster-line">{c.line}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
       </div>
     </section>
 
-    <!-- SCHEDULE BOARD -->
-    <section class="lf-board" id="schedule">
+    <!-- MEMBERSHIP: a table, not cards -->
+    <section class="lf-section lf-section-panel" id="membership">
       <div class="lf-wrap">
-        <p class="lf-kicker">/// Cette semaine chez Lune</p>
-        <h2 class="lf-h2">Le tableau <span class="lf-volt">ne ment jamais</span></h2>
-        <div class="lf-days">
-          <div class="lf-day">
-            <h3>LUN</h3>
-            <ul>
-              <li><span>05:30</span><span>CrossFit</span></li>
-              <li><span>12:15</span><span>Express 30</span></li>
-              <li><span>17:30</span><span>Prépa Hyrox</span></li>
-              <li><span>19:00</span><span>Gym libre</span></li>
-            </ul>
-          </div>
-          <div class="lf-day">
-            <h3>MAR</h3>
-            <ul>
-              <li><span>05:30</span><span>CrossFit</span></li>
-              <li><span>12:15</span><span>Haltérophilie</span></li>
-              <li><span>17:30</span><span>CrossFit</span></li>
-              <li><span>19:00</span><span>Gym libre</span></li>
-            </ul>
-          </div>
-          <div class="lf-day">
-            <h3>MER</h3>
-            <ul>
-              <li><span>05:30</span><span>Prépa Hyrox</span></li>
-              <li><span>12:15</span><span>Express 30</span></li>
-              <li><span>17:30</span><span>CrossFit</span></li>
-              <li><span>19:00</span><span>Mobilité</span></li>
-            </ul>
-          </div>
-          <div class="lf-day">
-            <h3>JEU</h3>
-            <ul>
-              <li><span>05:30</span><span>CrossFit</span></li>
-              <li><span>12:15</span><span>Haltérophilie</span></li>
-              <li><span>17:30</span><span>Prépa Hyrox</span></li>
-              <li><span>19:00</span><span>Gym libre</span></li>
-            </ul>
-          </div>
-          <div class="lf-day">
-            <h3>VEN</h3>
-            <ul>
-              <li><span>05:30</span><span>CrossFit</span></li>
-              <li><span>12:15</span><span>Express 30</span></li>
-              <li><span>17:30</span><span>Friday Night Lights</span></li>
-              <li><span>20:00</span><span>Gym libre</span></li>
-            </ul>
-          </div>
-          <div class="lf-day lf-day-weekend">
-            <h3>SAM</h3>
-            <ul>
-              <li><span>09:00</span><span>WOD en équipe</span></li>
-              <li><span>10:30</span><span>On-Ramp</span></li>
-              <li><span>12:00</span><span>Gym libre</span></li>
-            </ul>
-          </div>
-          <div class="lf-day lf-day-weekend">
-            <h3>DIM</h3>
-            <ul>
-              <li><span>10:00</span><span>Long Engine</span></li>
-              <li><span>11:30</span><span>Mobilité</span></li>
-              <li><span>13:00</span><span>Gym libre</span></li>
-            </ul>
-          </div>
+        <h2 class="lf-h2">ABONNE<span class="lf-volt">MENTS</span></h2>
+        <p class="lf-sec-lede">Trois formules, pas de frais d'adhésion, pas de contrat de 40 pages. Annule par texto.</p>
+        <div class="lf-table-scroll">
+          <table class="lf-table">
+            <caption class="lf-sr">Formules d'abonnement</caption>
+            <thead>
+              <tr><th scope="col">Formule</th><th scope="col">Prix</th><th scope="col">Cours</th><th scope="col">Gym libre</th><th scope="col">En plus</th></tr>
+            </thead>
+            <tbody>
+              {TIERS.map((t) => (
+                <tr><th scope="row">{t.name}</th><td class="lf-price">{t.price}</td><td>{t.classes}</td><td>{t.gym}</td><td>{t.extra}</td></tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-        <p class="lf-board-note">Les portes ouvrent 30 minutes avant le premier cours. Le dernier parti éteint les lumières.</p>
-      </div>
-    </section>
-
-    <!-- COACHES -->
-    <section class="lf-section" id="coaches">
-      <div class="lf-wrap">
-        <p class="lf-kicker">/// Ceux qui crient avec un sifflet</p>
-        <h2 class="lf-h2">Coachés par des <span class="lf-volt">fous</span> (certifiés)</h2>
-        <div class="lf-coaches">
-          <article class="lf-coach">
-            <div class="lf-coach-img"><img src={IMG.weights} alt="Coach Marie qui soulève des haltères" loading="lazy" /></div>
-            <h3>Marie « Motor » Côté</h3>
-            <p>Coach en chef. CF-L3, 9 ans d'expérience. Elle se souvient de ton PR mieux que toi.</p>
-          </article>
-          <article class="lf-coach">
-            <div class="lf-coach-img"><img src={IMG.workout} alt="Coach Sam aux battle ropes" loading="lazy" /></div>
-            <h3>Sam « Sled » Bérubé</h3>
-            <p>Responsable Hyrox. Ex-sprinteur. Pense que les jours de repos sont une rumeur.</p>
-          </article>
-          <article class="lf-coach">
-            <div class="lf-coach-img"><img src={IMG.training} alt="Coach Jo qui démontre un mouvement" loading="lazy" /></div>
-            <h3>Jo « Technique » Lachance</h3>
-            <p>Mordu d'haltérophilie. Va corriger ton arraché et ton attitude.</p>
-          </article>
-        </div>
+        <p class="lf-table-note">Étudiants et premiers répondants : 15 % de rabais sur Mensuel et Annuel, tous les jours, sans questions.</p>
       </div>
     </section>
 
     <!-- TRIAL -->
     <section class="lf-trial" id="trial">
+      <div class="lf-trial-bg" aria-hidden="true"><img src={IMG.gym} alt="" loading="lazy" /></div>
       <div class="lf-wrap lf-trial-in">
         <div>
-          <p class="lf-kicker lf-kicker-dark">/// Zéro risque, que de la craie</p>
-          <h2 class="lf-h2 lf-h2-dark">Ta première semaine<br />est pour nous</h2>
+          <h2 class="lf-h2 lf-h2-dark">TA PREMIÈRE SEMAINE<br />EST POUR NOUS</h2>
           <p class="lf-trial-copy">Sept jours. Tous les cours, gym libre inclus. Un coach t'accompagne le premier jour, et personne n'essaie de te vendre quoi que ce soit. Si tu détestes ça, tu ne reviens jamais et on fait comme si de rien n'était.</p>
           <ul class="lf-trial-list">
             <li>✓ Tous les cours, toute la semaine</li>
@@ -242,14 +253,14 @@ const IMG = {
     <p class="lf-footer-giant" aria-hidden="true">LUNE</p>
     <div class="lf-wrap lf-footer-in">
       <p>© 2026 Lune Fitness. Démo fictive. Aucun PR n'a été blessé.</p>
-      <p>77, rue Fictive, Trois-Rivières QC · <a href="tel:+18195550177">(819) 555-0177</a> · Ouvert 7 jours, 05 h 30-24 h</p>
+      <p>77, rue Fictive, Trois-Rivières QC · <a href="tel:+18195550177">(819) 555-0177</a> · Ouvert 7 jours, 05 h 30-24 h 00</p>
     </div>
   </footer>
 
   <EscapeHatch locale="fr" />
 
   <script>
-    // Demo form: never submits anywhere
+    // Formulaire démo : ne soumet rien nulle part
     (function () {
       var form = document.getElementById('lf-form') as HTMLFormElement | null;
       form?.addEventListener('submit', function (e) {
@@ -258,6 +269,37 @@ const IMG = {
         if (note) note.textContent = 'C\'est réglé. Un coach va te texter d\'ici une heure pour planifier ton premier jour.';
         form?.reset();
       });
+    })();
+    // Onglets de la semaine : la semaine est la navigation. Onglet par défaut = aujourd'hui.
+    (function () {
+      var tabs = Array.prototype.slice.call(document.querySelectorAll('.lf-daytab')) as HTMLElement[];
+      var panels = Array.prototype.slice.call(document.querySelectorAll('.lf-panel')) as HTMLElement[];
+      if (!tabs.length) return;
+      function select(tab: HTMLElement, focus: boolean) {
+        tabs.forEach(function (t: HTMLElement) {
+          var on = t === tab;
+          t.setAttribute('aria-selected', on ? 'true' : 'false');
+          t.tabIndex = on ? 0 : -1;
+          if (focus && on) t.focus();
+        });
+        panels.forEach(function (p: HTMLElement) {
+          var show = p.id === 'panel-' + tab.dataset.day;
+          if (show) p.removeAttribute('hidden'); else p.setAttribute('hidden', '');
+        });
+      }
+      tabs.forEach(function (tab: HTMLElement, i: number) {
+        tab.addEventListener('click', function () { select(tab, false); });
+        tab.addEventListener('keydown', function (e: KeyboardEvent) {
+          var k = e.key;
+          var j: number | null = null;
+          if (k === 'ArrowRight') j = (i + 1) % tabs.length;
+          if (k === 'ArrowLeft') j = (i - 1 + tabs.length) % tabs.length;
+          if (j !== null) { e.preventDefault(); select(tabs[j], true); }
+        });
+      });
+      // Jour JS : 0=Dim..6=Sam. Ordre DAYS : Lun..Dim.
+      var today = (new Date().getDay() + 6) % 7;
+      select(tabs[today] || tabs[0], false);
     })();
   </script>
 
@@ -280,33 +322,45 @@ const IMG = {
     }
     .lf *, .lf *::before, .lf *::after { box-sizing: border-box; }
     .lf img { display: block; max-width: 100%; }
-    .lf-wrap { max-width: 1200px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px); }
+    .lf-wrap { max-width: 1100px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px); }
     .lf-volt { color: var(--lf-volt); }
+    .lf-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
     /* nav */
-    .lf-navwrap { position: fixed; top: 0; left: 0; right: 0; z-index: 60; }
-    .lf-nav {
-      display: flex; align-items: center; gap: 26px;
-      padding: 16px clamp(20px, 4vw, 44px);
-      background: rgba(10, 10, 11, 0.82); backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--lf-line);
-    }
+    .lf-navwrap { position: sticky; top: 0; z-index: 60; background: rgba(10, 10, 11, 0.9); backdrop-filter: blur(14px); border-bottom: 1px solid var(--lf-line); }
+    .lf-nav { display: flex; align-items: center; gap: 26px; padding: 14px clamp(20px, 4vw, 44px); }
     .lf-logo {
-      font-family: var(--lf-display); font-size: 30px; letter-spacing: 0.06em;
+      font-family: var(--lf-display); font-size: 28px; letter-spacing: 0.06em;
       color: var(--lf-white); text-decoration: none; display: flex; align-items: center; gap: 8px;
       margin-right: auto;
     }
-    .lf-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--lf-volt); box-shadow: 0 0 14px var(--lf-volt); animation: lf-pulse 2s ease-in-out infinite; }
+    .lf-dot { width: 11px; height: 11px; border-radius: 50%; background: var(--lf-volt); box-shadow: 0 0 14px var(--lf-volt); animation: lf-pulse 2s ease-in-out infinite; }
     @keyframes lf-pulse { 50% { opacity: 0.4; } }
     .lf-nav-links { display: flex; gap: 6px; }
-    .lf-nav-links a {
-      color: var(--lf-gray); text-decoration: none; font-weight: 700; font-size: 13px;
-      letter-spacing: 0.18em; text-transform: uppercase; padding: 10px 14px;
-    }
+    .lf-nav-links a { color: var(--lf-gray); text-decoration: none; font-weight: 700; font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; padding: 10px 14px; }
     .lf-nav-links a:hover { color: var(--lf-volt); }
 
+    /* the week as nav */
+    .lf-weeknav {
+      display: grid; grid-template-columns: repeat(7, 1fr);
+      border-top: 1px solid var(--lf-line);
+      overflow-x: auto;
+    }
+    .lf-daytab {
+      font-family: var(--lf-body); background: transparent; border: none; border-left: 1px solid var(--lf-line);
+      color: var(--lf-gray); padding: 12px 8px 14px; cursor: pointer; display: grid; gap: 3px; text-align: center;
+      min-width: 96px;
+    }
+    .lf-daytab:first-child { border-left: none; }
+    .lf-daytab-short { font-family: var(--lf-display); font-size: 19px; letter-spacing: 0.12em; color: var(--lf-white); }
+    .lf-daytab-focus { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+    .lf-daytab:hover .lf-daytab-short { color: var(--lf-volt); }
+    .lf-daytab[aria-selected="true"] { background: var(--lf-volt); }
+    .lf-daytab[aria-selected="true"] .lf-daytab-short, .lf-daytab[aria-selected="true"] .lf-daytab-focus { color: #0A0A0B; }
+    .lf-daytab:focus-visible { outline: 2px solid var(--lf-volt); outline-offset: -2px; }
+
     /* buttons */
-    .lf-btn-volt, .lf-btn-ghost, .lf-btn-black {
+    .lf-btn-volt, .lf-btn-black {
       display: inline-flex; align-items: center; justify-content: center;
       font-family: var(--lf-body); font-weight: 800; font-size: 15px; letter-spacing: 0.06em; text-transform: uppercase;
       padding: 16px 32px; text-decoration: none; cursor: pointer; border: none;
@@ -314,104 +368,91 @@ const IMG = {
       transition: transform 0.15s ease, filter 0.15s ease;
     }
     .lf-btn-volt { background: var(--lf-volt); color: #0A0A0B; }
-    .lf-btn-volt:hover { transform: translateY(-2px); filter: brightness(1.08); box-shadow: 0 8px 30px rgba(204, 255, 0, 0.35); }
-    .lf-btn-ghost { background: transparent; color: var(--lf-white); outline: 2px solid var(--lf-line); outline-offset: -2px; }
-    .lf-btn-ghost:hover { outline-color: var(--lf-volt); color: var(--lf-volt); }
+    .lf-btn-volt:hover { filter: brightness(1.08); box-shadow: 0 8px 30px rgba(204, 255, 0, 0.35); }
     .lf-btn-black { background: #0A0A0B; color: var(--lf-volt); width: 100%; }
     .lf-btn-small { font-size: 13px; padding: 12px 24px; }
 
     /* type */
-    .lf-kicker { font-weight: 800; font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--lf-volt); margin: 0 0 16px; }
-    .lf-kicker-dark { color: #0A0A0B; }
     .lf-h1 {
-      font-family: var(--lf-display); font-size: clamp(4rem, 13vw, 11rem);
-      line-height: 0.9; letter-spacing: 0.01em; margin: 0 0 24px; text-transform: uppercase;
+      font-family: var(--lf-display); font-size: clamp(3.4rem, 11vw, 8.5rem);
+      line-height: 0.92; letter-spacing: 0.01em; margin: 0 0 22px; text-transform: uppercase;
     }
     .lf-h2 {
-      font-family: var(--lf-display); font-size: clamp(2.6rem, 7vw, 5.2rem);
-      line-height: 0.95; text-transform: uppercase; margin: 0 0 40px;
+      font-family: var(--lf-display); font-size: clamp(2.2rem, 6vw, 4rem);
+      line-height: 0.95; text-transform: uppercase; margin: 0 0 14px;
     }
     .lf-h2-dark { color: #0A0A0B; }
     .lf-eyebrow { font-weight: 800; font-size: 12.5px; letter-spacing: 0.32em; color: var(--lf-volt); margin: 0 0 22px; }
 
-    /* hero */
-    .lf-hero { position: relative; min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden; }
-    .lf-hero-bg { position: absolute; inset: 0; }
-    .lf-hero-bg img { width: 100%; height: 100%; object-fit: cover; filter: saturate(1.25) contrast(1.15) brightness(0.62); }
-    .lf-hero-bg::after {
+    /* program band */
+    .lf-week { padding-top: 0; }
+    .lf-band { position: relative; height: clamp(220px, 34vw, 380px); overflow: hidden; }
+    .lf-band img { width: 100%; height: 100%; object-fit: cover; filter: saturate(1.25) contrast(1.15) brightness(0.5); }
+    .lf-band::after {
       content: ""; position: absolute; inset: 0;
-      background:
-        radial-gradient(ellipse 90% 60% at 70% 20%, rgba(204, 255, 0, 0.14), transparent 60%),
-        linear-gradient(180deg, rgba(10,10,11,0.55) 0%, rgba(10,10,11,0.1) 40%, rgba(10,10,11,0.94) 100%);
+      background: linear-gradient(180deg, rgba(10,10,11,0.35) 0%, rgba(10,10,11,0.05) 45%, rgba(10,10,11,0.96) 100%);
     }
-    .lf-hero-in { position: relative; z-index: 2; max-width: 1200px; width: 100%; margin: 0 auto; padding: 120px clamp(20px, 4vw, 40px) 40px; }
-    .lf-lede { font-size: 18px; line-height: 1.6; max-width: 46ch; color: #D8D8D2; margin: 0 0 32px; }
-    .lf-hero-cta { display: flex; gap: 14px; flex-wrap: wrap; }
-    .lf-ticker { position: relative; z-index: 2; background: var(--lf-volt); color: #0A0A0B; overflow: hidden; padding: 12px 0; border-block: 2px solid #0A0A0B; }
+    .lf-band-in { margin-top: -120px; position: relative; z-index: 2; padding-bottom: 10px; }
+    .lf-lede { font-size: 17px; line-height: 1.65; max-width: 52ch; color: #D8D8D2; margin: 0; }
+
+    /* workout panels */
+    .lf-panel { border: 1px solid var(--lf-line); background: var(--lf-panel); margin: 34px 0 60px; }
+    .lf-panel-head { display: flex; gap: 28px; align-items: center; justify-content: space-between; padding: clamp(24px, 4vw, 40px); border-bottom: 1px solid var(--lf-line); }
+    .lf-panel-head .lf-h2 { margin-bottom: 8px; }
+    .lf-panel-meta { margin: 0; color: var(--lf-gray); font-weight: 700; font-size: 13.5px; letter-spacing: 0.12em; text-transform: uppercase; }
+    .lf-panel-img { width: 220px; height: 150px; object-fit: cover; filter: grayscale(0.6) contrast(1.1); border: 1px solid var(--lf-line); flex-shrink: 0; }
+    .lf-ledger { width: 100%; border-collapse: collapse; font-size: 15px; }
+    .lf-ledger th, .lf-ledger td { text-align: left; padding: 16px clamp(16px, 3vw, 28px); border-bottom: 1px solid var(--lf-line); vertical-align: top; }
+    .lf-ledger thead th { font-size: 11.5px; font-weight: 800; letter-spacing: 0.24em; text-transform: uppercase; color: var(--lf-gray); padding-top: 20px; }
+    .lf-ledger tbody tr:last-child td { border-bottom: none; }
+    .lf-ledger tbody tr:hover { background: rgba(204, 255, 0, 0.04); }
+    .lf-move { font-weight: 700; color: var(--lf-white); }
+    .lf-scheme { font-weight: 800; color: var(--lf-volt); font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .lf-note { color: var(--lf-gray); }
+    .lf-panel-note { margin: 0; padding: 20px clamp(16px, 3vw, 28px); color: #C9C9C2; font-size: 15px; line-height: 1.65; border-top: 1px solid var(--lf-line); font-style: italic; }
+
+    /* ticker */
+    .lf-ticker { background: var(--lf-volt); color: #0A0A0B; overflow: hidden; padding: 12px 0; border-block: 2px solid #0A0A0B; }
     .lf-ticker-track { display: flex; gap: 30px; width: max-content; animation: lf-tick 20s linear infinite; font-family: var(--lf-display); font-size: 20px; letter-spacing: 0.08em; }
     @keyframes lf-tick { to { transform: translateX(-50%); } }
 
-    /* stats */
-    .lf-stats {
-      display: grid; grid-template-columns: repeat(4, 1fr);
-      border-block: 1px solid var(--lf-line); background: var(--lf-panel);
-    }
-    .lf-stats div { padding: 34px 20px; text-align: center; border-left: 1px solid var(--lf-line); display: grid; gap: 6px; }
-    .lf-stats div:first-child { border-left: none; }
-    .lf-stats strong { font-family: var(--lf-display); font-size: clamp(2.2rem, 4.5vw, 3.6rem); color: var(--lf-volt); letter-spacing: 0.02em; }
-    .lf-stats span { font-size: 12.5px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--lf-gray); }
-
     /* sections */
-    .lf-section { padding: clamp(70px, 9vw, 130px) 0; }
+    .lf-section { padding: clamp(70px, 9vw, 120px) 0; }
+    .lf-section-panel { background: var(--lf-panel); border-block: 1px solid var(--lf-line); }
+    .lf-sec-lede { color: var(--lf-gray); font-size: 16.5px; line-height: 1.65; margin: 0 0 40px; max-width: 52ch; }
 
-    /* programs */
-    .lf-programs { display: grid; gap: 18px; }
-    .lf-prog {
-      display: grid; grid-template-columns: 110px 1fr 300px; gap: 30px; align-items: center;
-      background: var(--lf-panel); border: 1px solid var(--lf-line); padding: 30px;
-      transition: border-color 0.2s ease, transform 0.2s ease;
+    /* roster */
+    .lf-roster { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--lf-line); counter-reset: none; }
+    .lf-roster-row {
+      display: grid; grid-template-columns: 64px 120px 1fr; gap: clamp(16px, 3vw, 34px); align-items: center;
+      padding: 22px 0; border-bottom: 1px solid var(--lf-line);
     }
-    .lf-prog:hover { border-color: var(--lf-volt); transform: translateX(8px); }
-    .lf-prog-n { font-family: var(--lf-display); font-size: clamp(3rem, 6vw, 5rem); color: transparent; -webkit-text-stroke: 2px var(--lf-line); line-height: 1; }
-    .lf-prog:hover .lf-prog-n { -webkit-text-stroke-color: var(--lf-volt); }
-    .lf-prog h3 { font-family: var(--lf-display); font-size: 34px; letter-spacing: 0.03em; margin: 0 0 10px; text-transform: uppercase; }
-    .lf-prog p { margin: 0 0 12px; color: #C9C9C2; font-size: 15.5px; line-height: 1.65; }
-    .lf-prog-meta { font-size: 12px; font-weight: 800; letter-spacing: 0.22em; color: var(--lf-volt); }
-    .lf-prog img { width: 100%; height: 190px; object-fit: cover; filter: grayscale(1) contrast(1.1); border: 1px solid var(--lf-line); }
-    .lf-prog:hover img { filter: grayscale(0.2) contrast(1.05); }
+    .lf-roster-row:hover { background: rgba(204, 255, 0, 0.03); }
+    .lf-roster-n { font-family: var(--lf-display); font-size: 2.4rem; color: transparent; -webkit-text-stroke: 1.5px var(--lf-line); }
+    .lf-roster-row img { width: 120px; height: 120px; object-fit: cover; border-radius: 50%; filter: grayscale(1) contrast(1.1); border: 2px solid var(--lf-line); }
+    .lf-roster-row:hover img { filter: grayscale(0.2); border-color: var(--lf-volt); }
+    .lf-roster-row h3 { font-family: var(--lf-display); font-size: 26px; letter-spacing: 0.03em; margin: 0 0 4px; text-transform: uppercase; }
+    .lf-roster-role { margin: 0 0 6px; color: var(--lf-volt); font-weight: 800; font-size: 12.5px; letter-spacing: 0.2em; text-transform: uppercase; }
+    .lf-roster-line { margin: 0; color: var(--lf-gray); font-size: 15px; }
 
-    /* schedule board */
-    .lf-board { background: var(--lf-panel); border-block: 1px solid var(--lf-line); padding: clamp(70px, 9vw, 130px) 0; }
-    .lf-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
-    .lf-day { background: var(--lf-black); border: 1px solid var(--lf-line); padding: 18px 14px; }
-    .lf-day h3 {
-      font-family: var(--lf-display); font-size: 20px; letter-spacing: 0.1em; margin: 0 0 14px;
-      color: var(--lf-volt); border-bottom: 1px solid var(--lf-line); padding-bottom: 10px;
-    }
-    .lf-day-weekend h3 { color: var(--lf-white); }
-    .lf-day ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
-    .lf-day li { display: grid; gap: 2px; font-size: 13px; }
-    .lf-day li span:first-child { font-weight: 800; color: var(--lf-volt); font-variant-numeric: tabular-nums; }
-    .lf-day-weekend li span:first-child { color: var(--lf-gray); }
-    .lf-day li span:last-child { color: #C9C9C2; font-weight: 500; }
-    .lf-board-note { text-align: center; color: var(--lf-gray); font-size: 14px; margin: 30px 0 0; font-weight: 600; letter-spacing: 0.06em; }
-
-    /* coaches */
-    .lf-coaches { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-    .lf-coach { background: var(--lf-panel); border: 1px solid var(--lf-line); transition: transform 0.2s ease; }
-    .lf-coach:hover { transform: translateY(-6px); }
-    .lf-coach-img { position: relative; overflow: hidden; }
-    .lf-coach-img img { width: 100%; height: 340px; object-fit: cover; filter: grayscale(1) contrast(1.12); transition: filter 0.25s ease, transform 0.25s ease; }
-    .lf-coach:hover .lf-coach-img img { filter: grayscale(0) contrast(1); transform: scale(1.03); }
-    .lf-coach-img::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(204,255,0,0.22)); mix-blend-mode: overlay; }
-    .lf-coach h3 { font-family: var(--lf-display); font-size: 24px; letter-spacing: 0.04em; margin: 0; padding: 20px 22px 6px; text-transform: uppercase; }
-    .lf-coach p { margin: 0; padding: 0 22px 24px; color: var(--lf-gray); font-size: 14.5px; line-height: 1.6; }
+    /* membership table */
+    .lf-table-scroll { overflow-x: auto; border: 1px solid var(--lf-line); }
+    .lf-table { width: 100%; border-collapse: collapse; min-width: 640px; font-size: 15.5px; background: var(--lf-black); }
+    .lf-table th, .lf-table td { text-align: left; padding: 20px 24px; border-bottom: 1px solid var(--lf-line); }
+    .lf-table thead th { font-size: 11.5px; font-weight: 800; letter-spacing: 0.24em; text-transform: uppercase; color: var(--lf-gray); }
+    .lf-table tbody tr:last-child th, .lf-table tbody tr:last-child td { border-bottom: none; }
+    .lf-table tbody th { font-family: var(--lf-display); font-size: 24px; letter-spacing: 0.04em; text-transform: uppercase; font-weight: 400; }
+    .lf-table tbody tr:hover { background: rgba(204, 255, 0, 0.04); }
+    .lf-price { font-weight: 800; color: var(--lf-volt); font-size: 19px; font-variant-numeric: tabular-nums; }
+    .lf-table-note { color: var(--lf-gray); font-size: 14px; margin: 18px 0 0; }
 
     /* trial */
-    .lf-trial { background: var(--lf-volt); color: #0A0A0B; padding: clamp(70px, 9vw, 120px) 0; }
-    .lf-trial-in { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(36px, 6vw, 80px); align-items: center; }
+    .lf-trial { position: relative; background: var(--lf-volt); color: #0A0A0B; padding: clamp(70px, 9vw, 120px) 0; overflow: hidden; }
+    .lf-trial-bg { position: absolute; inset: 0; opacity: 0.14; }
+    .lf-trial-bg img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.2); }
+    .lf-trial-in { position: relative; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(36px, 6vw, 80px); align-items: center; }
     .lf-trial-copy { font-size: 17px; line-height: 1.65; max-width: 44ch; margin: 0 0 24px; font-weight: 500; }
-    .lf-trial-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-weight: 800; font-size: 16px; letter-spacing: 0.02em; }
+    .lf-trial-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-weight: 800; font-size: 16px; }
     .lf-form { background: #0A0A0B; padding: clamp(28px, 4vw, 44px); display: grid; gap: 16px; }
     .lf-form h3 { font-family: var(--lf-display); font-size: 30px; letter-spacing: 0.05em; color: var(--lf-volt); margin: 0; text-transform: uppercase; }
     .lf-form label { display: grid; gap: 8px; font-weight: 800; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--lf-gray); }
@@ -434,28 +475,22 @@ const IMG = {
     .lf-footer-in p { margin: 0; }
     .lf-footer-in a { color: var(--lf-volt); }
 
-    @media (max-width: 1020px) {
-      .lf-days { grid-template-columns: repeat(4, 1fr); }
-      .lf-prog { grid-template-columns: 80px 1fr; }
-      .lf-prog img { display: none; }
-    }
     @media (max-width: 860px) {
       .lf-nav-links { display: none; }
-      .lf-stats { grid-template-columns: 1fr 1fr; }
-      .lf-stats div:nth-child(3) { border-left: none; }
-      .lf-stats div { border-top: 1px solid var(--lf-line); }
-      .lf-stats div:nth-child(-n+2) { border-top: none; }
-      .lf-coaches { grid-template-columns: 1fr; max-width: 460px; margin-inline: auto; }
+      .lf-panel-head { flex-direction: column; align-items: flex-start; }
+      .lf-panel-img { width: 100%; height: 180px; }
+      .lf-roster-row { grid-template-columns: 88px 1fr; }
+      .lf-roster-n { display: none; }
+      .lf-roster-row img { width: 88px; height: 88px; }
       .lf-trial-in { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 640px) {
-      .lf-days { grid-template-columns: 1fr 1fr; }
-      .lf-prog { grid-template-columns: 1fr; gap: 14px; }
-      .lf-prog-n { font-size: 2.6rem; }
+      .lf-ledger thead { display: none; }
+      .lf-ledger tr { display: grid; gap: 4px; padding: 14px clamp(16px, 3vw, 28px); border-bottom: 1px solid var(--lf-line); }
+      .lf-ledger th, .lf-ledger td { padding: 0; border: none; }
+      .lf-note { font-size: 13.5px; }
     }
     @media (prefers-reduced-motion: reduce) {
       .lf-ticker-track, .lf-dot { animation: none; }
-      .lf-btn-volt, .lf-btn-ghost, .lf-prog, .lf-coach { transition: none; }
+      .lf-btn-volt, .lf-daytab { transition: none; }
     }
   </style>
 </body>
