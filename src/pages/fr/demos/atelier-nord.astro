@@ -1,8 +1,9 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
 
-// Démo : Atelier Nord — studio automobile fictif haut de gamme, Brossard QC.
-// Direction artistique autonome, hors du système de thème WEBAO.
+// Démo : Atelier Nord · studio automobile fictif haut de gamme, Brossard QC.
+// Reconstruite comme un « centre de mission » sombre. Direction artistique
+// autonome, hors du système de thème WEBAO.
 const IMG = {
   hero: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1800&auto=format&fit=crop",
   garage: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1200&auto=format&fit=crop",
@@ -16,7 +17,7 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Atelier Nord — Entretien automobile de précision à Brossard</title>
+  <title>Atelier Nord · Entretien automobile de précision à Brossard</title>
   <meta name="description" content="Atelier Nord : diagnostic de niveau concessionnaire, esthétique haut de gamme et performance honnête à Brossard. Sur rendez-vous seulement." />
   <meta name="robots" content="noindex" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -27,13 +28,13 @@ const IMG = {
 
   <header class="an-nav">
     <div class="an-nav-in">
-      <a class="an-logo" href="#top" aria-label="Atelier Nord — accueil">
+      <a class="an-logo" href="#top" aria-label="Atelier Nord · accueil">
         <span class="an-logo-mark" aria-hidden="true">N/</span>
         <span class="an-logo-text">ATELIER&nbsp;NORD</span>
       </a>
       <nav class="an-links" aria-label="Navigation principale">
         <a href="#services"><span>01</span>Services</a>
-        <a href="#inventory"><span>02</span>Atelier</a>
+        <a href="#bays"><span>02</span>Dans les baies</a>
         <a href="#process"><span>03</span>Processus</a>
         <a href="#contact"><span>04</span>Contact</a>
       </nav>
@@ -42,78 +43,100 @@ const IMG = {
     </div>
     <div class="an-mobile" hidden>
       <a href="#services">Services</a>
-      <a href="#inventory">Atelier</a>
+      <a href="#bays">Dans les baies</a>
       <a href="#process">Processus</a>
       <a href="#contact">Prendre rendez-vous</a>
     </div>
   </header>
 
   <main id="top">
-    <!-- HERO -->
+    <!-- HÉROS : titre à gauche, état des baies à droite -->
     <section class="an-hero">
-      <div class="an-hero-bg" aria-hidden="true">
-        <img src={IMG.hero} alt="" loading="eager" fetchpriority="high" />
-      </div>
-      <div class="an-wrap an-hero-in">
-        <p class="an-mono an-hero-kicker"><span class="an-live" aria-hidden="true"></span>BROSSARD QC · SUR RENDEZ-VOUS SEULEMENT</p>
-        <h1 class="an-h1">La précision<br />a une adresse.</h1>
-        <p class="an-hero-sub">Diagnostic de niveau concessionnaire, esthétique de qualité concours et performance honnête — pour ceux qui lisent la fiche technique.</p>
-        <div class="an-hero-cta">
-          <a class="an-btn an-btn-accent" href="#contact">Prendre rendez-vous</a>
-          <a class="an-btn an-btn-line" href="#services">Voir les services</a>
-        </div>
-        <div class="an-ticker" aria-hidden="true">
-          <div class="an-ticker-row">
-            <span>DIAGNOSTIC</span><i>·</i><span>ESTHÉTIQUE</span><i>·</i><span>PERFORMANCE</span><i>·</i><span>GÉOMÉTRIE</span><i>·</i><span>CÉRAMIQUE</span><i>·</i><span>PRÉPA PISTE</span><i>·</i>
-            <span>DIAGNOSTIC</span><i>·</i><span>ESTHÉTIQUE</span><i>·</i><span>PERFORMANCE</span><i>·</i><span>GÉOMÉTRIE</span><i>·</i><span>CÉRAMIQUE</span><i>·</i><span>PRÉPA PISTE</span><i>·</i>
+      <div class="an-wrap an-hero-grid">
+        <div class="an-hero-copy">
+          <p class="an-mono an-hero-kicker"><span class="an-live" aria-hidden="true"></span>Brossard QC · sur rendez-vous seulement</p>
+          <h1 class="an-h1">La précision<br />a une adresse.</h1>
+          <p class="an-hero-sub">Diagnostic de niveau concessionnaire, esthétique de qualité concours et performance honnête, pour ceux qui lisent la fiche technique.</p>
+          <div class="an-hero-cta">
+            <a class="an-btn an-btn-accent" href="#contact">Prendre rendez-vous</a>
+            <a class="an-btn an-btn-line" href="#bays">Voir les baies</a>
           </div>
+          <p class="an-mono an-hero-note">Mar. au sam. · 8 h à 18 h · 3 baies · 2 techniciens en poste</p>
         </div>
+        <aside class="an-panel" aria-label="État des baies en direct">
+          <div class="an-panel-head">
+            <p class="an-mono"><span class="an-live" aria-hidden="true"></span>État des baies</p>
+            <p class="an-mono an-panel-upd">Mis à jour à 10 h 42</p>
+          </div>
+          <div class="an-bay">
+            <div class="an-bay-top"><span class="an-mono">Baie 01</span><span class="an-status an-status-busy">En cours</span></div>
+            <p class="an-bay-job">Céramique · polissage étape 2</p>
+            <p class="an-mono an-bay-eta">Céramique à 14 h</p>
+          </div>
+          <div class="an-bay">
+            <div class="an-bay-top"><span class="an-mono">Baie 02</span><span class="an-status an-status-qc">Contrôle</span></div>
+            <p class="an-bay-job">Diagnostic complet · raté intermittent</p>
+            <p class="an-mono an-bay-eta">Essai routier ensuite</p>
+          </div>
+          <div class="an-bay">
+            <div class="an-bay-top"><span class="an-mono">Baie 03</span><span class="an-status an-status-open">Libre</span></div>
+            <p class="an-bay-job">Disponible · tous services</p>
+            <p class="an-mono an-bay-eta">Prochain créneau : 14 h 30</p>
+          </div>
+          <a class="an-btn an-btn-accent an-btn-full an-panel-cta" href="#contact">Réserver la baie 03</a>
+        </aside>
       </div>
     </section>
 
-    <!-- SERVICES -->
+    <!-- SERVICES : lignes de tableau de specs -->
     <section class="an-section" id="services">
       <div class="an-wrap">
         <div class="an-sec-head">
-          <p class="an-mono">01 / SERVICES</p>
+          <p class="an-mono">01 / Services</p>
           <h2 class="an-h2">Trois disciplines.<br />Zéro approximation.</h2>
         </div>
-        <div class="an-svc-grid">
-          <article class="an-svc">
-            <div class="an-svc-top"><span class="an-mono">S.01</span><span class="an-tag">Le plus demandé</span></div>
-            <h3>Diagnostic</h3>
-            <p>Diagnostic électrique à l'oscilloscope, codage de modules et inspections préachat avec rapport de 140 points.</p>
-            <ul class="an-spec">
-              <li><span>Inspection</span><b>140 pts</b></li>
-              <li><span>Rapport</span><b>le jour même</b></li>
-              <li><span>Estimation</span><b>ferme</b></li>
-            </ul>
+        <div class="an-specs">
+          <article class="an-specrow">
+            <span class="an-mono an-specrow-code">S.01</span>
+            <div class="an-specrow-main">
+              <h3>Diagnostic</h3>
+              <p>Diagnostic électrique à l'oscilloscope, codage de modules et inspections préachat de 140 points.</p>
+            </div>
+            <div class="an-chips">
+              <span class="an-chip">Rapport 140 pts</span>
+              <span class="an-chip">Résultats le jour même</span>
+              <span class="an-chip">Devis ferme</span>
+            </div>
           </article>
-          <article class="an-svc">
-            <div class="an-svc-top"><span class="an-mono">S.02</span></div>
-            <h3>Esthétique</h3>
-            <p>Polissage multi-étapes, revêtements céramiques et intérieurs remis à neuf — documentés panneau par panneau.</p>
-            <ul class="an-spec">
-              <li><span>Polissage</span><b>2–3 étapes</b></li>
-              <li><span>Céramique</span><b>jusqu'à 5 ans</b></li>
-              <li><span>Intérieur</span><b>remise à neuf</b></li>
-            </ul>
+          <article class="an-specrow">
+            <span class="an-mono an-specrow-code">S.02</span>
+            <div class="an-specrow-main">
+              <h3>Esthétique</h3>
+              <p>Polissage multi-étapes, revêtements céramiques et remises à neuf intérieures, documentés panneau par panneau.</p>
+            </div>
+            <div class="an-chips">
+              <span class="an-chip">Polissage multi-étapes</span>
+              <span class="an-chip">Céramique 5 ans</span>
+              <span class="an-chip">Dossier photo</span>
+            </div>
           </article>
-          <article class="an-svc">
-            <div class="an-svc-top"><span class="an-mono">S.03</span></div>
-            <h3>Performance</h3>
-            <p>Géométrie de suspension, freins améliorés et préparation piste. Mesuré au banc, pas à l'instinct.</p>
-            <ul class="an-spec">
-              <li><span>Géométrie</span><b>0,01°</b></li>
-              <li><span>Banc</span><b>sur place</b></li>
-              <li><span>Prépa piste</span><b>check-list</b></li>
-            </ul>
+          <article class="an-specrow">
+            <span class="an-mono an-specrow-code">S.03</span>
+            <div class="an-specrow-main">
+              <h3>Performance</h3>
+              <p>Géométrie de suspension, freins améliorés et préparation piste, mesurés au banc.</p>
+            </div>
+            <div class="an-chips">
+              <span class="an-chip">Précision 0,01°</span>
+              <span class="an-chip">Banc sur place</span>
+              <span class="an-chip">Check-list piste</span>
+            </div>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- NUMBERS -->
+    <!-- BANDEAU CHIFFRES -->
     <section class="an-numbers">
       <div class="an-wrap an-numbers-in">
         <div><strong>4,9</strong><span class="an-mono">note moyenne / 186 avis</span></div>
@@ -123,90 +146,100 @@ const IMG = {
       </div>
     </section>
 
-    <!-- GARAGE FEATURE -->
-    <section class="an-section an-feature">
-      <div class="an-wrap an-feature-grid">
-        <figure class="an-feature-img">
-          <img src={IMG.garage} alt="Une voiture classique dans l'atelier d'Atelier Nord" loading="lazy" />
-          <figcaption class="an-mono">BAIE 02 — 06:40</figcaption>
-        </figure>
-        <div>
-          <p class="an-mono">L'ATELIER</p>
-          <h2 class="an-h2">Un atelier,<br />pas une salle d'attente.</h2>
-          <p class="an-prose">Pas de théâtre de machine à café, pas de conseillers qui vendent des essuie-glaces. Vous parlez au technicien. Chaque voiture est photographiée à l'arrivée, serrée au couple prescrit et essayée sur route avant la reprise.</p>
-          <ul class="an-list">
-            <li>Prise en charge photo et inspection numérique</li>
-            <li>Pièces d'origine ou mieux, toujours détaillées</li>
-            <li>Couples de serrage consignés par roue, par job</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- INVENTORY -->
-    <section class="an-section" id="inventory">
+    <!-- DANS LES BAIES : journal d'atelier -->
+    <section class="an-section" id="bays">
       <div class="an-wrap">
         <div class="an-sec-head">
-          <p class="an-mono">02 / ATELIER</p>
-          <h2 class="an-h2">En ce moment<br />dans les baies.</h2>
+          <p class="an-mono">02 / Dans les baies</p>
+          <h2 class="an-h2">Journal d'atelier.</h2>
         </div>
-        <div class="an-inv-grid">
-          <article class="an-inv">
-            <img src={IMG.detail} alt="Berline sport bleue après polissage" loading="lazy" />
-            <div class="an-inv-body">
-              <p class="an-mono">BAIE 01 · CÉRAMIQUE</p>
-              <h3>Polissage, étape 2</h3>
-              <p>Polissage deux étapes + céramique 5 ans. 31 heures, documentées.</p>
+        <div class="an-log-grid">
+          <ol class="an-log">
+            <li>
+              <span class="an-mono an-log-t">10 h 20 · Baie 02</span>
+              <p>Géométrie réglée selon les specs. Essai routier ensuite.</p>
+            </li>
+            <li>
+              <span class="an-mono an-log-t">09 h 05 · Baie 03</span>
+              <p>Raté localisé : module de bobine défaillant. Le client a approuvé la réparation.</p>
+            </li>
+            <li>
+              <span class="an-mono an-log-t">08 h 12 · Baie 01</span>
+              <p>Polissage étape 2 terminé. La céramique à 14 h.</p>
+            </li>
+            <li>
+              <span class="an-mono an-log-t">06 h 40 · Baie 02</span>
+              <p>Photos d'arrivée prises. La GTI est sur le pont.</p>
+            </li>
+          </ol>
+          <div class="an-log-media">
+            <figure class="an-log-fig">
+              <img src={IMG.garage} alt="Une voiture classique dans l'atelier d'Atelier Nord" loading="lazy" />
+              <figcaption class="an-mono">Baie 02 · 06 h 40</figcaption>
+            </figure>
+            <div class="an-log-pair">
+              <figure class="an-log-fig">
+                <img src={IMG.detail} alt="Berline sport bleue après polissage" loading="lazy" />
+                <figcaption class="an-mono">Baie 01 · polissage</figcaption>
+              </figure>
+              <figure class="an-log-fig">
+                <img src={IMG.engine} alt="Moteur pendant une séance de diagnostic" loading="lazy" />
+                <figcaption class="an-mono">Baie 03 · diagnostic</figcaption>
+              </figure>
             </div>
-          </article>
-          <article class="an-inv">
-            <img src={IMG.engine} alt="Moteur pendant une séance de diagnostic" loading="lazy" />
-            <div class="an-inv-body">
-              <p class="an-mono">BAIE 03 · DIAGNOSTIC</p>
-              <h3>Raté intermittent, résolu</h3>
-              <p>Localisé à l'oscilloscope : module de bobine défaillant. Réparé le jour même, sans remplacer à l'aveugle.</p>
-            </div>
-          </article>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- PROCESS -->
+    <!-- PROCESSUS : ligne du temps numérotée -->
     <section class="an-section an-process" id="process">
       <div class="an-wrap">
         <div class="an-sec-head">
-          <p class="an-mono">03 / PROCESSUS</p>
+          <p class="an-mono">03 / Processus</p>
           <h2 class="an-h2">Le déroulement d'une visite.</h2>
         </div>
-        <ol class="an-steps">
-          <li><span class="an-mono">P.01</span><h3>Réserver</h3><p>Choisissez un créneau en ligne ou par téléphone. Décrivez les symptômes, pas les solutions — c'est notre travail.</p></li>
-          <li><span class="an-mono">P.02</span><h3>Inspecter</h3><p>Prise en charge photo et inspection numérique envoyées sur votre téléphone avant qu'on touche un boulon.</p></li>
-          <li><span class="an-mono">P.03</span><h3>Approuver</h3><p>Devis ferme, pièces détaillées. Rien ne bouge sans votre oui explicite.</p></li>
-          <li><span class="an-mono">P.04</span><h3>Rouler</h3><p>Serré au couple, testé, lavé. Les vieilles pièces dans une boîte, dans le coffre, si vous les voulez.</p></li>
+        <ol class="an-timeline">
+          <li>
+            <span class="an-mono an-timeline-n">P.01</span>
+            <div><h3>Réserver</h3><p>Choisissez un créneau en ligne ou par téléphone. Décrivez les symptômes, pas les solutions. C'est notre travail.</p></div>
+          </li>
+          <li>
+            <span class="an-mono an-timeline-n">P.02</span>
+            <div><h3>Inspecter</h3><p>Photos d'arrivée et inspection numérique sur votre téléphone avant qu'on touche un boulon.</p></div>
+          </li>
+          <li>
+            <span class="an-mono an-timeline-n">P.03</span>
+            <div><h3>Approuver</h3><p>Devis ferme, pièces détaillées. Rien ne bouge sans votre oui explicite.</p></div>
+          </li>
+          <li>
+            <span class="an-mono an-timeline-n">P.04</span>
+            <div><h3>Rouler</h3><p>Serré au couple, testé, lavé. Les vieilles pièces dans une boîte, dans le coffre, si vous les voulez.</p></div>
+          </li>
         </ol>
       </div>
     </section>
 
-    <!-- CONTACT -->
+    <!-- CONTACT : deux colonnes -->
     <section class="an-section" id="contact">
       <div class="an-wrap an-contact-grid">
         <div>
-          <p class="an-mono">04 / CONTACT</p>
+          <p class="an-mono">04 / Contact</p>
           <h2 class="an-h2">Réservez la baie.</h2>
-          <p class="an-prose">Rendez-vous du mardi au samedi. Urgences (vous savez ce que c'est) — appelez.</p>
+          <p class="an-prose">Rendez-vous du mardi au samedi. Urgences (vous savez ce que c'est) : appelez.</p>
           <dl class="an-contact-list">
-            <div><dt class="an-mono">TÉLÉPHONE</dt><dd><a href="tel:+14505550177">(450) 555-0177</a></dd></div>
-            <div><dt class="an-mono">COURRIEL</dt><dd><a href="mailto:service@atelier-nord-demo.ca">service@atelier-nord-demo.ca</a></dd></div>
-            <div><dt class="an-mono">ATELIER</dt><dd>123, rue Fictive, Brossard QC</dd></div>
-            <div><dt class="an-mono">HEURES</dt><dd>Mar–sam · 8 h–18 h</dd></div>
+            <div><dt class="an-mono">Téléphone</dt><dd><a href="tel:+14505550177">(450) 555-0177</a></dd></div>
+            <div><dt class="an-mono">Courriel</dt><dd><a href="mailto:service@atelier-nord-demo.ca">service@atelier-nord-demo.ca</a></dd></div>
+            <div><dt class="an-mono">Atelier</dt><dd>123, rue Fictive, Brossard QC</dd></div>
+            <div><dt class="an-mono">Heures</dt><dd>Mar. au sam. · 8 h à 18 h</dd></div>
           </dl>
         </div>
         <form class="an-form" id="an-form" novalidate>
           <div class="an-form-row">
-            <label class="an-mono">NOM<input type="text" name="name" required placeholder="Jeanne Tremblay" /></label>
-            <label class="an-mono">TÉLÉPHONE<input type="tel" name="phone" required placeholder="(450) 555-0000" /></label>
+            <label class="an-mono">Nom<input type="text" name="name" required placeholder="Jeanne Tremblay" /></label>
+            <label class="an-mono">Téléphone<input type="tel" name="phone" required placeholder="(450) 555-0000" /></label>
           </div>
-          <label class="an-mono">SERVICE
+          <label class="an-mono">Service
             <select name="service">
               <option>Diagnostic</option>
               <option>Esthétique</option>
@@ -214,7 +247,7 @@ const IMG = {
               <option>Inspection préachat</option>
             </select>
           </label>
-          <label class="an-mono">VÉHICULE / SYMPTÔMES<textarea name="details" rows="4" placeholder="Golf GTI 2019 — vibration à 110 km/h…"></textarea></label>
+          <label class="an-mono">Véhicule / symptômes<textarea name="details" rows="4" placeholder="Golf GTI 2019, vibration à 110 km/h…"></textarea></label>
           <button class="an-btn an-btn-accent an-btn-full" type="submit">Demander un rendez-vous</button>
           <p class="an-form-note" role="status" aria-live="polite"></p>
         </form>
@@ -225,7 +258,7 @@ const IMG = {
   <footer class="an-footer">
     <div class="an-wrap an-footer-in">
       <p class="an-logo"><span class="an-logo-mark" aria-hidden="true">N/</span><span class="an-logo-text">ATELIER&nbsp;NORD</span></p>
-      <p class="an-footer-note an-mono">© 2026 ATELIER NORD — BROSSARD, QC</p>
+      <p class="an-footer-note an-mono">© 2026 Atelier Nord · Brossard, QC</p>
     </div>
   </footer>
 
@@ -265,6 +298,8 @@ const IMG = {
       --an-line: rgba(242, 245, 249, 0.12);
       --an-accent: #3D7BFF;
       --an-accent-soft: rgba(61, 123, 255, 0.14);
+      --an-green: #34D399;
+      --an-amber: #F5A623;
       --an-font-d: "Space Grotesk", system-ui, sans-serif;
       --an-font-m: "IBM Plex Mono", ui-monospace, monospace;
       margin: 0;
@@ -278,23 +313,16 @@ const IMG = {
     .an img { display: block; max-width: 100%; }
     .an-wrap { max-width: 1200px; margin: 0 auto; padding: 0 clamp(18px, 4vw, 40px); }
     .an-mono { font-family: var(--an-font-m); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; }
-    .an-h1 {
-      font-weight: 700; letter-spacing: -0.03em;
-      font-size: clamp(3rem, 9vw, 6.6rem); line-height: 0.94; margin: 0;
-    }
-    .an-h2 {
-      font-weight: 700; letter-spacing: -0.025em;
-      font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1; margin: 0;
-    }
+
+    .an-h1 { font-weight: 700; letter-spacing: -0.03em; font-size: clamp(3rem, 8.5vw, 6.2rem); line-height: 0.94; margin: 0; }
+    .an-h2 { font-weight: 700; letter-spacing: -0.025em; font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1; margin: 0; }
     .an-prose { color: var(--an-ink-2); font-size: 15.5px; line-height: 1.7; max-width: 52ch; }
-    .an-prose a, .an-contact-list a { color: var(--an-accent); }
+
+    /* nav */
     .an-nav { position: sticky; top: 0; z-index: 60; background: rgba(10, 15, 26, 0.88); backdrop-filter: blur(14px); border-bottom: 1px solid var(--an-line); }
     .an-nav-in { max-width: 1320px; margin: 0 auto; padding: 14px clamp(18px, 4vw, 40px); display: flex; align-items: center; gap: 30px; }
     .an-logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--an-ink); }
-    .an-logo-mark {
-      font-family: var(--an-font-m); font-weight: 600; font-size: 15px;
-      background: var(--an-accent); color: #fff; padding: 7px 9px; border-radius: 8px;
-    }
+    .an-logo-mark { font-family: var(--an-font-m); font-weight: 600; font-size: 15px; background: var(--an-accent); color: #fff; padding: 7px 9px; border-radius: 8px; }
     .an-logo-text { font-weight: 700; font-size: 15px; letter-spacing: 0.14em; }
     .an-links { display: flex; gap: 28px; margin-left: auto; }
     .an-links a { color: var(--an-ink-2); text-decoration: none; font-size: 13.5px; font-weight: 500; display: inline-flex; gap: 8px; align-items: baseline; }
@@ -305,6 +333,7 @@ const IMG = {
     .an-mobile { display: grid; border-top: 1px solid var(--an-line); }
     .an-mobile[hidden] { display: none; }
     .an-mobile a { padding: 14px 24px; color: var(--an-ink); text-decoration: none; font-weight: 600; border-bottom: 1px solid var(--an-line); }
+
     .an-btn {
       display: inline-flex; align-items: center; justify-content: center; gap: 8px;
       font-weight: 600; font-size: 14px; padding: 15px 28px; border-radius: 10px;
@@ -318,74 +347,97 @@ const IMG = {
     .an-btn-line:hover { border-color: var(--an-ink-2); }
     .an-btn-sm { padding: 11px 20px; font-size: 13px; }
     .an-btn-full { width: 100%; }
-    .an-hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--an-line); }
-    .an-hero-bg { position: absolute; inset: 0; margin: 0; }
-    .an-hero-bg img { width: 100%; height: 100%; object-fit: cover; opacity: 0.42; }
-    .an-hero-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,15,26,0.55) 0%, rgba(10,15,26,0.25) 40%, var(--an-bg) 100%); }
-    .an-hero-in { position: relative; z-index: 1; padding-top: clamp(70px, 10vw, 130px); padding-bottom: 0; }
+
+    /* héros : titre / panneau des baies */
+    .an-hero { border-bottom: 1px solid var(--an-line); padding: clamp(56px, 8vw, 110px) 0; background:
+      radial-gradient(900px 480px at 12% 0%, rgba(61,123,255,0.10), transparent 60%),
+      var(--an-bg); }
+    .an-hero-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: clamp(32px, 5vw, 64px); align-items: center; }
     .an-hero-kicker { color: var(--an-ink-2); display: inline-flex; align-items: center; gap: 10px; margin: 0 0 22px; }
-    .an-live { width: 8px; height: 8px; border-radius: 50%; background: #34D399; box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.18); animation: an-pulse 2s infinite; }
+    .an-live { width: 8px; height: 8px; border-radius: 50%; background: var(--an-green); box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.18); animation: an-pulse 2s infinite; flex: none; }
     @keyframes an-pulse { 50% { box-shadow: 0 0 0 7px rgba(52, 211, 153, 0.05); } }
-    .an-hero-sub { color: var(--an-ink-2); font-size: 17px; line-height: 1.6; max-width: 48ch; margin: 24px 0 32px; }
-    .an-hero-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: clamp(48px, 7vw, 90px); }
-    .an-ticker { border-top: 1px solid var(--an-line); overflow: hidden; padding: 16px 0; margin: 0 calc(clamp(18px, 4vw, 40px) * -1); }
-    .an-ticker-row { display: flex; gap: 26px; width: max-content; animation: an-tick 30s linear infinite; font-family: var(--an-font-m); font-size: 12px; letter-spacing: 0.22em; color: var(--an-ink-2); }
-    .an-ticker-row i { font-style: normal; color: var(--an-accent); }
-    @keyframes an-tick { to { transform: translateX(-50%); } }
-    .an-section { padding: clamp(64px, 9vw, 120px) 0; }
-    .an-sec-head { display: grid; gap: 16px; margin-bottom: 44px; }
-    .an-sec-head .an-mono { color: var(--an-accent); margin: 0; }
-    .an-svc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-    .an-svc {
-      background: var(--an-card); border: 1px solid var(--an-line); border-radius: 16px; padding: 28px 26px;
-      display: flex; flex-direction: column; gap: 14px;
-      transition: transform 0.18s ease, border-color 0.18s ease;
+    .an-hero-sub { color: var(--an-ink-2); font-size: 17px; line-height: 1.6; max-width: 46ch; margin: 24px 0 32px; }
+    .an-hero-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 28px; }
+    .an-hero-note { color: var(--an-ink-2); margin: 0; line-height: 1.8; }
+
+    /* panneau d'état des baies */
+    .an-panel {
+      background: var(--an-card); border: 1px solid var(--an-line); border-radius: 18px;
+      padding: 24px; display: grid; gap: 14px; align-content: start;
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45);
     }
-    .an-svc:hover { transform: translateY(-4px); border-color: rgba(61, 123, 255, 0.45); }
-    .an-svc-top { display: flex; justify-content: space-between; align-items: center; }
-    .an-svc-top .an-mono { color: var(--an-ink-2); margin: 0; }
-    .an-tag { font-size: 11px; font-weight: 600; background: var(--an-accent-soft); color: var(--an-accent); border: 1px solid rgba(61,123,255,0.35); padding: 5px 11px; border-radius: 999px; }
-    .an-svc h3 { font-size: 24px; font-weight: 700; letter-spacing: -0.02em; margin: 0; }
-    .an-svc > p { color: var(--an-ink-2); font-size: 14.5px; line-height: 1.65; margin: 0; }
-    .an-spec { list-style: none; margin: 8px 0 0; padding: 18px 0 0; border-top: 1px solid var(--an-line); display: grid; gap: 10px; }
-    .an-spec li { display: flex; justify-content: space-between; align-items: baseline; font-size: 13.5px; }
-    .an-spec li span { font-family: var(--an-font-m); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--an-ink-2); }
-    .an-spec li b { font-weight: 600; }
+    .an-panel-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--an-line); }
+    .an-panel-head .an-mono { margin: 0; display: inline-flex; align-items: center; gap: 10px; color: var(--an-ink); }
+    .an-panel-upd { color: var(--an-ink-2); margin: 0; }
+    .an-bay { border: 1px solid var(--an-line); border-radius: 12px; padding: 16px 18px; display: grid; gap: 6px; background: var(--an-bg-2); }
+    .an-bay-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .an-bay-top .an-mono { color: var(--an-ink-2); margin: 0; }
+    .an-bay-job { margin: 0; font-size: 15px; font-weight: 600; }
+    .an-bay-eta { margin: 0; color: var(--an-ink-2); font-size: 10.5px; }
+    .an-status {
+      font-family: var(--an-font-m); font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 6px 12px; border-radius: 999px; white-space: nowrap; border: 1px solid;
+    }
+    .an-status-busy { color: var(--an-accent); border-color: rgba(61,123,255,0.5); background: var(--an-accent-soft); }
+    .an-status-qc { color: var(--an-amber); border-color: rgba(245,166,35,0.5); background: rgba(245,166,35,0.1); }
+    .an-status-open { color: var(--an-green); border-color: rgba(52,211,153,0.5); background: rgba(52,211,153,0.08); }
+    .an-panel-cta { margin-top: 4px; }
+
+    /* sections */
+    .an-section { padding: clamp(64px, 9vw, 120px) 0; }
+    .an-sec-head { display: grid; gap: 16px; margin-bottom: 40px; }
+    .an-sec-head .an-mono { color: var(--an-accent); margin: 0; }
+
+    /* services : lignes de specs */
+    .an-specs { border-top: 1px solid var(--an-line); }
+    .an-specrow { display: grid; grid-template-columns: 90px 1fr auto; gap: 24px; align-items: center; padding: 30px 8px; border-bottom: 1px solid var(--an-line); }
+    .an-specrow-code { color: var(--an-accent); margin: 0; }
+    .an-specrow-main h3 { margin: 0 0 8px; font-size: 23px; font-weight: 700; letter-spacing: -0.02em; }
+    .an-specrow-main p { margin: 0; color: var(--an-ink-2); font-size: 14.5px; line-height: 1.65; max-width: 60ch; }
+    .an-chips { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    .an-chip {
+      font-family: var(--an-font-m); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--an-ink-2); border: 1px solid var(--an-line); border-radius: 999px; padding: 8px 14px; white-space: nowrap;
+    }
+
+    /* bandeau chiffres */
     .an-numbers { border-block: 1px solid var(--an-line); background: var(--an-bg-2); }
     .an-numbers-in { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding-top: 40px; padding-bottom: 40px; }
     .an-numbers-in div { display: flex; flex-direction: column; gap: 8px; }
     .an-numbers-in strong { font-size: clamp(2.2rem, 4vw, 3.2rem); font-weight: 700; letter-spacing: -0.03em; }
     .an-numbers-in .an-mono { color: var(--an-ink-2); margin: 0; line-height: 1.7; }
-    .an-feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 72px); align-items: center; }
-    .an-feature-img { margin: 0; position: relative; }
-    .an-feature-img img { width: 100%; height: min(520px, 75vw); object-fit: cover; border-radius: 16px; border: 1px solid var(--an-line); }
-    .an-feature-img figcaption { position: absolute; left: 14px; bottom: 14px; background: rgba(10,15,26,0.75); backdrop-filter: blur(8px); padding: 8px 14px; border-radius: 8px; border: 1px solid var(--an-line); margin: 0; }
-    .an-feature .an-mono { color: var(--an-accent); }
-    .an-feature .an-h2 { margin: 16px 0 20px; }
-    .an-list { list-style: none; padding: 0; margin: 26px 0 0; display: grid; gap: 12px; }
-    .an-list li { display: flex; gap: 12px; align-items: flex-start; font-size: 14.5px; color: var(--an-ink-2); }
-    .an-list li::before { content: "▸"; color: var(--an-accent); font-weight: 700; }
-    .an-inv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .an-inv { background: var(--an-card); border: 1px solid var(--an-line); border-radius: 16px; overflow: hidden; }
-    .an-inv img { width: 100%; height: 300px; object-fit: cover; }
-    .an-inv-body { padding: 24px; display: grid; gap: 8px; }
-    .an-inv-body .an-mono { color: var(--an-accent); margin: 0; }
-    .an-inv-body h3 { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
-    .an-inv-body p { margin: 0; color: var(--an-ink-2); font-size: 14px; line-height: 1.6; }
+
+    /* journal d'atelier */
+    .an-log-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(32px, 5vw, 64px); align-items: start; }
+    .an-log { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--an-line); }
+    .an-log li { display: grid; grid-template-columns: 170px 1fr; gap: 18px; padding: 20px 4px; border-bottom: 1px solid var(--an-line); align-items: baseline; }
+    .an-log-t { color: var(--an-accent); margin: 0; font-size: 11px; }
+    .an-log p { margin: 0; font-size: 15px; line-height: 1.6; }
+    .an-log-media { display: grid; gap: 14px; }
+    .an-log-fig { margin: 0; position: relative; }
+    .an-log-fig img { width: 100%; height: 300px; object-fit: cover; border-radius: 14px; border: 1px solid var(--an-line); }
+    .an-log-fig figcaption { position: absolute; left: 14px; bottom: 14px; background: rgba(10,15,26,0.78); backdrop-filter: blur(8px); padding: 8px 14px; border-radius: 8px; border: 1px solid var(--an-line); margin: 0; }
+    .an-log-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .an-log-pair img { height: 190px; }
+
+    /* processus : ligne du temps */
     .an-process { background: var(--an-bg-2); border-block: 1px solid var(--an-line); }
-    .an-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-    .an-steps li { border-top: 2px solid var(--an-accent); padding-top: 22px; display: grid; gap: 10px; align-content: start; }
-    .an-steps .an-mono { color: var(--an-accent); margin: 0; }
-    .an-steps h3 { margin: 0; font-size: 19px; font-weight: 700; }
-    .an-steps p { margin: 0; color: var(--an-ink-2); font-size: 14px; line-height: 1.65; }
+    .an-timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; max-width: 760px; }
+    .an-timeline li { display: grid; grid-template-columns: 90px 1fr; gap: 24px; padding: 26px 0; border-bottom: 1px solid var(--an-line); position: relative; }
+    .an-timeline li:first-child { border-top: 1px solid var(--an-line); }
+    .an-timeline-n { color: var(--an-accent); margin: 0; padding-top: 4px; }
+    .an-timeline h3 { margin: 0 0 8px; font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+    .an-timeline p { margin: 0; color: var(--an-ink-2); font-size: 14.5px; line-height: 1.65; max-width: 56ch; }
+
+    /* contact */
     .an-contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 72px); align-items: start; }
-    .an-contact-grid .an-mono { color: var(--an-accent); }
+    .an-contact-grid > div > .an-mono { color: var(--an-accent); }
     .an-contact-grid .an-h2 { margin: 16px 0 18px; }
     .an-contact-list { margin: 30px 0 0; display: grid; gap: 16px; }
     .an-contact-list div { display: grid; grid-template-columns: 100px 1fr; gap: 12px; align-items: baseline; }
     .an-contact-list .an-mono { margin: 0; color: var(--an-ink-2); }
     .an-contact-list dd { margin: 0; font-size: 15.5px; font-weight: 500; }
-    .an-contact-list a { text-decoration: none; }
+    .an-contact-list a { text-decoration: none; color: var(--an-accent); }
     .an-form { background: var(--an-card); border: 1px solid var(--an-line); border-radius: 18px; padding: clamp(24px, 3vw, 34px); display: grid; gap: 16px; }
     .an-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .an-form label { display: grid; gap: 10px; color: var(--an-ink-2); }
@@ -399,26 +451,32 @@ const IMG = {
     .an-form select option { background: var(--an-bg); }
     .an-form-note { margin: 0; font-size: 12.5px; color: var(--an-ink-2); text-align: center; font-family: var(--an-font-m); letter-spacing: 0.04em; }
     .an-form-note:empty { display: none; }
-    .an-footer { border-top: 1px solid var(--an-line); padding: 48px 0; background: var(--an-bg-2); }
-    .an-footer-in { display: grid; gap: 12px; }
+
+    /* pied de page */
+    .an-footer { border-top: 1px solid var(--an-line); padding: 44px 0; background: var(--an-bg-2); }
+    .an-footer-in { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
     .an-footer .an-logo-text { font-size: 13px; }
-    .an-footer-note { margin: 0; color: var(--an-ink-2); font-size: 12.5px; line-height: 1.6; }
+    .an-footer-note { margin: 0; color: var(--an-ink-2); }
+
     @media (max-width: 960px) {
-      .an-svc-grid, .an-steps { grid-template-columns: 1fr 1fr; }
-      .an-feature-grid, .an-inv-grid, .an-contact-grid { grid-template-columns: 1fr; }
+      .an-hero-grid, .an-log-grid, .an-contact-grid { grid-template-columns: 1fr; }
       .an-numbers-in { grid-template-columns: 1fr 1fr; }
+      .an-specrow { grid-template-columns: 70px 1fr; }
+      .an-chips { grid-column: 2; justify-content: flex-start; }
     }
     @media (max-width: 720px) {
       .an-links, .an-nav .an-btn { display: none; }
       .an-burger { display: block; }
-      .an-svc-grid, .an-steps, .an-numbers-in { grid-template-columns: 1fr; }
+      .an-numbers-in { grid-template-columns: 1fr; }
       .an-form-row { grid-template-columns: 1fr; }
-      .an-hero-cta { gap: 12px; }
+      .an-log li { grid-template-columns: 1fr; gap: 6px; }
+      .an-log-pair { grid-template-columns: 1fr; }
+      .an-timeline li { grid-template-columns: 64px 1fr; gap: 16px; }
       .an-contact-list div { grid-template-columns: 1fr; gap: 4px; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .an-ticker-row, .an-live { animation: none; }
-      .an-btn, .an-svc { transition: none; }
+      .an-live { animation: none; }
+      .an-btn { transition: none; }
     }
   </style>
 </body>
