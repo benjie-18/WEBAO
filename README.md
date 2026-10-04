@@ -151,22 +151,46 @@ then closes the last gap with its own eased approach.
 - **Output / Assets directory:** `dist/client`
 - **Deploy commands:**
   ```bash
-  npm run build && npx wrangler deploy
+  npm run build && npx wrangler deploy --config wrangler.jsonc
   # or
   npm run cf:deploy
   npm run cf:dev   # local Workers preview with assets
   ```
 
-`wrangler.jsonc` is configured for **assets-only Workers** (no Worker script, static SPA):
+`wrangler.jsonc` runs `worker/index.ts` alongside static assets. The Worker
+requires `assets.binding: "ASSETS"` for static fallthrough and `WEBAO_KV` for API
+data and image fallback. Do not remove the assets binding while `main` is set.
 
-```jsonc
-{
-  "assets": { "directory": "./dist/client" },
-  "compatibility_date": "2026-10-03",
-  "compatibility_flags": ["nodejs_compat"]
-}
-```
+**Always pass `--config wrangler.jsonc` when running Wrangler dev/deploy.** Astro's
+static Cloudflare build writes `.wrangler/deploy/config.json`, which redirects
+plain Wrangler commands to `dist/client/wrangler.json`. That generated config is
+assets-only: it removes `main` and the assets binding, so our API and KV image
+fallback are never deployed. Deleting the redirect is not a durable fix—the next
+build recreates it. The `cf:dev`, `cf:deploy`, and CI commands explicitly select
+the root config to preserve the custom Worker.
+
+### Demo and carousel images
+
+Local URLs such as `/demos/tactile/01.jpg` and `/carousel/tactile.jpg` first use
+static assets, then KV keys such as `img:/demos/tactile/01.jpg`. KV values must be
+raw image bytes, not base64 text or source-page HTML.
+
+The repository currently contains **no demo/carousel image binaries or `.b64`
+files**. The restore script therefore restores zero files; a successful build
+is not proof that images exist. Production depends on the separately populated
+KV namespace. `npm run dev` runs Astro, not the custom Worker, so it cannot serve
+KV-only images. Use a Workers preview with separately seeded local KV to test
+that path. `src/lib/sources.json` is attribution, not an image download manifest.
+
+Run `npm test` for binding, fallback, and deployment-command regressions.
+Run `npm run test:integration` to build and check actual HTTP serving with
+Workerd and isolated local KV. This seeds a tiny synthetic JPEG fixture (not the
+production artwork), checks demo/carousel image bytes, GET/HEAD, static EN/FR
+pages, a static image, missing-image 404s, and API routing, then cleans up.
+After deployment, also check
+real image URLs for status 200, an image content type, and decodable image bytes;
+unit tests do not verify remote KV contents.
 
 > **Fixes for Cloudflare build errors:**
-> - **`npx wrangler build` / “Could not detect static files”:** Do **not** use `npx wrangler build` as the build command. That command compiles a Worker and expects built assets before it runs, so it fails when `dist/client` doesn’t yet exist. Use **`npm run build`** instead. Astro generates `dist/client` (and `dist/client/_headers` for caching), then `wrangler deploy` uploads from that directory. If your dashboard is set to `npx wrangler build`, change it to `npm run build`.
-> - **`Cannot use assets with a binding in an assets-only Worker`:** Remove the `assets.binding` (`\"ASSETS\"`) from `wrangler.jsonc` when no `main` Worker script is present. Assets-only Workers serve `dist/client` directly; a binding is only valid when you also provide a Worker (e.g. `main: \"./src/worker.ts\"`). Fixed by leaving `assets` as `{ \"directory\": \"./dist/client\" }`.
+> - **`npx wrangler build` / “Could not detect static files”:** Do **not** use `npx wrangler build` as the build command. That command compiles a Worker and expects built assets before it runs, so it fails when `dist/client` doesn’t yet exist. Use **`npm run build`** instead. Astro generates `dist/client` (and `dist/client/_headers` for caching), then `wrangler deploy --config wrangler.jsonc` uploads from that directory. If your dashboard is set to `npx wrangler build`, change it to `npm run build`.
+> - **`Cannot use assets with a binding in an assets-only Worker`:** Check that the selected config contains both `main: "worker/index.ts"` and `assets.binding: "ASSETS"`. Use `--config wrangler.jsonc` rather than the generated assets-only config. Removing the binding is only appropriate for sites without a custom Worker, not this project.
