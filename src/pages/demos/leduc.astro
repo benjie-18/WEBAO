@@ -5,12 +5,10 @@ import EscapeHatch from "../../components/demos/EscapeHatch.astro";
 // Vintage Americana service badge: cream/red/navy, star emblems, heritage since 1987.
 // Standalone art direction. Not connected to the WEBAO theme system.
 const IMG = {
-  hero: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?q=80&w=1400&auto=format&fit=crop",
-  portrait: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=900&auto=format&fit=crop",
-  tools: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?q=80&w=1000&auto=format&fit=crop",
-  wrench: "https://images.unsplash.com/photo-1581244277943-fe4a9c777189?q=80&w=1000&auto=format&fit=crop",
-  pipes: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=1000&auto=format&fit=crop",
-  van: "https://images.unsplash.com/photo-1538474705339-e87de81450e8?q=80&w=1200&auto=format&fit=crop",
+  hero: "/demos/leduc/01.jpg",
+  portrait: "/demos/leduc/02.jpg",
+  tools: "/demos/leduc/03.jpg",
+  wrench: "/demos/leduc/04.jpg",
 };
 ---
 
@@ -134,7 +132,7 @@ const IMG = {
           </article>
         </div>
         <div class="ld-more">
-          <img src={IMG.tools} alt="Neatly organized professional plumbing tools" loading="lazy" />
+          <img src={IMG.tools} alt="A vintage pipe wrench kept from years of service" loading="lazy" />
           <div>
             <h3>Not on the menu? Ask anyway.</h3>
             <p>If water runs through it, we have probably fixed it. Sump pumps, backwater valves, outdoor faucets, gas lines: one call covers it all.</p>
@@ -346,6 +344,7 @@ const IMG = {
     @keyframes ld-spin { to { transform: rotate(360deg); } }
     .ld-hero-photo { margin: 46px 0 0; width: 100%; border: 4px solid var(--ld-ink); border-radius: 190px 190px 14px 14px; overflow: hidden; background: var(--ld-cream-2); }
     .ld-hero-photo img { width: 100%; height: min(480px, 62vw); object-fit: cover; }
+    .ld img { filter: sepia(0.22) saturate(0.96) contrast(1.01); }
     .ld-hero-photo figcaption { text-align: center; font-size: 13.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; padding: 12px; background: var(--ld-cream); }
 
     /* trust */

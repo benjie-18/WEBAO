@@ -4,13 +4,13 @@ import EscapeHatch from "../../components/demos/EscapeHatch.astro";
 // Demo microsite: Maison Lune, fictional boutique lakeside inn, Magog.
 // Standalone art direction. Moonlit dreaminess. Not connected to the WEBAO theme system.
 const IMG = {
-  hero: "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1600&auto=format&fit=crop",
+  hero: "/demos/maison-lune/01.jpg",
   cabin: "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?q=80&w=1200&auto=format&fit=crop",
   room1: "https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1000&auto=format&fit=crop",
   room2: "https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=1000&auto=format&fit=crop",
   room3: "https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=1000&auto=format&fit=crop",
   room4: "https://images.unsplash.com/photo-1591088398332-8a7791972843?q=80&w=1000&auto=format&fit=crop",
-  dining: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=1000&auto=format&fit=crop",
+  dining: "/demos/maison-lune/02.jpg",
   canoe: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=1000&auto=format&fit=crop",
 };
 ---
@@ -51,7 +51,7 @@ const IMG = {
     <!-- HERO -->
     <section class="ml-hero">
       <div class="ml-hero-bg" aria-hidden="true">
-        <img src={IMG.hero} alt="" loading="eager" fetchpriority="high" />
+        <img src={IMG.hero} alt="Full moon over the lake at night" loading="eager" fetchpriority="high" />
       </div>
       <span class="ml-star ml-s1" aria-hidden="true"></span>
       <span class="ml-star ml-s2" aria-hidden="true"></span>
@@ -348,7 +348,7 @@ const IMG = {
     .ml-room-flip .ml-room-copy { order: 1; text-align: right; }
     .ml-room-flip .ml-room-copy ul { justify-items: end; }
     .ml-room-media { position: relative; margin: 0; }
-    .ml-room-media img { width: 100%; height: clamp(320px, 44vw, 520px); object-fit: cover; border-radius: 4px; }
+    .ml-room-media img { width: 100%; height: clamp(320px, 44vw, 520px); object-fit: cover; border-radius: 4px; box-shadow: 0 0 0 1px rgba(217, 190, 126, 0.4), 0 24px 60px rgba(0, 0, 0, 0.45); }
     .ml-phase {
       position: absolute; top: 22px; left: 22px; width: 58px; height: 58px; border-radius: 50%;
       display: grid; place-items: center; font-size: 26px; color: var(--ml-night);
