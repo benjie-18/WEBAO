@@ -1,0 +1,462 @@
+---
+import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+
+// Démo : Clinique Sora, clinique de physiothérapie et bien-être fictive, Brossard QC.
+// Calme clinique tout en douceur : blancs aérés, brume et sarcelle, cartes arrondies, réservation prioritaire.
+// Direction artistique autonome. Hors du système de thème WEBAO.
+const IMG = {
+  hero: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=1200&auto=format&fit=crop",
+  physio: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=900&auto=format&fit=crop",
+  massage: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=900&auto=format&fit=crop",
+  team1: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=700&auto=format&fit=crop",
+  team2: "https://images.unsplash.com/photo-1519824145371-296894a0daa9?q=80&w=700&auto=format&fit=crop",
+  team3: "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?q=80&w=700&auto=format&fit=crop",
+};
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clinique Sora : physiothérapie et bien-être à Brossard</title>
+  <meta name="description" content="Clinique Sora : physiothérapie et bien-être à Brossard. Physio, massothérapie, réadaptation posturale. Réservez votre évaluation en ligne en moins d'une minute." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body class="sr">
+
+  <!-- NAVIGATION -->
+  <header class="sr-nav">
+    <a class="sr-brand" href="#top" aria-label="Clinique Sora, accueil">
+      <span class="sr-brand-dot" aria-hidden="true"></span>
+      <span>Clinique <strong>Sora</strong></span>
+    </a>
+    <nav class="sr-links" aria-label="Principal">
+      <a href="#services">Soins</a>
+      <a href="#approach">Approche</a>
+      <a href="#team">Équipe</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="sr-nav-book" href="#book">Prendre rendez-vous</a>
+  </header>
+
+  <main id="top">
+    <!-- HÉROS + RÉSERVATION -->
+    <section class="sr-hero" id="book">
+      <div class="sr-hero-copy">
+        <p class="sr-pill">Nouveaux patients bienvenus · Brossard QC</p>
+        <h1 class="sr-h1">Bougez bien.<br />Sentez-vous mieux.</h1>
+        <p class="sr-lede">Physiothérapie, massothérapie et réadaptation dans une clinique calme et sans presse. Votre première évaluation dure 60 minutes, en tête-à-tête, avec un plan que vous pourrez vraiment suivre.</p>
+        <ul class="sr-hero-ticks">
+          <li>Facturation directe à la plupart des assureurs</li>
+          <li>Rendez-vous en soirée disponibles</li>
+          <li>Salles de traitement privées</li>
+        </ul>
+      </div>
+      <div class="sr-book" aria-label="Réserver une évaluation">
+        <div class="sr-book-float" aria-hidden="true"></div>
+        <h2>Réservez votre évaluation</h2>
+        <p class="sr-book-sub">Moins d'une minute. On confirme par texto.</p>
+        <form id="sr-book-form" novalidate>
+          <label>Service
+            <select name="service" required>
+              <option value="">Choisir…</option>
+              <option>Évaluation en physiothérapie</option>
+              <option>Massothérapie</option>
+              <option>Réadaptation sportive</option>
+              <option>Réadaptation posturale</option>
+            </select>
+          </label>
+          <label>Jour préféré
+            <select name="day" required>
+              <option value="">Choisir…</option>
+              <option>Lundi</option>
+              <option>Mardi</option>
+              <option>Mercredi</option>
+              <option>Jeudi</option>
+              <option>Vendredi</option>
+            </select>
+          </label>
+          <label>Votre nom<input type="text" name="name" required placeholder="Jeanne Tremblay" autocomplete="name" /></label>
+          <label>Téléphone<input type="tel" name="phone" required placeholder="(450) 555-0000" autocomplete="tel" /></label>
+          <button type="submit">Demander la réservation</button>
+          <p class="sr-book-note" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- CHIFFRES -->
+    <section class="sr-stats" aria-label="La clinique en chiffres">
+      <div><strong>12</strong><span>ans de soins</span></div>
+      <div><strong>9 400+</strong><span>patients traités</span></div>
+      <div><strong>4,9</strong><span>note moyenne</span></div>
+      <div><strong>60<span> min</span></strong><span>premières évaluations</span></div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="sr-section" id="services">
+      <div class="sr-wrap">
+        <p class="sr-eyebrow sr-center">Ce qu'on soigne</p>
+        <h2 class="sr-h2 sr-center">Des soins pour la façon<br />dont votre corps bouge vraiment.</h2>
+        <div class="sr-cards">
+          <article class="sr-card">
+            <div class="sr-card-icon" aria-hidden="true">◐</div>
+            <h3>Physiothérapie</h3>
+            <p>Maux de dos et de cou, blessures articulaires, réadaptation post-chirurgicale. Thérapie manuelle et programme maison adapté à votre semaine.</p>
+          </article>
+          <article class="sr-card">
+            <div class="sr-card-icon" aria-hidden="true">◑</div>
+            <h3>Massothérapie</h3>
+            <p>Massage thérapeutique et deep tissue pour les tensions, la récupération, et une détente qui dure vraiment.</p>
+          </article>
+          <article class="sr-card">
+            <div class="sr-card-icon" aria-hidden="true">⬢</div>
+            <h3>Blessures sportives</h3>
+            <p>Entorses, claquages et retours au sport planifiés avec votre entraîneur, votre saison et vos objectifs.</p>
+          </article>
+          <article class="sr-card">
+            <div class="sr-card-icon" aria-hidden="true">⬣</div>
+            <h3>Réadaptation posturale</h3>
+            <p>Douleurs liées au bureau, rééducation posturale et conseils ergonomiques qui survivent à la vraie vie.</p>
+          </article>
+          <article class="sr-card">
+            <div class="sr-card-icon" aria-hidden="true">○</div>
+            <h3>Soins périnataux</h3>
+            <p>Accompagnement pendant la grossesse et le post-partum : plancher pelvien, maux de dos, retour au mouvement.</p>
+          </article>
+          <article class="sr-card">
+            <div class="sr-card-icon" aria-hidden="true">◎</div>
+            <h3>Réadaptation vestibulaire</h3>
+            <p>Étourdissements et vertiges traités avec des manoeuvres précises et un travail d'équilibre fondé sur les données.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- APPROCHE -->
+    <section class="sr-section sr-approach" id="approach">
+      <div class="sr-wrap sr-approach-grid">
+        <figure class="sr-approach-media">
+          <img src={IMG.physio} alt="Une physiothérapeute guidant le mouvement de l'épaule d'une patiente" loading="lazy" />
+        </figure>
+        <div>
+          <p class="sr-eyebrow">Notre approche</p>
+          <h2 class="sr-h2">Des soins sans presse,<br />en trois temps.</h2>
+          <ol class="sr-steps">
+            <li><strong>On écoute d'abord.</strong><span>Votre histoire, votre douleur, vos objectifs. Le récit complet, pas un formulaire à cocher.</span></li>
+            <li><strong>On évalue à fond.</strong><span>Dépistage du mouvement et tests manuels pour trouver la vraie cause, pas juste le symptôme.</span></li>
+            <li><strong>On soigne et on enseigne.</strong><span>Thérapie manuelle à la clinique, exercices simples à la maison, et un plan avec une ligne d'arrivée.</span></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ÉQUIPE -->
+    <section class="sr-section" id="team">
+      <div class="sr-wrap">
+        <p class="sr-eyebrow sr-center">L'équipe</p>
+        <h2 class="sr-h2 sr-center">Des gens qui<br />connaîtront votre nom.</h2>
+        <div class="sr-team">
+          <article class="sr-member">
+            <img src={IMG.team1} alt="Dre Amélie Roy, physiothérapeute, souriante à la clinique" loading="lazy" />
+            <h3>Dre Amélie Roy, pht</h3>
+            <p class="sr-role">Physiothérapie · Fondatrice</p>
+            <p>Douze ans à soigner dos, genoux et guerriers du week-end. Convaincue que le meilleur exercice est celui qu'on fait vraiment.</p>
+          </article>
+          <article class="sr-member">
+            <img src={IMG.team2} alt="Jean-Philippe Côté, massothérapeute, dans une salle de traitement apaisante" loading="lazy" />
+            <h3>Jean-Philippe Côté</h3>
+            <p class="sr-role">Massothérapie</p>
+            <p>Deep tissue et massage sportif avec une touche douce. Coureurs et travailleurs de bureau le réservent des semaines d'avance.</p>
+          </article>
+          <article class="sr-member">
+            <img src={IMG.team3} alt="Sara Nguyen, kinésiologue, démontrant un exercice de mouvement" loading="lazy" />
+            <h3>Sara Nguyen, kin.</h3>
+            <p class="sr-role">Kinésiologie · Réadaptation</p>
+            <p>Conçoit les programmes maison et les retours au sport. Bienveillante, précise, allergique au tout-fait-pareil.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÉMOIGNAGES -->
+    <section class="sr-section sr-reviews">
+      <div class="sr-wrap">
+        <p class="sr-eyebrow sr-center">Histoires de patients</p>
+        <h2 class="sr-h2 sr-center">De retour à la vie<br />que vous aimez.</h2>
+        <div class="sr-review-grid">
+          <blockquote class="sr-review">
+            <p class="sr-stars" aria-label="5 étoiles sur 5">★★★★★</p>
+            <p>« Après deux ans de maux de dos, je jardine de nouveau. Amélie a tout expliqué et le plan a simplement fonctionné. »</p>
+            <cite>Louise T., Brossard</cite>
+          </blockquote>
+          <blockquote class="sr-review">
+            <p class="sr-stars" aria-label="5 étoiles sur 5">★★★★★</p>
+            <p>« Déchirure du LCA au ski. Sara m'a remis sur les pistes en neuf mois, plus fort qu'avant. Chaque visite en valait la peine. »</p>
+            <cite>David M., La Prairie</cite>
+          </blockquote>
+          <figure class="sr-review-media">
+            <img src={IMG.massage} alt="Une séance de massothérapie apaisante dans une douce lumière" loading="lazy" />
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="sr-section" id="faq">
+      <div class="sr-wrap sr-narrow">
+        <p class="sr-eyebrow sr-center">Bon à savoir</p>
+        <h2 class="sr-h2 sr-center">Des questions,<br />des réponses.</h2>
+        <div class="sr-faq">
+          <details>
+            <summary>Faut-il une ordonnance du médecin?</summary>
+            <p>Non. Vous pouvez réserver directement. Certains assureurs demandent une ordonnance pour le remboursement, alors vérifiez votre régime si vous voulez réclamer.</p>
+          </details>
+          <details>
+            <summary>Combien de temps dure la première visite?</summary>
+            <p>Soixante minutes, en tête-à-tête. On prend l'histoire complète, on évalue, on traite, et vous repartez avec un plan clair.</p>
+          </details>
+          <details>
+            <summary>Facturez-vous les assurances directement?</summary>
+            <p>Oui, pour la plupart des grands assureurs. Apportez votre carte et on s'occupe de la paperasse à l'accueil.</p>
+          </details>
+          <details>
+            <summary>Comment dois-je m'habiller?</summary>
+            <p>Comme pour bouger confortablement. On a des vestiaires privés et des jaquettes au besoin.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- PIED DE PAGE -->
+  <footer class="sr-footer">
+    <div class="sr-wrap sr-footer-grid">
+      <div>
+        <p class="sr-footer-brand">Clinique <strong>Sora</strong></p>
+        <p>789, rue Fictive, bureau 200<br />Brossard QC J4Z 1A1</p>
+      </div>
+      <div>
+        <p class="sr-footer-h">Heures</p>
+        <p>Lun–Ven 8 h à 20 h<br />Sam 9 h à 14 h</p>
+      </div>
+      <div>
+        <p class="sr-footer-h">Réserver</p>
+        <a class="sr-footer-phone" href="tel:+14505550162">(450) 555-0162</a>
+        <p><a href="#book">Réservation en ligne ↑</a></p>
+      </div>
+    </div>
+    <p class="sr-fine">© 2026 Clinique Sora. Site de démonstration fictif, pas une vraie clinique.</p>
+  </footer>
+
+  <EscapeHatch locale="fr" />
+
+  <script>
+    (function () {
+      var form = document.getElementById('sr-book-form') as HTMLFormElement | null;
+      form?.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var note = form?.querySelector('.sr-book-note');
+        if (note) note.textContent = 'Demande reçue. On vous textera bientôt pour confirmer votre heure.';
+        form?.reset();
+      });
+    })();
+  </script>
+
+  <style>
+    .sr {
+      --sr-white: #FFFFFF;
+      --sr-mist: #EAF1F1;
+      --sr-mist-2: #DDE9E9;
+      --sr-teal: #5E8B8B;
+      --sr-teal-deep: #3E6262;
+      --sr-ink: #2E3A3A;
+      --sr-ink-soft: rgba(46, 58, 58, 0.66);
+      --sr-blush: #F3E9E4;
+      --sr-sans: "Nunito", "Segoe UI", system-ui, sans-serif;
+      margin: 0;
+      background: var(--sr-white);
+      color: var(--sr-ink);
+      font-family: var(--sr-sans);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: clip;
+    }
+    .sr *, .sr *::before, .sr *::after { box-sizing: border-box; }
+    .sr img { display: block; max-width: 100%; }
+    .sr-wrap { max-width: 1160px; margin: 0 auto; padding: 0 clamp(22px, 5vw, 48px); }
+    .sr-narrow { max-width: 780px; margin-inline: auto; }
+    .sr-center { text-align: center; }
+
+    .sr-eyebrow { font-size: 13px; font-weight: 800; letter-spacing: 0.24em; text-transform: uppercase; color: var(--sr-teal); margin: 0 0 18px; }
+    .sr-h1 { font-size: clamp(2.8rem, 6vw, 4.8rem); font-weight: 800; line-height: 1.04; letter-spacing: -0.01em; margin: 0 0 20px; }
+    .sr-h2 { font-size: clamp(1.9rem, 4vw, 3rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.01em; margin: 0 0 20px; }
+    .sr-lede { font-size: 18px; line-height: 1.65; color: var(--sr-ink-soft); margin: 0 0 26px; max-width: 46ch; font-weight: 600; }
+
+    .sr-nav {
+      position: sticky; top: 0; z-index: 20;
+      display: flex; align-items: center; gap: 30px;
+      padding: 14px clamp(22px, 5vw, 48px); max-width: 1280px; margin: 0 auto;
+      background: rgba(255,255,255,0.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--sr-mist-2);
+    }
+    .sr-brand { display: inline-flex; align-items: center; gap: 11px; text-decoration: none; color: var(--sr-ink); font-size: 21px; font-weight: 700; }
+    .sr-brand strong { font-weight: 800; }
+    .sr-brand-dot { width: 26px; height: 26px; border-radius: 50%; background: radial-gradient(circle at 32% 30%, #9DC3C3, var(--sr-teal)); box-shadow: 0 4px 12px rgba(94,139,139,0.4); }
+    .sr-links { display: flex; gap: 26px; margin-left: auto; }
+    .sr-links a { color: var(--sr-ink-soft); text-decoration: none; font-weight: 700; font-size: 16px; }
+    .sr-links a:hover { color: var(--sr-teal-deep); }
+    .sr-nav-book {
+      background: var(--sr-teal); color: #fff; text-decoration: none; font-weight: 800; font-size: 15.5px;
+      padding: 12px 24px; border-radius: 999px; transition: background 0.18s ease, transform 0.18s ease;
+      box-shadow: 0 8px 20px rgba(94,139,139,0.35);
+    }
+    .sr-nav-book:hover { background: var(--sr-teal-deep); transform: translateY(-2px); }
+
+    .sr-hero {
+      display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(34px, 5vw, 70px); align-items: center;
+      max-width: 1280px; margin: 0 auto; padding: clamp(56px, 9vh, 110px) clamp(22px, 5vw, 48px);
+      background: radial-gradient(1100px 520px at 12% 8%, var(--sr-mist) 0%, transparent 60%);
+    }
+    .sr-pill {
+      display: inline-block; background: var(--sr-mist); color: var(--sr-teal-deep);
+      font-size: 13.5px; font-weight: 800; letter-spacing: 0.08em; padding: 9px 18px; border-radius: 999px; margin: 0 0 24px;
+    }
+    .sr-hero-ticks { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; font-weight: 700; font-size: 16.5px; color: var(--sr-ink); }
+    .sr-hero-ticks li { display: flex; align-items: center; gap: 12px; }
+    .sr-hero-ticks li::before {
+      content: ""; width: 26px; height: 26px; flex: none; border-radius: 50%;
+      background: var(--sr-mist) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%233E6262' d='M9 16.2l-3.5-3.5L4 14.2 9 19.2 20 8.2l-1.4-1.4z'/%3E%3C/svg%3E") center/14px no-repeat;
+    }
+
+    .sr-book {
+      position: relative; background: var(--sr-white); border-radius: 28px; padding: clamp(28px, 4vw, 44px);
+      box-shadow: 0 30px 70px rgba(62,98,98,0.16); border: 1px solid var(--sr-mist-2);
+      animation: sr-float 6s ease-in-out infinite;
+    }
+    @keyframes sr-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+    .sr-book-float {
+      position: absolute; inset: -18px -18px auto auto; width: 110px; height: 110px; border-radius: 50%;
+      background: radial-gradient(circle, var(--sr-blush) 0%, transparent 70%); z-index: -1;
+    }
+    .sr-book h2 { font-size: 24px; font-weight: 800; margin: 0 0 6px; }
+    .sr-book-sub { color: var(--sr-ink-soft); font-weight: 600; font-size: 15.5px; margin: 0 0 24px; }
+    .sr-book form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .sr-book label { display: grid; gap: 8px; font-size: 13px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sr-teal-deep); }
+    .sr-book input, .sr-book select {
+      font-family: var(--sr-sans); font-size: 16px; font-weight: 600; color: var(--sr-ink);
+      background: var(--sr-mist); border: 2px solid transparent; border-radius: 16px; padding: 14px 16px; width: 100%;
+    }
+    .sr-book input:focus, .sr-book select:focus { outline: none; border-color: var(--sr-teal); background: #fff; }
+    .sr-book button {
+      grid-column: 1 / -1; font-family: var(--sr-sans); font-size: 17px; font-weight: 800;
+      background: var(--sr-teal); color: #fff; border: 0; border-radius: 16px; padding: 16px; cursor: pointer;
+      transition: background 0.18s ease, transform 0.18s ease; box-shadow: 0 12px 26px rgba(94,139,139,0.35);
+    }
+    .sr-book button:hover { background: var(--sr-teal-deep); transform: translateY(-2px); }
+    .sr-book-note { grid-column: 1 / -1; margin: 0; text-align: center; font-weight: 700; font-size: 15px; color: var(--sr-teal-deep); }
+    .sr-book-note:empty { display: none; }
+
+    .sr-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; max-width: 1160px; margin: 0 auto; padding: 0 clamp(22px, 5vw, 48px) clamp(40px, 6vh, 70px); }
+    .sr-stats div { background: var(--sr-mist); border-radius: 22px; padding: 26px 20px; text-align: center; display: grid; gap: 6px; }
+    .sr-stats strong { font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 800; color: var(--sr-teal-deep); }
+    .sr-stats strong span { font-size: 1.1rem; }
+    .sr-stats span:last-child { font-size: 14px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--sr-ink-soft); }
+
+    .sr-section { padding: clamp(72px, 10vh, 130px) 0; }
+
+    .sr-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 48px; }
+    .sr-card {
+      background: var(--sr-white); border: 1px solid var(--sr-mist-2); border-radius: 26px; padding: 34px 30px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .sr-card:hover { transform: translateY(-7px); box-shadow: 0 24px 50px rgba(62,98,98,0.14); }
+    .sr-card-icon {
+      width: 58px; height: 58px; border-radius: 20px; display: grid; place-items: center;
+      background: var(--sr-mist); color: var(--sr-teal-deep); font-size: 26px; margin-bottom: 20px;
+    }
+    .sr-card:nth-child(2n) .sr-card-icon { background: var(--sr-blush); }
+    .sr-card h3 { font-size: 20px; font-weight: 800; margin: 0 0 10px; }
+    .sr-card p { margin: 0; font-size: 15.5px; line-height: 1.65; color: var(--sr-ink-soft); font-weight: 600; }
+
+    .sr-approach { background: var(--sr-mist); }
+    .sr-approach-grid { display: grid; grid-template-columns: 0.95fr 1.05fr; gap: clamp(34px, 5vw, 70px); align-items: center; }
+    .sr-approach-media { margin: 0; }
+    .sr-approach-media img { width: 100%; height: min(540px, 72vw); object-fit: cover; border-radius: 32px; }
+    .sr-steps { list-style: none; margin: 30px 0 0; padding: 0; display: grid; gap: 22px; counter-reset: sr-step; }
+    .sr-steps li { display: grid; grid-template-columns: 52px 1fr; gap: 18px; align-items: start; background: var(--sr-white); border-radius: 22px; padding: 24px; }
+    .sr-steps li::before {
+      counter-increment: sr-step; content: counter(sr-step);
+      width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center;
+      background: var(--sr-teal); color: #fff; font-weight: 800; font-size: 20px;
+    }
+    .sr-steps strong { display: block; font-size: 18px; font-weight: 800; margin-bottom: 6px; }
+    .sr-steps span { font-size: 15.5px; line-height: 1.6; color: var(--sr-ink-soft); font-weight: 600; }
+
+    .sr-team { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 48px; }
+    .sr-member { background: var(--sr-white); border: 1px solid var(--sr-mist-2); border-radius: 28px; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .sr-member:hover { transform: translateY(-7px); box-shadow: 0 24px 50px rgba(62,98,98,0.14); }
+    .sr-member img { width: 100%; height: 300px; object-fit: cover; }
+    .sr-member h3 { font-size: 20px; font-weight: 800; margin: 0; padding: 24px 26px 4px; }
+    .sr-role { font-size: 13.5px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sr-teal); margin: 0; padding: 0 26px 12px; }
+    .sr-member p:last-child { font-size: 15.5px; line-height: 1.65; color: var(--sr-ink-soft); font-weight: 600; margin: 0; padding: 0 26px 28px; }
+
+    .sr-reviews { background: var(--sr-white); }
+    .sr-review-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 48px; align-items: stretch; }
+    .sr-review {
+      margin: 0; background: var(--sr-mist); border-radius: 26px; padding: 32px 30px;
+      display: grid; align-content: start; gap: 14px;
+    }
+    .sr-stars { color: var(--sr-teal); font-size: 18px; letter-spacing: 3px; margin: 0; }
+    .sr-review p:nth-of-type(2) { font-size: 17px; line-height: 1.65; font-weight: 600; margin: 0; }
+    .sr-review cite { font-style: normal; font-weight: 800; font-size: 14px; letter-spacing: 0.06em; color: var(--sr-teal-deep); }
+    .sr-review-media { margin: 0; border-radius: 26px; overflow: hidden; min-height: 280px; }
+    .sr-review-media img { width: 100%; height: 100%; object-fit: cover; }
+
+    .sr-faq { display: grid; gap: 14px; margin-top: 44px; }
+    .sr-faq details { background: var(--sr-white); border: 1px solid var(--sr-mist-2); border-radius: 20px; padding: 6px 26px; transition: box-shadow 0.2s ease; }
+    .sr-faq details[open] { box-shadow: 0 16px 40px rgba(62,98,98,0.1); }
+    .sr-faq summary { cursor: pointer; font-weight: 800; font-size: 17px; padding: 20px 0; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    .sr-faq summary::-webkit-details-marker { display: none; }
+    .sr-faq summary::after {
+      content: "+"; flex: none; width: 34px; height: 34px; border-radius: 50%;
+      background: var(--sr-mist); color: var(--sr-teal-deep); display: grid; place-items: center; font-size: 20px; font-weight: 800;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+    .sr-faq details[open] summary::after { transform: rotate(45deg); background: var(--sr-teal); color: #fff; }
+    .sr-faq details p { margin: 0 0 22px; font-size: 16px; line-height: 1.65; color: var(--sr-ink-soft); font-weight: 600; }
+
+    .sr-footer { background: var(--sr-teal-deep); color: #fff; padding: clamp(52px, 8vh, 88px) 0 30px; }
+    .sr-footer-grid { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 34px; margin-bottom: 44px; }
+    .sr-footer-brand { font-size: 27px; font-weight: 700; margin: 0 0 14px; }
+    .sr-footer-brand strong { font-weight: 800; }
+    .sr-footer p { font-size: 15.5px; line-height: 1.7; font-weight: 600; opacity: 0.88; margin: 0 0 10px; }
+    .sr-footer a { color: #fff; }
+    .sr-footer-h { font-size: 12.5px !important; font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0.7 !important; }
+    .sr-footer-phone { font-size: clamp(1.5rem, 2.8vw, 2rem); font-weight: 800; text-decoration: none; }
+    .sr-fine { text-align: center; font-size: 13.5px; opacity: 0.65; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 24px; margin: 0; }
+
+    @media (max-width: 980px) {
+      .sr-hero { grid-template-columns: 1fr; }
+      .sr-book { max-width: 560px; }
+      .sr-cards, .sr-team { grid-template-columns: repeat(2, 1fr); }
+      .sr-review-grid { grid-template-columns: 1fr; }
+      .sr-approach-grid { grid-template-columns: 1fr; }
+      .sr-stats { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .sr-links { display: none; }
+      .sr-nav { justify-content: space-between; }
+      .sr-cards, .sr-team { grid-template-columns: 1fr; }
+      .sr-book form { grid-template-columns: 1fr; }
+      .sr-footer-grid { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .sr-book { animation: none; }
+      .sr-card, .sr-member, .sr-nav-book, .sr-book button { transition: none; }
+    }
+  </style>
+</body>
+</html>
