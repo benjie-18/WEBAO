@@ -1,6 +1,7 @@
 ---
 import { ClientRouter } from "astro:transitions";
 import LanguageSwitcher from "../components/ui/LanguageSwitcher.astro";
+import ThemeToggle from "../components/ui/ThemeToggle.astro";
 import {
   getLocaleFromUrl,
   getAlternateUrls,
@@ -86,8 +87,27 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
     <link rel="alternate" hreflang="fr" href={frHref} />
     <link rel="alternate" hreflang="x-default" href={alternates.en} />
     {noIndex && <meta name="robots" content="noindex, nofollow" />}
-    <meta name="theme-color" content="#0A0F1C" />
-    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#F8F5EF" />
+    <meta name="color-scheme" content="light dark" />
+
+    <!-- Theme init: runs before first paint to avoid a flash of the wrong
+         theme. Stored choice wins; otherwise the OS preference is respected. -->
+    <script is:inline>
+      (function () {
+        try {
+          var stored = null;
+          try { stored = localStorage.getItem("webao.theme"); } catch (e) {}
+          var theme = stored === "dark" || stored === "light"
+            ? stored
+            : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+          document.documentElement.setAttribute("data-theme", theme);
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute("content", theme === "dark" ? "#070B14" : "#F8F5EF");
+        } catch (e) {
+          document.documentElement.setAttribute("data-theme", "light");
+        }
+      })();
+    </script>
 
     <!-- Open Graph -->
     <meta property="og:site_name" content="WEBAO" />
@@ -166,6 +186,8 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
 
           <LanguageSwitcher locale={locale} currentPath={url.pathname} />
 
+          <ThemeToggle locale={locale} />
+
           <button class="menu-toggle" aria-label={t.nav.openMenu} aria-expanded="false" aria-controls="mobile-panel">
             <span></span>
           </button>
@@ -182,6 +204,10 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
         style="background: var(--ink); color: var(--paper); border-radius: 12px; padding-inline: 16px; margin-top: 12px; border-bottom:0;"
         >{t.nav.startSite}</a
       >
+      <div style="display:flex; align-items:center; justify-content:space-between; padding: 14px 4px 4px;">
+        <span class="mono" style="font-size:10px; letter-spacing:.14em; color: var(--muted);">{t.nav.theme}</span>
+        <ThemeToggle locale={locale} />
+      </div>
       <LanguageSwitcher locale={locale} currentPath={url.pathname} variant="mobile" />
     </div>
 
@@ -312,7 +338,12 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
               requestAnimationFrame(() => {
                 const y = window.scrollY;
                 if (header) {
-                  header.style.boxShadow = y > 8 ? '0 4px 24px rgba(10,15,28,.06), 0 1px 0 rgba(10,15,28,.04)' : 'none';
+                  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+                  header.style.boxShadow = y > 8
+                    ? (dark
+                        ? '0 4px 24px rgba(0,0,0,.45), 0 1px 0 rgba(248,245,239,.07)'
+                        : '0 4px 24px rgba(10,15,28,.06), 0 1px 0 rgba(10,15,28,.04)')
+                    : 'none';
                   header.style.background = y > 8 ? 'color-mix(in srgb, var(--paper) 96%, transparent)' : 'color-mix(in srgb, var(--paper) 88%, transparent)';
                 }
                 if (progress) {

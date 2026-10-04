@@ -37,6 +37,9 @@ const fr = {
     openMenu: "Ouvrir le menu",
     homeAria: "Accueil WEBAO",
     skip: "Aller au contenu",
+    theme: "Thème",
+    themeToDark: "Passer en mode sombre",
+    themeToLight: "Passer en mode clair",
   },
 
   footer: {

@@ -1,0 +1,94 @@
+---
+import { useTranslations, type Locale } from "../../lib/i18n";
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = "en" } = Astro.props as Props;
+const t = useTranslations(locale);
+---
+
+<button
+  type="button"
+  class="theme-toggle"
+  data-theme-toggle
+  data-label-to-dark={t.nav.themeToDark}
+  data-label-to-light={t.nav.themeToLight}
+  aria-label={t.nav.themeToDark}
+  title={t.nav.themeToDark}
+>
+  <img src="/light-icon.svg" alt="" aria-hidden="true" class="tt-icon tt-sun" width="20" height="20" />
+  <img src="/dark-icon.svg" alt="" aria-hidden="true" class="tt-icon tt-moon" width="20" height="20" />
+</button>
+
+<script is:inline data-astro-rerun>
+  (function () {
+    var KEY = "webao.theme";
+    var THEME_COLOR = { light: "#F8F5EF", dark: "#070B14" };
+
+    function currentTheme() {
+      return document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+    }
+
+    function applyMeta(theme) {
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute("content", THEME_COLOR[theme] || THEME_COLOR.light);
+    }
+
+    function syncToggles(theme) {
+      var toDark = theme !== "dark";
+      document.querySelectorAll("[data-theme-toggle]").forEach(function (btn) {
+        var label = toDark ? btn.getAttribute("data-label-to-dark") : btn.getAttribute("data-label-to-light");
+        if (label) {
+          btn.setAttribute("aria-label", label);
+          btn.setAttribute("title", label);
+        }
+        btn.setAttribute("aria-pressed", String(!toDark));
+      });
+    }
+
+    function setTheme(theme, animate) {
+      var html = document.documentElement;
+      if (currentTheme() === theme) {
+        syncToggles(theme);
+        return;
+      }
+      var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var doAnimate = animate !== false && !reduced;
+      if (doAnimate) html.classList.add("theming");
+      html.setAttribute("data-theme", theme);
+      try {
+        localStorage.setItem(KEY, theme);
+      } catch (e) {}
+      applyMeta(theme);
+      syncToggles(theme);
+      // Notify anything that paints with theme-dependent colors (e.g. canvases)
+      try {
+        window.dispatchEvent(new CustomEvent("webao:themechange", { detail: { theme: theme } }));
+      } catch (e) {}
+      if (doAnimate) {
+        window.setTimeout(function () {
+          html.classList.remove("theming");
+        }, 650);
+      }
+    }
+
+    function init() {
+      applyMeta(currentTheme());
+      syncToggles(currentTheme());
+      document.querySelectorAll("[data-theme-toggle]").forEach(function (btn) {
+        if (btn.dataset.webaoThemeBound) return;
+        btn.dataset.webaoThemeBound = "1";
+        btn.addEventListener("click", function () {
+          setTheme(currentTheme() === "dark" ? "light" : "dark");
+        });
+      });
+    }
+
+    window.__webaoSetTheme = setTheme;
+    document.addEventListener("astro:page-load", init);
+    if (document.readyState !== "loading") init();
+    else document.addEventListener("DOMContentLoaded", init, { once: true });
+  })();
+</script>
