@@ -114,7 +114,7 @@ const promptKey = t.intro.prompt.key;
         </span>
         <span class="wi-frame-r">
           <span class="wi-dot"></span>
-          <span class="wi-frame-mono">STUDIO — MONTRÉAL</span>
+          <span class="wi-frame-mono">STUDIO · MONTRÉAL</span>
         </span>
       </div>
     </div>
@@ -1469,7 +1469,13 @@ const promptKey = t.intro.prompt.key;
       phase = "firstHit";
       impactX = clamp(cur.x, vw * 0.2, vw * 0.8);
       impactY = surfaceY;
-      cameraShiftTo(vw * 0.5 - impactX, vh * CFG.breach.camera.focusY - surfaceY, CFG.breach.camera.shiftMs);
+      // On small viewports the cinematic reframe reads as a glitch: the
+      // horizontal shift exposes the stage's right edge and the vertical
+      // shift pulls the barrier off the bottom. The impact point is already
+      // well within view on a narrow screen, so keep the camera neutral there.
+      const camX = isSmallPerf ? 0 : vw * 0.5 - impactX;
+      const camY = isSmallPerf ? 0 : vh * CFG.breach.camera.focusY - surfaceY;
+      cameraShiftTo(camX, camY, CFG.breach.camera.shiftMs);
     }
 
     /** IMPACT — squash, shake, dent, shock ring, debris, then the bounce. */

@@ -54,7 +54,7 @@ export const INTRO_CONFIG = {
     /** Faint technical crosshair on the veil (fades before the invite). */
     crosshair: true,
     /** Frame captions on the veil. */
-    caption: { brand: "WEBAO", left: "WEBAO · WEBAO.CA", right: "STUDIO — MONTRÉAL" },
+    caption: { brand: "WEBAO", left: "WEBAO · WEBAO.CA", right: "STUDIO · MONTRÉAL" },
   },
 
   /* ------------------------------------------------------------------ cursor */
