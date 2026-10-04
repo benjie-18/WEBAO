@@ -5,10 +5,10 @@ import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
 // Direction artistique autonome. Bohème : terracotta, sauge, sable, arches,
 // motifs macramé. Non relié au système de thème WEBAO.
 const IMG = {
-  hero: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=1600&auto=format&fit=crop",
-  throw: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=1000&auto=format&fit=crop",
-  vase: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?q=80&w=1000&auto=format&fit=crop",
-  artisan: "https://images.unsplash.com/photo-1615873968403-89e068629265?q=80&w=1000&auto=format&fit=crop",
+  hero: "/demos/sahara-sage/01.jpg",
+  throw: "/demos/sahara-sage/02.jpg",
+  vase: "/demos/sahara-sage/03.jpg",
+  artisan: "/demos/sahara-sage/04.jpg",
   look1: "https://images.unsplash.com/photo-1567016432779-094069958ea5?q=80&w=1000&auto=format&fit=crop",
   look2: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1000&auto=format&fit=crop",
 };
@@ -77,7 +77,7 @@ const IMG = {
         </div>
         <div class="ss-hero-arch">
           <div class="ss-arch">
-            <img src={IMG.hero} alt="Salon bohème baigné de soleil, textiles superposés et plantes" loading="eager" fetchpriority="high" />
+            <img src={IMG.hero} alt="Salon bohème en rotin, textiles superposés, plantes et coussins terracotta" loading="eager" fetchpriority="high" />
           </div>
           <svg class="ss-macrame" viewBox="0 0 200 60" aria-hidden="true">
             <g fill="none" stroke="#6B4A35" stroke-width="2.5">
@@ -109,7 +109,7 @@ const IMG = {
         <h2 class="ss-h2 ss-center">La <em>collection</em></h2>
         <div class="ss-grid">
           <article class="ss-card">
-            <div class="ss-card-img"><img src={IMG.throw} alt="Jeté terracotta tissé à la main dans un salon chaleureux" loading="lazy" /></div>
+            <div class="ss-card-img"><img src={IMG.throw} alt="Salon bohème avec meubles en rotin et textiles chaleureux" loading="lazy" /></div>
             <div class="ss-card-body">
               <p class="ss-card-tag">Textiles</p>
               <h3>Jeté Sahara</h3>
@@ -118,7 +118,7 @@ const IMG = {
             </div>
           </article>
           <article class="ss-card">
-            <div class="ss-card-img"><img src={IMG.vase} alt="Vases en céramique faits main, émaux terreux" loading="lazy" /></div>
+            <div class="ss-card-img"><img src={IMG.vase} alt="Mains d\u2019artisan façonnant un vase en terre cuite au tour" loading="lazy" /></div>
             <div class="ss-card-body">
               <p class="ss-card-tag">Céramiques</p>
               <h3>Trio Dune</h3>
@@ -143,7 +143,7 @@ const IMG = {
     <section class="ss-artisans" id="artisans">
       <div class="ss-wrap ss-art-in">
         <div class="ss-arch ss-arch-sm">
-          <img src={IMG.artisan} alt="Chambre chaleureuse aux textiles d'artisan" loading="lazy" />
+          <img src={IMG.artisan} alt="Chambre bohème avec tenture en macramé et table en rotin" loading="lazy" />
         </div>
         <div>
           <p class="ss-caveat">nos gens</p>
@@ -173,7 +173,7 @@ const IMG = {
             <figcaption>Lumière du matin, stylé par Priya à Halifax</figcaption>
           </figure>
           <figure>
-            <img src={IMG.throw} alt="Textiles terracotta dans un coin lecture" loading="lazy" />
+            <img src={IMG.throw} alt="Fauteuils en rotin et textiles chaleureux dans un salon bohème" loading="lazy" />
             <figcaption>Coin lecture, stylé par nous (on n'a pas pu résister)</figcaption>
           </figure>
         </div>
@@ -388,6 +388,7 @@ const IMG = {
     .ss-arch {
       border-radius: 999px 999px 24px 24px; overflow: hidden;
       border: 6px solid var(--ss-sand-deep);
+      outline: 2px solid var(--ss-terra); outline-offset: 9px;
       box-shadow: 0 24px 60px rgba(107, 74, 53, 0.25);
       aspect-ratio: 4 / 5;
     }
@@ -413,7 +414,7 @@ const IMG = {
     }
     .ss-card:hover { transform: translateY(-8px) rotate(-0.6deg); box-shadow: 0 22px 44px rgba(107, 74, 53, 0.2); }
     .ss-card-img { aspect-ratio: 4 / 3; overflow: hidden; }
-    .ss-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+    .ss-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; filter: sepia(0.16) saturate(1.06); }
     .ss-card:hover .ss-card-img img { transform: scale(1.05); }
     .ss-card-body { padding: 26px 26px 30px; }
     .ss-card-tag { font-family: var(--ss-hand); font-size: 1.35rem; color: var(--ss-terra-deep); margin: 0 0 6px; }
