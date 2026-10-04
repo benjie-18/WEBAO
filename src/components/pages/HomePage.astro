@@ -1,5 +1,4 @@
 ---
-import CursorJourney from "../anim/CursorJourney.astro";
 import DemoCarousel from "../home/DemoCarousel.astro";
 import { useTranslations, localizedPaths, type Locale } from "../../lib/i18n";
 
@@ -18,42 +17,37 @@ const processId = locale === "fr" ? "processus" : "process";
      slot (outside <main>), never here: <main> is transformed while the intro
      plays, and a transformed ancestor would push the fixed overlay off-screen. -->
 
-<!-- HERO: watermark + parallax + split reveal -->
+<!-- HERO: asymmetric editorial. Copy on cols 1-7, a vertical fracture
+     divider, and the live site fragment on cols 9-12 bleeding off the right
+     edge. Exactly 4 text elements: title, lead, primary CTA, price note.
+     Entrance is gated on data-hero-enter, fired by the intro handoff
+     (or immediately when no intro plays). -->
 <section class="hero grain" id="hero">
-  <div class="hero-watermark" aria-hidden="true"><span>WEBAO</span><span>WEBAO</span></div>
   <div class="shell hero-grid">
     <div class="hero-copy">
-      <div class="hero-kicker" data-reveal>
-        <span class="eyebrow" style="color: var(--accent-text);">{t.home.hero.kicker}</span>
-        <span class="hero-badge">
-          <span class="dot"></span> {t.home.hero.badge}
-        </span>
-      </div>
-
-      <h1 class="hero-title display" data-reveal style="--d:80ms">
+      <h1 class="hero-title display" data-hero-title>
         {t.home.hero.title1}<br />
         <span class="hero-italic">{t.home.hero.titleWork}</span> {t.home.hero.title2}<br />
         {t.home.hero.title3}
       </h1>
 
-      <p class="hero-lead prose" data-reveal style="--d:160ms">
+      <p class="hero-lead prose" data-hero-lead>
         {t.home.hero.lead}
         <strong>{t.home.hero.leadStrong}</strong> {t.home.hero.leadRest}
       </p>
 
-      <div class="hero-actions" data-reveal style="--d:240ms">
+      <div class="hero-actions" data-hero-actions>
         <a href={paths.contact} class="btn btn--primary">
           {t.home.hero.ctaPrimary}
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3l5 5-5 5"/></svg>
-        </a>
-        <a href={paths.demos} class="btn btn--ghost">
-          {t.home.hero.ctaSecondary}
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>
         </a>
         <span class="hero-note mono" set:html={t.home.hero.priceNote}></span>
       </div>
     </div>
 
-    <div class="hero-visual" data-reveal="scale" style="--d:140ms" aria-hidden="true" data-hero-visual>
+    <div class="hero-fracture" aria-hidden="true"><span class="fracture-v"></span></div>
+
+    <div class="hero-visual" data-hero-visual aria-hidden="true">
       <div class="visual-stack" data-parallax="stack">
         <!-- Top bar -->
         <div class="browser-bar">
@@ -147,11 +141,6 @@ const processId = locale === "fr" ? "processus" : "process";
     </div>
   </div>
 
-  <div class="hero-rail" aria-hidden="true">
-    <div class="rail-line"></div>
-    <span class="mono">{locale==="fr" ? "DÉFILER" : "SCROLL"}</span>
-    <div class="rail-line"></div>
-  </div>
 </section>
 
 <!-- MARQUEE -->
@@ -167,81 +156,58 @@ const processId = locale === "fr" ? "processus" : "process";
 <!-- DEMO CAROUSEE : real demo homepages, auto-rotating -->
 <DemoCarousel locale={locale} />
 
-<!-- AGENCY CARDS -->
+<!-- OFFER: asymmetric. One pricing panel (60%) + two text links (40%).
+     Kills the three-equal-cards template. No eyebrow in this section. -->
 <section class="section section--ink2 grain" style="padding-bottom: 0;">
   <div class="shell">
-    <div class="agency-head" data-reveal>
+    <div class="offer-head" data-reveal>
       <h2 class="display" style="font-size: clamp(2.6rem, 6vw, 5.2rem); line-height:.9; color: var(--section-dark-text);">{t.home.agency.title}</h2>
       <p class="mono" style="color: rgba(248,245,239,.5); margin-top:12px; font-size: 12px;">{t.home.agency.subtitle}</p>
     </div>
 
-    <div class="agency-grid" style="position: relative;">
-      <CursorJourney locale={locale} />
-      <a href={paths.pricing} class="agency-card agency-card--pricing" data-reveal>
-        <div class="agency-top mono">
+    <div class="offer-grid">
+      <a href={paths.pricing} class="offer-panel fracture-reveal" data-offer-panel>
+        <span class="offer-fracture" aria-hidden="true"></span>
+        <span class="offer-panel-top mono">
           <span>{t.home.agency.pricing.top}</span><span aria-hidden="true">→</span>
-        </div>
-        <div class="agency-body">
-          <div class="agency-price">
-            <span class="display">{t.home.agency.pricing.price}</span>
-            <span class="mono" set:html={t.home.agency.pricing.priceSuffix}></span>
-          </div>
-          <h3 class="agency-title" set:html={t.home.agency.pricing.title}></h3>
-          <p>{t.home.agency.pricing.desc}</p>
-        </div>
-        <div class="agency-foot">
-          <span class="agency-cta">{t.home.agency.pricing.cta} <span aria-hidden="true">↗</span></span>
-          <div class="agency-mini">
+        </span>
+        <span class="offer-price">
+          <span class="display">{t.home.agency.pricing.price}</span>
+          <span class="mono" set:html={t.home.agency.pricing.priceSuffix}></span>
+        </span>
+        <span class="offer-title display" set:html={t.home.agency.pricing.title}></span>
+        <span class="offer-desc">{t.home.agency.pricing.desc}</span>
+        <span class="offer-foot">
+          <span class="offer-cta">{t.home.agency.pricing.cta} <span aria-hidden="true">↗</span></span>
+          <span class="offer-mini mono">
             {t.home.agency.pricing.mini.map(m => <span>{m}</span>)}
-          </div>
-        </div>
-        <div class="agency-art" aria-hidden="true">
-          <div class="art-price"></div>
-        </div>
+          </span>
+        </span>
       </a>
 
-      <a href={paths.contact} class="agency-card agency-card--contact" data-reveal style="--d:120ms">
-        <div class="agency-top mono" style="color: var(--muted);">
-          <span>{t.home.agency.contact.top}</span><span aria-hidden="true">→</span>
-        </div>
-        <div class="agency-body" style="color: var(--ink);">
-          <h3 class="agency-title" style="color: var(--ink);" set:html={t.home.agency.contact.title}></h3>
-          <p style="color: var(--muted);">{t.home.agency.contact.desc}</p>
-          <div class="contact-pills">
+      <div class="offer-links" data-reveal style="--d:120ms">
+        <a href={paths.contact} class="offer-link">
+          <span class="mono offer-link-top"><span>{t.home.agency.contact.top}</span><span aria-hidden="true">→</span></span>
+          <span class="offer-link-title display" set:html={t.home.agency.contact.title}></span>
+          <span class="offer-link-desc">{t.home.agency.contact.desc}</span>
+          <span class="offer-link-pills">
             {t.home.agency.contact.pills.map(p => <span>{p}</span>)}
-          </div>
-        </div>
-        <div class="agency-foot" style="border-top-color: var(--line); color: var(--ink);">
-          <span class="agency-cta" style="background: var(--ink); color: var(--paper);">{t.home.agency.contact.cta} <span aria-hidden="true">↗</span></span>
-        </div>
-        <div class="agency-art" aria-hidden="true">
-          <div class="art-contact"></div>
-        </div>
-      </a>
-
-      <a href={paths.demos} class="agency-card agency-card--demos" data-reveal style="--d:240ms">
-        <div class="agency-top mono">
-          <span>{t.home.agency.demos.top}</span><span aria-hidden="true">→</span>
-        </div>
-        <div class="agency-body">
-          <div class="demos-stack">
-            <span class="demos-thumb" style="background:#F8F5EF; color:#0A0F1C;">NORA</span>
-            <span class="demos-thumb" style="background:#FFF7ED; color:#431407; font-family: var(--font-display); font-style:italic;">Mira</span>
-            <span class="demos-thumb" style="background:#0F172A; color:white;">NORD</span>
-          </div>
-          <h3 class="agency-title" set:html={t.home.agency.demos.title}></h3>
-          <p>{t.home.agency.demos.desc}</p>
-        </div>
-        <div class="agency-foot">
-          <span class="agency-cta" style="background: var(--paper); color: var(--ink);">{t.home.agency.demos.cta} <span aria-hidden="true">↗</span></span>
-          <div class="agency-mini" style="color: rgba(248,245,239,.55);">
+          </span>
+          <span class="offer-link-cta">{t.home.agency.contact.cta} <span aria-hidden="true">↗</span></span>
+        </a>
+        <a href={paths.demos} class="offer-link">
+          <span class="mono offer-link-top"><span>{t.home.agency.demos.top}</span><span aria-hidden="true">→</span></span>
+          <span class="offer-link-title display" set:html={t.home.agency.demos.title}></span>
+          <span class="offer-link-desc">{t.home.agency.demos.desc}</span>
+          <span class="offer-link-mini mono">
             {t.home.agency.demos.mini.map(m => <span>{m}</span>)}
-          </div>
-        </div>
-      </a>
+          </span>
+          <span class="offer-link-cta">{t.home.agency.demos.cta} <span aria-hidden="true">↗</span></span>
+        </a>
+      </div>
     </div>
 
-    <div class="agency-note mono" data-reveal>
+    <div class="offer-note mono" data-reveal>
       <span>{t.home.agency.noteLeft}</span>
       <span style="opacity:.4;">{t.home.agency.noteRight}</span>
     </div>
@@ -249,66 +215,87 @@ const processId = locale === "fr" ? "processus" : "process";
   <div class="angle-divider" aria-hidden="true"></div>
 </section>
 
-<!-- HOW IT WORKS -->
-<section id={processId} class="section section--dark grain" style="overflow: clip;">
+<!-- HOW IT WORKS : pinned scrubbed timeline -->
+<section id={processId} class="section section--dark grain process">
   <div class="shell">
     <div class="section-head" data-reveal>
       <div class="eyebrow" style="color: rgba(248,245,239,.5);">{t.home.process.eyebrow}</div>
       <h2 class="display" style="font-size: clamp(2.4rem, 6vw, 5rem); margin-top: 12px; line-height:.92;" set:html={t.home.process.title}></h2>
     </div>
+  </div>
 
-    <div class="steps">
-      {t.home.process.steps.map((step: any, idx: number) => (
-        <div class="step" data-reveal style={`--d:${idx*100}ms`}>
-          <div class="step-n"><span class="oglyph">0{idx+1}</span></div>
-          <div class="step-body">
-            <h3>{step.title}</h3>
-            <p>{step.desc}</p>
-            <ul class="step-list mono">
-              {step.bullets.map((b: string) => <li>{b}</li>)}
-            </ul>
+  <div class="pin-wrap" data-process-pin>
+    <div class="pin-stage">
+      <div class="shell">
+        <div class="journey" data-journey>
+          <div class="journey-ends mono" aria-hidden="true">
+            <span>DAY 0</span>
+            <span data-day-readout>DAY 0</span>
+            <span>DAY 7</span>
           </div>
-          <div class="step-visual">
-            {idx === 0 && (
-              <div class="mini-card">
-                <div class="mono" style="font-size:10px; opacity:.5;">{step.visualInbox}</div>
-                <div style="margin-top:10px; font-size:13px; line-height:1.5;"><strong>{step.subject}</strong> {step.subjectText}</div>
-                <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">{step.tags?.map((tag: string) => <span class="tag">{tag}</span>)}</div>
-                <div style="margin-top:12px; height:1px; background: var(--line);"></div>
-                <div style="margin-top:10px; display:flex; align-items:center; gap:8px; font-size:13px;"><span style="width:28px;height:28px;border-radius:99px;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-size:11px;"><span class="oglyph">W</span></span> {step.reply} <span style="margin-left:auto; color: var(--accent-text);">↗</span></div>
-              </div>
-            )}
-            {idx === 1 && (
-              <div class="mini-card mini-card--dark">
-                <div style="display:flex; align-items:center; gap:8px;"><span style="width:8px;height:8px;border-radius:99px;background:#00D084;"></span><span class="mono" style="font-size:10px; opacity:.7; color:white;">{step.preview}</span></div>
-                <div style="margin-top:14px; height:86px; border-radius:10px; overflow:hidden; background: linear-gradient(135deg,#F8F5EF 0%, #EFE9DE 100%); position:relative;">
-                  <div style="position:absolute; inset:12px; border-radius:8px; background:white; border:1px solid rgba(10,15,28,.06); padding:10px;">
-                    <div style="height:6px; width:42%; border-radius:99px; background:#0A0F1C; opacity:.9;"></div>
-                    <div style="height:4px; width:64%; border-radius:99px; background:#0A0F1C; opacity:.14; margin-top:8px;"></div>
-                    <div style="display:flex; gap:6px; margin-top:10px;"><span style="flex:1; height:22px; border-radius:99px; background:#FF3B30;"></span><span style="flex:1; height:22px; border-radius:99px; border:1px solid rgba(10,15,28,.12);"></span></div>
+          <div class="journey-track">
+            <div class="journey-line" aria-hidden="true"></div>
+            <div class="crack-fill" data-crack-fill aria-hidden="true"><span class="crack-spark" aria-hidden="true"></span></div>
+            <ol class="stations" role="list">
+              {t.home.process.steps.map((step: any, idx: number) => (
+                <li class="station" data-station={idx} style={`--pos:${[6, 50, 94][idx]}%`}>
+                  <span class="station-node" aria-hidden="true"><span class="oglyph">0{idx+1}</span></span>
+                  <div class="station-card">
+                    <div class="station-body">
+                      <h3>{step.title}</h3>
+                      <p>{step.desc}</p>
+                      <ul class="step-list mono">
+                        {step.bullets.map((b: string) => <li>{b}</li>)}
+                      </ul>
+                    </div>
+                    <div class="station-visual">
+                      {idx === 0 && (
+                        <div class="mini-card">
+                          <div class="mono" style="font-size:10px; opacity:.5;">{step.visualInbox}</div>
+                          <div style="margin-top:10px; font-size:13px; line-height:1.5;"><strong>{step.subject}</strong> {step.subjectText}</div>
+                          <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">{step.tags?.map((tag: string) => <span class="tag">{tag}</span>)}</div>
+                          <div style="margin-top:12px; height:1px; background: var(--line);"></div>
+                          <div style="margin-top:10px; display:flex; align-items:center; gap:8px; font-size:13px;"><span style="width:28px;height:28px;border-radius:99px;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-size:11px;"><span class="oglyph">W</span></span> {step.reply} <span style="margin-left:auto; color: var(--accent-text);">↗</span></div>
+                        </div>
+                      )}
+                      {idx === 1 && (
+                        <div class="mini-card mini-card--dark">
+                          <div style="display:flex; align-items:center; gap:8px;"><span style="width:8px;height:8px;border-radius:99px;background:#00D084;"></span><span class="mono" style="font-size:10px; opacity:.7; color:white;">{step.preview}</span></div>
+                          <div style="margin-top:14px; height:86px; border-radius:10px; overflow:hidden; background: linear-gradient(135deg,#F8F5EF 0%, #EFE9DE 100%); position:relative;">
+                            <div style="position:absolute; inset:12px; border-radius:8px; background:white; border:1px solid rgba(10,15,28,.06); padding:10px;">
+                              <div style="height:6px; width:42%; border-radius:99px; background:#0A0F1C; opacity:.9;"></div>
+                              <div style="height:4px; width:64%; border-radius:99px; background:#0A0F1C; opacity:.14; margin-top:8px;"></div>
+                              <div style="display:flex; gap:6px; margin-top:10px;"><span style="flex:1; height:22px; border-radius:99px; background:#FF3B30;"></span><span style="flex:1; height:22px; border-radius:99px; border:1px solid rgba(10,15,28,.12);"></span></div>
+                            </div>
+                          </div>
+                          <div style="margin-top:12px; display:flex; gap:8px;"><span class="btn btn--primary btn--sm" style="flex:1; justify-content:center;">{step.approve}</span><span class="btn btn--ghost btn--sm" style="flex:1; justify-content:center; border-color: rgba(255,255,255,.14); color:white;">{step.comment}</span></div>
+                        </div>
+                      )}
+                      {idx === 2 && (
+                        <div class="mini-card">
+                          <div style="display:flex; align-items:center; justify-content:space-between;">
+                            <span class="mono" style="font-size:10px; opacity:.5;">{step.launchDay}</span>
+                            <span style="font-size:11px; background:var(--ink); color:var(--paper); padding:4px 8px; border-radius:99px; font-weight:600;">{step.live}</span>
+                          </div>
+                          <div style="margin-top:12px; display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:12.5px;">
+                            <div style="background:#F8F5EF; color:#0A0F1C; border-radius:10px; padding:10px; text-align:center;"><div style="font-weight:700;">{step.ssl}</div><div style="opacity:.6; font-size:11px;">{step.sslDesc}</div></div>
+                            <div style="background:#F8F5EF; color:#0A0F1C; border-radius:10px; padding:10px; text-align:center;"><div style="font-weight:700;">{step.backups}</div><div style="opacity:.6; font-size:11px;">{step.backupsDesc}</div></div>
+                          </div>
+                          <div style="margin-top:10px; font-size:12.5px; color: var(--muted); text-align:center;">{step.needChange} <a href={paths.contact} style="color:var(--accent-text); font-weight:600; text-decoration:underline; text-underline-offset:3px;">{step.sendMessage}</a></div>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-                <div style="margin-top:12px; display:flex; gap:8px;"><span class="btn btn--primary btn--sm" style="flex:1; justify-content:center;">{step.approve}</span><span class="btn btn--ghost btn--sm" style="flex:1; justify-content:center; border-color: rgba(255,255,255,.14); color:white;">{step.comment}</span></div>
-              </div>
-            )}
-            {idx === 2 && (
-              <div class="mini-card">
-                <div style="display:flex; align-items:center; justify-content:space-between;">
-                  <span class="mono" style="font-size:10px; opacity:.5;">{step.launchDay}</span>
-                  <span style="font-size:11px; background:var(--ink); color:var(--paper); padding:4px 8px; border-radius:99px; font-weight:600;">{step.live}</span>
-                </div>
-                <div style="margin-top:12px; display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:12.5px;">
-                  <div style="background:#F8F5EF; color:#0A0F1C; border-radius:10px; padding:10px; text-align:center;"><div style="font-weight:700;">{step.ssl}</div><div style="opacity:.6; font-size:11px;">{step.sslDesc}</div></div>
-                  <div style="background:#F8F5EF; color:#0A0F1C; border-radius:10px; padding:10px; text-align:center;"><div style="font-weight:700;">{step.backups}</div><div style="opacity:.6; font-size:11px;">{step.backupsDesc}</div></div>
-                </div>
-                <div style="margin-top:10px; font-size:12.5px; color: var(--muted); text-align:center;">{step.needChange} <a href={paths.contact} style="color:var(--accent-text); font-weight:600; text-decoration:underline; text-underline-offset:3px;">{step.sendMessage}</a></div>
-              </div>
-            )}
+                </li>
+              ))}
+            </ol>
           </div>
         </div>
-      ))}
+      </div>
     </div>
+  </div>
 
+  <div class="shell">
     <div class="steps-cta" data-reveal>
       <a href={paths.contact} class="btn btn--primary">{t.home.process.cta}</a>
       <span class="mono" style="color: rgba(248,245,239,.5); font-size:11px;">
@@ -374,21 +361,19 @@ const processId = locale === "fr" ? "processus" : "process";
             <span>{t.home.craft.float}</span>
             <span style="opacity:.5;">{t.home.craft.float2}</span>
           </div>
+          {t.home.craft.items.map((item, i) => (
+            <aside class={`margin-note margin-note--${i}`} data-reveal style={`--d:${i * 90}ms`}>
+              <span class="mono margin-note-tag">0{i + 1}</span>
+              <strong>{item.title}</strong>
+              <p>{item.desc}</p>
+            </aside>
+          ))}
         </div>
       </div>
       <div class="craft-copy">
         <div class="eyebrow">{t.home.craft.eyebrow}</div>
         <h2 class="display" style="font-size: clamp(2rem, 4.4vw, 3.4rem); margin-top:10px; line-height:.92;" set:html={t.home.craft.title}></h2>
         <p class="prose" style="margin-top:16px;">{t.home.craft.desc}</p>
-
-        <ul class="craft-list" role="list">
-          {t.home.craft.items.map(item => (
-            <li>
-              <span class="check-badge"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.2l3.2 3.2 5.8-6.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-              <div><strong>{item.title}</strong> {item.desc}</div>
-            </li>
-          ))}
-        </ul>
 
         <div class="cluster" style="margin-top: 24px;">
           <a href={paths.pricing} class="btn btn--ghost btn--sm">{t.home.craft.cta}</a>
@@ -404,64 +389,68 @@ const processId = locale === "fr" ? "processus" : "process";
   <div class="shell">
     <div class="faq-grid">
       <div data-reveal>
-        <div class="eyebrow">{t.home.faq.eyebrow}</div>
-        <h2 class="display" style="font-size: clamp(2rem, 4vw, 3.2rem); margin-top:10px; line-height:.92;" set:html={t.home.faq.title}></h2>
+        <h2 class="display" style="font-size: clamp(2rem, 4vw, 3.2rem); line-height:.92;" set:html={t.home.faq.title}></h2>
         <p class="prose" style="margin-top:14px; font-size:15px; color: var(--muted);">
           {t.home.faq.contactPrompt.split("{link}")[0]}
           <a href={paths.contact} style="color: var(--accent-text); font-weight:600; text-decoration: underline; text-underline-offset:3px;">{t.home.faq.askDirectly}</a>{t.home.faq.contactPrompt.split("{link}")[1] ?? ""}
         </p>
       </div>
       <div class="faq-list" data-reveal style="--d:100ms">
-        {t.home.faq.items.map((item, i) => (
+        {t.home.faq.items.map((item, i) => [
+          i > 0 ? <div class="fracture-divider" aria-hidden="true"></div> : null,
           <details open={i===0}>
             <summary>{item.q}</summary>
             <div><p>{item.a}</p></div>
           </details>
-        ))}
+        ])}
       </div>
     </div>
   </div>
 </section>
 
 <!-- FINAL CTA -->
-<section class="cta-band grain" data-reveal>
-  <div class="shell cta-inner">
-    <div class="cta-copy">
-      <div class="mono" style="color: rgba(248,245,239,.5); font-size:11px; letter-spacing:.14em;">{t.home.finalCta.eyebrow}</div>
-      <h2 class="display" style="font-size: clamp(2.6rem, 7vw, 5.6rem); line-height:.88; margin-top:14px; color: var(--section-dark-text);" set:html={t.home.finalCta.title}></h2>
-      <p style="margin-top:18px; color: rgba(248,245,239,.68); font-size: clamp(1rem, 1.6vw, 1.15rem); line-height:1.6; max-width: 46ch;">{t.home.finalCta.desc}</p>
-      <div class="cluster" style="margin-top: 28px;">
-        <a href={paths.contact} class="btn btn--on-dark">{t.home.finalCta.ctaPrimary}</a>
-        <a href={paths.demos} class="btn btn--ghost-on-dark">{t.home.finalCta.ctaSecondary}</a>
-      </div>
-      <div class="mono" style="margin-top:14px; font-size:11px; color: rgba(248,245,239,.46);">{t.home.finalCta.contact}</div>
+<section class="cta-statement grain">
+  <div class="shell cta-statement-inner" data-reveal>
+    <h2 class="display cta-statement-title" set:html={t.home.finalCta.title}></h2>
+    <p class="cta-statement-desc">{t.home.finalCta.desc}</p>
+    <div class="cluster cta-statement-actions">
+      <a href={paths.contact} class="btn btn--on-dark btn--crack"><span class="btn--crack-label">{t.home.finalCta.ctaPrimary}</span></a>
+      <a href={paths.demos} class="btn btn--ghost-on-dark">{t.home.finalCta.ctaSecondary}</a>
     </div>
-    <div class="cta-visual" aria-hidden="true">
-      <div class="cta-card">
-        <div class="mono" style="font-size:10px; opacity:.5;">{t.home.finalCta.preview}</div>
-        <div style="margin-top:10px; font-family: var(--font-display); font-size: 1.6rem; line-height:.9;" set:html={t.home.finalCta.yourBiz}></div>
-        <div style="margin-top:10px; height:1px; background: var(--line);"></div>
-        <div style="margin-top:12px; display:flex; gap:8px;"><span style="flex:1; height:28px; border-radius:99px; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-size:11px; font-weight:650;">{t.home.finalCta.call}</span><span style="flex:1; height:28px; border-radius:99px; border:1px solid var(--line-strong); display:grid; place-items:center; font-size:11px; font-weight:600;">{t.home.finalCta.quote}</span></div>
-        <div style="margin-top:12px; background: var(--paper-2); border:1px solid var(--line); border-radius:10px; padding:10px; font-size:12px; text-align:center;" set:html={t.home.finalCta.live}></div>
-      </div>
-      <div class="cta-stamp"><span class="oglyph">W</span></div>
-    </div>
+    <div class="mono cta-statement-contact">{t.home.finalCta.contact}</div>
   </div>
 </section>
 
 <style>
-  .hero { padding-block: 28px 24px; background: linear-gradient(180deg, var(--paper) 0%, var(--paper-3) 100%); overflow: clip; position: relative; }
-  .hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(24px, 4vw, 56px); align-items: center; padding-block: clamp(16px, 2.5vw, 32px) clamp(20px, 3vw, 40px); }
-  .hero-kicker { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-  .hero-badge { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; letter-spacing:-0.01em; background: var(--card-bg); border: 1px solid var(--line); padding: 6px 10px; border-radius: 99px; box-shadow: 0 2px 10px rgba(10,15,28,.06); }
-  .hero-badge .dot { width:8px; height:8px; border-radius:99px; background:#00C950; box-shadow: 0 0 0 4px rgba(0,201,80,.14); }
-  .hero-title { margin-top: 18px; font-size: clamp(2.8rem, 7.2vw, 6.2rem); line-height: .86; letter-spacing: -0.04em; }
+  /* --- HERO: asymmetric editorial ---
+     12-track grid: copy 1-7, 14px vertical fracture divider, visual 9-12
+     bleeding off the right viewport edge. Entrance gated on
+     [data-hero-enter="true"] (intro handoff or immediate). */
+  .hero { padding-block: clamp(24px, 4vw, 56px) clamp(32px, 5vw, 72px); background: linear-gradient(180deg, var(--paper) 0%, var(--paper-3) 100%); overflow: clip; position: relative; isolation: isolate; }
+  .hero::before { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0; background: radial-gradient(700px 400px at 18% 18%, var(--hero-glow-a) 0%, transparent 62%), radial-gradient(600px 600px at 92% 88%, var(--hero-glow-b) 0%, transparent 58%); }
+  .hero-grid { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)) 14px repeat(4, minmax(0, 1fr)); gap: clamp(20px, 3vw, 40px); align-items: center; }
+  .hero-copy { grid-column: 1 / 8; min-width: 0; }
+  .hero-fracture { grid-column: 8 / 9; align-self: stretch; display: flex; min-width: 0; }
+  .fracture-v { width: 14px; align-self: stretch; min-height: 240px; background: var(--line); clip-path: polygon(43% 0%, 57% 7%, 36% 14%, 57% 22%, 43% 31%, 64% 40%, 36% 49%, 57% 58%, 43% 67%, 64% 76%, 36% 85%, 57% 93%, 43% 100%, 57% 100%, 71% 93%, 50% 85%, 78% 76%, 57% 67%, 71% 58%, 50% 49%, 78% 40%, 57% 31%, 71% 22%, 50% 14%, 71% 7%, 57% 0%); }
+  .hero-visual { grid-column: 9 / 13; min-width: 0; position: relative; margin-right: calc((min(var(--content-max), 100vw - var(--content-pad) * 2) - 100vw) / 2); }
+  .hero-title { font-size: clamp(2.9rem, 7.4vw, 6.4rem); line-height: .88; letter-spacing: -0.04em; text-wrap: balance; }
   .hero-title .hero-italic { font-style: italic; font-weight: 400; color: var(--accent); position: relative; }
-  .hero-lead { margin-top: 18px; max-width: 50ch; font-size: clamp(1rem, 1.5vw, 1.08rem); }
-  .hero-actions { margin-top: 22px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+  .hero-title .w { display: inline-block; opacity: 0; transform: translateY(.55em); will-change: transform, opacity; }
+  [data-hero-enter="true"] .hero-title .w { animation: hero-word-in var(--dur-4) var(--ease-out-expo) forwards; animation-delay: calc(var(--wi, 0) * var(--stagger)); }
+  @keyframes hero-word-in { to { opacity: 1; transform: translateY(0); } }
+  .hero-title .hero-italic::after { content: ""; position: absolute; left: -2%; right: -2%; bottom: 0.08em; height: 0.34em; background: var(--accent-underline); z-index: -1; transform: scaleX(0); transform-origin: left; border-radius: 2px; }
+  [data-hero-enter="true"] .hero-title .hero-italic::after { transform: scaleX(1); transition: transform var(--dur-5) var(--ease-out-expo) calc(6 * var(--stagger)); }
+  .hero-lead { margin-top: 20px; max-width: 46ch; font-size: clamp(1rem, 1.5vw, 1.08rem); opacity: 0; }
+  .hero-actions { margin-top: 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; opacity: 0; }
   .hero-note { width: 100%; margin-top: 4px; font-size: 11px; color: var(--muted); letter-spacing: .04em; }
-  .hero-visual { position: relative; padding-top: 8px; }
-  .visual-stack { position: relative; background: var(--card-bg); border: 1px solid var(--line); border-radius: 22px; box-shadow: var(--shadow-lg); overflow: clip; transform: rotate(.4deg); }
+  .hero-visual { opacity: 0; }
+  [data-hero-enter="true"] .hero-lead, [data-hero-enter="true"] .hero-actions { animation: hero-rise var(--dur-4) var(--ease-out-expo) forwards; }
+  [data-hero-enter="true"] .hero-lead { animation-delay: calc(5 * var(--stagger)); }
+  [data-hero-enter="true"] .hero-actions { animation-delay: calc(7 * var(--stagger)); }
+  [data-hero-enter="true"] .hero-visual { animation: hero-visual-in var(--dur-5) var(--ease-out-expo) forwards; animation-delay: calc(3 * var(--stagger)); }
+  @keyframes hero-rise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes hero-visual-in { from { opacity: 0; transform: translateX(56px) rotate(.6deg); } to { opacity: 1; transform: translateX(0) rotate(0deg); } }
+  .visual-stack { position: relative; background: var(--card-bg); border: 1px solid var(--line); border-radius: 22px; box-shadow: var(--shadow-lg); overflow: clip; transform: perspective(1400px) rotateY(-6deg) rotateX(1deg); transform-origin: left center; }
   .browser-bar { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid var(--line); background: var(--card-bg); }
   .dots { display:flex; gap:6px; } .dots i { width:10px; height:10px; border-radius:99px; background: #E6E0D6; display:block; } .dots i:nth-child(1){ background:#FF5F57; } .dots i:nth-child(2){ background:#FFBD2E; } .dots i:nth-child(3){ background:#28C940; }
   .url { font-family: var(--font-mono); font-size:11px; letter-spacing:.04em; background: var(--paper-3); border:1px solid var(--line); padding:5px 10px; border-radius:99px; color: var(--ink-3); min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -483,110 +472,246 @@ const processId = locale === "fr" ? "processus" : "process";
   .float-list li i { width:16px; height:16px; border-radius:99px; background:#00C950; color:white; display:grid; place-items:center; font-style:normal; flex:none; }
   .float-list li i svg { width:8px; height:8px; display:block; }
   .visual-caption { display:flex; justify-content:space-between; gap:12px; margin-top:10px; font-size:10px; color: var(--muted); padding-inline: 4px; }
-  .hero-rail { display:flex; align-items:center; gap:14px; justify-content: center; padding: 10px 0 6px; color: var(--muted); font-family: var(--font-mono); font-size:10px; letter-spacing:.14em; }
-  .rail-line { flex:1; height:1px; background: var(--line); max-width: 420px; }
-  .hero-watermark { position: absolute; inset: 0; pointer-events: none; overflow: clip; z-index: 0; opacity: .035; display: grid; place-items: center; user-select: none; }
-  .hero-watermark span { position: absolute; font-family: var(--font-display); font-size: clamp(10rem, 28vw, 24rem); line-height: 1; letter-spacing: -0.06em; color: var(--ink); white-space: nowrap; transform: rotate(-6deg); }
-  .hero-watermark span:last-child { transform: rotate(-6deg) translate(1.2em, 1.1em); opacity: .6; }
-  .hero { isolation: isolate; }
-  .hero::before { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0; background: radial-gradient(700px 400px at 18% 18%, var(--hero-glow-a) 0%, transparent 62%), radial-gradient(600px 600px at 92% 88%, var(--hero-glow-b) 0%, transparent 58%), linear-gradient(180deg, transparent 0%, var(--hero-glow-b) 100%); }
-  .hero-grid, .hero-rail { position: relative; z-index: 1; }
-  .hero-badge .dot { animation: pulseDot 2.2s ease-in-out infinite; }
-  @keyframes pulseDot { 0%, 100% { box-shadow: 0 0 0 4px rgba(0,201,80,.14); transform: scale(1); } 50% { box-shadow: 0 0 0 7px rgba(0,201,80,0); transform: scale(1.08); } }
   .live i { animation: pulseLive 1.8s ease-in-out infinite; }
   @keyframes pulseLive { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .7; transform: scale(0.85); } }
-  .hero-title .hero-italic { position: relative; }
-  .hero-title .hero-italic::after { content: ""; position: absolute; left: -2%; right: -2%; bottom: 0.08em; height: 0.34em; background: var(--accent-underline); z-index: -1; transform: scaleX(0); transform-origin: left; transition: transform .9s var(--ease-out) 600ms; border-radius: 2px; }
-  [data-reveal].is-visible .hero-italic::after, .hero-title.is-visible .hero-italic::after { transform: scaleX(1); }
-  @media (prefers-reduced-motion: reduce) { .hero-badge .dot, .live i { animation: none; } .hero-title .hero-italic::after { transform: scaleX(1); transition: none; } }
-  @media (max-width: 960px) { .hero-grid { grid-template-columns: 1fr; } .float-a { right: 8px; bottom: 8px; } .float-b { left: 8px; bottom: -10px; } }
-  @media (max-width: 560px) { .hero { padding-block: 12px 16px; } .hero-title { font-size: clamp(2.6rem, 12vw, 4.2rem); } .float-card { position: relative; inset:auto !important; transform: none !important; margin-top:12px; width:auto; } .visual-stack { transform: none; } .preview-meta { flex-direction: column; align-items: flex-start; } }
+  @media (prefers-reduced-motion: reduce) {
+    .live i { animation: none; }
+    .hero-title .w { opacity: 1; transform: none; animation: none; }
+    .hero-lead, .hero-actions, .hero-visual { opacity: 1; transform: none; animation: none; }
+    [data-hero-enter="true"] .hero-title .hero-italic::after { transform: scaleX(1); transition: none; }
+    .fracture-v { clip-path: none; width: 1px; }
+  }
+  @media (max-width: 960px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-copy { grid-column: 1 / -1; }
+    .hero-fracture { display: none; }
+    .hero-visual { grid-column: 1 / -1; margin-right: 0; }
+    .float-a { right: 8px; bottom: 8px; }
+    .float-b { left: 8px; bottom: -10px; }
+  }
+  @media (max-width: 560px) { .hero { padding-block: 12px 16px; } .hero-title { font-size: clamp(2.6rem, 12.5vw, 4.2rem); } .float-card { position: relative; inset:auto !important; transform: none !important; margin-top:12px; width:auto; } .visual-stack { transform: none; } .preview-meta { flex-direction: column; align-items: flex-start; } }
   .section-head { max-width: 60ch; }
-  .steps { margin-top: 36px; display: grid; gap: 18px; }
-  .step { display:grid; grid-template-columns: 64px 1fr 360px; gap: 20px; background: rgba(248,245,239,.06); border:1px solid var(--line-on-dark); border-radius: 20px; padding: 22px; align-items: center; backdrop-filter: blur(6px); }
-  .step-n { width:56px; height:56px; border-radius: 14px; display:grid; place-items:center; font-family: var(--font-display); font-size:1.35rem; line-height:1; background: var(--paper-3); color: var(--ink); transition: transform .35s var(--ease-out); }
-  .step:hover .step-n { transform: scale(1.06) rotate(2deg); }
-  .step { transition: transform .35s var(--ease-out), background .3s, border-color .3s; }
-  .step:hover { transform: translateY(-2px); background: rgba(248,245,239,.09); border-color: rgba(248,245,239,.14); }
-  .step-body h3 { font-size: 18px; letter-spacing:-0.02em; color: var(--section-dark-text); }
-  .step-body p { margin-top:8px; font-size:14px; line-height:1.6; color: rgba(248,245,239,.68); max-width: 42ch; }
+  .process { --journey-accent: var(--accent); }
+  /* Pinned scrub stage: the wrap provides scroll distance, the stage sticks */
+  .pin-wrap { height: 280vh; position: relative; }
+  .pin-stage {
+    position: sticky; top: 0; height: 100vh; height: 100svh;
+    display: flex; align-items: center; overflow: clip;
+  }
+  .journey { width: 100%; }
+  .journey-ends { display: flex; justify-content: space-between; align-items: baseline; font-size: 10px; letter-spacing: .18em; color: rgba(248,245,239,.42); margin-bottom: 18px; }
+  .journey-ends [data-day-readout] { color: var(--journey-accent); font-weight: 700; }
+  .journey-track { position: relative; height: 2px; margin-block: clamp(200px, 30vh, 320px); }
+  .journey-line {
+    position: absolute; inset: 0; border-radius: 2px;
+    background:
+      repeating-linear-gradient(90deg, rgba(248,245,239,.16) 0 7px, transparent 7px 11px),
+      rgba(248,245,239,.07);
+  }
+  .crack-fill {
+    position: absolute; inset: -1px 0; border-radius: 3px;
+    background: linear-gradient(90deg, var(--journey-accent) 0%, var(--accent-mid, #FF7A3D) 100%);
+    box-shadow: 0 0 18px color-mix(in srgb, var(--journey-accent) 55%, transparent), 0 0 4px var(--journey-accent);
+    transform: scaleX(var(--scrub, 0)); transform-origin: left center;
+    will-change: transform;
+  }
+  .crack-spark {
+    position: absolute; right: -7px; top: 50%; width: 14px; height: 14px;
+    background: var(--journey-accent); transform: translateY(-50%) rotate(45deg) scale(var(--spark, 1));
+    box-shadow: 0 0 12px var(--journey-accent);
+  }
+  .stations { list-style: none; padding: 0; margin: 0; position: absolute; inset: 0; }
+  .station { position: absolute; left: var(--pos); top: 0; width: 0; }
+  .station-node {
+    position: absolute; left: 0; top: 50%; width: 52px; height: 52px;
+    transform: translate(-50%, -50%);
+    border-radius: 16px; display: grid; place-items: center;
+    font-family: var(--font-display); font-size: 1.25rem; line-height: 1;
+    background: rgba(248,245,239,.06); color: rgba(248,245,239,.5);
+    border: 1px solid rgba(248,245,239,.14);
+    transition: background .45s var(--ease-out), color .45s var(--ease-out), border-color .45s var(--ease-out), box-shadow .45s var(--ease-out), scale .45s var(--ease-spring, var(--ease-out));
+  }
+  .station.is-active .station-node {
+    background: var(--journey-accent); color: #fff; border-color: var(--journey-accent);
+    box-shadow: 0 0 28px color-mix(in srgb, var(--journey-accent) 60%, transparent);
+    scale: 1.12;
+  }
+  .station-card {
+    position: absolute; left: 0; width: min(340px, 78vw);
+    opacity: 0; transform: translate(-50%, 18px);
+    transition: opacity .6s var(--ease-out), transform .6s var(--ease-out);
+    pointer-events: none;
+  }
+  .station.is-active .station-card { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+  /* Zigzag: stations 0 and 2 float above the line, station 1 hangs below */
+  .station[data-station="0"] .station-card,
+  .station[data-station="2"] .station-card { bottom: 52px; }
+  .station[data-station="1"] .station-card { top: 52px; }
+  .station-card .station-body h3 { font-size: 19px; letter-spacing: -0.02em; color: var(--section-dark-text); }
+  .station-card .station-body p { margin-top: 8px; font-size: 13.5px; line-height: 1.6; color: rgba(248,245,239,.68); }
   .step-list { list-style:none; padding:0; margin-top:12px; display:flex; gap:12px; flex-wrap:wrap; font-size:11px; color: rgba(248,245,239,.55); }
-  .step-visual .mini-card { background: var(--paper-3); border:1px solid rgba(10,15,28,.06); border-radius: 16px; padding: 14px; box-shadow: var(--shadow-md); color: var(--ink); }
+  .station-visual { margin-top: 14px; }
+  .station-visual .mini-card { background: var(--paper-3); border:1px solid rgba(10,15,28,.06); border-radius: 16px; padding: 14px; box-shadow: var(--shadow-md); color: var(--ink); }
   .mini-card--dark { background:#0F1216 !important; color: var(--paper) !important; border-color: rgba(248,245,239,.08) !important; }
   .tag { font-size:11px; font-weight:600; background: var(--paper-2); border:1px solid var(--line); padding:4px 8px; border-radius:99px; }
   .steps-cta { margin-top:18px; display:flex; flex-wrap:wrap; align-items:center; gap:14px; }
-  @media (max-width: 980px) { .step { grid-template-columns: 56px 1fr; } .step-visual { grid-column: 1 / -1; } }
-  @media (max-width: 560px) { .step { grid-template-columns: 48px 1fr; padding:16px; } .step-n { width:48px; height:48px; } }
+  /* Keep the end station card inside the viewport */
+  .station[data-station="2"] .station-card { transform: translate(-78%, 18px); }
+  .station[data-station="2"].is-active .station-card { transform: translate(-78%, 0); }
+  .station[data-station="0"] .station-card { transform: translate(-22%, 18px); }
+  .station[data-station="0"].is-active .station-card { transform: translate(-22%, 0); }
+
+  /* Narrow viewports: vertical journey, no pinning */
+  @media (max-width: 860px) {
+    .pin-wrap { height: auto; }
+    .pin-stage { position: static; height: auto; display: block; padding-block: 8px 24px; }
+    .journey-track { height: auto; margin-block: 0; padding-left: 34px; }
+    .journey-line, .crack-fill { display: none; }
+    .journey-track::before {
+      content: ""; position: absolute; left: 11px; top: 8px; bottom: 8px; width: 2px;
+      background: linear-gradient(180deg, var(--journey-accent), var(--journey-accent) 60%, rgba(248,245,239,.14));
+      border-radius: 2px;
+    }
+    .stations { position: static; display: grid; gap: 26px; }
+    .station { position: relative; left: auto; top: auto; width: auto; }
+    .station-node { left: -34px; width: 44px; height: 44px; font-size: 1.05rem; background: var(--journey-accent); color: #fff; border-color: var(--journey-accent); }
+    .station-card, .station.is-active .station-card,
+    .station[data-station="0"] .station-card, .station[data-station="2"] .station-card {
+      position: static; width: auto; opacity: 1; transform: none; pointer-events: auto;
+    }
+  }
+
+  /* Reduced motion: vertical stack, everything visible, no pin/scrub */
+  @media (prefers-reduced-motion: reduce) {
+    .pin-wrap { height: auto; }
+    .pin-stage { position: static; height: auto; display: block; padding-block: 8px 24px; }
+    .journey-track { height: auto; margin-block: 0; }
+    .journey-line, .crack-fill, .crack-spark { display: none; }
+    .stations { position: static; display: grid; gap: 22px; margin-top: 26px; }
+    .station { position: relative; left: auto; top: auto; width: auto; }
+    .station-node { position: static; transform: none; background: var(--journey-accent); color: #fff; border-color: var(--journey-accent); margin-bottom: 12px; }
+    .station-card, .station.is-active .station-card,
+    .station[data-station="0"] .station-card, .station[data-station="2"] .station-card {
+      position: static; width: auto; max-width: 560px; opacity: 1; transform: none; pointer-events: auto; transition: none;
+    }
+    .journey-ends [data-day-readout] { display: none; }
+  }
   .split-head { display:grid; grid-template-columns: 1.2fr .8fr; gap: 24px; align-items: end; }
   .split-head-actions { padding-bottom: 6px; }
   @media (max-width: 900px) { .split-head { grid-template-columns: 1fr; } }
-  .agency-head { display:grid; gap:6px; }
-  .agency-grid { margin-top: 28px; display:grid; grid-template-columns: repeat(3, 1fr); gap:16px; align-items: stretch; }
-  .agency-card { position:relative; border-radius: 22px; overflow: clip; padding: 18px; display:flex; flex-direction:column; gap:16px; min-height: 420px; border: 1px solid var(--line); transition: transform .4s var(--ease-out), box-shadow .4s; isolation:isolate; }
-  .agency-card::before { content: ""; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,.10) 50%, transparent 65%); transform: translateX(-100%); transition: transform .7s var(--ease-out); pointer-events: none; z-index: 1; }
-  .agency-card:hover::before { transform: translateX(100%); }
-  .agency-card:hover { transform: translateY(-6px) rotate(.2deg); box-shadow: var(--shadow-lg); }
-  .agency-top { display:flex; justify-content:space-between; align-items:center; font-size:10px; letter-spacing:.14em; opacity:.7; }
-  .agency-body { flex:1; }
-  .agency-price { display:flex; align-items: baseline; gap:10px; }
-  .agency-price .display { font-size: 3.2rem; line-height:.9; }
-  .agency-price .mono { font-size:10px; line-height:1.2; opacity:.6; }
-  .agency-title { margin-top:14px; font-size: 1.45rem; line-height:1; letter-spacing:-0.03em; font-weight:750; }
-  .agency-card p { margin-top:10px; font-size:13.5px; line-height:1.6; opacity:.72; }
-  .agency-foot { margin-top:auto; padding-top:14px; border-top:1px solid var(--line-on-dark); display:grid; gap:10px; }
-  .agency-cta { display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:13px; letter-spacing:-0.01em; background: var(--ink); color: var(--paper); padding:10px 14px; border-radius:99px; width: fit-content; }
-  .agency-mini { display:flex; gap:6px; flex-wrap:wrap; font-family: var(--font-mono); font-size:10px; opacity:.55; letter-spacing:.04em; }
-  .agency-art { position:absolute; inset:auto -20px -20px auto; width: 56%; height: 42%; opacity:.9; pointer-events:none; z-index:-1; }
-  .agency-card--pricing { background: var(--accent); color: white; border-color: rgba(255,255,255,.14); }
-  .agency-card--pricing .agency-top { color: rgba(255,255,255,.8); }
-  .agency-card--pricing .agency-title { color:white; }
-  .agency-card--pricing p { color: rgba(255,255,255,.82); }
-  .agency-card--pricing .agency-foot { border-top-color: rgba(255,255,255,.18); }
-  .agency-card--pricing .agency-cta { background: white; color: var(--accent); }
-  .art-price { width:100%; height:100%; background: radial-gradient(120px 120px at 70% 30%, white 0%, rgba(255,255,255,0) 70%), linear-gradient(135deg, rgba(255,255,255,.18) 0%, rgba(0,0,0,.08) 100%); border-radius: 18px 0 0 0; border:1px solid rgba(255,255,255,.22); transform: rotate(-4deg); }
-  .agency-card--contact { background: var(--paper-3); color: var(--ink); }
-  .contact-pills { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
-  .contact-pills span { background: var(--paper-2); border:1px solid var(--line); padding:7px 10px; border-radius:99px; font-size:12px; font-weight:600; letter-spacing:-0.01em; }
-  .art-contact { width:100%; height:100%; background: repeating-linear-gradient( -12deg, #0A0F1C 0 2px, transparent 2px 14px), linear-gradient(180deg, #FFF 0%, #F8F5EF 100%); border-radius: 18px 0 0 0; opacity:.06; }
-  .agency-card--demos { background: var(--section-dark-bg); color: var(--section-dark-text); border-color: rgba(248,245,239,.08); }
-  .agency-card--demos p { color: var(--section-dark-soft); }
-  .agency-card--demos .agency-foot { border-top-color: var(--line-on-dark); }
-  .demos-stack { display:flex; gap: -8px; margin-top:2px; }
-  .demos-thumb { width:54px; height:54px; border-radius:12px; border:2px solid var(--ink); display:grid; place-items:center; font-weight:800; letter-spacing:-0.04em; font-size:11px; margin-left:-8px; box-shadow: 0 4px 16px rgba(0,0,0,.18); }
-  .demos-thumb:first-child { margin-left:0; }
-  .agency-note { margin-top:14px; display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; font-size:10px; color: rgba(248,245,239,.45); padding: 0 2px 22px; }
+  /* OFFER: asymmetric. One pricing panel (60%) + two text links (40%).
+     Replaces the three-equal-cards template. Panel reveals via the
+     fracture motif; hover displaces along the fracture edge (transform-only). */
+  .offer-head { display:grid; gap:6px; }
+  .offer-grid { margin-top: 28px; display:grid; grid-template-columns: 1.5fr 1fr; gap: clamp(20px, 3vw, 44px); align-items: stretch; }
+  .offer-panel { position:relative; display:flex; flex-direction:column; gap:14px; background: var(--accent); color:#fff; border-radius: var(--r-lg); padding: clamp(24px, 3vw, 40px); overflow: clip; isolation:isolate; }
+  .offer-panel:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
+  .offer-fracture { position:absolute; left:0; top:-2%; bottom:-2%; width:16px; background: var(--section-ink2-bg); clip-path: polygon(43% 0%, 57% 7%, 36% 14%, 57% 22%, 43% 31%, 64% 40%, 36% 49%, 57% 58%, 43% 67%, 64% 76%, 36% 85%, 57% 93%, 43% 100%, 57% 100%, 71% 93%, 50% 85%, 78% 76%, 57% 67%, 71% 58%, 50% 49%, 78% 40%, 57% 31%, 71% 22%, 50% 14%, 71% 7%, 57% 0%); pointer-events:none; transition: transform var(--dur-3) var(--ease-out-expo); }
+  .offer-panel-top { display:flex; justify-content:space-between; align-items:center; font-size:10px; letter-spacing:.14em; color: rgba(255,255,255,.8); }
+  .offer-price { display:flex; align-items:baseline; gap:12px; margin-top:6px; flex-wrap:wrap; }
+  .offer-price .display { font-size: clamp(4rem, 8vw, 6.5rem); line-height:.9; letter-spacing:-0.04em; }
+  .offer-price .mono { font-size:11px; line-height:1.4; color: rgba(255,255,255,.75); }
+  .offer-title { font-size: clamp(1.6rem, 2.6vw, 2.2rem); line-height:1; letter-spacing:-0.03em; font-weight:750; }
+  .offer-desc { font-size:14px; line-height:1.6; color: rgba(255,255,255,.85); max-width: 44ch; }
+  .offer-foot { margin-top:auto; padding-top:16px; border-top:1px solid rgba(255,255,255,.2); display:grid; gap:10px; }
+  .offer-cta { display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:13px; letter-spacing:-0.01em; background:#fff; color: var(--accent); padding:10px 16px; border-radius:99px; width: fit-content; }
+  .offer-mini { display:flex; gap:8px; flex-wrap:wrap; font-size:10px; letter-spacing:.04em; color: rgba(255,255,255,.65); }
+  @media (hover: hover) and (pointer: fine) {
+    /* Keep the fracture-reveal clip-path transition AND add the hover
+       displacement; both transitions must be listed or one is lost. */
+    .offer-panel { transition: clip-path var(--dur-5) var(--ease-out-expo), transform var(--dur-3) var(--ease-out-expo); }
+    .offer-panel:hover { transform: translateX(10px); }
+    .offer-panel:hover .offer-fracture { transform: translateX(-7px); }
+    .offer-link { transition: transform var(--dur-3) var(--ease-out-expo); }
+    .offer-link:hover { transform: translateX(8px); }
+    .offer-link:hover .offer-link-cta { color: var(--accent); border-bottom-color: var(--accent); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .offer-panel, .offer-panel .offer-fracture, .offer-link { transition: none; }
+    .offer-panel:hover, .offer-panel:hover .offer-fracture, .offer-link:hover { transform: none; }
+  }
+  .offer-links { display:grid; gap:0; align-content:start; }
+  .offer-link { display:grid; gap:8px; padding: 22px 4px; border-top:1px solid var(--line-on-dark); color: var(--section-dark-text); align-content:start; }
+  .offer-link:last-child { border-bottom:1px solid var(--line-on-dark); }
+  .offer-link-top { display:flex; justify-content:space-between; align-items:center; font-size:10px; letter-spacing:.14em; color: rgba(248,245,239,.5); }
+  .offer-link-title { font-size: clamp(1.4rem, 2.4vw, 1.9rem); line-height:1.02; letter-spacing:-0.03em; font-weight:750; }
+  .offer-link-desc { font-size:13.5px; line-height:1.6; color: var(--section-dark-soft); max-width: 38ch; }
+  .offer-link-pills { display:flex; flex-wrap:wrap; gap:8px; }
+  .offer-link-pills span { border:1px solid var(--line-on-dark); padding:7px 12px; border-radius:99px; font-size:12px; font-weight:600; letter-spacing:-0.01em; }
+  .offer-link-mini { display:flex; gap:8px; flex-wrap:wrap; font-size:10px; letter-spacing:.04em; color: rgba(248,245,239,.5); }
+  .offer-link-cta { display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:13px; letter-spacing:-0.01em; color: var(--section-dark-text); width: fit-content; border-bottom:1px solid rgba(248,245,239,.4); padding-bottom:2px; }
+  .offer-note { margin-top:14px; display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; font-size:10px; color: rgba(248,245,239,.45); padding: 0 2px 22px; }
+  @media (max-width: 960px) { .offer-grid { grid-template-columns: 1fr; } }
   .angle-divider { height: 28px; background: var(--paper); clip-path: polygon(0 100%, 100% 0, 100% 100%, 0 100%); margin-top: 10px; }
-  @media (max-width: 960px) { .agency-grid { grid-template-columns: 1fr; } .agency-card { min-height: 380px; } }
   .craft-grid { display:grid; grid-template-columns: .95fr 1.05fr; gap: clamp(24px, 4vw, 48px); align-items: center; }
   .craft-frame { position:relative; }
   .craft-img { border-radius:18px; overflow: clip; border:1px solid var(--line); box-shadow: var(--shadow-lg); background: var(--card-bg); }
   .craft-svg { width:100%; height:auto; display:block; }
   .craft-float { position:absolute; right:12px; bottom:12px; background: var(--card-bg); border:1px solid var(--line); border-radius:99px; padding:8px 12px; font-size:10px; display:flex; gap:8px; box-shadow: var(--shadow-sm); }
-  .craft-list { list-style:none; padding:0; margin-top:18px; display:grid; gap:14px; }
-  .craft-list li { display:flex; gap:12px; align-items:start; font-size:14px; line-height:1.55; color: var(--ink-3); }
-  .check-badge { width:26px; height:26px; border-radius:99px; background: var(--ink); color: var(--paper); display:grid; place-items:center; flex:none; margin-top:1px; }
-  .check-badge svg { width:12px; height:12px; display:block; }
-  @media (max-width: 880px) { .craft-grid { grid-template-columns: 1fr; } }
+  /* CRAFT marginalia: the 4 proof points as annotated notes pinned around
+     the visual, not a checklist. Leader lines tie each note to the frame. */
+  .margin-note { position: absolute; z-index: 3; width: 218px; background: var(--card-bg); border: 1px solid var(--line); border-radius: var(--r-md); padding: 12px 14px; box-shadow: var(--shadow-md); }
+  .margin-note strong { display: block; font-size: 13px; letter-spacing: -0.01em; margin: 6px 0 4px; }
+  .margin-note p { margin: 0; font-size: 12px; line-height: 1.55; color: var(--muted); }
+  .margin-note-tag { font-size: 10px; letter-spacing: .14em; color: var(--accent); }
+  .margin-note::after { content: ""; position: absolute; background: var(--line-strong); }
+  .margin-note--0 { top: -22px; left: -26px; transform: rotate(-1.6deg); }
+  .margin-note--0::after { left: 30px; top: 100%; width: 1px; height: 22px; }
+  .margin-note--1 { top: 24%; right: -34px; transform: rotate(1.2deg); }
+  .margin-note--1::after { left: 100%; top: 50%; width: 34px; height: 1px; }
+  .margin-note--2 { bottom: 26%; left: -30px; transform: rotate(1deg); }
+  .margin-note--2::after { right: 100%; top: 50%; width: 30px; height: 1px; }
+  .margin-note--3 { bottom: -26px; right: -26px; transform: rotate(-1.2deg); }
+  .margin-note--3::after { right: 34px; bottom: 100%; width: 1px; height: 26px; }
+  @media (max-width: 1100px) {
+    /* No room for marginalia: notes become a static 2-col grid under the visual. */
+    .margin-note { position: static; width: auto; transform: none; }
+    .margin-note::after { display: none; }
+    .craft-frame { display: grid; gap: 12px; }
+    .craft-img { order: -1; }
+    .margin-note--0, .margin-note--1, .margin-note--2, .margin-note--3 { order: 0; }
+    .craft-frame { grid-template-columns: 1fr 1fr; }
+    .craft-img, .craft-float { grid-column: 1 / -1; }
+  }
+  @media (max-width: 880px) { .craft-grid { grid-template-columns: 1fr; } .craft-frame { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { .margin-note { transform: none; } }
   .faq-grid { display:grid; grid-template-columns: .9fr 1.1fr; gap: clamp(24px, 4vw, 48px); align-items: start; }
-  .faq-list { display:grid; gap:10px; }
-  .faq-list details { background: var(--card-bg); border:1px solid var(--line); border-radius:14px; overflow:clip; box-shadow: var(--shadow-sm); }
-  .faq-list summary { list-style:none; cursor:pointer; padding:16px 18px; font-weight:650; letter-spacing:-0.02em; font-size:14.5px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .faq-list { display:grid; gap: 0; }
+  .faq-list details { background: transparent; border: 0; border-radius: 0; box-shadow: none; overflow: clip; }
+  .faq-list summary { list-style:none; cursor:pointer; padding:18px 4px; font-weight:650; letter-spacing:-0.02em; font-size:15px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
   .faq-list summary::-webkit-details-marker{ display:none; }
   .faq-list summary::after { content:"+"; width:24px; height:24px; border-radius:99px; border:1px solid var(--line); display:grid; place-items:center; font-weight:500; flex:none; font-size:12px; }
   .faq-list details[open] summary::after { content:"\\2212"; background: var(--ink); color: var(--paper); border-color: var(--ink); }
-  .faq-list details div { padding: 0 18px 16px; color: var(--muted); font-size:14px; line-height:1.6; border-top:1px solid var(--line); margin-top:4px; padding-top:12px; }
+  .faq-list details div { padding: 0 4px 20px; color: var(--muted); font-size:14px; line-height:1.6; }
+  /* Hairline crack between FAQ items: the fracture motif as divider. */
+  .fracture-divider { height: 8px; margin-block: 2px; background: var(--line-strong); opacity: .75; clip-path: polygon(0 42%, 9% 60%, 20% 34%, 33% 64%, 46% 38%, 59% 62%, 72% 36%, 84% 60%, 100% 42%, 100% 58%, 84% 74%, 72% 50%, 59% 76%, 46% 52%, 33% 78%, 20% 48%, 9% 74%, 0 56%); }
   @media (max-width: 880px) { .faq-grid { grid-template-columns: 1fr; } }
-  .cta-band { background: var(--section-dark-bg); color: var(--section-dark-text); padding-block: clamp(40px, 6vw, 80px); position:relative; overflow: clip; border-top: 1px solid var(--line-on-dark); }
-  .cta-band::before { content:""; position:absolute; inset:0; background: radial-gradient(600px 400px at 85% 10%, var(--cta-glow-a) 0%, transparent 60%), radial-gradient(500px 500px at 10% 90%, rgba(255,255,255,.06) 0%, transparent 60%); pointer-events:none; }
-  .cta-inner { display:grid; grid-template-columns: 1.2fr .8fr; gap: 24px; align-items: center; position:relative; }
-  .cta-visual { display:grid; place-items:center; position:relative; }
-  .cta-card { width: min(340px, 100%); background: var(--paper-3); color: var(--ink); border-radius: 18px; padding:16px; border:1px solid rgba(10,15,28,.08); box-shadow: 0 20px 60px rgba(0,0,0,.28); transform: rotate(1deg); }
-  .cta-stamp { position:absolute; right: 18%; top: 8%; width:54px; height:54px; border-radius:14px; background: var(--accent); color:white; display:grid; place-items:center; font-family: var(--font-display); font-size:22px; transform: rotate(8deg); box-shadow: 0 10px 24px color-mix(in srgb, var(--accent) 40%, transparent); border:1px solid rgba(255,255,255,.4); animation: floatStamp 4.5s ease-in-out infinite; }
-  @keyframes floatStamp { 0%, 100% { transform: rotate(8deg) translateY(0); } 50% { transform: rotate(8deg) translateY(-5px); } }
-  .cta-card { transition: transform .45s var(--ease-out), box-shadow .45s; }
-  .cta-card:hover { transform: rotate(0.4deg) translateY(-3px); box-shadow: 0 26px 70px rgba(0,0,0,.34); }
-  @media (prefers-reduced-motion: reduce) { .cta-stamp { animation: none; } }
-  @media (max-width: 900px) { .cta-inner { grid-template-columns: 1fr; } .cta-visual { order: -1; } .cta-stamp { right: 6%; } }
+  @media (prefers-reduced-motion: reduce) { .fracture-divider { clip-path: none; height: 1px; } }
+  /* FINAL CTA: full-viewport dark statement. The primary button cracks
+     open along a jagged line on hover (transform-only, clipped by the
+     button's own overflow). */
+  .cta-statement { background: var(--section-dark-bg); color: var(--section-dark-text); min-height: 100svh; display: grid; align-items: center; position: relative; overflow: clip; border-top: 1px solid var(--line-on-dark); }
+  .cta-statement::before { content:""; position:absolute; inset:0; background: radial-gradient(700px 460px at 50% 8%, var(--cta-glow-a) 0%, transparent 60%), radial-gradient(500px 500px at 50% 108%, rgba(255,255,255,.05) 0%, transparent 60%); pointer-events:none; }
+  .cta-statement-inner { position: relative; text-align: center; display: grid; justify-items: center; gap: clamp(18px, 3vw, 28px); padding-block: clamp(56px, 9vw, 110px); }
+  .cta-statement-title { font-size: clamp(2.8rem, 8vw, 6.4rem); line-height: .9; letter-spacing: -0.03em; text-wrap: balance; max-width: 20ch; }
+  .cta-statement-title span { font-style: italic; font-weight: 400; color: var(--accent); }
+  .cta-statement-desc { color: rgba(248,245,239,.68); font-size: clamp(1rem, 1.6vw, 1.15rem); line-height: 1.6; max-width: 46ch; text-wrap: pretty; }
+  .cta-statement-actions { justify-content: center; }
+  .cta-statement-contact { font-size: 11px; letter-spacing: .06em; color: rgba(248,245,239,.46); }
+  .btn--crack { background: var(--accent); color: #fff; }
+  .btn--crack:hover { transform: none; filter: none; box-shadow: 0 14px 34px color-mix(in srgb, var(--accent) 45%, transparent); }
+  .btn--crack .btn--crack-label { position: relative; z-index: 1; color: var(--ink); }
+  .btn--crack::before, .btn--crack::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--on-dark-btn-bg); transition: transform var(--dur-3) var(--ease-out-expo); }
+  .btn--crack::before { clip-path: polygon(0 0, 100% 0, 100% 44%, 86% 47%, 93% 51%, 78% 54%, 88% 58%, 72% 61%, 0 61%); }
+  .btn--crack::after { clip-path: polygon(0 61%, 72% 61%, 88% 58%, 78% 54%, 93% 51%, 86% 47%, 100% 44%, 100% 100%, 0 100%); }
+  @media (hover: hover) and (pointer: fine) {
+    .btn--crack:hover::before { transform: translateY(-7px); }
+    .btn--crack:hover::after { transform: translateY(7px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .btn--crack::before, .btn--crack::after { transition: none; }
+    .btn--crack:hover::before, .btn--crack:hover::after { transform: none; }
+  }
   .section { content-visibility: auto; contain-intrinsic-size: auto 700px; }
   .hero, .marquee { content-visibility: visible; contain-intrinsic-size: auto; }
 </style>
@@ -600,7 +725,6 @@ const processId = locale === "fr" ? "processus" : "process";
       const stack = hero.querySelector('[data-parallax="stack"]') as HTMLElement | null;
       const a = hero.querySelector('[data-parallax="a"]') as HTMLElement | null;
       const b = hero.querySelector('[data-parallax="b"]') as HTMLElement | null;
-      const watermark = hero.querySelector('.hero-watermark') as HTMLElement | null;
       let raf = 0, tx = 0, ty = 0, cx = 0, cy = 0;
       hero.addEventListener('mousemove', (e: MouseEvent) => {
         const r = hero.getBoundingClientRect();
@@ -616,43 +740,201 @@ const processId = locale === "fr" ? "processus" : "process";
         raf = 0;
         cx += (tx - cx) * 0.08;
         cy += (ty - cy) * 0.08;
-        if (stack) stack.style.transform = `rotate(.4deg) translate3d(${cx * 6}px, ${cy * 6}px, 0)`;
+        if (stack) stack.style.transform = `perspective(1400px) rotateY(-6deg) rotateX(1deg) translate3d(${cx * 6}px, ${cy * 6}px, 0)`;
         if (a) a.style.transform = `rotate(1.2deg) translate3d(${cx * 14}px, ${cy * 10}px, 0)`;
         if (b) b.style.transform = `rotate(-1deg) translate3d(${cx * -12}px, ${cy * -8}px, 0)`;
-        if (watermark) watermark.style.transform = `translate3d(${cx * -10}px, ${cy * -6}px, 0)`;
         if (Math.abs(tx - cx) > 0.001 || Math.abs(ty - cy) > 0.001) {
           raf = requestAnimationFrame(tick);
         }
       }
-      let sTick = false;
-      window.addEventListener('scroll', () => {
-        if (sTick) return;
-        sTick = true;
-        requestAnimationFrame(() => {
-          const y = window.scrollY * 0.08;
-          if (watermark && !prefersReduced) watermark.style.transform += ` translateY(${y}px)`;
-          sTick = false;
-        });
-      }, { passive: true });
     }
 
-    if (!prefersReduced && !isCoarse) {
-      const cards = document.querySelectorAll('.agency-card, .demo-card');
-      cards.forEach((el) => {
-        const card = el as HTMLElement;
-        card.style.willChange = 'transform';
-        card.addEventListener('mousemove', (e: MouseEvent) => {
-          const r = card.getBoundingClientRect();
-          const px = (e.clientX - r.left) / r.width - 0.5;
-          const py = (e.clientY - r.top) / r.height - 0.5;
-          const ry = px * 6;
-          const rx = py * -5;
-          card.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(0) translateY(-4px)`;
+    initHeroEntrance(hero, prefersReduced);
+
+    initProcessTimeline(prefersReduced);
+
+    // Fracture reveals: generic IntersectionObserver for .fracture-reveal
+    // elements (see global.css). Scroll-triggered, so it works on touch;
+    // reduced motion gets the instant, fully-open state.
+    // NOTE: we observe the closest .section, not the element itself.
+    // Sections use content-visibility:auto, which suppresses
+    // IntersectionObserver callbacks for skipped descendants in Chromium;
+    // observing the section (which keeps its box via contain-intrinsic-size)
+    // fires reliably.
+    const fractures = document.querySelectorAll('.fracture-reveal');
+    if (prefersReduced || !('IntersectionObserver' in window)) {
+      fractures.forEach((el) => el.classList.add('is-visible'));
+    } else {
+      const seen = new WeakSet<Element>();
+      const revealIn = (root: Element) => {
+        if (root.classList.contains('fracture-reveal') && !seen.has(root)) {
+          seen.add(root);
+          root.classList.add('is-visible');
+        }
+        root.querySelectorAll('.fracture-reveal').forEach((el) => {
+          if (!seen.has(el)) {
+            seen.add(el);
+            el.classList.add('is-visible');
+          }
         });
-        card.addEventListener('mouseleave', () => {
-          card.style.transform = '';
-        });
+      };
+      const fio = new IntersectionObserver((entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            revealIn(e.target as Element);
+            fio.unobserve(e.target);
+          }
+        }
+      }, { threshold: 0.12 });
+      const triggers = new Set<Element>();
+      fractures.forEach((el) => {
+        triggers.add(el.closest('.section') ?? el);
       });
+      triggers.forEach((t) => fio.observe(t));
+    }
+  }
+
+  /* Process timeline: pinned scrub.
+     The .pin-wrap is 280vh tall; .pin-stage sticks for one viewport while
+     the user scrolls through it. On each frame we compute how far the
+     viewport has travelled through the wrap (0..1) and:
+       - set --scrub on the journey, which drives .crack-fill scaleX
+       - toggle .is-active on stations whose --pos the crack has reached
+       - update the DAY 0..7 readout
+     Station thresholds sit slightly before each station's --pos so the
+     card starts opening as the spark arrives. Everything is transform /
+     opacity only. Reduced motion and narrow viewports get the static
+     vertical stack from CSS, so this function bails early there. */
+  function initProcessTimeline(prefersReduced: boolean): void {
+    const wrap = document.querySelector('[data-process-pin]') as HTMLElement | null;
+    const journey = wrap?.querySelector('[data-journey]') as HTMLElement | null;
+    if (!wrap || !journey) return;
+    const stations = Array.from(journey.querySelectorAll<HTMLElement>('[data-station]'));
+    const readout = journey.querySelector('[data-day-readout]') as HTMLElement | null;
+    const narrow = window.matchMedia('(max-width: 860px)');
+    if (prefersReduced || narrow.matches || !('requestAnimationFrame' in window)) {
+      // Static fallbacks: light every station, fill the crack.
+      stations.forEach((s) => s.classList.add('is-active'));
+      journey.style.setProperty('--scrub', '1');
+      if (readout) readout.textContent = 'DAY 7';
+      return;
+    }
+
+    // Station positions as fractions, read from the --pos custom property.
+    const thresholds = stations.map((s) => {
+      const raw = getComputedStyle(s).getPropertyValue('--pos').trim();
+      const frac = parseFloat(raw) / 100;
+      return Math.max(0, (isNaN(frac) ? 0.5 : frac) - 0.07);
+    });
+
+    let ticking = false;
+    let lastProgress = -1;
+    const update = () => {
+      ticking = false;
+      const rect = wrap.getBoundingClientRect();
+      const total = wrap.offsetHeight - window.innerHeight;
+      const travelled = Math.min(Math.max(-rect.top, 0), Math.max(total, 1));
+      const progress = total > 0 ? travelled / total : 1;
+      if (Math.abs(progress - lastProgress) < 0.0005) return;
+      lastProgress = progress;
+      journey.style.setProperty('--scrub', progress.toFixed(4));
+      // Spark swells slightly while moving, settles at rest.
+      journey.style.setProperty('--spark', (0.85 + progress * 0.3).toFixed(3));
+      stations.forEach((s, i) => {
+        s.classList.toggle('is-active', progress >= (thresholds[i] ?? 1));
+      });
+      if (readout) {
+        const day = Math.round(progress * 7);
+        const label = `DAY ${day}`;
+        if (readout.textContent !== label) readout.textContent = label;
+      }
+    };
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    // If the viewport crosses the narrow breakpoint mid-session, fall back
+    // to the static stack rather than a half-driven scrub.
+    narrow.addEventListener('change', (e) => {
+      if ((e as MediaQueryListEvent).matches) {
+        window.removeEventListener('scroll', onScroll);
+        stations.forEach((s) => s.classList.add('is-active'));
+        journey.style.setProperty('--scrub', '1');
+        if (readout) readout.textContent = 'DAY 7';
+      }
+    });
+    update();
+  }
+
+  /* Hero entrance: word-split title reveal gated on data-hero-enter.
+     The intro signals completion by adding .wi-released to <html>;
+     we watch for it so the hero choreography hands off seamlessly.
+     No intro (or already released) -> enter on the next frames. */
+  function splitWords(root: HTMLElement, lang: string): void {
+    const segmenter = new Intl.Segmenter(lang, { granularity: 'word' });
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const nodes: Node[] = [];
+    let n: Node | null;
+    while ((n = walker.nextNode())) nodes.push(n);
+    let i = 0;
+    for (const node of nodes) {
+      const frag = document.createDocumentFragment();
+      const text = node.textContent ?? '';
+      for (const seg of segmenter.segment(text)) {
+        if (seg.isWordLike) {
+          const s = document.createElement('span');
+          s.className = 'w';
+          s.setAttribute('aria-hidden', 'true');
+          s.style.setProperty('--wi', String(i++));
+          s.textContent = seg.segment;
+          frag.appendChild(s);
+        } else {
+          frag.appendChild(document.createTextNode(seg.segment));
+        }
+      }
+      const parent = node.parentNode;
+      if (parent) parent.replaceChild(frag, node);
+    }
+  }
+
+  function initHeroEntrance(hero: HTMLElement | null, prefersReduced: boolean): void {
+    if (!hero) return;
+    const title = hero.querySelector('[data-hero-title]') as HTMLElement | null;
+    const enter = () => hero.setAttribute('data-hero-enter', 'true');
+    const lang = document.documentElement.lang.startsWith('fr') ? 'fr-CA' : 'en-CA';
+
+    if (title) {
+      title.setAttribute('aria-label', (title.textContent ?? '').replace(/\s+/g, ' ').trim());
+      if (!prefersReduced && 'Segmenter' in Intl) {
+        const original = title.innerHTML;
+        splitWords(title, lang);
+        // Re-split on resize (debounced) so word spans stay in sync.
+        let rt = 0;
+        window.addEventListener('resize', () => {
+          window.clearTimeout(rt);
+          rt = window.setTimeout(() => {
+            title.innerHTML = original;
+            splitWords(title, lang);
+          }, 250);
+        });
+      }
+    }
+
+    if (prefersReduced) { enter(); return; }
+
+    const html = document.documentElement;
+    if (html.classList.contains('wi-run') && !html.classList.contains('wi-released')) {
+      const mo = new MutationObserver(() => {
+        if (html.classList.contains('wi-released')) { mo.disconnect(); enter(); }
+      });
+      mo.observe(html, { attributes: true, attributeFilter: ['class'] });
+      window.setTimeout(() => { mo.disconnect(); enter(); }, 9000);
+    } else {
+      requestAnimationFrame(() => requestAnimationFrame(enter));
     }
   }
 
