@@ -4,10 +4,10 @@ import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
 // Démo : Atelier Caractère, fonderie typographique haut de gamme fictive, Montréal.
 // Direction artistique autonome. Typographie de luxe : ivoire, encre, or, sérif monumental. Sans lien avec le thème WEBAO.
 const IMG = {
-  editorial: "https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1000&auto=format&fit=crop",
-  stationery: "https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?q=80&w=1000&auto=format&fit=crop",
-  publishing: "https://images.unsplash.com/photo-1524578271613-d550eacf6090?q=80&w=1000&auto=format&fit=crop",
-  foundry: "https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=1200&auto=format&fit=crop",
+  editorial: "/demos/atelier-caractere/01.jpg",
+  stationery: "/demos/atelier-caractere/02.jpg",
+  publishing: "/demos/atelier-caractere/03.jpg",
+  foundry: "/demos/atelier-caractere/04.jpg",
 };
 ---
 
@@ -120,15 +120,15 @@ const IMG = {
         <h2 class="ac-h2">Nos lettres, <em>dans le monde.</em></h2>
         <div class="ac-use-grid">
           <figure class="ac-use">
-            <img src={IMG.editorial} alt="Plume écrivant sur papier, typographie éditoriale" loading="lazy" />
+            <img src={IMG.editorial} alt="Spécimens typographiques Baskerville, Sabon et Univers" loading="lazy" />
             <figcaption><strong>Éditorial</strong><span>Revue fictive « Marge », composée en Caractère Texte</span></figcaption>
           </figure>
           <figure class="ac-use">
-            <img src={IMG.stationery} alt="Bureau élégant avec plume et papier, belle papeterie" loading="lazy" />
+            <img src={IMG.stationery} alt="Alphabet décoratif aux styles variés" loading="lazy" />
             <figcaption><strong>Papeterie</strong><span>Correspondance, Caractère Italique</span></figcaption>
           </figure>
           <figure class="ac-use">
-            <img src={IMG.publishing} alt="Rayonnages sombres de bibliothèque, belle édition" loading="lazy" />
+            <img src={IMG.publishing} alt="Spécimen d'alphabet géométrique audacieux, Caractère Display" loading="lazy" />
             <figcaption><strong>Édition</strong><span>Couvertures de livres, Caractère Display</span></figcaption>
           </figure>
         </div>
@@ -189,7 +189,7 @@ const IMG = {
     <section class="ac-section" id="foundry">
       <div class="ac-wrap ac-foundry-in">
         <div class="ac-foundry-img">
-          <img src={IMG.foundry} alt="Piles de journaux imprimés, le mot imprimé" loading="lazy" />
+          <img src={IMG.foundry} alt="Affiche typographique colorée, mur d'épreuves" loading="lazy" />
           <p class="ac-caption">Le mur d'épreuves, rue de l'Imprimerie.</p>
         </div>
         <div class="ac-foundry-copy">
@@ -400,8 +400,8 @@ const IMG = {
     /* in use */
     .ac-inuse { background: var(--ac-ivory-deep); border-block: 1px solid var(--ac-line); }
     .ac-use-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(24px, 4vw, 48px); }
-    .ac-use { margin: 0; }
-    .ac-use img { width: 100%; height: 380px; object-fit: cover; filter: sepia(0.28) contrast(1.02); }
+    .ac-use { margin: 0; background: #fff; border: 1px solid var(--ac-line); outline: 4px solid #fff; outline-offset: -5px; padding: 10px; }
+    .ac-use img { width: 100%; height: 380px; object-fit: cover; filter: contrast(1.03); border: 1px solid var(--ac-line); }
     .ac-use figcaption { padding-top: 20px; display: grid; gap: 6px; border-top: 1px solid var(--ac-gold); margin-top: 20px; }
     .ac-use figcaption strong { font-size: 22px; font-weight: 700; }
     .ac-use figcaption span { font-style: italic; font-size: 15.5px; color: var(--ac-ink-soft); }
