@@ -43,7 +43,7 @@ const paths = localizedPaths[locale];
 
         <div class="testi">
           <p>{t.contact.hero.browseText}</p>
-          <a href={paths.demos} class="mono" style="display:inline-block; margin-top:8px; font-size:12px; font-weight:600; color: var(--accent); text-decoration: underline; text-underline-offset:3px;">{t.contact.hero.browseCta}</a>
+          <a href={paths.demos} class="mono" style="display:inline-block; margin-top:8px; font-size:12px; font-weight:600; color: var(--accent-text); text-decoration: underline; text-underline-offset:3px;">{t.contact.hero.browseCta}</a>
         </div>
       </div>
 
@@ -185,9 +185,8 @@ const paths = localizedPaths[locale];
         if (!valid) {
           (status as HTMLElement).hidden = false;
           status.textContent = validationError;
-          (status as HTMLElement).style.color = '#B91C1C';
-          (status as HTMLElement).style.background = '#FFF0EF';
-          (status as HTMLElement).style.borderColor = '#FFD4D0';
+          status.classList.remove('form-status--success');
+          status.classList.add('form-status--error');
           return;
         }
         const fields: Array<[string, string]> = [
@@ -209,9 +208,8 @@ const paths = localizedPaths[locale];
         window.location.href = mailto;
         (status as HTMLElement).hidden = false;
         status.textContent = successMsg;
-        (status as HTMLElement).style.color = '#0E7A5A';
-        (status as HTMLElement).style.background = '#ECFDF5';
-        (status as HTMLElement).style.borderColor = '#A7F3D0';
+        status.classList.remove('form-status--error');
+        status.classList.add('form-status--success');
         const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
         if (btn) { btn.textContent = readyText; }
       });
@@ -226,23 +224,23 @@ const paths = localizedPaths[locale];
   .contact-grid { display:grid; grid-template-columns: 1fr 1.05fr; gap: clamp(24px,4vw,40px); align-items:start; }
   .contact-copy { position: sticky; top: calc(var(--header-h) + 16px); }
   .contact-cards { margin-top:18px; display:grid; gap:10px; }
-  .c-card { display:flex; align-items:center; gap:12px; background:white; border:1px solid var(--line); border-radius:14px; padding:14px; box-shadow: var(--shadow-sm); transition: transform .2s var(--ease-out), box-shadow .2s; }
+  .c-card { display:flex; align-items:center; gap:12px; background: var(--card-bg); border:1px solid var(--line); border-radius:14px; padding:14px; box-shadow: var(--shadow-sm); transition: transform .2s var(--ease-out), box-shadow .2s; }
   a.c-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
   .c-icon { width:36px; height:36px; border-radius:10px; background: var(--paper-2); border:1px solid var(--line); display:grid; place-items:center; font-size:14px; }
   .c-card strong { display:block; font-size:14.5px; letter-spacing:-0.02em; }
   .c-card .mono { display:block; font-size:11px; color: var(--muted); margin-top:2px; }
   .trust-mini { margin-top:14px; display:flex; gap:8px; flex-wrap:wrap; font-size:11px; color: var(--muted); }
-  .testi { margin-top:18px; background: white; border:1px solid var(--line); border-radius:14px; padding:16px; box-shadow: var(--shadow-sm); }
+  .testi { margin-top:18px; background: var(--card-bg); border:1px solid var(--line); border-radius:14px; padding:16px; box-shadow: var(--shadow-sm); }
   .testi p { font-size:14px; line-height:1.6; color: var(--ink-3); }
   .contact-form-wrap { display:grid; gap:10px; }
-  .form { background: white; border:1px solid var(--line); border-radius:18px; padding:18px; box-shadow: var(--shadow-md); display:grid; gap:14px; }
+  .form { background: var(--card-bg); border:1px solid var(--line); border-radius:18px; padding:18px; box-shadow: var(--shadow-md); display:grid; gap:14px; }
   .form-head h2 { font-size: 1.35rem; letter-spacing:-0.02em; font-weight:750; line-height:1; }
   .form-head p { margin-top:4px; font-size:11px; color: var(--muted); }
   .field-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
   label { display:grid; gap:6px; font-size:13px; font-weight:600; letter-spacing:-0.01em; color: var(--ink-3); }
   input, select, textarea { width:100%; padding:10px 12px; border:1px solid var(--line-strong); border-radius:10px; background: var(--paper-3); font-size:14px; font-weight:500; color: var(--ink); transition: border-color .2s, box-shadow .2s; }
   textarea { resize: vertical; min-height: 72px; }
-  input:focus, select:focus, textarea:focus { outline:none; border-color: var(--ink); box-shadow: 0 0 0 3px rgba(10,15,28,.08); }
+  input:focus, select:focus, textarea:focus { outline:none; border-color: var(--ink); box-shadow: 0 0 0 3px var(--focus-ring); }
   .optional { font-weight:500; color: var(--muted); text-transform:none; letter-spacing:0; font-size:11px; }
   .form-meta { display:grid; gap:8px; font-size:11px; color: var(--muted); line-height:1.5; }
   .check-row { display:flex; gap:8px; align-items:center; font-size:12.5px; color: var(--ink-3); font-weight:500; cursor:pointer; }
@@ -250,7 +248,7 @@ const paths = localizedPaths[locale];
   .form-status { padding:10px 12px; border-radius:10px; border:1px solid var(--line); font-size:12.5px; line-height:1.5; }
   .form-foot { display:flex; gap:8px; align-items:center; font-size:11px; color: var(--muted); padding: 6px 2px; line-height:1.5; }
   .info-grid { display:grid; grid-template-columns: repeat(3,1fr); gap:16px; }
-  .info-card { background:white; border:1px solid var(--line); border-radius:16px; padding:18px; box-shadow: var(--shadow-sm); }
+  .info-card { background: var(--card-bg); border:1px solid var(--line); border-radius:16px; padding:18px; box-shadow: var(--shadow-sm); }
   .info-card h3 { font-size:14.5px; letter-spacing:-0.02em; font-weight:750; }
   .info-card p { margin-top:8px; font-size:13px; color: var(--muted); line-height:1.5; }
   .info-card ul { list-style:none; padding:0; margin-top:10px; display:grid; gap:6px; font-size:13px; line-height:1.5; color: var(--ink-3); }
