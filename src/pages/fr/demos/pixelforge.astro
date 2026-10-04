@@ -1,9 +1,11 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
 
-// Demo microsite: Pixelforge Games, fictional indie game studio, Montreal.
-// Standalone art direction. 8-bit pixel art, CRT scanlines, chunky buttons.
-// Not connected to the WEBAO theme system.
+// Démo : Pixelforge Games, studio fictif de jeux indépendants, Montréal.
+// Reconstruite comme une BORNE D'ARCADE. La page est un écran de sélection :
+// elle s'ouvre en mode démo avec un INSERT COIN clignotant, les jeux sont des
+// bandeaux lumineux d'arcade (pas des cartes), les scores sont un tableau,
+// le journal de développement se lit comme des notes de patch. 8-bit, scanlines.
 const IMG = {
   hero: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1600&auto=format&fit=crop",
   game1: "/demos/pixelforge/02.jpg",
@@ -19,475 +21,337 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pixelforge Games : jeux indé, pixels au max</title>
-  <meta name="description" content="Pixelforge Games : studio indé fictif à Montréal. 14 petits jeux, 2 millions de joueurs, zéro polygone blessé. Appuie sur start." />
+  <title>Pixelforge Games · Insérez une pièce</title>
+  <meta name="description" content="Pixelforge Games : studio fictif de Montréal. 14 petits jeux, 2 millions de joueurs, zéro polygone blessé. Insérez une pièce." />
   <meta name="robots" content="noindex" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet" />
 </head>
-<body class="pf">
+<body class="ac">
 
-  <!-- CRT overlay -->
-  <div class="pf-scan" aria-hidden="true"></div>
+  <div class="ac-scan" aria-hidden="true"></div>
 
-  <!-- NAV -->
-  <header class="pf-navwrap">
-    <nav class="pf-nav" aria-label="Principal">
-      <a class="pf-logo" href="#top" aria-label="Pixelforge Games, accueil"><span class="pf-logo-fx">PIXELFORGE</span></a>
-      <div class="pf-nav-links">
-        <a href="#games">Jeux</a>
-        <a href="#scores">Scores</a>
-        <a href="#devlog">Journal</a>
-        <a href="#contact">Contact</a>
-      </div>
-      <a class="pf-btn pf-btn-small" href="#games">Jouer</a>
-      <button class="pf-burger" id="pf-burger" aria-expanded="false" aria-controls="pf-mobilemenu" aria-label="Ouvrir le menu">
-        <span></span><span></span><span></span>
-      </button>
-    </nav>
-    <div class="pf-mobilemenu" id="pf-mobilemenu">
-      <a href="#games">Jeux</a>
-      <a href="#scores">Scores</a>
-      <a href="#devlog">Journal</a>
-      <a href="#contact">Contact</a>
-      <a class="pf-btn" href="#games">Jouer</a>
+  <!-- MODE DÉMO -->
+  <header class="ac-attract" id="top">
+    <div class="ac-attract-bg" aria-hidden="true"><img src={IMG.hero} alt="" loading="eager" fetchpriority="high" /></div>
+    <div class="ac-attract-in">
+      <svg class="ac-invader" viewBox="0 0 11 8" shape-rendering="crispEdges" aria-hidden="true">
+        <rect x="2" y="0" width="1" height="1"/><rect x="8" y="0" width="1" height="1"/>
+        <rect x="3" y="1" width="1" height="1"/><rect x="7" y="1" width="1" height="1"/>
+        <rect x="2" y="2" width="7" height="1"/>
+        <rect x="1" y="3" width="2" height="1"/><rect x="4" y="3" width="3" height="1"/><rect x="8" y="3" width="2" height="1"/>
+        <rect x="0" y="4" width="11" height="1"/>
+        <rect x="0" y="5" width="1" height="1"/><rect x="2" y="5" width="7" height="1"/><rect x="10" y="5" width="1" height="1"/>
+        <rect x="0" y="6" width="1" height="1"/><rect x="2" y="6" width="1" height="1"/><rect x="8" y="6" width="1" height="1"/><rect x="10" y="6" width="1" height="1"/>
+        <rect x="3" y="7" width="2" height="1"/><rect x="6" y="7" width="2" height="1"/>
+      </svg>
+      <p class="ac-kicker">Pixelforge Games · Montréal · depuis 2017</p>
+      <h1 class="ac-logo">Pixelforge</h1>
+      <p class="ac-tag">Jeux indépendants, maximum de pixels. 14 jeux, plus de 2 M de joueurs, zéro polygone blessé.</p>
+      <a class="ac-insert" href="#select"><span class="ac-blink">▶ Insérez une pièce</span></a>
+      <p class="ac-hint">1 joueur · sans continue · boss du vendredi</p>
     </div>
   </header>
 
-  <main id="top">
-    <!-- HERO -->
-    <section class="pf-hero">
-      <div class="pf-hero-bg" aria-hidden="true"><img src={IMG.hero} alt="" loading="eager" fetchpriority="high" /></div>
-      <div class="pf-pixels" aria-hidden="true">
-        <span class="pf-pxl p1"></span><span class="pf-pxl p2"></span><span class="pf-pxl p3"></span>
-        <span class="pf-pxl p4"></span><span class="pf-pxl p5"></span><span class="pf-pxl p6"></span>
-      </div>
-      <div class="pf-hero-in">
-        <svg class="pf-invader" viewBox="0 0 11 8" shape-rendering="crispEdges" aria-hidden="true">
-          <rect x="2" y="0" width="1" height="1"/><rect x="8" y="0" width="1" height="1"/>
-          <rect x="3" y="1" width="1" height="1"/><rect x="7" y="1" width="1" height="1"/>
-          <rect x="2" y="2" width="7" height="1"/>
-          <rect x="1" y="3" width="2" height="1"/><rect x="4" y="3" width="3" height="1"/><rect x="8" y="3" width="2" height="1"/>
-          <rect x="0" y="4" width="11" height="1"/>
-          <rect x="0" y="5" width="1" height="1"/><rect x="2" y="5" width="7" height="1"/><rect x="10" y="5" width="1" height="1"/>
-          <rect x="0" y="6" width="1" height="1"/><rect x="2" y="6" width="1" height="1"/><rect x="8" y="6" width="1" height="1"/><rect x="10" y="6" width="1" height="1"/>
-          <rect x="3" y="7" width="2" height="1"/><rect x="6" y="7" width="2" height="1"/>
-        </svg>
-        <p class="pf-eyebrow">1UP · DEPUIS 2017 · MONTRÉAL, QC</p>
-        <h1 class="pf-h1">PIXEL<br />FORGE</h1>
-        <p class="pf-lede">Jeux indé, pixels au max. Petite équipe, gros sprites, et des boss qui se défendent. Zéro polygone blessé.</p>
-        <div class="pf-hpbar" aria-label="Niveau de hype : 100 sur 100">
-          <span class="pf-hp-label">HYPE</span>
-          <span class="pf-hp-track"><span class="pf-hp-fill"></span></span>
-          <span class="pf-hp-num">100/100</span>
+  <nav class="ac-nav" aria-label="Menu de la borne">
+    <a href="#select">Choisir</a>
+    <a href="#scores">Scores</a>
+    <a href="#patches">Patchs</a>
+    <a href="#continue">Continuer?</a>
+  </nav>
+
+  <main>
+    <!-- SÉLECTION : bandeaux lumineux, pas des cartes -->
+    <section class="ac-select" id="select" aria-label="Sélection du jeu">
+      <h2 class="ac-h">Choisissez votre jeu</h2>
+
+      <article class="ac-marquee">
+        <div class="ac-marquee-art"><img src={IMG.game1} alt="Bandeau de Duskfall Valley : coucher de soleil en pixels sur montagnes et lac" loading="lazy" /></div>
+        <div class="ac-marquee-in">
+          <p class="ac-mq-k">Borne 01 · exploration · solo</p>
+          <h3>Duskfall Valley</h3>
+          <p>Déambulez dans 40 vallées pixelisées à l'heure dorée. Aucun ennemi, que de l'ambiance.</p>
+          <a class="ac-btn" href="#continue">Insérez une pièce</a>
         </div>
-        <a class="pf-press" href="#games"><span class="pf-blink">▶ APPUIE SUR START</span></a>
-      </div>
-      <div class="pf-ticker" aria-hidden="true">
-        <div class="pf-ticker-track">
-          <span>INSÈRE UNE PIÈCE</span><span>◆</span><span>SANS CONTINUE</span><span>◆</span><span>BOSS DU VENDREDI</span><span>◆</span><span>PIXELS &gt; POLYGONES</span><span>◆</span>
-          <span>INSÈRE UNE PIÈCE</span><span>◆</span><span>SANS CONTINUE</span><span>◆</span><span>BOSS DU VENDREDI</span><span>◆</span><span>PIXELS &gt; POLYGONES</span><span>◆</span>
+      </article>
+
+      <article class="ac-marquee">
+        <div class="ac-marquee-art"><img src={IMG.game2} alt="Bandeau de Dungeon Delver : combat de donjon en pixels" loading="lazy" /></div>
+        <div class="ac-marquee-in">
+          <p class="ac-mq-k">Borne 02 · roguelike · solo</p>
+          <h3>Dungeon Delver</h3>
+          <p>99 étages générés procéduralement. Apportez une torche. Et une torche de rechange.</p>
+          <a class="ac-btn" href="#continue">Insérez une pièce</a>
         </div>
+      </article>
+
+      <article class="ac-marquee">
+        <div class="ac-marquee-art"><img src={IMG.game3} alt="Bandeau de Meadow Tactics : bataille RPG en pixels vue du dessus" loading="lazy" /></div>
+        <div class="ac-marquee-in">
+          <p class="ac-mq-k">Borne 03 · RPG tactique · 1 à 4 joueurs</p>
+          <h3>Meadow Tactics</h3>
+          <p>Des batailles au tour par tour dans une prairie pixelisée à la main. Réfléchissez vite, cliquez plus vite.</p>
+          <a class="ac-btn" href="#continue">Insérez une pièce</a>
+        </div>
+      </article>
+
+      <article class="ac-marquee">
+        <div class="ac-marquee-art"><img src={IMG.game4} alt="Bandeau de Blade Pixel : sprite d'épéiste en pixels" loading="lazy" /></div>
+        <div class="ac-marquee-in">
+          <p class="ac-mq-k">Borne 04 · action · coop</p>
+          <h3>Blade Pixel</h3>
+          <p>Une épée, 90 donjons, zéro pitié. Et le double saut.</p>
+          <a class="ac-btn" href="#continue">Insérez une pièce</a>
+        </div>
+      </article>
+    </section>
+
+    <!-- TABLEAU DES SCORES -->
+    <section class="ac-scores" id="scores" aria-label="Meilleurs scores">
+      <h2 class="ac-h">Meilleurs scores</h2>
+      <div class="ac-boards">
+        <table class="ac-table">
+          <caption>Temple de la renommée · toutes bornes</caption>
+          <thead><tr><th scope="col">Rang</th><th scope="col">Joueur</th><th scope="col">Score</th></tr></thead>
+          <tbody>
+            <tr><td>1er</td><td>AAA</td><td>9 999 990</td></tr>
+            <tr><td>2e</td><td>PIX3L</td><td>8 420 100</td></tr>
+            <tr><td>3e</td><td>NYB</td><td>7 777 777</td></tr>
+            <tr><td>4e</td><td>G4M3R</td><td>6 543 210</td></tr>
+            <tr class="ac-you"><td>5e</td><td>Vous?</td><td>0</td></tr>
+          </tbody>
+        </table>
+        <ul class="ac-studio">
+          <li><strong>2 M+</strong><span>joueurs dans le monde</span></li>
+          <li><strong>14</strong><span>jeux publiés</span></li>
+          <li><strong>97 %</strong><span>d'avis positifs</span></li>
+          <li><strong>∞</strong><span>tasses de café</span></li>
+        </ul>
       </div>
     </section>
 
-    <!-- GAMES -->
-    <section class="pf-section" id="games">
-      <div class="pf-wrap">
-        <p class="pf-kicker">&gt;_ choisis ta quête</p>
-        <h2 class="pf-h2">NOS JEUX</h2>
-        <p class="pf-sub">Quatre cartouches. Essais infinis. Choisis ton poison, joueur un.</p>
-        <div class="pf-carts">
-          <article class="pf-cart">
-            <div class="pf-cart-grip" aria-hidden="true"></div>
-            <div class="pf-cart-art"><img src={IMG.game1} alt="Jaquette de Duskfall Valley, coucher de soleil pixel sur montagnes et lac" loading="lazy" /></div>
-            <div class="pf-cart-body">
-              <h3>DUSKFALL VALLEY</h3>
-              <p class="pf-genre">EXPLORATION · SOLO</p>
-              <p>Explorez 40 vallées dessinées pixel par pixel à l'heure dorée. Aucun ennemi, que des ondes.</p>
-              <a class="pf-btn pf-btn-small" href="#coin">Insère une pièce</a>
-            </div>
-          </article>
-          <article class="pf-cart">
-            <div class="pf-cart-grip" aria-hidden="true"></div>
-            <div class="pf-cart-art"><img src={IMG.game2} alt="Jaquette de Dungeon Delver, combat de donjon en pixel art" loading="lazy" /></div>
-            <div class="pf-cart-body">
-              <h3>DUNGEON DELVER</h3>
-              <p class="pf-genre">ROGUELIKE · SOLO</p>
-              <p>99 étages générés au hasard. Apporte une torche. Et une torche de rechange.</p>
-              <a class="pf-btn pf-btn-small" href="#coin">Insère une pièce</a>
-            </div>
-          </article>
-          <article class="pf-cart">
-            <div class="pf-cart-grip" aria-hidden="true"></div>
-            <div class="pf-cart-art"><img src={IMG.game3} alt="Jaquette de Meadow Tactics, combat RPG pixel vu du dessus avec HUD" loading="lazy" /></div>
-            <div class="pf-cart-body">
-              <h3>MEADOW TACTICS</h3>
-              <p class="pf-genre">RPG TACTIQUE · 1-4 JOUEURS</p>
-              <p>Des batailles au tour par tour dans une prairie dessinée à la main. Réfléchis vite, clique plus vite.</p>
-              <a class="pf-btn pf-btn-small" href="#coin">Insère une pièce</a>
-            </div>
-          </article>
-          <article class="pf-cart">
-            <div class="pf-cart-grip" aria-hidden="true"></div>
-            <div class="pf-cart-art"><img src={IMG.game4} alt="Jaquette de Blade Pixel, sprite d'épéiste en pixel art" loading="lazy" /></div>
-            <div class="pf-cart-body">
-              <h3>BLADE PIXEL</h3>
-              <p class="pf-genre">ACTION · COOP</p>
-              <p>Une épée, 90 donjons, zéro pitié. Et le pouvoir de l'amitié (plus le double saut).</p>
-              <a class="pf-btn pf-btn-small" href="#coin">Insère une pièce</a>
-            </div>
-          </article>
-        </div>
-      </div>
+    <!-- NOTES DE PATCH -->
+    <section class="ac-patches" id="patches" aria-label="Notes de patch">
+      <h2 class="ac-h">Notes de patch</h2>
+      <ol class="ac-notes">
+        <li>
+          <p class="ac-ver">v2.4.1 <span>2026-09-28</span></p>
+          <p>Le boss #3 est enfin battable. Probablement. Notre testeur a pleuré deux fois, ce qu'on choisit d'interpréter comme bon signe.</p>
+        </li>
+        <li>
+          <p class="ac-ver">v2.4.0 <span>2026-09-12</span></p>
+          <p>Le blob peut maintenant porter des chapeaux. 40 chapeaux. Trois semaines de travail. Zéro regret. Les chapeaux arrivent vendredi.</p>
+        </li>
+        <li>
+          <p class="ac-ver">v2.3.7 <span>2026-08-30</span></p>
+          <figure><img src={IMG.studio} alt="L'équipe Pixelforge teste une version" loading="lazy" /></figure>
+          <p>60 joueurs, 12 pizzas, une manette brisée (RIP). La nouvelle version tactique a survécu au contact d'humains réels. De justesse.</p>
+        </li>
+      </ol>
     </section>
 
-    <!-- HIGH SCORES -->
-    <section class="pf-scores" id="scores">
-      <div class="pf-wrap">
-        <p class="pf-kicker">&gt;_ panthéon</p>
-        <h2 class="pf-h2">MEILLEURS SCORES</h2>
-        <div class="pf-score-grid">
-          <div class="pf-score-box">
-            <h3>MEILLEURS JOUEURS</h3>
-            <ol class="pf-board">
-              <li><span class="pf-rank">1ER</span><span class="pf-name">AAA</span><span class="pf-pts">9 999 990</span></li>
-              <li><span class="pf-rank">2E</span><span class="pf-name">PIX3L</span><span class="pf-pts">8 420 100</span></li>
-              <li><span class="pf-rank">3E</span><span class="pf-name">NYB</span><span class="pf-pts">7 777 777</span></li>
-              <li><span class="pf-rank">4E</span><span class="pf-name">G4M3R</span><span class="pf-pts">6 543 210</span></li>
-              <li><span class="pf-rank">5E</span><span class="pf-name">TOI ?</span><span class="pf-pts">0</span></li>
-            </ol>
-          </div>
-          <div class="pf-stat-box">
-            <h3>STATS DU STUDIO</h3>
-            <ul class="pf-stats">
-              <li><strong>2 M+</strong><span>joueurs dans le monde</span></li>
-              <li><strong>14</strong><span>jeux publiés</span></li>
-              <li><strong>97 %</strong><span>d'avis positifs</span></li>
-              <li><strong>∞</strong><span>tasses de café</span></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- DEVLOG -->
-    <section class="pf-section" id="devlog">
-      <div class="pf-wrap">
-        <p class="pf-kicker">&gt;_ transmission de la forge</p>
-        <h2 class="pf-h2">JOURNAL DE DEV</h2>
-        <div class="pf-logs">
-          <article class="pf-dialog">
-            <p class="pf-dialog-head">2026-09-28 :: BOSS Nº 3</p>
-            <p>&gt; Le boss nº 3 est enfin battable. Probablement. Notre testeur a pleuré deux fois, ce qu'on choisit d'interpréter comme bon signe.</p>
-          </article>
-          <article class="pf-dialog">
-            <p class="pf-dialog-head">2026-09-12 :: DLC BLOB QUEST</p>
-            <p>&gt; Le blob peut maintenant porter des chapeaux. 40 chapeaux. Trois semaines de travail. Zéro regret. Les chapeaux sortent vendredi.</p>
-          </article>
-          <article class="pf-dialog">
-            <div class="pf-dialog-img"><img src={IMG.studio} alt="L'équipe Pixelforge en séance de test" loading="lazy" /></div>
-            <p class="pf-dialog-head">2026-08-30 :: SOIRÉE DE TEST</p>
-            <p>&gt; 60 joueurs, 12 pizzas, une manette brisée (RIP). Starfall Tactics a survécu au contact avec de vrais humains. De justesse.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- NEWSLETTER -->
-    <section class="pf-coin" id="coin">
-      <div class="pf-wrap pf-coin-in">
-        <div>
-          <p class="pf-kicker pf-kicker-dark">&gt;_ 25 cents bien investis</p>
-          <h2 class="pf-h2 pf-h2-dark">INSÈRE<br />UNE PIÈCE</h2>
-          <p class="pf-coin-copy">Un courriel par mois. Notes de version, niveaux secrets, zéro spam. Désabonne-toi et on fera comme si tu n'avais jamais existé.</p>
-        </div>
-        <form class="pf-form" id="pf-coin-form" novalidate>
-          <div class="pf-slot" aria-hidden="true"><span></span></div>
-          <label>Courriel du joueur<input type="email" name="email" required placeholder="joueur1@example.com" /></label>
-          <button class="pf-btn pf-btn-mag" type="submit">+1UP</button>
-          <p class="pf-form-note" role="status" aria-live="polite"></p>
-        </form>
-      </div>
+    <!-- CONTINUER? -->
+    <section class="ac-continue" id="continue" aria-label="Continuer">
+      <h2 class="ac-h ac-h-dark">Continuer?</h2>
+      <p class="ac-count" aria-hidden="true">9 · 8 · 7 ···</p>
+      <p class="ac-continue-copy">Un courriel par mois. Notes de patch, niveaux secrets, zéro pourriel. Glissez une pièce (votre courriel) pour continuer.</p>
+      <form class="ac-form" id="ac-form" novalidate>
+        <div class="ac-slot" aria-hidden="true"><span></span></div>
+        <label>Courriel du joueur<input type="email" name="email" required placeholder="joueur1@exemple.com" autocomplete="email" /></label>
+        <button class="ac-btn ac-btn-mag" type="submit">+1 vie</button>
+        <p class="ac-form-note" role="status" aria-live="polite"></p>
+      </form>
     </section>
 
     <!-- CONTACT -->
-    <section class="pf-section" id="contact">
-      <div class="pf-wrap">
-        <p class="pf-kicker">&gt;_ point de sauvegarde</p>
-        <h2 class="pf-h2">CONTACT</h2>
-        <div class="pf-contact-grid">
-          <div class="pf-dialog pf-contact-box">
-            <p class="pf-dialog-head">L'ARCADE</p>
-            <p>404, allée Pixel, bureau 8B<br />Montréal, QC H2X 1Y2<br />Ouvert en semaine, 9 h à 18 h</p>
-          </div>
-          <div class="pf-dialog pf-contact-box">
-            <p class="pf-dialog-head">TRANSMETS UN MESSAGE</p>
-            <p>Presse et joueurs :<br /><a href="mailto:presse@pixelforge.games">presse@pixelforge.games</a><br /><a href="tel:+15145550188">(514) 555-0188</a></p>
-          </div>
-        </div>
+    <section class="ac-contact" aria-label="Contact">
+      <div>
+        <h2 class="ac-h">La salle</h2>
+        <p>404, rue Pixel, bureau 8B<br />Montréal, QC H2X 1Y2<br />Ouvert en semaine, 9 h à 18 h</p>
+      </div>
+      <div>
+        <h2 class="ac-h">Transmettre</h2>
+        <p>Presse et joueurs :<br /><a href="mailto:press@pixelforge.games">press@pixelforge.games</a><br /><a href="tel:+15145550188">(514) 555-0188</a></p>
       </div>
     </section>
   </main>
 
-  <footer class="pf-footer">
-    <p class="pf-footer-giant" aria-hidden="true">PARTIE TERMINÉE ?<br />JAMAIS.</p>
-    <div class="pf-wrap pf-footer-in">
-      <p>© 2026 Pixelforge Games. Démo fictive. Aucun pixel n'a été blessé.</p>
-      <p>404, allée Pixel, Montréal QC · <a href="tel:+15145550188">(514) 555-0188</a> · <a href="mailto:presse@pixelforge.games">presse@pixelforge.games</a></p>
-    </div>
+  <footer class="ac-foot">
+    <p class="ac-over" aria-hidden="true">Partie terminée?<br />Jamais.</p>
+    <p>© 2026 Pixelforge Games. Démo fictive. Aucun pixel n'a été blessé.<br />404, rue Pixel, Montréal QC</p>
   </footer>
 
   <EscapeHatch locale="fr" />
 
   <script>
-    // Demo: mobile menu + form never submits anywhere
     (function () {
-      var burger = document.getElementById('pf-burger');
-      var menu = document.getElementById('pf-mobilemenu');
-      burger?.addEventListener('click', function () {
-        var open = menu?.classList.toggle('pf-open');
-        burger?.setAttribute('aria-expanded', open ? 'true' : 'false');
-        burger?.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
-      });
-      menu?.querySelectorAll('a').forEach(function (a) {
-        a.addEventListener('click', function () {
-          menu?.classList.remove('pf-open');
-          burger?.setAttribute('aria-expanded', 'false');
-        });
-      });
-      var form = document.getElementById('pf-coin-form') as HTMLFormElement | null;
+      var form = document.getElementById('ac-form');
       form?.addEventListener('submit', function (e) {
         e.preventDefault();
-        var note = form?.querySelector('.pf-form-note');
-        if (note) note.textContent = 'PIÈCE ACCEPTÉE ! +1UP. Vérifie ta boîte courriel, joueur 1.';
-        form?.reset();
+        var note = form?.querySelector('.ac-form-note');
+        if (note) note.textContent = 'Pièce acceptée! +1 vie. Vérifiez votre boîte, joueur 1.';
+        if (form instanceof HTMLFormElement) form.reset();
       });
     })();
   </script>
 
   <style>
-    .pf {
-      --pf-navy: #0F0F23;
-      --pf-panel: #171733;
-      --pf-green: #7CFF6B;
-      --pf-mag: #FF6BD6;
-      --pf-yel: #FFE45E;
-      --pf-white: #EDEDF7;
-      --pf-dim: #9a9ac0;
-      --pf-display: "Press Start 2P", monospace;
-      --pf-body: "VT323", monospace;
+    .ac {
+      --ac-navy: #0F0F23;
+      --ac-panel: #171733;
+      --ac-green: #7CFF6B;
+      --ac-mag: #FF6BD6;
+      --ac-yel: #FFE45E;
+      --ac-white: #EDEDF7;
+      --ac-dim: #9a9ac0;
+      --ac-display: "Press Start 2P", monospace;
+      --ac-body: "VT323", monospace;
       margin: 0;
-      background: var(--pf-navy);
-      color: var(--pf-white);
-      font-family: var(--pf-body);
+      background: var(--ac-navy);
+      color: var(--ac-white);
+      font-family: var(--ac-body);
       font-size: 21px;
       line-height: 1.45;
       overflow-x: clip;
     }
-    .pf *, .pf *::before, .pf *::after { box-sizing: border-box; }
-    .pf img { display: block; max-width: 100%; image-rendering: pixelated; }
-    .pf-wrap { max-width: 1180px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px); }
-
-    /* CRT scanlines */
-    .pf-scan {
+    .ac *, .ac *::before, .ac *::after { box-sizing: border-box; }
+    .ac img { display: block; max-width: 100%; image-rendering: pixelated; }
+    .ac a { color: inherit; }
+    .ac-scan {
       position: fixed; inset: 0; z-index: 90; pointer-events: none;
       background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.16) 0 2px, transparent 2px 4px);
     }
-    .pf-scan::after {
+    .ac-scan::after {
       content: ""; position: absolute; inset: 0;
       background: radial-gradient(ellipse 120% 100% at 50% 50%, transparent 60%, rgba(0, 0, 0, 0.45) 100%);
     }
 
-    /* nav */
-    .pf-navwrap { position: fixed; top: 0; left: 0; right: 0; z-index: 80; }
-    .pf-nav {
-      display: flex; align-items: center; gap: 20px;
-      padding: 14px clamp(20px, 4vw, 40px);
-      background: rgba(15, 15, 35, 0.94);
-      border-bottom: 4px solid var(--pf-green);
+    .ac-attract { position: relative; min-height: 100svh; display: grid; place-items: center; overflow: hidden; }
+    .ac-attract-bg { position: absolute; inset: 0; }
+    .ac-attract-bg img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.32) saturate(1.3); }
+    .ac-attract-bg::after { content: ""; position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(15,15,35,0.65), rgba(15,15,35,0.2) 45%, rgba(15,15,35,0.92)); }
+    .ac-attract-in { position: relative; z-index: 2; text-align: center; padding: 120px 20px 80px; max-width: 900px; }
+    .ac-invader { width: 100px; fill: var(--ac-green); margin: 0 auto 24px; filter: drop-shadow(0 0 14px rgba(124,255,107,0.7)); animation: ac-hover 3s ease-in-out infinite; }
+    @keyframes ac-hover { 50% { transform: translateY(-12px); } }
+    .ac-kicker { font-family: var(--ac-display); font-size: 10px; letter-spacing: 0.18em; color: var(--ac-mag); margin: 0 0 22px; }
+    .ac-logo {
+      font-family: var(--ac-display); font-size: clamp(2rem, 9vw, 5.6rem); line-height: 1.2; margin: 0 0 20px;
+      color: var(--ac-green); text-shadow: 5px 5px 0 #1d5c1d, 0 0 34px rgba(124,255,107,0.55);
     }
-    .pf-logo { text-decoration: none; margin-right: auto; }
-    .pf-logo-fx { font-family: var(--pf-display); font-size: 15px; color: var(--pf-green); text-shadow: 3px 3px 0 #1d5c1d, 0 0 18px rgba(124, 255, 107, 0.6); }
-    .pf-nav-links { display: flex; gap: 2px; }
-    .pf-nav-links a {
-      font-family: var(--pf-display); font-size: 10px; color: var(--pf-dim);
-      text-decoration: none; padding: 12px 14px;
+    .ac-tag { font-size: 24px; color: var(--ac-white); max-width: 44ch; margin: 0 auto 36px; }
+    .ac-insert {
+      display: inline-block; font-family: var(--ac-display); font-size: clamp(0.85rem, 3vw, 1.2rem);
+      color: var(--ac-yel); text-decoration: none; text-shadow: 3px 3px 0 #7c5c1d;
+      padding: 20px 30px; border: 4px solid var(--ac-yel); background: rgba(15,15,35,0.7);
     }
-    .pf-nav-links a:hover { color: var(--pf-yel); }
-    .pf-burger { display: none; background: none; border: none; cursor: pointer; padding: 10px; flex-direction: column; gap: 5px; }
-    .pf-burger span { display: block; width: 26px; height: 4px; background: var(--pf-green); }
-    .pf-mobilemenu {
-      display: none; flex-direction: column; gap: 2px;
-      background: rgba(15, 15, 35, 0.98); border-bottom: 4px solid var(--pf-green);
-      padding: 12px clamp(20px, 4vw, 40px) 22px;
-    }
-    .pf-mobilemenu.pf-open { display: flex; }
-    .pf-mobilemenu a:not(.pf-btn) { font-family: var(--pf-display); font-size: 11px; color: var(--pf-white); text-decoration: none; padding: 13px 4px; }
+    .ac-blink { animation: ac-blink 1.1s steps(1) infinite; }
+    @keyframes ac-blink { 50% { opacity: 0; } }
+    .ac-hint { font-family: var(--ac-display); font-size: 9px; color: var(--ac-dim); letter-spacing: 0.14em; margin: 30px 0 0; }
 
-    /* chunky pixel buttons */
-    .pf-btn {
+    .ac-nav {
+      position: sticky; top: 0; z-index: 80;
+      display: flex; justify-content: center; gap: 6px; flex-wrap: wrap;
+      background: rgba(15, 15, 35, 0.96); border-bottom: 4px solid var(--ac-green);
+      padding: 12px 16px;
+    }
+    .ac-nav a { font-family: var(--ac-display); font-size: 10px; color: var(--ac-dim); text-decoration: none; padding: 12px 16px; }
+    .ac-nav a:hover { color: var(--ac-yel); }
+
+    .ac-h {
+      font-family: var(--ac-display); font-size: clamp(1.2rem, 4.2vw, 2rem); color: var(--ac-yel);
+      text-shadow: 4px 4px 0 #7c5c1d; margin: 0 0 40px; line-height: 1.5;
+    }
+    .ac-h-dark { color: var(--ac-navy); text-shadow: 4px 4px 0 rgba(15,15,35,0.25); }
+
+    .ac-btn {
       display: inline-flex; align-items: center; justify-content: center;
-      font-family: var(--pf-display); font-size: 12px;
-      background: var(--pf-green); color: #0F0F23; text-decoration: none; cursor: pointer; border: none;
+      font-family: var(--ac-display); font-size: 11px;
+      background: var(--ac-green); color: #0F0F23; text-decoration: none; cursor: pointer; border: none;
       padding: 15px 22px;
-      box-shadow: inset -4px -4px 0 rgba(0, 0, 0, 0.28), inset 4px 4px 0 rgba(255, 255, 255, 0.35), 0 6px 0 #1d5c1d;
+      box-shadow: inset -4px -4px 0 rgba(0,0,0,0.28), inset 4px 4px 0 rgba(255,255,255,0.35), 0 6px 0 #1d5c1d;
       transition: transform 0.08s ease, box-shadow 0.08s ease;
     }
-    .pf-btn:hover { transform: translateY(2px); box-shadow: inset -4px -4px 0 rgba(0, 0, 0, 0.28), inset 4px 4px 0 rgba(255, 255, 255, 0.35), 0 4px 0 #1d5c1d; }
-    .pf-btn:active { transform: translateY(6px); box-shadow: inset -4px -4px 0 rgba(0, 0, 0, 0.28), inset 4px 4px 0 rgba(255, 255, 255, 0.35), 0 0 0 #1d5c1d; }
-    .pf-btn-mag { background: var(--pf-mag); box-shadow: inset -4px -4px 0 rgba(0, 0, 0, 0.28), inset 4px 4px 0 rgba(255, 255, 255, 0.35), 0 6px 0 #7c1d5c; width: 100%; }
-    .pf-btn-mag:hover { box-shadow: inset -4px -4px 0 rgba(0, 0, 0, 0.28), inset 4px 4px 0 rgba(255, 255, 255, 0.35), 0 4px 0 #7c1d5c; }
-    .pf-btn-small { font-size: 10px; padding: 13px 18px; }
+    .ac-btn:hover { transform: translateY(2px); box-shadow: inset -4px -4px 0 rgba(0,0,0,0.28), inset 4px 4px 0 rgba(255,255,255,0.35), 0 4px 0 #1d5c1d; }
+    .ac-btn:active { transform: translateY(6px); box-shadow: inset -4px -4px 0 rgba(0,0,0,0.28), 0 0 0 #1d5c1d; }
+    .ac-btn-mag { background: var(--ac-mag); box-shadow: inset -4px -4px 0 rgba(0,0,0,0.28), inset 4px 4px 0 rgba(255,255,255,0.35), 0 6px 0 #7c1d5c; width: 100%; }
+    .ac-btn-mag:hover { box-shadow: inset -4px -4px 0 rgba(0,0,0,0.28), inset 4px 4px 0 rgba(255,255,255,0.35), 0 4px 0 #7c1d5c; }
 
-    /* type */
-    .pf-kicker { font-family: var(--pf-display); font-size: 11px; color: var(--pf-green); margin: 0 0 18px; letter-spacing: 0.04em; }
-    .pf-kicker-dark { color: #7c5c1d; }
-    .pf-h2 { font-family: var(--pf-display); font-size: clamp(1.4rem, 4.5vw, 2.4rem); color: var(--pf-yel); text-shadow: 4px 4px 0 #7c5c1d; margin: 0 0 16px; line-height: 1.35; }
-    .pf-h2-dark { color: var(--pf-navy); text-shadow: 4px 4px 0 rgba(15, 15, 35, 0.25); }
-    .pf-sub { color: var(--pf-dim); font-size: 23px; margin: 0 0 42px; max-width: 52ch; }
-    .pf-eyebrow { font-family: var(--pf-display); font-size: 10px; letter-spacing: 0.2em; color: var(--pf-mag); margin: 0 0 20px; }
-
-    /* hero */
-    .pf-hero { position: relative; min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden; }
-    .pf-hero-bg { position: absolute; inset: 0; }
-    .pf-hero-bg img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.35) saturate(1.3); }
-    .pf-hero-bg::after { content: ""; position: absolute; inset: 0;
-      background: linear-gradient(180deg, rgba(15,15,35,0.6), rgba(15,15,35,0.15) 45%, rgba(15,15,35,0.95)); }
-    .pf-pixels { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
-    .pf-pxl { position: absolute; width: 10px; height: 10px; animation: pf-rise 6s linear infinite; }
-    .pf-pxl.p1 { left: 12%; bottom: -20px; background: var(--pf-green); }
-    .pf-pxl.p2 { left: 28%; bottom: -20px; background: var(--pf-mag); animation-delay: 1.2s; }
-    .pf-pxl.p3 { left: 55%; bottom: -20px; background: var(--pf-yel); animation-delay: 2.4s; }
-    .pf-pxl.p4 { left: 72%; bottom: -20px; background: var(--pf-green); animation-delay: 3.1s; }
-    .pf-pxl.p5 { left: 88%; bottom: -20px; background: var(--pf-mag); animation-delay: 4s; }
-    .pf-pxl.p6 { left: 42%; bottom: -20px; background: var(--pf-yel); animation-delay: 5s; }
-    @keyframes pf-rise { to { transform: translateY(-110vh); } }
-    .pf-hero-in { position: relative; z-index: 2; max-width: 1180px; width: 100%; margin: 0 auto; padding: 130px clamp(20px, 4vw, 40px) 36px; text-align: center; }
-    .pf-invader { width: 110px; fill: var(--pf-green); margin: 0 auto 26px; filter: drop-shadow(0 0 14px rgba(124, 255, 107, 0.7)); animation: pf-hover 3s ease-in-out infinite; }
-    @keyframes pf-hover { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
-    .pf-h1 {
-      font-family: var(--pf-display); font-size: clamp(2.2rem, 10vw, 6.5rem); line-height: 1.15; margin: 0 0 22px;
-      color: var(--pf-green); text-shadow: 5px 5px 0 #1d5c1d, 0 0 34px rgba(124, 255, 107, 0.55);
+    .ac-select { padding: clamp(70px, 9vw, 120px) clamp(20px, 4vw, 40px); max-width: 1180px; margin: 0 auto; }
+    .ac-marquee {
+      display: grid; grid-template-columns: 340px 1fr;
+      background: var(--ac-panel); margin: 0 0 34px;
+      border: 4px solid var(--ac-mag);
+      box-shadow: 0 0 34px rgba(255, 107, 214, 0.22), inset 0 0 60px rgba(255,107,214,0.05);
     }
-    .pf-lede { font-size: 25px; color: var(--pf-white); max-width: 40ch; margin: 0 auto 28px; }
-    .pf-hpbar { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 0 0 30px; font-family: var(--pf-display); font-size: 10px; }
-    .pf-hp-label { color: var(--pf-yel); }
-    .pf-hp-track { width: min(320px, 50vw); height: 22px; background: #2a0f1e; border: 3px solid var(--pf-mag); }
-    .pf-hp-fill { display: block; height: 100%; width: 100%;
-      background: repeating-linear-gradient(90deg, var(--pf-green) 0 8px, #5ce04c 8px 16px);
-      animation: pf-shimmer 2s linear infinite; }
-    @keyframes pf-shimmer { to { background-position: 32px 0; } }
-    .pf-hp-num { color: var(--pf-white); }
-    .pf-press { display: inline-block; font-family: var(--pf-display); font-size: clamp(0.9rem, 3vw, 1.3rem); color: var(--pf-yel);
-      text-decoration: none; text-shadow: 3px 3px 0 #7c5c1d; padding: 18px 26px; border: 4px solid var(--pf-yel); background: rgba(15,15,35,0.7); }
-    .pf-blink { animation: pf-blink 1.1s steps(1) infinite; }
-    @keyframes pf-blink { 50% { opacity: 0; } }
-    .pf-ticker { position: relative; z-index: 2; background: var(--pf-green); color: #0F0F23; overflow: hidden; padding: 11px 0; border-block: 4px solid #0F0F23; }
-    .pf-ticker-track { display: flex; gap: 26px; width: max-content; animation: pf-tick 16s linear infinite; font-family: var(--pf-display); font-size: 13px; white-space: nowrap; }
-    @keyframes pf-tick { to { transform: translateX(-50%); } }
+    .ac-marquee:nth-child(3) { border-color: var(--ac-yel); box-shadow: 0 0 34px rgba(255,228,94,0.2), inset 0 0 60px rgba(255,228,94,0.05); }
+    .ac-marquee:nth-child(4) { border-color: var(--ac-green); box-shadow: 0 0 34px rgba(124,255,107,0.2), inset 0 0 60px rgba(124,255,107,0.05); }
+    .ac-marquee:nth-child(5) { border-color: #87CEFA; box-shadow: 0 0 34px rgba(135,206,250,0.2), inset 0 0 60px rgba(135,206,250,0.05); }
+    .ac-marquee-art img { width: 100%; height: 100%; min-height: 220px; object-fit: cover; filter: saturate(1.35) contrast(1.05); }
+    .ac-marquee-in { padding: clamp(24px, 3.5vw, 40px); display: grid; gap: 12px; align-content: center; justify-items: start; }
+    .ac-mq-k { font-family: var(--ac-display); font-size: 9px; color: var(--ac-dim); letter-spacing: 0.1em; margin: 0; }
+    .ac-marquee-in h3 { font-family: var(--ac-display); font-size: clamp(1rem, 3vw, 1.5rem); color: var(--ac-white); margin: 0; line-height: 1.5; }
+    .ac-marquee-in p { margin: 0; color: var(--ac-dim); font-size: 22px; max-width: 46ch; }
 
-    /* sections */
-    .pf-section { padding: clamp(70px, 9vw, 120px) 0; }
+    .ac-scores { background: #0b0b1a; border-block: 4px solid var(--ac-green); padding: clamp(70px, 9vw, 120px) clamp(20px, 4vw, 40px); }
+    .ac-scores .ac-h { max-width: 1180px; margin: 0 auto 40px; }
+    .ac-boards { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 30px; align-items: start; }
+    .ac-table { width: 100%; border-collapse: collapse; background: var(--ac-panel); font-size: 23px; }
+    .ac-table caption { font-family: var(--ac-display); font-size: 10px; color: var(--ac-dim); letter-spacing: 0.12em; padding-bottom: 16px; text-align: left; }
+    .ac-table th { font-family: var(--ac-display); font-size: 9px; color: var(--ac-dim); text-align: left; padding: 12px 16px; border-bottom: 2px solid var(--ac-green); letter-spacing: 0.1em; }
+    .ac-table td { padding: 14px 16px; border-bottom: 1px solid rgba(154,154,192,0.18); }
+    .ac-table td:first-child { font-family: var(--ac-display); font-size: 11px; color: var(--ac-mag); }
+    .ac-table td:last-child { color: var(--ac-green); text-align: right; font-variant-numeric: tabular-nums; }
+    .ac-table tbody tr:first-child td { background: rgba(255,228,94,0.08); }
+    .ac-you td { color: var(--ac-yel) !important; }
+    .ac-studio { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .ac-studio li { background: var(--ac-panel); padding: 22px 12px; text-align: center; display: grid; gap: 6px; }
+    .ac-studio strong { font-family: var(--ac-display); font-size: 18px; color: var(--ac-mag); }
+    .ac-studio span { color: var(--ac-dim); font-size: 20px; }
 
-    /* cartridges */
-    .pf-carts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; }
-    .pf-cart {
-      background: var(--pf-panel); margin: 4px;
-      box-shadow: 0 -4px 0 0 var(--pf-mag), 0 4px 0 0 var(--pf-mag), -4px 0 0 0 var(--pf-mag), 4px 0 0 0 var(--pf-mag);
-      transition: transform 0.15s ease;
-      display: flex; flex-direction: column;
+    .ac-patches { padding: clamp(70px, 9vw, 120px) clamp(20px, 4vw, 40px); max-width: 880px; margin: 0 auto; }
+    .ac-notes { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; }
+    .ac-notes li { background: #0b0b1a; border: 4px solid var(--ac-green); padding: 26px 28px; box-shadow: 8px 8px 0 rgba(124,255,107,0.15); }
+    .ac-ver { font-family: var(--ac-display); font-size: 11px; color: var(--ac-yel); margin: 0 0 14px; }
+    .ac-ver span { color: var(--ac-dim); margin-left: 12px; }
+    .ac-notes li p:last-child { margin: 0; font-size: 22px; }
+    .ac-notes figure { margin: 0 0 16px; }
+    .ac-notes figure img { width: 100%; height: 220px; object-fit: cover; border: 4px solid #0F0F23; }
+
+    .ac-continue { background: var(--ac-yel); color: var(--ac-navy); padding: clamp(70px, 9vw, 120px) clamp(20px, 4vw, 40px); text-align: center; }
+    .ac-count { font-family: var(--ac-display); font-size: clamp(1rem, 4vw, 1.8rem); color: #7c5c1d; margin: 0 0 18px; }
+    .ac-continue-copy { font-size: 23px; max-width: 46ch; margin: 0 auto 34px; color: #4d3d10; }
+    .ac-form { max-width: 480px; margin: 0 auto; background: var(--ac-navy); padding: clamp(26px, 4vw, 38px); display: grid; gap: 18px; box-shadow: 12px 12px 0 rgba(15,15,35,0.25); }
+    .ac-slot { display: flex; justify-content: center; }
+    .ac-slot span { display: block; width: 90px; height: 14px; background: #0b0b1a; border: 3px solid var(--ac-mag); }
+    .ac-form label { display: grid; gap: 10px; font-family: var(--ac-display); font-size: 10px; color: var(--ac-green); text-align: left; }
+    .ac-form input { font-family: var(--ac-body); font-size: 23px; background: #0b0b1a; border: 3px solid var(--ac-panel); color: var(--ac-white); padding: 13px 16px; width: 100%; }
+    .ac-form input:focus { outline: none; border-color: var(--ac-yel); }
+    .ac-form-note { margin: 0; color: var(--ac-yel); font-size: 22px; }
+    .ac-form-note:empty { display: none; }
+
+    .ac-contact {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 30px;
+      max-width: 1180px; margin: 0 auto; padding: clamp(70px, 9vw, 120px) clamp(20px, 4vw, 40px);
     }
-    .pf-cart:nth-child(2) { box-shadow: 0 -4px 0 0 var(--pf-yel), 0 4px 0 0 var(--pf-yel), -4px 0 0 0 var(--pf-yel), 4px 0 0 0 var(--pf-yel); }
-    .pf-cart:nth-child(3) { box-shadow: 0 -4px 0 0 var(--pf-green), 0 4px 0 0 var(--pf-green), -4px 0 0 0 var(--pf-green), 4px 0 0 0 var(--pf-green); }
-    .pf-cart:nth-child(4) { box-shadow: 0 -4px 0 0 #87CEFA, 0 4px 0 0 #87CEFA, -4px 0 0 0 #87CEFA, 4px 0 0 0 #87CEFA; }
-    .pf-cart:hover { transform: translateY(-8px); }
-    .pf-cart-grip { height: 26px; background: repeating-linear-gradient(90deg, #0F0F23 0 12px, transparent 12px 24px); border-bottom: 4px solid #0F0F23; }
-    .pf-cart-art img { width: 100%; height: 170px; object-fit: cover; filter: saturate(1.3) contrast(1.05); border-bottom: 4px solid #0F0F23; image-rendering: pixelated; }
-    .pf-cart-body { padding: 22px 20px 26px; display: grid; gap: 10px; flex: 1; }
-    .pf-cart-body h3 { font-family: var(--pf-display); font-size: 13px; color: var(--pf-white); margin: 0; line-height: 1.6; }
-    .pf-genre { font-family: var(--pf-display); font-size: 9px; color: var(--pf-yel); margin: 0; letter-spacing: 0.06em; }
-    .pf-cart-body p { margin: 0; color: var(--pf-dim); font-size: 20px; }
-    .pf-cart-body .pf-btn { margin-top: 8px; justify-self: start; }
+    .ac-contact .ac-h { margin-bottom: 20px; }
+    .ac-contact p { font-size: 23px; color: var(--ac-dim); margin: 0; line-height: 1.7; }
+    .ac-contact a { color: var(--ac-yel); }
 
-    /* scores */
-    .pf-scores { background: #0b0b1a; border-block: 4px solid var(--pf-green); padding: clamp(70px, 9vw, 120px) 0; }
-    .pf-score-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 30px; }
-    .pf-score-box, .pf-stat-box { background: var(--pf-panel); padding: 30px; margin: 4px;
-      box-shadow: 0 -4px 0 0 var(--pf-green), 0 4px 0 0 var(--pf-green), -4px 0 0 0 var(--pf-green), 4px 0 0 0 var(--pf-green); }
-    .pf-score-box h3, .pf-stat-box h3 { font-family: var(--pf-display); font-size: 13px; color: var(--pf-yel); margin: 0 0 22px; }
-    .pf-board { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
-    .pf-board li { display: grid; grid-template-columns: 64px 1fr auto; gap: 12px; align-items: center; font-size: 23px; padding: 10px 12px; background: rgba(15, 15, 35, 0.6); }
-    .pf-board li:first-child { background: rgba(255, 228, 94, 0.12); border: 2px solid var(--pf-yel); }
-    .pf-rank { font-family: var(--pf-display); font-size: 10px; color: var(--pf-mag); }
-    .pf-name { color: var(--pf-white); letter-spacing: 0.1em; }
-    .pf-pts { color: var(--pf-green); font-variant-numeric: tabular-nums; }
-    .pf-stats { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-    .pf-stats li { display: grid; gap: 4px; text-align: center; padding: 18px 8px; background: rgba(15, 15, 35, 0.6); }
-    .pf-stats strong { font-family: var(--pf-display); font-size: 20px; color: var(--pf-mag); }
-    .pf-stats span { font-size: 19px; color: var(--pf-dim); }
+    .ac-foot { text-align: center; padding: 70px 20px 90px; border-top: 4px solid var(--ac-mag); }
+    .ac-over { font-family: var(--ac-display); font-size: clamp(1.3rem, 6vw, 3.4rem); line-height: 1.6; color: var(--ac-mag); text-shadow: 4px 4px 0 #7c1d5c, 0 0 30px rgba(255,107,214,0.4); margin: 0 0 30px; }
+    .ac-foot p:last-child { color: var(--ac-dim); font-size: 20px; margin: 0; line-height: 1.7; }
 
-    /* devlog dialog boxes */
-    .pf-logs { display: grid; gap: 26px; max-width: 860px; }
-    .pf-dialog {
-      background: #0b0b1a; border: 4px solid var(--pf-green); padding: 26px 28px; margin: 4px;
-      box-shadow: 8px 8px 0 rgba(124, 255, 107, 0.18);
-    }
-    .pf-dialog-head { font-family: var(--pf-display); font-size: 10px; color: var(--pf-yel); margin: 0 0 14px; letter-spacing: 0.06em; }
-    .pf-dialog p { margin: 0; font-size: 22px; color: var(--pf-white); }
-    .pf-dialog-img { margin: 0 0 18px; border: 4px solid #0F0F23; }
-    .pf-dialog-img img { width: 100%; height: 260px; object-fit: cover; }
-
-    /* coin newsletter */
-    .pf-coin { background: var(--pf-yel); padding: clamp(70px, 9vw, 120px) 0; }
-    .pf-coin-in { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(36px, 6vw, 80px); align-items: center; }
-    .pf-coin-copy { font-size: 23px; color: #4d3d10; max-width: 40ch; margin: 0; }
-    .pf-form { background: var(--pf-navy); padding: clamp(28px, 4vw, 40px); display: grid; gap: 18px; margin: 4px;
-      box-shadow: 0 -4px 0 0 var(--pf-navy), 0 4px 0 0 var(--pf-navy), -4px 0 0 0 var(--pf-navy), 4px 0 0 0 var(--pf-navy), 12px 12px 0 rgba(15, 15, 35, 0.25); }
-    .pf-slot { display: flex; justify-content: center; }
-    .pf-slot span { display: block; width: 90px; height: 14px; background: #0b0b1a; border: 3px solid var(--pf-mag); }
-    .pf-form label { display: grid; gap: 10px; font-family: var(--pf-display); font-size: 10px; color: var(--pf-green); letter-spacing: 0.08em; }
-    .pf-form input {
-      font-family: var(--pf-body); font-size: 23px;
-      background: #0b0b1a; border: 3px solid var(--pf-panel); color: var(--pf-white);
-      padding: 13px 16px; width: 100%;
-    }
-    .pf-form input:focus { outline: none; border-color: var(--pf-yel); }
-    .pf-form-note { margin: 0; color: var(--pf-yel); font-size: 22px; }
-    .pf-form-note:empty { display: none; }
-
-    /* contact */
-    .pf-contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; max-width: 960px; }
-    .pf-contact-box p { font-size: 23px; }
-    .pf-contact-box a { color: var(--pf-yel); }
-
-    /* footer */
-    .pf-footer { padding: 80px 0 90px; text-align: center; border-top: 4px solid var(--pf-mag); overflow: hidden; }
-    .pf-footer-giant { font-family: var(--pf-display); font-size: clamp(1.4rem, 7vw, 4rem); line-height: 1.5; margin: 0 0 30px;
-      color: var(--pf-mag); text-shadow: 4px 4px 0 #7c1d5c, 0 0 30px rgba(255, 107, 214, 0.4); }
-    .pf-footer-in { display: grid; gap: 10px; color: var(--pf-dim); font-size: 20px; }
-    .pf-footer-in p { margin: 0; }
-    .pf-footer-in a { color: var(--pf-green); }
-
-    @media (max-width: 1020px) {
-      .pf-carts { grid-template-columns: 1fr 1fr; }
-    }
-    @media (max-width: 860px) {
-      .pf-nav-links, .pf-nav > .pf-btn { display: none; }
-      .pf-burger { display: flex; }
-      .pf-score-grid { grid-template-columns: 1fr; }
-      .pf-coin-in { grid-template-columns: 1fr; }
-      .pf-contact-grid { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 640px) {
-      .pf-carts { grid-template-columns: 1fr; max-width: 400px; margin-inline: auto; }
-      .pf-board li { grid-template-columns: 52px 1fr auto; font-size: 20px; }
+    @media (max-width: 900px) {
+      .ac-marquee { grid-template-columns: 1fr; }
+      .ac-marquee-art img { min-height: 0; height: 220px; }
+      .ac-boards, .ac-contact { grid-template-columns: 1fr; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .pf-ticker-track, .pf-pxl, .pf-invader, .pf-blink, .pf-hp-fill { animation: none; }
-      .pf-blink { opacity: 1; }
-      .pf-btn, .pf-cart { transition: none; }
+      .ac-invader, .ac-blink { animation: none; }
+      .ac-blink { opacity: 1; }
+      .ac-btn { transition: none; }
     }
   </style>
 </body>
