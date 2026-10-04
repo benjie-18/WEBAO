@@ -1,8 +1,9 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
 
-// Demo microsite: Mira Cantine — fictional wood-fired restaurant, Old Montreal.
-// Standalone art direction. Not connected to the WEBAO theme system by design.
+// Demo microsite: Mira Cantine · fictional wood-fired restaurant, Old Montreal.
+// Rebuilt menu-first, editorial. Standalone art direction, not connected
+// to the WEBAO theme system by design.
 const IMG = {
   hero: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=1800&auto=format&fit=crop",
   interior: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1200&auto=format&fit=crop",
@@ -17,7 +18,7 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mira Cantine — Wood-fired kitchen in Old Montreal</title>
+  <title>Mira Cantine · Wood-fired kitchen in Old Montreal</title>
   <meta name="description" content="Mira Cantine: wood-fired small plates, natural wine and a dining room that glows. Dinner Tuesday to Sunday in Old Montreal. Reservations recommended." />
   <meta name="robots" content="noindex" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -26,181 +27,185 @@ const IMG = {
 </head>
 <body class="mira">
 
-  <header class="mira-nav">
-    <nav class="mira-nav-in" aria-label="Primary">
-      <div class="mira-nav-side">
-        <a href="#menu">Menu</a>
-        <a href="#story">Story</a>
-      </div>
-      <a class="mira-brand" href="#top" aria-label="Mira Cantine — home">
-        <span class="mira-brand-mark" aria-hidden="true">✳</span>
-        <span>Mira</span>
-      </a>
-      <div class="mira-nav-side mira-nav-right">
-        <a href="#visit">Visit</a>
-        <a class="mira-pill" href="#reserve">Reserve a table</a>
-      </div>
-      <button class="mira-burger" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
-    </nav>
-    <div class="mira-mobile" hidden>
-      <a href="#menu">Menu</a>
-      <a href="#story">Story</a>
-      <a href="#visit">Visit</a>
-      <a href="#reserve">Reserve a table</a>
+  <!-- MINIMAL TOP BAR -->
+  <header class="mira-topbar">
+    <a class="mira-brand" href="#top" aria-label="Mira Cantine · home">Mira <em>cantine</em></a>
+    <div class="mira-topbar-right">
+      <a class="mira-pill" href="#reserve">Reserve a table</a>
+      <button class="mira-burger" aria-label="Open menu" aria-expanded="false" aria-controls="mira-overlay">
+        <span></span><span></span>
+      </button>
     </div>
   </header>
 
+  <!-- FULL-SCREEN OVERLAY MENU -->
+  <div class="mira-overlay" id="mira-overlay" aria-hidden="true">
+    <button class="mira-overlay-close" aria-label="Close menu">×</button>
+    <nav class="mira-overlay-nav" aria-label="Menu">
+      <a href="#menu">Menu</a>
+      <a href="#story">Our story</a>
+      <a href="#gallery">The room</a>
+      <a href="#visit">Visit</a>
+      <a href="#reserve" class="mira-overlay-cta">Reserve a table</a>
+    </nav>
+    <p class="mira-overlay-foot">123, rue Fictive, Montreal QC · <a href="tel:+15145550198">(514) 555-0198</a></p>
+  </div>
+
   <main id="top">
-    <!-- HERO -->
+    <!-- HERO: full-bleed image, overlaid italic serif headline -->
     <section class="mira-hero">
       <figure class="mira-hero-img">
         <img src={IMG.hero} alt="A finished dish at Mira Cantine, candlelit table" loading="eager" fetchpriority="high" />
       </figure>
       <div class="mira-hero-text">
         <p class="mira-kicker">Cantine · Old Montreal · since 2019</p>
-        <h1 class="mira-display">Cooked<br /><em>by fire,</em><br />served with love.</h1>
-        <p class="mira-hero-sub">Small plates from the wood oven, natural wine, and a room that glows amber till late. Dinner Tuesday to Sunday.</p>
-        <div class="mira-hero-cta">
-          <a class="mira-btn" href="#reserve">Reserve a table</a>
-          <a class="mira-link" href="#menu">See tonight's menu →</a>
-        </div>
+        <h1 class="mira-display">Supper,<br /><em>from the embers.</em></h1>
+        <p class="mira-hero-sub">Small plates, natural wine, and a room that glows till late. Tuesday to Sunday.</p>
+        <a class="mira-hero-link" href="#menu">Tonight's menu ↓</a>
       </div>
     </section>
 
-    <!-- INTRO -->
-    <section class="mira-intro">
-      <div class="mira-wrap">
-        <p class="mira-dropcap">Everything at Mira passes through fire. Our oven burns Quebec maple and oak, and the menu changes with the market — sometimes twice in one evening. What doesn't change: the room is warm, the wine is alive, and nobody leaves hungry.</p>
-        <div class="mira-facts">
-          <div><strong>34</strong><span>seats, one long bar</span></div>
-          <div><strong>100%</strong><span>wood-fired kitchen</span></div>
-          <div><strong>120+</strong><span>natural wines</span></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- MENU -->
+    <!-- MENU FIRST: light cream editorial -->
     <section class="mira-menu" id="menu">
       <div class="mira-wrap">
         <div class="mira-menu-head">
-          <p class="mira-kicker">Tonight</p>
-          <h2 class="mira-display mira-display-sm">The menu</h2>
-          <p class="mira-menu-note">Changes with the market</p>
+          <p class="mira-kicker">Tonight · printed at 5pm</p>
+          <h2 class="mira-display mira-display-sm">The <em>menu</em></h2>
+          <p class="mira-menu-note"><em>Crossed out when it's gone.</em></p>
         </div>
         <div class="mira-menu-grid">
           <div class="mira-menu-col">
             <h3>To begin</h3>
             <ul>
-              <li><div><strong>Charred leeks, hazelnut</strong><span>brown butter vinaigrette</span></div><b>14</b></li>
-              <li><div><strong>Beets from the embers</strong><span>whipped chèvre, rye crumb</span></div><b>15</b></li>
-              <li><div><strong>Grilled sardines</strong><span>lemon, chili, grilled bread</span></div><b>16</b></li>
-              <li><div><strong>Burrata, smoked tomato</strong><span>basil oil, sea salt</span></div><b>18</b></li>
+              <li><div class="mira-dish"><strong>Charred leeks, hazelnut</strong><span>brown butter vinaigrette</span></div><b>14</b></li>
+              <li><div class="mira-dish"><strong>Beets from the embers</strong><span>whipped chèvre, rye crumb</span></div><b>15</b></li>
+              <li><div class="mira-dish"><strong>Grilled sardines</strong><span>lemon, chili, grilled bread</span></div><b>16</b></li>
+              <li><div class="mira-dish"><strong>Burrata, smoked tomato</strong><span>basil oil, sea salt</span></div><b>18</b></li>
             </ul>
           </div>
           <div class="mira-menu-col">
             <h3>From the fire</h3>
             <ul>
-              <li><div><strong>Half chicken al mattone</strong><span>jus, charred lemon</span></div><b>29</b></li>
-              <li><div><strong>Dry-aged striploin</strong><span>bone-marrow butter, watercress</span></div><b>42</b></li>
-              <li><div><strong>Whole roasted cauliflower</strong><span>romanesco, almond, herbs</span></div><b>24</b></li>
-              <li><div><strong>Arctic char, ember carrots</strong><span>beurre blanc, dill</span></div><b>34</b></li>
+              <li><div class="mira-dish"><strong>Half chicken al mattone</strong><span>jus, charred lemon</span></div><b>29</b></li>
+              <li><div class="mira-dish"><strong>Dry-aged striploin</strong><span>bone-marrow butter, watercress</span></div><b>42</b></li>
+              <li><div class="mira-dish"><strong>Whole roasted cauliflower</strong><span>romesco, almond, herbs</span></div><b>24</b></li>
+              <li><div class="mira-dish"><strong>Arctic char, ember carrots</strong><span>beurre blanc, dill</span></div><b>34</b></li>
             </ul>
           </div>
           <div class="mira-menu-col">
             <h3>Sweet</h3>
             <ul>
-              <li><div><strong>Burnt honey panna cotta</strong><span>bee pollen</span></div><b>12</b></li>
-              <li><div><strong>Chocolate, olive oil, salt</strong><span>ember-baked, to share</span></div><b>14</b></li>
-              <li><div><strong>Wood-oven rice pudding</strong><span>poached quince</span></div><b>11</b></li>
+              <li><div class="mira-dish"><strong>Burnt honey panna cotta</strong><span>bee pollen</span></div><b>12</b></li>
+              <li><div class="mira-dish"><strong>Chocolate, olive oil, salt</strong><span>ember-baked, to share</span></div><b>14</b></li>
+              <li><div class="mira-dish"><strong>Wood-oven rice pudding</strong><span>poached quince</span></div><b>11</b></li>
             </ul>
-            <figure class="mira-menu-img">
-              <img src={IMG.dish} alt="A seasonal plate at Mira Cantine" loading="lazy" />
-            </figure>
           </div>
         </div>
+        <p class="mira-menu-wine"><em>Wine:</em> 120+ low-intervention bottles. Ask what's open.</p>
       </div>
     </section>
 
-    <!-- STORY -->
+    <!-- DARK FIRE INTERLUDE -->
+    <section class="mira-fire">
+      <figure class="mira-fire-bg" aria-hidden="true">
+        <img src={IMG.fire} alt="" loading="lazy" />
+      </figure>
+      <div class="mira-fire-in">
+        <blockquote class="mira-pull">
+          <p>"Everything on your plate<br />met the flame first."</p>
+          <footer>Mira, <em>chef and founder</em></footer>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- STORY: editorial spread -->
     <section class="mira-story" id="story">
       <div class="mira-wrap mira-story-grid">
-        <figure class="mira-story-img">
-          <img src={IMG.fire} alt="Meat grilling over open flame" loading="lazy" />
-        </figure>
-        <div>
+        <div class="mira-story-copy">
           <p class="mira-kicker">Our story</p>
-          <h2 class="mira-display mira-display-sm">A cantine,<br />not a concept.</h2>
-          <p class="mira-prose">Mira started in 2019 as a 34-seat room with one wood oven and a short menu. The idea hasn't changed: cook simply, source close, pour generously. Our farmers are mostly within an hour's drive; our wine list is all low-intervention.</p>
-          <p class="mira-prose">The room itself does half the work — brick, candlelight, and the smell of oak smoke. Come as you are; stay as long as you like.</p>
-          <p class="mira-sign">— Mira &amp; Théo, <em>founders</em></p>
+          <h2 class="mira-display mira-display-sm">A cantine,<br /><em>not a concept.</em></h2>
+          <p class="mira-dropcap">Mira opened in 2019 with 34 seats, one wood oven and a short menu. The idea hasn't moved: cook simply, buy close, pour generously. Most of our farmers are within an hour's drive; every bottle on the list is low-intervention.</p>
+          <blockquote class="mira-pull mira-pull-light">
+            <p>"Come as you are.<br />Stay as long as you like."</p>
+          </blockquote>
+          <p class="mira-prose">The room does half the work: brick, candlelight, the smell of oak smoke. No dress code, no rush, no tasting-menu theatre. Just dinner, the way we like to eat it.</p>
+          <p class="mira-sign">Mira &amp; Théo</p>
         </div>
+        <figure class="mira-arch">
+          <img src={IMG.interior} alt="The dining room at Mira Cantine, glowing amber" loading="lazy" />
+          <figcaption>The room, most nights</figcaption>
+        </figure>
       </div>
     </section>
 
-    <!-- GALLERY -->
-    <section class="mira-gallery" aria-label="The room">
-      <figure><img src={IMG.interior} alt="The dining room at Mira Cantine" loading="lazy" /><figcaption>The room</figcaption></figure>
-      <figure><img src={IMG.table} alt="A table spread of small plates" loading="lazy" /><figcaption>To share</figcaption></figure>
+    <!-- GALLERY STRIP -->
+    <section class="mira-gallery" id="gallery" aria-label="The room, in pictures">
+      <figure>
+        <img src={IMG.table} alt="A table spread of small plates" loading="lazy" />
+        <figcaption>To share</figcaption>
+      </figure>
+      <figure>
+        <img src={IMG.dish} alt="A seasonal plate at Mira Cantine" loading="lazy" />
+        <figcaption>From tonight's menu</figcaption>
+      </figure>
+      <figure>
+        <img src={IMG.fire} alt="Meat grilling over open flame" loading="lazy" />
+        <figcaption>The oven, always lit</figcaption>
+      </figure>
     </section>
 
-    <!-- VISIT -->
+    <!-- VISIT + RESERVE: one closing section -->
     <section class="mira-visit" id="visit">
-      <div class="mira-wrap mira-visit-grid">
-        <div>
+      <div class="mira-wrap">
+        <div class="mira-visit-head">
           <p class="mira-kicker">Find us</p>
-          <h2 class="mira-display mira-display-sm">Old Montreal,<br />two steps from<br />the river.</h2>
-          <address class="mira-address">
-            123, rue Fictive<br />
-            Montreal QC H2Y 1A1<br />
-            <a href="tel:+15145550198">(514) 555-0198</a><br />
-            <a href="mailto:hello@mira-cantine-demo.ca">hello@mira-cantine-demo.ca</a>
-          </address>
+          <h2 class="mira-display mira-display-sm">Old Montreal,<br /><em>two steps from the river.</em></h2>
         </div>
-        <div class="mira-hours">
-          <h3>Hours</h3>
-          <dl>
-            <div><dt>Tue – Thu</dt><dd>5:30pm – 10pm</dd></div>
-            <div><dt>Fri – Sat</dt><dd>5:30pm – 11pm</dd></div>
-            <div><dt>Sunday</dt><dd>4pm – 9pm</dd></div>
-            <div><dt>Mon</dt><dd>closed <em>(oven rests)</em></dd></div>
-          </dl>
-          <p class="mira-note">Walk-ins welcome at the bar. The dining room books out — reserve ahead.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- RESERVE -->
-    <section class="mira-reserve" id="reserve">
-      <div class="mira-wrap mira-reserve-in">
-        <div>
-          <p class="mira-kicker mira-kicker-light">Reservations</p>
-          <h2 class="mira-display mira-display-sm mira-display-light">Hungry already?</h2>
-          <p class="mira-prose mira-prose-light">Tables of 1 to 8 can book below. For 9 or more, call us — we'll push tables together and open something good.</p>
-        </div>
-        <form class="mira-form" id="mira-form" novalidate>
-          <div class="mira-form-row">
-            <label>Date<input type="date" name="date" required /></label>
-            <label>Guests
-              <select name="guests">
-                <option>2 guests</option><option>1 guest</option><option>3 guests</option>
-                <option>4 guests</option><option>5 guests</option><option>6 guests</option>
-                <option>7 guests</option><option>8 guests</option>
-              </select>
-            </label>
+        <div class="mira-visit-grid">
+          <div class="mira-hours">
+            <h3>Hours</h3>
+            <dl>
+              <div><dt>Tue to Thu</dt><dd>5:30pm to 10pm</dd></div>
+              <div><dt>Fri to Sat</dt><dd>5:30pm to 11pm</dd></div>
+              <div><dt>Sunday</dt><dd>4pm to 9pm</dd></div>
+              <div><dt>Monday</dt><dd>closed <em>(the oven rests)</em></dd></div>
+            </dl>
+            <address class="mira-address">
+              123, rue Fictive<br />
+              Montreal QC H2Y 1A1<br />
+              <a href="tel:+15145550198">(514) 555-0198</a><br />
+              <a href="mailto:hello@mira-cantine-demo.ca">hello@mira-cantine-demo.ca</a>
+            </address>
+            <p class="mira-note">Walk-ins welcome at the bar. The dining room books out, so reserve ahead.</p>
           </div>
-          <label>Name<input type="text" name="name" required placeholder="Jane Doe" /></label>
-          <label>Phone<input type="tel" name="phone" required placeholder="(514) 555-0000" /></label>
-          <button class="mira-btn mira-btn-light" type="submit">Request this table</button>
-          <p class="mira-form-note" role="status" aria-live="polite"></p>
-        </form>
+          <form class="mira-form" id="mira-form" novalidate>
+            <p class="mira-form-title">Reserve <em>a table</em></p>
+            <div class="mira-form-row">
+              <label>Date<input type="date" name="date" required /></label>
+              <label>Guests
+                <select name="guests">
+                  <option>2 guests</option><option>1 guest</option><option>3 guests</option>
+                  <option>4 guests</option><option>5 guests</option><option>6 guests</option>
+                  <option>7 guests</option><option>8 guests</option>
+                </select>
+              </label>
+            </div>
+            <label>Name<input type="text" name="name" required placeholder="Jane Doe" /></label>
+            <label>Phone<input type="tel" name="phone" required placeholder="(514) 555-0000" /></label>
+            <button class="mira-btn" type="submit">Request this table</button>
+            <p class="mira-form-note" role="status" aria-live="polite"></p>
+            <p class="mira-note">Tables of 1 to 8 book here. For 9 or more, call us and we'll push tables together.</p>
+          </form>
+        </div>
       </div>
     </section>
   </main>
 
+  <!-- MINIMAL CENTERED FOOTER -->
   <footer class="mira-footer">
     <div class="mira-wrap mira-footer-in">
       <p class="mira-footer-brand">Mira <em>cantine</em></p>
-      <p class="mira-footer-note">© 2026 Mira Cantine — Old Montreal, QC</p>
+      <p class="mira-footer-note">123, rue Fictive, Montreal QC · (514) 555-0198<br />© 2026 Mira Cantine · Old Montreal, QC</p>
     </div>
   </footer>
 
@@ -209,17 +214,32 @@ const IMG = {
   <script>
     (function () {
       var btn = document.querySelector('.mira-burger');
-      var menu = document.querySelector('.mira-mobile');
-      btn?.addEventListener('click', function () {
-        var isHidden = menu?.hasAttribute('hidden') ?? false;
-        if (isHidden) { menu?.removeAttribute('hidden'); } else { menu?.setAttribute('hidden', ''); }
-        btn?.setAttribute('aria-expanded', String(isHidden));
-        btn?.setAttribute('aria-label', isHidden ? 'Close menu' : 'Open menu');
+      var overlay = document.getElementById('mira-overlay');
+      var closeBtn = document.querySelector('.mira-overlay-close');
+      function open() {
+        overlay?.classList.add('mira-overlay-open');
+        overlay?.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        btn?.setAttribute('aria-expanded', 'true');
+        btn?.setAttribute('aria-label', 'Close menu');
+      }
+      function close() {
+        overlay?.classList.remove('mira-overlay-open');
+        overlay?.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        btn?.setAttribute('aria-expanded', 'false');
+        btn?.setAttribute('aria-label', 'Open menu');
+      }
+      btn?.addEventListener('click', open);
+      closeBtn?.addEventListener('click', close);
+      overlay?.addEventListener('click', function (e) {
+        if ((e.target as HTMLElement).tagName === 'A') close();
       });
-      menu?.addEventListener('click', function (e) {
-        if ((e.target as HTMLElement).tagName === 'A') menu?.setAttribute('hidden', '');
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && overlay?.classList.contains('mira-overlay-open')) close();
       });
     })();
+    // Demo form: never submits anywhere
     (function () {
       var form = document.getElementById('mira-form');
       form?.addEventListener('submit', function (e) {
@@ -238,6 +258,7 @@ const IMG = {
       --mira-ink-2: #5C4B3E;
       --mira-terra: #C2481F;
       --mira-terra-dark: #9E3715;
+      --mira-sand: #F3C9A8;
       --mira-line: rgba(34, 22, 16, 0.14);
       --mira-serif: "Fraunces", Georgia, serif;
       --mira-sans: "Inter", system-ui, sans-serif;
@@ -254,165 +275,196 @@ const IMG = {
 
     .mira-kicker {
       font-size: 11px; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase;
-      color: var(--mira-terra); margin: 0 0 16px;
+      color: var(--mira-terra); margin: 0 0 18px;
     }
-    .mira-kicker-light { color: #F3C9A8; }
     .mira-display {
       font-family: var(--mira-serif); font-weight: 600; letter-spacing: -0.015em;
-      font-size: clamp(3.2rem, 9vw, 7rem); line-height: 0.95; margin: 0;
+      font-size: clamp(3.4rem, 9vw, 7.4rem); line-height: 0.95; margin: 0;
     }
     .mira-display em { font-style: italic; font-weight: 400; color: var(--mira-terra); }
-    .mira-display-sm { font-size: clamp(2.4rem, 5.5vw, 4.2rem); }
-    .mira-display-light { color: var(--mira-cream); }
-    .mira-display-light em { color: #F3C9A8; }
-    .mira-prose { font-size: 16px; line-height: 1.75; color: var(--mira-ink-2); max-width: 56ch; }
-    .mira-prose-light { color: rgba(246, 239, 225, 0.82); }
+    .mira-display-sm { font-size: clamp(2.5rem, 5.6vw, 4.4rem); }
+    .mira-prose { font-size: 16px; line-height: 1.8; color: var(--mira-ink-2); max-width: 54ch; }
+    .mira-note { font-size: 13px; color: var(--mira-ink-2); font-style: italic; font-family: var(--mira-serif); margin: 18px 0 0; line-height: 1.6; }
 
-    /* nav */
-    .mira-nav { position: sticky; top: 0; z-index: 60; background: rgba(246, 239, 225, 0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--mira-line); }
-    .mira-nav-in { max-width: 1280px; margin: 0 auto; padding: 14px clamp(20px, 4vw, 40px); display: flex; align-items: center; justify-content: space-between; gap: 20px; }
-    .mira-nav-side { display: flex; gap: 26px; align-items: center; flex: 1; }
-    .mira-nav-right { justify-content: flex-end; }
-    .mira-nav-side a { color: var(--mira-ink); text-decoration: none; font-size: 13.5px; font-weight: 600; letter-spacing: 0.04em; }
-    .mira-nav-side a:hover { color: var(--mira-terra); }
-    .mira-brand { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: var(--mira-ink); font-family: var(--mira-serif); font-weight: 700; font-size: 30px; letter-spacing: -0.02em; }
-    .mira-brand-mark { color: var(--mira-terra); font-size: 22px; }
-    .mira-pill { border: 1.5px solid var(--mira-ink); border-radius: 999px; padding: 10px 20px !important; transition: background 0.18s, color 0.18s; }
-    .mira-pill:hover { background: var(--mira-ink); color: var(--mira-cream) !important; }
-    .mira-burger { display: none; background: none; border: 0; cursor: pointer; padding: 8px; }
-    .mira-burger span { display: block; width: 22px; height: 2px; background: var(--mira-ink); margin: 5px 0; }
-    .mira-mobile { display: grid; border-top: 1px solid var(--mira-line); }
-    .mira-mobile[hidden] { display: none; }
-    .mira-mobile a { padding: 14px 24px; text-decoration: none; color: var(--mira-ink); font-weight: 600; border-bottom: 1px solid var(--mira-line); }
+    /* minimal top bar */
+    .mira-topbar {
+      position: sticky; top: 0; z-index: 60;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px clamp(20px, 4vw, 40px);
+      background: rgba(246, 239, 225, 0.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--mira-line);
+    }
+    .mira-brand { font-family: var(--mira-serif); font-weight: 700; font-size: 26px; letter-spacing: -0.02em; color: var(--mira-ink); text-decoration: none; }
+    .mira-brand em { font-style: italic; font-weight: 400; color: var(--mira-terra); font-size: 18px; }
+    .mira-topbar-right { display: flex; align-items: center; gap: 18px; }
+    .mira-pill {
+      border: 1.5px solid var(--mira-ink); border-radius: 999px; padding: 10px 22px;
+      color: var(--mira-ink); text-decoration: none; font-size: 13.5px; font-weight: 600; letter-spacing: 0.03em;
+      transition: background 0.18s ease, color 0.18s ease;
+    }
+    .mira-pill:hover { background: var(--mira-ink); color: var(--mira-cream); }
+    .mira-burger { background: none; border: 0; cursor: pointer; padding: 10px 4px; display: grid; gap: 6px; }
+    .mira-burger span { display: block; width: 26px; height: 2px; background: var(--mira-ink); }
+
+    /* full-screen overlay menu */
+    .mira-overlay {
+      position: fixed; inset: 0; z-index: 100;
+      background: var(--mira-ink); color: var(--mira-cream);
+      display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 34px;
+      opacity: 0; visibility: hidden; pointer-events: none;
+      transition: opacity 0.32s ease, visibility 0.32s ease;
+    }
+    .mira-overlay-open { opacity: 1; visibility: visible; pointer-events: auto; }
+    .mira-overlay-close {
+      position: absolute; top: 22px; right: 28px;
+      background: none; border: 0; color: var(--mira-cream);
+      font-size: 44px; font-weight: 300; line-height: 1; cursor: pointer; padding: 8px;
+    }
+    .mira-overlay-nav { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .mira-overlay-nav a {
+      font-family: var(--mira-serif); font-style: italic; font-weight: 400;
+      font-size: clamp(2.6rem, 8vw, 4.6rem); line-height: 1.25; letter-spacing: -0.015em;
+      color: var(--mira-cream); text-decoration: none;
+      transition: color 0.18s ease;
+    }
+    .mira-overlay-nav a:hover { color: var(--mira-sand); }
+    .mira-overlay-cta { font-style: normal !important; color: var(--mira-sand) !important; }
+    .mira-overlay-foot { font-family: var(--mira-serif); font-style: italic; font-size: 15px; color: rgba(246,239,225,0.6); margin: 0; }
+    .mira-overlay-foot a { color: rgba(246,239,225,0.85); }
 
     /* hero */
-    .mira-hero { position: relative; }
-    .mira-hero-img { margin: 0; height: clamp(420px, 72vh, 640px); }
+    .mira-hero { position: relative; display: grid; }
+    .mira-hero-img { margin: 0; height: clamp(480px, 88vh, 780px); }
     .mira-hero-img img { width: 100%; height: 100%; object-fit: cover; }
-    .mira-hero-img::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,10,6,0.25) 0%, rgba(20,10,6,0) 30%, rgba(20,10,6,0) 55%, rgba(34,22,16,0.55) 100%); pointer-events: none; }
-    .mira-hero { display: grid; }
+    .mira-hero-img::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(20,10,6,0.35) 0%, rgba(20,10,6,0) 30%, rgba(20,10,6,0) 50%, rgba(24,14,8,0.72) 100%);
+      pointer-events: none;
+    }
     .mira-hero-text {
       position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
-      max-width: 1280px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px) clamp(28px, 5vw, 56px);
+      max-width: 1140px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px) clamp(36px, 6vw, 72px);
       color: var(--mira-cream);
     }
-    .mira-hero-text .mira-kicker { color: #F3C9A8; }
-    .mira-hero-text .mira-display em { color: #F3C9A8; }
-    .mira-hero-sub { font-size: 16px; line-height: 1.6; max-width: 44ch; color: rgba(246,239,225,0.85); margin: 18px 0 24px; }
-    .mira-hero-cta { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
-    .mira-btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      background: var(--mira-terra); color: #FFF8EE; font-weight: 600; font-size: 14.5px; letter-spacing: 0.02em;
-      padding: 15px 30px; border-radius: 999px; text-decoration: none; border: 0; cursor: pointer;
-      transition: background 0.18s ease, transform 0.18s ease;
-    }
-    .mira-btn:hover { background: var(--mira-terra-dark); transform: translateY(-2px); }
-    .mira-btn-light { background: var(--mira-cream); color: var(--mira-ink); }
-    .mira-btn-light:hover { background: #fff; }
-    .mira-link { color: var(--mira-cream); font-weight: 600; font-size: 14.5px; text-decoration: none; border-bottom: 1px solid rgba(246,239,225,0.5); padding-bottom: 2px; }
-    .mira-link:hover { border-color: var(--mira-cream); }
+    .mira-hero-text .mira-kicker { color: var(--mira-sand); }
+    .mira-hero-text .mira-display em { color: var(--mira-sand); }
+    .mira-hero-sub { font-size: 16px; line-height: 1.65; max-width: 42ch; color: rgba(246,239,225,0.88); margin: 20px 0 26px; }
+    .mira-hero-link { font-family: var(--mira-serif); font-style: italic; font-size: 17px; color: var(--mira-cream); text-decoration: none; border-bottom: 1px solid rgba(246,239,225,0.5); padding-bottom: 3px; }
+    .mira-hero-link:hover { border-color: var(--mira-cream); }
 
-    /* intro */
-    .mira-intro { padding: clamp(64px, 9vw, 120px) 0 clamp(48px, 6vw, 80px); }
-    .mira-dropcap { font-family: var(--mira-serif); font-size: clamp(1.35rem, 2.6vw, 1.9rem); line-height: 1.5; max-width: 62ch; margin: 0 0 44px; }
-    .mira-dropcap::first-letter {
-      font-size: 3.4em; float: left; line-height: 0.82; padding: 6px 12px 0 0;
-      color: var(--mira-terra); font-weight: 600;
-    }
-    .mira-facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; border-top: 1px solid var(--mira-line); padding-top: 28px; }
-    .mira-facts div { display: flex; flex-direction: column; gap: 4px; }
-    .mira-facts strong { font-family: var(--mira-serif); font-size: 34px; font-weight: 600; letter-spacing: -0.02em; }
-    .mira-facts span { font-size: 13px; color: var(--mira-ink-2); }
-
-    /* menu */
-    .mira-menu { background: var(--mira-ink); color: var(--mira-cream); padding: clamp(64px, 9vw, 120px) 0; }
-    .mira-menu .mira-kicker { color: #F3C9A8; }
-    .mira-menu-head { text-align: center; margin-bottom: 54px; }
-    .mira-menu-note { color: rgba(246,239,225,0.6); font-size: 13px; margin-top: 14px; }
-    .mira-menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(28px, 4vw, 56px); }
+    /* menu, editorial */
+    .mira-menu { padding: clamp(72px, 10vw, 140px) 0 clamp(64px, 9vw, 120px); }
+    .mira-menu-head { text-align: center; margin-bottom: clamp(44px, 6vw, 72px); }
+    .mira-menu-note { font-family: var(--mira-serif); font-size: 15px; color: var(--mira-ink-2); margin: 16px 0 0; }
+    .mira-menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(36px, 5vw, 72px); }
     .mira-menu-col h3 {
-      font-family: var(--mira-serif); font-style: italic; font-weight: 400; font-size: 22px;
-      color: #F3C9A8; margin: 0 0 20px; padding-bottom: 14px; border-bottom: 1px solid rgba(246,239,225,0.18);
+      font-family: var(--mira-serif); font-style: italic; font-weight: 400; font-size: 24px;
+      margin: 0 0 26px; padding-bottom: 16px; border-bottom: 1px solid var(--mira-line);
     }
-    .mira-menu-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; }
-    .mira-menu-col li { display: flex; justify-content: space-between; gap: 16px; align-items: baseline; }
-    .mira-menu-col li strong { display: block; font-size: 15.5px; font-weight: 600; margin-bottom: 4px; }
-    .mira-menu-col li span { font-size: 13px; color: rgba(246,239,225,0.62); font-style: italic; font-family: var(--mira-serif); }
-    .mira-menu-col li b { font-family: var(--mira-serif); font-weight: 600; font-size: 16px; color: #F3C9A8; }
-    .mira-menu-img { margin: 30px 0 0; }
-    .mira-menu-img img { width: 100%; height: 220px; object-fit: cover; border-radius: 14px; }
+    .mira-menu-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 24px; }
+    .mira-menu-col li { display: flex; justify-content: space-between; gap: 14px; align-items: baseline; }
+    .mira-dish strong { display: block; font-size: 15.5px; font-weight: 600; margin-bottom: 5px; }
+    .mira-dish span { font-family: var(--mira-serif); font-style: italic; font-size: 13.5px; color: var(--mira-ink-2); }
+    .mira-menu-col li b { font-family: var(--mira-serif); font-weight: 600; font-size: 16px; flex: none; }
+    .mira-menu-col li::after { content: ""; flex: 1; order: 2; border-bottom: 1px dotted var(--mira-line); margin: 0 2px 5px; min-width: 18px; }
+    .mira-dish { order: 1; }
+    .mira-menu-col li b { order: 3; }
+    .mira-menu-wine { text-align: center; font-family: var(--mira-serif); font-size: 16px; margin: clamp(44px, 6vw, 64px) 0 0; color: var(--mira-ink-2); }
+    .mira-menu-wine em { color: var(--mira-terra); }
 
-    /* story */
-    .mira-story { padding: clamp(64px, 9vw, 120px) 0; }
-    .mira-story-grid { display: grid; grid-template-columns: 0.95fr 1.05fr; gap: clamp(32px, 5vw, 72px); align-items: center; }
-    .mira-story-img { margin: 0; }
-    .mira-story-img img { width: 100%; height: min(560px, 80vw); object-fit: cover; border-radius: 4px 120px 4px 120px; }
-    .mira-story-grid .mira-display { margin-bottom: 24px; }
-    .mira-sign { font-family: var(--mira-serif); font-style: italic; font-size: 18px; margin-top: 26px; }
-    .mira-sign em { font-size: 13px; font-family: var(--mira-sans); font-style: normal; color: var(--mira-ink-2); }
+    /* dark fire interlude */
+    .mira-fire { position: relative; overflow: clip; }
+    .mira-fire-bg { position: absolute; inset: 0; margin: 0; }
+    .mira-fire-bg img { width: 100%; height: 100%; object-fit: cover; }
+    .mira-fire-bg::after { content: ""; position: absolute; inset: 0; background: rgba(18, 9, 5, 0.62); }
+    .mira-fire-in { position: relative; z-index: 1; padding: clamp(110px, 16vw, 210px) clamp(20px, 4vw, 40px); text-align: center; }
+    .mira-pull { margin: 0; }
+    .mira-pull p {
+      font-family: var(--mira-serif); font-style: italic; font-weight: 400;
+      font-size: clamp(2rem, 5.4vw, 3.8rem); line-height: 1.2; letter-spacing: -0.01em;
+      color: var(--mira-cream); margin: 0 0 22px;
+    }
+    .mira-pull footer { font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(246,239,225,0.65); }
+    .mira-pull footer em { font-family: var(--mira-serif); text-transform: none; letter-spacing: 0; font-size: 15px; }
 
-    /* gallery */
-    .mira-gallery { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 12px; padding: 0 12px; }
-    .mira-gallery figure { margin: 0; position: relative; overflow: hidden; border-radius: 8px; }
-    .mira-gallery img { width: 100%; height: clamp(280px, 44vw, 480px); object-fit: cover; transition: transform 0.6s ease; }
-    .mira-gallery figure:hover img { transform: scale(1.04); }
+    /* story spread */
+    .mira-story { padding: clamp(72px, 10vw, 140px) 0; }
+    .mira-story-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(40px, 6vw, 88px); align-items: center; }
+    .mira-story-copy .mira-display { margin-bottom: 30px; }
+    .mira-dropcap {
+      font-family: var(--mira-serif); font-size: clamp(1.3rem, 2.4vw, 1.75rem); line-height: 1.55;
+      max-width: 58ch; margin: 0 0 34px;
+    }
+    .mira-dropcap::first-letter { font-size: 3.3em; float: left; line-height: 0.84; padding: 6px 14px 0 0; color: var(--mira-terra); font-weight: 600; }
+    .mira-pull-light p { color: var(--mira-ink); font-size: clamp(1.6rem, 3.4vw, 2.4rem); margin: 0 0 34px; padding-left: 26px; border-left: 2px solid var(--mira-terra); }
+    .mira-sign { font-family: var(--mira-serif); font-style: italic; font-size: 19px; margin: 28px 0 0; }
+    .mira-arch { margin: 0; text-align: center; }
+    .mira-arch img { width: 100%; height: min(600px, 88vw); object-fit: cover; border-radius: 999px 999px 14px 14px; }
+    .mira-arch figcaption { font-family: var(--mira-serif); font-style: italic; font-size: 14px; color: var(--mira-ink-2); margin-top: 14px; }
+
+    /* gallery strip */
+    .mira-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; padding: 0 14px clamp(72px, 10vw, 140px); }
+    .mira-gallery figure { margin: 0; position: relative; overflow: hidden; border-radius: 10px; }
+    .mira-gallery img { width: 100%; height: clamp(260px, 38vw, 440px); object-fit: cover; transition: transform 0.6s ease; }
+    .mira-gallery figure:hover img { transform: scale(1.045); }
     .mira-gallery figcaption {
-      position: absolute; left: 16px; bottom: 14px; font-family: var(--mira-serif); font-style: italic;
-      color: #FFF8EE; font-size: 17px; text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+      position: absolute; left: 18px; bottom: 16px;
+      font-family: var(--mira-serif); font-style: italic; font-size: 17px; color: #FFF8EE;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.55);
     }
 
-    /* visit */
-    .mira-visit { padding: clamp(64px, 9vw, 120px) 0; }
-    .mira-visit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 72px); }
-    .mira-address { font-style: normal; font-size: 17px; line-height: 1.8; margin-top: 26px; }
-    .mira-address a { color: var(--mira-terra); font-weight: 600; text-decoration: none; }
-    .mira-hours { background: var(--mira-cream-2); border: 1px solid var(--mira-line); border-radius: 16px; padding: clamp(24px, 3vw, 36px); align-self: start; }
-    .mira-hours h3 { font-family: var(--mira-serif); font-size: 24px; margin: 0 0 18px; font-weight: 600; }
-    .mira-hours dl { margin: 0; display: grid; gap: 12px; }
-    .mira-hours dl div { display: flex; justify-content: space-between; gap: 12px; font-size: 14.5px; padding-bottom: 12px; border-bottom: 1px dashed var(--mira-line); }
+    /* visit + reserve */
+    .mira-visit { padding: 0 0 clamp(72px, 10vw, 140px); }
+    .mira-visit-head { text-align: center; margin-bottom: clamp(40px, 6vw, 64px); }
+    .mira-visit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 72px); align-items: start; }
+    .mira-hours { background: var(--mira-cream-2); border: 1px solid var(--mira-line); border-radius: 18px; padding: clamp(28px, 3.5vw, 42px); }
+    .mira-hours h3 { font-family: var(--mira-serif); font-size: 26px; font-weight: 600; margin: 0 0 20px; }
+    .mira-hours dl { margin: 0; display: grid; gap: 13px; }
+    .mira-hours dl div { display: flex; justify-content: space-between; gap: 12px; font-size: 14.5px; padding-bottom: 13px; border-bottom: 1px dashed var(--mira-line); }
     .mira-hours dt { font-weight: 600; }
     .mira-hours dd { margin: 0; color: var(--mira-ink-2); }
     .mira-hours dd em { font-family: var(--mira-serif); }
-    .mira-note { font-size: 13px; color: var(--mira-ink-2); font-style: italic; font-family: var(--mira-serif); margin: 18px 0 0; }
-
-    /* reserve */
-    .mira-reserve { background: var(--mira-terra); color: var(--mira-cream); padding: clamp(64px, 9vw, 110px) 0; }
-    .mira-reserve-in { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 72px); align-items: start; }
-    .mira-form { background: rgba(255, 248, 238, 0.08); border: 1px solid rgba(255, 248, 238, 0.25); border-radius: 18px; padding: clamp(24px, 3vw, 34px); display: grid; gap: 16px; }
+    .mira-address { font-style: normal; font-size: 16px; line-height: 1.85; margin-top: 26px; padding-top: 24px; border-top: 1px solid var(--mira-line); }
+    .mira-address a { color: var(--mira-terra); font-weight: 600; text-decoration: none; }
+    .mira-form { display: grid; gap: 18px; padding-top: 6px; }
+    .mira-form-title { font-family: var(--mira-serif); font-size: 30px; font-weight: 600; margin: 0 0 6px; letter-spacing: -0.015em; }
+    .mira-form-title em { font-style: italic; font-weight: 400; color: var(--mira-terra); }
     .mira-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .mira-form label { display: grid; gap: 8px; font-size: 12.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+    .mira-form label { display: grid; gap: 9px; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mira-ink-2); }
     .mira-form input, .mira-form select {
-      font: inherit; font-size: 15px; text-transform: none; letter-spacing: 0;
-      padding: 13px 15px; border-radius: 12px; border: 1.5px solid rgba(255, 248, 238, 0.35);
-      background: rgba(34, 22, 16, 0.25); color: var(--mira-cream); width: 100%;
+      font: inherit; font-size: 15px; text-transform: none; letter-spacing: 0; color: var(--mira-ink);
+      padding: 14px 16px; border-radius: 12px; border: 1.5px solid var(--mira-line);
+      background: #FFFDF7; width: 100%;
     }
-    .mira-form input::placeholder { color: rgba(246, 239, 225, 0.5); }
-    .mira-form input:focus, .mira-form select:focus { outline: 2px solid var(--mira-cream); outline-offset: 1px; }
-    .mira-form select option { color: #221610; }
-    .mira-form-note { margin: 0; font-size: 12.5px; color: rgba(246, 239, 225, 0.75); text-align: center; font-family: var(--mira-serif); font-style: italic; }
+    .mira-form input:focus, .mira-form select:focus { outline: 2px solid var(--mira-terra); outline-offset: 1px; border-color: var(--mira-terra); }
+    .mira-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--mira-terra); color: #FFF8EE; font-weight: 600; font-size: 15px; letter-spacing: 0.02em;
+      padding: 16px 30px; border-radius: 999px; text-decoration: none; border: 0; cursor: pointer;
+      transition: background 0.18s ease, transform 0.18s ease;
+    }
+    .mira-btn:hover { background: var(--mira-terra-dark); transform: translateY(-2px); }
+    .mira-form-note { margin: 0; font-size: 13px; color: var(--mira-terra); text-align: center; font-family: var(--mira-serif); font-style: italic; }
     .mira-form-note:empty { display: none; }
 
     /* footer */
-    .mira-footer { background: var(--mira-ink); color: rgba(246, 239, 225, 0.66); padding: 52px 0; }
-    .mira-footer-in { display: grid; gap: 12px; text-align: center; }
-    .mira-footer-brand { font-family: var(--mira-serif); font-size: 34px; color: var(--mira-cream); margin: 0; font-weight: 600; }
-    .mira-footer-brand em { font-style: italic; font-weight: 400; color: #F3C9A8; }
-    .mira-footer-note { margin: 0; font-size: 12.5px; line-height: 1.6; }
+    .mira-footer { border-top: 1px solid var(--mira-line); padding: 56px 0 64px; }
+    .mira-footer-in { display: grid; gap: 14px; text-align: center; }
+    .mira-footer-brand { font-family: var(--mira-serif); font-size: 36px; font-weight: 600; color: var(--mira-ink); margin: 0; letter-spacing: -0.02em; }
+    .mira-footer-brand em { font-style: italic; font-weight: 400; color: var(--mira-terra); font-size: 24px; }
+    .mira-footer-note { margin: 0; font-size: 12.5px; line-height: 1.8; color: var(--mira-ink-2); }
 
     @media (max-width: 900px) {
-      .mira-menu-grid, .mira-story-grid, .mira-visit-grid, .mira-reserve-in { grid-template-columns: 1fr; }
-      .mira-gallery { grid-template-columns: 1fr; }
-      .mira-facts { grid-template-columns: 1fr 1fr 1fr; }
+      .mira-menu-grid, .mira-story-grid, .mira-visit-grid { grid-template-columns: 1fr; }
+      .mira-gallery { grid-template-columns: 1fr; padding-left: 14px; padding-right: 14px; }
+      .mira-arch { max-width: 440px; margin: 0 auto; }
     }
-    @media (max-width: 720px) {
-      .mira-nav-side { display: none; }
-      .mira-burger { display: block; }
+    @media (max-width: 560px) {
       .mira-form-row { grid-template-columns: 1fr; }
-      .mira-facts { grid-template-columns: 1fr; gap: 20px; }
-      .mira-hero-cta { gap: 16px; }
+      .mira-pill { display: none; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .mira-gallery img, .mira-btn { transition: none; }
+      .mira-overlay, .mira-gallery img, .mira-btn, .mira-pill, .mira-overlay-nav a { transition: none; }
     }
   </style>
 </body>
