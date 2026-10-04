@@ -95,6 +95,77 @@ button, input, textarea, select { font: inherit; }
   will-change: transform;
 }
 
+/* --- The Fracture: signature motif utilities ---
+   The intro's barrier-break, reused as section transitions, dividers,
+   and progress indicators. Jagged clip-path geometry; transform/opacity
+   and clip-path only, never layout. */
+
+/* Hairline diagonal crack divider. A 14px band carrying a 2px jagged
+   line in --line color; reads as a fracture between sections. */
+.fracture-divider {
+  height: 14px;
+  background: var(--line);
+  clip-path: polygon(
+    0 43%, 8% 57%, 15% 36%, 24% 57%, 33% 43%, 42% 64%,
+    51% 36%, 60% 57%, 69% 43%, 78% 64%, 87% 36%, 94% 57%, 100% 43%,
+    100% 57%, 94% 71%, 87% 50%, 78% 78%, 69% 57%, 60% 71%,
+    51% 50%, 42% 78%, 33% 57%, 24% 71%, 15% 50%, 8% 71%, 0 57%
+  );
+}
+
+/* Scroll-triggered reveal: the section splits open along a crack.
+   Starts as a jagged horizontal slit at the vertical center, opens to
+   full with jagged top and bottom edges. JS adds .is-visible via
+   IntersectionObserver. Same vertex count in both states so the
+   clip-path interpolates smoothly. */
+.fracture-reveal {
+  clip-path: polygon(
+    0% 49.8%, 12.5% 50.3%, 25% 49.6%, 37.5% 50.2%, 50% 49.7%,
+    62.5% 50.4%, 75% 49.5%, 87.5% 50.1%, 100% 49.9%,
+    100% 50.6%, 87.5% 51.1%, 75% 50.3%, 62.5% 51.2%, 50% 50.5%,
+    37.5% 51%, 25% 50.4%, 12.5% 51.3%, 0% 50.5%
+  );
+  transition: clip-path var(--dur-5) var(--ease-out-expo);
+  will-change: clip-path;
+}
+.fracture-reveal.is-visible {
+  clip-path: polygon(
+    0% -3%, 12.5% 2%, 25% -2%, 37.5% 3%, 50% -1%,
+    62.5% 2.5%, 75% -2.5%, 87.5% 1.5%, 100% -2%,
+    100% 103%, 87.5% 98%, 75% 102.5%, 62.5% 97.5%, 50% 101%,
+    37.5% 98.5%, 25% 102%, 12.5% 99%, 0% 101.5%
+  );
+}
+
+/* Crack-fill progress indicator: a 2px line that fills with the accent.
+   Set --fill (0 to 1) from JS; no transition so rAF updates stay tight. */
+.crack-fill {
+  height: 2px;
+  background: var(--line);
+  position: relative;
+  overflow: hidden;
+}
+.crack-fill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform: scaleX(var(--fill, 0));
+  transform-origin: left;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fracture-reveal {
+    clip-path: none;
+    transition: none;
+    will-change: auto;
+  }
+  .fracture-divider {
+    clip-path: none;
+    height: 1px;
+  }
+}
+
 /* Back to top */
 .to-top {
   position: fixed;
@@ -222,20 +293,38 @@ button, input, textarea, select { font: inherit; }
   --radius-xl: 28px;
   --radius-pill: 999px;
 
+  /* Short aliases for the single radius system above. These are aliases,
+     not new values: one radius system, referenced two ways. */
+  --r-sm: var(--radius-sm);
+  --r-md: var(--radius-md);
+  --r-lg: var(--radius-xl);
+  --r-full: var(--radius-pill);
+
   --shadow-sm: 0 1px 2px rgba(10,15,28,.06), 0 4px 16px rgba(10,15,28,.06);
   --shadow-md: 0 8px 30px rgba(10,15,28,.10), 0 2px 8px rgba(10,15,28,.06);
   --shadow-lg: 0 20px 60px rgba(10,15,28,.14), 0 4px 16px rgba(10,15,28,.10);
 
   --ease-out: cubic-bezier(.16,1,.3,1);
+  --ease-out-expo: cubic-bezier(.16,1,.3,1);
   --ease-in-out: cubic-bezier(.65,0,.35,1);
   --ease-spring: cubic-bezier(.34,1.56,.64,1);
+
+  /* Duration scale: one choreography language for all motion */
+  --dur-1: 120ms;
+  --dur-2: 240ms;
+  --dur-3: 400ms;
+  --dur-4: 600ms;
+  --dur-5: 900ms;
+  --stagger: 90ms;
 
   --header-h: 64px;
   --content-max: 1280px;
   --content-pad: clamp(16px, 4vw, 40px);
 }
 
-/* --- Dark theme: deep black art direction, electric blue accent --- */
+/* --- Dark theme: deep blue-black art direction, lifted red accent ---
+   The accent stays in the red family (one accent color across themes),
+   lifted for AA contrast on dark backgrounds. */
 [data-theme="dark"] {
   --paper: #070B14;
   --paper-2: #0C1120;
@@ -249,15 +338,15 @@ button, input, textarea, select { font: inherit; }
   --line-strong: rgba(248,245,239,.17);
   --line-on-dark: rgba(248,245,239,.10);
   --line-on-dark-strong: rgba(248,245,239,.18);
-  --accent: #0043E0;
-  --accent-hover: #0038C0;
-  --accent-soft: rgba(0,67,224,.14);
-  --accent-dark: #0A1B4D;
-  --accent-text: #7FA3FF;
-  --accent-soft-text: #A9C2FF;
-  --accent-mid: #2B6BFF;
-  --accent-glow: rgba(0,67,224,.38);
-  --accent-underline: linear-gradient(90deg, rgba(0,67,224,.38), rgba(0,67,224,.10));
+  --accent: #FF5A4D;
+  --accent-hover: #E8483B;
+  --accent-soft: rgba(255,90,77,.14);
+  --accent-dark: #2A0F0C;
+  --accent-text: #FF5A4D;
+  --accent-soft-text: #FF9B8F;
+  --accent-mid: #FF7A3D;
+  --accent-glow: rgba(255,90,77,.38);
+  --accent-underline: linear-gradient(90deg, rgba(255,90,77,.38), rgba(255,90,77,.10));
   --success: #34D399;
   --card-bg: #0D1322;
   --card-dark-bg: #0A0F1C;
@@ -272,10 +361,10 @@ button, input, textarea, select { font: inherit; }
   --section-dark-soft: rgba(248,245,239,.64);
   --on-dark-btn-bg: #F8F5EF;
   --on-dark-btn-text: #0A0F1C;
-  --hero-glow-a: rgba(0,67,224,.12);
+  --hero-glow-a: rgba(255,90,77,.12);
   --hero-glow-b: rgba(0,0,0,.28);
-  --cta-glow-a: rgba(0,67,224,.28);
-  --focus-ring: rgba(0,67,224,.28);
+  --cta-glow-a: rgba(255,90,77,.28);
+  --focus-ring: rgba(255,90,77,.28);
   --error-text: #FF9B93;
   --error-bg: #2A100D;
   --error-border: #5C231D;
@@ -422,7 +511,7 @@ html.theming *::after {
 /* Header actions row. Kept in global (unscoped) CSS on purpose: a scoped
    <style> in BaseLayout would get Astro's [data-astro-cid] appended to the
    descendant selector, which never matches the LanguageSwitcher child
-   component (it carries its own cid) — leaving the flag pill visible on
+   component (it carries its own cid), leaving the flag pill visible on
    phones, overflowing the header and clipping the menu button. */
 .header-right {
   display: flex;
