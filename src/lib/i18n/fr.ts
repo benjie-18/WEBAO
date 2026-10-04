@@ -6,7 +6,7 @@ const fr = {
     home: {
       title: "WEBAO · Sites web sur mesure pour PME · webao.ca",
       description:
-        "Des sites web sur mesure pour les petites entreprises partout au Canada, à 149 $ CAD par mois. Design, domaine, hébergement, mises à jour et soutien inclus. Parcourez le catalogue de démos.",
+        "Des sites web sur mesure pour les entreprises partout au Canada, à 149 $ CAD par mois. Design, domaine, hébergement, mises à jour et soutien inclus. Parcourez le catalogue de démos.",
     },
     pricing: {
       title: "Tarifs · WEBAO · Un seul forfait simple à 149 $ CAD/mois",
@@ -44,7 +44,7 @@ const fr = {
 
   footer: {
     tagline:
-      "Des sites web sur mesure pour les petites entreprises partout au Canada. Un seul frais mensuel. On s’occupe du domaine, de l’hébergement, de la maintenance et du soutien pour que vous puissiez vous concentrer sur votre entreprise.",
+      "Des sites web sur mesure pour les entreprises partout au Canada. Un seul frais mensuel. On s’occupe du domaine, de l’hébergement, de la maintenance et du soutien pour que vous puissiez vous concentrer sur votre entreprise.",
     location: "BASÉ À MONTRÉAL · AU SERVICE DES ENTREPRISES PARTOUT AU CANADA",
     studio: "Studio",
     demoCatalog: "Catalogue de démos",
@@ -89,7 +89,7 @@ const fr = {
       title1: "Des sites qui",
       titleWork: "fonctionnent",
       title2: "pour les",
-      title3: "petites entreprises.",
+      title3: "entreprises.",
       lead: "Un site pro, sur mesure, sans vous casser la tête avec les domaines, l’hébergement et les « peux-tu arranger ça ? ».",
       leadStrong: "Un seul frais mensuel simple.",
       leadRest: "On conçoit, on lance, on héberge et on entretient pendant que vous gérez votre entreprise.",
@@ -118,7 +118,7 @@ const fr = {
       title1: "Vous ne devriez",
       title2: "pas avoir à devenir",
       title3: "une personne web.",
-      p1: "La plupart des petites entreprises n’ont pas besoin d’une appli complexe. Elles ont besoin d’un site <strong>rapide, crédible et trouvable</strong> qui répond au téléphone, même quand vous êtes sur un chantier.",
+      p1: "La plupart des entreprises n’ont pas besoin d’une appli complexe. Elles ont besoin d’un site <strong>rapide, crédible et trouvable</strong> qui répond au téléphone, même quand vous êtes sur un chantier.",
       p2: "WEBAO est un petit studio qui s’occupe de tout pour un frais mensuel unique : le domaine, l’hébergement, les mises à jour, les décisions techniques. Vous parlez à une vraie personne, pas à une file d’attente de billets.",
       cta: "Voir ce qui est inclus →",
       note: "Mensuel · Sans contrat à long terme",
@@ -344,7 +344,7 @@ const fr = {
     hero: {
       eyebrow: "Tarifs · Un seul forfait, rien à décoder",
       title: "Un seul forfait.<br /><span>Tout</span> inclus.",
-      desc: "On a voulu garder ça simple. La plupart des petites entreprises ont besoin de la même chose : un site crédible, trouvable, qui reste à jour. Un forfait couvre ça pour 149 $ par mois, sans frais d’installation.",
+      desc: "On a voulu garder ça simple. La plupart des entreprises ont besoin de la même chose : un site crédible, trouvable, qui reste à jour. Un forfait couvre ça pour 149 $ par mois, sans frais d’installation.",
       cta: "Démarrer mon site →",
       emailNote: "Des questions d’abord ? Écrivez à hello@webao.ca",
       card: {

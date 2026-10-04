@@ -1,9 +1,9 @@
 const en = {
   meta: {
     home: {
-      title: "WEBAO · Custom websites for small business · webao.ca",
+      title: "WEBAO · Custom websites for business · webao.ca",
       description:
-        "Custom websites for small businesses across Canada, for $149 CAD a month. Design, domain, hosting, updates, and support included. See the demo catalog.",
+        "Custom websites for businesses across Canada, for $149 CAD a month. Design, domain, hosting, updates, and support included. See the demo catalog.",
     },
     pricing: {
       title: "Pricing · WEBAO · One simple plan, $149 CAD/month",
@@ -41,7 +41,7 @@ const en = {
 
   footer: {
     tagline:
-      "Custom websites for small businesses across Canada. One monthly fee. We handle the domain, hosting, maintenance, and support, so you can run your business.",
+      "Custom websites for businesses across Canada. One monthly fee. We handle the domain, hosting, maintenance, and support, so you can run your business.",
     location: "BASED IN MONTRÉAL · SERVING BUSINESSES ACROSS CANADA",
     studio: "Studio",
     demoCatalog: "Demo catalog",
@@ -72,7 +72,7 @@ const en = {
     enter: "◆ ENTER",
     tap: "◆ TAP",
     static: {
-      sub: "Custom websites for small business · $149 CAD / month",
+      sub: "Custom websites for business · $149 CAD / month",
       button: "Enter site",
       live: "Intro (reduced motion). Press Enter to open the site.",
       liveTouch: "Intro: {action} to enter.",
@@ -86,7 +86,7 @@ const en = {
       title1: "Websites that",
       titleWork: "work",
       title2: "for",
-      title3: "small business.",
+      title3: "business.",
       lead: "A custom, professional website without the domains, hosting, and “can you fix this?” emails.",
       leadStrong: "One simple monthly fee.",
       leadRest: "We design, launch, host, and maintain it while you run your business.",
@@ -115,7 +115,7 @@ const en = {
       title1: "You shouldn’t",
       title2: "need to become",
       title3: "a web person.",
-      p1: "Most small businesses don’t need a complex app. They need a <strong>fast, credible, findable</strong> website that answers the phone, even when you’re on a job.",
+      p1: "Most businesses don’t need a complex app. They need a <strong>fast, credible, findable</strong> website that answers the phone, even when you’re on a job.",
       p2: "WEBAO is a small studio that takes care of all of it for one monthly fee: the domain, the hosting, the updates, the technical decisions. You get a person to talk to, not a ticket queue.",
       cta: "See what’s included →",
       note: "Monthly · No long-term contract",
@@ -340,7 +340,7 @@ const en = {
     hero: {
       eyebrow: "Pricing · One plan, nothing to decode",
       title: "One plan.<br /><span>Everything</span> included.",
-      desc: "We kept it simple on purpose. Most small businesses need the same thing: a credible, findable site that stays up to date. One plan covers that for $149 a month, with no setup fee.",
+      desc: "We kept it simple on purpose. Most businesses need the same thing: a credible, findable site that stays up to date. One plan covers that for $149 a month, with no setup fee.",
       cta: "Start your site →",
       emailNote: "Questions first? Email hello@webao.ca",
       card: {
