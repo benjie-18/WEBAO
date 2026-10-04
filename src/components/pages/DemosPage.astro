@@ -10,6 +10,10 @@ const t = useTranslations(locale);
 const paths = localizedPaths[locale];
 const demos = getDemos(locale);
 
+// Demos with published standalone microsites (first wave)
+const liveDemos = new Set(["nora", "mira", "atelier-nord"]);
+const demoHref = (id: string) => `${paths.demos}/${id}`;
+
 // Categories with localized labels but keep base value for filtering
 const categories = baseCategories.map(cat => ({
   value: cat,
@@ -67,7 +71,7 @@ const categories = baseCategories.map(cat => ({
   <div class="shell">
     <div id="demo-grid" class="demo-grid" data-reveal>
       {demos.map((d, i) => (
-        <a href="#" class="demo-card-demo" data-category={d.category} data-search={`${d.name} ${d.category} ${d.city} ${d.tone} ${d.palette} ${d.localizedDescription}`.toLowerCase()} data-reveal style={`--d:${(i%3)*80}ms`} data-demo-id={d.id} data-demo-tone={d.tone} data-demo-palette={d.palette} aria-label={`${t.demos.searchPlaceholder} ${d.name}`}>
+        <a href={liveDemos.has(d.id) ? demoHref(d.id) : "#"} class="demo-card-demo" data-category={d.category} data-search={`${d.name} ${d.category} ${d.city} ${d.tone} ${d.palette} ${d.localizedDescription}`.toLowerCase()} data-reveal style={`--d:${(i%3)*80}ms`} data-demo-id={d.id} data-demo-tone={d.tone} data-demo-palette={d.palette} data-live={liveDemos.has(d.id) ? "true" : undefined} aria-label={`${t.demos.searchPlaceholder} ${d.name}`}>
           <div class="demo-thumb" style={`background:${d.accent};`}>
             <div class="thumb-inner">
               <div class="thumb-bar mono">{d.city.toUpperCase()} · {((t.demos.categories as any)[d.category] ?? d.category).toUpperCase()}</div>
@@ -86,7 +90,7 @@ const categories = baseCategories.map(cat => ({
               <div style="font-weight:750; letter-spacing:-0.02em; font-size:14px;">{d.name}</div>
               <div class="mono" style="font-size:11px; color: var(--muted);">{d.city} · {d.tone}</div>
             </div>
-            <span class="mono" style="font-size:11px; background: var(--paper-2); border:1px solid var(--line); padding:6px 10px; border-radius:99px;">{t.demos.details}</span>
+            <span class="mono" style="font-size:11px; background: var(--paper-2); border:1px solid var(--line); padding:6px 10px; border-radius:99px;">{liveDemos.has(d.id) ? t.demos.viewDemo : t.demos.details}</span>
           </div>
           <span class="corner mono">{t.demos.fictional}</span>
         </a>
@@ -183,6 +187,8 @@ const categories = baseCategories.map(cat => ({
     }
 
     for (const card of cards) {
+      // Published demos navigate to their microsite; others show the "not yet published" toast.
+      if (card.getAttribute('data-live') === 'true') continue;
       card.addEventListener('click', (e) => {
         e.preventDefault();
         const name = card.querySelector('.demo-card-foot div div')?.textContent || 'Demo';
