@@ -1,0 +1,2148 @@
+---
+/**
+ * IntroSequence — "The Signature Handoff"
+ * ----------------------------------------------------------------------------
+ * A cinematic, physics-driven intro for the WEBAO landing page:
+ *
+ *   arrives → flies → hits the barrier → bounces → invites the click →
+ *   breaks through → the site rises into place → the cursor comes to rest
+ *   exactly on "Start your site" with a restrained glow pulse.
+ *
+ * Engineering notes
+ *   • Zero new dependencies — a small internal motion engine
+ *     (`src/lib/intro/{config,engine}.ts`) drives one rAF loop.
+ *   • Every value that matters artistically lives in `INTRO_CONFIG`.
+ *   • Transform/opacity only, GPU composites, no layout thrash:
+ *     the frame reads the CTA rect *first*, then writes transforms.
+ *   • No JS / JS failure ⇒ the intro never appears (the page is untouched).
+ *     `prefers-reduced-motion` ⇒ a static, instant entrance.
+ *   • The final cursor position is measured from the real CTA element, so
+ *     alignment is pixel-true at every viewport size.
+ */
+
+interface Props {
+  /** Element the cursor must finally rest on (defaults to the hero primary CTA). */
+  target?: string;
+}
+
+const { target } = Astro.props as Props;
+const targetSelector = target ?? "";
+---
+
+<!--
+  Boot gate — runs before #main is parsed, so the page is hidden below the
+  fold with zero flash. Without JS (or on any error) no class is added and the
+  site renders completely normally.
+-->
+<script is:inline data-astro-rerun>
+  (function () {
+    var d = document.documentElement;
+    var KEY = "webao.intro.seen.v1";
+    var FAILSAFE = 7000;
+    try {
+      var p = new URLSearchParams(location.search).get("intro");
+      var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var seen = false;
+      try {
+        seen = sessionStorage.getItem(KEY) === "1";
+      } catch (e) {}
+      var hashed = location.hash.length > 1;
+      if (p === "0") return;
+      if (p !== "1" && (seen || hashed || window.__wiStarted)) return;
+      if (window.__wiStarted) return;
+      window.__wiStarted = true;
+      d.classList.add("wi-run");
+      if (reduced) {
+        d.classList.add("wi-static");
+      } else {
+        try {
+          history.scrollRestoration = "manual";
+        } catch (e) {}
+        window.scrollTo(0, 0);
+      }
+      window.__wiFailsafe = setTimeout(function () {
+        if (window.__wiAlive) return;
+        d.classList.remove("wi-run", "wi-static");
+        var r = document.querySelector("[data-webao-intro]");
+        if (r) r.remove();
+      }, FAILSAFE);
+    } catch (e) {
+      d.classList.remove("wi-run", "wi-static");
+    }
+  })();
+</script>
+
+<div class="wi" data-webao-intro data-wi-target={targetSelector} role="region" aria-label="WEBAO introduction">
+  <div class="wi-world" data-wi-world>
+    <!-- Paper bleed: keeps the shake from ever exposing an edge -->
+    <div class="wi-bleed" data-wi-bleed aria-hidden="true"></div>
+
+    <!-- The veil: minimal stage the visitor first sees -->
+    <div class="wi-veil" data-wi-veil aria-hidden="true">
+      <div class="wi-grid" data-wi-grid></div>
+      <div class="wi-vignette"></div>
+      <div class="wi-cross" data-wi-cross></div>
+      <div class="wi-frame">
+        <span class="wi-frame-l">
+          <span class="wi-frame-brand">WEBAO</span>
+          <span class="wi-frame-sep"></span>
+          <span class="wi-frame-mono">WEBAO.CA</span>
+        </span>
+        <span class="wi-frame-r">
+          <span class="wi-dot"></span>
+          <span class="wi-frame-mono">STUDIO — MONTRÉAL</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Motion-blur ghosts (clones are appended in JS) -->
+    <div class="wi-trails" data-wi-trails aria-hidden="true"></div>
+
+    <!-- The pointer -->
+    <div class="wi-cursor" data-wi-cursor aria-hidden="true">
+      <span class="wi-rot" data-wi-rot>
+        <svg class="wi-arrow" viewBox="-31 -12 35 24" xmlns="http://www.w3.org/2000/svg">
+          <g data-wi-arrow>
+            <path
+              class="wi-arrow-path"
+              d="M0 0 L-15 -8 L-15.4 -3.6 L-26 -2.4 Q-28 0 -26 2.4 L-15.4 3.6 L-15 8 Z"
+              vector-effect="non-scaling-stroke"></path>
+            <path class="wi-arrow-accent" d="M-17.4 0 L-24.6 0" vector-effect="non-scaling-stroke"></path>
+          </g>
+        </svg>
+      </span>
+    </div>
+
+    <!-- Halo / pulse ring: contact cue and the final CTA glow -->
+    <div class="wi-fx" data-wi-fx aria-hidden="true">
+      <span class="wi-halo" data-wi-halo></span>
+      <span class="wi-ring" data-wi-ring></span>
+      <span class="wi-ring wi-ring--soft" data-wi-ring-soft></span>
+    </div>
+
+    <!-- The barrier: a studio floor that can be hit and broken -->
+    <div class="wi-floor" data-wi-floor aria-hidden="true">
+      <div class="wi-piece wi-piece--l" data-wi-piece="0"></div>
+      <div class="wi-piece wi-piece--c" data-wi-piece="1"></div>
+      <div class="wi-piece wi-piece--r" data-wi-piece="2"></div>
+      <div class="wi-lip" data-wi-lip>
+        <svg class="wi-lip-svg" viewBox="0 0 1000 46" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <g data-wi-dent-g>
+            <path class="wi-dent-fill" data-wi-dent-fill d=""></path>
+            <path class="wi-dent-line" data-wi-dent-line d="" vector-effect="non-scaling-stroke"></path>
+          </g>
+        </svg>
+      </div>
+      <div class="wi-dent-shade" data-wi-dent-shade></div>
+      <div class="wi-ground-shadow" data-wi-ground-shadow></div>
+      <div class="wi-reflection" data-wi-reflection>
+        <svg class="wi-arrow" viewBox="-31 -12 35 24" xmlns="http://www.w3.org/2000/svg">
+          <path
+            class="wi-arrow-path"
+            d="M0 0 L-15 -8 L-15.4 -3.6 L-26 -2.4 Q-28 0 -26 2.4 L-15.4 3.6 L-15 8 Z"
+            vector-effect="non-scaling-stroke"></path>
+        </svg>
+      </div>
+      <div class="wi-floor-meta">
+        <span class="wi-mono">◇ SURFACE 01</span>
+        <span class="wi-mono" data-wi-floor-hint>◆ ENTER</span>
+      </div>
+    </div>
+
+    <!-- Crack flash lines -->
+    <div class="wi-cracks" data-wi-cracks aria-hidden="true"></div>
+
+    <!-- Debris -->
+    <canvas class="wi-debris" data-wi-debris aria-hidden="true"></canvas>
+  </div>
+
+  <!-- Invitation -->
+  <button class="wi-prompt" data-wi-prompt type="button" tabindex="0">
+    <span class="wi-prompt-dot" aria-hidden="true"></span>
+    <span class="wi-prompt-label" data-wi-prompt-label>Click to enter</span>
+    <kbd class="wi-kbd" data-wi-prompt-key aria-hidden="true">↵</kbd>
+  </button>
+
+  <!-- Reduced-motion fallback: no motion, no cursor, one real action -->
+  <div class="wi-static-panel" data-wi-static>
+    <div class="wi-static-inner">
+      <span class="wi-static-mark" aria-hidden="true">W</span>
+      <p class="wi-static-name">WEBAO</p>
+      <p class="wi-static-sub">Custom websites for small business · $149 CAD / month</p>
+      <button class="wi-static-btn" data-wi-static-btn type="button">Enter site</button>
+    </div>
+  </div>
+
+  <p class="wi-sr" data-wi-live aria-live="polite"></p>
+</div>
+
+<style is:global>
+  /* ==========================================================================
+     WEBAO intro — all selectors are namespaced `wi-*`
+     ========================================================================== */
+
+  /* While the intro owns the screen the page is inert. `.wi-released` is added
+     the instant the site is fully in place, so the real page becomes usable
+     even though the overlay lingers for the final glow. */
+  html.wi-run:not(.wi-released) {
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+  /* The site waits one viewport below the fold until the barrier is broken. */
+  html.wi-run:not(.wi-released):not(.wi-static) #main,
+  html.wi-run:not(.wi-released):not(.wi-static) .site-footer,
+  html.wi-run:not(.wi-released):not(.wi-static) .site-header {
+    transform: translateY(100dvh);
+    will-change: transform;
+  }
+  html.wi-run:not(.wi-static):not(.wi-released),
+  html.wi-run:not(.wi-static):not(.wi-released) * {
+    cursor: none !important;
+  }
+
+  .wi {
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    display: none;
+    isolation: isolate;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    contain: layout paint;
+  }
+  html.wi-run .wi {
+    display: block;
+  }
+
+  .wi-world {
+    position: absolute;
+    inset: 0;
+    transform-origin: 50% 42%;
+  }
+  .wi-world.is-shaking {
+    will-change: transform;
+  }
+
+  /* -- backdrop ------------------------------------------------------------ */
+  .wi-bleed {
+    position: absolute;
+    inset: -28px;
+    background: var(--paper);
+    z-index: 0;
+  }
+
+  .wi-veil {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: var(--paper);
+    opacity: 0;
+    /* The barrier tears open *around the point of impact*: the mask hole grows
+       from the cursor's contact point outward, so the site shows through the
+       break rather than simply fading in. */
+    --wi-spread: calc(var(--wi-open, 0) * 210vmax);
+    -webkit-mask-image: radial-gradient(
+      circle var(--wi-spread) at var(--wi-hx, 50%) var(--wi-hy, 50%),
+      rgba(0, 0, 0, 0) 0 80%,
+      rgba(0, 0, 0, 0.85) 93%,
+      #000 100%
+    );
+    mask-image: radial-gradient(
+      circle var(--wi-spread) at var(--wi-hx, 50%) var(--wi-hy, 50%),
+      rgba(0, 0, 0, 0) 0 80%,
+      rgba(0, 0, 0, 0.85) 93%,
+      #000 100%
+    );
+    will-change: mask-image, opacity;
+  }
+  .wi-veil.is-open {
+    -webkit-mask-image: none;
+    mask-image: none;
+    will-change: opacity;
+  }
+  .wi-grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    background-image: radial-gradient(rgba(10, 15, 28, 0.16) 1px, transparent 1.2px);
+    background-size: 26px 26px;
+    background-position: center;
+    -webkit-mask-image: radial-gradient(120% 95% at 50% 42%, #000 24%, transparent 78%);
+    mask-image: radial-gradient(120% 95% at 50% 42%, #000 24%, transparent 78%);
+  }
+  .wi-vignette {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(130% 100% at 50% 34%, rgba(10, 15, 28, 0) 44%, rgba(10, 15, 28, 0.07) 100%),
+      linear-gradient(180deg, rgba(10, 15, 28, 0.02) 0%, rgba(10, 15, 28, 0) 30%);
+  }
+  .wi-cross {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 15px;
+    height: 15px;
+    margin: -7.5px 0 0 -7.5px;
+    opacity: 0;
+  }
+  .wi-cross::before,
+  .wi-cross::after {
+    content: "";
+    position: absolute;
+    background: rgba(10, 15, 28, 0.22);
+  }
+  .wi-cross::before {
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+  }
+  .wi-cross::after {
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+  }
+
+  .wi-frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 20px clamp(16px, 2.4vw, 30px);
+    opacity: 0;
+    color: var(--ink);
+  }
+  .wi-frame-l,
+  .wi-frame-r {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(10, 15, 28, 0.5);
+  }
+  .wi-frame-brand {
+    font-family: var(--font-sans);
+    font-size: 12.5px;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    text-transform: none;
+    color: var(--ink);
+  }
+  .wi-frame-sep {
+    width: 14px;
+    height: 1px;
+    background: rgba(10, 15, 28, 0.22);
+  }
+  .wi-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 99px;
+    background: var(--accent);
+  }
+
+  /* -- cursor -------------------------------------------------------------- */
+  /* ---- layer order ------------------------------------------------------
+     bleed 0 · veil 1 · halo/fx 22 · barrier 30 · cracks 34 · debris 36 ·
+     motion trail 38 · cursor 40 · prompt 42                                     */
+  .wi-cursor,
+  .wi-reflection {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+    transform-origin: 0 0;
+    will-change: transform;
+  }
+  .wi-cursor {
+    z-index: 40;
+  }
+  .wi-rot {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+    transform-origin: 0 0;
+    will-change: transform;
+  }
+  .wi-arrow {
+    position: absolute;
+    left: calc(-31 * var(--wi-cu, 1px));
+    top: calc(-12 * var(--wi-cu, 1px));
+    width: calc(35 * var(--wi-cu, 1px));
+    height: calc(24 * var(--wi-cu, 1px));
+    /* the global `svg { max-width: 100% }` would collapse it: the anchor span
+       it lives in is intentionally 0×0 */
+    max-width: none;
+    overflow: visible;
+    filter: drop-shadow(0 calc(3 * var(--wi-cs, 1) * 1px) calc(4 * var(--wi-cs, 1) * 1px) rgba(10, 15, 28, 0.3));
+  }
+  .wi-arrow-path {
+    fill: var(--wi-ink, var(--ink));
+    stroke: var(--wi-paper, var(--paper));
+    stroke-width: 1.9;
+    stroke-linejoin: round;
+  }
+  .wi-arrow-accent {
+    stroke: var(--wi-accent, var(--accent));
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    opacity: 0.9;
+  }
+
+  .wi-trails {
+    position: absolute;
+    inset: 0;
+    z-index: 38;
+    pointer-events: none;
+  }
+  .wi-trails .wi-cursor {
+    opacity: 0;
+  }
+
+  /* -- halo + pulse -------------------------------------------------------- */
+  .wi-fx {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+    z-index: 22;
+    will-change: transform;
+    pointer-events: none;
+  }
+  .wi-halo {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: calc(190 * var(--wi-cu, 1px));
+    height: calc(190 * var(--wi-cu, 1px));
+    margin: calc(-95 * var(--wi-cu, 1px)) 0 0 calc(-95 * var(--wi-cu, 1px));
+    border-radius: 999px;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--wi-accent, var(--accent)) 55%, transparent) 0%, transparent 72%);
+    opacity: 0;
+    will-change: opacity, transform;
+    pointer-events: none;
+  }
+  .wi-ring,
+  .wi-ring--soft {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: calc(46 * var(--wi-cu, 1px));
+    height: calc(46 * var(--wi-cu, 1px));
+    margin: calc(-23 * var(--wi-cu, 1px)) 0 0 calc(-23 * var(--wi-cu, 1px));
+    border-radius: 999px;
+    border: 1.5px solid rgba(10, 15, 28, 0.5);
+    opacity: 0;
+    will-change: opacity, transform;
+    pointer-events: none;
+  }
+  .wi-ring--soft {
+    width: calc(64 * var(--wi-cu, 1px));
+    height: calc(64 * var(--wi-cu, 1px));
+    margin: calc(-32 * var(--wi-cu, 1px)) 0 0 calc(-32 * var(--wi-cu, 1px));
+    border-width: 1px;
+    border-color: rgba(255, 59, 48, 0.55);
+  }
+
+  /* -- barrier ------------------------------------------------------------- */
+  .wi-floor {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: var(--wi-floor-h, 72px);
+    z-index: 30;
+    overflow: hidden;
+  }
+  .wi-piece {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, #0a0f1c 0%, #05080f 100%);
+    border-top: 1px solid rgba(248, 245, 239, 0.2);
+    will-change: transform, opacity;
+  }
+  .wi-piece::after {
+    content: "";
+    position: absolute;
+    inset: 1px 0 auto 0;
+    height: 6px;
+    background: linear-gradient(180deg, rgba(248, 245, 239, 0.1), rgba(248, 245, 239, 0));
+  }
+  .wi-piece--l {
+    left: 0;
+    width: 33.34%;
+  }
+  .wi-piece--c {
+    left: 33.33%;
+    width: 33.34%;
+  }
+  .wi-piece--r {
+    left: 66.66%;
+    width: 33.34%;
+  }
+
+  .wi-lip {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -1px;
+    height: var(--wi-lip-h, 46px);
+    pointer-events: none;
+  }
+  .wi-lip-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .wi-dent-fill {
+    fill: #0a0f1c;
+    stroke: none;
+  }
+  .wi-dent-line {
+    fill: none;
+    stroke: rgba(248, 245, 239, 0.24);
+    stroke-width: 1;
+  }
+  .wi-dent-shade {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 340px;
+    height: 34px;
+    margin-left: -170px;
+    background: radial-gradient(60% 120% at 50% 0%, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 70%);
+    opacity: 0;
+    pointer-events: none;
+    will-change: transform, opacity;
+  }
+  .wi-ground-shadow {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 30px;
+    height: 9px;
+    margin: -4px 0 0 -15px;
+    border-radius: 999px;
+    background: radial-gradient(closest-side, rgba(0, 0, 0, 0.62), rgba(0, 0, 0, 0));
+    opacity: 0;
+    pointer-events: none;
+    will-change: transform, opacity;
+  }
+  .wi-reflection {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .wi-reflection .wi-arrow {
+    filter: none;
+  }
+  .wi-reflection .wi-arrow-path {
+    fill: rgba(248, 245, 239, 0.5);
+    stroke: none;
+  }
+  .wi-floor-meta {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 12px;
+    padding: 0 clamp(16px, 2.4vw, 30px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    opacity: 0;
+    color: rgba(248, 245, 239, 0.42);
+    font-size: 10px;
+    pointer-events: none;
+    font-family: var(--font-mono);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .wi-mono {
+    font-family: var(--font-mono);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  /* -- fractures + debris -------------------------------------------------- */
+  .wi-cracks {
+    position: absolute;
+    inset: 0;
+    z-index: 34;
+    pointer-events: none;
+  }
+  .wi-crack {
+    position: absolute;
+    height: 1.5px;
+    background: rgba(10, 15, 28, 0.55);
+    transform-origin: 0 50%;
+    will-change: transform, opacity;
+    border-radius: 2px;
+  }
+  .wi-debris {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    z-index: 36;
+    pointer-events: none;
+  }
+
+  /* -- invitation ---------------------------------------------------------- */
+  .wi-prompt {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 42;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px 8px 11px;
+    border-radius: 999px;
+    border: 1px solid rgba(10, 15, 28, 0.12);
+    background: var(--paper-3);
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    box-shadow: 0 10px 26px rgba(10, 15, 28, 0.12), 0 2px 6px rgba(10, 15, 28, 0.06);
+    opacity: 0;
+    visibility: hidden;
+    transform: translate3d(0, 0, 0);
+    transition: opacity 0.32s var(--ease-out), border-color 0.24s var(--ease-out), box-shadow 0.24s var(--ease-out),
+      visibility 0.32s;
+    will-change: transform, opacity;
+    white-space: nowrap;
+  }
+  .wi-prompt:hover {
+    border-color: rgba(10, 15, 28, 0.28);
+    box-shadow: 0 14px 32px rgba(10, 15, 28, 0.16), 0 2px 6px rgba(10, 15, 28, 0.08);
+  }
+  .wi-prompt.is-live {
+    opacity: 1;
+    visibility: visible;
+  }
+  .wi-prompt-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 99px;
+    background: var(--accent);
+    box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.4);
+  }
+  .wi-prompt.is-live .wi-prompt-dot {
+    animation: wi-dot 2.05s var(--ease-in-out) infinite;
+  }
+  @keyframes wi-dot {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.32);
+    }
+    50% {
+      box-shadow: 0 0 0 5px rgba(255, 59, 48, 0);
+    }
+  }
+  .wi-kbd {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    line-height: 1;
+    padding: 3px 5px;
+    border-radius: 5px;
+    border: 1px solid rgba(10, 15, 28, 0.16);
+    background: rgba(10, 15, 28, 0.04);
+    color: rgba(10, 15, 28, 0.65);
+  }
+  .wi-prompt[data-wi-touch="1"] .wi-kbd {
+    display: none;
+  }
+
+  /* -- reduced motion ------------------------------------------------------ */
+  /* note: the reduced-motion state also lives on <html>, so the panel class
+     must stay distinct — a shared name would apply `display:none` to the root */
+  .wi-static-panel {
+    position: absolute;
+    inset: 0;
+    z-index: 50;
+    display: none;
+    place-items: center;
+    background: var(--paper);
+  }
+  html.wi-static .wi-static-panel {
+    display: grid;
+  }
+  html.wi-static .wi-world,
+  html.wi-static .wi-prompt {
+    display: none;
+  }
+  .wi-static-inner {
+    text-align: center;
+    padding: 24px;
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+  }
+  .wi-static-mark {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background: var(--ink);
+    color: var(--paper);
+    display: grid;
+    place-items: center;
+    font-family: var(--font-display);
+    font-size: 24px;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .wi-static-name {
+    font-family: var(--font-sans);
+    font-weight: 650;
+    font-size: 22px;
+    letter-spacing: -0.03em;
+  }
+  .wi-static-sub {
+    font-size: 13.5px;
+    color: var(--muted);
+    max-width: 30ch;
+    line-height: 1.5;
+  }
+  .wi-static-btn {
+    margin-top: 12px;
+    padding: 12px 20px;
+    border-radius: 999px;
+    border: 0;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+    box-shadow: 0 8px 20px rgba(255, 59, 48, 0.24);
+  }
+  .wi-static-btn:hover {
+    background: var(--accent-hover);
+  }
+
+  /* -- a11y ---------------------------------------------------------------- */
+  .wi-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wi-prompt.is-live .wi-prompt-dot {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  import { INTRO_CONFIG as CFG, type Frac } from "../../lib/intro/config";
+  import {
+    Clock,
+    Debris,
+    EASE,
+    clamp,
+    curveSampler,
+    lerp,
+    mulberry,
+    resolveEase,
+    smoothstep,
+    smoothing,
+    speedProfile,
+    springStep,
+    substep,
+    track,
+  } from "../../lib/intro/engine";
+
+  /* ---------------------------------------------------------------- helpers */
+
+  const r1 = (n: number) => Math.round(n * 10) / 10;
+  const r2 = (n: number) => Math.round(n * 100) / 100;
+  type Vec = { x: number; y: number; vx: number; vy: number };
+
+  /**
+   * Touch detection. `(hover: none)` alone is unreliable (headless browsers and
+   * some desktops report it), so we require an actual touch-capable input.
+   */
+  const coarse = () =>
+    (navigator.maxTouchPoints ?? 0) > 0 || window.matchMedia("(pointer: coarse)").matches;
+
+  /* ------------------------------------------------------------------- boot */
+
+  interface Refs {
+    root: HTMLElement;
+    world: HTMLElement;
+    bleed: HTMLElement;
+    veil: HTMLElement;
+    grid: HTMLElement;
+    cross: HTMLElement | null;
+    frame: HTMLElement;
+    trails: HTMLElement;
+    cursor: HTMLElement;
+    rot: HTMLElement;
+    fx: HTMLElement;
+    halo: HTMLElement;
+    ring: HTMLElement;
+    ringSoft: HTMLElement;
+    floor: HTMLElement;
+    pieces: HTMLElement[];
+    lip: HTMLElement;
+    dentG: SVGGElement;
+    dentFill: SVGPathElement;
+    dentLine: SVGPathElement;
+    dentShade: HTMLElement;
+    groundShadow: HTMLElement;
+    reflection: HTMLElement;
+    meta: HTMLElement;
+    floorHint: HTMLElement;
+    cracks: HTMLElement;
+    debris: HTMLCanvasElement;
+    prompt: HTMLElement;
+    promptLabel: HTMLElement;
+    promptKey: HTMLElement;
+    live: HTMLElement;
+    main: HTMLElement | null;
+    header: HTMLElement | null;
+    footer: HTMLElement | null;
+  }
+
+  const q = <T extends Element = HTMLElement>(root: ParentNode, sel: string) => root.querySelector<T>(sel);
+
+  function boot() {
+    const html = document.documentElement;
+    const root = document.querySelector<HTMLElement>("[data-webao-intro]");
+    if (!root || !html.classList.contains("wi-run")) return;
+    if (root.dataset.wiActive) return;
+    root.dataset.wiActive = "1";
+    (window as unknown as { __wiAlive?: boolean }).__wiAlive = true;
+    clearTimeout((window as unknown as { __wiFailsafe?: number }).__wiFailsafe);
+
+    if (html.classList.contains("wi-static")) startReduced(root);
+    else start(root);
+  }
+
+  /** Removes the intro completely: the page must behave as if it never ran. */
+  function teardown(root: HTMLElement, refs?: { main: HTMLElement | null; header: HTMLElement | null; footer: HTMLElement | null }) {
+    const html = document.documentElement;
+    html.classList.remove("wi-run", "wi-static", "wi-released");
+    if (refs) {
+      for (const el of [refs.main, refs.header, refs.footer]) {
+        if (!el) continue;
+        el.style.transform = "";
+        el.style.willChange = "";
+      }
+    }
+    try {
+      sessionStorage.setItem(CFG.master.sessionKey, "1");
+    } catch {
+      /* storage may be unavailable — the intro simply replays */
+    }
+    try {
+      history.scrollRestoration = "auto";
+    } catch {
+      /* ignore */
+    }
+    root.setAttribute("hidden", "");
+    root.remove();
+  }
+
+  function startReduced(root: HTMLElement) {
+    const btn = q<HTMLButtonElement>(root, "[data-wi-static-btn]");
+    const live = q(root, "[data-wi-live]");
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      const ms = CFG.reduced.fadeMs * 1000;
+      q(root, "[data-wi-static]")?.animate([{ opacity: 1 }, { opacity: 0 }], { duration: ms, easing: "ease-out", fill: "forwards" });
+      window.setTimeout(() => teardown(root), ms + 20);
+    };
+    btn?.addEventListener("click", finish, { once: true });
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
+        e.preventDefault();
+        finish();
+      }
+    };
+    document.addEventListener("keydown", onKey, { once: true });
+    if (live) live.textContent = "Intro (reduced motion). Press Enter to open the site.";
+    btn?.focus({ preventScroll: true });
+  }
+
+  /* ------------------------------------------------------------------ main */
+
+  function start(root: HTMLElement) {
+    const main = document.getElementById("main");
+    const header = document.querySelector<HTMLElement>(".site-header");
+    const footer = document.querySelector<HTMLElement>(".site-footer");
+    const widgets = { main, header, footer };
+
+    const refs: Refs = {
+      root,
+      world: q(root, "[data-wi-world]")!,
+      bleed: q(root, "[data-wi-bleed]")!,
+      veil: q(root, "[data-wi-veil]")!,
+      grid: q(root, "[data-wi-grid]")!,
+      cross: q(root, "[data-wi-cross]"),
+      frame: q(root, ".wi-frame")!,
+      trails: q(root, "[data-wi-trails]")!,
+      cursor: q(root, "[data-wi-cursor]")!,
+      rot: q(root, "[data-wi-rot]")!,
+      fx: q(root, "[data-wi-fx]")!,
+      halo: q(root, "[data-wi-halo]")!,
+      ring: q(root, "[data-wi-ring]")!,
+      ringSoft: q(root, "[data-wi-ring-soft]")!,
+      floor: q(root, "[data-wi-floor]")!,
+      pieces: Array.from(root.querySelectorAll<HTMLElement>("[data-wi-piece]")),
+      lip: q(root, "[data-wi-lip]")!,
+      dentG: q<SVGGElement>(root, "[data-wi-dent-g]")!,
+      dentFill: q<SVGPathElement>(root, "[data-wi-dent-fill]")!,
+      dentLine: q<SVGPathElement>(root, "[data-wi-dent-line]")!,
+      dentShade: q(root, "[data-wi-dent-shade]")!,
+      groundShadow: q(root, "[data-wi-ground-shadow]")!,
+      reflection: q(root, "[data-wi-reflection]")!,
+      meta: q(root, "[data-wi-floor] .wi-floor-meta")!,
+      floorHint: q(root, "[data-wi-floor-hint]")!,
+      cracks: q(root, "[data-wi-cracks]")!,
+      debris: q<HTMLCanvasElement>(root, "[data-wi-debris]")!,
+      prompt: q(root, "[data-wi-prompt]")!,
+      promptLabel: q(root, "[data-wi-prompt-label]")!,
+      promptKey: q(root, "[data-wi-prompt-key]")!,
+      live: q(root, "[data-wi-live]")!,
+      main,
+      header,
+      footer,
+    };
+
+    const clock = new Clock();
+    clock.scale = CFG.master.timeScale;
+
+    const touch = coarse();
+    const rng = mulberry(20260214);
+    const isSmallPerf = Math.min(window.innerWidth, window.innerHeight) < 760;
+    const debrisScale = isSmallPerf ? 0.5 : 1;
+
+    const debris = new Debris(refs.debris, CFG.palette.debris);
+    const ref = curveSampler(CFG.flight.path as unknown as { x: number; y: number }[], CFG.flight.pathTension);
+    const profile = speedProfile(CFG.flight.speedProfile as unknown as readonly (readonly [number, number])[]);
+    const riseEase = speedProfile(CFG.handoff.rise.profile as unknown as readonly (readonly [number, number])[]);
+
+    /* --------------------------------------------------------------- layout */
+
+    let vw = 1;
+    let vh = 1;
+    let floorH = 72;
+    let surfaceY = 0;
+    let cursorScale = 1;
+    let gravity = CFG.bounce.gravity;
+    let currentTarget = "";
+
+    function measure() {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      vw = w;
+      vh = h;
+      floorH = clamp(h * CFG.layout.floorHeight.ideal, CFG.layout.floorHeight.min, CFG.layout.floorHeight.max);
+      surfaceY = h - floorH;
+      cursorScale = clamp(Math.min(w / 1440, h / 900), CFG.cursor.scale.min, CFG.cursor.scale.max);
+      gravity = CFG.bounce.gravity * clamp(h / 900, 0.62, 1.25);
+      root.style.setProperty("--wi-cs", String(r2(cursorScale) || 1));
+      root.style.setProperty("--wi-lip-h", `${r1(CFG.layout.lipHeight)}px`);
+      root.style.setProperty("--wi-cu", `calc(${r2(cursorScale)} * 1px)`);
+      root.style.setProperty("--wi-floor-h", `${r1(floorH)}px`);
+      debris.resize(w, Math.max(surfaceY, 1), surfaceY);
+      refs.debris.style.height = `${r1(surfaceY)}px`;
+      if (!currentTarget) resolveTarget();
+    }
+
+    /** The real CTA — never a hard-coded coordinate. */
+    let targetEl: HTMLElement | null = null;
+    function resolveTarget() {
+      const custom = root.dataset.wiTarget?.trim();
+      // an explicit target always wins; the hero CTA is only the default
+      const sel = custom && custom.length ? custom : CFG.handoff.cta.selector;
+      targetEl = document.querySelector<HTMLElement>(sel);
+      if (!targetEl && sel !== CFG.handoff.cta.selector) {
+        targetEl = document.querySelector<HTMLElement>(CFG.handoff.cta.selector);
+      }
+      currentTarget = sel;
+    }
+
+    function targetPoint(): { x: number; y: number } {
+      if (!targetEl) return { x: vw * 0.5, y: vh * 0.5 };
+      const r = targetEl.getBoundingClientRect();
+      return {
+        x: r.left + r.width * CFG.handoff.cta.anchor.x,
+        y: r.top + r.height * CFG.handoff.cta.anchor.y,
+      };
+    }
+
+    /* ----------------------------------------------------------------- state */
+
+    /** Last contact point with the barrier (drives the tear + debugging). */
+    let impactX = 0.5;
+    let impactY = 0;
+
+    // while the site sits below the fold it is also inert: nothing hidden from
+    // sight can be focused, clicked or scrolled into
+    for (const el of [main, header, footer]) {
+      if (el && "inert" in el) el.inert = true;
+    }
+
+    const cur: Vec = { x: 0, y: 0, vx: 0, vy: 0 };
+    let theta = CFG.cursor.restAngle;
+    let stretch = 1;
+    let squashAlong = 1;
+    let squashAcross = 1;
+    let shakeAmp = 0;
+    let shakeT = 0;
+    let shakeFreq: number = CFG.impact.shake.freq;
+    let shakeRot = 0;
+    let dentDepth = 0;
+    let dentTarget = 0;
+    let dentX = 0;
+    let dentSigma = 0.09;
+    let dented = false;
+    let cursorAlpha = 1;
+    let framing = false;
+    /** Current translateY applied to the page by the intro (px). */
+    let pageShift = 0;
+    let hole = 0;
+    let flex = 0;
+    let flexTarget = 0;
+    let riseP = 0;
+    let phase: Phase = "compose";
+    let invited = false;
+    let clicked = false;
+    let captureX = 0;
+    let captureY = 0;
+    const wobble: Vec = { x: 0, y: 0, vx: 0, vy: 0 };
+    let trailLevel = -1;
+    let flightTween: { kill: () => void } | null = null;
+    let stopFlight: (() => void) | null = null;
+    let landed = false;
+    let history: { t: number; x: number; y: number; th: number; sx: number; sy: number }[] = [];
+    const ghosts: HTMLElement[] = [];
+    let targetVel = { x: 0, y: 0 };
+    let lastTarget = { x: 0, y: 0 };
+
+    type Phase =
+      | "compose"
+      | "swoop"
+      | "bounce"
+      | "settle"
+      | "invite"
+      | "press"
+      | "plunge"
+      | "breach"
+      | "rise"
+      | "rest"
+      | "done";
+
+    /* ------------------------------------------------------- pointer follow */
+
+    const pointer = { x: 0, y: 0, seen: false };
+    const onPointerMove = (e: PointerEvent) => {
+      if (touch) return;
+      pointer.x = e.clientX;
+      pointer.y = e.clientY;
+      pointer.seen = true;
+    };
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
+
+    /* --------------------------------------------------------- ghost clones */
+
+    const leadArrow = q(root, "[data-wi-rot] .wi-arrow");
+    if (leadArrow) {
+      for (let i = 0; i < CFG.cursor.trail.delaysMs.length; i++) {
+        const wrap = document.createElement("div");
+        wrap.className = "wi-cursor";
+        const rot = document.createElement("span");
+        rot.className = "wi-rot";
+        rot.appendChild(leadArrow.cloneNode(true));
+        wrap.appendChild(rot);
+        refs.trails.appendChild(wrap);
+        ghosts.push(wrap);
+      }
+    }
+
+    /* ------------------------------------------------------------ the dent */
+
+    function dentPath(): { fill: string; line: string } {
+      const pts: string[] = [];
+      const span = 420;
+      const steps = 40;
+      for (let i = 0; i <= steps; i++) {
+        const x = -span + (i / steps) * span * 2;
+        const y = Math.exp(-Math.pow(x / (dentSigma * 1000), 2));
+        pts.push(`${r2(x)},${r2(y)}`);
+      }
+      const line = `M${pts.join(" L")}`;
+      const fill = `${line} L${span},1.4 L${-span},1.4 Z`;
+      return { fill, line };
+    }
+    {
+      const d = dentPath();
+      refs.dentFill.setAttribute("d", d.fill);
+      refs.dentLine.setAttribute("d", d.line);
+      refs.dentG.setAttribute("transform", "translate(500,0) scale(1,0)");
+    }
+
+    /* --------------------------------------------------------------- timeline */
+
+    function resetStreaks() {
+      const line = refs.cracks.querySelectorAll<HTMLElement>(".wi-crack");
+      line.forEach((c) => c.remove());
+    }
+
+    /** Move the whole stage for a beat — the impact must be felt, not seen. */
+    function kick(amp: number, ms: number, freq: number, rot: number) {
+      shakeAmp = Math.max(shakeAmp, amp);
+      shakeT = 0;
+      shakeFreq = freq;
+      shakeRot = Math.max(shakeRot, rot);
+      clock.tween({
+        ms,
+        ease: EASE.outQuart,
+        onUpdate: (v) => {
+          shakeAmp = Math.max(shakeAmp * (1 - v * 0.999), 0);
+          shakeRot *= 1 - v * 0.02;
+        },
+      });
+    }
+
+    function dent(depth: number, sigma: number, x: number) {
+      dentSigma = sigma;
+      dentX = x;
+      dentDepth = Math.max(dentDepth, depth);
+      dentTarget = depth;
+    }
+
+    function buildCracks(x: number, y: number, strength: number) {
+      resetStreaks();
+      const count = CFG.breach.fracture.cracks;
+      for (let i = 0; i < count; i++) {
+        const dir = i % 2 === 0 ? -1 : 1;
+        const spread = lerp(6, 26, rng());
+        const len = vw * lerp(0.16, 0.42, rng());
+        const el = document.createElement("div");
+        el.className = "wi-crack";
+        el.style.left = `${r1(x)}px`;
+        el.style.top = `${r1(y)}px`;
+        el.style.width = `${r1(len)}px`;
+        el.style.transform = `rotate(${r1(dir * spread)}deg) scaleX(0)`;
+        el.style.opacity = String(clamp(strength, 0.35, 1));
+        refs.cracks.appendChild(el);
+        clock.tween({
+          delay: i * 0.012,
+          ms: CFG.breach.fracture.crackMs,
+          ease: EASE.outQuint,
+          onUpdate: (v) => {
+            el.style.transform = `rotate(${r1(dir * spread)}deg) scaleX(${r2(v)})`;
+          },
+        });
+        clock.tween({
+          delay: 0.12 + i * 0.012,
+          ms: 320,
+          ease: EASE.outCubic,
+          onUpdate: (v) => {
+            el.style.opacity = String(clamp(strength, 0.35, 1) * (1 - v));
+          },
+          onComplete: () => el.remove(),
+        });
+      }
+    }
+
+    /* ------------------------------------------------------------ the phases */
+
+    function begin() {
+      measure();
+      // palette + caption copy come from INTRO_CONFIG, so art direction lives
+      // in exactly one file
+      root.style.setProperty("--wi-ink", CFG.palette.ink);
+      root.style.setProperty("--wi-paper", CFG.palette.paper);
+      root.style.setProperty("--wi-accent", CFG.palette.accent);
+      const brand = refs.root.querySelector<HTMLElement>(".wi-frame-brand");
+      const left = refs.root.querySelector<HTMLElement>(".wi-frame-sep + .wi-frame-mono");
+      const right = refs.root.querySelector<HTMLElement>(".wi-frame-r .wi-frame-mono");
+      const name = CFG.layout.caption;
+      if (brand) brand.textContent = name.brand;
+      if (left) left.textContent = name.left;
+      if (right) right.textContent = name.right;
+      cur.x = vw * -0.14;
+      cur.y = vh * -0.26;
+      cur.vx = vw * CFG.flight.chase.entryVelocity.x;
+      cur.vy = vh * CFG.flight.chase.entryVelocity.y;
+      theta = Math.atan2(cur.vy, cur.vx) * (180 / Math.PI);
+
+      if (touch) {
+        refs.promptLabel.textContent = CFG.invite.promptText.touch;
+        refs.promptKey.style.display = "none";
+        refs.prompt.dataset.touch = "1";
+        refs.floorHint.textContent = "◆ TAP";
+      } else {
+        refs.promptLabel.textContent = CFG.invite.promptText.pointer;
+        refs.promptKey.textContent = "↵";
+      }
+      refs.live.textContent = `Intro: ${touch ? "tap" : "click or press Enter"} to enter.`;
+
+      /* --- composition reveal ------------------------------------------- */
+      clock.tween({ ms: 380, ease: EASE.outCubic, onUpdate: (v) => (refs.veil.style.opacity = String(r2(v))) });
+      clock.tween({ delay: 0.06, ms: 520, ease: EASE.outCubic, onUpdate: (v) => (refs.grid.style.opacity = String(r2(v * 0.62))) });
+      clock.tween({ delay: 0.04, ms: 460, ease: EASE.outCubic, onUpdate: (v) => (refs.frame.style.opacity = String(r2(v))) });
+      clock.tween({
+        delay: 0.1,
+        ms: 520,
+        ease: EASE.outQuint,
+        onUpdate: (v) => {
+          refs.floor.style.opacity = String(r2(v));
+          refs.floor.style.transform = `translateY(${r1((1 - v) * 26)}px)`;
+          refs.meta.style.opacity = String(r2(v * 0.9));
+        },
+        onComplete: () => {
+          refs.floor.style.transform = "";
+        },
+      });
+      if (CFG.layout.crosshair && refs.cross) {
+        clock.tween({ delay: 0.18, ms: 600, ease: EASE.outCubic, onUpdate: (v) => (refs.cross!.style.opacity = String(r2(v * 0.9))) });
+      }
+
+      /* --- the flight ---------------------------------------------------- */
+      // A physical chaser follows an authored curve, integrated in fixed
+      // substeps so the dive, the corners and the slam land the same way on
+      // every display. (No tween: the path is time-driven, not value-driven.)
+      const entry = Math.min(460, 240 + vh * 0.12) / 1000;
+      clock.after(Math.max(entry, 0.22), () => {
+        phase = "swoop";
+        let elapsed = 0;
+        const un = clock.onFrame((dt) => {
+          if (phase !== "swoop") return;
+          substep(dt, (h) => {
+            elapsed += h;
+            const v = clamp(elapsed / CFG.flight.duration, 0, 1);
+            const u = profile(v);
+            const p = ref(u) as Frac;
+            const ahead = ref(Math.min(1, u + 0.012)) as Frac;
+            const span = CFG.flight.duration * 0.012;
+            const tvx = ((ahead.x - p.x) * vw) / span;
+            const tvy = ((ahead.y - p.y) * vh) / span;
+            const speed = track(
+              cur,
+              p.x * vw,
+              p.y * vh,
+              tvx,
+              tvy,
+              CFG.flight.chase.stiffness,
+              CFG.flight.chase.damping,
+              CFG.flight.chase.maxSpeed,
+              h
+            );
+            if (cur.y >= surfaceY && cur.vy > 0) {
+              hitBarrier(speed);
+              return false;
+            }
+            return true;
+          });
+        });
+        stopFlight = un;
+        if (refs.cross) {
+          clock.tween({ ms: 420, ease: EASE.outCubic, onUpdate: (v) => (refs.cross!.style.opacity = String(r2((1 - v) * 0.9))) });
+        }
+      });
+
+      /* --- invitation safety net (never auto-advances the story) ---------- */
+      clock.after(4.2, () => {
+        if (!invited && phase === "settle") invite();
+      });
+    }
+
+    /** IMPACT — squash, shake, dent, shock ring, debris, then the bounce. */
+    function hitBarrier(speedAtHit: number) {
+      if (phase === "bounce") return;
+      stopFlight?.();
+      stopFlight = null;
+      flightTween?.kill();
+      flightTween = null;
+
+      // Keep the contact point: the pointer's own landing spot is the story.
+      const ix = clamp(cur.x, vw * 0.2, vw * 0.8);
+      impactX = ix;
+      impactY = surfaceY;
+      cur.x = ix;
+      cur.y = surfaceY;
+
+      const rest = CFG.impact.restitution;
+      const bounceV = Math.abs(cur.vy) * rest;
+      cur.vy = -bounceV;
+      // tangential loss off a solid surface + the pull back to the settle lane
+      cur.vx *= CFG.impact.deflection;
+
+      const s = clamp(speedAtHit / 2600, 0.45, 1.5);
+      debris.burst(ix, surfaceY, Math.round(CFG.impact.debris.count * s * debrisScale), {
+        speed: [CFG.impact.debris.speed[0] * s, CFG.impact.debris.speed[1] * s],
+        spreadDeg: CFG.impact.debris.spreadDeg,
+        lifeMs: CFG.impact.debris.lifeMs,
+        size: CFG.impact.debris.size,
+      });
+
+      kick(CFG.impact.shake.amp * s, CFG.impact.shake.ms, CFG.impact.shake.freq, CFG.impact.shake.rotDeg * s);
+      dent(CFG.impact.dent.depth * s, CFG.impact.dent.sigma, ix);
+      squashAlong = CFG.impact.squash.along;
+      squashAcross = CFG.impact.squash.across;
+      clock.tween({
+        ms: CFG.impact.squash.recoverMs,
+        ease: EASE.outCubic,
+        onUpdate: (v) => {
+          squashAlong = lerp(squashAlong, 1, v);
+          squashAcross = lerp(squashAcross, 1, v);
+        },
+      });
+
+      shockRing(ix, surfaceY, CFG.impact.shock.width * vw * s, CFG.impact.shock.ms, CFG.impact.shock.alpha);
+      refs.dentShade.style.opacity = String(CFG.impact.flash);
+      clock.tween({
+        ms: 200,
+        ease: EASE.outCubic,
+        onUpdate: (v) => {
+          refs.dentShade.style.opacity = String(r2(CFG.impact.flash * (1 - v)));
+        },
+      });
+
+      /* the rebound: real gravity, one small second tap, then the invitation */
+      phase = "bounce";
+      landed = false;
+      const arcTime = (2 * Math.abs(bounceV)) / gravity;
+      clock.after(clamp(arcTime * CFG.bounce.arcHold, CFG.bounce.arcMin, CFG.bounce.arcMax), () => {
+        if (phase !== "bounce") return;
+        phase = "settle";
+        clock.after(CFG.bounce.settleHold, () => {
+          if (!invited) invite();
+        });
+      });
+    }
+
+    function shockRing(x: number, y: number, width: number, ms: number, alpha: number) {
+      const el = document.createElement("div");
+      el.className = "wi-crack";
+      el.style.left = `${r1(x - width / 2)}px`;
+      el.style.top = `${r1(y - 1)}px`;
+      el.style.width = `${r1(width)}px`;
+      el.style.height = "2px";
+      el.style.borderRadius = "50%";
+      el.style.background = "rgba(248,245,239,.5)";
+      refs.cracks.appendChild(el);
+      clock.tween({
+        ms,
+        ease: EASE.outQuart,
+        onUpdate: (v) => {
+          const s = lerp(0.35, 1, v);
+          el.style.transform = `scale(${r2(s)}, ${r2(s * 0.9)})`;
+          el.style.opacity = String(r2(alpha * (1 - v)));
+        },
+        onComplete: () => el.remove(),
+      });
+    }
+
+    /* -------------------------------------------------------------- invitation */
+
+    function invite() {
+      if (invited) return;
+      invited = true;
+      phase = "invite";
+      refs.prompt.classList.add("is-live");
+
+      if (clicked) {
+        // the visitor already asked to come in — honour it immediately
+        clock.after(0.12, plunge);
+        return;
+      }
+      // restrained interaction cue: one wide breath + two thin rings
+      clock.tween({
+        delay: CFG.invite.promptDelay,
+        ms: CFG.invite.promptFade * 1000,
+        ease: EASE.outCubic,
+        onUpdate: (v) => {
+          refs.prompt.style.opacity = String(r2(v));
+        },
+      });
+      const startPulse = () => {
+        for (let i = 0; i < CFG.invite.pulse.loops; i++) {
+          clock.tween({
+            delay: i * (CFG.invite.pulse.periodMs / 1000),
+            ms: CFG.invite.pulse.periodMs * 0.72,
+            ease: EASE.outQuart,
+            onUpdate: (v) => {
+              if (phase !== "invite") return;
+              refs.ring.style.transform = `scale(${r2(lerp(0.42, CFG.invite.pulse.maxScale, v))})`;
+              refs.ring.style.opacity = String(r2(CFG.invite.pulse.alpha * (1 - v)));
+            },
+          });
+        }
+      };
+      clock.after(CFG.invite.promptDelay + 0.14, startPulse);
+
+      // slow halo breath
+      clock.onFrame((_dt, t) => {
+        if (phase !== "invite" && phase !== "settle") return;
+        const k = 0.5 - 0.5 * Math.cos(((t % (CFG.invite.halo.periodMs / 1000)) / (CFG.invite.halo.periodMs / 1000)) * Math.PI * 2);
+        refs.halo.style.opacity = String(r2(lerp(CFG.invite.halo.min, CFG.invite.halo.max, k)));
+        refs.halo.style.transform = `scale(${r2(lerp(0.94, 1.06, k))})`;
+      });
+    }
+
+    /* ---------------------------------------------------------------- the break */
+
+    function interact() {
+      if (!invited || phase !== "invite") {
+        // early interaction: rush the remaining story rather than freezing it
+        if (phase === "swoop" || phase === "bounce" || phase === "settle" || phase === "compose") {
+          clicked = true;
+          clock.scale = CFG.master.timeScale * CFG.master.rushScale;
+        }
+        return;
+      }
+      clicked = true;
+      press();
+    }
+
+    function press() {
+      phase = "press";
+      refs.prompt.classList.remove("is-live");
+      refs.prompt.style.opacity = "0";
+      refs.halo.style.opacity = "0";
+      refs.ring.style.opacity = "0";
+      squashAlong = 0.86;
+      squashAcross = 1.1;
+      clock.tween({
+        ms: CFG.breach.press * 1000,
+        ease: EASE.outCubic,
+        onUpdate: (v) => {
+          squashAlong = lerp(squashAlong, 1, v);
+          squashAcross = lerp(squashAcross, 1, v);
+        },
+      });
+      // the barrier tenses for a beat before it gives
+      kick(3.2, 220, 30, 0.08);
+      clock.tween({
+        ms: CFG.breach.press * 1000,
+        ease: EASE.inOutSine,
+        onUpdate: (v) => {
+          refs.floor.style.transform = `translateY(${r1(Math.sin(v * Math.PI * 2) * 1.6)}px)`;
+        },
+        onComplete: () => {
+          refs.floor.style.transform = "";
+        },
+      });
+      clock.after(CFG.breach.press, plunge);
+    }
+
+    function plunge() {
+      if (phase === "plunge" || phase === "breach") return;
+      phase = "plunge";
+      // break where the visitor left the pointer — clamped to a good composition
+      const px = clamp(cur.x, vw * 0.22, vw * 0.78);
+      const py = surfaceY + vh * 0.34;
+      const un = clock.onFrame((dt) => {
+        if (phase !== "plunge") return;
+        let sp = 0;
+        substep(dt, (h) => {
+          sp = track(cur, px, py, 0, 0, CFG.breach.plunge.stiffness, CFG.breach.plunge.damping, CFG.breach.plunge.maxSpeed, h);
+          if (cur.y >= surfaceY && cur.vy > 0) {
+            cur.y = surfaceY;
+            return false;
+          }
+          return true;
+        });
+        if (cur.y >= surfaceY && cur.vy > 0) {
+          un();
+          breach(px, sp);
+        }
+      });
+    }
+
+    function breach(x: number, speed: number) {
+      if (phase === "breach" || phase === "rise") return;
+      phase = "breach";
+      const y = surfaceY;
+      impactX = x;
+      impactY = y;
+
+      const strength = clamp(speed / 2400, 0.6, 1.4);
+
+      /* 1 — the barrier fractures around the point of impact */
+      const marks: number[] = [];
+      for (let i = 0; i <= CFG.breach.fracture.pieces; i++) {
+        marks.push(clamp((i / CFG.breach.fracture.pieces + (i > 0 && i < CFG.breach.fracture.pieces ? (rng() - 0.5) * 0.12 : 0)) * 100, 0, 100));
+      }
+      refs.pieces.forEach((piece, i) => {
+        const localX = clamp(((x / vw) * 100 - marks[i]) / (marks[i + 1] - marks[i]), 0.06, 0.94);
+        const j = CFG.breach.fracture.jitter;
+        const j1 = j * (rng() - 0.5) * 2;
+        const j2 = j * (rng() - 0.5) * 2;
+        const poly =
+          i === 0
+            ? [[0, 0], [localX * 100, 0], [clamp(localX * 100 + j1, 20, 100), 34], [clamp(localX * 100 + j2, 10, 100), 100], [0, 100]]
+            : i === 1
+              ? [[0, 0], [localX * 100, 0], [clamp(localX * 100 + j1, 8, 100), 30], [clamp(localX * 100 + j2 * 1.6, 4, 100), 100], [clamp(-j2 * 6, 0, 40), 100], [0, 42]]
+              : [[clamp(localX * 100 + j1, 0, 92), 0], [100, 0], [100, 100], [clamp(localX * 100 + j2, 0, 96), 100], [clamp(localX * 100 - 5, 0, 90), 40]];
+        piece.style.clipPath = `polygon(${poly.map(([a, b]) => `${r1(a)}% ${r1(b)}%`).join(", ")})`;
+        piece.style.transformOrigin = i === 0 ? "100% 0%" : i === 1 ? `${r1(localX * 100)}% 0%` : "0% 0%";
+        const dir = i === 0 ? -1 : i === 1 ? 0.35 : 1;
+        const d = CFG.breach.fracture.drift;
+        const dx = vw * d.x * dir * strength;
+        const dy = floorH * d.y * (i === 1 ? 1.4 : 1);
+        const rot = d.rot * dir * strength;
+        clock.tween({
+          ms: CFG.breach.fracture.pieceMs,
+          ease: EASE.inQuart,
+          onUpdate: (v) => {
+            piece.style.transform = `translate3d(${r1(dx * v)}px, ${r1(dy * v)}px, 0) rotate(${r1(rot * v)}deg)`;
+            piece.style.opacity = String(r2(1 - EASE.inCubic(v) * 0.98));
+          },
+        });
+      });
+      refs.lip.style.opacity = "0";
+      refs.meta.style.opacity = "0";
+
+      /* 2 — crack flash + debris + shake */
+      buildCracks(x, y, strength);
+      debris.burst(x, y, Math.round(CFG.breach.debris.count * strength * debrisScale), {
+        speed: [CFG.breach.debris.speed[0] * strength, CFG.breach.debris.speed[1] * strength],
+        spreadDeg: CFG.breach.debris.spreadDeg,
+        lifeMs: CFG.breach.debris.lifeMs,
+        size: CFG.breach.debris.size,
+      });
+      kick(CFG.breach.shake.amp * strength, CFG.breach.shake.ms, CFG.breach.shake.freq, CFG.breach.shake.rotDeg * strength);
+      dent(CFG.impact.dent.depth * strength, CFG.impact.dent.sigma, x);
+      shockRing(x, y, vw * 0.6 * strength, 620, 0.5);
+
+      /* 3 — the veil tears open from the point of impact */
+      refs.bleed.style.opacity = "0";
+      root.style.setProperty("--wi-hx", `${r2(clamp((x / Math.max(vw, 1)) * 100, 0, 100))}%`);
+      root.style.setProperty("--wi-hy", `${r2(clamp((impactY / Math.max(vh, 1)) * 100, 0, 100))}%`);
+      clock.tween({
+        ms: CFG.breach.hole.ms,
+        ease: CFG.breach.hole.ease,
+        onUpdate: (v) => {
+          hole = clamp(v * CFG.breach.hole.overshoot, 0, 1);
+          root.style.setProperty("--wi-open", String(r2(hole)));
+        },
+        onComplete: () => refs.veil.classList.add("is-open"),
+      });
+      // the surface flexes under the punch and springs back
+      flexTarget = CFG.breach.flex.y;
+      clock.tween({
+        ms: CFG.breach.flex.ms,
+        ease: EASE.outCubic,
+        onUpdate: (v) => {
+          flex = flexTarget * (1 - v);
+          refs.veil.style.transform = `translate3d(0, ${r1(flex)}px, 0)`;
+        },
+        onComplete: () => {
+          refs.veil.style.transform = "";
+        },
+      });
+
+      if (CFG.handoff.glow.alpha > 0) {
+        refs.halo.style.opacity = "0.08";
+      }
+
+      /* 4 — let the fracture read, then bring the site up through the break */
+      clock.after(CFG.breach.hold, rise);
+    }
+
+    /* ----------------------------------------------------------- the handoff */
+
+    function rise() {
+      phase = "rise";
+      const from = vh;
+      const dur = CFG.handoff.rise.duration;
+      const veilFrom = CFG.handoff.rise.veil[0];
+      const veilTo = CFG.handoff.rise.veil[1];
+
+      // --- Capture ---------------------------------------------------------
+      // From here on the pointer is *attached to the page*: we remember where
+      // it sits relative to the real CTA and shrink that offset to zero as the
+      // site rises. The residual dive velocity becomes a damped wobble, so the
+      // motion still carries its weight but can never run away off-screen.
+      const tp0 = targetPoint();
+      captureX = cur.x - tp0.x;
+      captureY = cur.y - tp0.y;
+      wobble.x = 0;
+      wobble.y = 0;
+      wobble.vx = clamp(cur.vx, -1400, 1400) * 0.32;
+      wobble.vy = clamp(cur.vy, -1400, 1400) * 0.32;
+
+      let framed = false;
+      clock.tween({
+        ms: dur * 1000,
+        ease: "linear",
+        onUpdate: (v) => {
+          const p = riseEase(v);
+          riseP = p;
+          // once the site is mostly visible, glide it until the CTA is framed —
+          // the captured cursor rides along, so the handoff stays aligned
+          if (!framed && p > 0.5) {
+            framed = true;
+            framing = frameCta();
+          }
+          const mainY = from * (1 - p);
+          pageShift = mainY;
+          if (refs.main) refs.main.style.transform = `translate3d(0, ${r1(mainY)}px, 0)`;
+          if (refs.footer) refs.footer.style.transform = `translate3d(0, ${r1(mainY)}px, 0)`;
+          const hp = clamp(p * CFG.handoff.rise.headerLead, 0, 1);
+          if (refs.header) refs.header.style.transform = `translate3d(0, ${r1(from * (1 - hp))}px, 0)`;
+          const veilOut = clamp((p - veilFrom) / Math.max(veilTo - veilFrom, 0.001), 0, 1);
+          refs.veil.style.opacity = String(r2(1 - veilOut));
+            },
+        onComplete: () => {
+          if (refs.main) refs.main.style.transform = "";
+          if (refs.footer) refs.footer.style.transform = "";
+          if (refs.header) refs.header.style.transform = "";
+          pageShift = 0;
+          // the site is fully in place: release the page (scroll, clicks and
+          // the real cursor all come back) while the overlay finishes its glow
+          html.classList.add("wi-released");
+          try {
+            sessionStorage.setItem(CFG.master.sessionKey, "1");
+          } catch {
+            /* ignore */
+          }
+          refs.root.style.pointerEvents = "none";
+          for (const el of [refs.main, refs.header, refs.footer]) {
+            if (el && "inert" in el) el.inert = false;
+          }
+          const waitFor = framing ? Math.max(0.1, CFG.handoff.scroll.ms / 1000 - CFG.handoff.rise.duration * 0.5 + 0.12) : 0.1;
+          clock.after(waitFor, () => {
+            phase = "rest";
+            glowPulse();
+          });
+        },
+      });
+    }
+
+    /**
+     * Brings the CTA into view if the viewport is too short to show it. Driven by
+     * our own clock (never `scrollTo({behavior:'smooth'})`), interpolated by the
+     * frame loop, and the cursor stays locked to the button the whole way.
+     */
+    function frameCta(): boolean {
+      if (!targetEl) return false;
+      const band = CFG.handoff.scroll.band;
+      // measure through the intro's own page offset, so the decision is based
+      // on where the button will sit once the page is at rest
+      const r = targetEl.getBoundingClientRect();
+      const settledY = r.top - pageShift + r.height * CFG.handoff.cta.anchor.y;
+      let delta = 0;
+      if (settledY > vh * band[1]) delta = settledY - vh * CFG.handoff.scroll.focus;
+      else if (settledY < vh * band[0]) delta = settledY - vh * CFG.handoff.scroll.focus * 0.7;
+      if (Math.abs(delta) < CFG.handoff.scroll.min) return false;
+      const max = Math.max(document.documentElement.scrollHeight - vh, 0);
+      const from = window.scrollY;
+      const to = clamp(from + delta, 0, max);
+      if (Math.abs(to - from) < CFG.handoff.scroll.min) return false;
+
+      // `html { scroll-behavior: smooth }` would fight a driven scroll
+      const prev = html.style.scrollBehavior;
+      html.style.scrollBehavior = "auto";
+      clock.tween({
+        ms: CFG.handoff.scroll.ms,
+        ease: resolveEase(CFG.handoff.scroll.ease),
+        onUpdate: (v) => window.scrollTo(0, from + (to - from) * v),
+        onComplete: () => {
+          html.style.scrollBehavior = prev;
+        },
+      });
+      return true;
+    }
+
+    /** Very restrained: two slow pulses that hand attention to the button. */
+    function glowPulse() {
+      const g = CFG.handoff.glow;
+      const loops = Math.max(1, Math.round(CFG.handoff.restMs / g.periodMs));
+      // landing acknowledgement
+      clock.tween({
+        ms: CFG.handoff.cta.landing.ms,
+        ease: EASE.outCubic,
+        onUpdate: (v) => {
+          const dip = lerp(CFG.handoff.cta.landing.dip, 1, v);
+          squashAlong = dip;
+          squashAcross = dip;
+        },
+      });
+      for (let i = 0; i < loops; i++) {
+        const delay = i * (g.periodMs / 1000);
+        clock.tween({
+          delay,
+          ms: g.periodMs,
+          ease: EASE.outCubic,
+          onUpdate: (v) => {
+            if (phase !== "rest") return;
+            const bell = Math.sin(Math.min(v, 1) * Math.PI);
+            refs.halo.style.opacity = String(r2(g.alpha * bell));
+            refs.halo.style.transform = `scale(${r2(lerp(0.92, 1.14, v))})`;
+          },
+        });
+        clock.tween({
+          delay: delay + 0.18,
+          ms: g.periodMs * 0.66,
+          ease: EASE.outQuart,
+          onUpdate: (v) => {
+            if (phase !== "rest") return;
+            refs.ringSoft.style.transform = `scale(${r2(lerp(0.6, g.ringScale, v))})`;
+            refs.ringSoft.style.opacity = String(r2(g.ringAlpha * (1 - v)));
+          },
+        });
+      }
+      clock.after(loops * (g.periodMs / 1000) + 0.2, () => {
+        if (phase === "rest") dissolve();
+      });
+    }
+
+    function dissolve() {
+      phase = "done";
+      clock.tween({
+        ms: CFG.handoff.fadeMs * 1000,
+        ease: EASE.inOutCubic,
+        onUpdate: (v) => {
+          refs.halo.style.opacity = String(r2(lerp(CFG.handoff.glow.alpha, 0, v)));
+          refs.halo.style.transform = `scale(${r2(lerp(1, 0.86, v))})`;
+          refs.cursor.style.opacity = String(r2(1 - v));
+          refs.trails.style.opacity = String(r2(1 - v));
+        },
+        onComplete: () => stop(),
+      });
+    }
+
+    function stop() {
+      running = false;
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = 0;
+      clock.reset();
+      debris.clear();
+      teardown(root, widgets);
+    }
+
+    /* --------------------------------------------------------------- the loop */
+
+    let running = true;
+    let rafId = 0;
+    let last = performance.now();
+
+    let frames = 0;
+    function frame(now: number) {
+      if (!running) return;
+      const rawDt = Math.min((now - last) / 1000, 1 / 12);
+      last = now;
+      frames++;
+
+      // ---- read (before any writes: no layout thrash)
+      let tp = { x: 0, y: 0 };
+      const trackingCta = phase === "breach" || phase === "rise" || phase === "rest";
+      if (trackingCta) {
+        tp = targetPoint();
+        const inst = { x: (tp.x - lastTarget.x) / Math.max(rawDt, 0.001), y: (tp.y - lastTarget.y) / Math.max(rawDt, 0.001) };
+        const k = smoothing(7, rawDt);
+        targetVel.x = lerp(targetVel.x, inst.x, k);
+        targetVel.y = lerp(targetVel.y, inst.y, k);
+        lastTarget = tp;
+      }
+
+      clock.tick(rawDt);
+      const dt = clamp(rawDt, 0, 1 / 12) * clock.scale;
+
+      // ---- update
+      let speed = Math.hypot(cur.vx, cur.vy);
+      switch (phase) {
+        case "swoop":
+          break; // driven by the flight substepper
+        case "bounce": {
+          substep(dt, (h) => {
+            cur.vy += gravity * h;
+            // horizontal: a damped spring back to the settle lane, so the
+            // rebound curves home instead of sliding off to one side
+            const kx = CFG.bounce.drift;
+            const settleX = vw * CFG.layout.settle.x;
+            cur.vx += ((settleX - cur.x) * kx - cur.vx * 2 * Math.sqrt(kx) * CFG.bounce.driftDamping) * h;
+            cur.x += cur.vx * h;
+            cur.y += cur.vy * h;
+            if (cur.y >= surfaceY && cur.vy > 0) {
+              cur.y = surfaceY;
+              if (!landed && CFG.bounce.secondTap.enabled) {
+                landed = true;
+                cur.vy = -cur.vy * CFG.bounce.secondTap.restitution;
+                debris.burst(cur.x, surfaceY, Math.round(7 * debrisScale), {
+                  speed: [120, 430],
+                  spreadDeg: [-172, -8],
+                  lifeMs: [380, 780],
+                  size: [1.2, 3.4],
+                });
+                kick(CFG.impact.shake.amp * 0.26, 300, CFG.impact.shake.freq, 0.09);
+                dent(CFG.impact.dent.depth * 0.42, CFG.impact.dent.sigma * 0.9, cur.x);
+              } else {
+                cur.vy = 0;
+                cur.vx *= 0.84;
+              }
+            }
+          });
+          speed = Math.hypot(cur.vx, cur.vy);
+          break;
+        }
+        case "settle":
+        case "invite": {
+          if (phase === "invite" && invited && !touch && pointer.seen) {
+            // the pointer is live: the cue follows the visitor's own hand
+            substep(dt, (h) => {
+              const k = smoothing(CFG.invite.follow.lerp * 60, h) * 0.16;
+              cur.x = lerp(cur.x, pointer.x, k);
+              cur.y = lerp(cur.y, pointer.y, k);
+            });
+          } else {
+            substep(dt, (h) => {
+              speed = track(
+                cur,
+                vw * CFG.layout.settle.x,
+                vh * CFG.layout.settle.y,
+                0,
+                0,
+                CFG.bounce.settle.stiffness,
+                CFG.bounce.settle.damping,
+                CFG.bounce.settle.maxSpeed,
+                h
+              );
+            });
+          }
+          speed = Math.hypot(cur.vx, cur.vy);
+          break;
+        }
+        case "breach": {
+          // the dive continues behind the barrier: the site is already tearing
+          // open above the pointer, so all we owe here is momentum
+          substep(dt, (h) => {
+            speed = track(
+              cur,
+              clamp(cur.x, vw * 0.22, vw * 0.78),
+              surfaceY + vh * 0.3,
+              0,
+              vh * 0.1,
+              CFG.breach.plunge.stiffness,
+              CFG.breach.plunge.damping,
+              CFG.breach.plunge.maxSpeed,
+              h
+            );
+          });
+          break;
+        }
+        case "rise": {
+          // pointer rides the rising page: the offset from the real CTA shrinks
+          // to exactly zero, and the residual dive energy settles on a spring
+          const tp = targetPoint();
+          const rel = 1 - EASE.outCubic(clamp(riseP / 0.82, 0, 1));
+          substep(dt, (h) => {
+            springStep(wobble, 0, 0, CFG.handoff.cta.wobbleStiffness, 1, 2200, h);
+          });
+          const px = cur.x;
+          const py = cur.y;
+          cur.x = tp.x + captureX * rel + wobble.x;
+          cur.y = tp.y + captureY * rel + wobble.y;
+          cur.vx = (cur.x - px) / Math.max(dt, 0.001);
+          cur.vy = (cur.y - py) / Math.max(dt, 0.001);
+          speed = Math.hypot(cur.vx, cur.vy);
+          break;
+        }
+        case "rest": {
+          // locked onto the CTA: it stays put (and stays aligned) until it
+          // dissolves, so the glow always reads as "here is your next step"
+          const px = cur.x;
+          const py = cur.y;
+          cur.x = tp.x;
+          cur.y = tp.y;
+          cur.vx = (cur.x - px) / Math.max(dt, 0.001);
+          cur.vy = (cur.y - py) / Math.max(dt, 0.001);
+          speed = Math.hypot(cur.vx, cur.vy);
+          break;
+        }
+        default:
+          break;
+      }
+
+      // rotation follows the travel direction — never a snapped angle
+      const rate = phase === "swoop" || phase === "plunge" ? CFG.cursor.rotation.rateFlying : CFG.cursor.rotation.rateSettling;
+      let want: number = theta;
+      const followTravel = speed > CFG.cursor.rotation.restBelowSpeed && (cur.vx || cur.vy);
+      if (phase === "breach") {
+        // "rotate to follow its downward trajectory as it breaks through" —
+        // while it is still diving. Once captured, the head comes back level.
+        want = cur.vy > 40 ? Math.atan2(cur.vy, cur.vx) * (180 / Math.PI) : CFG.cursor.restAngle;
+      } else if (phase === "rise") {
+        want = CFG.cursor.restAngle;
+      } else if (followTravel) {
+        want = Math.atan2(cur.vy, cur.vx) * (180 / Math.PI);
+      } else if (phase === "invite" || phase === "settle" || phase === "rest") {
+        want = CFG.cursor.restAngle;
+      }
+      // shortest path, exponentially smoothed (frame-rate independent)
+      const delta = ((((want - theta) % 360) + 540) % 360) - 180;
+      const step = delta * smoothing(rate, dt);
+      theta += clamp(step, -CFG.cursor.rotation.maxDegPerFrame, CFG.cursor.rotation.maxDegPerFrame);
+
+      // smear along the travel axis
+      const targetStretch =
+        phase === "swoop" || phase === "plunge"
+          ? 1 + clamp(speed * CFG.cursor.stretch.perSpeed, 0, CFG.cursor.stretch.max)
+          : phase === "breach"
+            ? 1 + clamp(speed * CFG.cursor.stretch.perSpeed, 0, CFG.cursor.stretch.max) * 0.6
+            : 1;
+      stretch = lerp(stretch, targetStretch, smoothing(CFG.cursor.stretch.relax, dt));
+
+      // barrier: dent springs back, shake decays
+      dentDepth = lerp(dentDepth, dentTarget, smoothing(11, dt));
+      dentTarget = lerp(dentTarget, 0, smoothing(2.6, dt));
+      shakeT += dt;
+      const decay = 1 - EASE.inOutQuart(clamp(shakeT / (CFG.impact.shake.ms / 1000), 0, 1));
+      const sxAmp = shakeAmp * decay;
+      const sx = Math.sin(shakeT * shakeFreq * 6.283) * sxAmp * 0.62 + Math.sin(shakeT * shakeFreq * 9.1) * sxAmp * 0.24;
+      const sy = Math.sin(shakeT * shakeFreq * 7.4 + 1.7) * sxAmp * 0.42;
+      const sr = Math.sin(shakeT * shakeFreq * 5.1 + 0.6) * shakeRot * decay;
+      if (sxAmp > 0.05 || Math.abs(sr) > 0.005) {
+        refs.world.classList.add("is-shaking");
+        refs.world.style.transform = `translate3d(${r2(sx)}px, ${r2(sy)}px, 0) rotate(${r2(sr)}deg)`;
+      } else if (refs.world.style.transform) {
+        refs.world.style.transform = "";
+        refs.world.classList.remove("is-shaking");
+      }
+
+      // ---- write
+      const sx2 = stretch * squashAlong;
+      const sy2 = (1 / Math.max(stretch, 0.001)) * squashAcross;
+
+      history.push({ t: now / 1000, x: cur.x, y: cur.y, th: theta, sx: sx2, sy: sy2 });
+      if (history.length > 64) history.shift();
+
+      // the pointer vanishes as it passes through the barrier and re-appears
+      // as the site rises (the eye follows the break, then finds it on the CTA)
+      const wantAlpha =
+        phase === "plunge" || phase === "breach"
+          ? clamp(1 - (cur.y - surfaceY) / (vh * 0.12), 0, 1)
+          : phase === "rise"
+            ? smoothstep(clamp((riseP - 0.34) / 0.26, 0, 1))
+            : 1;
+      if (Math.abs(wantAlpha - cursorAlpha) > 0.002) {
+        cursorAlpha = lerp(cursorAlpha, wantAlpha, 1 - Math.exp(-14 * dt));
+        refs.cursor.style.opacity = String(r2(cursorAlpha));
+        refs.trails.style.opacity = String(r2(cursorAlpha));
+      }
+
+      refs.cursor.style.transform = `translate3d(${r2(cur.x)}px, ${r2(cur.y)}px, 0)`;
+      refs.rot.style.transform = `rotate(${r2(theta)}deg) scale(${r2(sx2)}, ${r2(sy2)})`;
+      refs.fx.style.transform = `translate3d(${r2(cur.x)}px, ${r2(cur.y)}px, 0)`;
+
+      // ghosts sample the recorded history → true motion blur, no interpolation
+      const level = clamp(Math.round(clamp(speed / CFG.cursor.trail.reference, 0, 1) * 4), 0, 4);
+      if (level !== trailLevel) {
+        trailLevel = level;
+        ghosts.forEach((g, i) => {
+          const o = (CFG.cursor.trail.opacity[i] ?? 0.06) * (level / 4);
+          g.style.opacity = String(r2(o));
+          g.style.visibility = level === 0 ? "hidden" : "visible";
+          const b = (CFG.cursor.trail.blur[i] ?? 2) * (level / 4);
+          g.style.filter = b > 0.05 ? `blur(${r2(b)}px)` : "none";
+        });
+      }
+      if (level > 0) {
+        ghosts.forEach((g, i) => {
+          const delay = (CFG.cursor.trail.delaysMs[i] ?? 40) / 1000;
+          const sample = sampleHistory(now / 1000 - delay);
+          if (!sample) return;
+          const rotEl = g.firstElementChild as HTMLElement | null;
+          g.style.transform = `translate3d(${r2(sample.x)}px, ${r2(sample.y)}px, 0)`;
+          if (rotEl) rotEl.style.transform = `rotate(${r2(sample.th)}deg) scale(${r2(sample.sx)}, ${r2(sample.sy)})`;
+        });
+      }
+
+      // ground shadow + reflection on the glossy barrier
+      const altitude = clamp((surfaceY - cur.y) / CFG.cursor.shadow.altitude, 0, 1);
+      const near = 1 - altitude;
+      if (near > 0.02 && phase !== "rise" && phase !== "plunge" && phase !== "breach" && phase !== "rest" && phase !== "done") {
+        const sc = lerp(CFG.cursor.shadow.max, CFG.cursor.shadow.min, near);
+        refs.groundShadow.style.transform = `translate3d(${r2(clamp(cur.x, 8, vw - 8))}px, 0, 0) scale(${r2(sc / CFG.cursor.shadow.max)})`;
+        refs.groundShadow.style.opacity = String(r2(near * 0.9));
+        const rc = clamp(1 - (surfaceY - cur.y) / CFG.cursor.reflection.near, 0, 1);
+        refs.reflection.style.opacity = String(r2(rc * CFG.cursor.reflection.opacity));
+        if (rc > 0) {
+          const ry = 2 * surfaceY - cur.y;
+          refs.reflection.style.transform =
+            `translate3d(${r2(cur.x)}px, ${r2(ry)}px, 0) scale(1, ${-CFG.cursor.reflection.squash}) rotate(${r2(-theta)}deg) scale(${r2(sx2)}, ${r2(
+              sy2
+            )})`;
+        }
+      } else if (refs.groundShadow.style.opacity !== "0") {
+        refs.groundShadow.style.opacity = "0";
+        refs.reflection.style.opacity = "0";
+      }
+
+      // the prompt follows the pointer tip, clamped inside the stage
+      if (invited && phase === "invite") {
+        const off = CFG.invite.promptOffset;
+        refs.prompt.style.transform = `translate3d(${r2(cur.x + off.x)}px, ${r2(cur.y + off.y)}px, 0)`;
+      }
+
+      // dents
+      if (dentDepth > 0.02 || dented) {
+        const d = dentDepth > 0.02 ? dentDepth : 0;
+        dented = dentDepth > 0.02;
+        // the lip is authored in a 1000-unit viewBox spanning the viewport
+        refs.dentG.setAttribute("transform", `translate(${r2(clamp((dentX / Math.max(vw, 1)) * 1000, 0, 1000))},0) scale(1,${r2(d)})`);
+        refs.dentShade.style.transform = `translate3d(${r1(dentX)}px, 0, 0) scaleY(${r2(clamp(d / 30, 0.05, 1.6))})`;
+      }
+
+      // particles
+      debris.step(dt);
+
+      rafId = requestAnimationFrame(frame);
+    }
+
+    function sampleHistory(t: number) {
+      for (let i = history.length - 1; i > 0; i--) {
+        if (history[i].t <= t) return history[i];
+      }
+      return history[0] ?? null;
+    }
+
+    const html = document.documentElement;
+
+    /* ------------------------------------------------------------- listeners */
+
+    const onInteract = (e: Event) => {
+      // after release the page is live: any interaction ends the outro so the
+      // intro can never sit on top of what the visitor is doing
+      if (phase === "rest" || phase === "done") {
+        if (phase === "rest") dissolve();
+        return;
+      }
+      e.preventDefault?.();
+      interact();
+    };
+    refs.root.addEventListener("pointerdown", onInteract);
+    refs.prompt.addEventListener("click", (e) => {
+      e.stopPropagation();
+      interact();
+    });
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
+        e.preventDefault();
+        interact();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    const onResize = () => {
+      // keep the layout variables true; the physics simply continues
+      const px = cur.x / Math.max(vw, 1);
+      const py = cur.y / Math.max(vh, 1);
+      measure();
+      if (phase === "compose" || phase === "swoop") {
+        cur.x = px * vw;
+        cur.y = py * vh;
+      }
+    };
+    // if the tab is hidden mid-intro, hand the page straight back — the visitor
+    // must never return to a page that looks like it is still loading
+    const onVisibility = () => {
+      if (!document.hidden || phase === "done") return;
+      if (html.classList.contains("wi-released") || phase === "breach" || phase === "rise") {
+        html.classList.add("wi-released");
+        if (refs.main) refs.main.style.transform = "";
+        if (refs.footer) refs.footer.style.transform = "";
+        if (refs.header) refs.header.style.transform = "";
+        stop();
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+    window.addEventListener("resize", onResize, { passive: true });
+    window.addEventListener("orientationchange", onResize, { passive: true });
+
+    /* ------------------------------------------------------------------ go */
+
+    rafId = requestAnimationFrame(frame);
+    requestAnimationFrame(() => {
+      refs.veil.style.opacity = "0";
+      const ready = "fonts" in document ? (document as Document & { fonts: FontFaceSet }).fonts.ready : Promise.resolve();
+      Promise.race([ready, new Promise((r) => setTimeout(r, 320))]).then(() => begin());
+    });
+
+    /**
+     * Small tuning/inspection hook. `window.__wiDebug.state()` reports the live
+     * phase and coordinates, `forceTimeScale(n)` re-times the sequence and
+     * `config` is the same object as `INTRO_CONFIG` — handy while art-directing.
+     */
+    (window as unknown as { __wiDebug?: unknown }).__wiDebug = {
+      state: () => ({
+        phase,
+        vw,
+        vh,
+        surfaceY,
+        impactX,
+        impactY,
+        impactSpeed: cur.vy,
+        cursor: { x: r1(cur.x), y: r1(cur.y), speed: r1(Math.hypot(cur.vx, cur.vy)) },
+        speed: r1(Math.hypot(cur.vx, cur.vy)),
+        theta: r1(theta),
+        riseP: r2(riseP),
+        hole: r1(hole),
+        target: targetEl ? `${targetEl.tagName}.${targetEl.className}` : null,
+        trailLevel,
+        debris: debris.count,
+        frames,
+        clockTime: r2(clock.time),
+        clockScale: clock.scale,
+        tweens: clock.visible,
+      }),
+      /** Jump to the invitation (used when tuning the handoff). */
+      skipToInvite: () => {
+        clock.scale = 40;
+      },
+      /** Re-time the whole sequence, e.g. 0.5 for a slow-motion study. */
+      forceTimeScale: (s: number) => {
+        clock.scale = s;
+      },
+      config: CFG,
+    };
+
+    void rafId;
+  }
+
+  /* ---------------------------------------------------------------- lifecycle */
+
+  const boot$ = () => boot();
+  document.addEventListener("astro:page-load", boot$);
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot$, { once: true });
+  else boot$();
+  if (CFG.master.replay) {
+    try {
+      sessionStorage.removeItem(CFG.master.sessionKey);
+    } catch {
+      /* ignore */
+    }
+  }
+</script>

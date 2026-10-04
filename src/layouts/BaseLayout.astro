@@ -103,6 +103,10 @@ const canonical = Astro.url ? new URL(Astro.url.pathname, Astro.site).toString()
       <a href="/contact" style="background: var(--ink); color: var(--paper); border-radius: 12px; padding-inline: 16px; margin-top: 12px; border-bottom:0;">Start your site →</a>
     </div>
 
+    <!-- Full-viewport overlays (kept outside <main> so they are never affected
+         by the landing page's own transforms). Used by the landing page intro. -->
+    <slot name="overlay" />
+
     <main id="main">
       <slot />
     </main>

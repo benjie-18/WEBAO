@@ -1,12 +1,18 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import CursorJourney from "../components/anim/CursorJourney.astro";
+import IntroSequence from "../components/anim/IntroSequence.astro";
 ---
 
 <BaseLayout
   title="WEBAO · Custom websites for small business · webao.ca"
   description="Custom websites for small businesses across Canada, for $149 CAD a month. Design, domain, hosting, updates, and support included. See the demo catalog."
 >
+  <!-- Signature intro: cursor flies in, hits the barrier, bounces, invites the
+       click, breaks through and hands the visitor to "Start your site".
+       Only runs on the landing page, once per session, and never blocks the
+       site when disabled, reduced-motion, or JS-less. -->
+  <IntroSequence slot="overlay" />
   <!-- HERO: watermark + parallax + split reveal -->
   <section class="hero grain" id="hero">
     <div class="hero-watermark" aria-hidden="true"><span>WEBAO</span><span>WEBAO</span></div>

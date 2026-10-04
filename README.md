@@ -80,9 +80,66 @@ Project architecture:
 
 - `src/layouts/BaseLayout.astro`: SEO, header/footer, scroll progress, ClientRouter, reveal
 - `src/styles/global.css`: tokens, typography (Instrument Serif + Inter + IBM Plex Mono), layout, motion (respects `prefers-reduced-motion`)
-- `src/components/{ui,layout,anim}`: reusable Button, Card, Badge, Section, Reveal, CursorJourney
+- `src/components/{ui,layout,anim}`: reusable Button, Card, Badge, Section, Reveal, CursorJourney, **IntroSequence**
 - `src/lib/{demos,motion}.ts`: demo catalog (12 art-directed fictional businesses, clearly labeled as demos) + motion helpers
+- `src/lib/intro/{config,engine}.ts`: the intro's art direction (`INTRO_CONFIG`) and its dependency-free motion engine
 - `src/pages/{index,pricing,contact,demos,404,sitemap.xml.ts}`: polished marketing site; demos are a searchable/filterable catalog (no demo microsites yet per spec)
+
+## The intro sequence (`IntroSequence.astro`)
+
+The landing page opens with a signature interaction: a stylized pointer flies
+through the screen, hits the barrier at the bottom, bounces back, invites a
+click, breaks through, and hands the visitor to **"Start your site"** with a
+restrained glow. The site rises into place behind it — no `scrollTo()` jump.
+
+```
+arrives  →  flies (real inertia)  →  impact (squash · shake · dent · debris)
+      →  bounce (gravity + restitution)  →  invite (ring pulse + prompt)
+      →  break through (fracture · hole · shockwave)  →  site rises
+      →  cursor locks onto the real CTA  →  glow pulse  →  releases the page
+```
+
+### Tuning it
+
+Every artistic decision is a number in **`src/lib/intro/config.ts`** — nothing is
+hard-coded in the component. Nothing else needs to be edited to re-time,
+re-aim, soften or exaggerate the sequence:
+
+| Want to change…            | Edit                                             |
+| -------------------------- | ------------------------------------------------ |
+| the flight path or speed   | `flight.path`, `flight.speedProfile`, `duration`  |
+| the weight / momentum      | `flight.chase`, `bounce.gravity`, `restitution`   |
+| cursor rotation behaviour  | `cursor.rotation`, `cursor.restAngle`             |
+| the hit                    | `impact.squash`, `shake`, `dent`, `debris`, `shock` |
+| the invitation             | `invite.pulse`, `halo`, `promptText`              |
+| the break                  | `breach.fracture`, `hole`, `flex`, `hold`         |
+| the handoff + CTA glow     | `handoff.rise`, `handoff.cta`, `handoff.scroll`, `handoff.glow` |
+| overall pace               | `master.timeScale`                                |
+
+Positions are fractions of the viewport and the final cursor position is
+measured from the **actual** `"Start your site"` element (`.hero-actions
+.btn--primary`, overridable via the `target` prop or `[data-intro-target]`), so
+alignment stays pixel-true at every screen size — including short viewports,
+where the sequence deliberately glides the page until the CTA is in view and the
+captured cursor rides along.
+
+### Behaviour
+
+- **Runs once per session** (sessionStorage) and only on `/`; `?intro=1` replays,
+  `?intro=0` skips.
+- **Keyboard**: Enter/Space works anywhere (the invitation itself is a real
+  button, so tab-focus does the right thing). Past the invitation, the pointer
+  follows the visitor's own mouse, so the prompt can be clicked naturally.
+- **Touch**: no fake pointer-follow; the invite reads "Tap to enter".
+- **`prefers-reduced-motion`**: no flight, no cursor — a static, single-action
+  entrance (one click/Enter and the intro is gone).
+- **No JS / JS failure**: the inline boot gate never fires and a 7 s failsafe
+  releases the page, so the site always renders normally.
+- **After the handoff** the overlay, classes and transforms are removed
+  completely; scroll, navigation and the site's own `CursorJourney` behave
+  exactly as they did before the intro existed.
+- Inspect/tune live: `__wiDebug.state()`, `__wiDebug.config`,
+  `__wiDebug.forceTimeScale(0.4)` (slow motion), `__wiDebug.skipToInvite()`.
 
 ## Deployment: Cloudflare Workers (static assets)
 
