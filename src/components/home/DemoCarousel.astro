@@ -19,9 +19,18 @@ const eyebrow = locale === "fr" ? "Le catalogue en mouvement" : "The catalog in 
 const browse = locale === "fr" ? "Parcourir les 30 démos →" : "Browse all 30 demos →";
 const prevLabel = locale === "fr" ? "Précédent" : "Previous";
 const nextLabel = locale === "fr" ? "Suivant" : "Next";
+const total = String(demos.length).padStart(2, "0");
 ---
 
-<section class="carousel-section grain" aria-label={eyebrow}>
+<!--
+  Marks JS availability before first paint so the pinned scrub layout can
+  engage without a flash of the no-JS vertical stack.
+-->
+<script is:inline>
+  try { document.documentElement.classList.add("proof-js"); } catch (e) {}
+</script>
+
+<section class="proof grain" data-proof aria-label={eyebrow}>
   <div class="shell">
     <div class="split-head" data-reveal>
       <div>
@@ -35,132 +44,392 @@ const nextLabel = locale === "fr" ? "Suivant" : "Next";
     </div>
   </div>
 
-  <div class="carousel" data-carousel data-reveal>
-    <div class="carousel-viewport">
-      <div class="carousel-track">
-        {demos.map((d) => (
-          <a href={`${paths.demos}/${d.id}`} class="carousel-card" aria-label={`${d.name}, ${d.tone}`}>
-            <span class="carousel-shot">
-              <img src={`/carousel/${d.id}.jpg`} alt={`${d.name} homepage`} loading="lazy" width="1280" height="800" />
-            </span>
-            <span class="carousel-meta">
-              <span class="carousel-name">{d.name}</span>
-              <span class="carousel-tone mono">{d.tone}</span>
-            </span>
-          </a>
+  <!-- Tall scroll runway. The inner .proof-pin sticks while the page travels
+       through it; the track scrubs horizontally in sync. Without JS (or with
+       reduced motion) this collapses to a plain vertical stack. -->
+  <div class="proof-scroll" style={`--proof-n: ${demos.length}`}>
+    <div class="proof-pin" data-proof-pin tabindex="0" aria-keyshortcuts="ArrowLeft ArrowRight Home End">
+      <div class="proof-topbar" aria-hidden="true">
+        <span class="eyebrow eyebrow--sm">{eyebrow}</span>
+        <span class="proof-count mono"><span data-proof-count>01</span><span class="proof-count-sep"> / </span>{total}</span>
+      </div>
+
+      <div class="proof-track" data-proof-track>
+        {demos.map((d, i) => (
+          <article class="proof-panel" data-proof-panel>
+            {i > 0 && <span class="proof-fracture" aria-hidden="true"></span>}
+            <a href={`${paths.demos}/${d.id}`} class="proof-shot" aria-label={`${d.name}, ${d.tone}`}>
+              <img
+                src={`/carousel/${d.id}.jpg`}
+                alt={`${d.name} homepage`}
+                loading={i < 2 ? "eager" : "lazy"}
+                fetchpriority={i === 0 ? "high" : undefined}
+                width="1280"
+                height="800"
+              />
+            </a>
+            <div class="proof-meta">
+              <span class="proof-index mono" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+              <h3 class="proof-name">{d.name}</h3>
+              <p class="proof-tags mono"><span>{d.category}</span><span aria-hidden="true"> · </span><span>{d.tone}</span></p>
+            </div>
+          </article>
         ))}
       </div>
-    </div>
-    <div class="carousel-controls">
-      <button type="button" class="carousel-btn" data-carousel-prev aria-label={prevLabel}>
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg>
-      </button>
-      <div class="carousel-progress" data-carousel-progress role="slider" aria-label="Carousel position" tabindex="0"><span data-carousel-fill></span></div>
-      <button type="button" class="carousel-btn" data-carousel-next aria-label={nextLabel}>
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>
-      </button>
+
+      <div class="proof-controls">
+        <button type="button" class="proof-btn" data-proof-prev aria-label={prevLabel}>
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg>
+        </button>
+        <div class="proof-progress" aria-hidden="true">
+          <span class="proof-crackline"></span>
+          <span class="proof-fill" data-proof-fill></span>
+        </div>
+        <button type="button" class="proof-btn" data-proof-next aria-label={nextLabel}>
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>
+        </button>
+      </div>
     </div>
   </div>
 </section>
 
 <script>
-  function initCarousel() {
-    const root = document.querySelector('[data-carousel]') as HTMLElement;
+  function initProof() {
+    const root = document.querySelector('[data-proof]') as HTMLElement;
     if (!root || (root as HTMLElement).dataset.init) return;
     (root as HTMLElement).dataset.init = "1";
-    const track = root.querySelector('.carousel-track') as HTMLElement;
-    const cards = Array.from(track.querySelectorAll('.carousel-card')) as HTMLElement[];
-    const prev = root.querySelector('[data-carousel-prev]') as HTMLButtonElement;
-    const next = root.querySelector('[data-carousel-next]') as HTMLButtonElement;
-    const progress = root.querySelector('[data-carousel-progress]') as HTMLElement;
-    if (!cards.length) return;
+    const runway = root.querySelector('.proof-scroll') as HTMLElement;
+    const pin = root.querySelector('[data-proof-pin]') as HTMLElement;
+    const track = root.querySelector('[data-proof-track]') as HTMLElement;
+    const panels = Array.from(track.querySelectorAll('[data-proof-panel]')) as HTMLElement[];
+    const prev = root.querySelector('[data-proof-prev]') as HTMLButtonElement;
+    const next = root.querySelector('[data-proof-next]') as HTMLButtonElement;
+    const fill = root.querySelector('[data-proof-fill]') as HTMLElement;
+    const countNum = root.querySelector('[data-proof-count]') as HTMLElement;
+    if (!panels.length || !runway || !pin || !track || !prev || !next || !fill || !countNum) return;
 
-    let index = 0;
-    let perView = 1;
-    let timer: number | null = null;
+    const n = panels.length;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) return; // CSS already renders the vertical stack; nothing to drive.
 
-    function measure() {
-      const w = root.querySelector('.carousel-viewport')!.clientWidth;
-      perView = w >= 1100 ? 3 : w >= 700 ? 2 : 1;
-    }
-    function maxIndex() { return Math.max(0, cards.length - perView); }
+    // Prefer the pure-CSS view-timeline scrub when the engine understands
+    // named timelines; otherwise drive the transform from scroll in JS.
+    const cssScrub = typeof CSS !== "undefined" && !!CSS.supports &&
+      CSS.supports("animation-timeline: --proof") &&
+      CSS.supports("timeline-scope: --proof");
 
-    const fill = root.querySelector('[data-carousel-fill]') as HTMLElement;
-    function paintProgress() {
-      const max = maxIndex();
-      const pct = max === 0 ? 100 : (Math.min(index, max) / max) * 100;
-      fill.style.width = pct + '%';
-      progress.setAttribute('aria-valuenow', String(Math.round(pct)));
-    }
+    let ticking = false;
 
-    function go(i: number) {
-      index = (i + cards.length) % cards.length;
-      if (index > maxIndex()) index = 0;
-      const card = cards[0];
-      const gap = parseFloat(getComputedStyle(track).columnGap || '18');
-      const step = card.getBoundingClientRect().width + gap;
-      track.style.transform = `translateX(${-index * step}px)`;
-      paintProgress();
-    }
-    function stepFn(dir: number) { go(index + dir > maxIndex() ? 0 : index + dir); }
-    function restart() {
-      if (timer) window.clearInterval(timer);
-      timer = null;
-      if (!reduced) timer = window.setInterval(() => stepFn(1), 4200);
+    // Pinned progress, shared by the CSS keyframes and this fallback:
+    // q = 0 when the runway top meets the viewport top (pin engages),
+    // q = 1 when the runway bottom meets the viewport top (pin releases).
+    // This matches `animation-range: cover X% cover 100%` where X% is the
+    // pin-engagement point.
+    function progress() {
+      const rect = runway.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const p0 = vh / (rect.height + vh);
+      const p = (vh - rect.top) / (rect.height + vh);
+      const q = (p - p0) / (1 - p0);
+      return Math.min(1, Math.max(0, q));
     }
 
-    prev.addEventListener('click', () => { stepFn(-1); restart(); });
-    next.addEventListener('click', () => { stepFn(1); restart(); });
-    root.addEventListener('pointerenter', () => { if (timer) window.clearInterval(timer); timer = null; });
-    root.addEventListener('pointerleave', restart);
-    root.addEventListener('focusin', () => { if (timer) window.clearInterval(timer); timer = null; });
-    root.addEventListener('focusout', restart);
-    window.addEventListener('resize', () => { measure(); go(Math.min(index, maxIndex())); });
+    function paint() {
+      const p = progress();
+      if (!cssScrub) {
+        const max = Math.max(0, track.scrollWidth - pin.clientWidth);
+        track.style.transform = `translate3d(${-p * max}px, 0, 0)`;
+      }
+      fill.style.transform = `scaleX(${p})`;
+      const idx = Math.min(n - 1, Math.round(p * (n - 1)));
+      countNum.textContent = String(idx + 1).padStart(2, "0");
+      for (let i = 0; i < n; i++) panels[i].classList.toggle("is-active", i === idx);
+    }
 
-    measure(); go(0); restart();
-    progress.addEventListener('keydown', (e: KeyboardEvent) => {
-      if (e.key === 'ArrowRight') { stepFn(1); restart(); }
-      if (e.key === 'ArrowLeft') { stepFn(-1); restart(); }
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => { paint(); ticking = false; });
+    }
+
+    // Scroll-position for panel i so that it sits centered in the pin.
+    // Anchored to the runway (the tall scroll element), not the section.
+    function scrollToPanel(i: number) {
+      const clamped = Math.min(n - 1, Math.max(0, i));
+      const docTop = runway.getBoundingClientRect().top + window.scrollY;
+      const target = docTop + (clamped / (n - 1)) * (runway.offsetHeight - window.innerHeight);
+      window.scrollTo({ top: target, behavior: "smooth" });
+    }
+
+    function currentIndex() {
+      const docTop = runway.getBoundingClientRect().top + window.scrollY;
+      const span = Math.max(1, runway.offsetHeight - window.innerHeight);
+      const q = (window.scrollY - docTop) / span;
+      return Math.min(n - 1, Math.max(0, Math.round(q * (n - 1))));
+    }
+
+    prev.addEventListener("click", () => scrollToPanel(currentIndex() - 1));
+    next.addEventListener("click", () => scrollToPanel(currentIndex() + 1));
+
+    pin.addEventListener("keydown", (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") { e.preventDefault(); scrollToPanel(currentIndex() + 1); }
+      else if (e.key === "ArrowLeft") { e.preventDefault(); scrollToPanel(currentIndex() - 1); }
+      else if (e.key === "Home") { e.preventDefault(); scrollToPanel(0); }
+      else if (e.key === "End") { e.preventDefault(); scrollToPanel(n - 1); }
     });
+
+    // Drag the pinned stage horizontally: horizontal pointer travel is
+    // converted into vertical page scroll, which is the single source of
+    // truth for the scrub. Vertical touch panning stays native (pan-y).
+    let dragging = false;
+    let startX = 0;
+    let startY = 0;
+    let moved = 0;
+    pin.addEventListener("pointerdown", (e: PointerEvent) => {
+      if (e.button !== 0) return;
+      if ((e.target as HTMLElement).closest("button")) return;
+      // Links stay clickable: a drag longer than 8px suppresses the click.
+      e.preventDefault();
+      dragging = true;
+      moved = 0;
+      startX = e.clientX;
+      startY = window.scrollY;
+      pin.classList.add("is-dragging");
+    });
+    window.addEventListener("pointermove", (e: PointerEvent) => {
+      if (!dragging) return;
+      const dx = e.clientX - startX;
+      moved = Math.max(moved, Math.abs(dx));
+      window.scrollTo({ top: startY - dx * 2.4 });
+    }, { passive: true });
+    const endDrag = () => {
+      dragging = false;
+      pin.classList.remove("is-dragging");
+    };
+    window.addEventListener("pointerup", endDrag, { passive: true });
+    window.addEventListener("pointercancel", endDrag, { passive: true });
+    // A drag that ends over a link must not activate it.
+    pin.addEventListener("click", (e: MouseEvent) => {
+      if (moved > 8) { e.preventDefault(); e.stopPropagation(); }
+    }, true);
+
+    // Drive only while the runway is near the viewport.
+    const io = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          window.addEventListener("scroll", onScroll, { passive: true });
+          onScroll();
+        } else {
+          window.removeEventListener("scroll", onScroll);
+        }
+      }
+    }, { rootMargin: "100% 0px" });
+    io.observe(root);
+    window.addEventListener("resize", onScroll, { passive: true });
+    paint();
   }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initCarousel);
-  else initCarousel();
+
+  function bootProof() {
+    try { initProof(); } catch (e) { /* never break the page */ }
+  }
+  document.addEventListener("astro:page-load", bootProof);
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bootProof);
+  else bootProof();
 </script>
 
 <style>
-  .carousel-section { padding-block: clamp(48px, 7vw, 96px); overflow: clip; }
-  .carousel { margin-top: 34px; }
-  .carousel-viewport { overflow: hidden; padding: 6px max(20px, calc((100vw - 1240px) / 2 + 20px)) 18px; }
-  .carousel-track {
-    display: flex; column-gap: 18px;
-    transition: transform .8s cubic-bezier(.22,.8,.24,1);
+  .proof { padding-block: clamp(48px, 7vw, 96px) 0; overflow: clip; }
+
+  /* ---------- Base: vertical stack (no-JS default) ---------- */
+  .proof-scroll { margin-top: 34px; }
+  .proof-pin { position: relative; }
+  .proof-topbar { display: none; }
+  .proof-track { display: grid; gap: clamp(36px, 5vw, 64px); padding: 6px 0 48px; }
+  .proof-panel { position: relative; min-width: 0; }
+  .proof-shot {
+    display: block; border-radius: var(--r-lg, 18px); overflow: clip;
+    border: 1px solid var(--line); background: var(--paper-2);
+    box-shadow: var(--shadow-sm);
+    transition: transform .45s var(--ease-out, cubic-bezier(.16,1,.3,1)), box-shadow .45s var(--ease-out, cubic-bezier(.16,1,.3,1));
+  }
+  .proof-shot:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+  .proof-shot img { width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: top; display: block; }
+  .proof-meta { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-top: 14px; padding-inline: 4px; }
+  .proof-index { font-size: 11px; color: var(--accent-text, var(--accent)); letter-spacing: .08em; }
+  .proof-name { font-size: clamp(1.2rem, 2.4vw, 1.7rem); letter-spacing: -0.02em; font-weight: 700; }
+  .proof-tags { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-left: auto; }
+  .proof-fracture { display: none; }
+  .proof-controls { display: none; }
+
+  /* ---------- Enhanced: pinned horizontal scrub ---------- */
+  :global(html.proof-js) .proof-scroll {
+    --proof-vh: 88;
+    height: calc(var(--proof-n, 30) * var(--proof-vh) * 1vh);
+    timeline-scope: --proof;
+    view-timeline-name: --proof;
+    view-timeline-axis: block;
+  }
+  :global(html.proof-js) .proof-pin {
+    position: sticky;
+    top: var(--header-h, 64px);
+    height: calc(100vh - var(--header-h, 64px));
+    height: calc(100svh - var(--header-h, 64px));
+    overflow: hidden;
+    touch-action: pan-y;
+    outline-offset: -2px;
+  }
+  :global(html.proof-js) .proof-track {
+    display: flex;
+    gap: 0;
+    width: max-content;
+    height: 100%;
+    padding: 0;
     will-change: transform;
   }
-  .carousel-card {
-    flex: 0 0 calc((100% - 36px) / 3);
-    min-width: 0; text-decoration: none; color: inherit;
-    border: 1px solid var(--line); border-radius: 18px; overflow: clip;
-    background: var(--card-bg); box-shadow: var(--shadow-sm);
-    transition: transform .35s ease, box-shadow .35s ease;
+  :global(html.proof-js) .proof-panel {
+    width: 100vw;
+    flex: none;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(64px, 9vh, 96px) clamp(20px, 6vw, 88px) clamp(88px, 12vh, 120px);
   }
-  .carousel-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
-  .carousel-shot { display: block; aspect-ratio: 16 / 10; overflow: clip; background: var(--paper-2); }
-  .carousel-shot img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
-  .carousel-meta { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 12px 16px 14px; }
-  .carousel-name { font-weight: 700; letter-spacing: -0.02em; font-size: 15px; }
-  .carousel-tone { font-size: 10px; letter-spacing: .1em; color: var(--muted); text-transform: uppercase; white-space: nowrap; }
-  .carousel-controls { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 6px; }
-  .carousel-btn {
-    width: 40px; height: 40px; border-radius: 99px; border: 1px solid var(--line);
+  :global(html.proof-js) .proof-shot img {
+    height: clamp(240px, 46svh, 520px);
+    aspect-ratio: auto;
+  }
+  :global(html.proof-js) .proof-panel.is-active .proof-shot {
+    box-shadow: var(--shadow-md);
+  }
+  :global(html.proof-js) .proof-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    z-index: 3;
+    padding: 14px clamp(20px, 6vw, 88px);
+    pointer-events: none;
+  }
+  .eyebrow--sm { font-size: 10px; }
+  .proof-count { font-size: 11px; letter-spacing: .12em; color: var(--muted); }
+  .proof-count-sep { opacity: .45; }
+
+  /* Fracture motif: a jagged dark crack splitting each panel boundary,
+     like a torn page edge. Reads on paper in both themes. */
+  :global(html.proof-js) .proof-fracture {
+    display: block;
+    position: absolute;
+    top: -4%; bottom: -4%; left: 0;
+    width: 26px;
+    transform: translateX(-50%);
+    background: var(--ink);
+    opacity: .13;
+    clip-path: polygon(
+      62% 0, 100% 5%, 54% 10%, 96% 16%, 52% 23%, 92% 30%, 56% 38%,
+      100% 46%, 60% 55%, 94% 63%, 50% 71%, 88% 79%, 58% 87%,
+      92% 94%, 62% 100%, 34% 100%, 66% 93%, 36% 85%, 70% 77%,
+      38% 68%, 72% 60%, 40% 52%, 74% 44%, 42% 36%, 70% 28%,
+      38% 20%, 68% 12%, 40% 5%, 34% 0
+    );
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  /* Crack-fill progress + controls, overlaid at the pin's foot. */
+  :global(html.proof-js) .proof-controls {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    z-index: 3;
+    padding: 16px clamp(20px, 6vw, 88px) 22px;
+    background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--paper) 72%, transparent));
+  }
+  .proof-btn {
+    width: 44px; height: 44px; flex: none;
+    border-radius: 99px; border: 1px solid var(--line);
     background: var(--card-bg); color: var(--ink); cursor: pointer;
     display: inline-flex; align-items: center; justify-content: center;
+    transition: background .25s var(--ease-out, ease), color .25s var(--ease-out, ease), transform .25s var(--ease-out, ease);
   }
-  .carousel-btn:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-  .carousel-btn svg { width: 16px; height: 16px; }
-  .carousel-progress { width: min(320px, 40vw); height: 4px; border-radius: 99px; background: var(--line); overflow: clip; cursor: default; }
-  .carousel-progress span { display: block; height: 100%; width: 0; background: var(--ink); border-radius: 99px; transition: width .5s ease; }
-  @media (max-width: 1100px) { .carousel-card { flex-basis: calc((100% - 18px) / 2); } }
-  @media (max-width: 700px) { .carousel-card { flex-basis: 100%; } }
-  @media (prefers-reduced-motion: reduce) { .carousel-track { transition: none; } }
+  .proof-btn:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .proof-btn:active { transform: scale(.94); }
+  .proof-btn svg { width: 16px; height: 16px; }
+  .proof-progress { position: relative; flex: 1; height: 2px; }
+  .proof-crackline {
+    position: absolute; inset: 0;
+    background: var(--line-strong);
+    border-radius: 99px;
+  }
+  .proof-fill {
+    position: absolute; inset: 0;
+    background: var(--accent);
+    border-radius: 99px;
+    transform: scaleX(0);
+    transform-origin: left;
+    will-change: transform;
+  }
+
+  /* Drag affordance, fine pointers only. */
+  @media (hover: hover) and (pointer: fine) {
+    :global(html.proof-js) .proof-pin { cursor: grab; }
+    :global(html.proof-js) .proof-pin.is-dragging { cursor: grabbing; }
+    :global(html.proof-js) .proof-pin.is-dragging * { user-select: none; }
+    :global(html.proof-js) .proof-panel a { cursor: pointer; }
+  }
+
+  /* ---------- Pure-CSS scrub where named view timelines are understood ----------
+     Longhands only: the minifier merges the `animation` shorthand into a form
+     Chromium rejects when the timeline is a custom ident.
+     The range starts where the pin engages (not where the runway first
+     appears), so panel 0 and panel N-1 land exactly on Home/End. */
+  @supports (animation-timeline: --proof) and (timeline-scope: --proof) {
+    :global(html.proof-js) .proof-track {
+      animation-name: proof-scrub;
+      animation-duration: 1s;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: --proof;
+      animation-range: cover calc(100% / (var(--proof-n, 30) * var(--proof-vh, 88) / 100 + 1)) cover 100%;
+    }
+  }
+  @keyframes proof-scrub {
+    from { transform: translateX(0); }
+    to { transform: translateX(calc(-100% + 100vw)); }
+  }
+
+  /* ---------- Reduced motion: calm vertical stack, no pin, no scrub ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    :global(html.proof-js) .proof-scroll { height: auto; }
+    :global(html.proof-js) .proof-pin {
+      position: static;
+      height: auto;
+      overflow: visible;
+      touch-action: auto;
+    }
+    :global(html.proof-js) .proof-track {
+      display: grid;
+      gap: clamp(36px, 5vw, 64px);
+      width: auto;
+      height: auto;
+      padding: 6px 0 48px;
+      animation: none;
+      transform: none;
+      will-change: auto;
+    }
+    :global(html.proof-js) .proof-panel {
+      width: 100%;
+      height: auto;
+      display: block;
+      padding: 0;
+    }
+    :global(html.proof-js) .proof-shot img { height: auto; aspect-ratio: 16 / 10; }
+    :global(html.proof-js) .proof-topbar,
+    :global(html.proof-js) .proof-controls,
+    :global(html.proof-js) .proof-fracture { display: none; }
+    .proof-shot, .proof-btn { transition: none; }
+  }
 </style>
