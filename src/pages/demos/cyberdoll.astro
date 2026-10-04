@@ -1,0 +1,537 @@
+---
+import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+
+// Demo microsite: CYBERDOLL, fictional Y2K fashion label, Los Angeles.
+// Standalone art direction. Chrome gradients, sparkles, glossy bubbles.
+// Not connected to the WEBAO theme system.
+const IMG = {
+  hero: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1600&auto=format&fit=crop",
+  cargo: "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=800&auto=format&fit=crop",
+  tee: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=800&auto=format&fit=crop",
+  puffa: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=800&auto=format&fit=crop",
+  sneakers: "https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=800&auto=format&fit=crop",
+  look1: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=900&auto=format&fit=crop",
+  look2: "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=900&auto=format&fit=crop",
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CYBERDOLL: Y2K Fashion, Back 4Ever</title>
+  <meta name="description" content="CYBERDOLL: fictional Y2K fashion label. Glitter cargos, butterfly tops, chrome everything. New drops every Friday." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body class="cd">
+
+  <!-- NAV -->
+  <header class="cd-navwrap">
+    <nav class="cd-nav" aria-label="Primary">
+      <a class="cd-logo" href="#top" aria-label="CYBERDOLL, home"><span class="cd-chrome-sm">CYBERDOLL</span></a>
+      <div class="cd-nav-links">
+        <a href="#drops">Drops</a>
+        <a href="#lookbook">Lookbook</a>
+        <a href="#manifesto">Manifesto</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <a class="cd-btn cd-btn-small" href="#drops">Shop now</a>
+      <button class="cd-burger" id="cd-burger" aria-expanded="false" aria-controls="cd-mobilemenu" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+    <div class="cd-mobilemenu" id="cd-mobilemenu">
+      <a href="#drops">Drops</a>
+      <a href="#lookbook">Lookbook</a>
+      <a href="#manifesto">Manifesto</a>
+      <a href="#contact">Contact</a>
+      <a class="cd-btn" href="#drops">Shop now</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="cd-hero">
+      <div class="cd-stars" aria-hidden="true">
+        <svg class="cd-spark s1" viewBox="0 0 24 24"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg>
+        <svg class="cd-spark s2" viewBox="0 0 24 24"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg>
+        <svg class="cd-spark s3" viewBox="0 0 24 24"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg>
+        <svg class="cd-spark s4" viewBox="0 0 24 24"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg>
+        <svg class="cd-spark s5" viewBox="0 0 24 24"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg>
+      </div>
+      <div class="cd-bubbles" aria-hidden="true">
+        <span class="cd-bubble b1"></span>
+        <span class="cd-bubble b2"></span>
+        <span class="cd-bubble b3"></span>
+        <span class="cd-bubble b4"></span>
+        <span class="cd-bubble b5"></span>
+      </div>
+      <div class="cd-hero-in">
+        <p class="cd-est"><span>EST. 2003</span><span aria-hidden="true">★</span><span>BACK 4EVER</span></p>
+        <h1 class="cd-h1 cd-chrome">CYBER<br />DOLL</h1>
+        <p class="cd-lede">Y2K fashion for the new millennium, part two. Glitter, chrome, and butterfly clips. As seen in your dreams (and your old diary).</p>
+        <div class="cd-hero-cta">
+          <a class="cd-btn" href="#drops">Shop the drop</a>
+          <a class="cd-btn cd-btn-ghost" href="#lookbook">Peep the lookbook</a>
+        </div>
+      </div>
+      <span class="cd-badge-new" aria-hidden="true">NEW!!</span>
+      <span class="cd-badge-hot" aria-hidden="true">HOT!!</span>
+      <div class="cd-hero-photo" aria-hidden="true"><img src={IMG.hero} alt="" loading="eager" fetchpriority="high" /></div>
+      <div class="cd-ticker" aria-hidden="true">
+        <div class="cd-ticker-track">
+          <span>FREE SHIPPING OVER $75</span><span>★</span><span>NEW DROP EVERY FRIDAY</span><span>★</span><span>BUTTERFLY CLIPS 4EVER</span><span>★</span><span>GLITTER IS A NEUTRAL</span><span>★</span>
+          <span>FREE SHIPPING OVER $75</span><span>★</span><span>NEW DROP EVERY FRIDAY</span><span>★</span><span>BUTTERFLY CLIPS 4EVER</span><span>★</span><span>GLITTER IS A NEUTRAL</span><span>★</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- DROPS -->
+    <section class="cd-section" id="drops">
+      <div class="cd-wrap">
+        <p class="cd-kicker">/// straight off the truck</p>
+        <h2 class="cd-h2">FRESH <span class="cd-chrome">DROPS</span></h2>
+        <p class="cd-sub">Friday's drop just landed. When it's gone, it's gone, bestie.</p>
+        <div class="cd-grid">
+          <article class="cd-card">
+            <div class="cd-card-img"><img src={IMG.cargo} alt="Model wearing glitter cargo pants" loading="lazy" /><span class="cd-tag">NEW!!</span></div>
+            <div class="cd-card-body">
+              <h3>Glitterbomb Cargos</h3>
+              <p>Low rise, six pockets, maximum sparkle. Your flip phone called, it approves.</p>
+              <div class="cd-card-foot"><strong>$89</strong><button class="cd-btn cd-btn-small" type="button">Add 2 cart</button></div>
+            </div>
+          </article>
+          <article class="cd-card">
+            <div class="cd-card-img"><img src={IMG.tee} alt="Model in a butterfly baby tee" loading="lazy" /><span class="cd-tag cd-tag-blue">NEW!!</span></div>
+            <div class="cd-card-body">
+              <h3>Butterfly Baby Tee</h3>
+              <p>Cropped, rhinestoned, and 100% that girl. Pairs with literally everything.</p>
+              <div class="cd-card-foot"><strong>$45</strong><button class="cd-btn cd-btn-small" type="button">Add 2 cart</button></div>
+            </div>
+          </article>
+          <article class="cd-card">
+            <div class="cd-card-img"><img src={IMG.puffa} alt="Model wearing a silver puffer jacket" loading="lazy" /><span class="cd-tag cd-tag-hot">HOT!!</span></div>
+            <div class="cd-card-body">
+              <h3>Silver Puffa Jacket</h3>
+              <p>Chrome-plated coziness. Reflects flash photography and bad vibes alike.</p>
+              <div class="cd-card-foot"><strong>$149</strong><button class="cd-btn cd-btn-small" type="button">Add 2 cart</button></div>
+            </div>
+          </article>
+          <article class="cd-card">
+            <div class="cd-card-img"><img src={IMG.sneakers} alt="Star platform sneakers" loading="lazy" /></div>
+            <div class="cd-card-body">
+              <h3>Star Platform Sneakers</h3>
+              <p>Four inches of pure attitude. Warning: may cause spontaneous dance breaks.</p>
+              <div class="cd-card-foot"><strong>$120</strong><button class="cd-btn cd-btn-small" type="button">Add 2 cart</button></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOOKBOOK -->
+    <section class="cd-look" id="lookbook">
+      <div class="cd-wrap">
+        <p class="cd-kicker">/// shot on a flip phone (probably)</p>
+        <h2 class="cd-h2">THE <span class="cd-chrome">LOOKBOOK</span></h2>
+        <div class="cd-look-grid">
+          <figure class="cd-polaroid">
+            <img src={IMG.look1} alt="Y2K street style outfit in the city" loading="lazy" />
+            <figcaption>fit check #042: downtown diva</figcaption>
+          </figure>
+          <figure class="cd-polaroid cd-polaroid-tilt">
+            <img src={IMG.look2} alt="Shopping day look with statement accessories" loading="lazy" />
+            <figcaption>fit check #043: mall rat couture</figcaption>
+          </figure>
+          <figure class="cd-polaroid">
+            <img src={IMG.hero} alt="Pink Y2K editorial look" loading="lazy" />
+            <figcaption>fit check #044: main character</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- MANIFESTO -->
+    <section class="cd-mani" id="manifesto">
+      <div class="cd-wrap cd-mani-in">
+        <p class="cd-kicker cd-kicker-dark">/// the doll code</p>
+        <h2 class="cd-h2 cd-h2-dark">OUR MANIFESTO</h2>
+        <ul class="cd-mani-list">
+          <li><svg class="cd-heart" viewBox="0 0 7 6" aria-hidden="true"><rect x="1" y="0" width="2" height="1"/><rect x="4" y="0" width="2" height="1"/><rect x="0" y="1" width="7" height="2"/><rect x="1" y="3" width="5" height="1"/><rect x="2" y="4" width="3" height="1"/><rect x="3" y="5" width="1" height="1"/></svg>Low rise is a lifestyle, not a trend.</li>
+          <li><svg class="cd-heart" viewBox="0 0 7 6" aria-hidden="true"><rect x="1" y="0" width="2" height="1"/><rect x="4" y="0" width="2" height="1"/><rect x="0" y="1" width="7" height="2"/><rect x="1" y="3" width="5" height="1"/><rect x="2" y="4" width="3" height="1"/><rect x="3" y="5" width="1" height="1"/></svg>Glitter is a neutral. Chrome is a personality.</li>
+          <li><svg class="cd-heart" viewBox="0 0 7 6" aria-hidden="true"><rect x="1" y="0" width="2" height="1"/><rect x="4" y="0" width="2" height="1"/><rect x="0" y="1" width="7" height="2"/><rect x="1" y="3" width="5" height="1"/><rect x="2" y="4" width="3" height="1"/><rect x="3" y="5" width="1" height="1"/></svg>Your flip phone deserves a matching outfit.</li>
+          <li><svg class="cd-heart" viewBox="0 0 7 6" aria-hidden="true"><rect x="1" y="0" width="2" height="1"/><rect x="4" y="0" width="2" height="1"/><rect x="0" y="1" width="7" height="2"/><rect x="1" y="3" width="5" height="1"/><rect x="2" y="4" width="3" height="1"/><rect x="3" y="5" width="1" height="1"/></svg>Dress like the future we were promised in 1999.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- REVIEWS -->
+    <section class="cd-section" id="reviews">
+      <div class="cd-wrap">
+        <p class="cd-kicker">/// the dollfam speaks</p>
+        <h2 class="cd-h2">OBSESSED, <span class="cd-chrome">OBVIOUSLY</span></h2>
+        <div class="cd-reviews">
+          <blockquote class="cd-review">
+            <p class="cd-stars-row" aria-label="5 out of 5 stars">★★★★★</p>
+            <p>"The Silver Puffa made airport security ask for a photo. A PHOTO. Of my jacket."</p>
+            <cite>@glittergabi, verified doll</cite>
+          </blockquote>
+          <blockquote class="cd-review">
+            <p class="cd-stars-row" aria-label="5 out of 5 stars">★★★★★</p>
+            <p>"Ordered Friday, wearing it Saturday, main-character energy by Sunday brunch."</p>
+            <cite>@y2kjess, verified doll</cite>
+          </blockquote>
+          <blockquote class="cd-review">
+            <p class="cd-stars-row" aria-label="5 out of 5 stars">★★★★★</p>
+            <p>"My butterfly tee survived 40 washes and one dramatic breakup. 10/10."</p>
+            <cite>@chromecass, verified doll</cite>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAILING LIST -->
+    <section class="cd-mail" id="mailing">
+      <div class="cd-wrap cd-mail-in">
+        <div>
+          <p class="cd-kicker cd-kicker-dark">/// xoxo, gossip doll</p>
+          <h2 class="cd-h2 cd-h2-dark">JOIN THE<br />DOLLFAM</h2>
+          <p class="cd-mail-copy">Get 15% off your first order plus first dibs on every Friday drop. No spam, only slay.</p>
+        </div>
+        <form class="cd-form" id="cd-mail-form" novalidate>
+          <label>Your email<input type="email" name="email" required placeholder="cutie2003@example.com" /></label>
+          <button class="cd-btn cd-btn-dark" type="submit">Sign me up!!</button>
+          <p class="cd-form-note" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="cd-section" id="contact">
+      <div class="cd-wrap cd-contact-in">
+        <div>
+          <p class="cd-kicker">/// slide into our inbox</p>
+          <h2 class="cd-h2">SAY HI, <span class="cd-chrome">DOLL</span></h2>
+          <p class="cd-sub">Wholesale, collabs, or just to tell us your AIM screen name. We read everything.</p>
+        </div>
+        <div class="cd-contact-cards">
+          <div class="cd-contact-card">
+            <h3>Flagship store</h3>
+            <p>2003 Glitter Avenue<br />Los Angeles, CA 90014<br />Open daily, 10am to 9pm</p>
+          </div>
+          <div class="cd-contact-card">
+            <h3>Reach us</h3>
+            <p><a href="tel:+12135552003">(213) 555-2003</a><br /><a href="mailto:hello@cyberdoll.shop">hello@cyberdoll.shop</a><br />@cyberdoll.official everywhere</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="cd-footer">
+    <p class="cd-footer-giant cd-chrome" aria-hidden="true">CYBERDOLL</p>
+    <div class="cd-wrap cd-footer-in">
+      <p>© 2026 CYBERDOLL. Fictional demo. Made with glitter and dial-up.</p>
+      <p>2003 Glitter Avenue, Los Angeles, CA · <a href="tel:+12135552003">(213) 555-2003</a> · <a href="mailto:hello@cyberdoll.shop">hello@cyberdoll.shop</a></p>
+    </div>
+  </footer>
+
+  <EscapeHatch locale="en" />
+
+  <script>
+    // Demo: mobile menu + forms never submit anywhere
+    (function () {
+      var burger = document.getElementById('cd-burger');
+      var menu = document.getElementById('cd-mobilemenu');
+      burger?.addEventListener('click', function () {
+        var open = menu?.classList.toggle('cd-open');
+        burger?.setAttribute('aria-expanded', open ? 'true' : 'false');
+        burger?.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      });
+      menu?.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () {
+          menu?.classList.remove('cd-open');
+          burger?.setAttribute('aria-expanded', 'false');
+        });
+      });
+      var form = document.getElementById('cd-mail-form') as HTMLFormElement | null;
+      form?.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var note = form?.querySelector('.cd-form-note');
+        if (note) note.textContent = 'Y2K-ified! Check your inbox for 15% off. XOXO, the Dolls';
+        form?.reset();
+      });
+    })();
+  </script>
+
+  <style>
+    .cd {
+      --cd-pink: #FF6EC7;
+      --cd-lav: #B28DFF;
+      --cd-blue: #87CEFA;
+      --cd-black: #0B0B10;
+      --cd-white: #FFF7FB;
+      --cd-display: "Audiowide", "Arial Black", cursive;
+      --cd-body: "Quicksand", system-ui, sans-serif;
+      margin: 0;
+      background: var(--cd-black);
+      color: var(--cd-white);
+      font-family: var(--cd-body);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: clip;
+    }
+    .cd *, .cd *::before, .cd *::after { box-sizing: border-box; }
+    .cd img { display: block; max-width: 100%; }
+    .cd-wrap { max-width: 1200px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px); }
+
+    .cd-chrome {
+      background: linear-gradient(180deg, #ffffff 0%, #e9f5ff 16%, #87CEFA 30%, #ffffff 42%, #ffffff 50%, #B28DFF 58%, #FF6EC7 72%, #ffd9ef 84%, #ffffff 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .cd-chrome-sm {
+      font-family: var(--cd-display);
+      font-size: 22px;
+      letter-spacing: 0.08em;
+      background: linear-gradient(180deg, #ffffff 0%, #87CEFA 35%, #ffffff 50%, #B28DFF 60%, #FF6EC7 80%, #ffffff 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    /* nav */
+    .cd-navwrap { position: fixed; top: 0; left: 0; right: 0; z-index: 60; }
+    .cd-nav {
+      display: flex; align-items: center; gap: 22px;
+      padding: 14px clamp(20px, 4vw, 44px);
+      background: rgba(11, 11, 16, 0.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 2px solid var(--cd-pink);
+    }
+    .cd-logo { text-decoration: none; margin-right: auto; }
+    .cd-nav-links { display: flex; gap: 4px; }
+    .cd-nav-links a {
+      color: var(--cd-white); text-decoration: none; font-weight: 700; font-size: 14px;
+      letter-spacing: 0.14em; text-transform: uppercase; padding: 10px 14px; border-radius: 999px;
+    }
+    .cd-nav-links a:hover { background: rgba(255, 110, 199, 0.18); color: var(--cd-pink); }
+    .cd-burger { display: none; background: none; border: none; cursor: pointer; padding: 10px; flex-direction: column; gap: 5px; }
+    .cd-burger span { display: block; width: 26px; height: 3px; border-radius: 3px; background: var(--cd-pink); }
+    .cd-mobilemenu {
+      display: none; flex-direction: column; gap: 4px;
+      background: rgba(11, 11, 16, 0.97); border-bottom: 2px solid var(--cd-pink);
+      padding: 12px clamp(20px, 4vw, 40px) 22px;
+    }
+    .cd-mobilemenu.cd-open { display: flex; }
+    .cd-mobilemenu a:not(.cd-btn) {
+      color: var(--cd-white); text-decoration: none; font-weight: 700; font-size: 17px;
+      letter-spacing: 0.1em; text-transform: uppercase; padding: 12px 4px;
+    }
+
+    /* buttons */
+    .cd-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      font-family: var(--cd-body); font-weight: 700; font-size: 15px; letter-spacing: 0.08em; text-transform: uppercase;
+      background: linear-gradient(180deg, #ff9ed8, var(--cd-pink) 55%, #e14fa4);
+      color: #fff; text-decoration: none; cursor: pointer; border: none;
+      padding: 16px 34px; border-radius: 999px;
+      box-shadow: 0 4px 0 #a8327c, 0 10px 24px rgba(255, 110, 199, 0.45), inset 0 2px 2px rgba(255, 255, 255, 0.55);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .cd-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 0 #a8327c, 0 14px 30px rgba(255, 110, 199, 0.55), inset 0 2px 2px rgba(255, 255, 255, 0.55); }
+    .cd-btn-ghost {
+      background: transparent; color: var(--cd-white);
+      outline: 2px solid var(--cd-lav); outline-offset: -2px;
+      box-shadow: none;
+    }
+    .cd-btn-ghost:hover { box-shadow: 0 0 22px rgba(178, 141, 255, 0.5); color: var(--cd-lav); }
+    .cd-btn-dark { background: var(--cd-black); box-shadow: 0 4px 0 rgba(0,0,0,0.35), inset 0 2px 2px rgba(255,255,255,0.15); width: 100%; }
+    .cd-btn-small { font-size: 12.5px; padding: 11px 22px; }
+
+    /* type */
+    .cd-kicker { font-weight: 700; font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--cd-pink); margin: 0 0 16px; }
+    .cd-kicker-dark { color: #7a1e52; }
+    .cd-h2 { font-family: var(--cd-display); font-size: clamp(2.2rem, 6vw, 4.2rem); margin: 0 0 14px; letter-spacing: 0.04em; }
+    .cd-h2-dark { color: var(--cd-black); }
+    .cd-sub { font-size: 17px; color: #cfc4d4; margin: 0 0 40px; max-width: 52ch; }
+
+    /* hero */
+    .cd-hero { position: relative; min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden;
+      background: radial-gradient(ellipse 70% 50% at 20% 10%, rgba(255,110,199,0.22), transparent 60%),
+                  radial-gradient(ellipse 60% 45% at 85% 25%, rgba(178,141,255,0.25), transparent 60%),
+                  radial-gradient(ellipse 55% 40% at 50% 90%, rgba(135,206,250,0.16), transparent 60%),
+                  var(--cd-black);
+    }
+    .cd-stars, .cd-bubbles { position: absolute; inset: 0; pointer-events: none; }
+    .cd-spark { position: absolute; fill: #fff; filter: drop-shadow(0 0 8px var(--cd-pink)); animation: cd-twinkle 3.2s ease-in-out infinite; }
+    .cd-spark.s1 { width: 34px; top: 16%; left: 8%; }
+    .cd-spark.s2 { width: 22px; top: 30%; right: 12%; animation-delay: 0.8s; fill: var(--cd-blue); }
+    .cd-spark.s3 { width: 28px; top: 58%; left: 14%; animation-delay: 1.6s; fill: var(--cd-lav); }
+    .cd-spark.s4 { width: 20px; top: 22%; left: 55%; animation-delay: 2.2s; }
+    .cd-spark.s5 { width: 26px; top: 66%; right: 8%; animation-delay: 1.1s; fill: var(--cd-pink); }
+    @keyframes cd-twinkle { 0%, 100% { transform: scale(0.6) rotate(0deg); opacity: 0.5; } 50% { transform: scale(1.15) rotate(20deg); opacity: 1; } }
+    .cd-bubble { position: absolute; border-radius: 50%;
+      background: radial-gradient(circle at 32% 30%, rgba(255,255,255,0.85), rgba(255,255,255,0.06) 62%);
+      box-shadow: inset 0 0 18px rgba(255,255,255,0.25);
+      animation: cd-float 7s ease-in-out infinite;
+    }
+    .cd-bubble.b1 { width: 90px; height: 90px; left: 6%; bottom: 30%; }
+    .cd-bubble.b2 { width: 46px; height: 46px; right: 18%; bottom: 52%; animation-delay: 1.4s; }
+    .cd-bubble.b3 { width: 120px; height: 120px; right: 6%; bottom: 22%; animation-delay: 2.6s; }
+    .cd-bubble.b4 { width: 34px; height: 34px; left: 44%; bottom: 64%; animation-delay: 0.9s; }
+    .cd-bubble.b5 { width: 64px; height: 64px; left: 26%; bottom: 18%; animation-delay: 3.4s; }
+    @keyframes cd-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-26px); } }
+    .cd-hero-in { position: relative; z-index: 3; max-width: 1200px; width: 100%; margin: 0 auto; padding: 130px clamp(20px, 4vw, 40px) 30px; }
+    .cd-est { display: flex; gap: 14px; align-items: center; font-weight: 700; font-size: 13px; letter-spacing: 0.34em; color: var(--cd-blue); margin: 0 0 18px; }
+    .cd-h1 { font-family: var(--cd-display); font-size: clamp(3.6rem, 13vw, 10.5rem); line-height: 0.92; margin: 0 0 22px; letter-spacing: 0.02em;
+      filter: drop-shadow(0 6px 0 rgba(178, 141, 255, 0.35)) drop-shadow(0 14px 34px rgba(255, 110, 199, 0.35)); }
+    .cd-lede { font-size: 18.5px; line-height: 1.6; max-width: 44ch; color: #e8dcf0; margin: 0 0 34px; font-weight: 500; }
+    .cd-hero-cta { display: flex; gap: 14px; flex-wrap: wrap; }
+    .cd-hero-photo { position: absolute; right: 4%; bottom: 120px; width: min(340px, 34vw); z-index: 2; transform: rotate(4deg);
+      border: 10px solid #fff; border-bottom-width: 44px; box-shadow: 0 24px 60px rgba(0,0,0,0.5); }
+    .cd-hero-photo img { width: 100%; height: 380px; object-fit: cover; filter: saturate(1.25) contrast(1.05); }
+    .cd-badge-new, .cd-badge-hot {
+      position: absolute; z-index: 4; font-family: var(--cd-display); font-size: 20px; color: #fff;
+      background: radial-gradient(circle at 35% 30%, #ff9ed8, var(--cd-pink) 65%, #d63f9c);
+      width: 92px; height: 92px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 8px 22px rgba(255,110,199,0.55), inset 0 3px 6px rgba(255,255,255,0.5);
+      animation: cd-wobble 4s ease-in-out infinite;
+    }
+    .cd-badge-new { top: 20%; right: 30%; transform: rotate(-12deg); }
+    .cd-badge-hot { top: 46%; right: 6%; transform: rotate(10deg); animation-delay: 1.8s;
+      background: radial-gradient(circle at 35% 30%, #cdb4ff, var(--cd-lav) 65%, #7f5fe0); box-shadow: 0 8px 22px rgba(178,141,255,0.55), inset 0 3px 6px rgba(255,255,255,0.5); }
+    @keyframes cd-wobble { 0%, 100% { rotate: -6deg; } 50% { rotate: 8deg; } }
+    .cd-ticker { position: relative; z-index: 3; background: linear-gradient(180deg, #ff9ed8, var(--cd-pink)); color: var(--cd-black); overflow: hidden; padding: 13px 0; border-block: 3px solid #fff; }
+    .cd-ticker-track { display: flex; gap: 28px; width: max-content; animation: cd-tick 18s linear infinite; font-family: var(--cd-display); font-size: 18px; letter-spacing: 0.06em; white-space: nowrap; }
+    @keyframes cd-tick { to { transform: translateX(-50%); } }
+
+    /* sections */
+    .cd-section { padding: clamp(70px, 9vw, 130px) 0; }
+
+    /* drops */
+    .cd-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+    .cd-card {
+      background: linear-gradient(180deg, #ffffff, #ffe9f5);
+      border-radius: 26px; overflow: hidden; color: var(--cd-black);
+      box-shadow: 0 18px 44px rgba(255, 110, 199, 0.22);
+      transition: transform 0.2s ease;
+      position: relative;
+    }
+    .cd-card::before { content: ""; position: absolute; top: 0; left: 8%; right: 8%; height: 60px; border-radius: 0 0 40px 40px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.7), transparent); pointer-events: none; z-index: 2; }
+    .cd-card:hover { transform: translateY(-8px) rotate(-1deg); }
+    .cd-card-img { position: relative; }
+    .cd-card-img img { width: 100%; height: 260px; object-fit: cover; }
+    .cd-tag {
+      position: absolute; top: 14px; right: 14px; font-family: var(--cd-display); font-size: 14px;
+      background: var(--cd-pink); color: #fff; padding: 8px 14px; border-radius: 999px;
+      transform: rotate(8deg); box-shadow: 0 6px 16px rgba(255,110,199,0.5);
+    }
+    .cd-tag-blue { background: var(--cd-blue); box-shadow: 0 6px 16px rgba(135,206,250,0.5); }
+    .cd-tag-hot { background: var(--cd-lav); box-shadow: 0 6px 16px rgba(178,141,255,0.5); }
+    .cd-card-body { padding: 22px 22px 26px; display: grid; gap: 10px; }
+    .cd-card-body h3 { font-family: var(--cd-display); font-size: 19px; margin: 0; letter-spacing: 0.03em; }
+    .cd-card-body p { margin: 0; font-size: 14.5px; color: #6b5560; line-height: 1.55; }
+    .cd-card-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; }
+    .cd-card-foot strong { font-family: var(--cd-display); font-size: 24px; color: #c2267f; }
+
+    /* lookbook */
+    .cd-look { background: linear-gradient(180deg, #14141f, #1d1030); border-block: 2px solid rgba(255,110,199,0.35); padding: clamp(70px, 9vw, 130px) 0; }
+    .cd-look-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+    .cd-polaroid { background: #fff; padding: 14px 14px 0; margin: 0; transform: rotate(-2deg);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.45); position: relative; }
+    .cd-polaroid:nth-child(2) { transform: rotate(2.5deg); }
+    .cd-polaroid:nth-child(3) { transform: rotate(-1deg); }
+    .cd-polaroid::before { content: ""; position: absolute; top: -14px; left: 50%; transform: translateX(-50%) rotate(-4deg);
+      width: 110px; height: 30px; background: rgba(135, 206, 250, 0.75); box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+    .cd-polaroid img { width: 100%; height: 340px; object-fit: cover; filter: saturate(1.2); }
+    .cd-polaroid figcaption { font-family: var(--cd-display); font-size: 14px; color: var(--cd-black); padding: 16px 6px 20px; letter-spacing: 0.04em; }
+
+    /* manifesto */
+    .cd-mani { background: linear-gradient(180deg, #ff9ed8, var(--cd-pink) 60%, #f252b0); padding: clamp(70px, 9vw, 120px) 0; }
+    .cd-mani-in { max-width: 900px; }
+    .cd-mani-list { list-style: none; margin: 34px 0 0; padding: 0; display: grid; gap: 20px; }
+    .cd-mani-list li {
+      display: flex; align-items: center; gap: 18px;
+      font-family: var(--cd-display); font-size: clamp(1.1rem, 2.6vw, 1.7rem); color: #fff;
+      background: rgba(11, 11, 16, 0.85); padding: 20px 26px; border-radius: 18px;
+      box-shadow: 0 10px 26px rgba(11,11,16,0.3);
+    }
+    .cd-heart { width: 34px; height: 30px; fill: var(--cd-pink); flex: none; shape-rendering: crispEdges; animation: cd-beat 1.4s ease-in-out infinite; }
+    @keyframes cd-beat { 0%, 100% { transform: scale(1); } 25% { transform: scale(1.25); } }
+
+    /* reviews */
+    .cd-reviews { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    .cd-review {
+      background: rgba(255, 255, 255, 0.06); border: 2px solid rgba(178, 141, 255, 0.4);
+      border-radius: 22px; padding: 28px; margin: 0;
+      backdrop-filter: blur(6px);
+    }
+    .cd-stars-row { color: var(--cd-yel, #FFE45E); font-size: 20px; letter-spacing: 4px; margin: 0 0 14px; color: #FFE45E; }
+    .cd-review p { margin: 0 0 14px; font-size: 16px; line-height: 1.6; color: #efe6f2; }
+    .cd-review cite { font-style: normal; font-weight: 700; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--cd-pink); }
+
+    /* mailing list */
+    .cd-mail { background: linear-gradient(135deg, var(--cd-lav), #8f6bf0); padding: clamp(70px, 9vw, 120px) 0; }
+    .cd-mail-in { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(36px, 6vw, 80px); align-items: center; }
+    .cd-mail-copy { font-size: 17px; line-height: 1.6; color: #2b1b4d; font-weight: 600; max-width: 42ch; margin: 0; }
+    .cd-form { background: var(--cd-black); padding: clamp(28px, 4vw, 44px); border-radius: 26px; display: grid; gap: 18px;
+      box-shadow: 0 24px 60px rgba(11,11,16,0.4); }
+    .cd-form label { display: grid; gap: 10px; font-weight: 700; font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--cd-lav); }
+    .cd-form input {
+      font-family: var(--cd-body); font-size: 16px; font-weight: 600;
+      background: #1b1b28; border: 2px solid #33334d; color: #fff; border-radius: 14px;
+      padding: 15px 18px; width: 100%;
+    }
+    .cd-form input:focus { outline: none; border-color: var(--cd-pink); box-shadow: 0 0 0 3px rgba(255,110,199,0.3); }
+    .cd-form-note { margin: 0; color: var(--cd-pink); font-weight: 700; font-size: 15.5px; }
+    .cd-form-note:empty { display: none; }
+
+    /* contact */
+    .cd-contact-in { display: grid; gap: 10px; }
+    .cd-contact-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 30px; }
+    .cd-contact-card {
+      background: linear-gradient(180deg, #1c1c2b, #14141f);
+      border: 2px solid rgba(255, 110, 199, 0.45); border-radius: 22px; padding: 34px;
+    }
+    .cd-contact-card h3 { font-family: var(--cd-display); font-size: 20px; color: var(--cd-pink); margin: 0 0 14px; letter-spacing: 0.05em; }
+    .cd-contact-card p { margin: 0; font-size: 16.5px; line-height: 1.75; color: #d9cfe0; }
+    .cd-contact-card a { color: var(--cd-blue); font-weight: 700; }
+
+    /* footer */
+    .cd-footer { padding: 80px 0 90px; text-align: center; overflow: hidden; border-top: 2px solid rgba(255,110,199,0.4); }
+    .cd-footer-giant { font-family: var(--cd-display); font-size: clamp(3rem, 14vw, 11rem); line-height: 1; margin: 0 0 30px; letter-spacing: 0.03em; }
+    .cd-footer-in { display: grid; gap: 10px; color: #9b8ba3; font-size: 14.5px; }
+    .cd-footer-in p { margin: 0; }
+    .cd-footer-in a { color: var(--cd-pink); }
+
+    @media (max-width: 1020px) {
+      .cd-grid { grid-template-columns: 1fr 1fr; }
+      .cd-hero-photo { display: none; }
+      .cd-badge-new { right: 12%; }
+    }
+    @media (max-width: 860px) {
+      .cd-nav-links, .cd-nav > .cd-btn { display: none; }
+      .cd-burger { display: flex; }
+      .cd-look-grid { grid-template-columns: 1fr; max-width: 440px; margin-inline: auto; }
+      .cd-reviews { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; }
+      .cd-mail-in { grid-template-columns: 1fr; }
+      .cd-contact-cards { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .cd-grid { grid-template-columns: 1fr; max-width: 420px; margin-inline: auto; }
+      .cd-badge-new { width: 72px; height: 72px; font-size: 15px; top: 15%; }
+      .cd-badge-hot { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .cd-ticker-track, .cd-spark, .cd-bubble, .cd-badge-new, .cd-badge-hot, .cd-heart { animation: none; }
+      .cd-btn, .cd-card { transition: none; }
+    }
+  </style>
+</body>
+</html>
