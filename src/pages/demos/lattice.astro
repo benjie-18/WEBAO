@@ -1,8 +1,10 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
 
-// Demo microsite: Lattice, fictional modular productivity SaaS, Toronto.
-// Standalone art direction. Full bento grid. Not connected to the WEBAO theme system.
+// Demo microsite: Lattice · fictional modular productivity app, Toronto.
+// Rebuilt as ONE GIANT BENTO GRID: no sections at all. Nav, headline,
+// stats, modules, pricing, testimonials, contact form and footer are all
+// cells in a single continuous grid. Standalone art direction.
 const IMG = {
   desk: "/demos/lattice/01.jpg",
   planner: "/demos/lattice/02.jpg",
@@ -17,536 +19,293 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lattice: Every Tool, One Grid</title>
-  <meta name="description" content="Lattice is the modular productivity platform. Snap tasks, docs, time and teams into one bento dashboard. Free for 14 days." />
+  <title>Lattice · Every tool. One grid.</title>
+  <meta name="description" content="Lattice demo: a modular productivity app presented as one giant bento grid. Fictional product." />
   <meta name="robots" content="noindex" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 </head>
-<body class="lt">
+<body class="bx">
+
+  <!-- THE WHOLE PAGE: one bento grid -->
+  <main class="bx-grid" id="top">
+
+    <!-- nav cell -->
+    <nav class="bx-cell bx-nav" aria-label="Primary">
+      <a class="bx-logo" href="#top"><span class="bx-logo-box" aria-hidden="true"></span>Lattice</a>
+      <div class="bx-nav-links">
+        <a href="#cell-modules">Modules</a>
+        <a href="#cell-pricing">Pricing</a>
+        <a href="#cell-contact">Contact</a>
+      </div>
+      <a class="bx-cta" href="#cell-contact">Start free</a>
+    </nav>
+
+    <!-- headline cell -->
+    <header class="bx-cell bx-hero">
+      <p class="bx-mono bx-hero-kicker">Modular productivity · Toronto</p>
+      <h1 class="bx-h1">Every tool.<br />One <span class="bx-lime">grid.</span></h1>
+      <p class="bx-hero-sub">Lattice snaps docs, boards, chat and automations into a single workspace shaped exactly like your team.</p>
+      <a class="bx-cta" href="#cell-contact">Build your grid</a>
+    </header>
+
+    <!-- focus score cell -->
+    <div class="bx-cell bx-stat">
+      <p class="bx-mono">Focus score · this week</p>
+      <p class="bx-bignum">92<span class="bx-lime">%</span></p>
+      <p class="bx-mono bx-dim">Up 6 points since Monday</p>
+    </div>
+
+    <!-- today cell -->
+    <div class="bx-cell bx-today">
+      <p class="bx-mono">Today · 4 open</p>
+      <ul class="bx-checks">
+        <li><span class="bx-box bx-done" aria-hidden="true">✓</span>Ship onboarding flow</li>
+        <li><span class="bx-box bx-done" aria-hidden="true">✓</span>Review sprint board</li>
+        <li><span class="bx-box" aria-hidden="true"></span>Draft launch notes</li>
+        <li><span class="bx-box" aria-hidden="true"></span>1:1 with Priya</li>
+      </ul>
+    </div>
+
+    <!-- image cell: desk -->
+    <figure class="bx-cell bx-imgcell">
+      <img src={IMG.desk} alt="A calm desk with a laptop running Lattice" loading="lazy" />
+    </figure>
+
+    <!-- hours saved cell -->
+    <div class="bx-cell bx-stat">
+      <p class="bx-mono">Hours saved</p>
+      <p class="bx-bignum">11.4<span class="bx-lime">h</span></p>
+      <p class="bx-mono bx-dim">Automations did the boring parts</p>
+    </div>
+
+    <!-- calendar cell -->
+    <div class="bx-cell bx-cal">
+      <p class="bx-mono">October</p>
+      <div class="bx-cal-grid" aria-hidden="true">
+        <span></span><span></span><span>1</span><span>2</span><span>3</span><span class="bx-cal-now">4</span><span>5</span>
+        <span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span>
+      </div>
+      <p class="bx-mono bx-dim">2 meetings today. Both could have been a cell.</p>
+    </div>
+
+    <!-- team pulse cell -->
+    <div class="bx-cell bx-pulse">
+      <p class="bx-mono">Team pulse · live</p>
+      <div class="bx-dots" aria-hidden="true"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></div>
+      <p class="bx-pulse-line">4 of 6 online now</p>
+    </div>
+
+    <!-- image cell: planner, wide -->
+    <figure class="bx-cell bx-imgcell bx-wide">
+      <img src={IMG.planner} alt="A planner page filled with a Lattice weekly layout" loading="lazy" />
+    </figure>
+
+    <!-- modules: four small cells -->
+    <div class="bx-cell bx-mod" id="cell-modules">
+      <p class="bx-mod-ico" aria-hidden="true">▤</p>
+      <h2>Docs</h2>
+      <p>Notes that link themselves together.</p>
+    </div>
+    <div class="bx-cell bx-mod">
+      <p class="bx-mod-ico" aria-hidden="true">▦</p>
+      <h2>Boards</h2>
+      <p>Kanban without the kanban guilt.</p>
+    </div>
+    <div class="bx-cell bx-mod">
+      <p class="bx-mod-ico" aria-hidden="true">◭</p>
+      <h2>Chat</h2>
+      <p>Threads that stay where the work is.</p>
+    </div>
+    <div class="bx-cell bx-mod">
+      <p class="bx-mod-ico" aria-hidden="true">⚙</p>
+      <h2>Automations</h2>
+      <p>Rules that file, nudge and remind.</p>
+    </div>
+
+    <!-- workflow: three step cells -->
+    <div class="bx-cell bx-step">
+      <p class="bx-mono bx-lime">Capture</p>
+      <p>Drop everything in. Lattice sorts it before you finish your coffee.</p>
+    </div>
+    <div class="bx-cell bx-step">
+      <p class="bx-mono bx-lime">Arrange</p>
+      <p>Drag cells around until the week looks like a week you want.</p>
+    </div>
+    <div class="bx-cell bx-step">
+      <p class="bx-mono bx-lime">Ship</p>
+      <p>Share one link. Everyone sees the same grid, live.</p>
+    </div>
+
+    <!-- pricing: three cells -->
+    <div class="bx-cell bx-price" id="cell-pricing">
+      <h2>Starter</h2>
+      <p class="bx-bignum">$0</p>
+      <p class="bx-dim">3 boards · 1 automation<br />Up to 5 teammates</p>
+      <a class="bx-ghost" href="#cell-contact">Start free</a>
+    </div>
+    <div class="bx-cell bx-price bx-price-hot">
+      <p class="bx-mono bx-lime">Most snapped-in</p>
+      <h2>Studio</h2>
+      <p class="bx-bignum">$12<span class="bx-per">/mo</span></p>
+      <p class="bx-dim">Unlimited cells · 50 automations<br />Guests + version history</p>
+      <a class="bx-cta" href="#cell-contact">Try Studio</a>
+    </div>
+    <div class="bx-cell bx-price">
+      <h2>Enterprise</h2>
+      <p class="bx-bignum">Talk</p>
+      <p class="bx-dim">SSO · audit log · dedicated grid<br />A human on call</p>
+      <a class="bx-ghost" href="#cell-contact">Contact sales</a>
+    </div>
+
+    <!-- testimonial cell -->
+    <blockquote class="bx-cell bx-quote">
+      <p>"We deleted four apps in a week. The grid just ate them."</p>
+      <footer class="bx-mono bx-dim">Amara O. · ops lead, Fern Studio</footer>
+    </blockquote>
+
+    <!-- image cell: team -->
+    <figure class="bx-cell bx-imgcell">
+      <img src={IMG.team} alt="A product team around a table planning on a whiteboard" loading="lazy" />
+    </figure>
+
+    <!-- contact form cell -->
+    <div class="bx-cell bx-contact" id="cell-contact">
+      <h2 class="bx-h2">Get your grid</h2>
+      <form id="bx-form">
+        <label>Work email<input type="email" name="email" required autocomplete="email" placeholder="you@studio.com" /></label>
+        <label>Team size<select name="size"><option>Just me</option><option>2 to 10</option><option>11 to 50</option><option>50+</option></select></label>
+        <button class="bx-cta bx-cta-full" type="submit">Claim your workspace</button>
+        <p class="bx-mono bx-form-done" id="bx-done" hidden>Grid reserved. Check your inbox.</p>
+      </form>
+    </div>
+
+    <!-- image cell: notes -->
+    <figure class="bx-cell bx-imgcell">
+      <img src={IMG.notes} alt="Handwritten notes next to a Lattice board" loading="lazy" />
+    </figure>
+
+    <!-- image cell: office, wide-ish -->
+    <figure class="bx-cell bx-imgcell bx-wide2">
+      <img src={IMG.office} alt="A bright studio office with a shared work table" loading="lazy" />
+    </figure>
+
+    <!-- footer cell -->
+    <footer class="bx-cell bx-foot">
+      <p class="bx-mono">Lattice · fictitious demo site · Toronto</p>
+      <p class="bx-mono bx-dim">hello@lattice.example · (416) 555-0133</p>
+    </footer>
+  </main>
 
   <EscapeHatch locale="en" />
 
-  <!-- NAV -->
-  <header class="lt-navwrap">
-    <nav class="lt-nav" aria-label="Primary">
-      <a class="lt-logo" href="#top" aria-label="Lattice, home">
-        <span class="lt-logo-box" aria-hidden="true"></span>lattice
-      </a>
-      <button class="lt-burger" aria-label="Open menu" aria-expanded="false" aria-controls="lt-menu">
-        <span></span><span></span><span></span>
-      </button>
-      <div class="lt-menu" id="lt-menu">
-        <div class="lt-nav-links">
-          <a href="#modules">Modules</a>
-          <a href="#workflows">Workflows</a>
-          <a href="#pricing">Pricing</a>
-        </div>
-        <a class="lt-btn lt-btn-dark" href="#cta">Start free</a>
-      </div>
-    </nav>
-  </header>
+  <style>
+    .bx { --bg: #0e0f0c; --cell: #171814; --cell2: #1e2019; --ink: #f2f3ea; --mut: #9a9c8d; --lime: #c8f04a; --line: #2a2c23; --mono: "IBM Plex Mono", ui-monospace, monospace; --sans: "Space Grotesk", system-ui, sans-serif; background: var(--bg); color: var(--ink); font-family: var(--sans); margin: 0; min-height: 100vh; }
+    .bx * { box-sizing: border-box; }
+    .bx img { display: block; max-width: 100%; }
+    .bx .bx-mono { font-family: var(--mono); font-size: 12px; letter-spacing: .05em; }
+    .bx .bx-dim { color: var(--mut); }
+    .bx .bx-lime { color: var(--lime); }
+    .bx .bx-h1 { font-size: clamp(38px, 5.5vw, 68px); line-height: .98; letter-spacing: -0.03em; margin: 14px 0 0; font-weight: 700; }
+    .bx .bx-h2 { font-size: clamp(24px, 3vw, 34px); letter-spacing: -0.02em; margin: 0 0 18px; }
+    .bx .bx-bignum { font-size: clamp(34px, 4vw, 52px); font-weight: 700; letter-spacing: -0.03em; margin: 10px 0; font-variant-numeric: tabular-nums; }
+    .bx .bx-per { font-size: 16px; color: var(--mut); letter-spacing: 0; }
+    .bx .bx-cta { display: inline-block; background: var(--lime); color: #141505; font-weight: 700; font-size: 15px; padding: 12px 24px; border-radius: 999px; text-decoration: none; border: 0; cursor: pointer; font-family: var(--sans); }
+    .bx .bx-cta:hover { background: #d9ff63; }
+    .bx .bx-cta-full { width: 100%; }
+    .bx .bx-ghost { display: inline-block; margin-top: 14px; color: var(--ink); font-weight: 600; font-size: 14px; text-decoration: none; border: 1px solid var(--line); padding: 10px 20px; border-radius: 999px; }
+    .bx .bx-ghost:hover { border-color: var(--lime); color: var(--lime); }
 
-  <main id="top">
+    /* the grid IS the page */
+    .bx-grid { display: grid; grid-template-columns: repeat(12, 1fr); grid-auto-rows: minmax(120px, auto); gap: 14px; max-width: 1240px; margin: 0 auto; padding: 22px 20px 90px; }
+    .bx-cell { background: var(--cell); border: 1px solid var(--line); border-radius: 18px; padding: 26px; min-width: 0; }
+    .bx-cell h2 { font-size: 19px; margin: 0 0 8px; letter-spacing: -0.01em; }
+    .bx-cell p { margin: 0; }
 
-    <!-- HERO -->
-    <section class="lt-hero">
-      <div class="lt-wrap">
-        <p class="lt-eyebrow"><span class="lt-dot-live" aria-hidden="true"></span>14-day free trial, no card</p>
-        <h1 class="lt-h1">Every tool.<br />One <span class="lt-lime">grid.</span></h1>
-        <p class="lt-lede">Lattice snaps your tasks, docs, time and team into one tidy dashboard. Add a module when you need it, hide it when you don't. Your workflow, in boxes.</p>
-        <div class="lt-hero-cta">
-          <a class="lt-btn lt-btn-dark" href="#cta">Build your grid</a>
-          <a class="lt-btn lt-btn-line" href="#modules">See modules</a>
-        </div>
+    .bx-nav { grid-column: span 12; display: flex; align-items: center; gap: 26px; padding: 16px 26px; }
+    .bx-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 19px; color: var(--ink); text-decoration: none; margin-right: auto; }
+    .bx-logo-box { width: 22px; height: 22px; border-radius: 6px; background: linear-gradient(135deg, var(--lime), #7ddf6a); }
+    .bx-nav-links { display: flex; gap: 22px; }
+    .bx-nav-links a { color: var(--mut); text-decoration: none; font-size: 14px; font-weight: 500; }
+    .bx-nav-links a:hover { color: var(--ink); }
 
-        <!-- Live bento dashboard -->
-        <div class="lt-dash" aria-label="Lattice dashboard preview">
-          <div class="lt-cell lt-dash-main">
-            <div class="lt-cell-head"><h2>Focus score</h2><span class="lt-tag">This week</span></div>
-            <p class="lt-big">87<span class="lt-big-sub">/100</span></p>
-            <div class="lt-bars" aria-hidden="true">
-              <span style="--h:42%"></span><span style="--h:58%"></span><span style="--h:36%"></span><span style="--h:70%"></span>
-              <span style="--h:55%"></span><span style="--h:82%"></span><span style="--h:64%"></span><span style="--h:92%"></span>
-              <span style="--h:74%"></span><span style="--h:66%"></span><span style="--h:88%"></span><span style="--h:80%"></span>
-            </div>
-            <p class="lt-cell-note">Up 12 points since Monday. Deep work pays off.</p>
-          </div>
-          <div class="lt-cell lt-dash-tasks">
-            <div class="lt-cell-head"><h2>Today</h2><span class="lt-tag lt-tag-lime">4 open</span></div>
-            <ul class="lt-checks">
-              <li class="lt-done"><span aria-hidden="true"></span>Ship onboarding email</li>
-              <li class="lt-done"><span aria-hidden="true"></span>Review Q3 roadmap</li>
-              <li><span aria-hidden="true"></span>Draft launch notes</li>
-              <li><span aria-hidden="true"></span>1:1 with Priya</li>
-            </ul>
-          </div>
-          <div class="lt-cell lt-dash-stat">
-            <h2>Active projects</h2>
-            <p class="lt-stat-num">12</p>
-            <p class="lt-cell-note">3 due this week</p>
-          </div>
-          <div class="lt-cell lt-dash-stat">
-            <h2>Hours saved</h2>
-            <p class="lt-stat-num">31</p>
-            <p class="lt-cell-note">vs. last month</p>
-          </div>
-          <div class="lt-cell lt-dash-cal">
-            <div class="lt-cell-head"><h2>Calendar</h2><span class="lt-tag">Oct</span></div>
-            <div class="lt-cal" aria-hidden="true">
-              <span></span><span></span><span></span><span></span><span class="lt-busy"></span><span></span><span></span>
-              <span class="lt-busy"></span><span></span><span class="lt-busy"></span><span></span><span></span><span class="lt-busy"></span><span></span>
-              <span></span><span></span><span></span><span class="lt-today"></span><span></span><span></span><span></span>
-            </div>
-            <p class="lt-cell-note">Next: design sync, 2:00 PM</p>
-          </div>
-          <div class="lt-cell lt-dash-img">
-            <img src={IMG.desk} alt="Tidy desk with laptop and coffee, the Lattice way" loading="eager" fetchpriority="high" />
-          </div>
-          <div class="lt-cell lt-dash-team">
-            <div class="lt-cell-head"><h2>Team pulse</h2><span class="lt-tag lt-tag-lime">Live</span></div>
-            <div class="lt-pulse" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-            <p class="lt-cell-note">6 online now, 0 blockers</p>
-          </div>
-        </div>
-      </div>
-    </section>
+    .bx-hero { grid-column: span 8; grid-row: span 2; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; background: linear-gradient(140deg, var(--cell2), var(--cell)); }
+    .bx-hero-kicker { color: var(--lime); text-transform: uppercase; }
+    .bx-hero-sub { color: var(--mut); font-size: 17px; line-height: 1.6; max-width: 44ch; margin: 16px 0 22px; }
+    .bx-stat { grid-column: span 4; display: flex; flex-direction: column; justify-content: center; }
+    .bx-today { grid-column: span 4; }
+    .bx-checks { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 10px; font-size: 14px; }
+    .bx-checks li { display: flex; align-items: center; gap: 10px; color: var(--mut); }
+    .bx-box { width: 18px; height: 18px; border-radius: 6px; border: 1.5px solid var(--mut); display: inline-flex; align-items: center; justify-content: center; font-size: 12px; color: #141505; flex-shrink: 0; }
+    .bx-box.bx-done { background: var(--lime); border-color: var(--lime); }
 
-    <!-- MODULES -->
-    <section class="lt-section" id="modules">
-      <div class="lt-wrap">
-        <p class="lt-kicker">Modules</p>
-        <h2 class="lt-h2">Snap in what<br />you need. Nothing else.</h2>
-        <div class="lt-bento">
-          <article class="lt-cell lt-span4">
-            <div class="lt-cell-head"><h3>Tasks</h3><span class="lt-tag">Core</span></div>
-            <p>Kanban, list, or calendar. Tasks that surface themselves when they matter and stay quiet when they don't.</p>
-            <div class="lt-kanban" aria-hidden="true">
-              <div><i></i><i></i></div><div><i></i></div><div><i></i><i></i><i></i></div>
-            </div>
-          </article>
-          <article class="lt-cell lt-span2">
-            <div class="lt-cell-head"><h3>Docs</h3><span class="lt-tag">Core</span></div>
-            <p>Notes that link to tasks automatically.</p>
-          </article>
-          <article class="lt-cell lt-span2">
-            <div class="lt-cell-head"><h3>Time</h3><span class="lt-tag lt-tag-lime">New</span></div>
-            <p>One-tap tracking, honest reports.</p>
-          </article>
-          <article class="lt-cell lt-span2">
-            <div class="lt-cell-head"><h3>Habits</h3><span class="lt-tag">Add-on</span></div>
-            <p>Streaks without the guilt trip.</p>
-          </article>
-          <article class="lt-cell lt-span2">
-            <div class="lt-cell-head"><h3>CRM lite</h3><span class="lt-tag">Add-on</span></div>
-            <p>Contacts with context, not clutter.</p>
-          </article>
-          <article class="lt-cell lt-span3">
-            <div class="lt-cell-head"><h3>Automations</h3><span class="lt-tag lt-tag-lime">Pro</span></div>
-            <p>If this, then sorted. Build rules in plain language, like "when a task is overdue, nudge me at 9am."</p>
-            <img src={IMG.planner} alt="Productivity dashboard interface in a clean grid layout" loading="lazy" />
-          </article>
-          <article class="lt-cell lt-span3">
-            <div class="lt-cell-head"><h3>Insights</h3><span class="lt-tag lt-tag-lime">Pro</span></div>
-            <p>Where did the week actually go? Gentle charts, zero surveillance vibes.</p>
-            <img src={IMG.notes} alt="Handwritten notes and sketches on paper" loading="lazy" />
-          </article>
-        </div>
-      </div>
-    </section>
+    .bx-imgcell { padding: 0; overflow: hidden; grid-column: span 4; min-height: 220px; }
+    .bx-imgcell img { width: 100%; height: 100%; object-fit: cover; }
+    .bx-wide { grid-column: span 8; }
+    .bx-wide2 { grid-column: span 7; }
 
-    <!-- WORKFLOWS -->
-    <section class="lt-section" id="workflows">
-      <div class="lt-wrap">
-        <p class="lt-kicker">Workflows</p>
-        <h2 class="lt-h2">From chaos<br />to grid in three steps</h2>
-        <div class="lt-flow">
-          <article class="lt-cell">
-            <p class="lt-step">01</p>
-            <h3>Dump everything</h3>
-            <p>Forward emails, paste links, brain-dump voice notes. Lattice sorts the pile into candidate tasks.</p>
-          </article>
-          <article class="lt-cell">
-            <p class="lt-step">02</p>
-            <h3>Arrange the grid</h3>
-            <p>Drag modules into place. Your Monday grid can look nothing like your Friday grid, and that's the point.</p>
-          </article>
-          <article class="lt-cell">
-            <p class="lt-step">03</p>
-            <h3>Let it hum</h3>
-            <p>Automations handle the busywork. You get a calm dashboard and your evenings back.</p>
-          </article>
-        </div>
-        <div class="lt-bento lt-flow-imgs">
-          <div class="lt-cell lt-span3 lt-img-cell"><img src={IMG.team} alt="Team collaborating around a laptop" loading="lazy" /></div>
-          <div class="lt-cell lt-span3 lt-img-cell"><img src={IMG.office} alt="Bright organized office space" loading="lazy" /></div>
-        </div>
-      </div>
-    </section>
+    .bx-cal { grid-column: span 4; }
+    .bx-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin: 12px 0; font-size: 12px; text-align: center; color: var(--mut); }
+    .bx-cal-grid span { padding: 6px 0; border-radius: 8px; }
+    .bx-cal-now { background: var(--lime); color: #141505; font-weight: 700; }
 
-    <!-- PRICING -->
-    <section class="lt-section" id="pricing">
-      <div class="lt-wrap">
-        <p class="lt-kicker">Pricing</p>
-        <h2 class="lt-h2">Pick your<br />box size</h2>
-        <div class="lt-tiers">
-          <article class="lt-cell lt-tier">
-            <h3>Solo</h3>
-            <p class="lt-tier-price">$0<span>/mo</span></p>
-            <p>For personal grids.</p>
-            <ul>
-              <li>5 modules</li>
-              <li>Unlimited tasks</li>
-              <li>1 GB storage</li>
-            </ul>
-            <a class="lt-btn lt-btn-line" href="#cta">Start free</a>
-          </article>
-          <article class="lt-cell lt-tier lt-tier-pop">
-            <p class="lt-pop-tag">Most popular</p>
-            <h3>Team</h3>
-            <p class="lt-tier-price">$12<span>/user/mo</span></p>
-            <p>For grids that collaborate.</p>
-            <ul>
-              <li>All modules</li>
-              <li>Shared dashboards</li>
-              <li>Automations</li>
-              <li>100 GB storage</li>
-            </ul>
-            <a class="lt-btn lt-btn-lime" href="#cta">Start 14-day trial</a>
-          </article>
-          <article class="lt-cell lt-tier">
-            <h3>Enterprise</h3>
-            <p class="lt-tier-price">Custom</p>
-            <p>For grids with compliance.</p>
-            <ul>
-              <li>SSO and audit logs</li>
-              <li>Dedicated success manager</li>
-              <li>Onboarding concierge</li>
-            </ul>
-            <a class="lt-btn lt-btn-line" href="#cta">Talk to us</a>
-          </article>
-        </div>
-      </div>
-    </section>
+    .bx-pulse { grid-column: span 4; }
+    .bx-dots { display: flex; gap: 8px; margin: 14px 0 10px; }
+    .bx-dots span { width: 14px; height: 14px; border-radius: 50%; background: var(--line); }
+    .bx-dots span.on { background: var(--lime); box-shadow: 0 0 10px rgba(200,240,74,.6); }
+    .bx-pulse-line { font-size: 14px; color: var(--mut); }
 
-    <!-- PROOF -->
-    <section class="lt-section">
-      <div class="lt-wrap">
-        <p class="lt-kicker">Wall of love</p>
-        <h2 class="lt-h2">Small cells,<br />big opinions</h2>
-        <div class="lt-quotes">
-          <figure class="lt-cell lt-quote"><blockquote>"Replaced four apps in a week. My grid is the first tab I open."</blockquote><figcaption><strong>Lena K.</strong><span>Product lead, Fernway</span></figcaption></figure>
-          <figure class="lt-cell lt-quote"><blockquote>"The automations are scary good. It files my expense tasks before I remember them."</blockquote><figcaption><strong>Marcus T.</strong><span>Founder, Northloop</span></figcaption></figure>
-          <figure class="lt-cell lt-quote"><blockquote>"Finally, a dashboard my whole team actually checks."</blockquote><figcaption><strong>Amara O.</strong><span>Ops, Brightline Co.</span></figcaption></figure>
-          <figure class="lt-cell lt-quote"><blockquote>"Bento everything. My brain thinks in boxes now."</blockquote><figcaption><strong>Jonas P.</strong><span>Freelance designer</span></figcaption></figure>
-        </div>
-      </div>
-    </section>
+    .bx-mod { grid-column: span 3; }
+    .bx-mod-ico { font-size: 26px; color: var(--lime); margin-bottom: 12px; }
+    .bx-mod p:last-child { color: var(--mut); font-size: 14px; margin-top: 6px; line-height: 1.55; }
 
-    <!-- CTA + CONTACT -->
-    <section class="lt-section" id="cta">
-      <div class="lt-wrap">
-        <div class="lt-cta-box">
-          <p class="lt-kicker lt-kicker-light">Ready?</p>
-          <h2 class="lt-h2 lt-h2-light">Your grid is<br />one click away.</h2>
-          <p class="lt-cta-sub">Free 14 days on Team. Keep Solo free forever. Cancel in two clicks, we checked.</p>
-          <form class="lt-cta-form" id="lt-form" novalidate>
-            <label class="lt-sr" for="lt-email">Work email</label>
-            <input class="lt-cta-input" id="lt-email" type="email" name="email" required autocomplete="email" placeholder="you@company.com" />
-            <button class="lt-btn lt-btn-lime" type="submit">Start free</button>
-          </form>
-          <p class="lt-form-note" id="lt-form-note" role="status" hidden></p>
-          <div class="lt-contact-row">
-            <address>
-              <strong>Lattice Labs Inc.</strong><br />
-              77 King Street West, Suite 3200<br />
-              Toronto, ON M5K 1G8<br />
-              <a href="tel:+14165550187">(416) 555-0187</a> ·
-              <a href="mailto:hello@latticelabs.example">hello@latticelabs.example</a>
-            </address>
-          </div>
-        </div>
-      </div>
-    </section>
+    .bx-step { grid-column: span 4; }
+    .bx-step .bx-mono { text-transform: uppercase; font-weight: 600; }
+    .bx-step p:last-child { color: var(--mut); font-size: 14px; margin-top: 10px; line-height: 1.6; }
 
-  </main>
+    .bx-price { grid-column: span 4; display: flex; flex-direction: column; align-items: flex-start; }
+    .bx-price .bx-dim { font-size: 14px; line-height: 1.7; margin-bottom: 6px; }
+    .bx-price-hot { background: linear-gradient(150deg, #20241a, var(--cell)); border-color: #4a522f; }
 
-  <footer class="lt-footer">
-    <div class="lt-wrap lt-footer-grid">
-      <div>
-        <a class="lt-logo" href="#top" aria-label="Lattice, home"><span class="lt-logo-box" aria-hidden="true"></span>lattice</a>
-        <p>Modular productivity, beautifully boxed.</p>
-      </div>
-      <nav aria-label="Footer">
-        <a href="#modules">Modules</a>
-        <a href="#workflows">Workflows</a>
-        <a href="#pricing">Pricing</a>
-      </nav>
-      <p class="lt-fine">Fictional demo site crafted by WEBAO. Lattice Labs Inc. does not exist.</p>
-    </div>
-  </footer>
+    .bx-quote { grid-column: span 8; display: flex; flex-direction: column; justify-content: center; }
+    .bx-quote p { font-size: clamp(20px, 2.6vw, 28px); font-weight: 600; letter-spacing: -0.01em; line-height: 1.35; }
+    .bx-quote footer { margin-top: 14px; }
 
-<style>
-  .lt {
-    --paper: #FAF9F6;
-    --ink: #1A1A1A;
-    --muted: #6f6d68;
-    --lime: #D4FF3F;
-    --line: #e7e4dc;
-    --card: #ffffff;
-    --radius: 22px;
-    background: var(--paper);
-    color: var(--ink);
-    font-family: "Space Grotesk", system-ui, sans-serif;
-    overflow-x: clip;
-    line-height: 1.55;
-  }
-  .lt *, .lt *::before, .lt *::after { box-sizing: border-box; }
-  .lt img { display: block; max-width: 100%; }
-  .lt a { color: inherit; }
-  .lt-wrap { width: min(1180px, 92%); margin-inline: auto; }
-  .lt-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .bx-contact { grid-column: span 5; }
+    .bx-contact form { display: grid; gap: 12px; }
+    .bx-contact label { display: grid; gap: 7px; font-size: 13px; font-weight: 600; color: var(--mut); }
+    .bx-contact input, .bx-contact select { font-family: var(--sans); font-size: 15px; padding: 11px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); width: 100%; }
+    .bx-contact input:focus, .bx-contact select:focus { outline: 2px solid var(--lime); outline-offset: 1px; }
+    .bx-form-done { color: var(--lime); }
 
-  /* Cells: the atomic unit */
-  .lt-cell { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; }
-  .lt-cell h2, .lt-cell h3 { margin: 0; font-size: 1rem; font-weight: 700; letter-spacing: -0.01em; }
-  .lt-cell p { color: var(--muted); margin: 10px 0 0; font-size: 0.95rem; }
-  .lt-cell-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
-  .lt-tag { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
-    border: 1px solid var(--line); border-radius: 999px; padding: 5px 11px; white-space: nowrap; }
-  .lt-tag-lime { background: var(--lime); border-color: var(--lime); color: var(--ink); }
-  .lt-cell-note { font-size: 0.85rem !important; }
+    .bx-foot { grid-column: span 5; display: flex; flex-direction: column; justify-content: center; gap: 8px; }
 
-  /* Nav */
-  .lt-navwrap { position: sticky; top: 12px; z-index: 50; }
-  .lt-nav { width: min(1180px, 92%); margin-inline: auto; background: rgba(250,249,246,.92); backdrop-filter: blur(12px);
-    border: 1px solid var(--line); border-radius: 18px; padding: 10px 12px 10px 18px;
-    display: flex; align-items: center; justify-content: space-between; position: relative; }
-  .lt-logo { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.3rem; letter-spacing: -0.03em; text-decoration: none; }
-  .lt-logo-box { width: 22px; height: 22px; border-radius: 7px; background: var(--lime); border: 1.5px solid var(--ink); }
-  .lt-menu { display: flex; align-items: center; gap: 28px; }
-  .lt-nav-links { display: flex; gap: 26px; }
-  .lt-nav-links a { text-decoration: none; font-weight: 500; font-size: 0.95rem; color: var(--muted); }
-  .lt-nav-links a:hover { color: var(--ink); }
-  .lt-burger { display: none; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 11px; cursor: pointer; }
-  .lt-burger span { display: block; width: 22px; height: 2.5px; border-radius: 3px; background: var(--ink); margin: 4.5px 0; }
-
-  /* Buttons */
-  .lt-btn { display: inline-block; text-decoration: none; font-weight: 700; font-family: inherit; font-size: 0.98rem;
-    border-radius: 14px; padding: 13px 26px; cursor: pointer; border: 1.5px solid var(--ink); transition: transform .15s ease, box-shadow .15s ease; }
-  .lt-btn-dark { background: var(--ink); color: var(--paper); }
-  .lt-btn-dark:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--lime); }
-  .lt-btn-line { background: var(--card); color: var(--ink); }
-  .lt-btn-line:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--ink); }
-  .lt-btn-lime { background: var(--lime); color: var(--ink); }
-  .lt-btn-lime:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--ink); }
-
-  /* Hero */
-  .lt-hero { padding: 64px 0 30px; }
-  .lt-eyebrow { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.85rem; color: var(--muted);
-    border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 8px 16px; margin: 0 0 22px; }
-  .lt-dot-live { width: 9px; height: 9px; border-radius: 50%; background: #22c55e; animation: lt-blink 1.6s ease-in-out infinite; }
-  @keyframes lt-blink { 50% { opacity: 0.35; } }
-  .lt-h1 { font-size: clamp(3rem, 7vw, 5.5rem); line-height: 0.98; letter-spacing: -0.045em; font-weight: 700; margin: 0 0 20px; }
-  .lt-lime { background: var(--lime); padding: 0 0.12em; border-radius: 0.12em; }
-  .lt-lede { font-size: 1.15rem; color: var(--muted); max-width: 52ch; margin: 0 0 28px; }
-  .lt-hero-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 44px; }
-
-  /* Dashboard bento */
-  .lt-dash { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; }
-  .lt-dash-main { grid-column: span 4; grid-row: span 2; }
-  .lt-dash-tasks { grid-column: span 2; grid-row: span 2; }
-  .lt-dash-stat { grid-column: span 2; }
-  .lt-dash-cal { grid-column: span 2; }
-  .lt-dash-img { grid-column: span 3; padding: 0; overflow: hidden; }
-  .lt-dash-img img { width: 100%; height: 100%; min-height: 190px; object-fit: cover; }
-  .lt-dash-team { grid-column: span 3; }
-  .lt-big { font-size: 3.6rem; font-weight: 700; letter-spacing: -0.04em; color: var(--ink) !important; margin: 8px 0 0 !important; }
-  .lt-big-sub { font-size: 1.2rem; color: var(--muted); font-weight: 500; }
-  .lt-stat-num { font-size: 2.6rem; font-weight: 700; letter-spacing: -0.03em; color: var(--ink) !important; margin: 8px 0 0 !important; }
-  .lt-bars { display: flex; align-items: flex-end; gap: 7px; height: 120px; margin: 18px 0 6px; }
-  .lt-bars span { flex: 1; border-radius: 6px; background: var(--line); height: var(--h); min-height: 8px; }
-  .lt-bars span:nth-child(8), .lt-bars span:nth-child(11) { background: var(--lime); border: 1px solid var(--ink); }
-  .lt-checks { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 10px; }
-  .lt-checks li { display: flex; align-items: center; gap: 12px; font-size: 0.95rem; font-weight: 500; color: var(--ink); }
-  .lt-checks li span { width: 20px; height: 20px; flex: none; border-radius: 7px; border: 1.5px solid var(--ink); background: var(--card); }
-  .lt-checks li.lt-done { color: var(--muted); text-decoration: line-through; }
-  .lt-checks li.lt-done span { background: var(--lime); border-color: var(--ink); }
-  .lt-cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin: 12px 0; }
-  .lt-cal span { aspect-ratio: 1; border-radius: 8px; background: var(--paper); border: 1px solid var(--line); }
-  .lt-cal span.lt-busy { background: var(--ink); border-color: var(--ink); }
-  .lt-cal span.lt-today { background: var(--lime); border-color: var(--ink); }
-  .lt-pulse { display: flex; align-items: flex-end; gap: 5px; height: 64px; margin: 14px 0 4px; }
-  .lt-pulse span { flex: 1; border-radius: 4px; background: var(--ink); animation: lt-pulse 1.8s ease-in-out infinite; }
-  .lt-pulse span:nth-child(1) { height: 40%; } .lt-pulse span:nth-child(2) { height: 70%; animation-delay: .1s; }
-  .lt-pulse span:nth-child(3) { height: 55%; animation-delay: .2s; } .lt-pulse span:nth-child(4) { height: 85%; animation-delay: .3s; }
-  .lt-pulse span:nth-child(5) { height: 60%; animation-delay: .4s; } .lt-pulse span:nth-child(6) { height: 90%; animation-delay: .5s; }
-  .lt-pulse span:nth-child(7) { height: 50%; animation-delay: .6s; } .lt-pulse span:nth-child(8) { height: 75%; animation-delay: .7s; }
-  .lt-pulse span:nth-child(9) { height: 45%; animation-delay: .8s; } .lt-pulse span:nth-child(10) { height: 65%; animation-delay: .9s; }
-  @keyframes lt-pulse { 50% { transform: scaleY(0.55); } }
-
-  /* Sections */
-  .lt-section { padding: 70px 0 10px; }
-  .lt-kicker { font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; font-size: 0.78rem; color: var(--muted); margin: 0 0 14px; }
-  .lt-h2 { font-size: clamp(2.2rem, 4.5vw, 3.6rem); line-height: 1; letter-spacing: -0.04em; font-weight: 700; margin: 0 0 34px; }
-
-  /* Modules bento */
-  .lt-bento { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; }
-  .lt-span4 { grid-column: span 4; } .lt-span3 { grid-column: span 3; } .lt-span2 { grid-column: span 2; }
-  .lt-kanban { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 16px; }
-  .lt-kanban div { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 10px; display: grid; gap: 8px; }
-  .lt-kanban i { display: block; height: 34px; border-radius: 8px; background: var(--card); border: 1px solid var(--line); }
-  .lt-kanban div:nth-child(2) i { background: var(--lime); }
-  .lt-bento img { border-radius: 14px; margin-top: 16px; width: 100%; height: 170px; object-fit: cover; border: 1px solid var(--line); }
-
-  /* Workflows */
-  .lt-flow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-  .lt-step { font-size: 2.4rem; font-weight: 700; letter-spacing: -0.03em; color: var(--ink) !important; margin: 0 0 8px !important;
-    display: inline-block; background: var(--lime); border: 1.5px solid var(--ink); border-radius: 14px; padding: 2px 16px; }
-  .lt-flow-imgs { margin-top: 14px; }
-  .lt-img-cell { padding: 0; overflow: hidden; }
-  .lt-img-cell img { margin: 0; border: 0; border-radius: var(--radius); height: 230px; }
-  .lt-cell img { display: block; width: 100%; border-radius: 12px; border: 1px solid rgba(26,26,26,.1); margin-top: 12px; }
-
-  /* Tiers */
-  .lt-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; align-items: stretch; }
-  .lt-tier { display: flex; flex-direction: column; position: relative; }
-  .lt-tier h3 { font-size: 1.3rem; }
-  .lt-tier-price { font-size: 2.8rem !important; font-weight: 700; letter-spacing: -0.04em; color: var(--ink) !important; margin: 12px 0 4px !important; }
-  .lt-tier-price span { font-size: 1rem; color: var(--muted); font-weight: 500; letter-spacing: 0; }
-  .lt-tier ul { list-style: none; padding: 0; margin: 16px 0 24px; display: grid; gap: 9px; }
-  .lt-tier li { font-size: 0.95rem; font-weight: 500; padding-left: 26px; position: relative; }
-  .lt-tier li::before { content: ""; position: absolute; left: 0; top: 4px; width: 14px; height: 14px; border-radius: 5px; background: var(--lime); border: 1.5px solid var(--ink); }
-  .lt-tier .lt-btn { margin-top: auto; text-align: center; }
-  .lt-tier-pop { background: var(--ink); border-color: var(--ink); color: var(--paper); }
-  .lt-tier-pop h3, .lt-tier-pop .lt-tier-price { color: var(--paper) !important; }
-  .lt-tier-pop p { color: #b9b6ae !important; }
-  .lt-tier-pop li { color: var(--paper); }
-  .lt-tier-pop .lt-tier-price span { color: #b9b6ae; }
-  .lt-pop-tag { position: absolute; top: -13px; left: 24px; margin: 0; background: var(--lime); color: var(--ink); border: 1.5px solid var(--ink);
-    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 999px; padding: 5px 14px; }
-
-  /* Quotes */
-  .lt-quotes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-  .lt-quote blockquote { margin: 0 0 14px; font-size: 0.98rem; font-weight: 500; color: var(--ink); }
-  .lt-quote figcaption strong { display: block; font-size: 0.9rem; }
-  .lt-quote figcaption span { font-size: 0.82rem; color: var(--muted); }
-
-  /* CTA box */
-  .lt-cta-box { background: var(--ink); color: var(--paper); border-radius: 30px; padding: clamp(36px, 6vw, 72px); text-align: center; }
-  .lt-kicker-light { color: #b9b6ae; }
-  .lt-h2-light { color: var(--paper); }
-  .lt-cta-sub { color: #b9b6ae; max-width: 46ch; margin: 0 auto 30px; }
-  .lt-cta-form { display: flex; gap: 12px; max-width: 520px; margin: 0 auto; }
-  .lt-cta-input { flex: 1; border: 1.5px solid #3a3a3a; background: #242424; color: var(--paper); border-radius: 14px;
-    padding: 13px 18px; font-family: inherit; font-size: 1rem; }
-  .lt-cta-input::placeholder { color: #8a877f; }
-  .lt-cta-input:focus { outline: 3px solid var(--lime); outline-offset: 2px; }
-  .lt-form-note { margin: 18px auto 0; max-width: 520px; background: var(--lime); color: var(--ink); font-weight: 700;
-    border-radius: 14px; padding: 14px 18px; }
-  .lt-contact-row { margin-top: 34px; }
-  .lt-contact-row address { font-style: normal; color: #b9b6ae; font-size: 0.95rem; line-height: 1.7; }
-  .lt-contact-row a { color: var(--paper); font-weight: 600; }
-
-  /* Footer */
-  .lt-footer { padding: 60px 0 90px; }
-  .lt-footer-grid { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 30px; align-items: start; }
-  .lt-footer-grid nav { display: grid; gap: 10px; }
-  .lt-footer-grid nav a { text-decoration: none; font-weight: 500; color: var(--muted); }
-  .lt-footer p { color: var(--muted); }
-  .lt-fine { font-size: 0.85rem; }
-
-  @media (max-width: 960px) {
-    .lt-dash { grid-template-columns: repeat(4, 1fr); }
-    .lt-dash-main { grid-column: span 4; grid-row: auto; }
-    .lt-dash-tasks { grid-column: span 4; grid-row: auto; }
-    .lt-dash-stat { grid-column: span 2; }
-    .lt-dash-cal { grid-column: span 4; }
-    .lt-dash-img, .lt-dash-team { grid-column: span 2; }
-    .lt-bento { grid-template-columns: repeat(2, 1fr); }
-    .lt-span4, .lt-span3, .lt-span2 { grid-column: span 2; }
-    .lt-span4 { grid-column: span 2; }
-    .lt-flow { grid-template-columns: 1fr; }
-    .lt-tiers { grid-template-columns: 1fr; max-width: 460px; margin-inline: auto; }
-    .lt-quotes { grid-template-columns: 1fr 1fr; }
-  }
-  @media (max-width: 700px) {
-    .lt-burger { display: block; }
-    .lt-menu { display: none; position: absolute; top: calc(100% + 8px); left: 0; right: 0; flex-direction: column; align-items: stretch;
-      gap: 8px; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px; }
-    .lt-menu.lt-open { display: flex; }
-    .lt-nav-links { flex-direction: column; gap: 2px; }
-    .lt-nav-links a { padding: 12px 14px; border-radius: 12px; }
-    .lt-dash { grid-template-columns: 1fr 1fr; }
-    .lt-dash-main, .lt-dash-tasks { grid-column: span 2; }
-    .lt-bento { grid-template-columns: 1fr; }
-    .lt-span4, .lt-span3, .lt-span2 { grid-column: span 1; }
-    .lt-quotes { grid-template-columns: 1fr; }
-    .lt-cta-form { flex-direction: column; }
-    .lt-footer-grid { grid-template-columns: 1fr; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .lt *, .lt *::before, .lt *::after { transition: none !important; animation: none !important; }
-    .lt-btn:hover { transform: none; box-shadow: none; }
-  }
-</style>
-
-<script>
-  (function () {
-    var rootEl = document.querySelector(".lt");
-    if (!(rootEl instanceof HTMLElement)) return;
-    const root = rootEl;
-
-    // Mobile menu
-    var burgerEl = root.querySelector(".lt-burger");
-    var menuEl = root.querySelector("#lt-menu");
-    if (burgerEl instanceof HTMLButtonElement && menuEl instanceof HTMLElement) {
-      const burger = burgerEl;
-      const menu = menuEl;
-      burger.addEventListener("click", function () {
-        var open = menu.classList.toggle("lt-open");
-        burger.setAttribute("aria-expanded", open ? "true" : "false");
-        burger.setAttribute("aria-label", open ? "Close menu" : "Open menu");
-      });
-      menu.querySelectorAll("a").forEach(function (a) {
-        a.addEventListener("click", function () {
-          menu.classList.remove("lt-open");
-          burger.setAttribute("aria-expanded", "false");
-        });
-      });
+    @media (max-width: 900px) {
+      .bx-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 14px 14px 80px; }
+      .bx-nav, .bx-hero, .bx-wide, .bx-wide2, .bx-quote { grid-column: span 2 !important; }
+      .bx-stat, .bx-today, .bx-imgcell, .bx-cal, .bx-pulse, .bx-mod, .bx-step, .bx-price, .bx-contact, .bx-foot { grid-column: span 1 !important; }
+      .bx-nav-links { display: none; }
+      .bx-hero { grid-row: auto; }
+      .bx-cell { padding: 20px; border-radius: 14px; }
+      .bx-mod { grid-column: span 1 !important; }
+      .bx-price, .bx-step, .bx-contact { grid-column: span 2 !important; }
     }
+    @media (prefers-reduced-motion: reduce) {
+      .bx * { transition: none !important; }
+    }
+  </style>
 
-    // Checklist interactivity in the dashboard preview
-    root.querySelectorAll(".lt-checks li").forEach(function (node) {
-      if (!(node instanceof HTMLLIElement)) return;
-      const li = node;
-      li.style.cursor = "pointer";
-      li.addEventListener("click", function () { li.classList.toggle("lt-done"); });
-    });
-
-    // CTA form
-    var formEl = root.querySelector("#lt-form");
-    var noteEl = root.querySelector("#lt-form-note");
-    if (formEl instanceof HTMLFormElement && noteEl instanceof HTMLElement) {
-      const form = formEl;
-      const note = noteEl;
-      form.addEventListener("submit", function (e) {
+  <script>
+    (function () {
+      var form = document.getElementById('bx-form') as HTMLFormElement | null;
+      var done = document.getElementById('bx-done');
+      form?.addEventListener('submit', function (e) {
         e.preventDefault();
-        var emailEl = form.querySelector('[name="email"]');
-        var val = emailEl instanceof HTMLInputElement ? emailEl.value.trim() : "";
-        if (!val || val.indexOf("@") < 0) {
-          note.hidden = false;
-          note.textContent = "Please enter a valid work email to start your trial.";
-          return;
-        }
-        note.hidden = false;
-        note.textContent = "You're in. Check " + val + " for your invite, your grid is waiting.";
-        form.reset();
+        if (done) done.hidden = false;
+        form?.reset();
       });
-    }
-  })();
-</script>
+    })();
+  </script>
 </body>
 </html>
