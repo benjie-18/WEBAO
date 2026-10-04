@@ -75,8 +75,7 @@ const t = useTranslations(locale);
     }
 
     function init() {
-      applyMeta(currentTheme());
-      syncToggles(currentTheme());
+      applyStoredTheme();
       document.querySelectorAll("[data-theme-toggle]").forEach(function (btn) {
         if (btn.dataset.webaoThemeBound) return;
         btn.dataset.webaoThemeBound = "1";
@@ -86,8 +85,35 @@ const t = useTranslations(locale);
       });
     }
 
+    /**
+     * Re-apply the stored theme from localStorage. Exported so the layout can
+     * also call it after a View Transition swap.
+     */
+    function applyStoredTheme() {
+      var stored = null;
+      try { stored = localStorage.getItem(KEY); } catch (e) {}
+      var theme = stored === "dark" || stored === "light" ? stored : currentTheme();
+      var html = document.documentElement;
+      if (html.getAttribute("data-theme") !== theme) {
+        html.setAttribute("data-theme", theme);
+        applyMeta(theme);
+      } else {
+        applyMeta(theme);
+      }
+      syncToggles(theme);
+    }
+
     window.__webaoSetTheme = setTheme;
+    window.__webaoApplyStoredTheme = applyStoredTheme;
     document.addEventListener("astro:page-load", init);
+    // View Transitions swap in a freshly SSR'd <html> whose runtime
+    // data-theme attribute was lost, which reset the site to light on every
+    // client-side navigation. Re-apply the stored choice right after the swap,
+    // before the new page paints.
+    if (!window.__webaoThemeSwapBound) {
+      window.__webaoThemeSwapBound = true;
+      document.addEventListener("astro:after-swap", applyStoredTheme);
+    }
     if (document.readyState !== "loading") init();
     else document.addEventListener("DOMContentLoaded", init, { once: true });
   })();
