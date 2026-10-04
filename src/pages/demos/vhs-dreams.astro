@@ -5,11 +5,11 @@ import EscapeHatch from "../../components/demos/EscapeHatch.astro";
 // Standalone art direction. 80s neon grid, chrome sun, VHS tracking overlays.
 // Not connected to the WEBAO theme system.
 const IMG = {
-  hero: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1600&auto=format&fit=crop",
+  hero: "/demos/vhs-dreams/01.jpg",
   chromeHearts: "https://images.unsplash.com/photo-1483412033650-1015ddeb83d1?q=80&w=800&auto=format&fit=crop",
   palmStatic: "https://images.unsplash.com/photo-1557672172-298e090bd0f1?q=80&w=800&auto=format&fit=crop",
   neonRequiem: "https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=800&auto=format&fit=crop",
-  artist: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?q=80&w=1000&auto=format&fit=crop",
+  artist: "/demos/vhs-dreams/02.jpg",
   tour: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=1400&auto=format&fit=crop",
 };
 ---
@@ -147,7 +147,7 @@ const IMG = {
           </div>
         </div>
         <div class="vd-artist-photo">
-          <img src={IMG.artist} alt="Midnight Runner performing under neon lights" loading="lazy" />
+          <img src={IMG.artist} alt="Midnight Runner artwork: retro supercar racing toward a neon city under a pink sun" loading="lazy" />
           <p class="vd-photo-cap">Midnight Runner · Club Soda, Montréal</p>
         </div>
       </div>
@@ -358,7 +358,7 @@ const IMG = {
     /* hero */
     .vd-hero { position: relative; min-height: 100svh; display: flex; align-items: center; overflow: hidden; padding: 120px 0 90px; }
     .vd-hero-photo { position: absolute; inset: 0; }
-    .vd-hero-photo img { width: 100%; height: 100%; object-fit: cover; opacity: 0.28; filter: saturate(1.4) contrast(1.1); }
+    .vd-hero-photo img { width: 100%; height: 100%; object-fit: cover; opacity: 0.36; filter: saturate(1.65) contrast(1.12); }
     .vd-hero-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(13,2,33,.72) 0%, rgba(13,2,33,.25) 45%, rgba(13,2,33,.92) 100%); }
     .vd-sun {
       position: absolute; left: 50%; top: 6%; transform: translateX(-50%);
