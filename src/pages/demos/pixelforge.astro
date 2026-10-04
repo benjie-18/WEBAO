@@ -6,10 +6,10 @@ import EscapeHatch from "../../components/demos/EscapeHatch.astro";
 // Not connected to the WEBAO theme system.
 const IMG = {
   hero: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1600&auto=format&fit=crop",
-  game1: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=800&auto=format&fit=crop",
-  game2: "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800&auto=format&fit=crop",
-  game3: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop",
-  game4: "https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?q=80&w=800&auto=format&fit=crop",
+  game1: "/demos/pixelforge/02.jpg",
+  game2: "/demos/pixelforge/01.jpg",
+  game3: "/demos/pixelforge/04.png",
+  game4: "/demos/pixelforge/03.jpg",
   studio: "https://images.unsplash.com/photo-1556438064-2d7646166914?q=80&w=1000&auto=format&fit=crop",
 };
 ---
@@ -101,17 +101,17 @@ const IMG = {
         <div class="pf-carts">
           <article class="pf-cart">
             <div class="pf-cart-grip" aria-hidden="true"></div>
-            <div class="pf-cart-art"><img src={IMG.game1} alt="Neon Drifter box art, a glowing arcade racer" loading="lazy" /></div>
+            <div class="pf-cart-art"><img src={IMG.game1} alt="Duskfall Valley box art, a pixel sunset over mountains and lake" loading="lazy" /></div>
             <div class="pf-cart-body">
-              <h3>NEON DRIFTER</h3>
-              <p class="pf-genre">ARCADE RACER · 1-2 PLAYERS</p>
-              <p>Drift through 60 synth-soaked tracks at 200mph. Brakes are for cowards.</p>
+              <h3>DUSKFALL VALLEY</h3>
+              <p class="pf-genre">EXPLORATION · SOLO</p>
+              <p>Wander 40 hand-pixelated valleys at golden hour. No enemies, just vibes.</p>
               <a class="pf-btn pf-btn-small" href="#coin">Insert coin</a>
             </div>
           </article>
           <article class="pf-cart">
             <div class="pf-cart-grip" aria-hidden="true"></div>
-            <div class="pf-cart-art"><img src={IMG.game2} alt="Dungeon Delver box art, a torch-lit dungeon crawler" loading="lazy" /></div>
+            <div class="pf-cart-art"><img src={IMG.game2} alt="Dungeon Delver box art, pixel dungeon crawler battle" loading="lazy" /></div>
             <div class="pf-cart-body">
               <h3>DUNGEON DELVER</h3>
               <p class="pf-genre">ROGUELIKE · SOLO</p>
@@ -121,21 +121,21 @@ const IMG = {
           </article>
           <article class="pf-cart">
             <div class="pf-cart-grip" aria-hidden="true"></div>
-            <div class="pf-cart-art"><img src={IMG.game3} alt="Starfall Tactics box art, a cosmic strategy battle" loading="lazy" /></div>
+            <div class="pf-cart-art"><img src={IMG.game3} alt="Meadow Tactics box art, top-down pixel RPG battle with HUD" loading="lazy" /></div>
             <div class="pf-cart-body">
-              <h3>STARFALL TACTICS</h3>
-              <p class="pf-genre">STRATEGY · 1-4 PLAYERS</p>
-              <p>Command pixel armadas across collapsing star systems. Think fast, click faster.</p>
+              <h3>MEADOW TACTICS</h3>
+              <p class="pf-genre">TACTICAL RPG · 1-4 PLAYERS</p>
+              <p>Turn-based battles on a hand-pixelated meadow. Think fast, click faster.</p>
               <a class="pf-btn pf-btn-small" href="#coin">Insert coin</a>
             </div>
           </article>
           <article class="pf-cart">
             <div class="pf-cart-grip" aria-hidden="true"></div>
-            <div class="pf-cart-art"><img src={IMG.game4} alt="Blob Quest box art, a cheerful platform adventure" loading="lazy" /></div>
+            <div class="pf-cart-art"><img src={IMG.game4} alt="Blade Pixel box art, pixel swordsman sprite" loading="lazy" /></div>
             <div class="pf-cart-body">
-              <h3>BLOB QUEST</h3>
-              <p class="pf-genre">PLATFORMER · CO-OP</p>
-              <p>A heroic blob, 120 squishy levels, and the power of friendship (plus double jump).</p>
+              <h3>BLADE PIXEL</h3>
+              <p class="pf-genre">ACTION · CO-OP</p>
+              <p>One sword, 90 dungeons, zero mercy. And the power of friendship (plus double jump).</p>
               <a class="pf-btn pf-btn-small" href="#coin">Insert coin</a>
             </div>
           </article>
@@ -409,7 +409,7 @@ const IMG = {
     .pf-cart:nth-child(4) { box-shadow: 0 -4px 0 0 #87CEFA, 0 4px 0 0 #87CEFA, -4px 0 0 0 #87CEFA, 4px 0 0 0 #87CEFA; }
     .pf-cart:hover { transform: translateY(-8px); }
     .pf-cart-grip { height: 26px; background: repeating-linear-gradient(90deg, #0F0F23 0 12px, transparent 12px 24px); border-bottom: 4px solid #0F0F23; }
-    .pf-cart-art img { width: 100%; height: 170px; object-fit: cover; filter: saturate(1.3) contrast(1.05); border-bottom: 4px solid #0F0F23; }
+    .pf-cart-art img { width: 100%; height: 170px; object-fit: cover; filter: saturate(1.3) contrast(1.05); border-bottom: 4px solid #0F0F23; image-rendering: pixelated; }
     .pf-cart-body { padding: 22px 20px 26px; display: grid; gap: 10px; flex: 1; }
     .pf-cart-body h3 { font-family: var(--pf-display); font-size: 13px; color: var(--pf-white); margin: 0; line-height: 1.6; }
     .pf-genre { font-family: var(--pf-display); font-size: 9px; color: var(--pf-yel); margin: 0; letter-spacing: 0.06em; }
