@@ -1,0 +1,575 @@
+---
+import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+
+// Démo : VHS Dreams, étiquette synthwave fictive, Montréal.
+// Direction artistique autonome. Grille néon 80s, soleil chromé, balayage VHS.
+// Non relié au système de thème WEBAO.
+const IMG = {
+  hero: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1600&auto=format&fit=crop",
+  chromeHearts: "https://images.unsplash.com/photo-1483412033650-1015ddeb83d1?q=80&w=800&auto=format&fit=crop",
+  palmStatic: "https://images.unsplash.com/photo-1557672172-298e090bd0f1?q=80&w=800&auto=format&fit=crop",
+  neonRequiem: "https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=800&auto=format&fit=crop",
+  artist: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?q=80&w=1000&auto=format&fit=crop",
+  tour: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=1400&auto=format&fit=crop",
+};
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VHS Dreams : étiquette synthwave à Montréal</title>
+  <meta name="description" content="VHS Dreams est une étiquette synthwave fictive qui presse des rêves chromés sur cassette depuis 1984. Nouveautés, artistes, cassettes et dates de tournée." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Yellowtail&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body class="vd">
+
+  <!-- NAV -->
+  <header class="vd-navwrap">
+    <nav class="vd-nav" id="vd-nav" aria-label="Navigation principale">
+      <a class="vd-logo" href="#top" aria-label="VHS Dreams, accueil"><span class="vd-logo-main">VHS</span><span class="vd-logo-script">dreams</span></a>
+      <button class="vd-burger" id="vd-burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="vd-links">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="vd-links" id="vd-links">
+        <a href="#releases">Sorties</a>
+        <a href="#artists">Artistes</a>
+        <a href="#tapes">Cassettes</a>
+        <a href="#tour">Tournée</a>
+        <a class="vd-btn vd-btn-neon vd-links-cta" href="#club">Rejoindre le fan club</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="vd-hero" aria-label="VHS Dreams, étiquette synthwave">
+      <div class="vd-hero-photo" aria-hidden="true"><img src={IMG.hero} alt="" loading="eager" fetchpriority="high" /></div>
+      <div class="vd-sun" aria-hidden="true"></div>
+      <div class="vd-grid" aria-hidden="true"></div>
+      <svg class="vd-palm vd-palm-left" viewBox="0 0 200 250" aria-hidden="true">
+        <g stroke="#05010f" fill="none" stroke-linecap="round">
+          <path d="M100 250 C 98 195, 94 155, 90 122" stroke-width="15"/>
+          <path d="M90 122 C 60 112, 38 112, 16 124" stroke-width="11"/>
+          <path d="M90 122 C 66 96, 52 80, 48 54" stroke-width="11"/>
+          <path d="M90 122 C 90 92, 96 70, 110 50" stroke-width="11"/>
+          <path d="M90 122 C 114 104, 136 100, 158 108" stroke-width="11"/>
+          <path d="M90 122 C 112 128, 132 136, 146 152" stroke-width="11"/>
+        </g>
+      </svg>
+      <svg class="vd-palm vd-palm-right" viewBox="0 0 200 250" aria-hidden="true">
+        <g stroke="#05010f" fill="none" stroke-linecap="round">
+          <path d="M100 250 C 98 195, 94 155, 90 122" stroke-width="15"/>
+          <path d="M90 122 C 60 112, 38 112, 16 124" stroke-width="11"/>
+          <path d="M90 122 C 66 96, 52 80, 48 54" stroke-width="11"/>
+          <path d="M90 122 C 90 92, 96 70, 110 50" stroke-width="11"/>
+          <path d="M90 122 C 114 104, 136 100, 158 108" stroke-width="11"/>
+          <path d="M90 122 C 112 128, 132 136, 146 152" stroke-width="11"/>
+        </g>
+      </svg>
+      <div class="vd-scanlines" aria-hidden="true"></div>
+      <div class="vd-tracking" aria-hidden="true"></div>
+      <p class="vd-osd" aria-hidden="true"><span>▶ LECTURE</span><span>SP 0:00:12</span></p>
+
+      <div class="vd-hero-in">
+        <p class="vd-eyebrow">FONDÉ EN 1984 · L'ÉTIQUETTE LA PLUS SYNTH DE MONTRÉAL</p>
+        <h1 class="vd-h1"><span class="vd-h1-top">REMBOBINE</span><span class="vd-h1-script">le futur</span></h1>
+        <p class="vd-lede">VHS Dreams est une étiquette synthwave indépendante qui presse des rêves chromés sur cassette depuis 1984. Synthés analogiques, nuits néon, zéro saut de lecture.</p>
+        <div class="vd-hero-cta">
+          <a class="vd-btn vd-btn-neon" href="#releases">Écouter la dernière sortie</a>
+          <a class="vd-btn vd-btn-ghost" href="#artists">Voir les artistes</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- TICKER -->
+    <div class="vd-ticker" aria-hidden="true">
+      <div class="vd-ticker-track">
+        <span>EN MAGASIN : MIDNIGHT RUNNER « CHROME HEARTS »</span><span>★</span><span>NEON PALMS EN CONCERT À MONTRÉAL LE 17 OCT</span><span>★</span><span>ABONNEMENTS AU CLUB CASSETTE OUVERTS</span><span>★</span><span>GÉNIAL DEPUIS 1984</span><span>★</span>
+        <span>EN MAGASIN : MIDNIGHT RUNNER « CHROME HEARTS »</span><span>★</span><span>NEON PALMS EN CONCERT À MONTRÉAL LE 17 OCT</span><span>★</span><span>ABONNEMENTS AU CLUB CASSETTE OUVERTS</span><span>★</span><span>GÉNIAL DEPUIS 1984</span><span>★</span>
+      </div>
+    </div>
+
+    <!-- RELEASES -->
+    <section class="vd-section" id="releases">
+      <div class="vd-wrap">
+        <p class="vd-kicker">// Fraîchement pressées</p>
+        <h2 class="vd-h2">Dernières <span class="vd-script-inline">sorties</span></h2>
+        <div class="vd-cards">
+          <article class="vd-card">
+            <div class="vd-cover"><img src={IMG.chromeHearts} alt="Pochette de Chrome Hearts, tourne-disque néon" loading="lazy" /><span class="vd-cover-badge">NOUVEAU</span></div>
+            <div class="vd-card-body">
+              <p class="vd-card-tag">SYNTHWAVE / OUTRUN · 2026</p>
+              <h3>Chrome Hearts</h3>
+              <p class="vd-card-artist">Midnight Runner</p>
+              <div class="vd-card-row"><span class="vd-price">29 $</span><button class="vd-btn vd-btn-neon vd-btn-small" type="button" data-crate="Chrome Hearts">Ajouter au panier</button></div>
+            </div>
+          </article>
+          <article class="vd-card">
+            <div class="vd-cover"><img src={IMG.palmStatic} alt="Pochette de Palm Static, formes néon abstraites" loading="lazy" /></div>
+            <div class="vd-card-body">
+              <p class="vd-card-tag">DARKWAVE · 2026</p>
+              <h3>Palm Static</h3>
+              <p class="vd-card-artist">Glass Jaguar</p>
+              <div class="vd-card-row"><span class="vd-price">29 $</span><button class="vd-btn vd-btn-neon vd-btn-small" type="button" data-crate="Palm Static">Ajouter au panier</button></div>
+            </div>
+          </article>
+          <article class="vd-card">
+            <div class="vd-cover"><img src={IMG.neonRequiem} alt="Pochette de Neon Requiem, abstraction néon violette" loading="lazy" /></div>
+            <div class="vd-card-body">
+              <p class="vd-card-tag">RETROWAVE · 2025</p>
+              <h3>Neon Requiem</h3>
+              <p class="vd-card-artist">Vector Vixen</p>
+              <div class="vd-card-row"><span class="vd-price">24 $</span><button class="vd-btn vd-btn-neon vd-btn-small" type="button" data-crate="Neon Requiem">Ajouter au panier</button></div>
+            </div>
+          </article>
+        </div>
+        <p class="vd-crate-note" id="vd-crate-note" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <!-- ARTISTS -->
+    <section class="vd-section vd-section-alt" id="artists">
+      <div class="vd-wrap vd-artists-grid">
+        <div>
+          <p class="vd-kicker">// Signés dans le chrome</p>
+          <h2 class="vd-h2">La <span class="vd-script-inline">formation</span></h2>
+          <p class="vd-copy">Quatre groupes, une seule fréquence. Chaque artiste VHS Dreams enregistre sur bande d'abord et pose les questions ensuite. Voyez-les en concert avant que la grille n'avale le soleil.</p>
+          <div class="vd-roster">
+            <a class="vd-roster-row" href="#tour"><span class="vd-roster-n">01</span><span class="vd-roster-main"><strong>Midnight Runner</strong><em>Outrun</em></span><span class="vd-roster-meta">1,2 M par mois</span><span class="vd-roster-arrow" aria-hidden="true">→</span></a>
+            <a class="vd-roster-row" href="#tour"><span class="vd-roster-n">02</span><span class="vd-roster-main"><strong>Glass Jaguar</strong><em>Darkwave</em></span><span class="vd-roster-meta">840 K par mois</span><span class="vd-roster-arrow" aria-hidden="true">→</span></a>
+            <a class="vd-roster-row" href="#tour"><span class="vd-roster-n">03</span><span class="vd-roster-main"><strong>Vector Vixen</strong><em>Retrowave</em></span><span class="vd-roster-meta">620 K par mois</span><span class="vd-roster-arrow" aria-hidden="true">→</span></a>
+            <a class="vd-roster-row" href="#tour"><span class="vd-roster-n">04</span><span class="vd-roster-main"><strong>Turbo Lazer</strong><em>Chiptune</em></span><span class="vd-roster-meta">410 K par mois</span><span class="vd-roster-arrow" aria-hidden="true">→</span></a>
+          </div>
+        </div>
+        <div class="vd-artist-photo">
+          <img src={IMG.artist} alt="Midnight Runner en concert sous les néons" loading="lazy" />
+          <p class="vd-photo-cap">Midnight Runner · Club Soda, Montréal</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAPES & MERCH -->
+    <section class="vd-section" id="tapes">
+      <div class="vd-wrap">
+        <p class="vd-kicker">// Nourris ton lecteur</p>
+        <h2 class="vd-h2">Cassettes <span class="vd-script-inline">&amp; marchandise</span></h2>
+        <div class="vd-tiers">
+          <article class="vd-tier">
+            <h3>Cassette single</h3>
+            <p class="vd-tier-price">9 $</p>
+            <ul>
+              <li>Une cassette chrome, dolby ou pas</li>
+              <li>Code de téléchargement numérique</li>
+              <li>Paquet d'autocollants (holographiques)</li>
+            </ul>
+            <a class="vd-btn vd-btn-ghost" href="#club">J'en veux une</a>
+          </article>
+          <article class="vd-tier vd-tier-hot">
+            <p class="vd-tier-flag">LA PLUS VOULUE</p>
+            <h3>Vinyle LP</h3>
+            <p class="vd-tier-price">29 $</p>
+            <ul>
+              <li>Vinyle 180 g à éclaboussures néon</li>
+              <li>Pochette ouvrante avec affiche</li>
+              <li>Code de téléchargement + pièce bonus</li>
+            </ul>
+            <a class="vd-btn vd-btn-neon" href="#club">J'en veux un</a>
+          </article>
+          <article class="vd-tier">
+            <h3>Club cassette</h3>
+            <p class="vd-tier-price">79 $<span>/an</span></p>
+            <ul>
+              <li>Chaque sortie en cassette, en premier</li>
+              <li>Marchandise exclusive aux membres</li>
+              <li>Codes de prévente pour chaque tournée</li>
+            </ul>
+            <a class="vd-btn vd-btn-ghost" href="#club">Rejoindre le club</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOUR -->
+    <section class="vd-tour" id="tour">
+      <div class="vd-tour-bg" aria-hidden="true"><img src={IMG.tour} alt="" loading="lazy" /></div>
+      <div class="vd-wrap">
+        <p class="vd-kicker">// Des nuits néon sur la route</p>
+        <h2 class="vd-h2">Dates de <span class="vd-script-inline">tournée</span></h2>
+        <ul class="vd-dates">
+          <li><span class="vd-date">17 OCT</span><span class="vd-venue">Montréal, QC · Club Soda</span><a class="vd-btn vd-btn-neon vd-btn-small" href="#club">Billets</a></li>
+          <li><span class="vd-date">24 OCT</span><span class="vd-venue">Toronto, ON · The Danforth</span><a class="vd-btn vd-btn-neon vd-btn-small" href="#club">Billets</a></li>
+          <li><span class="vd-date">1 NOV</span><span class="vd-venue">New York, NY · Webster Hall</span><a class="vd-btn vd-btn-neon vd-btn-small" href="#club">Billets</a></li>
+          <li><span class="vd-date">8 NOV</span><span class="vd-venue">Chicago, IL · Metro</span><a class="vd-btn vd-btn-neon vd-btn-small" href="#club">Billets</a></li>
+          <li><span class="vd-date">15 NOV</span><span class="vd-venue">Los Angeles, CA · The Wiltern</span><span class="vd-soldout">COMPLET</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- NEWSLETTER + CONTACT -->
+    <section class="vd-section" id="club">
+      <div class="vd-wrap vd-club-grid">
+        <div>
+          <p class="vd-kicker">// Une transmission par mois</p>
+          <h2 class="vd-h2">Rejoins le <span class="vd-script-inline">fan club</span></h2>
+          <p class="vd-copy">Nouvelles sorties, codes de prévente et rumeurs de tournée, directement dans ta boîte courriel. Zéro pourriel, que du signal.</p>
+          <form class="vd-form" id="vd-news-form" novalidate>
+            <label class="vd-field">Adresse courriel
+              <input type="email" name="email" required placeholder="toi@courrielneon.com" />
+            </label>
+            <button class="vd-btn vd-btn-neon" type="submit">Syntonise-moi</button>
+            <p class="vd-form-note" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+        <div class="vd-contact">
+          <h3>Réserve l'étiquette</h3>
+          <p>Démos, réservations et licences. On écoute chaque cassette, promis.</p>
+          <ul>
+            <li><strong>Courriel</strong><a href="mailto:booking@vhsdreams.example">booking@vhsdreams.example</a></li>
+            <li><strong>Téléphone</strong><a href="tel:+15145550199">(514) 555-0199</a></li>
+            <li><strong>Studio</strong><span>1984, boul. Saint-Laurent, Montréal QC</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="vd-footer">
+    <p class="vd-footer-giant" aria-hidden="true">VHS</p>
+    <div class="vd-wrap vd-footer-in">
+      <p>© 2026 VHS Dreams. Étiquette fictive de démonstration. Aucune cassette n'a été blessée.</p>
+      <p>1984, boul. Saint-Laurent, Montréal QC · <a href="tel:+15145550199">(514) 555-0199</a> · <a href="mailto:booking@vhsdreams.example">booking@vhsdreams.example</a></p>
+    </div>
+  </footer>
+
+  <EscapeHatch locale="fr" />
+
+  <script>
+    (function () {
+      var nav = document.getElementById('vd-nav');
+      var burger = document.getElementById('vd-burger');
+      burger?.addEventListener('click', function () {
+        var open = nav?.classList.toggle('vd-open') ?? false;
+        burger?.setAttribute('aria-expanded', String(open));
+        burger?.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+      });
+      nav?.querySelectorAll('.vd-links a').forEach(function (a) {
+        a.addEventListener('click', function () {
+          nav?.classList.remove('vd-open');
+          burger?.setAttribute('aria-expanded', 'false');
+          burger?.setAttribute('aria-label', 'Ouvrir le menu');
+        });
+      });
+
+      var news = document.getElementById('vd-news-form') as HTMLFormElement | null;
+      news?.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var note = news?.querySelector('.vd-form-note');
+        if (note) note.textContent = 'C\'est syntonisé. Vérifie ta boîte courriel pour un message de bienvenue.';
+        news?.reset();
+      });
+
+      var crateNote = document.getElementById('vd-crate-note');
+      document.querySelectorAll('[data-crate]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var title = (btn as HTMLElement).dataset.crate || 'cassette';
+          if (crateNote) crateNote.textContent = title + ' ajoutée à ton panier. Excellent choix.';
+        });
+      });
+    })();
+  </script>
+
+  <style>
+    .vd {
+      --vd-bg: #0D0221;
+      --vd-bg2: #160538;
+      --vd-pink: #FF2079;
+      --vd-cyan: #00F0FF;
+      --vd-orange: #FF9E00;
+      --vd-yellow: #FFD319;
+      --vd-purple: #B537F2;
+      --vd-white: #FFF6EC;
+      --vd-muted: #B9A8D9;
+      --vd-display: "Orbitron", "Arial Black", sans-serif;
+      --vd-script: "Yellowtail", cursive;
+      --vd-body: "Space Grotesk", system-ui, sans-serif;
+      margin: 0;
+      background: var(--vd-bg);
+      color: var(--vd-white);
+      font-family: var(--vd-body);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: clip;
+    }
+    .vd *, .vd *::before, .vd *::after { box-sizing: border-box; }
+    .vd img { display: block; max-width: 100%; }
+    .vd-wrap { max-width: 1200px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px); }
+
+    /* nav */
+    .vd-navwrap { position: fixed; top: 0; left: 0; right: 0; z-index: 60; }
+    .vd-nav {
+      display: flex; align-items: center; gap: 24px;
+      padding: 14px clamp(20px, 4vw, 44px);
+      background: rgba(13, 2, 33, 0.78); backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255, 32, 121, 0.35);
+      box-shadow: 0 1px 24px rgba(255, 32, 121, 0.18);
+    }
+    .vd-logo { text-decoration: none; margin-right: auto; display: flex; align-items: baseline; gap: 10px; }
+    .vd-logo-main {
+      font-family: var(--vd-display); font-weight: 900; font-size: 26px; letter-spacing: 0.12em;
+      color: var(--vd-white); text-shadow: 0 0 12px var(--vd-pink), 0 0 34px rgba(255, 32, 121, 0.6);
+    }
+    .vd-logo-script { font-family: var(--vd-script); font-size: 26px; color: var(--vd-cyan); text-shadow: 0 0 14px rgba(0, 240, 255, 0.8); transform: rotate(-4deg); }
+    .vd-links { display: flex; align-items: center; gap: 6px; }
+    .vd-links a:not(.vd-btn) {
+      color: var(--vd-muted); text-decoration: none; font-weight: 700; font-size: 13px;
+      letter-spacing: 0.2em; text-transform: uppercase; padding: 10px 14px; font-family: var(--vd-display);
+    }
+    .vd-links a:not(.vd-btn):hover { color: var(--vd-cyan); text-shadow: 0 0 12px rgba(0, 240, 255, 0.7); }
+    .vd-burger { display: none; background: none; border: 1px solid rgba(255,32,121,.5); border-radius: 10px; padding: 10px 12px; cursor: pointer; }
+    .vd-burger span { display: block; width: 22px; height: 2px; background: var(--vd-pink); margin: 5px 0; box-shadow: 0 0 8px var(--vd-pink); transition: transform .2s ease, opacity .2s ease; }
+    .vd-open .vd-burger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .vd-open .vd-burger span:nth-child(2) { opacity: 0; }
+    .vd-open .vd-burger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* buttons */
+    .vd-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      font-family: var(--vd-display); font-weight: 700; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 16px 30px; text-decoration: none; cursor: pointer; border: none; border-radius: 4px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .vd-btn-neon { background: linear-gradient(180deg, var(--vd-pink), #C40E5C); color: #fff; box-shadow: 0 0 18px rgba(255,32,121,.65), inset 0 1px 0 rgba(255,255,255,.35); text-shadow: 0 1px 2px rgba(0,0,0,.4); }
+    .vd-btn-neon:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(255,32,121,.9), inset 0 1px 0 rgba(255,255,255,.35); }
+    .vd-btn-ghost { background: transparent; color: var(--vd-cyan); border: 2px solid var(--vd-cyan); box-shadow: 0 0 14px rgba(0,240,255,.25), inset 0 0 12px rgba(0,240,255,.08); text-shadow: 0 0 10px rgba(0,240,255,.7); }
+    .vd-btn-ghost:hover { background: rgba(0,240,255,.1); transform: translateY(-2px); }
+    .vd-btn-small { font-size: 12px; padding: 11px 20px; }
+
+    /* type */
+    .vd-kicker { font-family: var(--vd-display); font-weight: 700; font-size: 12px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--vd-cyan); margin: 0 0 14px; text-shadow: 0 0 12px rgba(0,240,255,.6); }
+    .vd-h2 { font-family: var(--vd-display); font-weight: 900; font-size: clamp(2.2rem, 6vw, 4.2rem); letter-spacing: 0.04em; text-transform: uppercase; margin: 0 0 44px; text-shadow: 0 0 24px rgba(255,32,121,.45); }
+    .vd-script-inline { font-family: var(--vd-script); text-transform: none; letter-spacing: 0; font-weight: 400; color: var(--vd-pink); text-shadow: 0 0 18px rgba(255,32,121,.8); font-size: 1.15em; }
+    .vd-eyebrow { font-family: var(--vd-display); font-weight: 700; font-size: 12px; letter-spacing: 0.32em; color: var(--vd-yellow); margin: 0 0 20px; text-shadow: 0 0 14px rgba(255,211,25,.6); }
+    .vd-copy { color: var(--vd-muted); font-size: 17px; line-height: 1.7; max-width: 52ch; margin: 0 0 28px; }
+
+    /* hero */
+    .vd-hero { position: relative; min-height: 100svh; display: flex; align-items: center; overflow: hidden; padding: 120px 0 90px; }
+    .vd-hero-photo { position: absolute; inset: 0; }
+    .vd-hero-photo img { width: 100%; height: 100%; object-fit: cover; opacity: 0.28; filter: saturate(1.4) contrast(1.1); }
+    .vd-hero-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(13,2,33,.72) 0%, rgba(13,2,33,.25) 45%, rgba(13,2,33,.92) 100%); }
+    .vd-sun {
+      position: absolute; left: 50%; top: 6%; transform: translateX(-50%);
+      width: min(400px, 64vw); aspect-ratio: 1; border-radius: 50%;
+      background: linear-gradient(180deg, var(--vd-yellow) 0%, var(--vd-orange) 32%, var(--vd-pink) 68%, var(--vd-purple) 100%);
+      box-shadow: 0 0 70px rgba(255,32,121,.55), 0 0 150px rgba(255,158,0,.3);
+      animation: vd-sunfloat 7s ease-in-out infinite;
+    }
+    .vd-sun::after {
+      content: ""; position: absolute; inset: 0; border-radius: 50%;
+      background: repeating-linear-gradient(180deg, transparent 0 20px, rgba(13,2,33,.96) 20px 28px);
+      -webkit-mask-image: linear-gradient(180deg, transparent 42%, black 72%);
+      mask-image: linear-gradient(180deg, transparent 42%, black 72%);
+    }
+    @keyframes vd-sunfloat { 50% { transform: translateX(-50%) translateY(-12px); } }
+    .vd-grid {
+      position: absolute; left: -30%; right: -30%; bottom: -12%; height: 62%;
+      background-image:
+        linear-gradient(rgba(255,32,121,.5) 2px, transparent 2px),
+        linear-gradient(90deg, rgba(255,32,121,.5) 2px, transparent 2px);
+      background-size: 64px 64px;
+      transform: perspective(460px) rotateX(62deg);
+      transform-origin: top center;
+      -webkit-mask-image: linear-gradient(180deg, transparent, black 34%);
+      mask-image: linear-gradient(180deg, transparent, black 34%);
+      animation: vd-gridmove 1.4s linear infinite;
+      filter: drop-shadow(0 0 12px rgba(255,32,121,.7));
+    }
+    @keyframes vd-gridmove { to { background-position: 0 64px, 0 64px; } }
+    .vd-palm { position: absolute; bottom: 8%; height: min(300px, 34vw); filter: drop-shadow(0 0 18px rgba(255,32,121,.5)); }
+    .vd-palm-left { left: 2%; }
+    .vd-palm-right { right: 2%; transform: scaleX(-1); }
+    .vd-scanlines { position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(180deg, rgba(255,255,255,.035) 0 1px, transparent 1px 4px); }
+    .vd-tracking { position: absolute; left: 0; right: 0; top: -18%; height: 90px; background: linear-gradient(180deg, transparent, rgba(0,240,255,.14), transparent); animation: vd-track 5.5s linear infinite; pointer-events: none; }
+    @keyframes vd-track { to { top: 110%; } }
+    .vd-osd {
+      position: absolute; top: 84px; left: clamp(20px, 4vw, 44px); z-index: 3; margin: 0;
+      display: flex; gap: 18px; font-family: var(--vd-display); font-size: 13px; letter-spacing: 0.22em;
+      color: var(--vd-white); text-shadow: 0 0 10px rgba(0,240,255,.8);
+    }
+    .vd-osd span:first-child { animation: vd-blink 1.2s steps(2) infinite; }
+    @keyframes vd-blink { 50% { opacity: 0.25; } }
+    .vd-hero-in { position: relative; z-index: 2; max-width: 1200px; width: 100%; margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px); text-align: center; }
+    .vd-h1 { margin: 0 0 22px; line-height: 0.95; }
+    .vd-h1-top {
+      display: block; font-family: var(--vd-display); font-weight: 900; font-size: clamp(3.4rem, 12vw, 9rem); letter-spacing: 0.08em;
+      color: var(--vd-white); text-shadow: 0 0 18px var(--vd-pink), 0 0 60px rgba(255,32,121,.7), 4px 4px 0 var(--vd-purple);
+    }
+    .vd-h1-script {
+      display: block; font-family: var(--vd-script); font-weight: 400; font-size: clamp(3rem, 10vw, 7.5rem);
+      color: var(--vd-cyan); text-shadow: 0 0 16px rgba(0,240,255,.9), 0 0 60px rgba(0,240,255,.5);
+      transform: rotate(-3deg); margin-top: -0.15em;
+    }
+    .vd-lede { font-size: 18px; line-height: 1.65; max-width: 52ch; margin: 0 auto 34px; color: #E9DCF7; text-shadow: 0 2px 12px rgba(13,2,33,.9); }
+    .vd-hero-cta { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    /* ticker */
+    .vd-ticker { background: var(--vd-pink); color: #fff; overflow: hidden; padding: 13px 0; border-block: 3px solid #7d0a3d; position: relative; z-index: 2; }
+    .vd-ticker-track { display: flex; gap: 34px; width: max-content; animation: vd-tick 22s linear infinite; font-family: var(--vd-display); font-weight: 700; font-size: 15px; letter-spacing: 0.14em; text-shadow: 0 1px 2px rgba(0,0,0,.35); }
+    @keyframes vd-tick { to { transform: translateX(-50%); } }
+
+    /* sections */
+    .vd-section { padding: clamp(70px, 9vw, 130px) 0; position: relative; }
+    .vd-section-alt { background: linear-gradient(180deg, rgba(22,5,56,.0), rgba(22,5,56,.85) 18%, rgba(22,5,56,.85) 82%, rgba(22,5,56,0)); }
+
+    /* release cards */
+    .vd-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    .vd-card {
+      background: rgba(22, 5, 56, 0.75); border: 1px solid rgba(255,32,121,.4); border-radius: 14px; overflow: hidden;
+      box-shadow: 0 0 0 rgba(255,32,121,0); transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .vd-card:hover { transform: translateY(-8px) rotate(-0.5deg); border-color: var(--vd-pink); box-shadow: 0 18px 50px rgba(255,32,121,.35); }
+    .vd-cover { position: relative; overflow: hidden; }
+    .vd-cover img { width: 100%; height: 250px; object-fit: cover; filter: saturate(1.35) contrast(1.08); transition: transform .3s ease; }
+    .vd-card:hover .vd-cover img { transform: scale(1.05); }
+    .vd-cover::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(180deg, rgba(255,255,255,.05) 0 1px, transparent 1px 4px); pointer-events: none; }
+    .vd-cover-badge {
+      position: absolute; top: 14px; left: 14px; font-family: var(--vd-display); font-size: 11px; font-weight: 800; letter-spacing: 0.2em;
+      background: var(--vd-cyan); color: #04222a; padding: 7px 12px; border-radius: 4px; box-shadow: 0 0 16px rgba(0,240,255,.7);
+    }
+    .vd-card-body { padding: 24px; }
+    .vd-card-tag { font-family: var(--vd-display); font-size: 11px; letter-spacing: 0.26em; color: var(--vd-cyan); margin: 0 0 10px; }
+    .vd-card h3 { font-family: var(--vd-display); font-size: 26px; font-weight: 800; letter-spacing: 0.03em; margin: 0 0 4px; text-shadow: 0 0 14px rgba(255,32,121,.5); }
+    .vd-card-artist { color: var(--vd-muted); font-size: 15px; margin: 0 0 18px; }
+    .vd-card-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .vd-price { font-family: var(--vd-display); font-size: 24px; font-weight: 900; color: var(--vd-yellow); text-shadow: 0 0 12px rgba(255,211,25,.6); }
+    .vd-crate-note { margin: 22px 0 0; color: var(--vd-cyan); font-weight: 600; font-size: 16px; min-height: 24px; text-shadow: 0 0 10px rgba(0,240,255,.5); }
+    .vd-crate-note:empty { display: none; }
+
+    /* artists */
+    .vd-artists-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(36px, 6vw, 80px); align-items: center; }
+    .vd-roster { display: grid; border-top: 1px solid rgba(255,32,121,.35); }
+    .vd-roster-row {
+      display: grid; grid-template-columns: 56px 1fr auto 34px; gap: 18px; align-items: center;
+      padding: 20px 8px; border-bottom: 1px solid rgba(255,32,121,.35); text-decoration: none; color: inherit;
+      transition: background .18s ease, padding-left .18s ease;
+    }
+    .vd-roster-row:hover { background: rgba(255,32,121,.08); padding-left: 18px; }
+    .vd-roster-n { font-family: var(--vd-display); font-weight: 800; color: var(--vd-purple); font-size: 15px; letter-spacing: 0.1em; }
+    .vd-roster-main { display: grid; gap: 3px; }
+    .vd-roster-main strong { font-family: var(--vd-display); font-size: 20px; letter-spacing: 0.05em; }
+    .vd-roster-main em { font-style: normal; color: var(--vd-muted); font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; }
+    .vd-roster-meta { font-family: var(--vd-display); font-size: 13px; color: var(--vd-cyan); letter-spacing: 0.08em; }
+    .vd-roster-arrow { color: var(--vd-pink); font-size: 22px; text-shadow: 0 0 10px rgba(255,32,121,.8); }
+    .vd-artist-photo { position: relative; }
+    .vd-artist-photo img { width: 100%; height: 520px; object-fit: cover; border-radius: 14px; border: 1px solid rgba(0,240,255,.45); box-shadow: 0 0 40px rgba(0,240,255,.25); filter: saturate(1.3); }
+    .vd-photo-cap { position: absolute; left: 18px; bottom: 16px; margin: 0; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; background: rgba(13,2,33,.75); padding: 8px 14px; border-radius: 6px; border: 1px solid rgba(255,32,121,.4); }
+
+    /* tiers */
+    .vd-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; align-items: stretch; }
+    .vd-tier {
+      background: rgba(22,5,56,.75); border: 1px solid rgba(0,240,255,.35); border-radius: 14px; padding: 36px 30px;
+      display: grid; gap: 6px; align-content: start; position: relative;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .vd-tier:hover { transform: translateY(-6px); box-shadow: 0 16px 44px rgba(0,240,255,.2); }
+    .vd-tier-hot { border-color: var(--vd-pink); box-shadow: 0 0 34px rgba(255,32,121,.35); }
+    .vd-tier-flag {
+      position: absolute; top: -15px; left: 50%; transform: translateX(-50%); margin: 0;
+      font-family: var(--vd-display); font-size: 11px; font-weight: 800; letter-spacing: 0.22em;
+      background: linear-gradient(180deg, var(--vd-pink), #C40E5C); color: #fff; padding: 8px 18px; border-radius: 999px;
+      box-shadow: 0 0 18px rgba(255,32,121,.7); white-space: nowrap;
+    }
+    .vd-tier h3 { font-family: var(--vd-display); font-size: 22px; letter-spacing: 0.06em; margin: 8px 0 0; text-transform: uppercase; }
+    .vd-tier-price { font-family: var(--vd-display); font-size: 52px; font-weight: 900; color: var(--vd-yellow); margin: 6px 0 10px; text-shadow: 0 0 18px rgba(255,211,25,.55); }
+    .vd-tier-price span { font-size: 18px; color: var(--vd-muted); }
+    .vd-tier ul { list-style: none; margin: 0 0 24px; padding: 0; display: grid; gap: 12px; color: #DCCBF5; font-size: 15px; }
+    .vd-tier li::before { content: "▶ "; color: var(--vd-cyan); font-size: 12px; }
+
+    /* tour */
+    .vd-tour { position: relative; padding: clamp(70px, 9vw, 130px) 0; overflow: hidden; }
+    .vd-tour-bg { position: absolute; inset: 0; }
+    .vd-tour-bg img { width: 100%; height: 100%; object-fit: cover; opacity: 0.22; filter: saturate(1.4); }
+    .vd-tour-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, var(--vd-bg) 0%, rgba(13,2,33,.55) 30%, rgba(13,2,33,.55) 70%, var(--vd-bg) 100%); }
+    .vd-tour .vd-wrap { position: relative; z-index: 2; }
+    .vd-dates { list-style: none; margin: 0; padding: 0; display: grid; border-top: 1px solid rgba(0,240,255,.35); }
+    .vd-dates li {
+      display: grid; grid-template-columns: 110px 1fr auto; gap: 20px; align-items: center;
+      padding: 22px 8px; border-bottom: 1px solid rgba(0,240,255,.35);
+      transition: background .18s ease, padding-left .18s ease;
+    }
+    .vd-dates li:hover { background: rgba(0,240,255,.07); padding-left: 20px; }
+    .vd-date { font-family: var(--vd-display); font-weight: 900; font-size: 20px; color: var(--vd-orange); text-shadow: 0 0 12px rgba(255,158,0,.6); letter-spacing: 0.06em; }
+    .vd-venue { font-size: 17px; font-weight: 600; }
+    .vd-soldout { font-family: var(--vd-display); font-size: 12px; font-weight: 800; letter-spacing: 0.2em; color: var(--vd-muted); border: 1px solid var(--vd-muted); padding: 10px 18px; border-radius: 4px; }
+
+    /* club / contact */
+    .vd-club-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(36px, 6vw, 80px); align-items: start; }
+    .vd-form { display: grid; gap: 16px; max-width: 480px; }
+    .vd-field { display: grid; gap: 8px; font-family: var(--vd-display); font-size: 12px; font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase; color: var(--vd-muted); }
+    .vd-field input {
+      font-family: var(--vd-body); font-size: 16px; color: var(--vd-white);
+      background: rgba(22,5,56,.8); border: 1px solid rgba(255,32,121,.5); border-radius: 8px; padding: 15px 18px; width: 100%;
+    }
+    .vd-field input:focus { outline: 2px solid var(--vd-cyan); outline-offset: 2px; }
+    .vd-form-note { margin: 0; color: var(--vd-cyan); font-weight: 600; font-size: 15px; text-shadow: 0 0 10px rgba(0,240,255,.5); }
+    .vd-form-note:empty { display: none; }
+    .vd-contact {
+      background: rgba(22,5,56,.75); border: 1px solid rgba(255,32,121,.4); border-radius: 14px; padding: clamp(28px, 4vw, 44px);
+      box-shadow: 0 0 34px rgba(255,32,121,.2);
+    }
+    .vd-contact h3 { font-family: var(--vd-script); font-weight: 400; font-size: 40px; color: var(--vd-pink); margin: 0 0 10px; text-shadow: 0 0 16px rgba(255,32,121,.7); }
+    .vd-contact p { color: var(--vd-muted); margin: 0 0 22px; font-size: 15.5px; line-height: 1.65; }
+    .vd-contact ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
+    .vd-contact li { display: grid; gap: 4px; }
+    .vd-contact strong { font-family: var(--vd-display); font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--vd-cyan); }
+    .vd-contact a { color: var(--vd-white); font-weight: 600; font-size: 17px; }
+    .vd-contact a:hover { color: var(--vd-pink); }
+    .vd-contact span { color: #DCCBF5; font-size: 16px; }
+
+    /* footer */
+    .vd-footer { padding: 70px 0 90px; text-align: center; overflow: hidden; border-top: 1px solid rgba(255,32,121,.3); }
+    .vd-footer-giant {
+      font-family: var(--vd-display); font-weight: 900; font-size: clamp(4rem, 18vw, 13rem); line-height: 0.9; margin: 0 0 26px; letter-spacing: 0.1em;
+      color: transparent; -webkit-text-stroke: 2px rgba(255,32,121,.5);
+      filter: drop-shadow(0 0 24px rgba(255,32,121,.35));
+    }
+    .vd-footer-in { display: grid; gap: 10px; color: var(--vd-muted); font-size: 14px; }
+    .vd-footer-in p { margin: 0; }
+    .vd-footer-in a { color: var(--vd-cyan); }
+
+    @media (max-width: 1020px) {
+      .vd-cards, .vd-tiers { grid-template-columns: 1fr 1fr; }
+      .vd-artists-grid, .vd-club-grid { grid-template-columns: 1fr; }
+      .vd-artist-photo img { height: 380px; }
+    }
+    @media (max-width: 860px) {
+      .vd-burger { display: block; }
+      .vd-links {
+        display: none; position: absolute; top: 100%; left: 0; right: 0;
+        flex-direction: column; align-items: stretch; gap: 4px;
+        background: rgba(13,2,33,.97); border-bottom: 1px solid rgba(255,32,121,.4);
+        padding: 12px clamp(20px, 4vw, 44px) 20px;
+      }
+      .vd-open .vd-links { display: flex; }
+      .vd-links a:not(.vd-btn) { padding: 14px 6px; border-bottom: 1px solid rgba(255,32,121,.18); }
+      .vd-links-cta { margin-top: 10px; }
+      .vd-palm { height: 150px; }
+    }
+    @media (max-width: 640px) {
+      .vd-cards, .vd-tiers { grid-template-columns: 1fr; }
+      .vd-dates li { grid-template-columns: 1fr; gap: 8px; }
+      .vd-roster-row { grid-template-columns: 44px 1fr auto; }
+      .vd-roster-arrow { display: none; }
+      .vd-sun { top: 9%; }
+      .vd-osd { top: 76px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .vd-grid, .vd-ticker-track, .vd-tracking, .vd-sun, .vd-osd span:first-child { animation: none; }
+      .vd-btn, .vd-card, .vd-tier, .vd-roster-row, .vd-dates li, .vd-cover img { transition: none; }
+    }
+  </style>
+</body>
+</html>
