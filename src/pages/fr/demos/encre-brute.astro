@@ -1,0 +1,464 @@
+---
+import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+
+// Démo : Encre Brute, studio de tatouage fictif, Montréal QC.
+// Direction artistique autonome. Néo-brutalisme. Hors du système de thème WEBAO.
+const IMG = {
+  hero: "https://images.unsplash.com/photo-1568515045052-f9a854d70bfd?q=80&w=1600&auto=format&fit=crop",
+  a1: "https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?q=80&w=800&auto=format&fit=crop",
+  a2: "https://images.unsplash.com/photo-1542727365-19732a80dcfd?q=80&w=800&auto=format&fit=crop",
+  a3: "https://images.unsplash.com/photo-1565058379802-bbe93b2f703a?q=80&w=800&auto=format&fit=crop",
+  f1: "https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?q=80&w=800&auto=format&fit=crop",
+  f2: "https://images.unsplash.com/photo-1611695434369-a8f5d76ceb7b?q=80&w=800&auto=format&fit=crop",
+  f3: "https://images.unsplash.com/photo-1651684215020-f7a5b6610f23?q=80&w=800&auto=format&fit=crop",
+  f4: "https://images.unsplash.com/photo-1572085313466-6710de8d7ba3?q=80&w=800&auto=format&fit=crop",
+  f5: "https://images.unsplash.com/photo-1602738328654-51ab2ae6c4ff?q=80&w=800&auto=format&fit=crop",
+  f6: "https://images.unsplash.com/photo-1519415943484-9fa1873496d4?q=80&w=800&auto=format&fit=crop",
+};
+const MARQUEE = ["SANS RENDEZ-VOUS", "LIGNES FINES", "BLACKWORK", "RECOUVREMENTS", "FLASH PERSONNALISÉS", "ZÉRO REGRET"];
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Encre Brute : Studio de tatouage à Montréal</title>
+  <meta name="description" content="Encre Brute : studio de tatouage brut à Montréal. Lignes fines, blackwork, recouvrements et flash. Quatre artistes résidents. Sans rendez-vous bienvenus." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet" />
+</head>
+<body class="eb">
+
+  <!-- BARRE DU HAUT, ÉPAISSE -->
+  <header class="eb-topbar">
+    <a class="eb-wordmark" href="#top" aria-label="Encre Brute, accueil">ENCRE BRUTE</a>
+    <p class="eb-topbar-tag">MONTRÉAL · DEPUIS 2019</p>
+    <a class="eb-btn eb-btn-red" href="#book">RÉSERVER</a>
+    <button class="eb-burger" aria-label="Ouvrir le menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  </header>
+
+  <main id="top">
+    <!-- HÉROS -->
+    <section class="eb-hero">
+      <div class="eb-hero-type">
+        <p class="eb-label">STUDIO DE TATOUAGE · MONTRÉAL QC</p>
+        <h1 class="eb-h1">ENCRE<br />BRUTE</h1>
+        <p class="eb-hero-sub">Pas de flafla. Pas de questions sur votre signe astrologique. Quatre artistes, des aiguilles affûtées, des prix honnêtes.</p>
+        <div class="eb-hero-cta">
+          <a class="eb-btn eb-btn-red" href="#book">RÉSERVER UNE CONSULTATION</a>
+          <a class="eb-btn eb-btn-ghost" href="#flash">VOIR LE FLASH</a>
+        </div>
+      </div>
+      <figure class="eb-hero-media">
+        <img src={IMG.hero} alt="Artiste tatoueuse au travail dans le studio Encre Brute" loading="eager" fetchpriority="high" />
+        <span class="eb-sticker" aria-hidden="true">SANS<br />RDV OK</span>
+      </figure>
+      <span class="eb-stamp" aria-hidden="true">DEPUIS<br />2019</span>
+    </section>
+
+    <!-- BANDEAU DÉFILANT -->
+    <div class="eb-marquee" aria-hidden="true">
+      <div class="eb-marquee-track">
+        {MARQUEE.concat(MARQUEE).map((s) => (
+          <span class="eb-marquee-item">{s}<i>✕</i></span>
+        ))}
+      </div>
+    </div>
+
+    <!-- ARTISTES -->
+    <section class="eb-section" id="artists">
+      <div class="eb-wrap">
+        <p class="eb-label">L'ÉQUIPE</p>
+        <h2 class="eb-h2">CHOISIS TON POISON.</h2>
+        <div class="eb-artists">
+          <article class="eb-artist">
+            <img src={IMG.a1} alt="Marc L., tatoueur blackwork" loading="lazy" />
+            <div class="eb-artist-in">
+              <h3>MARC L.</h3>
+              <p class="eb-artist-style">BLACKWORK / LIGNES ÉPAISSES / GÉOMÉTRIQUE</p>
+              <p class="eb-artist-meta">Réservation : nov. 2026</p>
+            </div>
+            <span class="eb-status eb-status-open">OUVERT</span>
+          </article>
+          <article class="eb-artist">
+            <img src={IMG.a2} alt="Léa R., tatoueuse lignes fines" loading="lazy" />
+            <div class="eb-artist-in">
+              <h3>LÉA R.</h3>
+              <p class="eb-artist-style">LIGNES FINES / BOTANIQUE / LETTRAGE</p>
+              <p class="eb-artist-meta">Réservation : oct. 2026</p>
+            </div>
+            <span class="eb-status eb-status-low">2 PLACES</span>
+          </article>
+          <article class="eb-artist">
+            <img src={IMG.a3} alt="Jo P., tatoueur néo-traditionnel" loading="lazy" />
+            <div class="eb-artist-in">
+              <h3>JO P.</h3>
+              <p class="eb-artist-style">NÉO-TRADITIONNEL / COULEUR / AUDACIEUX</p>
+              <p class="eb-artist-meta">Réservation : déc. 2026</p>
+            </div>
+            <span class="eb-status eb-status-wait">LISTE D'ATTENTE</span>
+          </article>
+        </div>
+        <p class="eb-note">Des artistes invités passent chaque mois. C'est épinglé sur le tableau près de la porte, allez voir là-bas.</p>
+      </div>
+    </section>
+
+    <!-- FLASH -->
+    <section class="eb-section eb-section-red" id="flash">
+      <div class="eb-wrap">
+        <p class="eb-label eb-label-light">PREMIER ARRIVÉ, PREMIER SERVI</p>
+        <h2 class="eb-h2 eb-h2-light">MUR DE FLASH.</h2>
+        <p class="eb-lede-light">Prix fixe, taille fixe, règles de placement fixes. Tu en choisis un, on l'encre, tu repars content.</p>
+        <div class="eb-flash">
+          <figure class="eb-flash-card"><img src={IMG.f1} alt="Flash : serpent" loading="lazy" /><figcaption><span>SERPENT</span><strong>120 $</strong></figcaption></figure>
+          <figure class="eb-flash-card"><img src={IMG.f2} alt="Flash : papillon de nuit" loading="lazy" /><figcaption><span>PAPILLON</span><strong>90 $</strong></figcaption></figure>
+          <figure class="eb-flash-card"><img src={IMG.f3} alt="Flash : dague" loading="lazy" /><figcaption><span>DAGUE</span><strong>110 $</strong></figcaption></figure>
+          <figure class="eb-flash-card"><img src={IMG.f4} alt="Flash : pivoine" loading="lazy" /><figcaption><span>PIVOINE</span><strong>140 $</strong></figcaption></figure>
+          <figure class="eb-flash-card"><img src={IMG.f5} alt="Flash : œil" loading="lazy" /><figcaption><span>ŒIL</span><strong>80 $</strong></figcaption></figure>
+          <figure class="eb-flash-card"><img src={IMG.f6} alt="Flash : rose crâne" loading="lazy" /><figcaption><span>ROSE CRÂNE</span><strong>150 $</strong></figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- TARIFS / SOINS -->
+    <section class="eb-section" id="pricing">
+      <div class="eb-wrap">
+        <p class="eb-label">DES CHIFFRES, PAS DE MYSTÈRE</p>
+        <h2 class="eb-h2">ÇA COÛTE COMBIEN.</h2>
+        <table class="eb-table">
+          <thead><tr><th>QUOI</th><th>PRIX</th><th>DÉTAILS</th></tr></thead>
+          <tbody>
+            <tr><td>Consultation</td><td>0 $</td><td>20 minutes, on parle du projet, café en option</td></tr>
+            <tr><td>Minimum du studio</td><td>100 $</td><td>Dès que ça touche la peau</td></tr>
+            <tr><td>Projet personnalisé</td><td>180 $/h</td><td>Facturé au quart d'heure, minuteur visible</td></tr>
+            <tr><td>Journée complète</td><td>900 $</td><td>6 heures, lunch offert</td></tr>
+          </tbody>
+        </table>
+        <div class="eb-after">
+          <h3 class="eb-h3">SOINS, VERSION COURTE</h3>
+          <ol>
+            <li>Garde le pansement 24 heures, pas de triche.</li>
+            <li>Lave doucement avec un savon sans parfum, sèche en tapotant.</li>
+            <li>Pas de soleil, pas de piscine, pas de sauna pendant 2 semaines.</li>
+            <li>Fine couche de baume, deux fois par jour. Fine, ça veut dire fine.</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- RÉSERVATION -->
+    <section class="eb-section eb-section-black" id="book">
+      <div class="eb-wrap">
+        <p class="eb-label eb-label-light">DIS-NOUS LE PLAN</p>
+        <h2 class="eb-h2 eb-h2-light">RÉSERVE.</h2>
+        <form class="eb-form" id="eb-form" novalidate>
+          <label>TON NOM<input type="text" name="name" required placeholder="Jeanne Tremblay" /></label>
+          <label>TÉLÉPHONE<input type="tel" name="phone" required placeholder="(514) 555-0100" /></label>
+          <label>ARTISTE
+            <select name="artist">
+              <option>Marc L., blackwork</option>
+              <option>Léa R., lignes fines</option>
+              <option>Jo P., néo-traditionnel</option>
+              <option>Le premier disponible</option>
+            </select>
+          </label>
+          <label>TAILLE
+            <select name="size">
+              <option>Flash (fixe)</option>
+              <option>Petit (taille d'une paume)</option>
+              <option>Moyen (demi-manche)</option>
+              <option>Gros (amène des collations)</option>
+            </select>
+          </label>
+          <label class="eb-form-wide">TON IDÉE<textarea name="idea" rows="4" placeholder="Un serpent enroulé autour d'une dague, avant-bras, côté extérieur…"></textarea></label>
+          <label>MOIS SOUHAITÉ<input type="month" name="month" /></label>
+          <button class="eb-btn eb-btn-red eb-btn-full eb-form-wide" type="submit">DEMANDER UN RENDEZ-VOUS</button>
+          <p class="eb-form-note" role="status" aria-live="polite"></p>
+        </form>
+        <p class="eb-note eb-note-light">On te répond sous 48 heures. Un dépôt de 50 $ réserve ta place, les dépôts ne sont pas remboursables.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- PIED DE PAGE -->
+  <footer class="eb-footer">
+    <p class="eb-footer-giant" aria-hidden="true">ENCRE BRUTE</p>
+    <div class="eb-wrap eb-footer-in">
+      <div>
+        <p class="eb-label">NOUS TROUVER</p>
+        <p class="eb-footer-line">88, rue Fictive, Montréal QC</p>
+        <p class="eb-footer-line">Mar–sam, 11 h–19 h</p>
+      </div>
+      <div>
+        <p class="eb-label">APPELER</p>
+        <p class="eb-footer-line"><a href="tel:+15145550170">(514) 555-0170</a></p>
+        <p class="eb-footer-line"><a href="mailto:hello@encre-brute-demo.ca">hello@encre-brute-demo.ca</a></p>
+      </div>
+      <div>
+        <p class="eb-label">RÈGLES</p>
+        <p class="eb-footer-line">18 ans et plus avec pièce d'identité. Pas de tatouage au visage à la première visite.</p>
+        <p class="eb-footer-line">© 2026 Encre Brute. Démo fictive.</p>
+      </div>
+    </div>
+  </footer>
+
+  <EscapeHatch locale="fr" />
+
+  <script>
+    (function () {
+      var btn = document.querySelector('.eb-burger');
+      btn?.addEventListener('click', function () {
+        var open = btn?.getAttribute('aria-expanded') === 'true';
+        btn?.setAttribute('aria-expanded', String(!open));
+        btn?.setAttribute('aria-label', open ? 'Ouvrir le menu' : 'Fermer le menu');
+        document.body.classList.toggle('eb-menu-open', !open);
+      });
+    })();
+    // Formulaire démo : ne soumet rien nulle part
+    (function () {
+      var form = document.getElementById('eb-form');
+      form?.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var note = form?.querySelector('.eb-form-note');
+        if (note) note.textContent = 'Reçu. On te répond sous 48 heures.';
+      });
+    })();
+  </script>
+
+  <style>
+    .eb {
+      --eb-paper: #FFFFFF;
+      --eb-ink: #000000;
+      --eb-red: #FF0000;
+      --eb-grey: #F2F2F2;
+      --eb-font-h: "Archivo Black", system-ui, sans-serif;
+      --eb-font-b: system-ui, -apple-system, "Segoe UI", sans-serif;
+      margin: 0;
+      background: var(--eb-paper);
+      color: var(--eb-ink);
+      font-family: var(--eb-font-b);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: clip;
+    }
+    .eb *, .eb *::before, .eb *::after { box-sizing: border-box; }
+    .eb img { display: block; max-width: 100%; }
+    .eb-wrap { max-width: 1180px; margin: 0 auto; padding: 0 clamp(18px, 4vw, 40px); }
+
+    /* topbar */
+    .eb-topbar {
+      display: flex; align-items: center; gap: 24px;
+      padding: 14px clamp(18px, 4vw, 40px);
+      border-bottom: 3px solid var(--eb-ink);
+      background: var(--eb-paper);
+      position: sticky; top: 0; z-index: 50;
+    }
+    .eb-wordmark {
+      font-family: var(--eb-font-h);
+      font-size: clamp(1.6rem, 3.4vw, 2.6rem);
+      letter-spacing: -0.01em; line-height: 1;
+      color: var(--eb-ink); text-decoration: none;
+    }
+    .eb-topbar-tag {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.22em;
+      margin: 0 0 0 auto;
+    }
+    .eb-burger { display: none; background: none; border: 3px solid var(--eb-ink); cursor: pointer; padding: 8px; margin-left: auto; }
+    .eb-burger span { display: block; width: 22px; height: 3px; background: var(--eb-ink); margin: 5px 0; }
+
+    /* buttons + labels */
+    .eb-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      font-family: var(--eb-font-h); font-size: 15px; letter-spacing: 0.04em;
+      padding: 16px 30px; text-decoration: none; cursor: pointer;
+      border: 3px solid var(--eb-ink); border-radius: 0;
+      box-shadow: 5px 5px 0 var(--eb-ink);
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+    .eb-btn:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 var(--eb-ink); }
+    .eb-btn:active { transform: translate(3px, 3px); box-shadow: 2px 2px 0 var(--eb-ink); }
+    .eb-btn-red { background: var(--eb-red); color: #fff; }
+    .eb-btn-ghost { background: var(--eb-paper); color: var(--eb-ink); }
+    .eb-btn-full { width: 100%; }
+    .eb-label {
+      font-size: 12px; font-weight: 800; letter-spacing: 0.28em;
+      text-transform: uppercase; margin: 0 0 16px;
+    }
+    .eb-label-light { color: #fff; }
+
+    /* type */
+    .eb-h1 {
+      font-family: var(--eb-font-h);
+      font-size: clamp(4rem, 14vw, 11rem);
+      line-height: 0.88; letter-spacing: -0.02em;
+      margin: 0 0 22px;
+    }
+    .eb-h2 {
+      font-family: var(--eb-font-h);
+      font-size: clamp(2.2rem, 6vw, 4.2rem);
+      line-height: 0.95; letter-spacing: -0.01em;
+      margin: 0 0 20px;
+    }
+    .eb-h2-light { color: #fff; }
+    .eb-h3 { font-family: var(--eb-font-h); font-size: 1.25rem; margin: 0 0 16px; letter-spacing: 0.02em; }
+    .eb-lede-light { color: #fff; font-size: 17px; line-height: 1.55; max-width: 56ch; margin: 0 0 34px; }
+    .eb-note { font-size: 13px; font-weight: 600; margin-top: 22px; max-width: 62ch; }
+    .eb-note-light { color: #fff; }
+
+    /* hero */
+    .eb-hero {
+      position: relative;
+      display: grid; grid-template-columns: 1.15fr 0.85fr;
+      gap: 30px; align-items: center;
+      max-width: 1320px; margin: 0 auto;
+      padding: clamp(40px, 6vw, 90px) clamp(18px, 4vw, 40px);
+    }
+    .eb-hero-type { position: relative; z-index: 2; }
+    .eb-hero-sub { font-size: 18px; line-height: 1.5; max-width: 38ch; margin: 0 0 30px; font-weight: 500; }
+    .eb-hero-cta { display: flex; gap: 18px; flex-wrap: wrap; }
+    .eb-hero-media { position: relative; margin: 0; z-index: 1; }
+    .eb-hero-media img {
+      width: 100%; height: min(560px, 66vw); object-fit: cover;
+      border: 3px solid var(--eb-ink); box-shadow: 8px 8px 0 var(--eb-ink);
+      filter: grayscale(1) contrast(1.1);
+    }
+    .eb-sticker {
+      position: absolute; top: -26px; right: -18px;
+      width: 110px; height: 110px;
+      display: grid; place-items: center; text-align: center;
+      background: var(--eb-red); color: #fff;
+      border: 3px solid var(--eb-ink); border-radius: 50%;
+      font-family: var(--eb-font-h); font-size: 15px; line-height: 1.1;
+      transform: rotate(10deg);
+      box-shadow: 4px 4px 0 var(--eb-ink);
+    }
+    .eb-stamp {
+      position: absolute; left: clamp(18px, 4vw, 40px); bottom: 26px;
+      font-family: var(--eb-font-h); font-size: 13px; line-height: 1.3; text-align: center;
+      border: 3px solid var(--eb-ink); padding: 12px 14px;
+      transform: rotate(-8deg); background: var(--eb-paper);
+      box-shadow: 4px 4px 0 var(--eb-ink);
+    }
+
+    /* marquee */
+    .eb-marquee { background: var(--eb-ink); color: #fff; overflow: hidden; border-block: 3px solid var(--eb-ink); padding: 16px 0; }
+    .eb-marquee-track { display: flex; gap: 0; width: max-content; animation: eb-tick 22s linear infinite; }
+    .eb-marquee-item {
+      font-family: var(--eb-font-h); font-size: 20px; letter-spacing: 0.06em;
+      white-space: nowrap; display: inline-flex; align-items: center; gap: 28px; padding-right: 28px;
+    }
+    .eb-marquee-item i { font-style: normal; color: var(--eb-red); }
+    @keyframes eb-tick { to { transform: translateX(-50%); } }
+
+    /* sections */
+    .eb-section { padding: clamp(60px, 8vw, 110px) 0; border-bottom: 3px solid var(--eb-ink); }
+    .eb-section-red { background: var(--eb-red); }
+    .eb-section-black { background: var(--eb-ink); }
+
+    /* artists */
+    .eb-artists { display: grid; gap: 0; margin-top: 34px; border: 3px solid var(--eb-ink); box-shadow: 8px 8px 0 var(--eb-ink); }
+    .eb-artist {
+      display: grid; grid-template-columns: 110px 1fr auto; gap: 22px; align-items: center;
+      padding: 18px; background: var(--eb-paper);
+      border-bottom: 3px solid var(--eb-ink);
+      transition: background 0.12s ease, color 0.12s ease;
+    }
+    .eb-artist:last-child { border-bottom: 0; }
+    .eb-artist:hover { background: var(--eb-ink); color: #fff; }
+    .eb-artist:hover .eb-artist-style { color: #fff; }
+    .eb-artist img { width: 110px; height: 110px; object-fit: cover; border: 3px solid var(--eb-ink); filter: grayscale(1); }
+    .eb-artist h3 { font-family: var(--eb-font-h); font-size: 1.6rem; margin: 0 0 6px; letter-spacing: 0.01em; }
+    .eb-artist-style { font-size: 12px; font-weight: 800; letter-spacing: 0.18em; margin: 0 0 8px; color: #333; }
+    .eb-artist-meta { margin: 0; font-size: 14px; font-weight: 600; }
+    .eb-status {
+      font-family: var(--eb-font-h); font-size: 13px; letter-spacing: 0.06em;
+      border: 3px solid var(--eb-ink); padding: 10px 16px; white-space: nowrap;
+      box-shadow: 4px 4px 0 var(--eb-ink); background: var(--eb-paper); color: var(--eb-ink);
+    }
+    .eb-status-open { background: #2bff5e; }
+    .eb-status-low { background: var(--eb-red); color: #fff; }
+    .eb-status-wait { background: #ffe600; }
+
+    /* flash */
+    .eb-flash { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .eb-flash-card {
+      margin: 0; background: var(--eb-paper);
+      border: 3px solid var(--eb-ink); box-shadow: 6px 6px 0 var(--eb-ink);
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+    .eb-flash-card:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 var(--eb-ink); }
+    .eb-flash-card img { width: 100%; height: 260px; object-fit: cover; border-bottom: 3px solid var(--eb-ink); filter: grayscale(1) contrast(1.15); }
+    .eb-flash-card figcaption {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 16px; font-family: var(--eb-font-h); font-size: 15px; letter-spacing: 0.03em;
+    }
+    .eb-flash-card figcaption strong { background: var(--eb-ink); color: #fff; padding: 4px 10px; }
+
+    /* table */
+    .eb-table { width: 100%; border-collapse: collapse; margin-top: 34px; border: 3px solid var(--eb-ink); box-shadow: 8px 8px 0 var(--eb-ink); background: var(--eb-paper); }
+    .eb-table th, .eb-table td { border: 3px solid var(--eb-ink); padding: 16px 18px; text-align: left; }
+    .eb-table th { font-family: var(--eb-font-h); font-size: 14px; letter-spacing: 0.08em; background: var(--eb-ink); color: #fff; }
+    .eb-table td { font-size: 15px; font-weight: 500; }
+    .eb-table td:nth-child(2) { font-family: var(--eb-font-h); font-size: 17px; white-space: nowrap; }
+    .eb-after {
+      margin-top: 34px; border: 3px solid var(--eb-ink); box-shadow: 8px 8px 0 var(--eb-ink);
+      padding: clamp(22px, 3vw, 34px); background: var(--eb-grey);
+    }
+    .eb-after ol { margin: 0; padding-left: 22px; display: grid; gap: 10px; font-size: 15.5px; font-weight: 600; }
+
+    /* booking form */
+    .eb-form {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 34px;
+      background: var(--eb-paper); border: 3px solid var(--eb-ink); box-shadow: 8px 8px 0 var(--eb-red);
+      padding: clamp(24px, 4vw, 44px);
+    }
+    .eb-form-wide { grid-column: 1 / -1; }
+    .eb-form label { display: grid; gap: 10px; font-family: var(--eb-font-h); font-size: 13px; letter-spacing: 0.08em; }
+    .eb-form input, .eb-form select, .eb-form textarea {
+      font-family: var(--eb-font-b); font-weight: 600; font-size: 16px;
+      padding: 14px 16px; border: 3px solid var(--eb-ink); border-radius: 0;
+      background: #fff; color: var(--eb-ink); width: 100%;
+    }
+    .eb-form input:focus, .eb-form select:focus, .eb-form textarea:focus { outline: 3px solid var(--eb-red); outline-offset: 2px; }
+    .eb-form-note { grid-column: 1 / -1; margin: 0; font-weight: 700; font-size: 15px; text-align: center; }
+    .eb-form-note:empty { display: none; }
+
+    /* footer */
+    .eb-footer { background: var(--eb-paper); padding: 60px 0 90px; overflow: hidden; }
+    .eb-footer-giant {
+      font-family: var(--eb-font-h);
+      font-size: clamp(3.4rem, 12.5vw, 11rem);
+      line-height: 0.9; margin: 0 0 40px; text-align: center; white-space: nowrap;
+      color: transparent; -webkit-text-stroke: 3px var(--eb-ink);
+    }
+    .eb-footer-in { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+    .eb-footer-line { margin: 6px 0; font-size: 15px; font-weight: 600; }
+    .eb-footer-line a { color: var(--eb-ink); }
+
+    @media (max-width: 960px) {
+      .eb-hero { grid-template-columns: 1fr; }
+      .eb-flash { grid-template-columns: 1fr 1fr; }
+      .eb-artist { grid-template-columns: 90px 1fr; }
+      .eb-artist img { width: 90px; height: 90px; }
+      .eb-status { grid-column: 1 / -1; justify-self: start; }
+    }
+    @media (max-width: 720px) {
+      .eb-topbar-tag { display: none; }
+      .eb-topbar .eb-btn { display: none; }
+      .eb-burger { display: block; }
+      body.eb-menu-open .eb-topbar .eb-btn { display: inline-flex; position: absolute; top: 100%; right: 18px; margin-top: 12px; }
+      .eb-flash { grid-template-columns: 1fr; }
+      .eb-form { grid-template-columns: 1fr; }
+      .eb-footer-in { grid-template-columns: 1fr; }
+      .eb-table th:nth-child(3), .eb-table td:nth-child(3) { display: none; }
+      .eb-sticker { top: -20px; right: 6px; width: 92px; height: 92px; font-size: 13px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .eb-marquee-track { animation: none; }
+      .eb-btn, .eb-artist, .eb-flash-card { transition: none; }
+    }
+  </style>
+</body>
+</html>
