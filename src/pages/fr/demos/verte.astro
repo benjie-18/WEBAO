@@ -1,0 +1,566 @@
+---
+import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+
+// Demo microsite: Verte Épicerie, fictional zero-waste grocery, Sherbrooke.
+// Standalone art direction. Fresh market vibrancy. Not connected to the WEBAO theme system.
+const IMG = {
+  hero: "https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1200&auto=format&fit=crop",
+  tomatoes: "https://images.unsplash.com/photo-1488459716781-31db52582fe9?q=80&w=800&auto=format&fit=crop",
+  bread: "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800&auto=format&fit=crop",
+  greens: "https://images.unsplash.com/photo-1518843875459-f738682238a6?q=80&w=800&auto=format&fit=crop",
+  fruit: "https://images.unsplash.com/photo-1610832958506-aa56368176cf?q=80&w=800&auto=format&fit=crop",
+  salad: "https://images.unsplash.com/photo-1540420773420-3366772f4999?q=80&w=800&auto=format&fit=crop",
+  prep: "https://images.unsplash.com/photo-1498837167922-ddd27525d352?q=80&w=800&auto=format&fit=crop",
+};
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verte Épicerie : épicerie zéro déchet à Sherbrooke</title>
+  <meta name="description" content="Verte Épicerie : l'épicerie zéro déchet de Sherbrooke. Produits locaux, vrac, pain frais du jour. Apportez un pot, repartez avec le souper." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body class="vt">
+
+  <!-- TICKER -->
+  <div class="vt-ticker" aria-hidden="true">
+    <div class="vt-ticker-track">
+      <span>100 % LOCAL</span><span>✿</span><span>ZÉRO DÉCHET</span><span>✿</span><span>VRAC DÈS 0,80 $ / 100 G</span><span>✿</span><span>PAIN FRAIS CHAQUE JOUR</span><span>✿</span><span>APPORTEZ UN POT</span><span>✿</span>
+      <span>100 % LOCAL</span><span>✿</span><span>ZÉRO DÉCHET</span><span>✿</span><span>VRAC DÈS 0,80 $ / 100 G</span><span>✿</span><span>PAIN FRAIS CHAQUE JOUR</span><span>✿</span><span>APPORTEZ UN POT</span><span>✿</span>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <header class="vt-navwrap">
+    <nav class="vt-nav" aria-label="Principal">
+      <a class="vt-logo" href="#top" aria-label="Verte Épicerie, accueil">
+        <span class="vt-logo-leaf" aria-hidden="true">❧</span>
+        <span>VERTE</span>
+      </a>
+      <div class="vt-nav-links">
+        <a href="#harvest">Récolte</a>
+        <a href="#bulk">Vrac</a>
+        <a href="#basket">Panier</a>
+        <a href="#visit">Nous trouver</a>
+      </div>
+      <a class="vt-btn vt-btn-small vt-btn-leaf" href="#basket">Commander</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="vt-hero">
+      <div class="vt-hero-copy">
+        <p class="vt-sticker-pill">✿ ÉPICERIE ZÉRO DÉCHET · SHERBROOKE ✿</p>
+        <h1 class="vt-h1">Du bon manger,<br /><span class="vt-h1-green">zéro déchet.</span></h1>
+        <p class="vt-lede">Verte, c'est l'épicerie de quartier réinventée : des légumes mûris au soleil de 40 fermes du Québec, 120 bacs de vrac et du pain encore tiède à 8 h. Apportez vos pots, ou empruntez les nôtres gratis.</p>
+        <div class="vt-hero-cta">
+          <a class="vt-btn vt-btn-leaf" href="#harvest">Voir la récolte de la semaine</a>
+          <a class="vt-btn vt-btn-cream" href="#bulk">Explorer le mur de vrac</a>
+        </div>
+        <div class="vt-hero-facts">
+          <div><strong>40+</strong><span>fermes locales</span></div>
+          <div><strong>120</strong><span>bacs de vrac</span></div>
+          <div><strong>0</strong><span>sac de plastique, jamais</span></div>
+        </div>
+      </div>
+      <figure class="vt-hero-media">
+        <div class="vt-blob">
+          <img src={IMG.hero} alt="Étalages colorés de fruits et légumes chez Verte Épicerie" loading="eager" fetchpriority="high" />
+        </div>
+        <span class="vt-float-sticker vt-float-1" aria-hidden="true">légumes moches<br /><strong>-30 %</strong></span>
+        <span class="vt-float-sticker vt-float-2" aria-hidden="true">pain sorti<br /><strong>8 h 00</strong></span>
+      </figure>
+    </section>
+
+    <!-- HARVEST -->
+    <section class="vt-section" id="harvest">
+      <div class="vt-wrap">
+        <p class="vt-kicker">✿ cueilli cette semaine ✿</p>
+        <h2 class="vt-h2">Le tableau de récolte</h2>
+        <p class="vt-sub">Ce qui est arrivé du camion ce matin. Quand il n'y en a plus, il n'y en a plus, et c'est ça le principe.</p>
+        <div class="vt-cards">
+          <article class="vt-card vt-tilt-l">
+            <span class="vt-tape" aria-hidden="true"></span>
+            <img src={IMG.tomatoes} alt="Tomates anciennes à l'étal du marché" loading="lazy" />
+            <div class="vt-card-in">
+              <h3>Tomates anciennes</h3>
+              <p>Ferme Jardins d'Argile, à 12 km. Laides, parfaites, goût d'août.</p>
+              <p class="vt-price">3,40 $ <span>/ lb</span></p>
+            </div>
+          </article>
+          <article class="vt-card vt-tilt-r">
+            <span class="vt-tape" aria-hidden="true"></span>
+            <img src={IMG.bread} alt="Pains au levain frais" loading="lazy" />
+            <div class="vt-card-in">
+              <h3>Pain au levain</h3>
+              <p>Cuit ici à l'aube avec de la farine de Kamouraska. Une croûte qui chante.</p>
+              <p class="vt-price">6,50 $ <span>/ pain</span></p>
+            </div>
+          </article>
+          <article class="vt-card vt-tilt-l">
+            <span class="vt-tape" aria-hidden="true"></span>
+            <img src={IMG.greens} alt="Légumes verts frais" loading="lazy" />
+            <div class="vt-card-in">
+              <h3>Légumes verts</h3>
+              <p>Chou kale, bette à carde et bok choy cueillis hier à Compton. Encore fringants.</p>
+              <p class="vt-price">2,80 $ <span>/ botte</span></p>
+            </div>
+          </article>
+          <article class="vt-card vt-tilt-r">
+            <span class="vt-tape" aria-hidden="true"></span>
+            <img src={IMG.fruit} alt="Fruits frais de saison" loading="lazy" />
+            <div class="vt-card-in">
+              <h3>Fruits du verger</h3>
+              <p>Ce qui est mûr dans un rayon de 100 km. En ce moment : les bonnes pommes.</p>
+              <p class="vt-price">4,20 $ <span>/ panier</span></p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- BULK CHALKBOARD -->
+    <section class="vt-chalk" id="bulk">
+      <div class="vt-wrap">
+        <p class="vt-kicker vt-kicker-chalk">✎ le mur de vrac ✎</p>
+        <h2 class="vt-h2 vt-h2-chalk">Servez-vous vous-même</h2>
+        <p class="vt-sub vt-sub-chalk">120 bacs, prix au 100 g. Apportez vos pots, ou empruntez les nôtres gratuitement avec une consigne remboursée.</p>
+        <div class="vt-chalk-board">
+          <div class="vt-chalk-col">
+            <h3>Garde-manger</h3>
+            <ul>
+              <li><span>Flocons d'avoine</span><span>0,80 $</span></li>
+              <li><span>Riz basmati</span><span>1,10 $</span></li>
+              <li><span>Lentilles rouges</span><span>0,95 $</span></li>
+              <li><span>Pois chiches</span><span>1,05 $</span></li>
+              <li><span>Quinoa</span><span>1,60 $</span></li>
+            </ul>
+          </div>
+          <div class="vt-chalk-col">
+            <h3>Douceurs</h3>
+            <ul>
+              <li><span>Pépites de chocolat noir</span><span>2,40 $</span></li>
+              <li><span>Granola à l'érable</span><span>1,90 $</span></li>
+              <li><span>Mangue séchée</span><span>2,10 $</span></li>
+              <li><span>Amandes grillées</span><span>2,60 $</span></li>
+              <li><span>Café en grains</span><span>2,20 $</span></li>
+            </ul>
+          </div>
+          <div class="vt-chalk-col">
+            <h3>Maison</h3>
+            <ul>
+              <li><span>Savon à vaisselle</span><span>1,20 $</span></li>
+              <li><span>Feuilles de lessive</span><span>0,90 $</span></li>
+              <li><span>Nettoyant tout usage</span><span>1,10 $</span></li>
+              <li><span>Emballages à la cire</span><span>4,50 $</span></li>
+              <li><span>Brosses en bambou</span><span>3,80 $</span></li>
+            </ul>
+          </div>
+        </div>
+        <p class="vt-chalk-note">Première visite? Prenez une trousse de départ gratis au comptoir : 3 pots, un sac en tissu et des explications très enthousiastes.</p>
+      </div>
+    </section>
+
+    <!-- BASKET BUILDER -->
+    <section class="vt-section" id="basket">
+      <div class="vt-wrap">
+        <p class="vt-kicker">✿ commandez d'avance ✿</p>
+        <h2 class="vt-h2">Montez votre panier</h2>
+        <p class="vt-sub">Choisissez vos essentiels, on les emballe dans vos pots, vous passez après 15 h. Pas de compte, pas d'appli, pas de tracas.</p>
+        <div class="vt-basket">
+          <div class="vt-basket-items" id="vt-items"></div>
+          <aside class="vt-basket-side">
+            <div class="vt-basket-card">
+              <h3>Votre panier</h3>
+              <p class="vt-basket-empty" id="vt-empty">Rien pour l'instant. Les tomates vous appellent.</p>
+              <ul class="vt-basket-list" id="vt-list"></ul>
+              <p class="vt-basket-total">Total <strong id="vt-total">0,00 $</strong></p>
+              <button class="vt-btn vt-btn-tomato" id="vt-reserve" type="button">Réserver pour cueillette</button>
+              <p class="vt-basket-note" id="vt-note" role="status" aria-live="polite"></p>
+            </div>
+            <img class="vt-basket-img" src={IMG.salad} alt="Bol de salade fraîche avec des ingrédients du marché" loading="lazy" />
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- VALUES -->
+    <section class="vt-values">
+      <div class="vt-wrap">
+        <div class="vt-value"><span aria-hidden="true">♻</span><h3>Zéro plastique, promis</h3><p>Sacs, pellicules, bouteilles : rien de tout ça ne franchit notre porte.</p></div>
+        <div class="vt-value"><span aria-hidden="true">✿</span><h3>40+ fermes locales</h3><p>Votre dollar reste dans un rayon de 100 km, souvent de 20.</p></div>
+        <div class="vt-value"><span aria-hidden="true">☀</span><h3>On composte tout</h3><p>Les retailles deviennent du terreau à la Ferme Berthe. La boucle est bouclée.</p></div>
+      </div>
+    </section>
+
+    <!-- VISIT -->
+    <section class="vt-section" id="visit">
+      <div class="vt-wrap vt-visit">
+        <div>
+          <p class="vt-kicker vt-kicker-left">✿ venez nous voir ✿</p>
+          <h2 class="vt-h2 vt-h2-left">Sur la rue King Ouest</h2>
+          <p class="vt-visit-line"><strong>214, rue King Ouest</strong><br />Sherbrooke QC</p>
+          <p class="vt-visit-line">Lun-Ven · 8 h-19 h<br />Sam · 8 h-17 h · Dim · 9 h-15 h</p>
+          <a class="vt-btn vt-btn-leaf" href="tel:+18195550134">Appeler le (819) 555-0134</a>
+        </div>
+        <div class="vt-news">
+          <img src={IMG.prep} alt="Préparation d'un repas avec des produits du marché" loading="lazy" />
+          <form class="vt-form" id="vt-form" novalidate>
+            <h3>La liste du dimanche</h3>
+            <p>Un courriel par semaine : ce qui est mûr, ce qui cuit, ce qui est à -30 % parce que glorieusement moche.</p>
+            <label>Courriel<input type="email" name="email" required placeholder="vous@exemple.com" /></label>
+            <button class="vt-btn vt-btn-tomato" type="submit">Je m'abonne</button>
+            <p class="vt-form-note" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="vt-footer">
+    <p class="vt-footer-giant" aria-hidden="true">VERTE ✿</p>
+    <div class="vt-wrap vt-footer-in">
+      <p>© 2026 Verte Épicerie. Démo fictive, vrai appétit.</p>
+      <p>214, rue King Ouest, Sherbrooke QC · <a href="tel:+18195550134">(819) 555-0134</a></p>
+    </div>
+  </footer>
+
+  <EscapeHatch locale="fr" />
+
+  <script>
+    // Basket builder: local state only, never sends anything anywhere
+    (function () {
+      var ITEMS = [
+        { id: "sourdough", name: "Pain au levain", unit: "pain", price: 6.5 },
+        { id: "tomatoes", name: "Tomates anciennes", unit: "lb", price: 3.4 },
+        { id: "greens", name: "Légumes verts", unit: "botte", price: 2.8 },
+        { id: "oats", name: "Flocons d'avoine", unit: "500 g", price: 4.0 },
+        { id: "granola", name: "Granola à l'érable", unit: "500 g", price: 9.5 },
+        { id: "soap", name: "Savon à vaisselle", unit: "500 ml", price: 6.0 },
+      ];
+      var qty: Record<string, number> = {};
+      function need(id: string): HTMLElement {
+        var e = document.getElementById(id);
+        if (!e) throw new Error("missing element #" + id);
+        return e;
+      }
+      var list = need("vt-items");
+      var out = need("vt-list");
+      var empty = need("vt-empty");
+      var totalEl = need("vt-total");
+      var note = need("vt-note");
+      var reserveBtn = need("vt-reserve");
+
+      function money(n: number) { return n.toFixed(2).replace(".", ",") + " $"; }
+
+      function render() {
+        var total = 0, count = 0, html = "";
+        ITEMS.forEach(function (it) {
+          var q = qty[it.id] || 0;
+          if (q > 0) {
+            count += q;
+            total += q * it.price;
+            html += '<li><span>' + it.name + ' × ' + q + '</span><span>' + money(q * it.price) + "</span></li>";
+          }
+        });
+        out.innerHTML = html;
+        empty.style.display = count ? "none" : "block";
+        totalEl.textContent = money(total);
+      }
+
+      ITEMS.forEach(function (it) {
+        var row = document.createElement("div");
+        row.className = "vt-item";
+        row.innerHTML =
+          '<div class="vt-item-info"><strong>' + it.name + "</strong><span>" + money(it.price) + " / " + it.unit + "</span></div>" +
+          '<div class="vt-stepper"><button type="button" data-a="-" aria-label="Enlever un">−</button>' +
+          '<span data-q>0</span>' +
+          '<button type="button" data-a="+" aria-label="Ajouter un">+</button></div>';
+        var qEl = row.querySelector("[data-q]");
+        row.querySelectorAll("button").forEach(function (b) {
+          b.addEventListener("click", function () {
+            var q = qty[it.id] || 0;
+            q = b.getAttribute("data-a") === "+" ? q + 1 : Math.max(0, q - 1);
+            qty[it.id] = q;
+            if (qEl) qEl.textContent = String(q);
+            render();
+          });
+        });
+        list.appendChild(row);
+      });
+
+      reserveBtn.addEventListener("click", function () {
+        var n = Object.keys(qty).reduce(function (a: number, k: string) { return a + (qty[k] || 0); }, 0);
+        note.textContent = n
+          ? "Panier réservé! Il sera emballé et prêt après 15 h aujourd'hui."
+          : "Ajoutez un petit quelque chose d'abord, votre panier est encore vide.";
+      });
+
+      var form = document.getElementById("vt-form") as HTMLFormElement | null;
+      form?.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var n = form?.querySelector(".vt-form-note");
+        if (n) n.textContent = "C'est noté! Le premier courriel arrive dimanche matin.";
+        form?.reset();
+      });
+      render();
+    })();
+  </script>
+
+  <style>
+    .vt {
+      --vt-cream: #FFF8EC;
+      --vt-ink: #2E3A1F;
+      --vt-leaf: #3E8914;
+      --vt-leaf-deep: #2B610C;
+      --vt-tomato: #E4572E;
+      --vt-sun: #FFC53D;
+      --vt-chalk: #22331C;
+      --vt-font: "Fredoka", "Comic Sans MS", system-ui, sans-serif;
+      margin: 0;
+      background: var(--vt-cream);
+      color: var(--vt-ink);
+      font-family: var(--vt-font);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: clip;
+    }
+    .vt *, .vt *::before, .vt *::after { box-sizing: border-box; }
+    .vt img { display: block; max-width: 100%; }
+    .vt-wrap { max-width: 1160px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px); }
+
+    /* ticker */
+    .vt-ticker { background: var(--vt-leaf); color: #fff; overflow: hidden; padding: 10px 0; }
+    .vt-ticker-track { display: flex; gap: 34px; width: max-content; animation: vt-tick 22s linear infinite; font-weight: 600; font-size: 14px; letter-spacing: 0.12em; }
+    @keyframes vt-tick { to { transform: translateX(-50%); } }
+
+    /* nav */
+    .vt-navwrap { position: sticky; top: 10px; z-index: 50; padding: 10px clamp(12px, 3vw, 28px) 0; }
+    .vt-nav {
+      max-width: 1060px; margin: 0 auto; display: flex; align-items: center; gap: 18px;
+      background: rgba(255, 248, 236, 0.92); backdrop-filter: blur(12px);
+      border: 3px solid var(--vt-ink); border-radius: 999px; padding: 10px 12px 10px 24px;
+      box-shadow: 0 10px 24px rgba(46, 58, 31, 0.14);
+    }
+    .vt-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--vt-ink); font-weight: 700; font-size: 22px; letter-spacing: 0.04em; margin-right: auto; }
+    .vt-logo-leaf { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--vt-leaf); color: #fff; font-size: 20px; }
+    .vt-nav-links { display: flex; gap: 4px; }
+    .vt-nav-links a { color: var(--vt-ink); text-decoration: none; font-weight: 500; font-size: 15.5px; padding: 10px 16px; border-radius: 999px; }
+    .vt-nav-links a:hover { background: var(--vt-sun); }
+
+    /* buttons */
+    .vt-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      font-family: var(--vt-font); font-weight: 600; font-size: 16px;
+      padding: 15px 30px; border-radius: 999px; text-decoration: none; cursor: pointer;
+      border: 3px solid var(--vt-ink); transition: transform 0.15s ease;
+    }
+    .vt-btn:hover { transform: translateY(-3px) rotate(-1deg); }
+    .vt-btn-leaf { background: var(--vt-leaf); color: #fff; }
+    .vt-btn-tomato { background: var(--vt-tomato); color: #fff; }
+    .vt-btn-cream { background: #fff; color: var(--vt-ink); }
+    .vt-btn-small { font-size: 14px; padding: 10px 20px; }
+
+    /* type */
+    .vt-kicker { text-align: center; font-weight: 600; letter-spacing: 0.22em; font-size: 13px; color: var(--vt-leaf-deep); margin: 0 0 14px; text-transform: uppercase; }
+    .vt-kicker-left { text-align: left; }
+    .vt-h1 { font-weight: 700; font-size: clamp(3rem, 8.5vw, 5.8rem); line-height: 0.98; letter-spacing: -0.01em; margin: 0 0 22px; }
+    .vt-h1-green { color: var(--vt-leaf); }
+    .vt-h2 { font-weight: 700; font-size: clamp(2.1rem, 5vw, 3.4rem); line-height: 1; text-align: center; margin: 0 0 14px; letter-spacing: -0.01em; }
+    .vt-h2-left { text-align: left; }
+    .vt-sub { text-align: center; font-size: 16.5px; max-width: 58ch; margin: 0 auto 44px; line-height: 1.65; font-weight: 400; }
+    .vt-sticker-pill {
+      display: inline-block; background: var(--vt-sun); border: 3px solid var(--vt-ink);
+      border-radius: 999px; font-weight: 600; font-size: 13px; letter-spacing: 0.14em;
+      padding: 10px 22px; margin: 0 0 26px; transform: rotate(-2deg);
+    }
+
+    /* hero */
+    .vt-hero {
+      display: grid; grid-template-columns: 1.02fr 0.98fr; gap: clamp(30px, 5vw, 64px);
+      max-width: 1220px; margin: 0 auto; align-items: center;
+      padding: clamp(44px, 6vw, 90px) clamp(20px, 4vw, 40px) clamp(60px, 7vw, 100px);
+    }
+    .vt-lede { font-size: 18px; line-height: 1.65; max-width: 44ch; margin: 0 0 30px; }
+    .vt-hero-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 36px; }
+    .vt-hero-facts { display: flex; gap: 34px; }
+    .vt-hero-facts div { display: grid; }
+    .vt-hero-facts strong { font-size: 30px; font-weight: 700; color: var(--vt-leaf-deep); }
+    .vt-hero-facts span { font-size: 13.5px; font-weight: 500; }
+    .vt-hero-media { position: relative; margin: 0; justify-self: center; }
+    .vt-blob {
+      border-radius: 46% 54% 52% 48% / 52% 46% 54% 48%;
+      overflow: hidden; border: 4px dashed var(--vt-leaf);
+      outline: 6px solid #fff; outline-offset: -2px;
+      animation: vt-blobmorph 12s ease-in-out infinite;
+    }
+    .vt-blob img { width: min(440px, 78vw); height: min(440px, 78vw); object-fit: cover; }
+    @keyframes vt-blobmorph {
+      0%, 100% { border-radius: 46% 54% 52% 48% / 52% 46% 54% 48%; }
+      50% { border-radius: 54% 46% 48% 52% / 48% 54% 46% 52%; }
+    }
+    .vt-float-sticker {
+      position: absolute; background: #fff; border: 3px solid var(--vt-ink); border-radius: 18px;
+      padding: 12px 16px; font-size: 14px; font-weight: 500; line-height: 1.3; text-align: center;
+      box-shadow: 0 10px 20px rgba(46, 58, 31, 0.16);
+    }
+    .vt-float-sticker strong { color: var(--vt-tomato); font-size: 18px; }
+    .vt-float-1 { top: 4%; left: -30px; transform: rotate(-8deg); animation: vt-bob 4.5s ease-in-out infinite; }
+    .vt-float-2 { bottom: 6%; right: -22px; transform: rotate(6deg); animation: vt-bob 5.5s ease-in-out infinite reverse; }
+    @keyframes vt-bob { 0%, 100% { margin-top: 0; } 50% { margin-top: -12px; } }
+
+    /* sections */
+    .vt-section { padding: clamp(60px, 8vw, 110px) 0; }
+
+    /* harvest cards */
+    .vt-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+    .vt-card {
+      position: relative; background: #fff; border: 3px solid var(--vt-ink); border-radius: 26px;
+      overflow: visible; transition: transform 0.18s ease;
+      box-shadow: 0 14px 28px rgba(46, 58, 31, 0.12);
+    }
+    .vt-card:hover { transform: translateY(-6px); }
+    .vt-tilt-l { transform: rotate(-1.4deg); }
+    .vt-tilt-r { transform: rotate(1.4deg); }
+    .vt-tilt-l:hover, .vt-tilt-r:hover { transform: rotate(0deg) translateY(-6px); }
+    .vt-tape {
+      position: absolute; top: -14px; left: 50%; transform: translateX(-50%) rotate(-3deg);
+      width: 92px; height: 28px; background: rgba(255, 197, 61, 0.85);
+      border-left: 2px dashed rgba(46,58,31,0.25); border-right: 2px dashed rgba(46,58,31,0.25);
+      z-index: 2;
+    }
+    .vt-card img { width: 100%; height: 190px; object-fit: cover; border-radius: 22px 22px 0 0; border-bottom: 3px solid var(--vt-ink); }
+    .vt-card-in { padding: 20px 20px 24px; display: grid; gap: 8px; }
+    .vt-card-in h3 { margin: 0; font-size: 20px; font-weight: 600; }
+    .vt-card-in p { margin: 0; font-size: 14px; line-height: 1.55; font-weight: 400; }
+    .vt-price { font-size: 24px; font-weight: 700; color: var(--vt-leaf-deep); margin: 4px 0 0; }
+    .vt-price span { font-size: 14px; font-weight: 500; color: var(--vt-ink); }
+
+    /* chalkboard */
+    .vt-chalk { background: var(--vt-chalk); color: #F3EBD3; padding: clamp(60px, 8vw, 110px) 0; position: relative; }
+    .vt-chalk::before, .vt-chalk::after {
+      content: ""; position: absolute; left: 0; right: 0; height: 26px;
+      background: radial-gradient(circle at 14px 50%, var(--vt-chalk) 12px, transparent 13px);
+      background-size: 28px 26px;
+    }
+    .vt-chalk::before { top: -13px; }
+    .vt-chalk::after { bottom: -13px; transform: rotate(180deg); }
+    .vt-kicker-chalk { color: var(--vt-sun); }
+    .vt-h2-chalk { color: #FFF8EC; }
+    .vt-sub-chalk { color: #D8CDAE; }
+    .vt-chalk-board {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px;
+      border: 10px solid #5A4128; border-radius: 14px; background: #2A3F22;
+      padding: clamp(24px, 4vw, 44px);
+      box-shadow: inset 0 0 60px rgba(0,0,0,0.35);
+    }
+    .vt-chalk-col h3 {
+      margin: 0 0 16px; font-size: 22px; font-weight: 600; color: var(--vt-sun);
+      border-bottom: 2px dashed rgba(243, 235, 211, 0.4); padding-bottom: 10px;
+    }
+    .vt-chalk-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+    .vt-chalk-col li {
+      display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+      font-size: 16.5px; font-weight: 400;
+    }
+    .vt-chalk-col li span:first-child { border-bottom: 2px dotted rgba(243, 235, 211, 0.35); flex: 1; padding-bottom: 2px; }
+    .vt-chalk-col li span:last-child { font-weight: 600; color: #fff; white-space: nowrap; }
+    .vt-chalk-note { text-align: center; color: var(--vt-sun); font-size: 15.5px; margin: 30px 0 0; font-weight: 500; }
+
+    /* basket builder */
+    .vt-basket { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 26px; align-items: start; }
+    .vt-basket-items { display: grid; gap: 14px; }
+    .vt-item {
+      display: flex; align-items: center; justify-content: space-between; gap: 14px;
+      background: #fff; border: 3px solid var(--vt-ink); border-radius: 20px; padding: 14px 14px 14px 22px;
+    }
+    .vt-item-info { display: grid; }
+    .vt-item-info strong { font-size: 17px; font-weight: 600; }
+    .vt-item-info span { font-size: 13.5px; color: var(--vt-leaf-deep); font-weight: 500; }
+    .vt-stepper { display: flex; align-items: center; gap: 12px; }
+    .vt-stepper button {
+      width: 40px; height: 40px; border-radius: 50%; border: 3px solid var(--vt-ink);
+      background: var(--vt-sun); font-family: var(--vt-font); font-size: 20px; font-weight: 700;
+      cursor: pointer; line-height: 1; color: var(--vt-ink);
+    }
+    .vt-stepper button:hover { background: var(--vt-leaf); color: #fff; }
+    .vt-stepper span { font-size: 18px; font-weight: 700; min-width: 26px; text-align: center; }
+    .vt-basket-side { display: grid; gap: 18px; position: sticky; top: 110px; }
+    .vt-basket-card {
+      background: var(--vt-leaf-deep); color: #fff; border-radius: 26px; border: 3px solid var(--vt-ink);
+      padding: 28px; display: grid; gap: 12px;
+    }
+    .vt-basket-card h3 { margin: 0; font-size: 24px; font-weight: 600; }
+    .vt-basket-empty { margin: 0; font-size: 15px; opacity: 0.85; }
+    .vt-basket-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: 15px; }
+    .vt-basket-list li { display: flex; justify-content: space-between; gap: 10px; border-bottom: 1px dashed rgba(255,255,255,0.3); padding-bottom: 8px; }
+    .vt-basket-total { display: flex; justify-content: space-between; font-size: 18px; margin: 6px 0 0; }
+    .vt-basket-total strong { font-size: 26px; }
+    .vt-basket-note { margin: 0; font-size: 14.5px; font-weight: 500; min-height: 20px; color: var(--vt-sun); }
+    .vt-basket-img { border-radius: 26px; border: 3px solid var(--vt-ink); height: 220px; width: 100%; object-fit: cover; }
+
+    /* values */
+    .vt-values { background: var(--vt-sun); border-block: 3px solid var(--vt-ink); padding: 54px 0; }
+    .vt-values .vt-wrap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+    .vt-value { text-align: center; display: grid; gap: 8px; justify-items: center; }
+    .vt-value span { font-size: 40px; }
+    .vt-value h3 { margin: 0; font-size: 21px; font-weight: 600; }
+    .vt-value p { margin: 0; font-size: 15px; max-width: 30ch; }
+
+    /* visit */
+    .vt-visit { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(30px, 5vw, 70px); align-items: center; }
+    .vt-visit-line { font-size: 17px; line-height: 1.7; margin: 0 0 18px; }
+    .vt-news { display: grid; gap: 0; }
+    .vt-news img { border-radius: 26px 26px 0 0; border: 3px solid var(--vt-ink); border-bottom: none; height: 240px; width: 100%; object-fit: cover; }
+    .vt-form {
+      background: #fff; border: 3px solid var(--vt-ink); border-radius: 0 0 26px 26px;
+      padding: 28px; display: grid; gap: 14px;
+    }
+    .vt-form h3 { margin: 0; font-size: 22px; font-weight: 600; }
+    .vt-form p { margin: 0; font-size: 14.5px; line-height: 1.6; }
+    .vt-form label { display: grid; gap: 8px; font-weight: 600; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; }
+    .vt-form input {
+      font-family: var(--vt-font); font-size: 16px; padding: 13px 20px; border-radius: 999px;
+      border: 3px solid var(--vt-leaf); width: 100%; color: var(--vt-ink);
+    }
+    .vt-form input:focus { outline: 3px solid var(--vt-sun); outline-offset: 2px; }
+    .vt-form-note { margin: 0; font-weight: 600; font-size: 14.5px; color: var(--vt-leaf-deep); }
+    .vt-form-note:empty { display: none; }
+
+    /* footer */
+    .vt-footer { background: var(--vt-ink); color: #FFF8EC; padding: 60px 0 80px; text-align: center; overflow: hidden; }
+    .vt-footer-giant { font-weight: 700; font-size: clamp(3.4rem, 12vw, 9rem); line-height: 1; margin: 0 0 24px; color: var(--vt-sun); letter-spacing: 0.02em; }
+    .vt-footer-in { display: grid; gap: 8px; font-size: 14.5px; }
+    .vt-footer-in p { margin: 0; }
+    .vt-footer-in a { color: var(--vt-sun); }
+
+    @media (max-width: 960px) {
+      .vt-hero { grid-template-columns: 1fr; text-align: center; }
+      .vt-lede { margin-inline: auto; }
+      .vt-hero-cta, .vt-hero-facts { justify-content: center; }
+      .vt-cards { grid-template-columns: 1fr 1fr; }
+      .vt-chalk-board { grid-template-columns: 1fr; }
+      .vt-basket { grid-template-columns: 1fr; }
+      .vt-basket-side { position: static; }
+      .vt-visit { grid-template-columns: 1fr; }
+      .vt-values .vt-wrap { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .vt-nav-links { display: none; }
+      .vt-cards { grid-template-columns: 1fr; max-width: 420px; margin-inline: auto; }
+      .vt-float-1 { left: -6px; }
+      .vt-float-2 { right: -4px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .vt-ticker-track, .vt-blob, .vt-float-1, .vt-float-2 { animation: none; }
+      .vt-btn, .vt-card { transition: none; }
+    }
+  </style>
+</body>
+</html>
