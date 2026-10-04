@@ -5,15 +5,9 @@ import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
 // Direction artistique autonome. Néo-brutalisme. Hors du système de thème WEBAO.
 const IMG = {
   hero: "https://images.unsplash.com/photo-1568515045052-f9a854d70bfd?q=80&w=1600&auto=format&fit=crop",
-  a1: "https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?q=80&w=800&auto=format&fit=crop",
-  a2: "https://images.unsplash.com/photo-1542727365-19732a80dcfd?q=80&w=800&auto=format&fit=crop",
+  a1: "/demos/encre-brute/01.jpg",
+  a2: "/demos/encre-brute/02.jpg",
   a3: "https://images.unsplash.com/photo-1565058379802-bbe93b2f703a?q=80&w=800&auto=format&fit=crop",
-  f1: "https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?q=80&w=800&auto=format&fit=crop",
-  f2: "https://images.unsplash.com/photo-1611695434369-a8f5d76ceb7b?q=80&w=800&auto=format&fit=crop",
-  f3: "https://images.unsplash.com/photo-1651684215020-f7a5b6610f23?q=80&w=800&auto=format&fit=crop",
-  f4: "https://images.unsplash.com/photo-1572085313466-6710de8d7ba3?q=80&w=800&auto=format&fit=crop",
-  f5: "https://images.unsplash.com/photo-1602738328654-51ab2ae6c4ff?q=80&w=800&auto=format&fit=crop",
-  f6: "https://images.unsplash.com/photo-1519415943484-9fa1873496d4?q=80&w=800&auto=format&fit=crop",
 };
 const MARQUEE = ["SANS RENDEZ-VOUS", "LIGNES FINES", "BLACKWORK", "RECOUVREMENTS", "FLASH PERSONNALISÉS", "ZÉRO REGRET"];
 ---
@@ -113,12 +107,73 @@ const MARQUEE = ["SANS RENDEZ-VOUS", "LIGNES FINES", "BLACKWORK", "RECOUVREMENTS
         <h2 class="eb-h2 eb-h2-light">MUR DE FLASH.</h2>
         <p class="eb-lede-light">Prix fixe, taille fixe, règles de placement fixes. Tu en choisis un, on l'encre, tu repars content.</p>
         <div class="eb-flash">
-          <figure class="eb-flash-card"><img src={IMG.f1} alt="Flash : serpent" loading="lazy" /><figcaption><span>SERPENT</span><strong>120 $</strong></figcaption></figure>
-          <figure class="eb-flash-card"><img src={IMG.f2} alt="Flash : papillon de nuit" loading="lazy" /><figcaption><span>PAPILLON</span><strong>90 $</strong></figcaption></figure>
-          <figure class="eb-flash-card"><img src={IMG.f3} alt="Flash : dague" loading="lazy" /><figcaption><span>DAGUE</span><strong>110 $</strong></figcaption></figure>
-          <figure class="eb-flash-card"><img src={IMG.f4} alt="Flash : pivoine" loading="lazy" /><figcaption><span>PIVOINE</span><strong>140 $</strong></figcaption></figure>
-          <figure class="eb-flash-card"><img src={IMG.f5} alt="Flash : œil" loading="lazy" /><figcaption><span>ŒIL</span><strong>80 $</strong></figcaption></figure>
-          <figure class="eb-flash-card"><img src={IMG.f6} alt="Flash : rose crâne" loading="lazy" /><figcaption><span>ROSE CRÂNE</span><strong>150 $</strong></figcaption></figure>
+          <figure class="eb-flash-card"><svg viewBox="0 0 300 260" class="eb-flash-art" role="img" aria-label="Flash : serpent">
+  <rect width="300" height="260" fill="#F4F1EA"/>
+  <path d="M230 200 l 14 -30 l 12 28 l 30 -8 l -18 24 l 26 16 l -32 4 l 6 30 l -24 -18 l -20 22 l 2 -32 l -30 2 l 22 -22 z" fill="none" stroke="#111111" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M60 205 C 40 155, 95 135, 112 102 C 129 69, 100 52, 130 32 C 150 18, 180 24, 186 42" fill="none" stroke="#111111" stroke-width="17" stroke-linecap="round"/>
+  <path d="M186 42 l 28 -8 l -15 24 z" fill="#111111"/>
+  <circle cx="197" cy="41" r="4.5" fill="#F4F1EA"/>
+  <path d="M214 34 l 18 -9 m -18 9 l -5 11 m 5 -11 l 7 7" stroke="#C80000" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M68 176 l 20 7 M78 150 l 20 5 M93 124 l 18 3 M114 98 l 15 -2" stroke="#111111" stroke-width="5" stroke-linecap="round"/>
+</svg><figcaption><span>SERPENT</span><strong>120 $</strong></figcaption></figure>
+          <figure class="eb-flash-card"><svg viewBox="0 0 300 260" class="eb-flash-art" role="img" aria-label="Flash : papillon de nuit">
+  <rect width="300" height="260" fill="#F4F1EA"/>
+  <path d="M150 92 C 100 40, 38 52, 54 112 C 64 152, 110 152, 136 130 Z" fill="#111111"/>
+  <path d="M150 92 C 200 40, 262 52, 246 112 C 236 152, 190 152, 164 130 Z" fill="#111111"/>
+  <path d="M140 142 C 110 162, 100 202, 130 212 C 150 217, 150 182, 148 156 Z" fill="#111111"/>
+  <path d="M160 142 C 190 162, 200 202, 170 212 C 150 217, 150 182, 152 156 Z" fill="#111111"/>
+  <rect x="141" y="82" width="18" height="112" rx="9" fill="#111111"/>
+  <path d="M144 84 C 130 62, 114 56, 104 46 M156 84 C 170 62, 186 56, 196 46" stroke="#111111" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <circle cx="95" cy="106" r="14" fill="#F4F1EA"/><circle cx="95" cy="106" r="6" fill="#C80000"/>
+  <circle cx="205" cy="106" r="14" fill="#F4F1EA"/><circle cx="205" cy="106" r="6" fill="#C80000"/>
+</svg><figcaption><span>PAPILLON</span><strong>90 $</strong></figcaption></figure>
+          <figure class="eb-flash-card"><svg viewBox="0 0 300 260" class="eb-flash-art" role="img" aria-label="Flash : dague">
+  <rect width="300" height="260" fill="#F4F1EA"/>
+  <path d="M70 60 l 32 10 M70 122 l 32 6 M230 60 l -32 10 M230 122 l -32 6" stroke="#111111" stroke-width="5" stroke-linecap="round"/>
+  <path d="M150 18 L169 40 L158 182 L150 202 L142 182 L131 40 Z" fill="#111111"/>
+  <path d="M150 30 L150 168" stroke="#F4F1EA" stroke-width="4"/>
+  <rect x="104" y="198" width="92" height="16" fill="#111111"/>
+  <rect x="141" y="214" width="18" height="32" fill="#111111"/>
+  <circle cx="150" cy="254" r="0" fill="none"/>
+  <circle cx="150" cy="248" r="9" fill="#C80000" stroke="#111111" stroke-width="4"/>
+</svg><figcaption><span>DAGUE</span><strong>110 $</strong></figcaption></figure>
+          <figure class="eb-flash-card"><svg viewBox="0 0 300 260" class="eb-flash-art" role="img" aria-label="Flash : pivoine">
+  <rect width="300" height="260" fill="#F4F1EA"/>
+  <g fill="none" stroke="#111111" stroke-width="7">
+    <ellipse cx="150" cy="108" rx="34" ry="54"/>
+    <ellipse cx="104" cy="130" rx="30" ry="46" transform="rotate(-28 104 130)"/>
+    <ellipse cx="196" cy="130" rx="30" ry="46" transform="rotate(28 196 130)"/>
+    <ellipse cx="150" cy="168" rx="44" ry="34"/>
+  </g>
+  <circle cx="150" cy="124" r="16" fill="#C80000"/>
+  <path d="M150 202 L150 252" stroke="#111111" stroke-width="8"/>
+  <path d="M150 224 C 120 219, 100 204, 94 184 C 120 189, 140 199, 150 224 Z" fill="#111111"/>
+  <path d="M150 236 C 180 231, 200 216, 206 196 C 180 201, 160 211, 150 236 Z" fill="#111111"/>
+</svg><figcaption><span>PIVOINE</span><strong>140 $</strong></figcaption></figure>
+          <figure class="eb-flash-card"><svg viewBox="0 0 300 260" class="eb-flash-art" role="img" aria-label="Flash : œil">
+  <rect width="300" height="260" fill="#F4F1EA"/>
+  <g stroke="#111111" stroke-width="6" stroke-linecap="round">
+    <path d="M150 28 L150 54 M88 48 L104 68 M212 48 L196 68 M52 100 L78 110 M248 100 L222 110"/>
+  </g>
+  <path d="M48 142 C 94 96, 206 96, 252 142 C 206 188, 94 188, 48 142 Z" fill="none" stroke="#111111" stroke-width="10"/>
+  <circle cx="150" cy="142" r="34" fill="#111111"/>
+  <circle cx="150" cy="142" r="14" fill="#C80000"/>
+  <circle cx="150" cy="142" r="5" fill="#F4F1EA"/>
+</svg><figcaption><span>ŒIL</span><strong>80 $</strong></figcaption></figure>
+          <figure class="eb-flash-card"><svg viewBox="0 0 300 260" class="eb-flash-art" role="img" aria-label="Flash : rose crâne">
+  <rect width="300" height="260" fill="#F4F1EA"/>
+  <path d="M108 92 C 108 56, 192 56, 192 92 C 192 117, 176 127, 171 142 L171 168 L129 168 L129 142 C 124 127, 108 117, 108 92 Z" fill="#111111"/>
+  <circle cx="132" cy="106" r="13" fill="#F4F1EA"/>
+  <circle cx="168" cy="106" r="13" fill="#F4F1EA"/>
+  <path d="M150 120 l -8 15 l 16 0 z" fill="#F4F1EA"/>
+  <path d="M136 168 l 0 -13 M146 168 l 0 -13 M156 168 l 0 -13 M166 168 l 0 -13" stroke="#F4F1EA" stroke-width="4"/>
+  <g transform="translate(224 196)">
+    <circle r="26" fill="none" stroke="#C80000" stroke-width="8"/>
+    <path d="M0 -26 C -18 -18, -18 18, 0 26 M0 -26 C 18 -18, 18 18, 0 26" fill="none" stroke="#C80000" stroke-width="5"/>
+    <path d="M0 26 L0 58" stroke="#111111" stroke-width="7"/>
+    <path d="M0 44 C -20 41, -30 31, -34 21 C -18 23, -6 31, 0 44 Z" fill="#111111"/>
+  </g>
+</svg><figcaption><span>ROSE CRÂNE</span><strong>150 $</strong></figcaption></figure>
         </div>
       </div>
     </section>
@@ -388,8 +443,11 @@ const MARQUEE = ["SANS RENDEZ-VOUS", "LIGNES FINES", "BLACKWORK", "RECOUVREMENTS
       border: 3px solid var(--eb-ink); box-shadow: 6px 6px 0 var(--eb-ink);
       transition: transform 0.12s ease, box-shadow 0.12s ease;
     }
-    .eb-flash-card:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 var(--eb-ink); }
+    .eb-flash-card:nth-child(odd) { transform: rotate(-1.1deg); }
+    .eb-flash-card:nth-child(even) { transform: rotate(0.9deg); }
+    .eb-flash-card:hover { transform: translate(-2px, -2px) rotate(0deg); box-shadow: 8px 8px 0 var(--eb-ink); }
     .eb-flash-card img { width: 100%; height: 260px; object-fit: cover; border-bottom: 3px solid var(--eb-ink); filter: grayscale(1) contrast(1.15); }
+    .eb-flash-card .eb-flash-art { width: 100%; height: 260px; display: block; border-bottom: 3px solid var(--eb-ink); }
     .eb-flash-card figcaption {
       display: flex; justify-content: space-between; align-items: center;
       padding: 14px 16px; font-family: var(--eb-font-h); font-size: 15px; letter-spacing: 0.03em;

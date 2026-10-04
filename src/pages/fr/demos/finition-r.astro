@@ -5,12 +5,12 @@ import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
 // Standalone art direction. Swiss International typographic. Not connected to the WEBAO theme system.
 const IMG = {
   hero: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200&auto=format&fit=crop",
-  kitchen: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?q=80&w=800&auto=format&fit=crop",
+  kitchen: "/demos/finition-r/01.jpg",
   bathroom: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=800&auto=format&fit=crop",
   living: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=800&auto=format&fit=crop",
   interior: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=800&auto=format&fit=crop",
   detail: "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?q=80&w=800&auto=format&fit=crop",
-  site: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1000&auto=format&fit=crop",
+  site: "/demos/finition-r/02.png",
 };
 ---
 
@@ -352,7 +352,7 @@ const IMG = {
     /* work grid */
     .fnr-work { background: #F7F7F5; border-block: 1px solid var(--fnr-line); padding: clamp(70px, 9vw, 130px) 0; }
     .fnr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
-    .fnr-proj { margin: 0; background: #fff; border: 1px solid var(--fnr-line); }
+    .fnr-proj { margin: 0; background: #fff; border: 1px solid var(--fnr-line); border-top: 6px solid var(--fnr-orange); }
     .fnr-proj img { width: 100%; height: 340px; object-fit: cover; }
     .fnr-proj figcaption {
       display: flex; gap: 12px; align-items: baseline; padding: 16px 20px;
