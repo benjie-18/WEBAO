@@ -5,10 +5,10 @@ import EscapeHatch from "../../components/demos/EscapeHatch.astro";
 // Standalone art direction. Bohemian: terracotta, sage, sand, arch frames,
 // macramé motifs. Not connected to the WEBAO theme system.
 const IMG = {
-  hero: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=1600&auto=format&fit=crop",
-  throw: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=1000&auto=format&fit=crop",
-  vase: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?q=80&w=1000&auto=format&fit=crop",
-  artisan: "https://images.unsplash.com/photo-1615873968403-89e068629265?q=80&w=1000&auto=format&fit=crop",
+  hero: "/demos/sahara-sage/01.jpg",
+  throw: "/demos/sahara-sage/02.jpg",
+  vase: "/demos/sahara-sage/03.jpg",
+  artisan: "/demos/sahara-sage/04.jpg",
   look1: "https://images.unsplash.com/photo-1567016432779-094069958ea5?q=80&w=1000&auto=format&fit=crop",
   look2: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1000&auto=format&fit=crop",
 };
@@ -77,7 +77,7 @@ const IMG = {
         </div>
         <div class="ss-hero-arch">
           <div class="ss-arch">
-            <img src={IMG.hero} alt="Sunlit bohemian living room with layered textiles and plants" loading="eager" fetchpriority="high" />
+            <img src={IMG.hero} alt="Rattan bohemian living room with layered textiles, plants and terracotta cushions" loading="eager" fetchpriority="high" />
           </div>
           <svg class="ss-macrame" viewBox="0 0 200 60" aria-hidden="true">
             <g fill="none" stroke="#6B4A35" stroke-width="2.5">
@@ -109,7 +109,7 @@ const IMG = {
         <h2 class="ss-h2 ss-center">The <em>collection</em></h2>
         <div class="ss-grid">
           <article class="ss-card">
-            <div class="ss-card-img"><img src={IMG.throw} alt="Handwoven terracotta throw draped in a cozy living room" loading="lazy" /></div>
+            <div class="ss-card-img"><img src={IMG.throw} alt="Bohemian living room with rattan furniture and warm layered textiles" loading="lazy" /></div>
             <div class="ss-card-body">
               <p class="ss-card-tag">Textiles</p>
               <h3>Sahara Throw</h3>
@@ -118,7 +118,7 @@ const IMG = {
             </div>
           </article>
           <article class="ss-card">
-            <div class="ss-card-img"><img src={IMG.vase} alt="Handmade ceramic vases in earthy glazes" loading="lazy" /></div>
+            <div class="ss-card-img"><img src={IMG.vase} alt="Artisan hands shaping a terracotta vessel on the wheel" loading="lazy" /></div>
             <div class="ss-card-body">
               <p class="ss-card-tag">Ceramics</p>
               <h3>Dune Vessel Set</h3>
@@ -143,7 +143,7 @@ const IMG = {
     <section class="ss-artisans" id="artisans">
       <div class="ss-wrap ss-art-in">
         <div class="ss-arch ss-arch-sm">
-          <img src={IMG.artisan} alt="Warm bedroom styled with artisan textiles" loading="lazy" />
+          <img src={IMG.artisan} alt="Bohemian bedroom with a macrame wall hanging and rattan side table" loading="lazy" />
         </div>
         <div>
           <p class="ss-caveat">our people</p>
@@ -173,7 +173,7 @@ const IMG = {
             <figcaption>Morning light, styled by Priya in Halifax</figcaption>
           </figure>
           <figure>
-            <img src={IMG.throw} alt="Terracotta textiles in a living room corner" loading="lazy" />
+            <img src={IMG.throw} alt="Rattan armchairs and warm textiles in a bohemian living room" loading="lazy" />
             <figcaption>Reading corner, styled by us (we could not resist)</figcaption>
           </figure>
         </div>
@@ -391,6 +391,7 @@ const IMG = {
     .ss-arch {
       border-radius: 999px 999px 24px 24px; overflow: hidden;
       border: 6px solid var(--ss-sand-deep);
+      outline: 2px solid var(--ss-terra); outline-offset: 9px;
       box-shadow: 0 24px 60px rgba(107, 74, 53, 0.25);
       aspect-ratio: 4 / 5;
     }
@@ -418,7 +419,7 @@ const IMG = {
     }
     .ss-card:hover { transform: translateY(-8px) rotate(-0.6deg); box-shadow: 0 22px 44px rgba(107, 74, 53, 0.2); }
     .ss-card-img { aspect-ratio: 4 / 3; overflow: hidden; }
-    .ss-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+    .ss-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; filter: sepia(0.16) saturate(1.06); }
     .ss-card:hover .ss-card-img img { transform: scale(1.05); }
     .ss-card-body { padding: 26px 26px 30px; }
     .ss-card-tag { font-family: var(--ss-hand); font-size: 1.35rem; color: var(--ss-terra-deep); margin: 0 0 6px; }

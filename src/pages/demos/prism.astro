@@ -5,9 +5,9 @@ import EscapeHatch from "../../components/demos/EscapeHatch.astro";
 // Standalone art direction. Frosted glass cards over an animated gradient.
 // Not connected to the WEBAO theme system.
 const IMG = {
-  phone: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=800&auto=format&fit=crop",
-  pay: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=800&auto=format&fit=crop",
-  dashboard: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop",
+  phone: "/demos/prism/01.jpg",
+  pay: "/demos/prism/02.jpg",
+  dashboard: "/demos/prism/03.jpg",
   ava1: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop",
   ava2: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop",
   ava3: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&auto=format&fit=crop",
@@ -100,7 +100,7 @@ const IMG = {
         <h2 class="pr-h2">Everything in one <span class="pr-grad">clear place</span></h2>
         <div class="pr-feats">
           <article class="pr-glass pr-feat">
-            <div class="pr-feat-img"><img src={IMG.pay} alt="Paying with a phone at checkout" loading="lazy" /></div>
+            <div class="pr-feat-img"><img src={IMG.pay} alt="Frosted glass shapes floating on a soft gradient" loading="lazy" /></div>
             <span class="pr-ic" aria-hidden="true">⚡</span>
             <h3>Instant transfers</h3>
             <p>Send money to anyone in seconds, Prism member or not. Splitting dinner has never been this painless.</p>
@@ -116,7 +116,7 @@ const IMG = {
             <p>Stash cash toward goals in separate vaults. Tokyo trip, new bike, rainy day: each gets its own jar.</p>
           </article>
           <article class="pr-glass pr-feat">
-            <div class="pr-feat-img"><img src={IMG.dashboard} alt="Spending analytics dashboard" loading="lazy" /></div>
+            <div class="pr-feat-img"><img src={IMG.dashboard} alt="Translucent glass panels layered over violet gradients" loading="lazy" /></div>
             <span class="pr-ic" aria-hidden="true">📊</span>
             <h3>Spending insights</h3>
             <p>Beautiful charts show exactly where your money goes each month, no spreadsheet required.</p>
@@ -226,7 +226,7 @@ const IMG = {
               <a class="pr-store" href="#download" aria-label="Get it on Google Play"><span class="pr-store-ic" aria-hidden="true">▶</span><span><small>Get it on</small><strong>Google Play</strong></span></a>
             </div>
           </div>
-          <div class="pr-dl-phone"><img src={IMG.phone} alt="Hand holding a phone" loading="lazy" /></div>
+          <div class="pr-dl-phone"><img src={IMG.phone} alt="Abstract translucent glass 3D render" loading="lazy" /></div>
         </div>
       </div>
     </section>
@@ -446,6 +446,10 @@ const IMG = {
     .pr-feat { padding: 30px 28px; transition: transform .2s ease; overflow: hidden; }
     .pr-feat:hover { transform: translateY(-8px); }
     .pr-feat-img { margin: -30px -28px 22px; }
+    .pr-feat-img { position: relative; }
+    .pr-feat-img::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,0) 45%); pointer-events: none; }
+    .pr-dl-phone { position: relative; }
+    .pr-dl-phone::after { content: ""; position: absolute; inset: 0; border-radius: 22px; background: linear-gradient(135deg, rgba(255,255,255,.28), rgba(255,255,255,0) 55%); pointer-events: none; }
     .pr-feat-img img { width: 100%; height: 170px; object-fit: cover; }
     .pr-ic { display: inline-grid; place-items: center; width: 52px; height: 52px; border-radius: 18px; font-size: 24px; background: rgba(255,255,255,.5); border: 1px solid rgba(255,255,255,.6); margin-bottom: 18px; }
     .pr-feat h3 { margin: 0 0 10px; font-size: 20px; font-weight: 800; letter-spacing: -0.02em; color: #fff; text-shadow: 0 2px 12px rgba(30,10,80,.4); }
