@@ -1,8 +1,11 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
 
-// Demo microsite: Finition R, fictional renovation contractor, Montréal.
-// Standalone art direction. Swiss International typographic. Not connected to the WEBAO theme system.
+// Démo : Finition R, entrepreneur fictif en rénovation, Montréal.
+// Direction artistique autonome. Typographie Swiss International. Non relié au système de thème WEBAO.
+// REFONTE : la page est une étude de transformation. Elle s'ouvre sur un
+// comparateur avant/après interactif et chaque projet est un dossier numéroté
+// avec son comparateur, sa fiche technique et une note. La transformation EST la page.
 const IMG = {
   hero: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200&auto=format&fit=crop",
   kitchen: "/demos/finition-r/01.jpg",
@@ -19,8 +22,8 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Finition R : entrepreneur en rénovation à Montréal</title>
-  <meta name="description" content="Finition R : entrepreneur en rénovation à Montréal. Cuisines, salles de bain, intérieurs complets. Soumissions fixes, licence RBQ, 240 projets livrés." />
+  <title>Finition R : Avant / Après | Entrepreneur en rénovation, Montréal</title>
+  <meta name="description" content="Finition R : entrepreneur en rénovation à Montréal. Chaque projet montré de la façon honnête : l'avant, puis l'après. Cuisines, salles de bain, intérieurs complets. Devis fixes, licence RBQ." />
   <meta name="robots" content="noindex" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -40,153 +43,186 @@ const IMG = {
     <nav class="fnr-nav" aria-label="Principal">
       <a class="fnr-wordmark" href="#top" aria-label="Finition R, accueil">FINITION&nbsp;R<span class="fnr-sq" aria-hidden="true"></span></a>
       <div class="fnr-nav-links">
+        <a href="#dossiers">Dossiers</a>
         <a href="#services">Services</a>
-        <a href="#work">Réalisations</a>
         <a href="#process">Processus</a>
-        <a href="#quote">Contact</a>
       </div>
       <a class="fnr-btn" href="#quote">Demander un devis</a>
     </nav>
   </header>
 
   <main id="top">
-    <!-- HERO -->
-    <section class="fnr-hero">
-      <div class="fnr-hero-grid">
-        <div class="fnr-hero-type">
-          <p class="fnr-index">RÉNOVATION · MONTRÉAL · DEPUIS 2008</p>
-          <h1 class="fnr-h1">On finit ce que les autres <span class="fnr-orange">commencent.</span></h1>
-          <p class="fnr-lede">Finition R, c'est l'entrepreneur en rénovation pour ceux qui lisent les petits caractères. Cuisines, salles de bain et intérieurs complets, livrés sur devis fixe par une équipe licenciée.</p>
-          <div class="fnr-hero-meta">
-            <div><strong>18</strong><span>ans sur les chantiers</span></div>
-            <div><strong>240</strong><span>projets livrés</span></div>
-            <div><strong>4,9</strong><span>note moyenne</span></div>
+    <!-- OPENER: one giant before/after. No hero copy block. -->
+    <section class="fnr-open">
+      <div class="fnr-wrap">
+        <p class="fnr-index">RÉNOVATION · MONTRÉAL · DEPUIS 2008</p>
+        <h1 class="fnr-h1">AVANT <span class="fnr-orange">/</span> APRÈS</h1>
+        <p class="fnr-lede">Finition R, c'est l'entrepreneur en rénovation pour ceux qui lisent les petits caractères. Chaque projet ci-dessous est montré de la seule façon honnête : l'avant, puis l'après. <strong>Glissez la poignée.</strong></p>
+      </div>
+      <div class="fnr-open-slider">
+        <div class="ba" data-ba>
+          <img class="ba-after" src={IMG.hero} alt="Maison moderne complétée par Finition R, projet 047 à Rosemont" loading="eager" fetchpriority="high" />
+          <img class="ba-before" src={IMG.hero} alt="" aria-hidden="true" />
+          <span class="ba-divider" aria-hidden="true"></span>
+          <span class="ba-tag ba-tag-before">Avant</span>
+          <span class="ba-tag ba-tag-after">Après</span>
+          <input class="ba-range" type="range" min="0" max="100" value="50" step="1" aria-label="Glissez pour comparer l'avant et l'après" />
+        </div>
+        <p class="fnr-caption"><span class="fnr-chip">PROJET 047</span> Intérieur complet, Rosemont · 2025 · 10 semaines · devis fixe respecté</p>
+      </div>
+    </section>
+
+    <!-- DOSSIERS -->
+    <section class="fnr-dossiers" id="dossiers">
+      <div class="fnr-wrap">
+        <div class="fnr-sec-head">
+          <p class="fnr-index">04 dossiers, de 2023 à 2025</p>
+          <h2 class="fnr-h2">La preuve</h2>
+        </div>
+
+        <article class="fnr-dossier">
+          <div class="fnr-dossier-head">
+            <span class="fnr-dossier-n">042</span>
+            <div>
+              <h3>Cuisine, Villeray</h3>
+              <p>2025 · la cuisine en longueur qui respire enfin</p>
+            </div>
           </div>
-          <a class="fnr-btn fnr-btn-big" href="#quote">Demander un devis fixe</a>
+          <div class="ba ba-sm" data-ba>
+            <img class="ba-after" src={IMG.kitchen} alt="Cuisine rénovée avec îlot par Finition R" loading="lazy" />
+            <img class="ba-before" src={IMG.kitchen} alt="" aria-hidden="true" />
+            <span class="ba-divider" aria-hidden="true"></span>
+            <span class="ba-tag ba-tag-before">Avant</span>
+            <span class="ba-tag ba-tag-after">Après</span>
+            <input class="ba-range" type="range" min="0" max="100" value="50" step="1" aria-label="Glissez pour comparer l'avant et l'après, cuisine à Villeray" />
+          </div>
+          <dl class="fnr-specs">
+            <div><dt>Portée</dt><dd>Armoires, pierre, éclairage, réagencement</dd></div>
+            <div><dt>Durée</dt><dd>5 semaines</dd></div>
+            <div><dt>Budget</dt><dd>Fixé à 31 k$</dd></div>
+          </dl>
+          <p class="fnr-dossier-note">Note : la cliente voulait « un endroit où cuisiner face à mes enfants ». On a déplacé le mur.</p>
+        </article>
+
+        <article class="fnr-dossier">
+          <div class="fnr-dossier-head">
+            <span class="fnr-dossier-n">039</span>
+            <div>
+              <h3>Salle de bain, Plateau</h3>
+              <p>2024 · quarante ans de beige, éliminés</p>
+            </div>
+          </div>
+          <div class="ba ba-sm" data-ba>
+            <img class="ba-after" src={IMG.bathroom} alt="Salle de bain rénovée avec douche à l'italienne par Finition R" loading="lazy" />
+            <img class="ba-before" src={IMG.bathroom} alt="" aria-hidden="true" />
+            <span class="ba-divider" aria-hidden="true"></span>
+            <span class="ba-tag ba-tag-before">Avant</span>
+            <span class="ba-tag ba-tag-after">Après</span>
+            <input class="ba-range" type="range" min="0" max="100" value="50" step="1" aria-label="Glissez pour comparer l'avant et l'après, salle de bain sur le Plateau" />
+          </div>
+          <dl class="fnr-specs">
+            <div><dt>Portée</dt><dd>Imperméabilisation, céramique, robinetterie</dd></div>
+            <div><dt>Durée</dt><dd>3 semaines</dd></div>
+            <div><dt>Budget</dt><dd>Fixé à 19 k$</dd></div>
+          </dl>
+          <p class="fnr-dossier-note">Note : la plomberie de 1978 s'est défendue. On a gagné.</p>
+        </article>
+
+        <article class="fnr-dossier">
+          <div class="fnr-dossier-head">
+            <span class="fnr-dossier-n">035</span>
+            <div>
+              <h3>Intérieur complet, Hochelaga</h3>
+              <p>2024 · trois petites pièces devenues une grande</p>
+            </div>
+          </div>
+          <div class="ba ba-sm" data-ba>
+            <img class="ba-after" src={IMG.living} alt="Salon ouvert rénové par Finition R" loading="lazy" />
+            <img class="ba-before" src={IMG.living} alt="" aria-hidden="true" />
+            <span class="ba-divider" aria-hidden="true"></span>
+            <span class="ba-tag ba-tag-before">Avant</span>
+            <span class="ba-tag ba-tag-after">Après</span>
+            <input class="ba-range" type="range" min="0" max="100" value="50" step="1" aria-label="Glissez pour comparer l'avant et l'après, intérieur complet à Hochelaga" />
+          </div>
+          <dl class="fnr-specs">
+            <div><dt>Portée</dt><dd>Multi-pièces, poutre structurelle, permis gérés</dd></div>
+            <div><dt>Durée</dt><dd>12 semaines</dd></div>
+            <div><dt>Budget</dt><dd>Fixé à 94 k$</dd></div>
+          </dl>
+          <p class="fnr-dossier-note">Note : la poutre est structurelle et magnifique. On l'a laissée apparente, exprès.</p>
+        </article>
+
+        <article class="fnr-dossier">
+          <div class="fnr-dossier-head">
+            <span class="fnr-dossier-n">031</span>
+            <div>
+              <h3>Ébénisterie, Outremont</h3>
+              <p>2023 · un mur bibliothèque, mesuré au millimètre</p>
+            </div>
+          </div>
+          <div class="ba ba-sm" data-ba>
+            <img class="ba-after" src={IMG.interior} alt="Aire ouverte avec mur en ébénisterie de bois sur mesure par Finition R" loading="lazy" />
+            <img class="ba-before" src={IMG.interior} alt="" aria-hidden="true" />
+            <span class="ba-divider" aria-hidden="true"></span>
+            <span class="ba-tag ba-tag-before">Avant</span>
+            <span class="ba-tag ba-tag-after">Après</span>
+            <input class="ba-range" type="range" min="0" max="100" value="50" step="1" aria-label="Glissez pour comparer l'avant et l'après, ébénisterie à Outremont" />
+          </div>
+          <dl class="fnr-specs">
+            <div><dt>Portée</dt><dd>Mobilier intégré, mur bibliothèque, vanité sur mesure</dd></div>
+            <div><dt>Durée</dt><dd>3 semaines</dd></div>
+            <div><dt>Budget</dt><dd>Fixé à 11 k$</dd></div>
+          </dl>
+          <p class="fnr-dossier-note">Note : 214 livres mesurés. Zéro tablette gaspillée.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- SERVICES: a real data table, Swiss style -->
+    <section class="fnr-services" id="services">
+      <div class="fnr-wrap">
+        <div class="fnr-sec-head">
+          <p class="fnr-index">Ce qu'on construit</p>
+          <h2 class="fnr-h2">La grille tarifaire</h2>
         </div>
-        <figure class="fnr-hero-media">
-          <img src={IMG.hero} alt="Maison moderne complétée par Finition R" loading="eager" fetchpriority="high" />
-          <figcaption><span class="fnr-tag">PROJET 047</span> Intérieur complet, Rosemont · 2025</figcaption>
+        <div class="fnr-tablewrap">
+          <table class="fnr-table">
+            <thead>
+              <tr><th scope="col">Discipline</th><th scope="col">Portée</th><th scope="col">Durée typique</th><th scope="col">À partir de</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Cuisines</th><td>Armoires, pierre, éclairage, réagencement</td><td>4 à 6 semaines</td><td>28 k$</td></tr>
+              <tr><th scope="row">Salles de bain</th><td>Imperméabilisation, céramique, robinetterie</td><td>3 à 4 semaines</td><td>18 k$</td></tr>
+              <tr><th scope="row">Sous-sols</th><td>Isolation, division, planchers, sorties</td><td>5 à 8 semaines</td><td>35 k$</td></tr>
+              <tr><th scope="row">Intérieurs complets</th><td>Multi-pièces, structurel, permis gérés</td><td>10 à 16 semaines</td><td>90 k$</td></tr>
+              <tr><th scope="row">Ébénisterie</th><td>Mobilier intégré, bibliothèques, vanités sur mesure</td><td>2 à 4 semaines</td><td>9 k$</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <figure class="fnr-detail">
+          <img src={IMG.detail} alt="Gros plan d'un détail de finition précis par Finition R" loading="lazy" />
+          <figcaption>La différence est dans le dernier millimètre.</figcaption>
         </figure>
-      </div>
-    </section>
-
-    <!-- MARQUEE -->
-    <div class="fnr-marquee" aria-hidden="true">
-      <div class="fnr-marquee-track">
-        <span>Cuisines</span><span class="fnr-orange">·</span><span>Salles de bain</span><span class="fnr-orange">·</span><span>Sous-sols</span><span class="fnr-orange">·</span><span>Intérieurs complets</span><span class="fnr-orange">·</span><span>Ébénisterie</span><span class="fnr-orange">·</span>
-        <span>Cuisines</span><span class="fnr-orange">·</span><span>Salles de bain</span><span class="fnr-orange">·</span><span>Sous-sols</span><span class="fnr-orange">·</span><span>Intérieurs complets</span><span class="fnr-orange">·</span><span>Ébénisterie</span><span class="fnr-orange">·</span>
-      </div>
-    </div>
-
-    <!-- SERVICES -->
-    <section class="fnr-section" id="services">
-      <div class="fnr-wrap">
-        <div class="fnr-sec-head">
-          <p class="fnr-index">01 ,  Services</p>
-          <h2 class="fnr-h2">Ce qu'on construit</h2>
-        </div>
-        <div class="fnr-rows">
-          <article class="fnr-row">
-            <span class="fnr-row-n">01</span>
-            <h3>Cuisines</h3>
-            <p class="fnr-row-scope">Armoires, pierre, éclairage, réagencement</p>
-            <p class="fnr-row-time">4 à 6 semaines</p>
-            <p class="fnr-row-price">dès 28 k$</p>
-          </article>
-          <article class="fnr-row">
-            <span class="fnr-row-n">02</span>
-            <h3>Salles de bain</h3>
-            <p class="fnr-row-scope">Imperméabilisation, céramique, robinetterie</p>
-            <p class="fnr-row-time">3 à 4 semaines</p>
-            <p class="fnr-row-price">dès 18 k$</p>
-          </article>
-          <article class="fnr-row">
-            <span class="fnr-row-n">03</span>
-            <h3>Sous-sols</h3>
-            <p class="fnr-row-scope">Isolation, division, planchers, sorties</p>
-            <p class="fnr-row-time">5 à 8 semaines</p>
-            <p class="fnr-row-price">dès 35 k$</p>
-          </article>
-          <article class="fnr-row">
-            <span class="fnr-row-n">04</span>
-            <h3>Intérieurs complets</h3>
-            <p class="fnr-row-scope">Multi-pièces, structurel, permis gérés</p>
-            <p class="fnr-row-time">10 à 16 semaines</p>
-            <p class="fnr-row-price">dès 90 k$</p>
-          </article>
-          <article class="fnr-row">
-            <span class="fnr-row-n">05</span>
-            <h3>Ébénisterie</h3>
-            <p class="fnr-row-scope">Mobilier intégré, bibliothèques, vanités</p>
-            <p class="fnr-row-time">2 à 4 semaines</p>
-            <p class="fnr-row-price">dès 9 k$</p>
-          </article>
-        </div>
-        <p class="fnr-note">Chaque projet commence par un devis fixe et écrit. Le chiffre qu'on signe est le chiffre que vous payez.</p>
-      </div>
-    </section>
-
-    <!-- WORK -->
-    <section class="fnr-work" id="work">
-      <div class="fnr-wrap">
-        <div class="fnr-sec-head">
-          <p class="fnr-index">02 ,  Réalisations choisies</p>
-          <h2 class="fnr-h2">Projets récents</h2>
-        </div>
-        <div class="fnr-grid">
-          <figure class="fnr-proj">
-            <img src={IMG.kitchen} alt="Cuisine rénovée avec îlot" loading="lazy" />
-            <figcaption><span>042</span> Cuisine, Villeray · 2025</figcaption>
-          </figure>
-          <figure class="fnr-proj">
-            <img src={IMG.bathroom} alt="Salle de bain rénovée avec douche à l'italienne" loading="lazy" />
-            <figcaption><span>039</span> Salle de bain, Plateau · 2024</figcaption>
-          </figure>
-          <figure class="fnr-proj">
-            <img src={IMG.living} alt="Salon rénové à aire ouverte" loading="lazy" />
-            <figcaption><span>035</span> Intérieur complet, Hochelaga · 2024</figcaption>
-          </figure>
-          <figure class="fnr-proj">
-            <img src={IMG.interior} alt="Corridor rénové avec ébénisterie sur mesure" loading="lazy" />
-            <figcaption><span>031</span> Ébénisterie, Outremont · 2023</figcaption>
-          </figure>
-        </div>
+        <p class="fnr-note">Chaque projet commence par un devis écrit et fixe. Le chiffre qu'on signe est celui que vous payez.</p>
       </div>
     </section>
 
     <!-- PROCESS -->
-    <section class="fnr-section" id="process">
+    <section class="fnr-process" id="process">
       <div class="fnr-wrap">
         <div class="fnr-sec-head">
-          <p class="fnr-index">03 ,  Processus</p>
-          <h2 class="fnr-h2">Comment ça se passe</h2>
+          <p class="fnr-index">Comment ça se passe</p>
+          <h2 class="fnr-h2">Quatre étapes, sans surprises</h2>
         </div>
-        <div class="fnr-steps">
-          <article class="fnr-step">
-            <p class="fnr-step-n">01</p>
-            <h3>Visite</h3>
-            <p>On mesure tout, on pose des questions fatigantes et on photographie ce qui se cache dans vos murs. 45 minutes, gratuit.</p>
-          </article>
-          <article class="fnr-step">
-            <p class="fnr-step-n">02</p>
-            <h3>Devis fixe</h3>
-            <p>Détaillé, écrit, valide 30 jours. Si on a oublié quelque chose dans nos propres mesures, c'est notre problème.</p>
-          </article>
-          <article class="fnr-step">
-            <p class="fnr-step-n">03</p>
-            <h3>Le chantier</h3>
-            <p>Un chargé de projet, des photos chaque jour, des barrières anti-poussière qui fonctionnent vraiment. Vous savez toujours qui est chez vous.</p>
-          </article>
-          <article class="fnr-step">
-            <p class="fnr-step-n">04</p>
-            <h3>Inspection</h3>
-            <p>On fait le tour pièce par pièce avec une liste. Tout ce qui n'est pas parfait est corrigé avant le paiement final, par écrit.</p>
-          </article>
-        </div>
+        <ol class="fnr-steps">
+          <li><span>01</span><h3>Visite du chantier</h3><p>On mesure tout, on pose des questions fatigantes et on photographie ce qu'il y a derrière vos murs. 45 minutes, gratuit.</p></li>
+          <li><span>02</span><h3>Devis fixe</h3><p>Détaillé, écrit, valide 30 jours. Si on a oublié quelque chose dans nos propres mesures, c'est notre problème.</p></li>
+          <li><span>03</span><h3>Le chantier</h3><p>Un chargé de projet, des photos quotidiennes, des barrières anti-poussière qui fonctionnent vraiment. Vous savez toujours qui est chez vous.</p></li>
+          <li><span>04</span><h3>Visite finale</h3><p>On fait le tour pièce par pièce avec une liste. Tout ce qui n'est pas parfait est corrigé avant le paiement final, par écrit.</p></li>
+        </ol>
         <figure class="fnr-site">
-          <img src={IMG.site} alt="L'équipe de Finition R au travail sur un chantier" loading="lazy" />
-          <figcaption><span class="fnr-tag">CHANTIER 048</span> En cours, Verdun · barrières montées, café qui coule</figcaption>
+          <img src={IMG.site} alt="Équipe Finition R au travail sur un chantier de rénovation" loading="lazy" />
+          <figcaption><span class="fnr-chip">CHANTIER 048</span> En cours, Verdun · barrières anti-poussière installées, café en circulation</figcaption>
         </figure>
       </div>
     </section>
@@ -195,10 +231,10 @@ const IMG = {
     <section class="fnr-quote" id="quote">
       <div class="fnr-wrap fnr-quote-grid">
         <div>
-          <p class="fnr-index">04 ,  Contact</p>
-          <h2 class="fnr-h2">Décrivez le projet.<br />On fait le calcul.</h2>
-          <p class="fnr-quote-copy">Dites-nous la pièce, la taille approximative et votre échéancier. On répond en un jour ouvrable avec les prochaines étapes et une plage de visite.</p>
-          <p class="fnr-quote-direct">Pressé? <a href="tel:+15145550142">(514) 555-0142</a></p>
+          <p class="fnr-index fnr-index-light">Contact</p>
+          <h2 class="fnr-h2">Décrivez le projet.<br />On fait les maths.</h2>
+          <p class="fnr-quote-copy">Dites-nous la pièce, la taille approximative et votre échéancier. On répond en un jour ouvrable avec les prochaines étapes et un créneau de visite.</p>
+          <p class="fnr-quote-direct">Pressé ? <a href="tel:+15145550142">(514) 555-0142</a></p>
         </div>
         <form class="fnr-form" id="fnr-form" novalidate>
           <label>Nom<input type="text" name="name" required placeholder="Alex Tremblay" /></label>
@@ -231,15 +267,35 @@ const IMG = {
   <EscapeHatch locale="fr" />
 
   <script>
-    // Demo form: never submits anywhere
+    // Comparateurs avant/après : un curseur par comparaison pilote le rognage.
     (function () {
-      var form = document.getElementById('fnr-form') as HTMLFormElement | null;
-      form?.addEventListener('submit', function (e) {
-        e.preventDefault();
-        var note = form?.querySelector('.fnr-form-note');
-        if (note) note.textContent = 'Bien reçu. On répond en un jour ouvrable avec une plage de visite.';
-        form?.reset();
+      document.querySelectorAll('[data-ba]').forEach(function (root) {
+        var range = root.querySelector('.ba-range');
+        var before = root.querySelector('.ba-before');
+        var divider = root.querySelector('.ba-divider');
+        if (range instanceof HTMLInputElement && before instanceof HTMLElement) {
+          var r = range;
+          var b = before;
+          var d = divider;
+          var update = function () {
+            b.style.clipPath = 'inset(0 ' + (100 - Number(r.value)) + '% 0 0)';
+            if (d instanceof HTMLElement) d.style.left = r.value + '%';
+          };
+          r.addEventListener('input', update);
+          update();
+        }
       });
+      // Formulaire démo : ne soumet jamais rien
+      var formEl = document.getElementById('fnr-form');
+      if (formEl instanceof HTMLFormElement) {
+        var form = formEl;
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var note = form.querySelector('.fnr-form-note');
+          if (note) note.textContent = 'Reçu. On répond en un jour ouvrable avec un créneau de visite.';
+          form.reset();
+        });
+      }
     })();
   </script>
 
@@ -296,84 +352,102 @@ const IMG = {
       padding: 15px 28px; border: none; transition: background 0.15s ease;
     }
     .fnr-btn:hover { background: var(--fnr-orange); }
-    .fnr-btn-big { font-size: 14px; padding: 18px 36px; margin-top: 8px; }
     .fnr-btn-full { width: 100%; }
 
     /* type */
     .fnr-index { font-size: 12px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: var(--fnr-gray); margin: 0 0 18px; }
+    .fnr-index-light { color: #8A8A8A; }
     .fnr-h1 {
-      font-weight: 900; font-size: clamp(3rem, 7.5vw, 6.2rem);
+      font-weight: 900; font-size: clamp(3.4rem, 11vw, 9rem);
       line-height: 0.94; letter-spacing: -0.03em; margin: 0 0 26px; text-transform: uppercase;
     }
     .fnr-h2 { font-weight: 800; font-size: clamp(2.2rem, 5vw, 3.8rem); letter-spacing: -0.025em; line-height: 1; margin: 0; text-transform: uppercase; }
     .fnr-sec-head { display: grid; gap: 6px; margin-bottom: 44px; border-top: 3px solid var(--fnr-ink); padding-top: 22px; }
-
-    /* hero */
-    .fnr-hero { padding: clamp(48px, 6vw, 96px) clamp(20px, 4vw, 44px); max-width: 1440px; margin: 0 auto; }
-    .fnr-hero-grid { display: grid; grid-template-columns: 1.08fr 0.92fr; gap: clamp(36px, 5vw, 80px); align-items: end; }
-    .fnr-lede { font-size: 18px; line-height: 1.6; max-width: 44ch; margin: 0 0 34px; color: #333; }
-    .fnr-hero-meta { display: flex; gap: 44px; margin-bottom: 30px; border-top: 1px solid var(--fnr-line); padding-top: 24px; }
-    .fnr-hero-meta div { display: grid; gap: 4px; }
-    .fnr-hero-meta strong { font-size: 40px; font-weight: 900; letter-spacing: -0.03em; }
-    .fnr-hero-meta span { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fnr-gray); }
-    .fnr-hero-media { margin: 0; }
-    .fnr-hero-media img { width: 100%; height: clamp(380px, 44vw, 560px); object-fit: cover; }
-    .fnr-hero-media figcaption, .fnr-site figcaption {
-      display: flex; align-items: center; gap: 10px; padding-top: 12px;
+    .fnr-lede { font-size: 18px; line-height: 1.6; max-width: 60ch; margin: 0 0 40px; color: #333; }
+    .fnr-caption {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
       font-size: 12.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--fnr-gray);
+      margin: 14px 0 0;
     }
-    .fnr-tag { background: var(--fnr-orange); color: #fff; font-size: 11px; font-weight: 800; letter-spacing: 0.14em; padding: 5px 10px; }
+    .fnr-chip { background: var(--fnr-orange); color: #fff; font-size: 11px; font-weight: 800; letter-spacing: 0.14em; padding: 5px 10px; }
 
-    /* marquee */
-    .fnr-marquee { background: var(--fnr-black); color: #fff; overflow: hidden; padding: 16px 0; }
-    .fnr-marquee-track { display: flex; gap: 26px; width: max-content; animation: fnr-tick 24s linear infinite; font-weight: 800; font-size: 20px; letter-spacing: 0.06em; text-transform: uppercase; }
-    @keyframes fnr-tick { to { transform: translateX(-50%); } }
+    /* opener */
+    .fnr-open { padding: clamp(48px, 6vw, 90px) 0 0; }
+    .fnr-open-slider { max-width: 1440px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 44px); }
 
-    /* sections */
-    .fnr-section { padding: clamp(70px, 9vw, 130px) 0; }
-
-    /* service rows */
-    .fnr-rows { border-top: 1px solid var(--fnr-line); }
-    .fnr-row {
-      display: grid; grid-template-columns: 70px 1.2fr 1.6fr 0.7fr 0.7fr; gap: 20px; align-items: baseline;
-      padding: 26px 12px; border-bottom: 1px solid var(--fnr-line);
-      transition: background 0.16s ease, color 0.16s ease;
+    /* before/after slider */
+    .ba { position: relative; overflow: hidden; background: var(--fnr-ink); }
+    .ba-after { width: 100%; height: clamp(380px, 52vw, 640px); object-fit: cover; display: block; }
+    .ba-sm .ba-after { height: clamp(300px, 40vw, 460px); }
+    .ba-before {
+      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;
+      filter: grayscale(1) sepia(0.25) brightness(0.55) contrast(0.95);
+      clip-path: inset(0 50% 0 0);
     }
-    .fnr-row:hover { background: var(--fnr-ink); color: #fff; }
-    .fnr-row:hover .fnr-row-scope, .fnr-row:hover .fnr-row-time { color: #BDBDBD; }
-    .fnr-row:hover .fnr-row-n { color: var(--fnr-orange); }
-    .fnr-row-n { font-weight: 800; font-size: 15px; color: var(--fnr-orange); font-variant-numeric: tabular-nums; }
-    .fnr-row h3 { margin: 0; font-size: 26px; font-weight: 800; letter-spacing: -0.02em; text-transform: uppercase; }
-    .fnr-row-scope { margin: 0; font-size: 14.5px; color: var(--fnr-gray); }
-    .fnr-row-time { margin: 0; font-size: 14px; font-weight: 600; color: var(--fnr-gray); font-variant-numeric: tabular-nums; }
-    .fnr-row-price { margin: 0; font-size: 16px; font-weight: 800; text-align: right; font-variant-numeric: tabular-nums; }
-    .fnr-note { margin: 26px 0 0; font-size: 14.5px; color: var(--fnr-gray); border-left: 4px solid var(--fnr-orange); padding-left: 16px; max-width: 62ch; }
-
-    /* work grid */
-    .fnr-work { background: #F7F7F5; border-block: 1px solid var(--fnr-line); padding: clamp(70px, 9vw, 130px) 0; }
-    .fnr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
-    .fnr-proj { margin: 0; background: #fff; border: 1px solid var(--fnr-line); border-top: 6px solid var(--fnr-orange); }
-    .fnr-proj img { width: 100%; height: 340px; object-fit: cover; }
-    .fnr-proj figcaption {
-      display: flex; gap: 12px; align-items: baseline; padding: 16px 20px;
-      font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fnr-gray);
+    .ba-tag {
+      position: absolute; top: 16px; z-index: 3;
+      font-size: 11px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase;
+      padding: 8px 14px; pointer-events: none;
     }
-    .fnr-proj figcaption span { color: var(--fnr-orange); font-weight: 800; }
+    .ba-tag-before { left: 16px; background: var(--fnr-ink); color: #fff; }
+    .ba-tag-after { right: 16px; background: var(--fnr-orange); color: #fff; }
+    .ba-divider {
+      position: absolute; top: 0; bottom: 0; left: 50%; width: 4px; margin-left: -2px;
+      background: var(--fnr-orange); z-index: 2; pointer-events: none;
+    }
+    .ba-divider::after {
+      content: "◂ ▸"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      background: var(--fnr-orange); color: #fff; font-size: 12px; letter-spacing: 2px;
+      padding: 10px 8px 10px 10px; border-radius: 999px; white-space: nowrap;
+    }
+    .ba-range {
+      position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; z-index: 4;
+      -webkit-appearance: none; appearance: none; background: transparent;
+    }
+    .ba-range:focus-visible { opacity: 1; outline: 3px solid var(--fnr-orange); outline-offset: -3px; }
+
+    /* dossiers */
+    .fnr-dossiers { padding: clamp(70px, 9vw, 130px) 0; background: #F7F7F5; border-block: 1px solid var(--fnr-line); }
+    .fnr-dossier { border-top: 3px solid var(--fnr-ink); padding: 34px 0 54px; }
+    .fnr-dossier:last-child { padding-bottom: 0; }
+    .fnr-dossier-head { display: flex; align-items: baseline; gap: 24px; margin-bottom: 24px; }
+    .fnr-dossier-n { font-weight: 900; font-size: clamp(2.6rem, 6vw, 4.4rem); letter-spacing: -0.03em; color: var(--fnr-orange); font-variant-numeric: tabular-nums; }
+    .fnr-dossier-head h3 { margin: 0; font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 800; text-transform: uppercase; letter-spacing: -0.02em; }
+    .fnr-dossier-head p { margin: 6px 0 0; color: var(--fnr-gray); font-size: 15px; font-style: italic; }
+    .fnr-specs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--fnr-line); border: 1px solid var(--fnr-line); margin: 26px 0 0; }
+    .fnr-specs div { background: #fff; padding: 18px 22px; display: grid; gap: 6px; }
+    .fnr-specs dt { font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fnr-gray); }
+    .fnr-specs dd { margin: 0; font-size: 16px; font-weight: 600; }
+    .fnr-dossier-note { margin: 18px 0 0; font-size: 15px; color: var(--fnr-gray); border-left: 4px solid var(--fnr-orange); padding-left: 16px; max-width: 64ch; }
+
+    /* services table */
+    .fnr-services { padding: clamp(70px, 9vw, 130px) 0; }
+    .fnr-tablewrap { overflow-x: auto; border-top: 3px solid var(--fnr-ink); }
+    .fnr-table { width: 100%; border-collapse: collapse; font-size: 15.5px; }
+    .fnr-table th, .fnr-table td { text-align: left; padding: 20px 18px; border-bottom: 1px solid var(--fnr-line); vertical-align: baseline; }
+    .fnr-table thead th { font-size: 11.5px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fnr-gray); }
+    .fnr-table tbody th { font-size: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: -0.01em; }
+    .fnr-table tbody td:last-child { font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .fnr-table tbody tr:hover { background: #FFF4EA; }
+    .fnr-detail { margin: 44px 0 0; display: grid; grid-template-columns: 220px 1fr; gap: 26px; align-items: center; }
+    .fnr-detail img { width: 220px; height: 220px; object-fit: cover; }
+    .fnr-detail figcaption { font-size: clamp(1.4rem, 3vw, 2.2rem); font-weight: 800; text-transform: uppercase; letter-spacing: -0.02em; line-height: 1.15; }
+    .fnr-note { margin: 30px 0 0; font-size: 14.5px; color: var(--fnr-gray); border-left: 4px solid var(--fnr-orange); padding-left: 16px; max-width: 62ch; }
 
     /* process */
-    .fnr-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-left: 1px solid var(--fnr-line); }
-    .fnr-step { padding: 8px 26px 0; border-right: 1px solid var(--fnr-line); }
-    .fnr-step-n { font-size: 15px; font-weight: 800; color: var(--fnr-orange); margin: 0 0 34px; font-variant-numeric: tabular-nums; }
-    .fnr-step h3 { margin: 0 0 12px; font-size: 21px; font-weight: 800; letter-spacing: -0.01em; text-transform: uppercase; }
-    .fnr-step p { margin: 0; font-size: 14.5px; line-height: 1.65; color: #444; }
-    .fnr-step { border-top: 3px solid var(--fnr-ink); padding-top: 20px; }
+    .fnr-process { background: #F7F7F5; border-block: 1px solid var(--fnr-line); padding: clamp(70px, 9vw, 130px) 0; }
+    .fnr-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-left: 1px solid var(--fnr-line); }
+    .fnr-steps li { padding: 20px 26px 0; border-right: 1px solid var(--fnr-line); border-top: 3px solid var(--fnr-ink); }
+    .fnr-steps span { font-size: 15px; font-weight: 800; color: var(--fnr-orange); display: block; margin-bottom: 34px; font-variant-numeric: tabular-nums; }
+    .fnr-steps h3 { margin: 0 0 12px; font-size: 21px; font-weight: 800; text-transform: uppercase; letter-spacing: -0.01em; }
+    .fnr-steps p { margin: 0; font-size: 14.5px; line-height: 1.65; color: #444; }
     .fnr-site { margin: 60px 0 0; }
     .fnr-site img { width: 100%; height: clamp(280px, 36vw, 480px); object-fit: cover; }
+    .fnr-site figcaption { display: flex; align-items: center; gap: 10px; padding-top: 12px; font-size: 12.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--fnr-gray); }
 
     /* quote */
     .fnr-quote { background: var(--fnr-black); color: #fff; padding: clamp(70px, 9vw, 130px) 0; }
     .fnr-quote-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 6vw, 90px); align-items: start; }
-    .fnr-quote .fnr-index { color: #8A8A8A; }
     .fnr-quote-copy { font-size: 17px; line-height: 1.65; color: #CFCFCF; max-width: 42ch; margin: 24px 0; }
     .fnr-quote-direct { font-size: 15px; color: #CFCFCF; }
     .fnr-quote-direct a { color: var(--fnr-orange); font-weight: 700; }
@@ -403,24 +477,20 @@ const IMG = {
     .fnr-footer-in a { color: var(--fnr-orange); }
 
     @media (max-width: 1020px) {
-      .fnr-row { grid-template-columns: 56px 1fr 1fr; row-gap: 8px; }
-      .fnr-row-time, .fnr-row-price { grid-column: auto; }
       .fnr-steps { grid-template-columns: 1fr 1fr; row-gap: 36px; }
+      .fnr-specs { grid-template-columns: 1fr; }
     }
     @media (max-width: 860px) {
       .fnr-nav-links, .fnr-util span:nth-child(2) { display: none; }
-      .fnr-hero-grid, .fnr-quote-grid { grid-template-columns: 1fr; }
-      .fnr-grid { grid-template-columns: 1fr; }
+      .fnr-quote-grid { grid-template-columns: 1fr; }
+      .fnr-detail { grid-template-columns: 1fr; }
+      .fnr-detail img { width: 100%; height: 240px; }
     }
     @media (max-width: 640px) {
-      .fnr-row { grid-template-columns: 44px 1fr; }
-      .fnr-row-scope { grid-column: 2; }
       .fnr-steps { grid-template-columns: 1fr; }
-      .fnr-hero-meta { gap: 26px; flex-wrap: wrap; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .fnr-marquee-track { animation: none; }
-      .fnr-btn, .fnr-row { transition: none; }
+      .fnr-btn { transition: none; }
     }
   </style>
 </body>
