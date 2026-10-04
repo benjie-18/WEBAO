@@ -1212,70 +1212,74 @@ import IntroSequence from "../components/anim/IntroSequence.astro";
   </style>
 
   <script>
-    // Hero parallax: mouse + scroll, respects reduced-motion and coarse pointer
-    const hero = document.getElementById('hero');
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const isCoarse = window.matchMedia('(pointer: coarse), (hover: none)').matches;
-    if (hero && !prefersReduced && !isCoarse) {
-      const stack = hero.querySelector('[data-parallax="stack"]') as HTMLElement | null;
-      const a = hero.querySelector('[data-parallax="a"]') as HTMLElement | null;
-      const b = hero.querySelector('[data-parallax="b"]') as HTMLElement | null;
-      const watermark = hero.querySelector('.hero-watermark') as HTMLElement | null;
-      let raf = 0, tx = 0, ty = 0, cx = 0, cy = 0;
-      hero.addEventListener('mousemove', (e: MouseEvent) => {
-        const r = hero.getBoundingClientRect();
-        tx = ((e.clientX - r.left) / r.width - 0.5) * 2; // -1..1
-        ty = ((e.clientY - r.top) / r.height - 0.5) * 2;
-        if (!raf) raf = requestAnimationFrame(tick);
-      });
-      hero.addEventListener('mouseleave', () => {
-        tx = 0; ty = 0;
-        if (!raf) raf = requestAnimationFrame(tick);
-      });
-      function tick() {
-        raf = 0;
-        cx += (tx - cx) * 0.08;
-        cy += (ty - cy) * 0.08;
-        if (stack) stack.style.transform = `rotate(.4deg) translate3d(${cx * 6}px, ${cy * 6}px, 0)`;
-        if (a) a.style.transform = `rotate(1.2deg) translate3d(${cx * 14}px, ${cy * 10}px, 0)`;
-        if (b) b.style.transform = `rotate(-1deg) translate3d(${cx * -12}px, ${cy * -8}px, 0)`;
-        if (watermark) watermark.style.transform = `translate3d(${cx * -10}px, ${cy * -6}px, 0)`;
-        if (Math.abs(tx - cx) > 0.001 || Math.abs(ty - cy) > 0.001) {
-          raf = requestAnimationFrame(tick);
-        }
-      }
-      // scroll parallax on watermark
-      let sTick = false;
-      window.addEventListener('scroll', () => {
-        if (sTick) return;
-        sTick = true;
-        requestAnimationFrame(() => {
-          const y = window.scrollY * 0.08;
-          if (watermark && !prefersReduced) watermark.style.transform += ` translateY(${y}px)`;
-          sTick = false;
+    function initHomePage() {
+      // Hero parallax: mouse + scroll, respects reduced-motion and coarse pointer
+      const hero = document.getElementById('hero');
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const isCoarse = window.matchMedia('(pointer: coarse), (hover: none)').matches;
+      if (hero && !prefersReduced && !isCoarse) {
+        const stack = hero.querySelector('[data-parallax="stack"]') as HTMLElement | null;
+        const a = hero.querySelector('[data-parallax="a"]') as HTMLElement | null;
+        const b = hero.querySelector('[data-parallax="b"]') as HTMLElement | null;
+        const watermark = hero.querySelector('.hero-watermark') as HTMLElement | null;
+        let raf = 0, tx = 0, ty = 0, cx = 0, cy = 0;
+        hero.addEventListener('mousemove', (e: MouseEvent) => {
+          const r = hero.getBoundingClientRect();
+          tx = ((e.clientX - r.left) / r.width - 0.5) * 2; // -1..1
+          ty = ((e.clientY - r.top) / r.height - 0.5) * 2;
+          if (!raf) raf = requestAnimationFrame(tick);
         });
-      }, { passive: true });
+        hero.addEventListener('mouseleave', () => {
+          tx = 0; ty = 0;
+          if (!raf) raf = requestAnimationFrame(tick);
+        });
+        function tick() {
+          raf = 0;
+          cx += (tx - cx) * 0.08;
+          cy += (ty - cy) * 0.08;
+          if (stack) stack.style.transform = `rotate(.4deg) translate3d(${cx * 6}px, ${cy * 6}px, 0)`;
+          if (a) a.style.transform = `rotate(1.2deg) translate3d(${cx * 14}px, ${cy * 10}px, 0)`;
+          if (b) b.style.transform = `rotate(-1deg) translate3d(${cx * -12}px, ${cy * -8}px, 0)`;
+          if (watermark) watermark.style.transform = `translate3d(${cx * -10}px, ${cy * -6}px, 0)`;
+          if (Math.abs(tx - cx) > 0.001 || Math.abs(ty - cy) > 0.001) {
+            raf = requestAnimationFrame(tick);
+          }
+        }
+        // scroll parallax on watermark
+        let sTick = false;
+        window.addEventListener('scroll', () => {
+          if (sTick) return;
+          sTick = true;
+          requestAnimationFrame(() => {
+            const y = window.scrollY * 0.08;
+            if (watermark && !prefersReduced) watermark.style.transform += ` translateY(${y}px)`;
+            sTick = false;
+          });
+        }, { passive: true });
+      }
+
+      // Subtle 3D tilt for agency/demo cards: respects reduced-motion / coarse
+      if (!prefersReduced && !isCoarse) {
+        const cards = document.querySelectorAll('.agency-card, .demo-card');
+        cards.forEach((el) => {
+          const card = el as HTMLElement;
+          card.style.willChange = 'transform';
+          // @ts-ignore
+          card.addEventListener('mousemove', (e: MouseEvent) => {
+            const r = card.getBoundingClientRect();
+            const px = (e.clientX - r.left) / r.width - 0.5;
+            const py = (e.clientY - r.top) / r.height - 0.5;
+            const ry = px * 6; // rotateY
+            const rx = py * -5; // rotateX
+            card.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(0) translateY(-4px)`;
+          });
+          card.addEventListener('mouseleave', () => {
+            card.style.transform = '';
+          });
+        });
+      }
     }
 
-    // Subtle 3D tilt for agency/demo cards: respects reduced-motion / coarse
-    if (!prefersReduced && !isCoarse) {
-      const cards = document.querySelectorAll('.agency-card, .demo-card');
-      cards.forEach((el) => {
-        const card = el as HTMLElement;
-        card.style.willChange = 'transform';
-        // @ts-ignore
-        card.addEventListener('mousemove', (e: MouseEvent) => {
-          const r = card.getBoundingClientRect();
-          const px = (e.clientX - r.left) / r.width - 0.5;
-          const py = (e.clientY - r.top) / r.height - 0.5;
-          const ry = px * 6; // rotateY
-          const rx = py * -5; // rotateX
-          card.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(0) translateY(-4px)`;
-        });
-        card.addEventListener('mouseleave', () => {
-          card.style.transform = '';
-        });
-      });
-    }
+    document.addEventListener('astro:page-load', initHomePage);
   </script>
 </BaseLayout>
