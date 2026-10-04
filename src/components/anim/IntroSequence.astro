@@ -144,6 +144,18 @@ const promptKey = t.intro.prompt.key;
       <span class="wi-ring wi-ring--soft" data-wi-ring-soft></span>
     </div>
 
+    <!-- Stress displacement filter: warps the barrier before the break -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+      <defs>
+        <filter id="wi-displace" x="-20%" y="-20%" width="140%" height="140%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.012 0.028" numOctaves="2" seed="7" result="noise">
+            <animate attributeName="baseFrequency" values="0.012 0.028;0.016 0.036;0.012 0.028" dur="0.9s" repeatCount="indefinite" />
+          </feTurbulence>
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" data-wi-displace-map />
+        </filter>
+      </defs>
+    </svg>
+
     <!-- The barrier: a studio floor that can be hit and broken -->
     <div class="wi-floor" data-wi-floor aria-hidden="true">
       {Array.from({ length: fracturePieceCount }, (_, index) => (
@@ -924,6 +936,7 @@ const promptKey = t.intro.prompt.key;
     ring: HTMLElement;
     ringSoft: HTMLElement;
     floor: HTMLElement;
+    displaceMap: SVGFEDisplacementMapElement | null;
     pieces: HTMLElement[];
     lip: HTMLElement;
     dentG: SVGGElement;
@@ -1035,6 +1048,7 @@ const promptKey = t.intro.prompt.key;
       ring: q(root, "[data-wi-ring]")!,
       ringSoft: q(root, "[data-wi-ring-soft]")!,
       floor: q(root, "[data-wi-floor]")!,
+      displaceMap: q(root, "[data-wi-displace-map]") as SVGFEDisplacementMapElement | null,
       pieces: Array.from(root.querySelectorAll<HTMLElement>("[data-wi-piece]")),
       lip: q(root, "[data-wi-lip]")!,
       dentG: q<SVGGElement>(root, "[data-wi-dent-g]")!,
@@ -1640,6 +1654,20 @@ const promptKey = t.intro.prompt.key;
       refs.halo.style.opacity = "0";
       refs.ring.style.opacity = "0";
 
+      // Barrier stress: warp the floor with an SVG displacement filter that
+      // ramps up as the cursor draws back. The turbulence animates on its own;
+      // we only drive the displacement scale.
+      if (refs.displaceMap) {
+        refs.floor.style.filter = "url(#wi-displace)";
+        clock.tween({
+          ms: CFG.breach.prepare.moveMs + CFG.breach.prepare.holdMs,
+          ease: EASE.inOutCubic,
+          onUpdate: (v) => {
+            refs.displaceMap?.setAttribute("scale", String(r1(v * 14)));
+          },
+        });
+      }
+
       // Aim where the visitor left the pointer, then take a small, visible step
       // back and draw the cursor's tip toward the barrier before the launch.
       // NOTE: the camera is deliberately *not* re-centered here. It is already
@@ -1723,6 +1751,10 @@ const promptKey = t.intro.prompt.key;
       impactX = x;
       impactY = y;
 
+      // the barrier is fracturing now: drop the stress displacement filter
+      refs.floor.style.filter = "";
+      refs.displaceMap?.setAttribute("scale", "0");
+
       const strength = clamp(speed / 2400, 0.6, 1.4);
 
       /* 1 — split the barrier into irregular slabs around the impact point */
@@ -1798,6 +1830,8 @@ const promptKey = t.intro.prompt.key;
         lifeMs: CFG.breach.debris.lifeMs,
         size: CFG.breach.debris.size,
       });
+      // fracture shards: 12-18 canvas triangles with pointer repulsion
+      debris.fractureBurst(x, y, 12 + Math.round(rng() * 6 * strength));
       kick(CFG.breach.shake.amp * strength, CFG.breach.shake.ms, CFG.breach.shake.freq, CFG.breach.shake.rotDeg * strength);
       dent(CFG.impact.dent.depth * strength, CFG.impact.dent.sigma, x);
       shockRing(x, y, vw * 0.6 * strength, 620, 0.5);
@@ -2054,6 +2088,9 @@ const promptKey = t.intro.prompt.key;
       rafId = 0;
       clock.reset();
       debris.clear();
+      // Signal completion: the hero listens for [data-intro-complete] to
+      // continue the fracture motif in its section dividers.
+      document.documentElement.setAttribute("data-intro-complete", "1");
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("resize", onResize);
@@ -2384,7 +2421,9 @@ const promptKey = t.intro.prompt.key;
         refs.dentShade.style.transform = `translate3d(${r1(dentX)}px, 0, 0) scaleY(${r2(clamp(d / 30, 0.05, 1.6))})`;
       }
 
-      // particles
+      // particles: feed the live pointer so fracture shards repel slightly
+      if (pointer.seen) debris.setPointer(pointer.x, pointer.y);
+      else debris.setPointer(null, null);
       debris.step(dt);
 
       rafId = requestAnimationFrame(frame);
