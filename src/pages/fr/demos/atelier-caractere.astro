@@ -1,8 +1,12 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
 
-// Démo : Atelier Caractère, fonderie typographique haut de gamme fictive, Montréal.
-// Direction artistique autonome. Typographie de luxe : ivoire, encre, or, sérif monumental. Sans lien avec le thème WEBAO.
+// Démo : Atelier Caractère, fonderie typographique fictive haut de gamme, Montréal.
+// Direction artistique autonome. Typographie de luxe : ivoire, encre, or, serif énorme.
+// Non relié au système de thème WEBAO.
+// REFONTE : la page EST un spécimen imprimé. Couverture, index, testeur de
+// caractères interactif, quatre planches de familles, planches d'application,
+// grille tarifaire et colophon. La typographie est toute l'expérience visuelle.
 const IMG = {
   editorial: "/demos/atelier-caractere/01.jpg",
   stationery: "/demos/atelier-caractere/02.jpg",
@@ -16,8 +20,8 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Atelier Caractère : Fonderie typographique | Caractères d'exception, Montréal</title>
-  <meta name="description" content="L'Atelier Caractère est une fonderie typographique fictive à Montréal. Sérifs didones à fort contraste, caractères de texte et italiques, dessinés à la main depuis 2011." />
+  <title>Atelier Caractère : Spécimen Nº 24 | Fonderie typographique, Montréal</title>
+  <meta name="description" content="Spécimen Nº 24 de l'Atelier Caractère, fonderie typographique fictive de Montréal. Essayez le testeur, parcourez quatre familles, lisez le colophon. Dessiné à la main depuis 2011." />
   <meta name="robots" content="noindex" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -25,195 +29,213 @@ const IMG = {
 </head>
 <body class="ac">
 
-  <!-- NAV -->
+  <!-- NAV: a running head, like a book -->
   <header class="ac-navwrap">
     <nav class="ac-nav" aria-label="Navigation principale">
-      <a class="ac-logo" href="#top" aria-label="Atelier Caractère, accueil">Atelier <em>Caractère</em></a>
+      <a class="ac-logo" href="#top" aria-label="Atelier Caractère, accueil">A<span>C</span></a>
+      <p class="ac-running" aria-hidden="true">Spécimen Nº 24 · Atelier Caractère · Montréal</p>
       <button class="ac-burger" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="ac-menu">
         <span></span><span></span>
       </button>
       <div class="ac-nav-links" id="ac-menu">
-        <a href="#collection">Collection</a>
-        <a href="#inuse">En usage</a>
+        <a href="#index">Index</a>
+        <a href="#tester">Testeur</a>
         <a href="#licensing">Licences</a>
-        <a href="#foundry">La fonderie</a>
         <a class="ac-nav-cta" href="#contact">Demander une licence</a>
       </div>
     </nav>
   </header>
 
   <main id="top">
-    <!-- HERO -->
-    <section class="ac-hero">
-      <div class="ac-hero-in">
-        <p class="ac-eyebrow">Fonderie typographique · Montréal · depuis 2011</p>
-        <p class="ac-giant" aria-hidden="true">A<span class="ac-giant-amp">a</span></p>
-        <h1 class="ac-h1">Des lettres qui<br /><em>survivent</em> à leur siècle.</h1>
-        <div class="ac-rule" aria-hidden="true"><span>◆</span></div>
-        <p class="ac-lede">L'Atelier Caractère dessine des caractères d'exception à la main. Des didones à fort contraste, des caractères de texte patients et des italiques pleines d'esprit, chacun espacé et crénelé glyphe par glyphe, pour l'imprimé comme pour l'écran.</p>
-        <div class="ac-hero-cta">
-          <a class="ac-btn" href="#collection">Explorer la collection</a>
-          <a class="ac-link" href="#licensing">Voir les licences →</a>
-        </div>
+    <!-- COVER -->
+    <section class="ac-cover">
+      <p class="ac-cover-no">Spécimen Nº 24</p>
+      <p class="ac-giant" aria-hidden="true">A<span class="ac-giant-amp">a</span></p>
+      <h1 class="ac-cover-title">Atelier <em>Caractère</em></h1>
+      <p class="ac-cover-sub">Quatre familles · vingt et une graisses · dessinées à la main<br />Montréal · MMXI–MMXXVI</p>
+      <div class="ac-rule" aria-hidden="true"><span>◆</span></div>
+      <p class="ac-cover-note">Des caractères qui survivent à leur siècle. Tournez la page.</p>
+    </section>
+
+    <!-- INDEX -->
+    <section class="ac-index" id="index">
+      <div class="ac-wrap">
+        <h2 class="ac-index-title">Index</h2>
+        <ol class="ac-toc">
+          <li><a href="#tester"><span>I</span> Le testeur de caractères <em>essayez avant d'acheter</em></a></li>
+          <li><a href="#display"><span>II</span> Caractère Display <em>didone à fort contraste · 9 graisses</em></a></li>
+          <li><a href="#texte"><span>III</span> Caractère Texte <em>serif de transition · 6 graisses</em></a></li>
+          <li><a href="#italique"><span>IV</span> Caractère Italique <em>italique calligraphique · 4 graisses</em></a></li>
+          <li><a href="#capitales"><span>V</span> Caractère Capitales <em>petites capitales de cérémonie · 2 graisses</em></a></li>
+          <li><a href="#inuse"><span>VI</span> Planches <em>nos lettres, dans le monde</em></a></li>
+          <li><a href="#licensing"><span>VII</span> Licences <em>un prix honnête, pour toujours</em></a></li>
+          <li><a href="#colophon"><span>VIII</span> Colophon <em>la fonderie, en bref</em></a></li>
+        </ol>
       </div>
     </section>
 
-    <!-- COLLECTION -->
-    <section class="ac-section" id="collection">
+    <!-- TYPE TESTER -->
+    <section class="ac-tester" id="tester">
       <div class="ac-wrap">
-        <p class="ac-label">La collection</p>
-        <h2 class="ac-h2">Quatre familles.<br />Une obsession : <em>la lettre.</em></h2>
-
-        <article class="ac-spec">
-          <header class="ac-spec-head">
-            <h3>Caractère Display</h3>
-            <p class="ac-spec-class">Didone à fort contraste · 9 graisses · pour les titres</p>
-          </header>
-          <p class="ac-spec-alpha ac-w900">ABCDEFGHIJKLMNOPQRSTUVWXYZ<br />abcdefghijklmnopqrstuvwxyz</p>
-          <p class="ac-spec-nums ac-w900">0123456789 &amp; § † ‡</p>
-          <div class="ac-ramp">
-            <p class="ac-r1">Portez ce vieux whisky</p>
-            <p class="ac-r2">Portez ce vieux whisky au juge blond</p>
-            <p class="ac-r3">Portez ce vieux whisky au juge blond qui fume.</p>
+        <p class="ac-folio">I · Le testeur de caractères</p>
+        <h2 class="ac-h2">Composez vos propres <em>mots.</em></h2>
+        <div class="ac-test-controls">
+          <label class="ac-test-text">Votre texte
+            <input type="text" id="ac-test-input" value="Portez ce vieux whisky" maxlength="60" autocomplete="off" />
+          </label>
+          <label class="ac-test-size">Taille
+            <input type="range" id="ac-test-size" min="28" max="130" value="72" step="2" />
+          </label>
+          <div class="ac-test-fams" role="group" aria-label="Choisir une famille">
+            <button type="button" class="ac-fam ac-fam-on" data-fam="display" aria-pressed="true">Display</button>
+            <button type="button" class="ac-fam" data-fam="texte" aria-pressed="false">Texte</button>
+            <button type="button" class="ac-fam" data-fam="italique" aria-pressed="false">Italique</button>
+            <button type="button" class="ac-fam" data-fam="capitales" aria-pressed="false">Capitales</button>
           </div>
-          <p class="ac-spec-note">Gravé pour les corps au-delà de 48 pt. Chasses d'encre dessinées à la main.</p>
-        </article>
-
-        <article class="ac-spec">
-          <header class="ac-spec-head">
-            <h3>Caractère Texte</h3>
-            <p class="ac-spec-class">Sérif de texte transitionnel · 6 graisses · pour la lecture au long cours</p>
-          </header>
-          <p class="ac-spec-alpha ac-w400">ABCDEFGHIJKLMNOPQRSTUVWXYZ<br />abcdefghijklmnopqrstuvwxyz</p>
-          <p class="ac-spec-nums ac-w400">0123456789 &amp; § † ‡</p>
-          <p class="ac-spec-para">Nous croyons qu'un caractère de texte doit disparaître. Composé plein, interlettré avec retenue, le Caractère Texte porte romans, rapports annuels et faire-part de mariage avec la même assurance tranquille. Il ne demande rien et rend tout.</p>
-          <p class="ac-spec-note">Corps optiques de 6 à 14 pt. Vraies petites capitales incluses.</p>
-        </article>
-
-        <article class="ac-spec">
-          <header class="ac-spec-head">
-            <h3>Caractère Italique</h3>
-            <p class="ac-spec-class">Italique calligraphique · 4 graisses · pour l'emphase</p>
-          </header>
-          <p class="ac-spec-alpha ac-italic">ABCDEFGHIJKLMNOPQRSTUVWXYZ<br />abcdefghijklmnopqrstuvwxyz</p>
-          <p class="ac-spec-nums ac-italic">0123456789 &amp; § † ‡</p>
-          <p class="ac-spec-sample ac-italic ac-w600">L'élégance est un refus, dit avec panache.</p>
-          <p class="ac-spec-note">Dessinée d'après des études à la plume plate, non penchée du romain.</p>
-        </article>
-
-        <article class="ac-spec">
-          <header class="ac-spec-head">
-            <h3>Caractère Capitales</h3>
-            <p class="ac-spec-class">Petites capitales de cérémonie · 2 graisses · pour les occasions</p>
-          </header>
-          <p class="ac-spec-alpha ac-caps">ABCDEFGHIJKLMNOPQRSTUVWXYZ<br />0123456789</p>
-          <p class="ac-spec-sample ac-caps ac-w600">Chapitre premier · Édition limitée</p>
-          <p class="ac-spec-note">Pour les pages de titre, les colophons et les très bonnes nouvelles.</p>
-        </article>
+        </div>
+        <p class="ac-test-preview ac-prev-display" id="ac-test-preview" aria-live="polite">Portez ce vieux whisky</p>
+        <p class="ac-test-note">Rendu en direct dans la famille choisie. Imaginez-le sur votre jaquette.</p>
       </div>
     </section>
 
-    <!-- EN USAGE -->
-    <section class="ac-section ac-inuse" id="inuse">
+    <!-- FAMILY SPREADS -->
+    <section class="ac-spread" id="display">
       <div class="ac-wrap">
-        <p class="ac-label">En usage</p>
+        <p class="ac-folio">II · Caractère Display</p>
+        <h2 class="ac-h2">Didone à fort <em>contraste.</em></h2>
+        <p class="ac-spread-class">9 graisses · pour les titres · dessiné pour les corps au-dessus de 48 pt</p>
+        <p class="ac-alpha ac-w900">ABCDEFGHIJKLMNOPQRSTUVWXYZ<br />abcdefghijklmnopqrstuvwxyz</p>
+        <p class="ac-nums ac-w900">0123456789 &amp; § † ‡</p>
+        <div class="ac-ramp">
+          <p class="ac-r1">Portez ce vieux whisky</p>
+          <p class="ac-r2">Portez ce vieux whisky</p>
+          <p class="ac-r3">Portez ce vieux whisky au juge blond qui fume.</p>
+        </div>
+        <p class="ac-margin-note">Chasses d'encre dessinées à la main. Les déliés ne pardonneront pas le papier bon marché.</p>
+      </div>
+    </section>
+
+    <section class="ac-spread ac-spread-deep" id="texte">
+      <div class="ac-wrap">
+        <p class="ac-folio">III · Caractère Texte</p>
+        <h2 class="ac-h2">Le discret <em>bourreau de travail.</em></h2>
+        <p class="ac-spread-class">6 graisses · pour la lecture au long cours · corps optiques de 6 à 14 pt</p>
+        <p class="ac-alpha ac-w400">ABCDEFGHIJKLMNOPQRSTUVWXYZ<br />abcdefghijklmnopqrstuvwxyz</p>
+        <p class="ac-nums ac-w400">0123456789 &amp; § † ‡</p>
+        <p class="ac-para">Nous croyons qu'un caractère de texte doit disparaître. Composé au fer, chassé un peu large, Caractère Texte porte romans, rapports annuels et faire-part avec la même assurance tranquille. Il ne demande rien et rend tout.</p>
+        <p class="ac-margin-note">Vraies petites capitales incluses. Vos notes de bas de page vous remercieront.</p>
+      </div>
+    </section>
+
+    <section class="ac-spread" id="italique">
+      <div class="ac-wrap">
+        <p class="ac-folio">IV · Caractère Italique</p>
+        <h2 class="ac-h2"><em>Écrite,</em> pas penchée.</h2>
+        <p class="ac-spread-class">4 graisses · pour l'emphase · dessinée d'après des études à la plume</p>
+        <p class="ac-alpha ac-italic ac-w600">ABCDEFGHIJKLMNOPQRSTUVWXYZ<br />abcdefghijklmnopqrstuvwxyz</p>
+        <p class="ac-nums ac-italic">0123456789 &amp; § † ‡</p>
+        <p class="ac-sample ac-italic ac-w600">L'élégance est un refus, dit avec panache.</p>
+        <p class="ac-margin-note">Dessinée d'après des études à la plume, jamais penchée depuis le romain. Il y a une différence, et elle se sent.</p>
+      </div>
+    </section>
+
+    <section class="ac-spread ac-spread-deep" id="capitales">
+      <div class="ac-wrap">
+        <p class="ac-folio">V · Caractère Capitales</p>
+        <h2 class="ac-h2">Pour les <em>occasions.</em></h2>
+        <p class="ac-spread-class">2 graisses · petites capitales de cérémonie</p>
+        <p class="ac-alpha ac-caps ac-w600">ABCDEFGHIJKLMNOPQRSTUVWXYZ<br />0123456789</p>
+        <p class="ac-sample ac-caps ac-w600">Chapitre premier · Édition limitée</p>
+        <p class="ac-margin-note">Pour les pages de titre, les colophons et les très bonnes nouvelles.</p>
+      </div>
+    </section>
+
+    <!-- PLATES -->
+    <section class="ac-plates" id="inuse">
+      <div class="ac-wrap">
+        <p class="ac-folio">VI · Planches</p>
         <h2 class="ac-h2">Nos lettres, <em>dans le monde.</em></h2>
-        <div class="ac-use-grid">
-          <figure class="ac-use">
-            <img src={IMG.editorial} alt="Spécimens typographiques Baskerville, Sabon et Univers" loading="lazy" />
-            <figcaption><strong>Éditorial</strong><span>Revue fictive « Marge », composée en Caractère Texte</span></figcaption>
+        <div class="ac-plate-grid">
+          <figure class="ac-plate">
+            <img src={IMG.editorial} alt="Affiches de spécimens pour Baskerville, Sabon et Univers" loading="lazy" />
+            <figcaption><span>Planche 1 · Éditorial</span>Magazine « Marge », composé en Caractère Texte</figcaption>
           </figure>
-          <figure class="ac-use">
-            <img src={IMG.stationery} alt="Alphabet décoratif aux styles variés" loading="lazy" />
-            <figcaption><strong>Papeterie</strong><span>Correspondance, Caractère Italique</span></figcaption>
+          <figure class="ac-plate">
+            <img src={IMG.stationery} alt="Alphabet décoratif en styles variés" loading="lazy" />
+            <figcaption><span>Planche 2 · Papeterie</span>Suite de correspondance, Caractère Italique</figcaption>
           </figure>
-          <figure class="ac-use">
-            <img src={IMG.publishing} alt="Spécimen d'alphabet géométrique audacieux, Caractère Display" loading="lazy" />
-            <figcaption><strong>Édition</strong><span>Couvertures de livres, Caractère Display</span></figcaption>
+          <figure class="ac-plate">
+            <img src={IMG.publishing} alt="Spécimen d'alphabet géométrique gras, Caractère Display" loading="lazy" />
+            <figcaption><span>Planche 3 · Édition</span>Jaquettes de livres, Caractère Display</figcaption>
           </figure>
         </div>
-        <p class="ac-use-note">Une sélection de commandes fictives. Les vraies commandes sont les bienvenues.</p>
+        <p class="ac-plate-note">Une sélection de commandes fictives. Les vraies commandes sont bienvenues.</p>
       </div>
     </section>
 
-    <!-- LICENCES -->
-    <section class="ac-section ac-licensing" id="licensing">
+    <!-- LICENSING: a price list, not cards -->
+    <section class="ac-licensing" id="licensing">
       <div class="ac-wrap">
-        <p class="ac-label ac-label-light">Licences</p>
+        <p class="ac-folio ac-folio-light">VII · Licences</p>
         <h2 class="ac-h2 ac-h2-light">Un prix honnête, <em>pour toujours.</em></h2>
-        <p class="ac-lic-lede">Un seul paiement. À vous pour toujours. Chaque licence comprend les quatre familles, toutes les graisses, et notre célèbre crénage.</p>
-        <div class="ac-lic-grid">
-          <article class="ac-lic">
-            <h3>Bureau</h3>
-            <p class="ac-lic-price">95 $</p>
-            <p class="ac-lic-per">paiement unique · par poste de travail</p>
-            <ul>
-              <li>5 postes de travail</li>
-              <li>Polices bureau (OTF)</li>
-              <li>Imprimé et documents statiques</li>
-              <li>Mises à jour gratuites à vie</li>
-            </ul>
-            <a class="ac-btn ac-btn-outline" href="#contact">Choisir Bureau</a>
-          </article>
-          <article class="ac-lic ac-lic-featured">
-            <p class="ac-lic-badge">Le plus choisi</p>
-            <h3>Studio</h3>
-            <p class="ac-lic-price">290 $</p>
-            <p class="ac-lic-per">paiement unique · pour les studios</p>
-            <ul>
-              <li>20 postes de travail</li>
-              <li>Bureau + webfonts (WOFF2)</li>
-              <li>Pages vues illimitées</li>
-              <li>Travail client inclus</li>
-              <li>Mises à jour gratuites à vie</li>
-            </ul>
-            <a class="ac-btn ac-btn-gold" href="#contact">Choisir Studio</a>
-          </article>
-          <article class="ac-lic">
-            <h3>Maison</h3>
-            <p class="ac-lic-price">890 $</p>
-            <p class="ac-lic-per">paiement unique · pour les entreprises</p>
-            <ul>
-              <li>Postes de travail illimités</li>
-              <li>Bureau, web et intégration applicative</li>
-              <li>Diffusion et signalétique</li>
-              <li>Soutien prioritaire, par lettre si vous voulez</li>
-            </ul>
-            <a class="ac-btn ac-btn-outline" href="#contact">Choisir Maison</a>
-          </article>
-        </div>
+        <p class="ac-lic-lede">Un seul paiement. À vous pour toujours. Chaque licence inclut les quatre familles, toutes les graisses et notre célèbre crénage.</p>
+        <table class="ac-price">
+          <thead>
+            <tr><th scope="col">Licence</th><th scope="col">Inclut</th><th scope="col">Prix</th><th scope="col"><span class="ac-sr">Choisir</span></th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Bureau</th>
+              <td>5 postes · fontes desktop (OTF) · impression et documents statiques · mises à jour gratuites à vie</td>
+              <td>95 $</td>
+              <td><a href="#contact">Choisir</a></td>
+            </tr>
+            <tr>
+              <th scope="row">Studio</th>
+              <td>20 postes · desktop + webfonts (WOFF2) · pages vues illimitées · travaux clients inclus · mises à jour gratuites à vie</td>
+              <td>290 $</td>
+              <td><a href="#contact">Choisir</a></td>
+            </tr>
+            <tr>
+              <th scope="row">Maison</th>
+              <td>Postes illimités · desktop, web et intégration applicative · diffusion et signalétique · support prioritaire, par lettre si vous voulez</td>
+              <td>890 $</td>
+              <td><a href="#contact">Choisir</a></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </section>
 
-    <!-- LA FONDERIE -->
-    <section class="ac-section" id="foundry">
-      <div class="ac-wrap ac-foundry-in">
-        <div class="ac-foundry-img">
-          <img src={IMG.foundry} alt="Affiche typographique colorée, mur d'épreuves" loading="lazy" />
-          <p class="ac-caption">Le mur d'épreuves, rue de l'Imprimerie.</p>
-        </div>
-        <div class="ac-foundry-copy">
-          <p class="ac-label">La fonderie</p>
+    <!-- COLOPHON -->
+    <section class="ac-colophon" id="colophon">
+      <div class="ac-wrap ac-col-in">
+        <figure class="ac-col-img">
+          <img src={IMG.foundry} alt="Affiche en caractères de bois colorés sur le mur d'épreuves" loading="lazy" />
+          <figcaption>Le mur d'épreuves, rue de l'Imprimerie.</figcaption>
+        </figure>
+        <div>
+          <p class="ac-folio">VIII · Colophon</p>
           <h2 class="ac-h2">Des lettres lentes,<br />dessinées <em>à la main.</em></h2>
-          <p>Fondé en 2011 dans une ancienne imprimerie de la rue de l'Imprimerie, l'Atelier Caractère compte trois graveurs, deux apprentis et un chat très patient. Nous dessinons chaque glyphe sur papier d'abord. Nous crénelons en silence. Nous tirons des épreuves jusqu'à ce que l'encre se tienne.</p>
-          <p>Nous publions une famille par an. Certaines années, nous publions une virgule.</p>
-          <div class="ac-stats">
-            <div><strong>2011</strong><span>fondation</span></div>
-            <div><strong>24</strong><span>familles de caractères</span></div>
-            <div><strong>1 400</strong><span>glyphes par famille</span></div>
-            <div><strong>3</strong><span>graveurs</span></div>
-          </div>
+          <p>Fondé en 2011 dans une ancienne imprimerie rue de l'Imprimerie, l'Atelier Caractère c'est trois graveurs, deux apprentis et un chat très patient. On dessine chaque glyphe au papier d'abord. On crène en silence. On tire des épreuves jusqu'à ce que l'encre se tienne.</p>
+          <p>On sort une famille par an. Certaines années, on sort une virgule.</p>
+          <dl class="ac-col-stats">
+            <div><dt>Fondation</dt><dd>2011</dd></div>
+            <div><dt>Familles</dt><dd>24</dd></div>
+            <div><dt>Glyphes par famille</dt><dd>1 400</dd></div>
+            <div><dt>Graveurs</dt><dd>3</dd></div>
+          </dl>
         </div>
       </div>
     </section>
 
-    <!-- CONTACT -->
-    <section class="ac-section ac-contact" id="contact">
+    <!-- CORRESPONDENCE -->
+    <section class="ac-contact" id="contact">
       <div class="ac-wrap ac-contact-in">
         <div class="ac-contact-copy">
-          <p class="ac-label">Contact</p>
-          <h2 class="ac-h2">Écrivez-nous.<br /><em>Nous aimons les lettres.</em></h2>
-          <p>Pour les licences, les caractères sur mesure, ou simplement pour parler sérifs. Nous répondons à chaque lettre sous deux jours ouvrables.</p>
+          <p class="ac-folio">Correspondance</p>
+          <h2 class="ac-h2">Écrivez-nous.<br /><em>On aime les lettres.</em></h2>
+          <p>Pour les licences, les caractères sur mesure, ou simplement pour parler empattements. On répond à chaque lettre sous deux jours ouvrables.</p>
           <ul class="ac-contact-list">
             <li><strong>Atelier</strong><span>418, rue de l'Imprimerie, Montréal QC</span></li>
             <li><strong>Téléphone</strong><span><a href="tel:+15145550198">(514) 555-0198</a></span></li>
@@ -233,7 +255,7 @@ const IMG = {
               <option>Licence Studio</option>
               <option>Licence Maison</option>
               <option>Caractère sur mesure</option>
-              <option>Juste parler sérifs</option>
+              <option>Juste parler empattements</option>
             </select>
           </label>
           <label>Votre message
@@ -259,28 +281,67 @@ const IMG = {
   <script>
     (function () {
       // Menu mobile
-      var burger = document.querySelector('.ac-burger') as HTMLButtonElement | null;
-      var nav = document.querySelector('.ac-navwrap');
-      burger?.addEventListener('click', function () {
-        var open = nav?.classList.toggle('ac-nav-open');
-        burger?.setAttribute('aria-expanded', open ? 'true' : 'false');
-        burger?.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
-      });
-      document.querySelectorAll('.ac-nav-links a').forEach(function (a) {
-        a.addEventListener('click', function () {
-          nav?.classList.remove('ac-nav-open');
-          burger?.setAttribute('aria-expanded', 'false');
-          burger?.setAttribute('aria-label', 'Ouvrir le menu');
+      var burgerEl = document.querySelector('.ac-burger');
+      var navEl = document.querySelector('.ac-navwrap');
+      if (burgerEl instanceof HTMLButtonElement) {
+        var burger = burgerEl;
+        var nav = navEl;
+        burger.addEventListener('click', function () {
+          var open = nav ? nav.classList.toggle('ac-nav-open') : false;
+          burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+          burger.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+        });
+        document.querySelectorAll('.ac-nav-links a').forEach(function (a) {
+          a.addEventListener('click', function () {
+            if (nav) nav.classList.remove('ac-nav-open');
+            burger.setAttribute('aria-expanded', 'false');
+            burger.setAttribute('aria-label', 'Ouvrir le menu');
+          });
+        });
+      }
+      // Testeur de caractères
+      var input = document.getElementById('ac-test-input');
+      var size = document.getElementById('ac-test-size');
+      var preview = document.getElementById('ac-test-preview');
+      var fams = document.querySelectorAll('.ac-fam');
+      var updateText = function () {
+        if (preview && input instanceof HTMLInputElement) {
+          preview.textContent = input.value.trim() === '' ? 'Portez ce vieux whisky' : input.value;
+        }
+      };
+      var updateSize = function () {
+        if (preview && size instanceof HTMLInputElement) preview.style.fontSize = size.value + 'px';
+      };
+      if (input instanceof HTMLInputElement) input.addEventListener('input', updateText);
+      if (size instanceof HTMLInputElement) size.addEventListener('input', updateSize);
+      fams.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          fams.forEach(function (b) {
+            b.classList.remove('ac-fam-on');
+            b.setAttribute('aria-pressed', 'false');
+          });
+          btn.classList.add('ac-fam-on');
+          btn.setAttribute('aria-pressed', 'true');
+          if (preview) {
+            preview.className = 'ac-test-preview ac-prev-' + (btn.getAttribute('data-fam') || 'display');
+            updateText();
+            updateSize();
+          }
         });
       });
-      // Formulaire de démo : ne s'envoie nulle part
-      var form = document.getElementById('ac-form') as HTMLFormElement | null;
-      form?.addEventListener('submit', function (e) {
-        e.preventDefault();
-        var note = form?.querySelector('.ac-form-note');
-        if (note) note.textContent = "Merci. Nous vous écrirons sous deux jours ouvrables, dans une belle police.";
-        form?.reset();
-      });
+      updateText();
+      updateSize();
+      // Formulaire démo : ne soumet jamais rien
+      var formEl = document.getElementById('ac-form');
+      if (formEl instanceof HTMLFormElement) {
+        var form = formEl;
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var note = form.querySelector('.ac-form-note');
+          if (note) note.textContent = 'Merci. On vous répondra sous deux jours ouvrables, dans une belle typographie.';
+          form.reset();
+        });
+      }
     })();
   </script>
 
@@ -306,17 +367,17 @@ const IMG = {
     .ac *, .ac *::before, .ac *::after { box-sizing: border-box; }
     .ac img { display: block; max-width: 100%; }
     .ac-wrap { max-width: 1140px; margin: 0 auto; padding: 0 clamp(24px, 5vw, 48px); }
-    .ac-section { padding: clamp(90px, 11vw, 160px) 0; }
+    .ac-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-    /* labels + headings */
-    .ac-label {
+    /* folio + headings */
+    .ac-folio {
       font-family: var(--ac-sans); font-size: 11.5px; font-weight: 600;
       letter-spacing: 0.38em; text-transform: uppercase; color: var(--ac-gold-deep);
       margin: 0 0 22px;
     }
-    .ac-label-light { color: var(--ac-gold); }
-    .ac-h2 { font-weight: 600; font-size: clamp(2.3rem, 5.2vw, 3.9rem); line-height: 1.08; margin: 0 0 56px; }
-    .ac-h2 em, .ac-h1 em { font-style: italic; font-weight: 500; color: var(--ac-gold-deep); }
+    .ac-folio-light { color: var(--ac-gold); }
+    .ac-h2 { font-weight: 600; font-size: clamp(2.3rem, 5.2vw, 3.9rem); line-height: 1.08; margin: 0 0 40px; }
+    .ac-h2 em { font-style: italic; font-weight: 500; color: var(--ac-gold-deep); }
     .ac-h2-light { color: var(--ac-ivory); }
     .ac-h2-light em { color: var(--ac-gold); }
 
@@ -331,21 +392,25 @@ const IMG = {
     .ac-btn:hover { background: transparent; color: var(--ac-ink); }
     .ac-btn-gold { background: var(--ac-gold); border-color: var(--ac-gold); color: var(--ac-ink); }
     .ac-btn-gold:hover { background: transparent; color: var(--ac-gold-deep); border-color: var(--ac-gold-deep); }
-    .ac-btn-outline { background: transparent; color: var(--ac-ink); }
-    .ac-btn-outline:hover { background: var(--ac-ink); color: var(--ac-ivory); }
-    .ac-link { font-style: italic; font-size: 17px; color: var(--ac-ink); text-decoration: none; border-bottom: 1px solid var(--ac-gold); padding-bottom: 3px; }
-    .ac-link:hover { color: var(--ac-gold-deep); }
 
-    /* nav */
+    /* nav: running head */
     .ac-navwrap { position: fixed; top: 0; left: 0; right: 0; z-index: 60; }
     .ac-nav {
       display: flex; align-items: center; gap: 20px;
-      padding: 18px clamp(24px, 5vw, 56px);
-      background: rgba(247, 243, 234, 0.9); backdrop-filter: blur(12px);
+      padding: 14px clamp(24px, 5vw, 56px);
+      background: rgba(247, 243, 234, 0.92); backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--ac-line);
     }
-    .ac-logo { font-size: 24px; font-weight: 700; color: var(--ac-ink); text-decoration: none; margin-right: auto; }
-    .ac-logo em { font-style: italic; color: var(--ac-gold-deep); }
+    .ac-logo {
+      font-size: 26px; font-weight: 900; color: var(--ac-ink); text-decoration: none;
+      border: 2px solid var(--ac-ink); width: 46px; height: 46px; display: grid; place-items: center;
+      letter-spacing: -0.05em;
+    }
+    .ac-logo span { font-style: italic; font-weight: 500; color: var(--ac-gold-deep); }
+    .ac-running {
+      font-family: var(--ac-sans); font-size: 11px; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--ac-ink-soft); margin: 0 auto 0 0;
+    }
     .ac-burger { display: none; background: none; border: none; width: 44px; height: 40px; cursor: pointer; flex-direction: column; align-items: center; justify-content: center; gap: 7px; }
     .ac-burger span { display: block; width: 26px; height: 1.5px; background: var(--ac-ink); }
     .ac-nav-links { display: flex; align-items: center; gap: 6px; }
@@ -357,86 +422,144 @@ const IMG = {
     .ac-nav-cta { border: 1px solid var(--ac-ink); color: var(--ac-ink) !important; margin-left: 10px; }
     .ac-nav-cta:hover { background: var(--ac-ink); color: var(--ac-ivory) !important; }
 
-    /* hero */
-    .ac-hero { padding: 170px 0 110px; text-align: center; position: relative; }
-    .ac-hero-in { max-width: 900px; margin: 0 auto; padding: 0 clamp(24px, 5vw, 48px); animation: ac-rise 1.1s ease both; }
-    @keyframes ac-rise { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
-    .ac-eyebrow {
-      font-family: var(--ac-sans); font-size: 11.5px; font-weight: 600; letter-spacing: 0.4em; text-transform: uppercase;
-      color: var(--ac-gold-deep); margin: 0 0 10px;
+    /* cover */
+    .ac-cover { padding: 170px 0 110px; text-align: center; }
+    .ac-cover-no {
+      font-family: var(--ac-sans); font-size: 12px; font-weight: 600; letter-spacing: 0.5em; text-transform: uppercase;
+      color: var(--ac-gold-deep); margin: 0 0 8px;
     }
     .ac-giant { font-weight: 900; font-size: clamp(11rem, 36vw, 26rem); line-height: 0.85; margin: 0; letter-spacing: -0.02em; }
     .ac-giant-amp { font-style: italic; font-weight: 500; color: var(--ac-gold); }
-    .ac-h1 { font-weight: 600; font-size: clamp(2.2rem, 5.5vw, 3.8rem); line-height: 1.12; margin: 26px 0 0; }
+    .ac-cover-title { font-weight: 600; font-size: clamp(2.4rem, 6vw, 4.2rem); margin: 30px 0 18px; }
+    .ac-cover-title em { font-style: italic; color: var(--ac-gold-deep); }
+    .ac-cover-sub { font-style: italic; font-size: 18px; color: var(--ac-ink-soft); line-height: 1.7; margin: 0; }
     .ac-rule { display: flex; align-items: center; gap: 18px; margin: 44px auto; max-width: 420px; color: var(--ac-gold); font-size: 11px; }
     .ac-rule::before, .ac-rule::after { content: ""; flex: 1; height: 1px; background: var(--ac-gold); opacity: 0.6; }
-    .ac-lede { font-size: 19px; line-height: 1.75; color: var(--ac-ink-soft); max-width: 58ch; margin: 0 auto 40px; }
-    .ac-hero-cta { display: flex; gap: 28px; align-items: center; justify-content: center; flex-wrap: wrap; }
+    .ac-cover-note { font-style: italic; font-size: 17px; color: var(--ac-ink-soft); margin: 0; }
 
-    /* specimens */
-    .ac-spec {
-      background: var(--ac-card); border: 1px solid var(--ac-line);
-      padding: clamp(36px, 5vw, 72px); margin-bottom: 40px;
+    /* index */
+    .ac-index { padding: 40px 0 110px; }
+    .ac-index-title { font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 600; margin: 0 0 40px; }
+    .ac-toc { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ac-line); }
+    .ac-toc li { border-bottom: 1px solid var(--ac-line); }
+    .ac-toc a {
+      display: grid; grid-template-columns: 70px 1fr; gap: 24px; align-items: baseline;
+      padding: 22px 8px; text-decoration: none; color: var(--ac-ink);
+      font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 600;
     }
-    .ac-spec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; flex-wrap: wrap; border-bottom: 1px solid var(--ac-line); padding-bottom: 24px; margin-bottom: 36px; }
-    .ac-spec-head h3 { font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 700; margin: 0; }
-    .ac-spec-class { font-family: var(--ac-sans); font-size: 11.5px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--ac-gold-deep); margin: 0; }
-    .ac-spec-alpha { font-size: clamp(1.6rem, 4vw, 2.9rem); line-height: 1.35; margin: 0 0 18px; word-break: break-word; }
-    .ac-spec-nums { font-size: clamp(1.4rem, 3.4vw, 2.2rem); margin: 0 0 36px; color: var(--ac-ink-soft); }
+    .ac-toc a:hover { background: var(--ac-card); }
+    .ac-toc span { font-family: var(--ac-sans); font-size: 12px; font-weight: 700; letter-spacing: 0.3em; color: var(--ac-gold-deep); }
+    .ac-toc em { display: block; font-size: 15px; font-weight: 400; color: var(--ac-ink-soft); }
+
+    /* tester */
+    .ac-tester { background: var(--ac-ink); color: var(--ac-ivory); padding: clamp(90px, 11vw, 160px) 0; }
+    .ac-tester .ac-h2 { color: var(--ac-ivory); }
+    .ac-tester .ac-h2 em { color: var(--ac-gold); }
+    .ac-tester .ac-folio { color: var(--ac-gold); }
+    .ac-test-controls { display: grid; gap: 26px; margin-bottom: 50px; }
+    .ac-test-text, .ac-test-size {
+      display: grid; gap: 12px;
+      font-family: var(--ac-sans); font-size: 11px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase;
+      color: rgba(247, 243, 234, 0.6);
+    }
+    .ac-test-text input {
+      font-family: var(--ac-serif); font-size: 22px; font-style: italic; color: var(--ac-ivory);
+      background: transparent; border: none; border-bottom: 1px solid rgba(198, 161, 91, 0.5);
+      padding: 10px 2px; width: 100%; border-radius: 0;
+    }
+    .ac-test-text input:focus { outline: none; border-bottom-color: var(--ac-gold); }
+    .ac-test-size input { width: 100%; accent-color: var(--ac-gold); }
+    .ac-test-fams { display: flex; gap: 10px; flex-wrap: wrap; }
+    .ac-fam {
+      font-family: var(--ac-sans); font-size: 12px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+      background: transparent; color: rgba(247, 243, 234, 0.6); border: 1px solid rgba(198, 161, 91, 0.4);
+      padding: 14px 26px; cursor: pointer; transition: all 0.2s ease;
+    }
+    .ac-fam:hover { border-color: var(--ac-gold); color: var(--ac-ivory); }
+    .ac-fam-on { background: var(--ac-gold); border-color: var(--ac-gold); color: var(--ac-ink); }
+    .ac-test-preview {
+      margin: 0; line-height: 1.25; word-break: break-word; min-height: 1.4em;
+      border-top: 1px solid rgba(198, 161, 91, 0.3); border-bottom: 1px solid rgba(198, 161, 91, 0.3);
+      padding: 50px 0;
+    }
+    .ac-prev-display { font-weight: 900; }
+    .ac-prev-texte { font-weight: 400; }
+    .ac-prev-italique { font-style: italic; font-weight: 600; }
+    .ac-prev-capitales { text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600; }
+    .ac-test-note { font-style: italic; color: rgba(247, 243, 234, 0.55); margin: 26px 0 0; font-size: 16px; }
+
+    /* spreads */
+    .ac-spread { padding: clamp(90px, 11vw, 160px) 0; border-top: 1px solid var(--ac-line); }
+    .ac-spread-deep { background: var(--ac-ivory-deep); }
+    .ac-spread-class {
+      font-family: var(--ac-sans); font-size: 11.5px; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase;
+      color: var(--ac-gold-deep); margin: 0 0 44px;
+    }
+    .ac-alpha { font-size: clamp(1.7rem, 4.4vw, 3.1rem); line-height: 1.35; margin: 0 0 18px; word-break: break-word; }
+    .ac-nums { font-size: clamp(1.4rem, 3.4vw, 2.2rem); margin: 0 0 40px; color: var(--ac-ink-soft); }
     .ac-w900 { font-weight: 900; }
     .ac-w600 { font-weight: 600; }
     .ac-w400 { font-weight: 400; }
     .ac-italic { font-style: italic; }
     .ac-caps { text-transform: uppercase; letter-spacing: 0.14em; }
-    .ac-ramp { border-top: 1px solid var(--ac-line); border-bottom: 1px solid var(--ac-line); padding: 30px 0; margin-bottom: 30px; display: grid; gap: 14px; }
+    .ac-ramp { border-top: 1px solid var(--ac-line); border-bottom: 1px solid var(--ac-line); padding: 30px 0; margin-bottom: 34px; display: grid; gap: 14px; }
     .ac-ramp p { margin: 0; }
     .ac-r1 { font-size: 44px; font-weight: 800; }
     .ac-r2 { font-size: 30px; font-weight: 600; }
     .ac-r3 { font-size: 20px; font-weight: 400; color: var(--ac-ink-soft); }
-    .ac-spec-para { font-size: 18px; line-height: 1.8; color: var(--ac-ink-soft); max-width: 62ch; margin: 0 0 30px; }
-    .ac-spec-sample { font-size: clamp(1.7rem, 3.6vw, 2.6rem); line-height: 1.3; margin: 0 0 30px; }
-    .ac-spec-note { font-style: italic; font-size: 15.5px; color: var(--ac-gold-deep); margin: 0; }
-
-    /* in use */
-    .ac-inuse { background: var(--ac-ivory-deep); border-block: 1px solid var(--ac-line); }
-    .ac-use-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(24px, 4vw, 48px); }
-    .ac-use { margin: 0; background: #fff; border: 1px solid var(--ac-line); outline: 4px solid #fff; outline-offset: -5px; padding: 10px; }
-    .ac-use img { width: 100%; height: 380px; object-fit: cover; filter: contrast(1.03); border: 1px solid var(--ac-line); }
-    .ac-use figcaption { padding-top: 20px; display: grid; gap: 6px; border-top: 1px solid var(--ac-gold); margin-top: 20px; }
-    .ac-use figcaption strong { font-size: 22px; font-weight: 700; }
-    .ac-use figcaption span { font-style: italic; font-size: 15.5px; color: var(--ac-ink-soft); }
-    .ac-use-note { font-style: italic; color: var(--ac-ink-soft); margin: 44px 0 0; text-align: center; }
-
-    /* licensing */
-    .ac-licensing { background: var(--ac-ink); color: var(--ac-ivory); }
-    .ac-lic-lede { font-size: 18px; font-style: italic; color: rgba(247, 243, 234, 0.72); max-width: 52ch; margin: 0 0 56px; }
-    .ac-lic-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(198, 161, 91, 0.4); border: 1px solid rgba(198, 161, 91, 0.4); }
-    .ac-lic { background: var(--ac-ink); padding: 48px 40px; display: grid; gap: 16px; align-content: start; position: relative; }
-    .ac-lic h3 { font-size: 26px; font-weight: 600; font-style: italic; margin: 0; }
-    .ac-lic-price { font-size: 54px; font-weight: 700; margin: 0; }
-    .ac-lic-per { font-family: var(--ac-sans); font-size: 11.5px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(247, 243, 234, 0.55); margin: 0; }
-    .ac-lic ul { list-style: none; margin: 8px 0 16px; padding: 0; display: grid; gap: 12px; font-size: 16px; color: rgba(247, 243, 234, 0.85); }
-    .ac-lic li { padding-left: 22px; position: relative; }
-    .ac-lic li::before { content: "◆"; position: absolute; left: 0; color: var(--ac-gold); font-size: 10px; top: 4px; }
-    .ac-lic-featured { background: #171512; }
-    .ac-lic-badge {
-      position: absolute; top: 22px; right: 28px; margin: 0;
-      font-family: var(--ac-sans); font-size: 10.5px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase;
-      color: var(--ac-gold); border: 1px solid var(--ac-gold); padding: 8px 14px;
+    .ac-para { font-size: 18px; line-height: 1.8; color: var(--ac-ink-soft); max-width: 62ch; margin: 0 0 34px; }
+    .ac-sample { font-size: clamp(1.7rem, 3.6vw, 2.6rem); line-height: 1.3; margin: 0 0 34px; }
+    .ac-margin-note {
+      font-style: italic; font-size: 15.5px; color: var(--ac-gold-deep); margin: 0;
+      border-left: 2px solid var(--ac-gold); padding-left: 18px; max-width: 52ch;
     }
 
-    /* foundry */
-    .ac-foundry-in { display: grid; grid-template-columns: 0.95fr 1.05fr; gap: clamp(40px, 7vw, 100px); align-items: center; }
-    .ac-foundry-img img { width: 100%; height: 520px; object-fit: cover; filter: sepia(0.32); }
-    .ac-caption { font-style: italic; font-size: 14.5px; color: var(--ac-ink-soft); margin: 14px 0 0; }
-    .ac-foundry-copy p { font-size: 18px; line-height: 1.8; color: var(--ac-ink-soft); }
-    .ac-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 44px; padding-top: 36px; border-top: 1px solid var(--ac-line); }
-    .ac-stats div { display: grid; gap: 6px; }
-    .ac-stats strong { font-size: 34px; font-weight: 800; color: var(--ac-gold-deep); }
-    .ac-stats span { font-family: var(--ac-sans); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ac-ink-soft); }
+    /* plates */
+    .ac-plates { padding: clamp(90px, 11vw, 160px) 0; border-top: 1px solid var(--ac-line); }
+    .ac-plate-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(24px, 4vw, 48px); }
+    .ac-plate { margin: 0; background: var(--ac-card); border: 1px solid var(--ac-line); padding: 14px; }
+    .ac-plate img { width: 100%; height: 380px; object-fit: cover; border: 1px solid var(--ac-line); filter: contrast(1.03); }
+    .ac-plate figcaption { padding: 20px 6px 6px; display: grid; gap: 6px; }
+    .ac-plate figcaption span {
+      font-family: var(--ac-sans); font-size: 11px; font-weight: 700; letter-spacing: 0.26em; text-transform: uppercase;
+      color: var(--ac-gold-deep);
+    }
+    .ac-plate figcaption { font-style: italic; font-size: 15.5px; color: var(--ac-ink-soft); }
+    .ac-plate-note { font-style: italic; color: var(--ac-ink-soft); margin: 44px 0 0; text-align: center; }
+
+    /* licensing price list */
+    .ac-licensing { background: var(--ac-ink); color: var(--ac-ivory); padding: clamp(90px, 11vw, 160px) 0; }
+    .ac-lic-lede { font-size: 18px; font-style: italic; color: rgba(247, 243, 234, 0.72); max-width: 52ch; margin: 0 0 50px; }
+    .ac-price { width: 100%; border-collapse: collapse; }
+    .ac-price th, .ac-price td { text-align: left; padding: 26px 18px; border-bottom: 1px solid rgba(198, 161, 91, 0.25); vertical-align: top; }
+    .ac-price thead th {
+      font-family: var(--ac-sans); font-size: 11px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase;
+      color: rgba(247, 243, 234, 0.5);
+    }
+    .ac-price tbody th { font-size: 26px; font-weight: 600; font-style: italic; white-space: nowrap; }
+    .ac-price tbody td { font-size: 15.5px; line-height: 1.7; color: rgba(247, 243, 234, 0.8); }
+    .ac-price tbody td:nth-child(3) { font-size: 34px; font-weight: 700; color: var(--ac-gold); white-space: nowrap; font-style: normal; }
+    .ac-price tbody td:last-child { white-space: nowrap; }
+    .ac-price a {
+      font-family: var(--ac-sans); font-size: 11.5px; font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase;
+      color: var(--ac-ivory); text-decoration: none; border: 1px solid var(--ac-gold); padding: 14px 24px; display: inline-block;
+    }
+    .ac-price a:hover { background: var(--ac-gold); color: var(--ac-ink); }
+
+    /* colophon */
+    .ac-colophon { padding: clamp(90px, 11vw, 160px) 0; border-top: 1px solid var(--ac-line); }
+    .ac-col-in { display: grid; grid-template-columns: 0.95fr 1.05fr; gap: clamp(40px, 7vw, 100px); align-items: center; }
+    .ac-col-img { margin: 0; }
+    .ac-col-img img { width: 100%; height: 520px; object-fit: cover; filter: sepia(0.32); }
+    .ac-col-img figcaption { font-style: italic; font-size: 14.5px; color: var(--ac-ink-soft); margin: 14px 0 0; }
+    .ac-col-in p { font-size: 18px; line-height: 1.8; color: var(--ac-ink-soft); }
+    .ac-col-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin: 44px 0 0; padding: 36px 0 0; border-top: 1px solid var(--ac-line); }
+    .ac-col-stats div { display: grid; gap: 6px; }
+    .ac-col-stats dt { font-family: var(--ac-sans); font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ac-ink-soft); }
+    .ac-col-stats dd { margin: 0; font-size: 34px; font-weight: 800; color: var(--ac-gold-deep); }
 
     /* contact */
-    .ac-contact { background: var(--ac-ivory-deep); border-top: 1px solid var(--ac-line); }
+    .ac-contact { background: var(--ac-ivory-deep); border-top: 1px solid var(--ac-line); padding: clamp(90px, 11vw, 160px) 0; }
     .ac-contact-in { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 7vw, 100px); align-items: start; }
     .ac-contact-copy p { font-size: 18px; line-height: 1.8; color: var(--ac-ink-soft); }
     .ac-contact-list { list-style: none; margin: 36px 0 0; padding: 0; display: grid; gap: 0; border-top: 1px solid var(--ac-line); }
@@ -464,13 +587,13 @@ const IMG = {
 
     /* responsive */
     @media (max-width: 1020px) {
-      .ac-use-grid { grid-template-columns: 1fr; max-width: 560px; margin-inline: auto; }
-      .ac-use img { height: 320px; }
-      .ac-lic-grid { grid-template-columns: 1fr; max-width: 560px; margin-inline: auto; }
-      .ac-foundry-in, .ac-contact-in { grid-template-columns: 1fr; }
-      .ac-foundry-img img { height: 380px; }
+      .ac-plate-grid { grid-template-columns: 1fr; max-width: 560px; margin-inline: auto; }
+      .ac-plate img { height: 320px; }
+      .ac-col-in, .ac-contact-in { grid-template-columns: 1fr; }
+      .ac-col-img img { height: 380px; }
     }
     @media (max-width: 860px) {
+      .ac-running { display: none; }
       .ac-burger { display: flex; }
       .ac-nav-links {
         display: none; position: absolute; top: 100%; left: 0; right: 0;
@@ -480,12 +603,16 @@ const IMG = {
       .ac-nav-open .ac-nav-links { display: flex; }
       .ac-nav-links a { padding: 14px 4px; border-bottom: 1px solid var(--ac-line); }
       .ac-nav-cta { margin: 12px 0 0; text-align: center; border: 1px solid var(--ac-ink); }
-      .ac-stats { grid-template-columns: 1fr 1fr; }
+      .ac-col-stats { grid-template-columns: 1fr 1fr; }
       .ac-contact-list li { grid-template-columns: 1fr; gap: 6px; }
+      .ac-toc a { grid-template-columns: 44px 1fr; gap: 14px; }
+      .ac-price thead { display: none; }
+      .ac-price tr { display: grid; gap: 6px; padding: 10px 0; }
+      .ac-price th, .ac-price td { border: none; padding: 4px 0; }
+      .ac-price tbody tr { border-bottom: 1px solid rgba(198, 161, 91, 0.25); }
     }
     @media (prefers-reduced-motion: reduce) {
-      .ac-hero-in { animation: none; }
-      .ac-btn { transition: none; }
+      .ac-btn, .ac-fam { transition: none; }
     }
   </style>
 </body>
