@@ -11,8 +11,14 @@ const paths = localizedPaths[locale];
 const demos = getDemos(locale);
 
 // Demos with published standalone microsites
-const liveDemos = new Set(["nora", "mira", "atelier-nord", "encre-brute", "boba-club", "kanso", "leduc", "boise", "sora", "forma", "toit-fils", "verte", "lune", "maison-lune", "finition-r", "pouf", "hexline", "papier-ciseaux", "studio-reve", "cyberdoll", "pixelforge", "vhs-dreams", "prism", "tactile", "lattice", "maximal", "atelier-caractere", "esquisse", "brume", "sahara-sage", "aeris"]);
+const liveDemos = new Set(["nora", "mira", "atelier-nord", "encre-brute", "kanso", "leduc", "boise", "sora", "forma", "toit-fils", "verte", "lune", "maison-lune", "finition-r", "pouf", "hexline", "papier-ciseaux", "studio-reve", "cyberdoll", "pixelforge", "vhs-dreams", "prism", "tactile", "lattice", "maximal", "atelier-caractere", "esquisse", "brume", "sahara-sage", "aeris"]);
+// Hidden from the catalog: style already covered by another demo (boba-club = Y2K, covered by cyberdoll)
+const hiddenDemos = new Set(["boba-club"]);
+const visibleDemos = demos.filter((d) => !hiddenDemos.has(d.id));
 const demoHref = (id: string) => `${paths.demos}/${id}`;
+
+// Unique design styles (tones) for the style filter, alphabetical
+const tones = [...new Set(visibleDemos.map((d) => d.tone))].sort((a, b) => a.localeCompare(b));
 
 // Categories with localized labels but keep base value for filtering
 const categories = baseCategories.map(cat => ({
@@ -60,13 +66,20 @@ const categories = baseCategories.map(cat => ({
       <label class="search">
         <span aria-hidden="true">⌕</span>
         <input id="search" type="search" placeholder={t.demos.searchPlaceholder} autocomplete="off" aria-label={t.common.search} />
-        <span class="mono" style="font-size:11px; color: var(--muted); white-space:nowrap;" data-count>{t.demos.searchCount.replace("{count}", String(demos.length))}</span>
+        <span class="mono" style="font-size:11px; color: var(--muted); white-space:nowrap;" data-count>{t.demos.searchCount.replace("{count}", String(visibleDemos.length))}</span>
       </label>
       <div class="filters" role="group" aria-label={t.demos.filterLabel}>
         {categories.map((c) => (
           <button class:list={["chip", c.value === "All" && "chip--active"]} data-filter={c.value} aria-pressed={c.value === "All" ? "true" : "false"}>{c.label}</button>
         ))}
       </div>
+      <label class="style-filter">
+        <span class="mono">{t.demos.styleLabel}</span>
+        <select id="style-filter" aria-label={t.demos.styleLabel}>
+          <option value="All">{t.demos.allStyles}</option>
+          {tones.map((tone) => (<option value={tone}>{tone}</option>))}
+        </select>
+      </label>
     </div>
   </div>
 </section>
@@ -74,7 +87,7 @@ const categories = baseCategories.map(cat => ({
 <section class="section" style="padding-top: 20px;">
   <div class="shell">
     <div id="demo-grid" class="demo-grid" data-reveal>
-      {demos.map((d, i) => (
+      {visibleDemos.map((d, i) => (
         <a href={liveDemos.has(d.id) ? demoHref(d.id) : "#"} class="demo-card-demo" data-category={d.category} data-search={`${d.name} ${d.category} ${d.city} ${d.tone} ${d.palette} ${d.localizedDescription}`.toLowerCase()} data-reveal style={`--d:${(i%3)*80}ms`} data-demo-id={d.id} data-demo-tone={d.tone} data-demo-palette={d.palette} data-live={liveDemos.has(d.id) ? "true" : undefined} aria-label={`${t.demos.searchPlaceholder} ${d.name}`}>
           {liveDemos.has(d.id) ? (
             <div class={`demo-thumb dthumb dthumb-${d.id}`}>
@@ -337,7 +350,6 @@ const categories = baseCategories.map(cat => ({
                   <div class="ae-sub">CLEAN TECH</div>
                 </div>
               )}
-              <div class="dthumb-desc">{d.localizedDescription}</div>
             </div>
           ) : (
             <div class="demo-thumb" style={`background:${d.accent};`}>
@@ -359,7 +371,6 @@ const categories = baseCategories.map(cat => ({
             </div>
             <span class="mono" style="font-size:11px; background: var(--paper-2); border:1px solid var(--line); padding:6px 10px; border-radius:99px;">{liveDemos.has(d.id) ? t.demos.viewDemo : t.demos.details}</span>
           </div>
-          <span class="corner mono">{t.demos.fictional}</span>
         </a>
       ))}
     </div>
@@ -388,6 +399,9 @@ const categories = baseCategories.map(cat => ({
       <a href={paths.pricing} class="btn btn--ghost-on-dark">{t.demos.ctaSecondary}</a>
     </div>
   </div>
+  <div class="shell" style="margin-top: 22px; display:flex; justify-content:center;">
+    <a href={locale === "fr" ? "/fr/sources" : "/sources"} class="mono" style="font-size:11px; letter-spacing:.1em; color: rgba(248,245,239,.45); text-decoration: underline; text-underline-offset: 3px;">{t.demos.sourcesLink}</a>
+  </div>
 </section>
 
 <div id="demo-i18n" hidden data-toast-template={t.demos.toast} data-search-count-template={t.demos.searchCount}></div>
@@ -402,7 +416,9 @@ const categories = baseCategories.map(cat => ({
     const i18nEl = document.getElementById('demo-i18n');
     const toastTemplate = i18nEl?.getAttribute('data-toast-template') || '{name} is a fictional business and one of our design directions: {tone}, {palette}. The full clickable demo site isn’t published yet. Like this direction? Mention it when you contact us.';
     const countTemplate = i18nEl?.getAttribute('data-search-count-template') || '{count} demos';
+    const styleSelect = document.getElementById('style-filter') as HTMLSelectElement | null;
     let active = 'All';
+    let activeStyle = 'All';
     let query = '';
 
     function apply() {
@@ -410,10 +426,12 @@ const categories = baseCategories.map(cat => ({
       const q = query.trim().toLowerCase();
       for (const c of cards) {
         const cat = c.getAttribute('data-category') || '';
+        const tone = c.getAttribute('data-demo-tone') || '';
         const txt = c.getAttribute('data-search') || '';
         const matchCat = active === 'All' || cat === active;
+        const matchStyle = activeStyle === 'All' || tone === activeStyle;
         const matchQ = !q || txt.includes(q);
-        const show = matchCat && matchQ;
+        const show = matchCat && matchStyle && matchQ;
         (c as HTMLElement).style.display = show ? '' : 'none';
         if (show) visible++;
       }
@@ -444,11 +462,19 @@ const categories = baseCategories.map(cat => ({
         query = '';
         (search as HTMLInputElement).value = '';
         active = 'All';
+        activeStyle = 'All';
+        if (styleSelect) styleSelect.value = 'All';
         for (const c of chips) {
           const isActive = c.getAttribute('data-filter') === 'All';
           c.classList.toggle('chip--active', isActive);
           c.setAttribute('aria-pressed', String(isActive));
         }
+        apply();
+      });
+    }
+    if (styleSelect) {
+      styleSelect.addEventListener('change', () => {
+        activeStyle = styleSelect.value || 'All';
         apply();
       });
     }
@@ -495,6 +521,10 @@ const categories = baseCategories.map(cat => ({
   .search span:first-child { font-size:16px; opacity:.5; }
   .search input { flex:1; min-width:0; border:0; background:transparent; outline:none; font-size:14px; font-weight:500; }
   .filters { display:flex; gap:8px; flex-wrap:wrap; }
+  .style-filter { display:inline-flex; align-items:center; gap:10px; margin-left:auto; }
+  .style-filter .mono { font-size:11px; color: var(--muted); letter-spacing:.08em; }
+  .style-filter select { appearance:none; -webkit-appearance:none; font: inherit; font-size:13px; font-weight:600; color: var(--ink); background: var(--paper-2); border:1px solid var(--line); border-radius:99px; padding:9px 34px 9px 16px; cursor:pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23888' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; max-width: 220px; }
+  .style-filter select:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
   .chip { padding:7px 12px; border-radius:99px; border:1px solid var(--line); background: var(--paper-2); font-size:12.5px; font-weight:600; letter-spacing:-0.01em; cursor:pointer; transition: background .2s, color .2s, border-color .2s; }
   .chip:hover { background: var(--paper-3); }
   .chip--active { background: var(--ink); color: var(--paper); border-color: var(--ink); }

@@ -182,19 +182,19 @@ const paths = localizedPaths[locale];
   .compare-label { font-size:10px; color: var(--muted); margin-bottom:10px; }
   .compare-card ul { list-style:none; padding:0; display:grid; gap:14px; }
   .compare-card li { display:grid; grid-template-columns: 28px 1fr; gap:10px; align-items:start; }
-  .ic { width:26px; height:26px; border-radius:99px; background: var(--ink); color: var(--paper); display:grid; place-items:center; font-size:12px; font-weight:700; flex:none; }
-  .ic svg { width:13px; height:13px; display:block; }
+  .ic { width:26px; height:26px; border-radius:99px; background: var(--ink); color: var(--paper); display:inline-flex; align-items:center; justify-content:center; line-height:1; font-size:12px; font-weight:700; flex:none; }
+  .ic svg { width:13px; height:13px; display:block; flex:none; }
   .ic--dash { background: var(--paper-2); color: var(--ink); border:1px solid var(--line); }
   .compare-card li strong { display:block; font-size:14px; letter-spacing:-0.02em; line-height:1.25; }
-  .compare-card li span { display:block; font-size:13px; line-height:1.55; color: var(--muted); margin-top:2px; }
+  .compare-card li div span { display:block; font-size:13px; line-height:1.55; color: var(--muted); margin-top:2px; }
   .callout { margin-top:18px; background: var(--card-bg); border:1px solid var(--line); border-radius:14px; padding:14px; }
   .compare-foot { display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; padding:12px 14px; background: var(--section-dark-bg); color: rgba(248,245,239,.7); border-radius:12px; font-size:11px; }
   .timeline-grid { display:grid; grid-template-columns: .9fr 1.1fr; gap: 24px; align-items:start; }
   .timeline { list-style:none; padding:0; display:grid; gap:10px; }
   .timeline li { display:grid; grid-template-columns: 44px 1fr; gap:14px; align-items:start; background: rgba(248,245,239,.06); border:1px solid var(--line-on-dark); border-radius:14px; padding:14px; }
-  .t-n { width:36px; height:36px; border-radius:10px; background: var(--paper-3); color: var(--ink); display:grid; place-items:center; font-weight:750; font-size:13px; }
+  .t-n { width:36px; height:36px; border-radius:10px; background: var(--paper-3); color: var(--ink); display:inline-flex; align-items:center; justify-content:center; line-height:1; font-weight:750; font-size:13px; flex:none; }
   .timeline li strong { display:block; color: var(--section-dark-text); font-size:14px; letter-spacing:-0.01em; }
-  .timeline li span { display:block; color: rgba(248,245,239,.6); font-size:13px; line-height:1.5; margin-top:2px; }
+  .timeline li div span { display:block; color: rgba(248,245,239,.6); font-size:13px; line-height:1.5; margin-top:2px; }
   .quote-card { display:grid; grid-template-columns: .9fr 1.1fr; gap:24px; align-items:center; background: var(--card-bg); border:1px solid var(--line); border-radius:18px; padding:18px; box-shadow: var(--shadow-sm); }
   .invoice { background: var(--paper-3); border:1px solid var(--line); border-radius:14px; padding:16px; }
   .check-list { list-style:none; padding:0; margin-top:12px; display:grid; gap:6px; font-size:13px; color: var(--muted); }
