@@ -1,0 +1,533 @@
+---
+import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+
+// Demo microsite: Hexline Systems, fictional neural interface security startup, Montréal.
+// Standalone art direction: cybercore. Near-black, neon cyan/magenta, HUD motifs. Not connected to the WEBAO theme system.
+const IMG = {
+  hero: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=1600&auto=format&fit=crop",
+  lock: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800&auto=format&fit=crop",
+  servers: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=800&auto=format&fit=crop",
+  ops: "https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=800&auto=format&fit=crop",
+  neon: "https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=800&auto=format&fit=crop",
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hexline Systems: Neural Interface Security</title>
+  <meta name="description" content="Hexline Systems hardens neural interfaces and connected infrastructure against intrusion. Perimeter defense, neural mesh hardening, zero-trust identity." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+</head>
+<body class="hx">
+
+  <!-- NAV -->
+  <header class="hx-navwrap">
+    <nav class="hx-nav" aria-label="Primary">
+      <a class="hx-logo" href="#top" aria-label="Hexline Systems, home">
+        <svg class="hx-hex" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2 29 9.5v13L16 30 3 22.5v-13Z" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="16" cy="16" r="4" fill="currentColor"/></svg>
+        HEXLINE
+      </a>
+      <div class="hx-nav-links" id="hx-menu">
+        <a href="#protocols">Protocols</a>
+        <a href="#intel">Intel</a>
+        <a href="#access">Access</a>
+        <a href="#uplink">Uplink</a>
+      </div>
+      <p class="hx-sys"><span class="hx-dot" aria-hidden="true"></span>SYSTEMS NOMINAL</p>
+      <button class="hx-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="hx-menu">
+        <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+      </button>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hx-hero">
+      <div class="hx-hero-bg" aria-hidden="true"><img src={IMG.hero} alt="" loading="eager" fetchpriority="high" /></div>
+      <div class="hx-scanlines" aria-hidden="true"></div>
+      <div class="hx-wrap hx-hero-in">
+        <p class="hx-eyebrow">// NEURAL INTERFACE SECURITY · EST. 2024</p>
+        <p class="hx-term" aria-hidden="true">&gt; hexline --init --secure<span class="hx-caret">▌</span></p>
+        <h1 class="hx-h1">THE PERIMETER<br /><span class="hx-grad">IS YOU.</span></h1>
+        <p class="hx-lede">Hexline hardens neural interfaces and connected infrastructure against intrusion, spoofing, and signal theft. Military-grade cryptography. Civilian-friendly deployment.</p>
+        <div class="hx-hero-cta">
+          <a class="hx-btn hx-btn-cyan" href="#access">Request access</a>
+          <a class="hx-btn hx-btn-ghost" href="#protocols">Read the protocols</a>
+        </div>
+        <div class="hx-readouts">
+          <div class="hx-read"><span class="hx-read-k">UPTIME</span><span class="hx-read-v">99.98%</span></div>
+          <div class="hx-read"><span class="hx-read-k">NODES</span><span class="hx-read-v">4,096</span></div>
+          <div class="hx-read"><span class="hx-read-k">THREATS/D</span><span class="hx-read-v">1.2M</span></div>
+          <div class="hx-read"><span class="hx-read-k">LATENCY</span><span class="hx-read-v">4ms</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- THREAT TICKER -->
+    <div class="hx-ticker" aria-hidden="true">
+      <div class="hx-ticker-track">
+        <span>[14:02:11] INTRUSION BLOCKED :: NODE 7</span><span>[14:02:08] SPOOF ATTEMPT NEUTRALIZED :: MESH C</span><span>[14:01:57] SIGNAL INTEGRITY 100%</span><span>[14:01:44] ZERO-DAY SIGNATURE DEPLOYED</span><span>[14:01:31] PHANTOM RELAY TERMINATED</span>
+        <span>[14:02:11] INTRUSION BLOCKED :: NODE 7</span><span>[14:02:08] SPOOF ATTEMPT NEUTRALIZED :: MESH C</span><span>[14:01:57] SIGNAL INTEGRITY 100%</span><span>[14:01:44] ZERO-DAY SIGNATURE DEPLOYED</span><span>[14:01:31] PHANTOM RELAY TERMINATED</span>
+      </div>
+    </div>
+
+    <!-- PROTOCOLS -->
+    <section class="hx-section" id="protocols">
+      <div class="hx-wrap">
+        <p class="hx-kicker">// DEFENSIVE STACK</p>
+        <h2 class="hx-h2">PROTOCOLS</h2>
+        <div class="hx-panels">
+          <article class="hx-panel">
+            <span class="hx-panel-n" aria-hidden="true">P-01</span>
+            <h3>Perimeter Defense</h3>
+            <p>Adaptive firewall mesh that learns attacker patterns in real time. Deploys in under 20 minutes. Holds the line while you sleep.</p>
+            <ul>
+              <li>Behavioral threat modeling</li>
+              <li>Auto-isolation of hostile nodes</li>
+              <li>DDoS absorption to 2.4 Tbps</li>
+            </ul>
+            <img src={IMG.lock} alt="Digital lock representing perimeter encryption" loading="lazy" />
+          </article>
+          <article class="hx-panel">
+            <span class="hx-panel-n" aria-hidden="true">P-02</span>
+            <h3>Neural Mesh Hardening</h3>
+            <p>End-to-end encryption for brain-computer interfaces. Every signal signed, every channel verified, every anomaly flagged in milliseconds.</p>
+            <ul>
+              <li>Post-quantum key exchange</li>
+              <li>Signal integrity attestation</li>
+              <li>4ms anomaly response loop</li>
+            </ul>
+            <img src={IMG.servers} alt="Server racks running the Hexline neural mesh" loading="lazy" />
+          </article>
+          <article class="hx-panel">
+            <span class="hx-panel-n" aria-hidden="true">P-03</span>
+            <h3>Intrusion Countermeasures</h3>
+            <p>Active defense that does not wait for permission. Honeypots, tracer injection, and automated retaliation within legal bounds.</p>
+            <ul>
+              <li>Deception grid deployment</li>
+              <li>Attribution tracing</li>
+              <li>Forensic capture, court-ready</li>
+            </ul>
+            <img src={IMG.ops} alt="Security operations analyst at a dark workstation" loading="lazy" />
+          </article>
+          <article class="hx-panel">
+            <span class="hx-panel-n" aria-hidden="true">P-04</span>
+            <h3>Zero-Trust Identity</h3>
+            <p>No implicit trust. Every user, device, and process re-authenticates continuously. Credentials are verified, never assumed.</p>
+            <ul>
+              <li>Continuous re-authentication</li>
+              <li>Hardware-bound identity keys</li>
+              <li>Granular access policies</li>
+            </ul>
+            <img src={IMG.neon} alt="Neon-lit abstract network visualization" loading="lazy" />
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATS DASHBOARD -->
+    <section class="hx-dash">
+      <div class="hx-wrap">
+        <p class="hx-kicker">// LIVE TELEMETRY</p>
+        <h2 class="hx-h2">DASHBOARD</h2>
+        <div class="hx-meters">
+          <div class="hx-meter">
+            <p class="hx-meter-k">Threats blocked today</p>
+            <p class="hx-meter-v">1,204,883</p>
+            <div class="hx-bar"><span style="width: 92%"></span></div>
+          </div>
+          <div class="hx-meter">
+            <p class="hx-meter-k">Mesh integrity</p>
+            <p class="hx-meter-v">100%</p>
+            <div class="hx-bar"><span style="width: 100%"></span></div>
+          </div>
+          <div class="hx-meter">
+            <p class="hx-meter-k">Mean response time</p>
+            <p class="hx-meter-v">4ms</p>
+            <div class="hx-bar"><span style="width: 18%"></span></div>
+          </div>
+          <div class="hx-meter">
+            <p class="hx-meter-k">Breaches to date</p>
+            <p class="hx-meter-v hx-magenta">0</p>
+            <div class="hx-bar"><span class="hx-bar-magenta" style="width: 2%"></span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTEL FEED -->
+    <section class="hx-section" id="intel">
+      <div class="hx-wrap">
+        <p class="hx-kicker">// RAW FEED · UNCLASSIFIED</p>
+        <h2 class="hx-h2">INTEL</h2>
+        <div class="hx-terminal">
+          <p><span class="hx-t-time">[14:02:11]</span> INTRUSION BLOCKED :: origin 185.220.x.x :: node 7 :: action: DROP</p>
+          <p><span class="hx-t-time">[14:02:08]</span> SPOOF ATTEMPT :: neural channel C :: signature mismatch :: neutralized</p>
+          <p><span class="hx-t-time">[14:01:57]</span> SIGNAL INTEGRITY CHECK :: 4,096 nodes :: all green</p>
+          <p><span class="hx-t-time">[14:01:44]</span> ZERO-DAY SIGNATURE v88.2 deployed fleet-wide in 3.1s</p>
+          <p><span class="hx-t-time">[14:01:31]</span> PHANTOM RELAY :: traced to exit node :: terminated</p>
+          <p><span class="hx-t-time">[14:01:02]</span> KEY ROTATION :: mesh-wide :: completed, zero downtime</p>
+          <p class="hx-t-prompt" aria-hidden="true">&gt; awaiting next event<span class="hx-caret">▌</span></p>
+        </div>
+        <p class="hx-note">Figures shown are illustrative telemetry from the demo grid. Real deployments report to your own SIEM.</p>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="hx-section hx-section-dim" id="access">
+      <div class="hx-wrap">
+        <p class="hx-kicker">// CLEARANCE LEVELS</p>
+        <h2 class="hx-h2">ACCESS TIERS</h2>
+        <div class="hx-tiers">
+          <article class="hx-tier">
+            <p class="hx-tier-n">TIER 01</p>
+            <h3>Scout</h3>
+            <p class="hx-tier-price">$490<span>/mo</span></p>
+            <ul>
+              <li>Perimeter defense, 1 site</li>
+              <li>Daily threat digest</li>
+              <li>Standard support SLA</li>
+            </ul>
+            <a class="hx-btn hx-btn-ghost" href="#uplink">Request Scout</a>
+          </article>
+          <article class="hx-tier hx-tier-hot">
+            <p class="hx-tier-n">TIER 02</p>
+            <h3>Sentinel</h3>
+            <p class="hx-tier-price">$1,900<span>/mo</span></p>
+            <ul>
+              <li>Full protocol stack, 5 sites</li>
+              <li>Neural mesh hardening</li>
+              <li>Live telemetry dashboard</li>
+              <li>Priority support SLA</li>
+            </ul>
+            <a class="hx-btn hx-btn-cyan" href="#uplink">Request Sentinel</a>
+          </article>
+          <article class="hx-tier">
+            <p class="hx-tier-n">TIER 03</p>
+            <h3>Overlord</h3>
+            <p class="hx-tier-price">Custom</p>
+            <ul>
+              <li>Unlimited sites + air-gapped option</li>
+              <li>Dedicated countermeasure team</li>
+              <li>Custom integrations</li>
+            </ul>
+            <a class="hx-btn hx-btn-ghost" href="#uplink">Contact us</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- UPLINK -->
+    <section class="hx-section" id="uplink">
+      <div class="hx-wrap hx-uplink-in">
+        <div>
+          <p class="hx-kicker">// SECURE CHANNEL</p>
+          <h2 class="hx-h2">ESTABLISH UPLINK</h2>
+          <p class="hx-lede">Send a transmission. A Hexline operator responds within one business day. No cold calls. No mailing lists. Ever.</p>
+          <ul class="hx-contact-list">
+            <li><span>HQ</span>Unit 7, 1010 Circuit Lane, Montréal QC</li>
+            <li><span>VOICE</span><a href="tel:+15145550917">(514) 555-0917</a></li>
+            <li><span>MAIL</span><a href="mailto:uplink@hexline.systems">uplink@hexline.systems</a></li>
+          </ul>
+        </div>
+        <form class="hx-form" id="hx-form" novalidate>
+          <p class="hx-form-head" aria-hidden="true">// TRANSMISSION FORM</p>
+          <label>Callsign<input type="text" name="callsign" required placeholder="ghost.actual" /></label>
+          <label>Email<input type="email" name="email" required placeholder="you@company.com" /></label>
+          <label>Clearance
+            <select name="tier">
+              <option>Scout</option>
+              <option>Sentinel</option>
+              <option>Overlord</option>
+              <option>Unsure, advise me</option>
+            </select>
+          </label>
+          <label>Objective<textarea name="message" rows="4" placeholder="Describe the asset to protect."></textarea></label>
+          <button class="hx-btn hx-btn-cyan hx-btn-full" type="submit">Establish uplink</button>
+          <p class="hx-form-note" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="hx-footer">
+    <div class="hx-wrap">
+      <p class="hx-footer-logo" aria-hidden="true">HEXLINE</p>
+      <p>© 2026 Hexline Systems. Fictional demo. No networks were harmed.</p>
+      <p>Unit 7, 1010 Circuit Lane, Montréal QC · <a href="tel:+15145550917">(514) 555-0917</a></p>
+    </div>
+  </footer>
+
+  <EscapeHatch locale="en" />
+
+  <script>
+    // Demo form: never submits anywhere. Mobile menu toggle.
+    (function () {
+      var form = document.getElementById('hx-form') as HTMLFormElement | null;
+      form?.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var note = form?.querySelector('.hx-form-note');
+        if (note) note.textContent = 'UPLINK ESTABLISHED. An operator will respond within one business day.';
+        form?.reset();
+      });
+      var burger = document.querySelector('.hx-burger') as HTMLButtonElement | null;
+      var menu = document.getElementById('hx-menu');
+      burger?.addEventListener('click', function () {
+        var open = menu?.classList.toggle('hx-open') ?? false;
+        burger?.setAttribute('aria-expanded', String(open));
+        burger?.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      });
+      menu?.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () {
+          menu?.classList.remove('hx-open');
+          burger?.setAttribute('aria-expanded', 'false');
+          burger?.setAttribute('aria-label', 'Open menu');
+        });
+      });
+    })();
+  </script>
+
+  <style>
+    .hx {
+      --hx-bg: #05070D;
+      --hx-panel: #0A0F1C;
+      --hx-line: #1B2740;
+      --hx-cyan: #00F0FF;
+      --hx-magenta: #FF2EA6;
+      --hx-chrome1: #E8F4FF;
+      --hx-chrome2: #7A8CA8;
+      --hx-text: #D7E2F2;
+      --hx-dim: #8A93A6;
+      --hx-display: "Orbitron", "Arial Black", sans-serif;
+      --hx-body: "Space Grotesk", system-ui, sans-serif;
+      --hx-mono: "JetBrains Mono", ui-monospace, monospace;
+      margin: 0;
+      background: var(--hx-bg);
+      color: var(--hx-text);
+      font-family: var(--hx-body);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: clip;
+    }
+    .hx *, .hx *::before, .hx *::after { box-sizing: border-box; }
+    .hx img { display: block; max-width: 100%; }
+    .hx-wrap { max-width: 1200px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px); }
+
+    /* nav */
+    .hx-navwrap { position: fixed; top: 0; left: 0; right: 0; z-index: 60; }
+    .hx-nav {
+      display: flex; align-items: center; gap: 22px;
+      padding: 14px clamp(20px, 4vw, 40px);
+      background: rgba(5, 7, 13, 0.88); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--hx-line);
+    }
+    .hx-logo {
+      font-family: var(--hx-display); font-weight: 800; font-size: 20px; letter-spacing: 0.14em;
+      color: var(--hx-text); text-decoration: none; display: flex; align-items: center; gap: 10px; margin-right: auto;
+    }
+    .hx-hex { width: 30px; height: 30px; color: var(--hx-cyan); filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.7)); }
+    .hx-nav-links { display: flex; gap: 4px; }
+    .hx-nav-links a {
+      color: var(--hx-dim); text-decoration: none; font-family: var(--hx-mono); font-size: 13px;
+      letter-spacing: 0.12em; text-transform: uppercase; padding: 10px 14px; border: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+    .hx-nav-links a:hover { color: var(--hx-cyan); border-color: var(--hx-line); background: rgba(0, 240, 255, 0.05); }
+    .hx-sys { font-family: var(--hx-mono); font-size: 12px; letter-spacing: 0.14em; color: var(--hx-cyan); margin: 0; display: flex; align-items: center; gap: 8px; }
+    .hx-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--hx-cyan); box-shadow: 0 0 10px var(--hx-cyan); animation: hx-blink 1.6s steps(2, start) infinite; }
+    @keyframes hx-blink { 50% { opacity: 0.25; } }
+    .hx-burger { display: none; background: transparent; border: 1px solid var(--hx-line); width: 44px; height: 44px; cursor: pointer; flex-direction: column; align-items: center; justify-content: center; gap: 5px; }
+    .hx-burger span { display: block; width: 20px; height: 2px; background: var(--hx-cyan); }
+
+    /* buttons */
+    .hx-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      font-family: var(--hx-mono); font-weight: 700; font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 16px 30px; text-decoration: none; cursor: pointer; border: 1px solid;
+      clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+      transition: filter 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .hx-btn-cyan { background: var(--hx-cyan); border-color: var(--hx-cyan); color: #05070D; }
+    .hx-btn-cyan:hover { filter: brightness(1.12); box-shadow: 0 0 26px rgba(0, 240, 255, 0.45); transform: translateY(-2px); }
+    .hx-btn-ghost { background: transparent; border-color: var(--hx-line); color: var(--hx-text); }
+    .hx-btn-ghost:hover { border-color: var(--hx-cyan); color: var(--hx-cyan); }
+    .hx-btn-full { width: 100%; }
+
+    /* type */
+    .hx-kicker { font-family: var(--hx-mono); font-size: 13px; letter-spacing: 0.3em; color: var(--hx-cyan); margin: 0 0 16px; }
+    .hx-h1 {
+      font-family: var(--hx-display); font-weight: 900; font-size: clamp(2.8rem, 8.5vw, 6.4rem);
+      line-height: 1.02; letter-spacing: 0.02em; margin: 0 0 24px;
+    }
+    .hx-grad {
+      background: linear-gradient(100deg, var(--hx-chrome1) 10%, var(--hx-chrome2) 45%, var(--hx-cyan) 90%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .hx-h2 { font-family: var(--hx-display); font-weight: 800; font-size: clamp(2rem, 5.5vw, 3.6rem); letter-spacing: 0.06em; margin: 0 0 40px; }
+    .hx-eyebrow { font-family: var(--hx-mono); font-size: 12.5px; letter-spacing: 0.3em; color: var(--hx-dim); margin: 0 0 18px; }
+    .hx-term { font-family: var(--hx-mono); font-size: 15px; color: var(--hx-cyan); margin: 0 0 14px; }
+    .hx-caret { animation: hx-blink 1s steps(2, start) infinite; }
+    .hx-lede { font-size: 17.5px; line-height: 1.65; color: var(--hx-dim); max-width: 52ch; margin: 0 0 32px; }
+
+    /* hero */
+    .hx-hero { position: relative; min-height: 100svh; display: flex; align-items: center; overflow: hidden; padding: 130px 0 80px; }
+    .hx-hero-bg { position: absolute; inset: 0; }
+    .hx-hero-bg img { width: 100%; height: 100%; object-fit: cover; opacity: 0.32; filter: saturate(1.3); }
+    .hx-hero-bg::after {
+      content: ""; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 55% at 75% 30%, rgba(0, 240, 255, 0.12), transparent 60%),
+        radial-gradient(ellipse 60% 45% at 15% 80%, rgba(255, 46, 166, 0.1), transparent 60%),
+        linear-gradient(180deg, rgba(5,7,13,0.7) 0%, rgba(5,7,13,0.35) 45%, rgba(5,7,13,0.95) 100%);
+    }
+    .hx-scanlines {
+      position: absolute; inset: 0; pointer-events: none; z-index: 1;
+      background: repeating-linear-gradient(180deg, rgba(255,255,255,0.028) 0 1px, transparent 1px 4px);
+    }
+    .hx-hero-in { position: relative; z-index: 2; width: 100%; }
+    .hx-hero-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 48px; }
+    .hx-readouts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; max-width: 860px; }
+    .hx-read {
+      background: rgba(10, 15, 28, 0.78); border: 1px solid var(--hx-line); padding: 18px 20px;
+      display: grid; gap: 6px; position: relative;
+    }
+    .hx-read::before, .hx-read::after { content: ""; position: absolute; width: 12px; height: 12px; border: 2px solid var(--hx-cyan); }
+    .hx-read::before { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+    .hx-read::after { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+    .hx-read-k { font-family: var(--hx-mono); font-size: 11px; letter-spacing: 0.24em; color: var(--hx-dim); }
+    .hx-read-v { font-family: var(--hx-display); font-weight: 700; font-size: 28px; color: var(--hx-cyan); text-shadow: 0 0 18px rgba(0, 240, 255, 0.5); }
+
+    /* ticker */
+    .hx-ticker { background: #02040A; border-block: 1px solid var(--hx-line); overflow: hidden; padding: 12px 0; }
+    .hx-ticker-track { display: flex; gap: 44px; width: max-content; animation: hx-tick 30s linear infinite; font-family: var(--hx-mono); font-size: 13px; letter-spacing: 0.08em; color: var(--hx-magenta); white-space: nowrap; }
+    @keyframes hx-tick { to { transform: translateX(-50%); } }
+
+    /* sections */
+    .hx-section { padding: clamp(70px, 9vw, 120px) 0; }
+    .hx-section-dim { background: var(--hx-panel); border-block: 1px solid var(--hx-line); }
+
+    /* panels */
+    .hx-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .hx-panel {
+      background: var(--hx-panel); border: 1px solid var(--hx-line); padding: 34px 32px;
+      position: relative; display: grid; gap: 14px; align-content: start;
+      transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .hx-panel::before, .hx-panel::after { content: ""; position: absolute; width: 18px; height: 18px; border: 2px solid var(--hx-cyan); transition: border-color 0.2s ease; }
+    .hx-panel::before { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+    .hx-panel::after { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+    .hx-panel:hover { border-color: var(--hx-cyan); transform: translateY(-4px); box-shadow: 0 14px 44px rgba(0, 240, 255, 0.1); }
+    .hx-panel-n { font-family: var(--hx-mono); font-size: 12px; letter-spacing: 0.3em; color: var(--hx-magenta); }
+    .hx-panel h3 { font-family: var(--hx-display); font-weight: 700; font-size: 24px; letter-spacing: 0.04em; margin: 0; }
+    .hx-panel p { margin: 0; color: var(--hx-dim); font-size: 15.5px; line-height: 1.65; }
+    .hx-panel ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+    .hx-panel li { font-family: var(--hx-mono); font-size: 13px; color: var(--hx-text); padding-left: 22px; position: relative; }
+    .hx-panel li::before { content: "▸"; position: absolute; left: 0; color: var(--hx-cyan); }
+    .hx-panel img { width: 100%; height: 180px; object-fit: cover; border: 1px solid var(--hx-line); filter: saturate(1.2) contrast(1.05); }
+
+    /* dashboard */
+    .hx-dash { background: #02040A; border-block: 1px solid var(--hx-line); padding: clamp(70px, 9vw, 110px) 0; }
+    .hx-meters { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .hx-meter { background: var(--hx-panel); border: 1px solid var(--hx-line); padding: 26px 24px; display: grid; gap: 10px; }
+    .hx-meter-k { margin: 0; font-family: var(--hx-mono); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--hx-dim); }
+    .hx-meter-v { margin: 0; font-family: var(--hx-display); font-weight: 800; font-size: clamp(1.8rem, 3.4vw, 2.8rem); color: var(--hx-cyan); text-shadow: 0 0 20px rgba(0, 240, 255, 0.45); }
+    .hx-magenta { color: var(--hx-magenta) !important; text-shadow: 0 0 20px rgba(255, 46, 166, 0.45) !important; }
+    .hx-bar { height: 8px; background: #141C30; position: relative; overflow: hidden; }
+    .hx-bar span { position: absolute; inset: 0 auto 0 0; background: linear-gradient(90deg, var(--hx-cyan), rgba(0, 240, 255, 0.4)); box-shadow: 0 0 12px rgba(0, 240, 255, 0.6); }
+    .hx-bar-magenta { background: linear-gradient(90deg, var(--hx-magenta), rgba(255, 46, 166, 0.4)) !important; box-shadow: 0 0 12px rgba(255, 46, 166, 0.6) !important; }
+
+    /* terminal */
+    .hx-terminal {
+      background: #02040A; border: 1px solid var(--hx-line); padding: clamp(24px, 4vw, 40px);
+      font-family: var(--hx-mono); font-size: 14px; line-height: 2; color: var(--hx-text);
+      box-shadow: inset 0 0 60px rgba(0, 240, 255, 0.04);
+    }
+    .hx-terminal p { margin: 0; }
+    .hx-t-time { color: var(--hx-magenta); }
+    .hx-t-prompt { color: var(--hx-cyan); margin-top: 8px; }
+    .hx-note { color: var(--hx-dim); font-size: 13.5px; font-family: var(--hx-mono); margin: 18px 0 0; }
+
+    /* tiers */
+    .hx-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; align-items: stretch; }
+    .hx-tier {
+      background: var(--hx-bg); border: 1px solid var(--hx-line); padding: 36px 32px;
+      display: grid; gap: 12px; align-content: start; position: relative;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+    .hx-tier:hover { border-color: var(--hx-cyan); transform: translateY(-6px); }
+    .hx-tier-hot { border-color: var(--hx-cyan); box-shadow: 0 0 40px rgba(0, 240, 255, 0.12), inset 0 0 40px rgba(0, 240, 255, 0.03); }
+    .hx-tier-n { margin: 0; font-family: var(--hx-mono); font-size: 12px; letter-spacing: 0.3em; color: var(--hx-magenta); }
+    .hx-tier h3 { margin: 0; font-family: var(--hx-display); font-weight: 800; font-size: 30px; letter-spacing: 0.05em; }
+    .hx-tier-price { margin: 0; font-family: var(--hx-display); font-weight: 700; font-size: 40px; color: var(--hx-cyan); }
+    .hx-tier-price span { font-size: 16px; color: var(--hx-dim); font-family: var(--hx-mono); }
+    .hx-tier ul { list-style: none; margin: 0 0 14px; padding: 0; display: grid; gap: 10px; }
+    .hx-tier li { font-size: 15px; color: var(--hx-dim); padding-left: 22px; position: relative; line-height: 1.5; }
+    .hx-tier li::before { content: "+"; position: absolute; left: 0; color: var(--hx-cyan); font-family: var(--hx-mono); font-weight: 700; }
+
+    /* uplink */
+    .hx-uplink-in { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(36px, 6vw, 70px); align-items: start; }
+    .hx-contact-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-family: var(--hx-mono); font-size: 14px; }
+    .hx-contact-list li { border: 1px solid var(--hx-line); background: var(--hx-panel); padding: 14px 18px; display: flex; gap: 16px; }
+    .hx-contact-list span { color: var(--hx-magenta); letter-spacing: 0.2em; font-size: 12px; min-width: 52px; }
+    .hx-contact-list a { color: var(--hx-cyan); }
+    .hx-form { background: var(--hx-panel); border: 1px solid var(--hx-line); padding: clamp(28px, 4vw, 42px); display: grid; gap: 16px; position: relative; }
+    .hx-form::before, .hx-form::after { content: ""; position: absolute; width: 18px; height: 18px; border: 2px solid var(--hx-magenta); }
+    .hx-form::before { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+    .hx-form::after { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+    .hx-form-head { margin: 0; font-family: var(--hx-mono); font-size: 12px; letter-spacing: 0.3em; color: var(--hx-magenta); }
+    .hx-form label { display: grid; gap: 8px; font-family: var(--hx-mono); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--hx-dim); }
+    .hx-form input, .hx-form select, .hx-form textarea {
+      font-family: var(--hx-mono); font-size: 15px; color: var(--hx-text);
+      background: #02040A; border: 1px solid var(--hx-line); padding: 14px 16px; width: 100%;
+    }
+    .hx-form input:focus, .hx-form select:focus, .hx-form textarea:focus { outline: none; border-color: var(--hx-cyan); box-shadow: 0 0 14px rgba(0, 240, 255, 0.25); }
+    .hx-form textarea { resize: vertical; }
+    .hx-form-note { margin: 0; font-family: var(--hx-mono); font-size: 14px; color: var(--hx-cyan); }
+    .hx-form-note:empty { display: none; }
+
+    /* footer */
+    .hx-footer { border-top: 1px solid var(--hx-line); padding: 70px 0 90px; text-align: center; background: #02040A; }
+    .hx-footer-logo {
+      font-family: var(--hx-display); font-weight: 900; font-size: clamp(3rem, 12vw, 8rem); letter-spacing: 0.1em; margin: 0 0 24px;
+      background: linear-gradient(180deg, var(--hx-chrome1), var(--hx-chrome2)); -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .hx-footer p { margin: 0 0 10px; color: var(--hx-dim); font-family: var(--hx-mono); font-size: 13.5px; }
+    .hx-footer a { color: var(--hx-cyan); }
+
+    @media (max-width: 1020px) {
+      .hx-readouts, .hx-meters { grid-template-columns: 1fr 1fr; }
+      .hx-panels { grid-template-columns: 1fr; }
+      .hx-tiers { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; }
+      .hx-uplink-in { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 860px) {
+      .hx-burger { display: flex; }
+      .hx-sys { display: none; }
+      .hx-nav-links {
+        display: none; position: absolute; top: 100%; left: 0; right: 0;
+        background: rgba(5, 7, 13, 0.98); border-bottom: 1px solid var(--hx-line);
+        flex-direction: column; padding: 12px 20px 20px; gap: 2px;
+      }
+      .hx-nav-links.hx-open { display: flex; }
+      .hx-nav-links a { font-size: 15px; padding: 14px 10px; border-bottom: 1px solid var(--hx-line); }
+      .hx-nav { position: relative; }
+    }
+    @media (max-width: 640px) {
+      .hx-readouts { grid-template-columns: 1fr 1fr; }
+      .hx-meters { grid-template-columns: 1fr; }
+      .hx-hero-cta .hx-btn { width: 100%; }
+      .hx-terminal { font-size: 12px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hx-ticker-track, .hx-dot, .hx-caret { animation: none; }
+      .hx-btn, .hx-panel, .hx-tier, .hx-nav-links a { transition: none; }
+      .hx-btn:hover, .hx-panel:hover, .hx-tier:hover { transform: none; box-shadow: none; }
+    }
+  </style>
+</body>
+</html>
