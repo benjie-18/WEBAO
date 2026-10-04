@@ -3,7 +3,9 @@ import EscapeHatch from "../../components/demos/EscapeHatch.astro";
 
 // Demo microsite: AERIS, fictional clean-tech company, Québec City.
 // Standalone art direction. Frutiger Aero: glossy aqua, aurora gradients,
-// glass orbs, lens flares, dewy nature meets tech. Not connected to the WEBAO theme system.
+// dewy nature meets tech. Not connected to the WEBAO theme system.
+// Structure: a product page. One product (Aeris One), Apple-style: big glossy
+// visuals, feature deep-dives, a spec sheet table, minimal nav.
 const IMG = {
   hero: "/demos/aeris/01.jpg",
   chip: "/demos/aeris/02.jpg",
@@ -12,6 +14,47 @@ const IMG = {
   leaves: "/demos/aeris/03.jpg",
   wave: "https://images.unsplash.com/photo-1439405326854-014607f694d7?q=80&w=1600&auto=format&fit=crop",
 };
+
+const FEATURES = [
+  {
+    img: IMG.chip, alt: "The Helio Core chip, glowing faintly",
+    kick: "Helio Core", title: "Thinks 200 times a second",
+    copy: "A fingernail-sized chip that reads your home's energy rhythm 200 times a second and reroutes power before you waste a watt. It learns when you shower, when you charge, when the sun shows up, and quietly optimizes all of it.",
+  },
+  {
+    img: IMG.solar, alt: "Glass-gloss solar tiles catching the sun",
+    kick: "Aura glass", title: "Drinks the sun",
+    copy: "Glass-gloss solar tiles that look like a pond at noon. 22% efficiency, hail-proof, and gorgeous from the street. Your roof stops being a roof and starts being a power plant.",
+  },
+  {
+    img: IMG.hills, alt: "Green hills under a bright sky",
+    kick: "Dew Grid", title: "Shares with the street",
+    copy: "Neighbourhoods share stored sunshine through a mesh that behaves like a forest: every leaf feeds the canopy. Your surplus powers the neighbour's heat pump; theirs charges your car.",
+  },
+  {
+    img: IMG.wave, alt: "Clear water catching the light",
+    kick: "Aqua Buffer", title: "Saves summer for winter",
+    copy: "Excess summer solar becomes winter heat, stored in water tanks so efficient they feel like science fiction. February runs on July.",
+  },
+];
+
+const SPECS = [
+  ["Model", "Aeris One (2026)"],
+  ["Solar", "Aura glass tiles · 22% efficiency · hail-proof"],
+  ["Storage", "Nimbus cell · 13.5 kWh · storm-proof backup"],
+  ["Chip", "Helio Core · 200 readings per second"],
+  ["App", "Glow dashboard · iOS and Android"],
+  ["Grid", "Dew Grid mesh · share with your street"],
+  ["Install", "2 days · certified crew · zero roof damage"],
+  ["Warranty", "25 years panels · 10 years battery"],
+];
+
+const IMPACT = [
+  ["41 GWh", "clean energy shared"],
+  ["18,400 t", "of CO₂ avoided"],
+  ["96%", "would recommend us"],
+  ["3.2 yrs", "average payback"],
+];
 ---
 
 <!DOCTYPE html>
@@ -19,269 +62,162 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AERIS: Clean Tech That Feels Like Morning Dew</title>
-  <meta name="description" content="AERIS: home energy that learns, adapts, and glows. Solar roofs, smart storage, and a grid that loves nature back. Get your free energy scan." />
+  <title>Aeris One: the home energy pod · AERIS</title>
+  <meta name="description" content="Meet Aeris One: solar glass, a thinking chip, and storm-proof storage in one glowing pod. From $8,900 installed. Free energy scan." />
   <meta name="robots" content="noindex" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
 </head>
 <body class="fa">
 
-  <!-- NAV -->
+  <!-- MINIMAL NAV -->
   <header class="fa-navwrap">
     <nav class="fa-nav" aria-label="Primary">
-      <a class="fa-logo" href="#top" aria-label="AERIS, home">
-        <span class="fa-orb-logo" aria-hidden="true"></span>
-        <span>AERIS</span>
-      </a>
-      <div class="fa-nav-links">
-        <a href="#tech">Technology</a>
-        <a href="#products">Products</a>
-        <a href="#impact">Impact</a>
-        <a href="#plans">Plans</a>
-      </div>
-      <a class="fa-gel fa-gel-small" href="#contact">Free energy scan</a>
-      <button class="fa-burger" id="fa-burger" aria-expanded="false" aria-controls="fa-menu" aria-label="Open menu">
-        <span></span><span></span><span></span>
-      </button>
+      <a class="fa-logo" href="#top" aria-label="AERIS, home">AERIS</a>
+      <a class="fa-nav-product" href="#one">Aeris One</a>
+      <a class="fa-nav-link" href="#specs">Specs</a>
+      <a class="fa-buy" href="#buy">Buy</a>
     </nav>
-    <div class="fa-menu" id="fa-menu" hidden>
-      <a href="#tech">Technology</a>
-      <a href="#products">Products</a>
-      <a href="#impact">Impact</a>
-      <a href="#plans">Plans</a>
-      <a class="fa-gel" href="#contact">Free energy scan</a>
-    </div>
   </header>
 
   <main id="top">
-    <!-- HERO -->
-    <section class="fa-hero">
-      <div class="fa-hero-bg" aria-hidden="true">
-        <img src={IMG.hero} alt="Glossy water droplets beading on a vivid green leaf" loading="eager" fetchpriority="high" />
-      </div>
-      <div class="fa-aurora" aria-hidden="true"></div>
-      <div class="fa-orb fa-orb-1" aria-hidden="true"></div>
-      <div class="fa-orb fa-orb-2" aria-hidden="true"></div>
-      <div class="fa-orb fa-orb-3" aria-hidden="true"></div>
-      <div class="fa-flare" aria-hidden="true"></div>
-      <div class="fa-hero-in">
-        <div class="fa-glass-card">
-          <p class="fa-eyebrow">CLEAN TECH · EST. 2024 · QUÉBEC CITY</p>
-          <h1 class="fa-h1">Energy that feels<br />like <em>morning dew</em></h1>
-          <p class="fa-lede">AERIS learns how your home breathes, then powers it with sun, wind, and storage, all wrapped in one glowing dashboard. Cheaper bills. Lighter footprint. Zero homework.</p>
-          <div class="fa-hero-cta">
-            <a class="fa-gel" href="#contact">Get my free scan</a>
-            <a class="fa-gel fa-gel-ghost" href="#products">See the products</a>
-          </div>
-          <div class="fa-hero-stats">
-            <div><strong>38%</strong><span>avg. bill drop</span></div>
-            <div><strong>12k</strong><span>homes powered</span></div>
-            <div><strong>0</strong><span>blackouts in 2025</span></div>
-          </div>
+    <!-- PRODUCT HERO -->
+    <section class="fa-hero" id="one" aria-label="Aeris One">
+      <div class="fa-hero-bg" aria-hidden="true"><img src={IMG.hero} alt="" loading="eager" fetchpriority="high" /></div>
+      <div class="fa-wrap fa-hero-in">
+        <p class="fa-new">New</p>
+        <h1 class="fa-h1">Aeris One</h1>
+        <p class="fa-tagline">Energy that feels like morning dew.</p>
+        <p class="fa-price">From $8,900 installed</p>
+        <div class="fa-hero-cta">
+          <a class="fa-btn-gloss" href="#buy">Buy Aeris One</a>
+          <a class="fa-link" href="#specs">See the specs ↓</a>
         </div>
+      </div>
+      <div class="fa-bubbles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+    </section>
+
+    <!-- HIGHLIGHTS -->
+    <section class="fa-highlights" aria-label="Aeris One highlights">
+      <div class="fa-wrap fa-hl-row">
+        <div><strong>38%</strong><span>avg. bill drop</span></div>
+        <div><strong>12k</strong><span>homes powered</span></div>
+        <div><strong>0</strong><span>blackouts in 2025</span></div>
       </div>
     </section>
 
-    <!-- TECHNOLOGY -->
-    <section class="fa-section" id="tech">
+    <!-- FEATURE DEEP DIVES -->
+    <section class="fa-features" aria-label="Features">
       <div class="fa-wrap">
         <p class="fa-kicker">Under the glass</p>
-        <h2 class="fa-h2">Tech that <em>photosynthesizes</em></h2>
-        <div class="fa-panels">
-          <article class="fa-panel">
-            <div class="fa-panel-img"><img src={IMG.chip} alt="Close-up of a glowing AERIS energy chip" loading="lazy" /></div>
-            <div class="fa-panel-body">
-              <h3>Helio Core</h3>
-              <p>A fingernail-sized chip that reads your home's energy rhythm 200 times a second and reroutes power before you waste a watt.</p>
-            </div>
-          </article>
-          <article class="fa-panel">
-            <div class="fa-panel-img"><img src={IMG.leaves} alt="Dew drops sparkling on a green leaf in morning light" loading="lazy" /></div>
-            <div class="fa-panel-body">
-              <h3>Dew Grid</h3>
-              <p>Neighbourhoods share stored sunshine through a mesh that behaves like a forest: every leaf feeds the canopy.</p>
-            </div>
-          </article>
-          <article class="fa-panel">
-            <div class="fa-panel-img"><img src={IMG.wave} alt="Crystalline ocean wave curling in sunlight" loading="lazy" /></div>
-            <div class="fa-panel-body">
-              <h3>Aqua Buffer</h3>
-              <p>Excess summer solar becomes winter heat, stored in water tanks so efficient they feel like science fiction.</p>
-            </div>
-          </article>
-        </div>
+        <h2 class="fa-h2">One pod.<br />Four superpowers.</h2>
       </div>
+      {FEATURES.map((f, i) => (
+        <div class={"fa-feat" + (i % 2 === 1 ? " fa-feat-flip" : "")}>
+          <div class="fa-feat-media"><img src={f.img} alt={f.alt} loading="lazy" /></div>
+          <div class="fa-feat-copy">
+            <p class="fa-feat-kick">{f.kick}</p>
+            <h3>{f.title}</h3>
+            <p>{f.copy}</p>
+          </div>
+        </div>
+      ))}
     </section>
 
-    <!-- PRODUCTS -->
-    <section class="fa-products" id="products">
-      <div class="fa-wrap">
-        <p class="fa-kicker">The lineup</p>
-        <h2 class="fa-h2">Shiny things for a <em>greener</em> home</h2>
-        <div class="fa-prod-grid">
-          <article class="fa-prod">
-            <img src={IMG.solar} alt="AERIS solar panels glinting on a bright roof" loading="lazy" />
-            <div class="fa-prod-body">
-              <span class="fa-badge">Best seller</span>
-              <h3>Aura Roof</h3>
-              <p>Glass-gloss solar tiles that look like a pond at noon. 22% efficiency, hail-proof, gorgeous from the street.</p>
-              <p class="fa-prod-price">from $8,900 <span>installed</span></p>
-            </div>
-          </article>
-          <article class="fa-prod">
-            <img src={IMG.hills} alt="Green rolling hills under a clear blue sky" loading="lazy" />
-            <div class="fa-prod-body">
-              <span class="fa-badge fa-badge-green">New</span>
-              <h3>Nimbus Pack</h3>
-              <p>A wall battery with the footprint of a poster frame. Stores a full sunny day for a stormy week.</p>
-              <p class="fa-prod-price">from $4,200 <span>installed</span></p>
-            </div>
-          </article>
-        </div>
+    <!-- SPEC SHEET -->
+    <section class="fa-specs" id="specs">
+      <div class="fa-wrap-narrow">
+        <p class="fa-kicker">Tech specs</p>
+        <h2 class="fa-h2">The fine print,<br />made fine.</h2>
+        <table class="fa-table">
+          <caption class="fa-sr">Aeris One technical specifications</caption>
+          <tbody>
+            {SPECS.map((s) => (
+              <tr><th scope="row">{s[0]}</th><td>{s[1]}</td></tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </section>
 
     <!-- IMPACT -->
-    <section class="fa-impact" id="impact">
+    <section class="fa-impact" aria-label="Impact">
+      <div class="fa-impact-bg" aria-hidden="true"><img src={IMG.leaves} alt="" loading="lazy" /></div>
       <div class="fa-wrap fa-impact-in">
-        <div>
-          <p class="fa-kicker">Proof, not promises</p>
-          <h2 class="fa-h2">Numbers that <em>sparkle</em></h2>
-          <p class="fa-copy">Every AERIS home reports back (anonymously) so the whole grid gets smarter. Here is what 12,000 homes did last year.</p>
-          <a class="fa-gel" href="#contact">Join the grid</a>
-        </div>
-        <div class="fa-counters">
-          <div class="fa-counter"><strong>41 GWh</strong><span>clean energy shared</span></div>
-          <div class="fa-counter"><strong>18,400 t</strong><span>CO₂ avoided</span></div>
-          <div class="fa-counter"><strong>96%</strong><span>would recommend us</span></div>
-          <div class="fa-counter"><strong>3.2 yrs</strong><span>average payback</span></div>
+        <h2 class="fa-h2 fa-h2-light">12,000 homes.<br />One smarter grid.</h2>
+        <p class="fa-impact-sub">Every Aeris home reports back (anonymously) so the whole grid gets smarter. Here is what the fleet did last year.</p>
+        <div class="fa-impact-row">
+          {IMPACT.map((s) => (
+            <div><strong>{s[0]}</strong><span>{s[1]}</span></div>
+          ))}
         </div>
       </div>
     </section>
 
-    <!-- PLANS -->
-    <section class="fa-section" id="plans">
-      <div class="fa-wrap">
-        <p class="fa-kicker">Simple as water</p>
-        <h2 class="fa-h2">Pick your <em>current</em></h2>
-        <div class="fa-tiers">
-          <article class="fa-tier">
-            <h3>Breeze</h3>
-            <p class="fa-tier-price">$29<span>/mo</span></p>
-            <p class="fa-tier-sub">Renters and small condos</p>
-            <ul>
-              <li>Helio Core plug-in monitor</li>
-              <li>Glow dashboard app</li>
-              <li>Monthly savings report</li>
-            </ul>
-            <a class="fa-gel fa-gel-ghost" href="#contact">Start light</a>
-          </article>
-          <article class="fa-tier fa-tier-hot">
-            <span class="fa-badge">Most popular</span>
-            <h3>Stream</h3>
-            <p class="fa-tier-price">$59<span>/mo</span></p>
-            <p class="fa-tier-sub">Family homes, full control</p>
-            <ul>
-              <li>Everything in Breeze</li>
-              <li>Nimbus Pack battery lease</li>
-              <li>Dew Grid sharing credits</li>
-              <li>Storm-proof backup mode</li>
-            </ul>
-            <a class="fa-gel" href="#contact">Go with the flow</a>
-          </article>
-          <article class="fa-tier">
-            <h3>River</h3>
-            <p class="fa-tier-price">$119<span>/mo</span></p>
-            <p class="fa-tier-sub">Estates and small business</p>
-            <ul>
-              <li>Everything in Stream</li>
-              <li>Aura Roof priority install</li>
-              <li>Aqua Buffer heat storage</li>
-              <li>Dedicated energy coach</li>
-            </ul>
-            <a class="fa-gel fa-gel-ghost" href="#contact">Make waves</a>
-          </article>
+    <!-- BUY -->
+    <section class="fa-buysec" id="buy">
+      <div class="fa-wrap-narrow">
+        <p class="fa-kicker">Free, no strings</p>
+        <h2 class="fa-h2">Start with a scan.</h2>
+        <p class="fa-buy-sub">Answer four questions and our Helio model will sketch your home's solar potential, in plain words, within 24 hours. Then decide.</p>
+        <div class="fa-buybox">
+          <div class="fa-buybox-price">
+            <p class="fa-buybox-name">Aeris One</p>
+            <p class="fa-buybox-amount">From $8,900 <span>installed</span></p>
+            <p class="fa-buybox-fine">0% financing available · 25-year panel warranty</p>
+          </div>
+          <form class="fa-form" id="fa-form" novalidate>
+            <h3>Your free energy scan</h3>
+            <label>Name<input type="text" name="name" required placeholder="Alex Tremblay" /></label>
+            <label>Email<input type="email" name="email" required placeholder="alex@example.com" /></label>
+            <div class="fa-form-row">
+              <label>Home type
+                <select name="home">
+                  <option>Single-family house</option>
+                  <option>Condo / apartment</option>
+                  <option>Duplex / triplex</option>
+                  <option>Small business</option>
+                </select>
+              </label>
+              <label>Roof sun exposure
+                <select name="sun">
+                  <option>Lots of sun</option>
+                  <option>Some shade</option>
+                  <option>Mostly shaded</option>
+                  <option>No idea, surprise me</option>
+                </select>
+              </label>
+            </div>
+            <button class="fa-btn-gloss fa-btn-full" type="submit">Scan my home</button>
+            <p class="fa-form-note" role="status" aria-live="polite"></p>
+          </form>
         </div>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section class="fa-contact" id="contact">
-      <div class="fa-wrap fa-contact-in">
-        <div class="fa-glass-card">
-          <p class="fa-kicker">Free, no strings</p>
-          <h2 class="fa-h2">Your home's <em>energy scan</em></h2>
-          <p class="fa-copy">Answer four questions and our Helio model will sketch your home's solar potential, in plain words, within 24 hours.</p>
-          <address class="fa-addr">
-            88, rue de l'Aurore<br />
-            Québec City, QC G1K 2B7<br />
-            <a href="tel:+14185550193">(418) 555-0193</a><br />
-            <a href="mailto:hello@aeristech.ca">hello@aeristech.ca</a>
-          </address>
-        </div>
-        <form class="fa-form" id="fa-form" novalidate>
-          <h3>Start your scan</h3>
-          <label>Name<input type="text" name="name" required placeholder="Léa Morin" /></label>
-          <label>Email<input type="email" name="email" required placeholder="lea@example.com" /></label>
-          <label>Home type
-            <select name="home">
-              <option>Single-family house</option>
-              <option>Condo / apartment</option>
-              <option>Duplex / triplex</option>
-              <option>Small business</option>
-            </select>
-          </label>
-          <label>Roof sun exposure
-            <select name="sun">
-              <option>Lots of sun</option>
-              <option>Some shade</option>
-              <option>Mostly shaded</option>
-              <option>No idea, surprise me</option>
-            </select>
-          </label>
-          <button class="fa-gel" type="submit">Scan my home</button>
-          <p class="fa-form-note" role="status" aria-live="polite"></p>
-        </form>
+        <address class="fa-address">
+          88, rue de l'Aurore, Québec City, QC G1K 2B7<br />
+          <a href="tel:+14185550193">(418) 555-0193</a> · <a href="mailto:hello@aeristech.ca">hello@aeristech.ca</a>
+        </address>
       </div>
     </section>
   </main>
 
   <footer class="fa-footer">
     <div class="fa-wrap fa-footer-in">
-      <p class="fa-footer-logo" aria-hidden="true">AERIS</p>
-      <p>© 2026 AERIS Technologies. Fictional demo company. No watts were harmed.</p>
-      <p>88, rue de l'Aurore, Québec City QC · <a href="tel:+14185550193">(418) 555-0193</a> · <a href="mailto:hello@aeristech.ca">hello@aeristech.ca</a></p>
+      <p class="fa-footer-logo">AERIS</p>
+      <p>© 2026 AERIS. Fictional demo. The future is dewy.</p>
     </div>
   </footer>
 
   <EscapeHatch locale="en" />
 
   <script>
+    // Demo form: never submits anywhere
     (function () {
-      const burger = document.getElementById('fa-burger');
-      const menu = document.getElementById('fa-menu');
-      if (burger && menu) {
-        burger.addEventListener('click', function () {
-          var open = menu.hasAttribute('hidden');
-          if (open) { menu.removeAttribute('hidden'); } else { menu.setAttribute('hidden', ''); }
-          burger.setAttribute('aria-expanded', String(open));
-          burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
-        });
-        menu.querySelectorAll('a').forEach(function (a) {
-          a.addEventListener('click', function () {
-            menu.setAttribute('hidden', '');
-            burger.setAttribute('aria-expanded', 'false');
-            burger.setAttribute('aria-label', 'Open menu');
-          });
-        });
-      }
       var form = document.getElementById('fa-form') as HTMLFormElement | null;
       form?.addEventListener('submit', function (e) {
         e.preventDefault();
         var note = form?.querySelector('.fa-form-note');
-        if (note) note.textContent = 'Scan requested! Your personalized energy sketch will land in your inbox within 24 hours.';
+        if (note) note.textContent = 'Scan requested. Our Helio model will sketch your solar potential within 24 hours.';
         form?.reset();
       });
     })();
@@ -292,7 +228,6 @@ const IMG = {
       --fa-aqua: #4FC3F7;
       --fa-aqua-deep: #29A9E0;
       --fa-green: #7ED957;
-      --fa-green-deep: #4CAF50;
       --fa-teal: #0B3D4A;
       --fa-teal-deep: #072A33;
       --fa-white: #FFFFFF;
@@ -300,7 +235,7 @@ const IMG = {
       --fa-ink: #0E2A33;
       --fa-sans: "Nunito", "Segoe UI", system-ui, sans-serif;
       margin: 0;
-      background: linear-gradient(180deg, #EAF7FD 0%, #D8F0FB 30%, #EAF7FD 100%);
+      background: linear-gradient(180deg, #F4FBFF 0%, #E4F4FC 40%, #F4FBFF 100%);
       color: var(--fa-ink);
       font-family: var(--fa-sans);
       -webkit-font-smoothing: antialiased;
@@ -308,277 +243,144 @@ const IMG = {
     }
     .fa *, .fa *::before, .fa *::after { box-sizing: border-box; }
     .fa img { display: block; max-width: 100%; }
-    .fa-wrap { max-width: 1180px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px); }
+    .fa-wrap { max-width: 1120px; margin: 0 auto; padding: 0 clamp(22px, 4vw, 44px); }
+    .fa-wrap-narrow { max-width: 760px; margin: 0 auto; padding: 0 clamp(22px, 4vw, 44px); }
+    .fa-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-    .fa-kicker {
-      font-weight: 900; font-size: 0.85rem; letter-spacing: 0.28em; text-transform: uppercase;
-      color: var(--fa-aqua-deep); margin: 0 0 14px;
+    /* minimal nav */
+    .fa-navwrap { position: sticky; top: 0; z-index: 60; background: rgba(255, 255, 255, 0.72); backdrop-filter: blur(18px) saturate(1.6); border-bottom: 1px solid rgba(11, 61, 74, 0.1); }
+    .fa-nav { display: flex; align-items: center; gap: 30px; max-width: 1120px; margin: 0 auto; padding: 14px clamp(22px, 4vw, 44px); }
+    .fa-logo { font-weight: 900; font-size: 19px; letter-spacing: 0.14em; color: var(--fa-ink); text-decoration: none; margin-right: auto; }
+    .fa-nav-product { font-weight: 800; font-size: 14.5px; color: var(--fa-ink); text-decoration: none; }
+    .fa-nav-link { font-weight: 700; font-size: 14.5px; color: #4A6B76; text-decoration: none; }
+    .fa-nav-link:hover, .fa-nav-product:hover { color: var(--fa-aqua-deep); }
+    .fa-buy {
+      font-weight: 800; font-size: 14px; color: #fff; text-decoration: none;
+      background: linear-gradient(180deg, var(--fa-aqua), var(--fa-aqua-deep));
+      padding: 10px 26px; border-radius: 999px; box-shadow: 0 6px 18px rgba(41, 169, 224, 0.4), inset 0 1px 0 rgba(255,255,255,0.5);
     }
-    .fa-h1 { font-size: clamp(2.6rem, 6.5vw, 4.8rem); line-height: 1.04; font-weight: 900; margin: 0 0 20px; letter-spacing: -0.01em; }
-    .fa-h2 { font-size: clamp(2rem, 4.8vw, 3.2rem); font-weight: 900; margin: 0 0 26px; line-height: 1.08; }
-    .fa-h1 em, .fa-h2 em { font-style: normal; background: linear-gradient(100deg, var(--fa-aqua-deep), var(--fa-green-deep)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .fa-lede { font-size: 1.1rem; line-height: 1.7; color: #2C4A55; max-width: 46ch; margin: 0 0 28px; font-weight: 600; }
-    .fa-copy { font-size: 1.05rem; line-height: 1.7; color: #2C4A55; margin: 0 0 22px; max-width: 50ch; font-weight: 600; }
+    .fa-buy:hover { filter: brightness(1.06); }
 
-    /* gel buttons */
-    .fa-gel {
-      display: inline-flex; align-items: center; justify-content: center;
-      font-family: var(--fa-sans); font-weight: 800; font-size: 1rem;
-      color: #fff; text-decoration: none; cursor: pointer; border: none;
-      padding: 15px 36px; border-radius: 999px;
-      background: linear-gradient(180deg, #7ED957 0%, #4FC3F7 100%);
-      box-shadow:
-        inset 0 2px 3px rgba(255, 255, 255, 0.75),
-        inset 0 -3px 6px rgba(11, 61, 74, 0.25),
-        0 8px 22px rgba(79, 195, 247, 0.45);
-      text-shadow: 0 1px 2px rgba(11, 61, 74, 0.3);
-      transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
-      position: relative; overflow: hidden;
-    }
-    .fa-gel::before {
-      content: ""; position: absolute; top: 3px; left: 8%; right: 8%; height: 42%;
-      border-radius: 999px; background: linear-gradient(180deg, rgba(255,255,255,0.65), rgba(255,255,255,0));
-      pointer-events: none;
-    }
-    .fa-gel:hover { transform: translateY(-2px) scale(1.02); filter: brightness(1.05); box-shadow: inset 0 2px 3px rgba(255,255,255,0.75), inset 0 -3px 6px rgba(11,61,74,0.25), 0 12px 28px rgba(79,195,247,0.55); }
-    .fa-gel-ghost {
-      background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(234,247,253,0.9));
-      color: var(--fa-teal); text-shadow: none;
-      box-shadow: inset 0 2px 3px rgba(255,255,255,0.9), inset 0 -2px 5px rgba(79,195,247,0.25), 0 6px 18px rgba(79,195,247,0.3);
-      border: 1px solid rgba(79, 195, 247, 0.5);
-    }
-    .fa-gel-small { padding: 11px 26px; font-size: 0.92rem; }
-
-    /* nav */
-    .fa-navwrap { position: fixed; top: 0; left: 0; right: 0; z-index: 60; }
-    .fa-nav {
-      display: flex; align-items: center; gap: 22px;
-      padding: 12px clamp(20px, 4vw, 40px);
-      background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(234,247,253,0.75));
-      backdrop-filter: blur(14px);
-      border-bottom: 1px solid rgba(79, 195, 247, 0.35);
-      box-shadow: 0 4px 18px rgba(79, 195, 247, 0.15);
-    }
-    .fa-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--fa-teal); font-weight: 900; font-size: 1.5rem; letter-spacing: 0.12em; margin-right: auto; }
-    .fa-orb-logo {
-      width: 34px; height: 34px; border-radius: 50%;
-      background: radial-gradient(circle at 32% 28%, #ffffff 0%, #BDEBFF 18%, #4FC3F7 45%, #0B3D4A 100%);
-      box-shadow: inset -3px -5px 8px rgba(11,61,74,0.4), 0 4px 12px rgba(79,195,247,0.5);
-    }
-    .fa-nav-links { display: flex; gap: 4px; }
-    .fa-nav-links a { color: var(--fa-teal); text-decoration: none; font-weight: 800; font-size: 0.98rem; padding: 10px 15px; border-radius: 999px; }
-    .fa-nav-links a:hover { background: rgba(79, 195, 247, 0.18); }
-    .fa-burger { display: none; background: none; border: none; cursor: pointer; padding: 10px; }
-    .fa-burger span { display: block; width: 26px; height: 3px; border-radius: 3px; background: var(--fa-teal); margin: 5px 0; }
-    .fa-menu { display: none; }
-
-    /* hero */
-    .fa-hero { position: relative; min-height: 100svh; display: flex; align-items: center; overflow: hidden; padding: 130px 0 70px; }
+    /* product hero */
+    .fa-hero { position: relative; min-height: 92svh; display: flex; align-items: center; overflow: hidden; }
     .fa-hero-bg { position: absolute; inset: 0; }
     .fa-hero-bg img { width: 100%; height: 100%; object-fit: cover; }
     .fa-hero-bg::after {
       content: ""; position: absolute; inset: 0;
-      background: linear-gradient(100deg, rgba(234, 247, 253, 0.92) 20%, rgba(234, 247, 253, 0.45) 55%, rgba(11, 61, 74, 0.25) 100%);
+      background: linear-gradient(180deg, rgba(234, 247, 253, 0.75) 0%, rgba(234, 247, 253, 0.25) 45%, rgba(234, 247, 253, 0.92) 100%);
     }
-    .fa-aurora {
-      position: absolute; inset: -10%;
-      background:
-        radial-gradient(ellipse 45% 30% at 20% 15%, rgba(126, 217, 87, 0.5), transparent 70%),
-        radial-gradient(ellipse 50% 32% at 75% 25%, rgba(79, 195, 247, 0.55), transparent 70%),
-        radial-gradient(ellipse 40% 28% at 50% 85%, rgba(79, 195, 247, 0.35), transparent 70%);
-      animation: fa-aurora 14s ease-in-out infinite alternate;
-      pointer-events: none;
+    .fa-hero-in { position: relative; text-align: center; padding-top: 60px; padding-bottom: 60px; }
+    .fa-new { font-weight: 800; font-size: 15px; color: var(--fa-aqua-deep); letter-spacing: 0.2em; text-transform: uppercase; margin: 0 0 14px; }
+    .fa-h1 { font-size: clamp(3.6rem, 12vw, 7.5rem); font-weight: 900; letter-spacing: -0.02em; margin: 0 0 12px; color: var(--fa-teal-deep); text-shadow: 0 2px 30px rgba(255,255,255,0.8); }
+    .fa-tagline { font-size: clamp(1.4rem, 3.4vw, 2rem); font-weight: 700; color: var(--fa-teal); margin: 0 0 10px; }
+    .fa-price { font-size: 17px; font-weight: 600; color: #4A6B76; margin: 0 0 34px; }
+    .fa-hero-cta { display: flex; gap: 26px; align-items: center; justify-content: center; flex-wrap: wrap; }
+    .fa-btn-gloss {
+      display: inline-block; font-weight: 800; font-size: 17px; color: #fff; text-decoration: none; cursor: pointer; border: none; font-family: var(--fa-sans);
+      background: linear-gradient(180deg, #6FD3F9 0%, var(--fa-aqua-deep) 55%, #1E96CE 100%);
+      padding: 17px 44px; border-radius: 999px;
+      box-shadow: 0 12px 32px rgba(41, 169, 224, 0.45), inset 0 2px 2px rgba(255,255,255,0.55), inset 0 -3px 6px rgba(7, 42, 51, 0.25);
+      transition: transform 0.15s ease, filter 0.15s ease;
     }
-    @keyframes fa-aurora { to { transform: translate(4%, 6%) scale(1.06); opacity: 0.85; } }
-    .fa-orb { position: absolute; border-radius: 50%; pointer-events: none; animation: fa-float 9s ease-in-out infinite; }
-    .fa-orb::after {
-      content: ""; position: absolute; top: 12%; left: 16%; width: 34%; height: 22%;
-      border-radius: 50%; background: radial-gradient(ellipse, rgba(255,255,255,0.95), rgba(255,255,255,0));
-      transform: rotate(-24deg);
-    }
-    .fa-orb-1 { width: 150px; height: 150px; top: 14%; right: 8%; background: radial-gradient(circle at 32% 28%, #ffffff 0%, #BDEBFF 22%, #4FC3F7 55%, #0B3D4A 110%); box-shadow: inset -8px -12px 24px rgba(11,61,74,0.45), 0 10px 30px rgba(79,195,247,0.5); }
-    .fa-orb-2 { width: 92px; height: 92px; bottom: 18%; right: 26%; background: radial-gradient(circle at 32% 28%, #ffffff 0%, #DFF5C8 22%, #7ED957 55%, #2E7D32 115%); box-shadow: inset -6px -9px 18px rgba(46,125,50,0.45), 0 8px 24px rgba(126,217,87,0.5); animation-delay: -3s; }
-    .fa-orb-3 { width: 60px; height: 60px; top: 46%; right: 16%; background: radial-gradient(circle at 32% 28%, #ffffff 0%, #BDEBFF 25%, #4FC3F7 60%, #0B3D4A 115%); box-shadow: inset -4px -6px 12px rgba(11,61,74,0.4), 0 6px 18px rgba(79,195,247,0.45); animation-delay: -6s; }
-    @keyframes fa-float { 50% { transform: translateY(-26px); } }
-    .fa-flare {
-      position: absolute; top: 8%; left: 55%; width: 220px; height: 220px; pointer-events: none;
-      background: radial-gradient(circle, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.25) 28%, transparent 60%);
-      animation: fa-flare 7s ease-in-out infinite alternate;
-    }
-    @keyframes fa-flare { to { opacity: 0.55; transform: scale(1.2); } }
-    .fa-hero-in { position: relative; z-index: 2; width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px); }
-    .fa-glass-card {
-      max-width: 620px; padding: clamp(30px, 4vw, 48px);
-      background: linear-gradient(160deg, rgba(255,255,255,0.72), rgba(234,247,253,0.55));
-      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-      border-radius: 32px; border: 1px solid rgba(255,255,255,0.8);
-      box-shadow: inset 0 2px 6px rgba(255,255,255,0.8), inset 0 -3px 10px rgba(79,195,247,0.35), 0 20px 50px rgba(11,61,74,0.18);
-      position: relative; overflow: hidden;
-    }
-    .fa-glass-card::before {
-      content: ""; position: absolute; top: 0; left: 6%; right: 6%; height: 46%;
-      background: linear-gradient(180deg, rgba(255,255,255,0.5), rgba(255,255,255,0));
-      border-radius: 0 0 50% 50% / 0 0 24px 24px; pointer-events: none;
-    }
-    .fa-eyebrow { font-weight: 900; font-size: 0.8rem; letter-spacing: 0.3em; color: var(--fa-aqua-deep); margin: 0 0 18px; }
-    .fa-hero-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 30px; }
-    .fa-hero-stats { display: flex; gap: clamp(18px, 4vw, 44px); flex-wrap: wrap; }
-    .fa-hero-stats div { display: grid; gap: 2px; }
-    .fa-hero-stats strong { font-size: 1.9rem; font-weight: 900; color: var(--fa-teal); }
-    .fa-hero-stats span { font-size: 0.85rem; font-weight: 700; color: #4A6B77; text-transform: uppercase; letter-spacing: 0.06em; }
+    .fa-btn-gloss:hover { transform: translateY(-2px); filter: brightness(1.05); }
+    .fa-link { font-weight: 800; font-size: 17px; color: var(--fa-aqua-deep); text-decoration: none; }
+    .fa-link:hover { text-decoration: underline; }
+    .fa-bubbles i { position: absolute; border-radius: 50%; background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(79,195,247,0.35)); border: 1px solid rgba(255,255,255,0.7); animation: fa-float 9s ease-in-out infinite; }
+    .fa-bubbles i:nth-child(1) { width: 70px; height: 70px; left: 8%; bottom: 12%; }
+    .fa-bubbles i:nth-child(2) { width: 44px; height: 44px; left: 16%; bottom: 30%; animation-delay: -2s; }
+    .fa-bubbles i:nth-child(3) { width: 90px; height: 90px; right: 10%; bottom: 18%; animation-delay: -4s; }
+    .fa-bubbles i:nth-child(4) { width: 36px; height: 36px; right: 22%; bottom: 40%; animation-delay: -6s; }
+    .fa-bubbles i:nth-child(5) { width: 56px; height: 56px; left: 46%; bottom: 8%; animation-delay: -3s; }
+    @keyframes fa-float { 50% { transform: translateY(-46px); } }
 
-    /* sections */
-    .fa-section { padding: clamp(70px, 9vw, 120px) 0; }
+    /* highlights */
+    .fa-highlights { padding: 56px 0; }
+    .fa-hl-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: center; }
+    .fa-hl-row div { display: grid; gap: 6px; }
+    .fa-hl-row strong { font-size: clamp(2.4rem, 5vw, 3.6rem); font-weight: 900; color: var(--fa-teal-deep); letter-spacing: -0.02em; }
+    .fa-hl-row span { font-weight: 700; font-size: 14.5px; color: #4A6B76; }
 
-    /* tech panels */
-    .fa-panels { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 36px; }
-    .fa-panel {
-      border-radius: 28px; overflow: hidden; background: rgba(255,255,255,0.65);
-      backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.9);
-      box-shadow: inset 0 2px 5px rgba(255,255,255,0.9), 0 16px 40px rgba(11,61,74,0.14);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .fa-panel:hover { transform: translateY(-8px); box-shadow: inset 0 2px 5px rgba(255,255,255,0.9), 0 24px 50px rgba(79,195,247,0.3); }
-    .fa-panel-img { height: 210px; overflow: hidden; position: relative; }
-    .fa-panel-img::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255,255,255,0.25), transparent 40%); }
-    .fa-panel-img img { width: 100%; height: 100%; object-fit: cover; }
-    .fa-panel-body { padding: 26px 26px 30px; }
-    .fa-panel h3 { font-size: 1.45rem; font-weight: 900; margin: 0 0 10px; color: var(--fa-teal); }
-    .fa-panel p { margin: 0; color: #2C4A55; font-weight: 600; line-height: 1.65; font-size: 0.98rem; }
+    /* features */
+    .fa-features { padding: clamp(40px, 6vw, 90px) 0; }
+    .fa-kicker { font-weight: 800; font-size: 14px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--fa-aqua-deep); margin: 0 0 16px; }
+    .fa-h2 { font-size: clamp(2.4rem, 6vw, 4.2rem); font-weight: 900; letter-spacing: -0.02em; line-height: 1.02; margin: 0 0 20px; color: var(--fa-teal-deep); }
+    .fa-h2-light { color: #fff; text-shadow: 0 2px 24px rgba(7, 42, 51, 0.5); }
+    .fa-feat { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 6vw, 90px); align-items: center; max-width: 1120px; margin: 0 auto; padding: clamp(40px, 6vw, 80px) clamp(22px, 4vw, 44px); }
+    .fa-feat-flip .fa-feat-media { order: 2; }
+    .fa-feat-media img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 28px; box-shadow: 0 30px 80px rgba(11, 61, 74, 0.22), inset 0 2px 0 rgba(255,255,255,0.6); }
+    .fa-feat-kick { font-weight: 800; font-size: 14px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--fa-aqua-deep); margin: 0 0 14px; }
+    .fa-feat-copy h3 { font-size: clamp(1.9rem, 4vw, 2.8rem); font-weight: 900; letter-spacing: -0.01em; margin: 0 0 16px; color: var(--fa-teal-deep); }
+    .fa-feat-copy p:last-child { font-size: 18px; line-height: 1.75; color: #33505B; margin: 0; max-width: 44ch; }
 
-    /* products */
-    .fa-products {
-      background: linear-gradient(180deg, rgba(11,61,74,0.06), rgba(79,195,247,0.12));
-      border-block: 1px solid rgba(79,195,247,0.3);
-      padding: clamp(70px, 9vw, 120px) 0;
-    }
-    .fa-prod-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; margin-top: 36px; }
-    .fa-prod {
-      display: grid; grid-template-columns: 1fr 1fr; border-radius: 28px; overflow: hidden;
-      background: rgba(255,255,255,0.7); backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.9);
-      box-shadow: inset 0 2px 5px rgba(255,255,255,0.9), 0 16px 40px rgba(11,61,74,0.14);
-    }
-    .fa-prod img { width: 100%; height: 100%; min-height: 280px; object-fit: cover; }
-    .fa-prod-body { padding: 30px; display: grid; gap: 10px; align-content: center; }
-    .fa-badge {
-      justify-self: start; font-size: 0.78rem; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase;
-      color: #fff; background: linear-gradient(180deg, #4FC3F7, #29A9E0);
-      padding: 7px 16px; border-radius: 999px;
-      box-shadow: inset 0 1px 2px rgba(255,255,255,0.7), 0 4px 12px rgba(79,195,247,0.4);
-    }
-    .fa-badge-green { background: linear-gradient(180deg, #7ED957, #4CAF50); box-shadow: inset 0 1px 2px rgba(255,255,255,0.7), 0 4px 12px rgba(126,217,87,0.4); }
-    .fa-prod h3 { font-size: 1.7rem; font-weight: 900; margin: 0; color: var(--fa-teal); }
-    .fa-prod p { margin: 0; color: #2C4A55; font-weight: 600; line-height: 1.65; }
-    .fa-prod-price { font-size: 1.5rem; font-weight: 900; color: var(--fa-teal); }
-    .fa-prod-price span { font-size: 0.9rem; font-weight: 700; color: #4A6B77; }
+    /* spec sheet */
+    .fa-specs { padding: clamp(60px, 8vw, 110px) 0; }
+    .fa-specs .fa-kicker, .fa-specs .fa-h2 { text-align: center; }
+    .fa-table { width: 100%; border-collapse: collapse; margin-top: 40px; font-size: 16.5px; background: rgba(255,255,255,0.65); backdrop-filter: blur(8px); border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(11, 61, 74, 0.12); }
+    .fa-table th, .fa-table td { text-align: left; padding: 18px 28px; border-bottom: 1px solid rgba(11, 61, 74, 0.1); vertical-align: top; }
+    .fa-table tr:last-child th, .fa-table tr:last-child td { border-bottom: none; }
+    .fa-table th { font-weight: 800; color: var(--fa-teal-deep); white-space: nowrap; width: 34%; }
+    .fa-table td { color: #33505B; }
 
     /* impact */
-    .fa-impact {
-      background:
-        radial-gradient(ellipse 60% 45% at 15% 20%, rgba(126,217,87,0.28), transparent 70%),
-        radial-gradient(ellipse 55% 45% at 85% 80%, rgba(79,195,247,0.32), transparent 70%),
-        linear-gradient(160deg, var(--fa-teal) 0%, var(--fa-teal-deep) 100%);
-      color: #fff; padding: clamp(70px, 9vw, 120px) 0;
-    }
-    .fa-impact .fa-kicker { color: var(--fa-green); }
-    .fa-impact .fa-h2 { color: #fff; }
-    .fa-impact .fa-copy { color: #CDE9F2; }
-    .fa-impact-in { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(30px, 5vw, 70px); align-items: center; }
-    .fa-counters { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-    .fa-counter {
-      border-radius: 24px; padding: 28px;
-      background: linear-gradient(160deg, rgba(255,255,255,0.22), rgba(255,255,255,0.08));
-      border: 1px solid rgba(255,255,255,0.35);
-      box-shadow: inset 0 2px 4px rgba(255,255,255,0.35);
-      backdrop-filter: blur(10px); display: grid; gap: 6px;
-    }
-    .fa-counter strong { font-size: 2.2rem; font-weight: 900; color: #fff; text-shadow: 0 2px 8px rgba(79,195,247,0.5); }
-    .fa-counter span { font-size: 0.88rem; font-weight: 700; color: #BEE3F0; text-transform: uppercase; letter-spacing: 0.06em; }
+    .fa-impact { position: relative; padding: clamp(80px, 10vw, 140px) 0; overflow: hidden; }
+    .fa-impact-bg { position: absolute; inset: 0; }
+    .fa-impact-bg img { width: 100%; height: 100%; object-fit: cover; }
+    .fa-impact-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(7,42,51,0.55), rgba(7,42,51,0.35)); }
+    .fa-impact-in { position: relative; text-align: center; }
+    .fa-impact-sub { color: #EAF7FD; font-size: 18px; line-height: 1.7; max-width: 52ch; margin: 0 auto 44px; }
+    .fa-impact-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .fa-impact-row div { display: grid; gap: 6px; background: rgba(255,255,255,0.14); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); border-radius: 20px; padding: 28px 16px; }
+    .fa-impact-row strong { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 900; color: #fff; }
+    .fa-impact-row span { font-size: 14px; font-weight: 700; color: #D8F0FB; }
 
-    /* tiers */
-    .fa-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 40px; }
-    .fa-tier {
-      border-radius: 28px; padding: 36px 30px; display: grid; gap: 12px; align-content: start; text-align: center;
-      background: rgba(255,255,255,0.7); backdrop-filter: blur(12px);
-      border: 1px solid rgba(79,195,247,0.4);
-      box-shadow: inset 0 2px 5px rgba(255,255,255,0.9), 0 16px 40px rgba(11,61,74,0.12);
-      transition: transform 0.2s ease;
+    /* buy */
+    .fa-buysec { padding: clamp(70px, 9vw, 120px) 0; }
+    .fa-buysec .fa-kicker, .fa-buysec .fa-h2 { text-align: center; }
+    .fa-buy-sub { text-align: center; font-size: 18px; line-height: 1.7; color: #33505B; max-width: 52ch; margin: 0 auto 40px; }
+    .fa-buybox {
+      display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 0; overflow: hidden;
+      background: rgba(255,255,255,0.8); backdrop-filter: blur(12px); border-radius: 28px;
+      box-shadow: 0 30px 90px rgba(11, 61, 74, 0.16); border: 1px solid rgba(255,255,255,0.8);
     }
-    .fa-tier:hover { transform: translateY(-6px); }
-    .fa-tier-hot {
-      background: linear-gradient(170deg, rgba(255,255,255,0.9), rgba(189,235,255,0.75));
-      border: 2px solid var(--fa-aqua); transform: scale(1.04);
-      box-shadow: inset 0 2px 6px rgba(255,255,255,0.95), 0 22px 50px rgba(79,195,247,0.35);
-    }
-    .fa-tier-hot:hover { transform: scale(1.04) translateY(-6px); }
-    .fa-tier h3 { font-size: 1.6rem; font-weight: 900; margin: 0; color: var(--fa-teal); }
-    .fa-tier-price { font-size: 2.8rem; font-weight: 900; margin: 0; color: var(--fa-teal); }
-    .fa-tier-price span { font-size: 1.05rem; font-weight: 700; color: #4A6B77; }
-    .fa-tier-sub { font-weight: 700; color: #4A6B77; margin: 0; font-size: 0.98rem; }
-    .fa-tier ul { list-style: none; margin: 6px 0 10px; padding: 0; display: grid; gap: 10px; font-weight: 600; color: #2C4A55; font-size: 0.98rem; }
-    .fa-tier ul li::before { content: "◍ "; color: var(--fa-aqua-deep); }
-
-    /* contact */
-    .fa-contact { padding: clamp(70px, 9vw, 120px) 0; background: linear-gradient(180deg, transparent, rgba(126,217,87,0.1)); }
-    .fa-contact-in { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(30px, 5vw, 70px); align-items: start; }
-    .fa-contact .fa-glass-card { max-width: none; }
-    .fa-addr { font-style: normal; font-size: 1.02rem; line-height: 1.9; color: #2C4A55; font-weight: 600; margin-top: 16px; }
-    .fa-addr a { color: var(--fa-aqua-deep); font-weight: 800; }
-    .fa-form {
-      border-radius: 28px; padding: clamp(28px, 4vw, 42px); display: grid; gap: 16px;
-      background: linear-gradient(160deg, rgba(255,255,255,0.85), rgba(234,247,253,0.7));
-      backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.9);
-      box-shadow: inset 0 2px 6px rgba(255,255,255,0.9), 0 20px 50px rgba(11,61,74,0.16);
-    }
-    .fa-form h3 { font-size: 1.6rem; font-weight: 900; margin: 0; color: var(--fa-teal); }
-    .fa-form label { display: grid; gap: 8px; font-weight: 800; font-size: 0.92rem; color: var(--fa-teal); }
+    .fa-buybox-price { background: linear-gradient(160deg, var(--fa-teal), var(--fa-teal-deep)); color: #fff; padding: clamp(30px, 5vw, 54px); display: flex; flex-direction: column; justify-content: center; }
+    .fa-buybox-name { font-weight: 900; font-size: 26px; margin: 0 0 10px; }
+    .fa-buybox-amount { font-weight: 900; font-size: clamp(2rem, 4.5vw, 3rem); margin: 0 0 14px; color: var(--fa-green); letter-spacing: -0.01em; }
+    .fa-buybox-amount span { font-size: 16px; font-weight: 700; color: #BFE3F2; }
+    .fa-buybox-fine { margin: 0; color: #BFE3F2; font-size: 14.5px; line-height: 1.6; }
+    .fa-form { padding: clamp(30px, 5vw, 54px); display: grid; gap: 18px; }
+    .fa-form h3 { font-size: 22px; font-weight: 900; margin: 0; color: var(--fa-teal-deep); }
+    .fa-form label { display: grid; gap: 8px; font-weight: 800; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #4A6B76; }
     .fa-form input, .fa-form select {
-      font-family: var(--fa-sans); font-size: 1rem; font-weight: 600;
-      background: rgba(255,255,255,0.9); border: 2px solid rgba(79,195,247,0.4); border-radius: 18px;
-      padding: 13px 18px; width: 100%; color: var(--fa-ink);
-      box-shadow: inset 0 2px 5px rgba(79,195,247,0.12);
+      font-family: var(--fa-sans); font-size: 16.5px; font-weight: 600; color: var(--fa-ink);
+      background: #fff; border: 2px solid #D8ECF5; border-radius: 14px; padding: 14px 18px; width: 100%;
     }
-    .fa-form input:focus, .fa-form select:focus { outline: 3px solid var(--fa-green); outline-offset: 1px; }
-    .fa-form-note { margin: 0; font-weight: 800; color: var(--fa-green-deep); font-size: 1.02rem; }
+    .fa-form input:focus, .fa-form select:focus { outline: 3px solid var(--fa-aqua); outline-offset: 1px; border-color: var(--fa-aqua-deep); }
+    .fa-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .fa-btn-full { width: 100%; text-align: center; }
+    .fa-form-note { margin: 0; color: var(--fa-aqua-deep); font-weight: 700; font-size: 16px; text-align: center; }
     .fa-form-note:empty { display: none; }
+    .fa-address { font-style: normal; text-align: center; margin: 36px 0 0; color: #4A6B76; font-size: 15.5px; line-height: 1.8; }
+    .fa-address a { color: var(--fa-aqua-deep); font-weight: 700; }
 
     /* footer */
-    .fa-footer {
-      background: linear-gradient(180deg, var(--fa-teal), var(--fa-teal-deep));
-      color: #D9EFF7; padding: 60px 0 80px; text-align: center;
-    }
-    .fa-footer-logo {
-      font-size: clamp(2.6rem, 8vw, 4.5rem); font-weight: 900; letter-spacing: 0.2em; margin: 0 0 20px;
-      background: linear-gradient(180deg, #ffffff, #BDEBFF); -webkit-background-clip: text; background-clip: text; color: transparent;
-      text-shadow: 0 4px 20px rgba(79,195,247,0.4);
-    }
-    .fa-footer-in { display: grid; gap: 8px; font-size: 0.95rem; font-weight: 600; }
+    .fa-footer { padding: 60px 0 90px; text-align: center; }
+    .fa-footer-in { display: grid; gap: 8px; color: #4A6B76; font-size: 14.5px; }
     .fa-footer-in p { margin: 0; }
-    .fa-footer-in a { color: var(--fa-aqua); font-weight: 800; }
+    .fa-footer-logo { font-weight: 900; font-size: 30px; letter-spacing: 0.2em; color: var(--fa-teal-deep); }
 
-    @media (max-width: 900px) {
-      .fa-nav-links, .fa-nav > .fa-gel { display: none; }
-      .fa-burger { display: block; }
-      .fa-menu {
-        display: grid; gap: 4px; background: rgba(234,247,253,0.97);
-        border-bottom: 1px solid rgba(79,195,247,0.35); padding: 14px clamp(20px, 4vw, 40px) 22px;
-      }
-      .fa-menu[hidden] { display: none; }
-      .fa-menu a:not(.fa-gel) { padding: 12px 6px; color: var(--fa-teal); text-decoration: none; font-weight: 800; font-size: 1.05rem; border-bottom: 1px solid rgba(79,195,247,0.25); }
-      .fa-menu .fa-gel { margin-top: 12px; }
-      .fa-panels { grid-template-columns: 1fr; max-width: 480px; margin-left: auto; margin-right: auto; }
-      .fa-prod-grid { grid-template-columns: 1fr; max-width: 560px; margin-left: auto; margin-right: auto; }
-      .fa-tiers { grid-template-columns: 1fr; max-width: 460px; margin-left: auto; margin-right: auto; }
-      .fa-tier-hot { transform: none; }
-      .fa-tier-hot:hover { transform: translateY(-6px); }
-      .fa-impact-in, .fa-contact-in { grid-template-columns: 1fr; }
-      .fa-orb-1 { width: 100px; height: 100px; }
-      .fa-orb-2 { display: none; }
+    @media (max-width: 860px) {
+      .fa-nav-link { display: none; }
+      .fa-feat { grid-template-columns: 1fr; }
+      .fa-feat-flip .fa-feat-media { order: 0; }
+      .fa-buybox { grid-template-columns: 1fr; }
+      .fa-impact-row { grid-template-columns: 1fr 1fr; }
+      .fa-hl-row { grid-template-columns: 1fr; gap: 30px; }
+      .fa-form-row { grid-template-columns: 1fr; }
+      .fa-table th { white-space: normal; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .fa-aurora, .fa-orb, .fa-flare { animation: none; }
-      .fa-gel, .fa-panel, .fa-tier { transition: none; }
+      .fa-bubbles i { animation: none; }
+      .fa-btn-gloss { transition: none; }
     }
   </style>
 </body>
