@@ -1,0 +1,840 @@
+---
+import CursorJourney from "../anim/CursorJourney.astro";
+import IntroSequence from "../anim/IntroSequence.astro";
+import { useTranslations, localizedPaths, type Locale } from "../../lib/i18n";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props as Props;
+const t = useTranslations(locale);
+
+const paths = localizedPaths[locale];
+const processId = locale === "fr" ? "processus" : "process";
+---
+
+<!-- Signature intro: cursor flies in, hits the barrier, bounces, invites the
+     click, breaks through and hands the visitor to the primary CTA.
+     Only runs on the landing page, once per session, and never blocks the
+     site when disabled, reduced-motion, or JS-less. -->
+<IntroSequence slot="overlay" locale={locale} />
+
+<!-- HERO: watermark + parallax + split reveal -->
+<section class="hero grain" id="hero">
+  <div class="hero-watermark" aria-hidden="true"><span>WEBAO</span><span>WEBAO</span></div>
+  <div class="shell hero-grid">
+    <div class="hero-copy">
+      <div class="hero-kicker" data-reveal>
+        <span class="eyebrow" style="color: var(--accent);">{t.home.hero.kicker}</span>
+        <span class="hero-badge">
+          <span class="dot"></span> {t.home.hero.badge}
+        </span>
+      </div>
+
+      <h1 class="hero-title display" data-reveal style="--d:80ms">
+        {t.home.hero.title1}<br />
+        <span class="hero-italic">{t.home.hero.titleWork}</span> {t.home.hero.title2}<br />
+        {t.home.hero.title3}
+      </h1>
+
+      <p class="hero-lead prose" data-reveal style="--d:160ms">
+        {t.home.hero.lead}
+        <strong>{t.home.hero.leadStrong}</strong> {t.home.hero.leadRest}
+      </p>
+
+      <div class="hero-actions" data-reveal style="--d:240ms">
+        <a href={paths.contact} class="btn btn--primary">
+          {t.home.hero.ctaPrimary}
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3l5 5-5 5"/></svg>
+        </a>
+        <a href={paths.demos} class="btn btn--ghost">
+          {t.home.hero.ctaSecondary}
+        </a>
+        <span class="hero-note mono" set:html={t.home.hero.priceNote}></span>
+      </div>
+    </div>
+
+    <div class="hero-visual" data-reveal="scale" style="--d:140ms" aria-hidden="true" data-hero-visual>
+      <div class="visual-stack" data-parallax="stack">
+        <!-- Top bar -->
+        <div class="browser-bar">
+          <div class="dots"><i></i><i></i><i></i></div>
+          <div class="url">{t.home.hero.visual.url}</div>
+          <div class="live"><i></i>{t.home.hero.visual.live}</div>
+        </div>
+
+        <!-- Main preview -->
+        <div class="preview-main">
+          <div class="preview-media">
+            <svg viewBox="0 0 640 420" role="img" aria-label="Preview collage" class="preview-art">
+              <defs>
+                <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#0A0F1C"/><stop offset="100%" stop-color="#1E2A3A"/>
+                </linearGradient>
+                <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+                  <path d="M32 0 H0 V32" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+                </pattern>
+              </defs>
+              <rect width="640" height="420" rx="16" fill="url(#g1)"/>
+              <rect width="640" height="420" rx="16" fill="url(#grid)"/>
+              <rect x="28" y="28" width="260" height="320" rx="14" fill="#F8F5EF"/>
+              <rect x="42" y="46" width="180" height="10" rx="5" fill="#0A0F1C" opacity=".08"/>
+              <rect x="42" y="66" width="232" height="26" rx="6" fill="#0A0F1C"/>
+              <rect x="42" y="100" width="210" height="8" rx="4" fill="#0A0F1C" opacity=".36"/>
+              <rect x="42" y="116" width="180" height="8" rx="4" fill="#0A0F1C" opacity=".18"/>
+              <rect x="42" y="146" width="232" height="1" fill="#0A0F1C" opacity=".08"/>
+              <rect x="42" y="164" width="232" height="150" rx="10" fill="#E3421E"/>
+              <g opacity=".92">
+                <path d="M58 264 q56 -48 96 0 t 104 0" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+                <circle cx="210" cy="198" r="22" fill="white" opacity=".95"/>
+              </g>
+              <rect x="306" y="28" width="306" height="140" rx="14" fill="white" opacity=".96"/>
+              <rect x="324" y="48" width="110" height="8" rx="4" fill="#0A0F1C" opacity=".08"/>
+              <rect x="324" y="64" width="170" height="12" rx="6" fill="#0A0F1C"/>
+              <rect x="324" y="86" width="150" height="7" rx="3.5" fill="#0A0F1C" opacity=".30"/>
+              <g transform="translate(324 108)">
+                <rect width="88" height="28" rx="14" fill="#0A0F1C"/><text x="18" y="18" font-size="11" font-family="Inter" fill="white" font-weight="600">{locale==="fr" ? "Devis" : "Get Quote"}</text>
+                <rect x="96" y="0" width="88" height="28" rx="14" fill="none" stroke="#0A0F1C" stroke-opacity=".12"/><text x="112" y="18" font-size="11" font-family="Inter" fill="#0A0F1C" font-weight="600">{locale==="fr" ? "Réalisations" : "Our Work"}</text>
+              </g>
+              <g transform="translate(306 182)">
+                <rect width="148" height="96" rx="12" fill="white"/>
+                <rect x="14" y="14" width="36" height="36" rx="8" fill="#F8F5EF" stroke="#0A0F1C" stroke-opacity=".06"/>
+                <text x="14" y="76" font-size="11" font-family="Inter" font-weight="650" fill="#0A0F1C">{locale==="fr" ? "Résidentiel" : "Residential"}</text>
+                <text x="14" y="88" font-size="10" font-family="Inter" fill="#6B7288">{locale==="fr" ? "Urgence 24h" : "24h emergency"}</text>
+                <rect x="158" y="0" width="148" height="96" rx="12" fill="#0A0F1C"/>
+                <circle cx="172" cy="32" r="18" fill="white" opacity=".12"/><path d="M166 32 h12 M172 26 v12" stroke="white" stroke-width="1.6" stroke-linecap="round"/>
+                <text x="172" y="76" font-size="11" font-family="Inter" font-weight="650" fill="white">{locale==="fr" ? "Commercial" : "Commercial"}</text>
+                <text x="172" y="88" font-size="10" font-family="Inter" fill="white" opacity=".6">{locale==="fr" ? "Certifié et assuré" : "Certified & insured"}</text>
+              </g>
+              <g transform="translate(306 290)">
+                <rect width="306" height="58" rx="12" fill="#0A0F1C"/>
+                <text x="16" y="24" font-size="10" font-family="IBM Plex Mono" fill="white" opacity=".5" letter-spacing="2">{locale==="fr" ? "PROCHAINE DISPO" : "NEXT AVAILABLE"}</text>
+                <text x="16" y="42" font-size="13" font-family="Inter" font-weight="650" fill="white">{locale==="fr" ? "Demain à 9h00 · Réserver" : "Tomorrow at 9:00 AM · Book now"}</text>
+                <circle cx="280" cy="29" r="16" fill="white"/><path d="M274 29 l5 5 6-6" fill="none" stroke="#0A0F1C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </g>
+            </svg>
+          </div>
+          <div class="preview-meta">
+            <div class="meta-left">
+              <span class="mono" style="font-size:10px; color: var(--muted);">{t.home.hero.visual.demoLabel}</span>
+              <span style="font-weight:650; letter-spacing:-0.02em;">{t.home.hero.visual.demoTone}</span>
+            </div>
+            <span class="pill">{t.home.hero.visual.mobileReady}</span>
+          </div>
+        </div>
+
+        <div class="float-card float-a" data-parallax="a">
+          <div class="float-icon">◐</div>
+          <div>
+            <div style="font-weight: 700; font-size: 13px; letter-spacing:-0.02em;">{t.home.hero.visual.domainIncluded}</div>
+            <div style="font-size: 12.5px; color: var(--muted);">{t.home.hero.visual.domainDesc}</div>
+          </div>
+          <span class="check">✓</span>
+        </div>
+        <div class="float-card float-b" data-parallax="b">
+          <div style="font-family: var(--font-mono); font-size:10px; letter-spacing:.12em; color: var(--muted);">{t.home.hero.visual.smallUpdates}</div>
+          <div style="font-family: var(--font-display); font-size:24px; line-height:1.05; margin-top:6px;" set:html={t.home.hero.visual.hours}></div>
+          <ul class="float-list" role="list">
+            <li><i>✓</i> {t.home.hero.visual.included}</li>
+            <li><i>✓</i> {t.home.hero.visual.sendEmail}</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="visual-caption mono">
+        <span>{t.home.hero.visual.captionLeft}</span>
+        <span style="opacity:.5;">{t.home.hero.visual.captionRight}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-rail" aria-hidden="true">
+    <div class="rail-line"></div>
+    <span class="mono">{locale==="fr" ? "DÉFILER" : "SCROLL"}</span>
+    <div class="rail-line"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span class="marquee-item" set:html={t.home.marquee}></span>
+    <span class="marquee-item" set:html={t.home.marquee}></span>
+    <span class="marquee-item" set:html={t.home.marquee}></span>
+    <span class="marquee-item" set:html={t.home.marquee}></span>
+  </div>
+</div>
+
+<!-- POSITIONING / INTRO -->
+<section class="section grain">
+  <div class="shell">
+    <div class="intro-grid">
+      <div data-reveal>
+        <div class="eyebrow">{t.home.why.eyebrow}</div>
+        <h2 class="display" style="font-size: clamp(2.2rem, 5vw, 4.2rem); margin-top: 14px; line-height:.92;">
+          {t.home.why.title1}<br />
+          {t.home.why.title2}<br />
+          <span style="font-style: italic; font-weight:400;">{t.home.why.title3}</span>
+        </h2>
+      </div>
+      <div class="intro-copy" data-reveal style="--d:120ms">
+        <p class="prose" set:html={t.home.why.p1}></p>
+        <p class="prose" style="margin-top: 16px; color: var(--muted);">
+          {t.home.why.p2}
+        </p>
+
+        <div class="cluster" style="margin-top: 28px;">
+          <a href={paths.pricing} class="btn btn--dark btn--sm">{t.home.why.cta}</a>
+          <span class="mono" style="font-size:11px; color: var(--muted);">{t.home.why.note}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-grid" data-reveal style="--d:180ms">
+      {t.home.why.features.map((f) => (
+        <div class="f-card">
+          <div class="f-icon">{f.icon}</div>
+          <h3>{f.title}</h3>
+          <p>{f.desc}</p>
+        </div>
+      ))}
+      <!-- Keep accent on second card -->
+      <style>
+        .feature-grid .f-card:nth-child(2) { background: var(--ink); color: var(--paper); border-color: rgba(248,245,239,.06); }
+        .feature-grid .f-card:nth-child(2) p { color: rgba(248,245,239,.68); }
+        .feature-grid .f-card:nth-child(2) .f-icon { background: rgba(248,245,239,.08); border-color: rgba(248,245,239,.10); color: var(--paper); }
+      </style>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id={processId} class="section section--dark grain" style="overflow: clip;">
+  <div class="shell">
+    <div class="section-head" data-reveal>
+      <div class="eyebrow" style="color: rgba(248,245,239,.5);">{t.home.process.eyebrow}</div>
+      <h2 class="display" style="font-size: clamp(2.4rem, 6vw, 5rem); margin-top: 12px; line-height:.92;" set:html={t.home.process.title}></h2>
+    </div>
+
+    <div class="steps">
+      {t.home.process.steps.map((step: any, idx: number) => (
+        <div class="step" data-reveal style={`--d:${idx*100}ms`}>
+          <div class="step-n">0{idx+1}</div>
+          <div class="step-body">
+            <h3>{step.title}</h3>
+            <p>{step.desc}</p>
+            <ul class="step-list mono">
+              {step.bullets.map((b: string) => <li>{b}</li>)}
+            </ul>
+          </div>
+          <div class="step-visual">
+            {idx === 0 && (
+              <div class="mini-card">
+                <div class="mono" style="font-size:10px; opacity:.5;">{step.visualInbox}</div>
+                <div style="margin-top:10px; font-size:13px; line-height:1.5;"><strong>{step.subject}</strong> {step.subjectText}</div>
+                <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">{step.tags?.map((tag: string) => <span class="tag">{tag}</span>)}</div>
+                <div style="margin-top:12px; height:1px; background: var(--line);"></div>
+                <div style="margin-top:10px; display:flex; align-items:center; gap:8px; font-size:13px;"><span style="width:28px;height:28px;border-radius:99px;background:var(--ink);color:white;display:grid;place-items:center;font-size:11px;">W</span> {step.reply} <span style="margin-left:auto; color: var(--accent);">↗</span></div>
+              </div>
+            )}
+            {idx === 1 && (
+              <div class="mini-card mini-card--dark">
+                <div style="display:flex; align-items:center; gap:8px;"><span style="width:8px;height:8px;border-radius:99px;background:#00D084;"></span><span class="mono" style="font-size:10px; opacity:.7; color:white;">{step.preview}</span></div>
+                <div style="margin-top:14px; height:86px; border-radius:10px; overflow:hidden; background: linear-gradient(135deg,#F8F5EF 0%, #EFE9DE 100%); position:relative;">
+                  <div style="position:absolute; inset:12px; border-radius:8px; background:white; border:1px solid rgba(10,15,28,.06); padding:10px;">
+                    <div style="height:6px; width:42%; border-radius:99px; background:#0A0F1C; opacity:.9;"></div>
+                    <div style="height:4px; width:64%; border-radius:99px; background:#0A0F1C; opacity:.14; margin-top:8px;"></div>
+                    <div style="display:flex; gap:6px; margin-top:10px;"><span style="flex:1; height:22px; border-radius:99px; background:#FF3B30;"></span><span style="flex:1; height:22px; border-radius:99px; border:1px solid rgba(10,15,28,.12);"></span></div>
+                  </div>
+                </div>
+                <div style="margin-top:12px; display:flex; gap:8px;"><span class="btn btn--primary btn--sm" style="flex:1; justify-content:center;">{step.approve}</span><span class="btn btn--ghost btn--sm" style="flex:1; justify-content:center; border-color: rgba(255,255,255,.14); color:white;">{step.comment}</span></div>
+              </div>
+            )}
+            {idx === 2 && (
+              <div class="mini-card">
+                <div style="display:flex; align-items:center; justify-content:space-between;">
+                  <span class="mono" style="font-size:10px; opacity:.5;">{step.launchDay}</span>
+                  <span style="font-size:11px; background:#0A0F1C; color:white; padding:4px 8px; border-radius:99px; font-weight:600;">{step.live}</span>
+                </div>
+                <div style="margin-top:12px; display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:12.5px;">
+                  <div style="background:#F8F5EF; border-radius:10px; padding:10px; text-align:center;"><div style="font-weight:700;">{step.ssl}</div><div style="opacity:.6; font-size:11px;">{step.sslDesc}</div></div>
+                  <div style="background:#F8F5EF; border-radius:10px; padding:10px; text-align:center;"><div style="font-weight:700;">{step.backups}</div><div style="opacity:.6; font-size:11px;">{step.backupsDesc}</div></div>
+                </div>
+                <div style="margin-top:10px; font-size:12.5px; color: var(--muted); text-align:center;">{step.needChange} <a href={paths.contact} style="color:var(--accent); font-weight:600; text-decoration:underline; text-underline-offset:3px;">{step.sendMessage}</a></div>
+              </div>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="steps-cta" data-reveal>
+      <a href={paths.contact} class="btn btn--primary">{t.home.process.cta}</a>
+      <span class="mono" style="color: rgba(248,245,239,.5); font-size:11px;">
+        {t.home.process.ctaNote.split("{link}")[0]}
+        <a href={paths.contact} style="color: var(--paper); text-decoration: underline; text-underline-offset: 3px;">{t.home.process.sendDetails}</a>{t.home.process.ctaNote.split("{link}")[1] ?? ""}
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- DEMOS PREVIEW -->
+<section class="section">
+  <div class="shell">
+    <div class="split-head" data-reveal>
+      <div>
+        <div class="eyebrow">{t.home.demosPreview.eyebrow}</div>
+        <h2 class="display" style="font-size: clamp(2.2rem, 5.2vw, 4.4rem); margin-top:10px; line-height:.92;" set:html={t.home.demosPreview.title}></h2>
+      </div>
+      <div class="split-head-actions">
+        <p class="prose" style="font-size: 15px; max-width: 38ch;">{t.home.demosPreview.desc}</p>
+        <a href={paths.demos} class="btn btn--ghost btn--sm" style="margin-top:16px;">{t.home.demosPreview.browse}</a>
+      </div>
+    </div>
+
+    <div class="demo-strip">
+      <a href={paths.demos} class="demo-card demo-card--dark" data-reveal>
+        <div class="demo-media">
+          <div class="demo-tag mono">{t.home.demosPreview.cards[0].tag}</div>
+          <div class="demo-title">NORA <span>ÉLECTRIQUE</span></div>
+          <div class="demo-sub mono">{t.home.demosPreview.cards[0].sub}</div>
+          <div class="demo-lines"><i style="width:92%"></i><i style="width:68%; opacity:.5"></i></div>
+        </div>
+        <div class="demo-foot">
+          <span style="font-weight:650; letter-spacing:-0.02em;">Nora Électrique</span>
+          <span class="mono" style="font-size:11px; opacity:.6;">{t.home.demosPreview.view}</span>
+        </div>
+      </a>
+      <a href={paths.demos} class="demo-card demo-card--paper" data-reveal style="--d:100ms">
+        <div class="demo-media" style="background: #FFF7ED;">
+          <div class="demo-tag mono" style="color: #9A3412;">{t.home.demosPreview.cards[1].tag}</div>
+          <div class="demo-title" style="color:#431407; font-family: var(--font-display); font-style: italic; letter-spacing:-0.03em;">Mira <span style="font-style: normal; font-weight:400;">Cantine</span></div>
+          <div class="demo-sub mono" style="color:#9A3412;">{t.home.demosPreview.cards[1].sub}</div>
+          <div style="margin-top:18px; display:flex; gap:8px;">
+            <span style="background:#431407; color:#FFF7ED; padding:6px 12px; border-radius:99px; font-size:11px; font-weight:650;">{t.home.demosPreview.cards[1].reserve}</span>
+            <span style="border:1px solid rgba(67,20,7,.14); padding:6px 12px; border-radius:99px; font-size:11px;">{t.home.demosPreview.cards[1].menu}</span>
+          </div>
+        </div>
+        <div class="demo-foot">
+          <span style="font-weight:650; letter-spacing:-0.02em;">Mira Cantine</span>
+          <span class="mono" style="font-size:11px; opacity:.6;">{t.home.demosPreview.view}</span>
+        </div>
+      </a>
+      <a href={paths.demos} class="demo-card demo-card--ink" data-reveal style="--d:200ms">
+        <div class="demo-media" style="background:#0F172A; color:#E2E8F0;">
+          <div class="demo-tag mono" style="color: rgba(226,232,240,.5);">{t.home.demosPreview.cards[2].tag}</div>
+          <div class="demo-title" style="color:white; letter-spacing:-0.04em;">ATELIER <span style="font-weight:400; opacity:.7;">NORD</span></div>
+          <div class="demo-sub mono" style="color: rgba(226,232,240,.6);">{t.home.demosPreview.cards[2].sub}</div>
+          <div style="margin-top:16px; height:1px; background: rgba(226,232,240,.12);"></div>
+          <div style="margin-top:14px; display:flex; gap:8px; font-size:11px;"><span style="color: white; font-weight:650;">Services</span><span style="opacity:.5;">·</span><span style="opacity:.7;">Inventaire</span><span style="opacity:.5;">·</span><span style="opacity:.7;">Rendez-vous</span></div>
+        </div>
+        <div class="demo-foot" style="background:#0F172A; color:#E2E8F0; border-top-color: rgba(226,232,240,.08);">
+          <span style="font-weight:650; letter-spacing:-0.02em;">Atelier Nord</span>
+          <span class="mono" style="font-size:11px; opacity:.5;">{t.home.demosPreview.view}</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="demo-browse" data-reveal>
+      <div class="demo-browse-left">
+        <span class="mono" style="font-size:11px; color: var(--muted);">{t.home.demosPreview.also}</span>
+        <div class="chips">
+          {t.home.demosPreview.chips.map(c => <span>{c}</span>)}
+        </div>
+      </div>
+      <a href={paths.demos} class="btn btn--dark" style="white-space:nowrap;">{t.home.demosPreview.searchFilter}</a>
+    </div>
+  </div>
+</section>
+
+<!-- AGENCY CARDS -->
+<section class="section section--ink2 grain" style="padding-bottom: 0;">
+  <div class="shell">
+    <div class="agency-head" data-reveal>
+      <h2 class="display" style="font-size: clamp(2.6rem, 6vw, 5.2rem); line-height:.9; color: var(--paper);">{t.home.agency.title}</h2>
+      <p class="mono" style="color: rgba(248,245,239,.5); margin-top:12px; font-size: 12px;">{t.home.agency.subtitle}</p>
+    </div>
+
+    <div class="agency-grid" style="position: relative;">
+      <CursorJourney locale={locale} />
+      <a href={paths.pricing} class="agency-card agency-card--pricing" data-reveal>
+        <div class="agency-top mono">
+          <span>{t.home.agency.pricing.top}</span><span aria-hidden="true">→</span>
+        </div>
+        <div class="agency-body">
+          <div class="agency-price">
+            <span class="display">{t.home.agency.pricing.price}</span>
+            <span class="mono" set:html={t.home.agency.pricing.priceSuffix}></span>
+          </div>
+          <h3 class="agency-title" set:html={t.home.agency.pricing.title}></h3>
+          <p>{t.home.agency.pricing.desc}</p>
+        </div>
+        <div class="agency-foot">
+          <span class="agency-cta">{t.home.agency.pricing.cta} <span aria-hidden="true">↗</span></span>
+          <div class="agency-mini">
+            {t.home.agency.pricing.mini.map(m => <span>{m}</span>)}
+          </div>
+        </div>
+        <div class="agency-art" aria-hidden="true">
+          <div class="art-price"></div>
+        </div>
+      </a>
+
+      <a href={paths.contact} class="agency-card agency-card--contact" data-reveal style="--d:120ms">
+        <div class="agency-top mono" style="color: rgba(10,15,28,.55);">
+          <span>{t.home.agency.contact.top}</span><span aria-hidden="true">→</span>
+        </div>
+        <div class="agency-body" style="color: var(--ink);">
+          <h3 class="agency-title" style="color: var(--ink);" set:html={t.home.agency.contact.title}></h3>
+          <p style="color: var(--muted);">{t.home.agency.contact.desc}</p>
+          <div class="contact-pills">
+            {t.home.agency.contact.pills.map(p => <span>{p}</span>)}
+          </div>
+        </div>
+        <div class="agency-foot" style="border-top-color: var(--line); color: var(--ink);">
+          <span class="agency-cta" style="background: var(--ink); color: var(--paper);">{t.home.agency.contact.cta} <span aria-hidden="true">↗</span></span>
+        </div>
+        <div class="agency-art" aria-hidden="true">
+          <div class="art-contact"></div>
+        </div>
+      </a>
+
+      <a href={paths.demos} class="agency-card agency-card--demos" data-reveal style="--d:240ms">
+        <div class="agency-top mono">
+          <span>{t.home.agency.demos.top}</span><span aria-hidden="true">→</span>
+        </div>
+        <div class="agency-body">
+          <div class="demos-stack">
+            <span class="demos-thumb" style="background:#F8F5EF; color:#0A0F1C;">NORA</span>
+            <span class="demos-thumb" style="background:#FFF7ED; color:#431407; font-family: var(--font-display); font-style:italic;">Mira</span>
+            <span class="demos-thumb" style="background:#0F172A; color:white;">NORD</span>
+          </div>
+          <h3 class="agency-title" set:html={t.home.agency.demos.title}></h3>
+          <p>{t.home.agency.demos.desc}</p>
+        </div>
+        <div class="agency-foot">
+          <span class="agency-cta" style="background: var(--paper); color: var(--ink);">{t.home.agency.demos.cta} <span aria-hidden="true">↗</span></span>
+          <div class="agency-mini" style="color: rgba(248,245,239,.55);">
+            {t.home.agency.demos.mini.map(m => <span>{m}</span>)}
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <div class="agency-note mono" data-reveal>
+      <span>{t.home.agency.noteLeft}</span>
+      <span style="opacity:.4;">{t.home.agency.noteRight}</span>
+    </div>
+  </div>
+  <div class="angle-divider" aria-hidden="true"></div>
+</section>
+
+<!-- PRICING TEASER -->
+<section class="section grain" style="padding-top: 72px;">
+  <div class="shell">
+    <div class="pricing-teaser" data-reveal>
+      <div class="pricing-left">
+        <div class="eyebrow">{t.home.pricingTeaser.eyebrow}</div>
+        <h2 class="display" style="font-size: clamp(2rem, 4.2vw, 3.6rem); margin-top: 10px; line-height:.94;">{t.home.pricingTeaser.price} <span style="font-size:.52em; vertical-align: middle; font-family: var(--font-sans); font-weight:600; letter-spacing:-0.02em; opacity:.7;">{t.home.pricingTeaser.priceSuffix}</span></h2>
+        <p class="prose" style="margin-top:12px; font-size: 15px;">{t.home.pricingTeaser.desc}</p>
+        <a href={paths.pricing} class="btn btn--primary" style="margin-top: 18px;">{t.home.pricingTeaser.cta}</a>
+        <div class="mono" style="margin-top:10px; font-size:11px; color: var(--muted);">{t.home.pricingTeaser.note}</div>
+      </div>
+      <div class="pricing-grid">
+        <div class="price-card">
+          <div class="mono" style="font-size:10px; color: var(--muted);">{t.home.pricingTeaser.includedTitle}</div>
+          <ul>
+            {t.home.pricingTeaser.included.map(item => <li><i>✓</i> {item}</li>)}
+          </ul>
+        </div>
+        <div class="price-card price-card--muted">
+          <div class="mono" style="font-size:10px; color: var(--muted);">{t.home.pricingTeaser.goodTitle}</div>
+          <ul>
+            {t.home.pricingTeaser.good.map(item => <li><i>✓</i> {item}</li>)}
+          </ul>
+          <div style="margin-top:16px; padding:10px 12px; background: var(--accent-soft); border-radius:10px; font-size:12.5px; line-height:1.5; color:#7A1F1A;">
+            <strong>{t.home.pricingTeaser.needMore}</strong> {t.home.pricingTeaser.needMoreDesc}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CRAFT / EDITORIAL -->
+<section class="section section--tight">
+  <div class="shell">
+    <div class="craft-grid" data-reveal>
+      <div class="craft-visual">
+        <div class="craft-frame">
+          <div class="craft-img">
+            <svg viewBox="0 0 560 680" class="craft-svg" role="img" aria-label="Craft collage">
+              <rect width="560" height="680" rx="18" fill="#0A0F1C"/>
+              <g opacity=".95">
+                <rect x="0" y="0" width="560" height="420" rx="18" fill="#0A0F1C"/>
+                <g stroke="rgba(255,255,255,.08)" stroke-width="1" fill="none">
+                  <path d="M24 42 H536 M24 72 H536 M24 102 H536 M24 132 H536 M24 162 H536 M24 192 H536 M24 222 H536 M24 252 H536 M24 282 H536"/>
+                  <path d="M42 24 V396 M92 24 V396 M142 24 V396 M192 24 V396 M242 24 V396 M292 24 V396 M342 24 V396 M392 24 V396 M442 24 V396 M492 24 V396"/>
+                </g>
+                <rect x="28" y="28" width="504" height="360" rx="14" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="1.2"/>
+                <rect x="40" y="42" width="480" height="28" rx="8" fill="rgba(255,255,255,.06)"/>
+                <circle cx="56" cy="56" r="5" fill="#FF5F57"/><circle cx="72" cy="56" r="5" fill="#FFBD2E"/><circle cx="88" cy="56" r="5" fill="#28C940"/>
+                <rect x="40" y="84" width="220" height="100" rx="10" fill="white" opacity=".96"/>
+                <rect x="52" y="98" width="160" height="8" rx="4" fill="#0A0F1C" opacity=".08"/>
+                <rect x="52" y="114" width="120" height="12" rx="6" fill="#0A0F1C"/>
+                <rect x="52" y="136" width="180" height="6" rx="3" fill="#0A0F1C" opacity=".18"/>
+                <rect x="52" y="152" width="90" height="22" rx="11" fill="#FF3B30"/>
+                <rect x="272" y="84" width="248" height="180" rx="10" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.12)"/>
+                <g transform="translate(284 96)">
+                  <rect width="224" height="8" rx="4" fill="white" opacity=".18"/>
+                  <rect y="16" width="180" height="6" rx="3" fill="white" opacity=".10"/>
+                  <rect y="32" width="224" height="6" rx="3" fill="white" opacity=".08"/>
+                  <rect y="48" width="200" height="6" rx="3" fill="white" opacity=".08"/>
+                  <g transform="translate(0 72)">
+                    <rect width="104" height="64" rx="8" fill="white" opacity=".96"/>
+                    <rect x="114" y="0" width="110" height="64" rx="8" fill="#FF3B30"/>
+                  </g>
+                </g>
+                <g transform="translate(40 198)">
+                  <rect width="154" height="44" rx="10" fill="white" opacity=".96"/>
+                  <rect x="166" y="0" width="154" height="44" rx="10" fill="white" opacity=".08" stroke="rgba(255,255,255,.14)"/>
+                  <rect x="332" y="0" width="154" height="44" rx="10" fill="white" opacity=".08" stroke="rgba(255,255,255,.14)"/>
+                </g>
+              </g>
+              <rect x="20" y="400" width="520" height="260" rx="14" fill="#F8F5EF"/>
+              <text x="44" y="438" font-family="Instrument Serif" font-size="26" fill="#0A0F1C">{t.home.craft.built1}</text>
+              <text x="44" y="466" font-family="Instrument Serif" font-size="26" fill="#0A0F1C" font-style="italic">{t.home.craft.built2}</text>
+              <text x="44" y="496" font-family="Inter" font-size="12.5" fill="#6B7288">{t.home.craft.builtDesc1}</text>
+              <text x="44" y="514" font-family="Inter" font-size="12.5" fill="#6B7288">{t.home.craft.builtDesc2}</text>
+              <g transform="translate(44 536)">
+                <rect width="124" height="32" rx="16" fill="#0A0F1C"/><text x="14" y="20" font-family="Inter" font-size="11.5" fill="white" font-weight="600">{t.home.craft.badges[0]}</text>
+                <rect x="132" y="0" width="110" height="32" rx="16" fill="none" stroke="#0A0F1C" stroke-opacity=".12"/><text x="146" y="20" font-family="Inter" font-size="11.5" fill="#0A0F1C" font-weight="600">{t.home.craft.badges[1]}</text>
+              </g>
+            </svg>
+          </div>
+          <div class="craft-float mono">
+            <span>{t.home.craft.float}</span>
+            <span style="opacity:.5;">{t.home.craft.float2}</span>
+          </div>
+        </div>
+      </div>
+      <div class="craft-copy">
+        <div class="eyebrow">{t.home.craft.eyebrow}</div>
+        <h2 class="display" style="font-size: clamp(2rem, 4.4vw, 3.4rem); margin-top:10px; line-height:.92;" set:html={t.home.craft.title}></h2>
+        <p class="prose" style="margin-top:16px;">{t.home.craft.desc}</p>
+
+        <ul class="craft-list" role="list">
+          {t.home.craft.items.map(item => (
+            <li>
+              <span class="check-badge">✓</span>
+              <div><strong>{item.title}</strong> {item.desc}</div>
+            </li>
+          ))}
+        </ul>
+
+        <div class="cluster" style="margin-top: 24px;">
+          <a href={paths.pricing} class="btn btn--ghost btn--sm">{t.home.craft.cta}</a>
+          <span class="mono" style="font-size:11px; color: var(--muted);">{t.home.craft.note}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" style="background: var(--paper-2); border-block: 1px solid var(--line);">
+  <div class="shell">
+    <div class="faq-grid">
+      <div data-reveal>
+        <div class="eyebrow">{t.home.faq.eyebrow}</div>
+        <h2 class="display" style="font-size: clamp(2rem, 4vw, 3.2rem); margin-top:10px; line-height:.92;" set:html={t.home.faq.title}></h2>
+        <p class="prose" style="margin-top:14px; font-size:15px; color: var(--muted);">
+          {t.home.faq.contactPrompt.split("{link}")[0]}
+          <a href={paths.contact} style="color: var(--accent); font-weight:600; text-decoration: underline; text-underline-offset:3px;">{t.home.faq.askDirectly}</a>{t.home.faq.contactPrompt.split("{link}")[1] ?? ""}
+        </p>
+      </div>
+      <div class="faq-list" data-reveal style="--d:100ms">
+        {t.home.faq.items.map((item, i) => (
+          <details open={i===0}>
+            <summary>{item.q}</summary>
+            <div><p>{item.a}</p></div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="cta-band grain" data-reveal>
+  <div class="shell cta-inner">
+    <div class="cta-copy">
+      <div class="mono" style="color: rgba(248,245,239,.5); font-size:11px; letter-spacing:.14em;">{t.home.finalCta.eyebrow}</div>
+      <h2 class="display" style="font-size: clamp(2.6rem, 7vw, 5.6rem); line-height:.88; margin-top:14px; color: var(--paper);" set:html={t.home.finalCta.title}></h2>
+      <p style="margin-top:18px; color: rgba(248,245,239,.68); font-size: clamp(1rem, 1.6vw, 1.15rem); line-height:1.6; max-width: 46ch;">{t.home.finalCta.desc}</p>
+      <div class="cluster" style="margin-top: 28px;">
+        <a href={paths.contact} class="btn btn--primary" style="background: var(--paper); color: var(--ink); box-shadow: none;">{t.home.finalCta.ctaPrimary}</a>
+        <a href={paths.demos} class="btn" style="background: transparent; color: var(--paper); border-color: rgba(248,245,239,.18);">{t.home.finalCta.ctaSecondary}</a>
+      </div>
+      <div class="mono" style="margin-top:14px; font-size:11px; color: rgba(248,245,239,.46);">{t.home.finalCta.contact}</div>
+    </div>
+    <div class="cta-visual" aria-hidden="true">
+      <div class="cta-card">
+        <div class="mono" style="font-size:10px; opacity:.5;">{t.home.finalCta.preview}</div>
+        <div style="margin-top:10px; font-family: var(--font-display); font-size: 1.6rem; line-height:.9;" set:html={t.home.finalCta.yourBiz}></div>
+        <div style="margin-top:10px; height:1px; background: var(--line);"></div>
+        <div style="margin-top:12px; display:flex; gap:8px;"><span style="flex:1; height:28px; border-radius:99px; background: var(--ink); color: white; display:grid; place-items:center; font-size:11px; font-weight:650;">{t.home.finalCta.call}</span><span style="flex:1; height:28px; border-radius:99px; border:1px solid var(--line-strong); display:grid; place-items:center; font-size:11px; font-weight:600;">{t.home.finalCta.quote}</span></div>
+        <div style="margin-top:12px; background: #F8F5EF; border-radius:10px; padding:10px; font-size:12px; text-align:center;" set:html={t.home.finalCta.live}></div>
+      </div>
+      <div class="cta-stamp">W</div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero { padding-block: 28px 24px; background: linear-gradient(180deg, var(--paper) 0%, var(--paper-3) 100%); overflow: clip; position: relative; }
+  .hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(24px, 4vw, 56px); align-items: center; padding-block: clamp(16px, 2.5vw, 32px) clamp(20px, 3vw, 40px); }
+  .hero-kicker { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; letter-spacing:-0.01em; background: white; border: 1px solid var(--line); padding: 6px 10px; border-radius: 99px; box-shadow: 0 2px 10px rgba(10,15,28,.06); }
+  .hero-badge .dot { width:8px; height:8px; border-radius:99px; background:#00C950; box-shadow: 0 0 0 4px rgba(0,201,80,.14); }
+  .hero-title { margin-top: 18px; font-size: clamp(2.8rem, 7.2vw, 6.2rem); line-height: .86; letter-spacing: -0.04em; }
+  .hero-title .hero-italic { font-style: italic; font-weight: 400; color: var(--accent); position: relative; }
+  .hero-lead { margin-top: 18px; max-width: 50ch; font-size: clamp(1rem, 1.5vw, 1.08rem); }
+  .hero-actions { margin-top: 22px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+  .hero-note { width: 100%; margin-top: 4px; font-size: 11px; color: var(--muted); letter-spacing: .04em; }
+  .hero-visual { position: relative; padding-top: 8px; }
+  .visual-stack { position: relative; background: white; border: 1px solid var(--line); border-radius: 22px; box-shadow: var(--shadow-lg); overflow: clip; transform: rotate(.4deg); }
+  .browser-bar { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid var(--line); background: #FDFCF9; }
+  .dots { display:flex; gap:6px; } .dots i { width:10px; height:10px; border-radius:99px; background: #E6E0D6; display:block; } .dots i:nth-child(1){ background:#FF5F57; } .dots i:nth-child(2){ background:#FFBD2E; } .dots i:nth-child(3){ background:#28C940; }
+  .url { font-family: var(--font-mono); font-size:11px; letter-spacing:.04em; background: white; border:1px solid var(--line); padding:5px 10px; border-radius:99px; color: var(--ink-3); }
+  .live { margin-left: auto; font-size:11px; color: var(--muted); font-weight:650; display:flex; align-items:center; gap:6px; } .live i { width:7px; height:7px; border-radius:99px; background: var(--muted); display:block; }
+  .preview-main { padding: 14px; background: #FDFCF9; }
+  .preview-media { border-radius: 14px; overflow: clip; border: 1px solid var(--line); background: white; }
+  .preview-art { width:100%; height:auto; display:block; }
+  .preview-meta { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:10px; font-size:12px; }
+  .meta-left { display: grid; gap:2px; }
+  .pill { font-size:11px; font-weight:650; background: var(--ink); color:white; padding:6px 10px; border-radius:99px; }
+  .float-card { position: absolute; background: white; border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow-md); padding: 12px 14px; display: flex; align-items: center; gap:12px; }
+  .float-a { right: -10px; bottom: 54px; transform: rotate(1.2deg); max-width: 300px; }
+  .float-icon { width:36px; height:36px; border-radius:10px; background: var(--paper-2); display:grid; place-items:center; font-size:14px; flex:none; }
+  .float-card .check { margin-left:auto; width:24px; height:24px; border-radius:99px; background:#00C950; color:white; display:grid; place-items:center; font-size:12px; font-weight:700; }
+  .float-b { left: -14px; bottom: -18px; flex-direction: column; align-items: stretch; gap: 4px; width: 205px; transform: rotate(-1deg); }
+  .float-list { list-style:none; padding:0; margin:8px 0 0; display:grid; gap:5px; }
+  .float-list li { display:flex; align-items:center; gap:6px; font-size:11.5px; color: var(--ink-3); line-height:1.3; }
+  .float-list li i { width:16px; height:16px; border-radius:99px; background:#00C950; color:white; display:grid; place-items:center; font-size:9px; font-style:normal; flex:none; }
+  .visual-caption { display:flex; justify-content:space-between; gap:12px; margin-top:10px; font-size:10px; color: var(--muted); padding-inline: 4px; }
+  .hero-rail { display:flex; align-items:center; gap:14px; justify-content: center; padding: 10px 0 6px; color: var(--muted); font-family: var(--font-mono); font-size:10px; letter-spacing:.14em; }
+  .rail-line { flex:1; height:1px; background: var(--line); max-width: 420px; }
+  .hero-watermark { position: absolute; inset: 0; pointer-events: none; overflow: clip; z-index: 0; opacity: .035; display: grid; place-items: center; user-select: none; }
+  .hero-watermark span { position: absolute; font-family: var(--font-display); font-size: clamp(10rem, 28vw, 24rem); line-height: 1; letter-spacing: -0.06em; color: var(--ink); white-space: nowrap; transform: rotate(-6deg); }
+  .hero-watermark span:last-child { transform: rotate(-6deg) translate(1.2em, 1.1em); opacity: .6; }
+  .hero { isolation: isolate; }
+  .hero::before { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0; background: radial-gradient(700px 400px at 18% 18%, rgba(255,59,48,.06) 0%, transparent 62%), radial-gradient(600px 600px at 92% 88%, rgba(10,15,28,.04) 0%, transparent 58%), linear-gradient(180deg, transparent 0%, rgba(10,15,28,.015) 100%); }
+  .hero-grid, .hero-rail { position: relative; z-index: 1; }
+  .hero-badge .dot { animation: pulseDot 2.2s ease-in-out infinite; }
+  @keyframes pulseDot { 0%, 100% { box-shadow: 0 0 0 4px rgba(0,201,80,.14); transform: scale(1); } 50% { box-shadow: 0 0 0 7px rgba(0,201,80,0); transform: scale(1.08); } }
+  .live i { animation: pulseLive 1.8s ease-in-out infinite; }
+  @keyframes pulseLive { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .7; transform: scale(0.85); } }
+  .hero-title .hero-italic { position: relative; }
+  .hero-title .hero-italic::after { content: ""; position: absolute; left: -2%; right: -2%; bottom: 0.08em; height: 0.34em; background: linear-gradient(90deg, rgba(255,59,48,.16), rgba(255,59,48,.08)); z-index: -1; transform: scaleX(0); transform-origin: left; transition: transform .9s var(--ease-out) 600ms; border-radius: 2px; }
+  [data-reveal].is-visible .hero-italic::after, .hero-title.is-visible .hero-italic::after { transform: scaleX(1); }
+  @media (prefers-reduced-motion: reduce) { .hero-badge .dot, .live i { animation: none; } .hero-title .hero-italic::after { transform: scaleX(1); transition: none; } }
+  @media (max-width: 960px) { .hero-grid { grid-template-columns: 1fr; } .float-a { right: 8px; bottom: 8px; } .float-b { left: 8px; bottom: -10px; } }
+  @media (max-width: 560px) { .hero { padding-block: 12px 16px; } .hero-title { font-size: clamp(2.6rem, 12vw, 4.2rem); } .float-card { position: relative; inset:auto !important; transform: none !important; margin-top:12px; width:auto; } .visual-stack { transform: none; } .preview-meta { flex-direction: column; align-items: flex-start; } }
+  .intro-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(24px, 4vw, 56px); align-items: start; }
+  .feature-grid { display:grid; grid-template-columns: repeat(3,1fr); gap:16px; margin-top: clamp(32px,5vw,56px); }
+  .f-card { background:white; border:1px solid var(--line); border-radius: var(--radius-lg); padding: 22px; box-shadow: var(--shadow-sm); }
+  .f-icon { width:36px; height:36px; border-radius:10px; display:grid; place-items:center; background: var(--paper-2); border:1px solid var(--line); font-size:13px; transition: transform .35s var(--ease-out), background .2s; }
+  .f-card { transition: transform .35s var(--ease-out), box-shadow .35s, border-color .2s; }
+  .f-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .f-card:hover .f-icon { transform: rotate(8deg) scale(1.06); }
+  .f-card h3 { margin-top:14px; font-size:16px; letter-spacing:-0.02em; font-weight:700; line-height:1.25; }
+  .f-card p { margin-top:8px; font-size:13.5px; line-height:1.6; color: var(--muted); }
+  @media (max-width: 880px) { .intro-grid { grid-template-columns: 1fr; } .feature-grid { grid-template-columns: 1fr; } }
+  .section-head { max-width: 60ch; }
+  .steps { margin-top: 36px; display: grid; gap: 18px; }
+  .step { display:grid; grid-template-columns: 64px 1fr 360px; gap: 20px; background: rgba(248,245,239,.06); border:1px solid var(--line-on-dark); border-radius: 20px; padding: 22px; align-items: center; backdrop-filter: blur(6px); }
+  .step-n { width:56px; height:56px; border-radius: 14px; display:grid; place-items:center; font-family: var(--font-display); font-size:1.35rem; line-height:1; background: var(--paper); color: var(--ink); transition: transform .35s var(--ease-out); }
+  .step:hover .step-n { transform: scale(1.06) rotate(2deg); }
+  .step { transition: transform .35s var(--ease-out), background .3s, border-color .3s; }
+  .step:hover { transform: translateY(-2px); background: rgba(248,245,239,.09); border-color: rgba(248,245,239,.14); }
+  .step-body h3 { font-size: 18px; letter-spacing:-0.02em; color: var(--paper); }
+  .step-body p { margin-top:8px; font-size:14px; line-height:1.6; color: rgba(248,245,239,.68); max-width: 42ch; }
+  .step-list { list-style:none; padding:0; margin-top:12px; display:flex; gap:12px; flex-wrap:wrap; font-size:11px; color: rgba(248,245,239,.55); }
+  .step-visual .mini-card { background: var(--paper-3); border:1px solid rgba(10,15,28,.06); border-radius: 16px; padding: 14px; box-shadow: var(--shadow-md); color: var(--ink); }
+  .mini-card--dark { background:#0F1216 !important; color: var(--paper) !important; border-color: rgba(248,245,239,.08) !important; }
+  .tag { font-size:11px; font-weight:600; background: var(--paper-2); border:1px solid var(--line); padding:4px 8px; border-radius:99px; }
+  .steps-cta { margin-top:18px; display:flex; flex-wrap:wrap; align-items:center; gap:14px; }
+  @media (max-width: 980px) { .step { grid-template-columns: 56px 1fr; } .step-visual { grid-column: 1 / -1; } }
+  @media (max-width: 560px) { .step { grid-template-columns: 48px 1fr; padding:16px; } .step-n { width:48px; height:48px; } }
+  .split-head { display:grid; grid-template-columns: 1.2fr .8fr; gap: 24px; align-items: end; }
+  .split-head-actions { padding-bottom: 6px; }
+  .demo-strip { margin-top: 28px; display:grid; grid-template-columns: repeat(3,1fr); gap:16px; }
+  .demo-card { border-radius: 20px; overflow: clip; border: 1px solid var(--line); background: white; box-shadow: var(--shadow-sm); transition: transform .4s var(--ease-out), box-shadow .4s; }
+  .demo-card { position: relative; overflow: clip; }
+  .demo-card::before { content: ""; position: absolute; inset: 0; background: linear-gradient(102deg, transparent 40%, rgba(255,255,255,.14) 50%, transparent 60%); transform: translateX(-100%); transition: transform .65s var(--ease-out); pointer-events: none; z-index: 2; }
+  .demo-card:hover::before { transform: translateX(100%); }
+  .demo-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .demo-media { padding:18px; min-height: 220px; position:relative; }
+  .demo-tag { font-size:10px; opacity:.6; }
+  .demo-title { margin-top: 14px; font-family: var(--font-sans); font-weight:800; letter-spacing:-0.03em; font-size:1.55rem; line-height:.9; }
+  .demo-title span { font-weight:400; opacity:.6; }
+  .demo-sub { margin-top:8px; font-size:11px; opacity:.6; }
+  .demo-lines { margin-top:18px; display:grid; gap:6px; }
+  .demo-lines i { height:6px; border-radius:99px; background: currentColor; opacity:.12; display:block; }
+  .demo-foot { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 14px; border-top:1px solid var(--line); background: white; font-size:13px; }
+  .demo-card--dark .demo-media { background: var(--ink); color: var(--paper); }
+  .demo-card--dark .demo-foot { background: var(--ink); color: var(--paper); border-top-color: rgba(248,245,239,.08); }
+  .demo-card--ink .demo-foot { background: #0F172A; }
+  .demo-browse { margin-top:16px; display:flex; flex-wrap:wrap; gap:16px; align-items:center; justify-content:space-between; background: var(--paper-2); border:1px solid var(--line); border-radius:16px; padding:14px; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+  .chips span { font-size:12px; font-weight:600; letter-spacing:-0.01em; background:white; border:1px solid var(--line); padding:6px 10px; border-radius:99px; }
+  @media (max-width: 900px) { .split-head { grid-template-columns: 1fr; } .demo-strip { grid-template-columns: 1fr; } .demo-card .demo-media { min-height: 180px; } }
+  .agency-head { display:grid; gap:6px; }
+  .agency-grid { margin-top: 28px; display:grid; grid-template-columns: repeat(3, 1fr); gap:16px; align-items: stretch; }
+  .agency-card { position:relative; border-radius: 22px; overflow: clip; padding: 18px; display:flex; flex-direction:column; gap:16px; min-height: 420px; border: 1px solid var(--line); transition: transform .4s var(--ease-out), box-shadow .4s; isolation:isolate; }
+  .agency-card::before { content: ""; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,.10) 50%, transparent 65%); transform: translateX(-100%); transition: transform .7s var(--ease-out); pointer-events: none; z-index: 1; }
+  .agency-card:hover::before { transform: translateX(100%); }
+  .agency-card:hover { transform: translateY(-6px) rotate(.2deg); box-shadow: var(--shadow-lg); }
+  .agency-top { display:flex; justify-content:space-between; align-items:center; font-size:10px; letter-spacing:.14em; opacity:.7; }
+  .agency-body { flex:1; }
+  .agency-price { display:flex; align-items: baseline; gap:10px; }
+  .agency-price .display { font-size: 3.2rem; line-height:.9; }
+  .agency-price .mono { font-size:10px; line-height:1.2; opacity:.6; }
+  .agency-title { margin-top:14px; font-size: 1.45rem; line-height:1; letter-spacing:-0.03em; font-weight:750; }
+  .agency-card p { margin-top:10px; font-size:13.5px; line-height:1.6; opacity:.72; }
+  .agency-foot { margin-top:auto; padding-top:14px; border-top:1px solid var(--line-on-dark); display:grid; gap:10px; }
+  .agency-cta { display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:13px; letter-spacing:-0.01em; background: var(--ink); color: var(--paper); padding:10px 14px; border-radius:99px; width: fit-content; }
+  .agency-mini { display:flex; gap:6px; flex-wrap:wrap; font-family: var(--font-mono); font-size:10px; opacity:.55; letter-spacing:.04em; }
+  .agency-art { position:absolute; inset:auto -20px -20px auto; width: 56%; height: 42%; opacity:.9; pointer-events:none; z-index:-1; }
+  .agency-card--pricing { background: var(--accent); color: white; border-color: rgba(255,255,255,.14); }
+  .agency-card--pricing .agency-top { color: rgba(255,255,255,.8); }
+  .agency-card--pricing .agency-title { color:white; }
+  .agency-card--pricing p { color: rgba(255,255,255,.82); }
+  .agency-card--pricing .agency-foot { border-top-color: rgba(255,255,255,.18); }
+  .agency-card--pricing .agency-cta { background: white; color: var(--accent); }
+  .art-price { width:100%; height:100%; background: radial-gradient(120px 120px at 70% 30%, white 0%, rgba(255,255,255,0) 70%), linear-gradient(135deg, rgba(255,255,255,.18) 0%, rgba(0,0,0,.08) 100%); border-radius: 18px 0 0 0; border:1px solid rgba(255,255,255,.22); transform: rotate(-4deg); }
+  .agency-card--contact { background: var(--paper-3); color: var(--ink); }
+  .contact-pills { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+  .contact-pills span { background: var(--paper-2); border:1px solid var(--line); padding:7px 10px; border-radius:99px; font-size:12px; font-weight:600; letter-spacing:-0.01em; }
+  .art-contact { width:100%; height:100%; background: repeating-linear-gradient( -12deg, #0A0F1C 0 2px, transparent 2px 14px), linear-gradient(180deg, #FFF 0%, #F8F5EF 100%); border-radius: 18px 0 0 0; opacity:.06; }
+  .agency-card--demos { background: var(--ink); color: var(--paper); border-color: rgba(248,245,239,.08); }
+  .agency-card--demos p { color: rgba(248,245,239,.66); }
+  .agency-card--demos .agency-foot { border-top-color: var(--line-on-dark); }
+  .demos-stack { display:flex; gap: -8px; margin-top:2px; }
+  .demos-thumb { width:54px; height:54px; border-radius:12px; border:2px solid var(--ink); display:grid; place-items:center; font-weight:800; letter-spacing:-0.04em; font-size:11px; margin-left:-8px; box-shadow: 0 4px 16px rgba(0,0,0,.18); }
+  .demos-thumb:first-child { margin-left:0; }
+  .agency-note { margin-top:14px; display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; font-size:10px; color: rgba(248,245,239,.45); padding: 0 2px 22px; }
+  .angle-divider { height: 28px; background: var(--paper); clip-path: polygon(0 100%, 100% 0, 100% 100%, 0 100%); margin-top: 10px; }
+  @media (max-width: 960px) { .agency-grid { grid-template-columns: 1fr; } .agency-card { min-height: 380px; } }
+  .pricing-teaser { display:grid; grid-template-columns: .9fr 1.1fr; gap: 24px; align-items: start; }
+  .pricing-grid { display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
+  .price-card { background: white; border:1px solid var(--line); border-radius:16px; padding:16px; box-shadow: var(--shadow-sm); transition: transform .3s var(--ease-out), box-shadow .3s; }
+  .price-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .price-card ul { list-style:none; padding:0; margin-top:10px; display:grid; gap:8px; }
+  .price-card li { display:flex; gap:8px; align-items:center; font-size:13.5px; line-height:1.45; }
+  .price-card li i { width:20px; height:20px; border-radius:99px; background: #00C950; color:white; display:grid; place-items:center; font-size:10px; font-style:normal; flex:none; }
+  .price-card--muted { background: var(--paper-2); }
+  .price-card--muted li { color: var(--muted); font-size:13px; }
+  @media (max-width: 900px) { .pricing-teaser { grid-template-columns: 1fr; } .pricing-grid { grid-template-columns: 1fr; } }
+  .craft-grid { display:grid; grid-template-columns: .95fr 1.05fr; gap: clamp(24px, 4vw, 48px); align-items: center; }
+  .craft-frame { position:relative; }
+  .craft-img { border-radius:18px; overflow: clip; border:1px solid var(--line); box-shadow: var(--shadow-lg); background:white; }
+  .craft-svg { width:100%; height:auto; display:block; }
+  .craft-float { position:absolute; right:12px; bottom:12px; background:white; border:1px solid var(--line); border-radius:99px; padding:8px 12px; font-size:10px; display:flex; gap:8px; box-shadow: var(--shadow-sm); }
+  .craft-list { list-style:none; padding:0; margin-top:18px; display:grid; gap:14px; }
+  .craft-list li { display:flex; gap:12px; align-items:start; font-size:14px; line-height:1.55; color: var(--ink-3); }
+  .check-badge { width:26px; height:26px; border-radius:99px; background: var(--ink); color:white; display:grid; place-items:center; font-size:11px; flex:none; margin-top:1px; }
+  @media (max-width: 880px) { .craft-grid { grid-template-columns: 1fr; } }
+  .faq-grid { display:grid; grid-template-columns: .9fr 1.1fr; gap: clamp(24px, 4vw, 48px); align-items: start; }
+  .faq-list { display:grid; gap:10px; }
+  .faq-list details { background:white; border:1px solid var(--line); border-radius:14px; overflow:clip; box-shadow: var(--shadow-sm); }
+  .faq-list summary { list-style:none; cursor:pointer; padding:16px 18px; font-weight:650; letter-spacing:-0.02em; font-size:14.5px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .faq-list summary::-webkit-details-marker{ display:none; }
+  .faq-list summary::after { content:"＋"; width:24px; height:24px; border-radius:99px; border:1px solid var(--line); display:grid; place-items:center; font-weight:500; flex:none; font-size:12px; }
+  .faq-list details[open] summary::after { content:"\\2212"; background: var(--ink); color:white; border-color: var(--ink); }
+  .faq-list details div { padding: 0 18px 16px; color: var(--muted); font-size:14px; line-height:1.6; border-top:1px solid var(--line); margin-top:4px; padding-top:12px; }
+  @media (max-width: 880px) { .faq-grid { grid-template-columns: 1fr; } }
+  .cta-band { background: var(--ink); color: var(--paper); padding-block: clamp(40px, 6vw, 80px); position:relative; overflow: clip; border-top: 1px solid var(--line-on-dark); }
+  .cta-band::before { content:""; position:absolute; inset:0; background: radial-gradient(600px 400px at 85% 10%, rgba(255,59,48,.22) 0%, transparent 60%), radial-gradient(500px 500px at 10% 90%, rgba(255,255,255,.06) 0%, transparent 60%); pointer-events:none; }
+  .cta-inner { display:grid; grid-template-columns: 1.2fr .8fr; gap: 24px; align-items: center; position:relative; }
+  .cta-visual { display:grid; place-items:center; position:relative; }
+  .cta-card { width: min(340px, 100%); background: var(--paper-3); color: var(--ink); border-radius: 18px; padding:16px; border:1px solid rgba(10,15,28,.08); box-shadow: 0 20px 60px rgba(0,0,0,.28); transform: rotate(1deg); }
+  .cta-stamp { position:absolute; right: 18%; top: 8%; width:54px; height:54px; border-radius:14px; background: var(--accent); color:white; display:grid; place-items:center; font-family: var(--font-display); font-size:22px; transform: rotate(8deg); box-shadow: 0 10px 24px rgba(255,59,48,.4); border:1px solid rgba(255,255,255,.4); animation: floatStamp 4.5s ease-in-out infinite; }
+  @keyframes floatStamp { 0%, 100% { transform: rotate(8deg) translateY(0); } 50% { transform: rotate(8deg) translateY(-5px); } }
+  .cta-card { transition: transform .45s var(--ease-out), box-shadow .45s; }
+  .cta-card:hover { transform: rotate(0.4deg) translateY(-3px); box-shadow: 0 26px 70px rgba(0,0,0,.34); }
+  @media (prefers-reduced-motion: reduce) { .cta-stamp { animation: none; } }
+  @media (max-width: 900px) { .cta-inner { grid-template-columns: 1fr; } .cta-visual { order: -1; } .cta-stamp { right: 6%; } }
+  .section { content-visibility: auto; contain-intrinsic-size: auto 700px; }
+  .hero, .marquee { content-visibility: visible; contain-intrinsic-size: auto; }
+</style>
+
+<script>
+  function initHomePage() {
+    const hero = document.getElementById('hero');
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isCoarse = window.matchMedia('(pointer: coarse), (hover: none)').matches;
+    if (hero && !prefersReduced && !isCoarse) {
+      const stack = hero.querySelector('[data-parallax="stack"]') as HTMLElement | null;
+      const a = hero.querySelector('[data-parallax="a"]') as HTMLElement | null;
+      const b = hero.querySelector('[data-parallax="b"]') as HTMLElement | null;
+      const watermark = hero.querySelector('.hero-watermark') as HTMLElement | null;
+      let raf = 0, tx = 0, ty = 0, cx = 0, cy = 0;
+      hero.addEventListener('mousemove', (e: MouseEvent) => {
+        const r = hero.getBoundingClientRect();
+        tx = ((e.clientX - r.left) / r.width - 0.5) * 2;
+        ty = ((e.clientY - r.top) / r.height - 0.5) * 2;
+        if (!raf) raf = requestAnimationFrame(tick);
+      });
+      hero.addEventListener('mouseleave', () => {
+        tx = 0; ty = 0;
+        if (!raf) raf = requestAnimationFrame(tick);
+      });
+      function tick() {
+        raf = 0;
+        cx += (tx - cx) * 0.08;
+        cy += (ty - cy) * 0.08;
+        if (stack) stack.style.transform = `rotate(.4deg) translate3d(${cx * 6}px, ${cy * 6}px, 0)`;
+        if (a) a.style.transform = `rotate(1.2deg) translate3d(${cx * 14}px, ${cy * 10}px, 0)`;
+        if (b) b.style.transform = `rotate(-1deg) translate3d(${cx * -12}px, ${cy * -8}px, 0)`;
+        if (watermark) watermark.style.transform = `translate3d(${cx * -10}px, ${cy * -6}px, 0)`;
+        if (Math.abs(tx - cx) > 0.001 || Math.abs(ty - cy) > 0.001) {
+          raf = requestAnimationFrame(tick);
+        }
+      }
+      let sTick = false;
+      window.addEventListener('scroll', () => {
+        if (sTick) return;
+        sTick = true;
+        requestAnimationFrame(() => {
+          const y = window.scrollY * 0.08;
+          if (watermark && !prefersReduced) watermark.style.transform += ` translateY(${y}px)`;
+          sTick = false;
+        });
+      }, { passive: true });
+    }
+
+    if (!prefersReduced && !isCoarse) {
+      const cards = document.querySelectorAll('.agency-card, .demo-card');
+      cards.forEach((el) => {
+        const card = el as HTMLElement;
+        card.style.willChange = 'transform';
+        card.addEventListener('mousemove', (e: MouseEvent) => {
+          const r = card.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width - 0.5;
+          const py = (e.clientY - r.top) / r.height - 0.5;
+          const ry = px * 6;
+          const rx = py * -5;
+          card.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(0) translateY(-4px)`;
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = '';
+        });
+      });
+    }
+  }
+
+  document.addEventListener('astro:page-load', initHomePage);
+</script>

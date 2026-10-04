@@ -21,15 +21,23 @@
  */
 
 import { INTRO_CONFIG } from "../../lib/intro/config";
+import { useTranslations, type Locale } from "../../lib/i18n";
 
 interface Props {
   /** Element the cursor must finally rest on (defaults to the hero primary CTA). */
   target?: string;
+  locale?: Locale;
 }
 
-const { target } = Astro.props as Props;
+const { target, locale = "en" } = Astro.props as Props;
+const t = useTranslations(locale);
 const targetSelector = target ?? "";
 const fracturePieceCount = INTRO_CONFIG.breach.fracture.pieces;
+
+// Localized prompt texts for SSR
+const promptPointer = t.intro.prompt.pointer;
+const promptTouch = t.intro.prompt.touch;
+const promptKey = t.intro.prompt.key;
 ---
 
 <!--
@@ -75,7 +83,14 @@ const fracturePieceCount = INTRO_CONFIG.breach.fracture.pieces;
   })();
 </script>
 
-<div class="wi" data-webao-intro data-wi-target={targetSelector} role="region" aria-label="WEBAO introduction">
+<div
+  class="wi"
+  data-webao-intro
+  data-wi-target={targetSelector}
+  role="region"
+  aria-label="WEBAO introduction"
+  data-reduced-live={t.intro.static.live}
+>
   <div class="wi-world" data-wi-world>
     <!-- Paper bleed: keeps the shake from ever exposing an edge -->
     <div class="wi-bleed" data-wi-bleed aria-hidden="true"></div>
@@ -147,8 +162,8 @@ const fracturePieceCount = INTRO_CONFIG.breach.fracture.pieces;
         </svg>
       </div>
       <div class="wi-floor-meta">
-        <span class="wi-mono">◇ SURFACE 01</span>
-        <span class="wi-mono" data-wi-floor-hint>◆ ENTER</span>
+        <span class="wi-mono">{t.intro.surface}</span>
+        <span class="wi-mono" data-wi-floor-hint>{t.intro.enter}</span>
       </div>
     </div>
 
@@ -160,10 +175,10 @@ const fracturePieceCount = INTRO_CONFIG.breach.fracture.pieces;
   </div>
 
   <!-- Invitation -->
-  <button class="wi-prompt" data-wi-prompt type="button" tabindex="0">
+  <button class="wi-prompt" data-wi-prompt type="button" tabindex="0" data-prompt-pointer={promptPointer} data-prompt-touch={promptTouch} data-prompt-enter={t.intro.enter} data-prompt-tap={t.intro.tap}>
     <span class="wi-prompt-dot" aria-hidden="true"></span>
-    <span class="wi-prompt-label" data-wi-prompt-label>Click to enter</span>
-    <kbd class="wi-kbd" data-wi-prompt-key aria-hidden="true">↵</kbd>
+    <span class="wi-prompt-label" data-wi-prompt-label>{promptPointer}</span>
+    <kbd class="wi-kbd" data-wi-prompt-key aria-hidden="true">{promptKey}</kbd>
   </button>
 
   <!-- Reduced-motion fallback: no motion, no cursor, one real action -->
@@ -171,8 +186,8 @@ const fracturePieceCount = INTRO_CONFIG.breach.fracture.pieces;
     <div class="wi-static-inner">
       <span class="wi-static-mark" aria-hidden="true">W</span>
       <p class="wi-static-name">WEBAO</p>
-      <p class="wi-static-sub">Custom websites for small business · $149 CAD / month</p>
-      <button class="wi-static-btn" data-wi-static-btn type="button">Enter site</button>
+      <p class="wi-static-sub">{t.intro.static.sub}</p>
+      <button class="wi-static-btn" data-wi-static-btn type="button">{t.intro.static.button}</button>
     </div>
   </div>
 
@@ -886,7 +901,10 @@ const fracturePieceCount = INTRO_CONFIG.breach.fracture.pieces;
       }
     };
     document.addEventListener("keydown", onKey, { once: true });
-    if (live) live.textContent = "Intro (reduced motion). Press Enter to open the site.";
+    if (live) {
+      const reducedLive = (root as HTMLElement & { dataset: DOMStringMap }).dataset.reducedLive;
+      live.textContent = reducedLive || "Intro (reduced motion). Press Enter to open the site.";
+    }
     btn?.focus({ preventScroll: true });
   }
 
@@ -1230,16 +1248,25 @@ const fracturePieceCount = INTRO_CONFIG.breach.fracture.pieces;
       cur.vy = vh * CFG.flight.chase.entryVelocity.y;
       theta = Math.atan2(cur.vy, cur.vx) * (180 / Math.PI);
 
+      const promptEl = refs.prompt as HTMLElement & { dataset: DOMStringMap };
+      const localizedPointer = promptEl.dataset.promptPointer || CFG.invite.promptText.pointer;
+      const localizedTouch = promptEl.dataset.promptTouch || CFG.invite.promptText.touch;
+      const localizedEnter = promptEl.dataset.promptEnter || "◆ ENTER";
+      const localizedTap = promptEl.dataset.promptTap || "◆ TAP";
+
       if (touch) {
-        refs.promptLabel.textContent = CFG.invite.promptText.touch;
+        refs.promptLabel.textContent = localizedTouch;
         refs.promptKey.style.display = "none";
         refs.prompt.dataset.touch = "1";
-        refs.floorHint.textContent = "◆ TAP";
+        refs.floorHint.textContent = localizedTap;
       } else {
-        refs.promptLabel.textContent = CFG.invite.promptText.pointer;
+        refs.promptLabel.textContent = localizedPointer;
         refs.promptKey.textContent = "↵";
+        refs.floorHint.textContent = localizedEnter;
       }
-      refs.live.textContent = `Intro: ${touch ? "tap" : "click or press Enter"} to enter.`;
+      // live region is localized via static text from translation (fallback)
+      const liveText = refs.root.querySelector<HTMLElement>("[data-wi-static] .wi-static-sub")?.textContent || "";
+      refs.live.textContent = `Intro: ${touch ? localizedTouch : localizedPointer} — ${liveText}`;
 
       /* --- composition reveal ------------------------------------------- */
       clock.tween({ ms: 380, ease: EASE.outCubic, onUpdate: (v) => (refs.veil.style.opacity = String(r2(v))) });
