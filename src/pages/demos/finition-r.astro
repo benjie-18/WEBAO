@@ -1,0 +1,427 @@
+---
+import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+
+// Demo microsite: Finition R, fictional renovation contractor, Montréal.
+// Standalone art direction. Swiss International typographic. Not connected to the WEBAO theme system.
+const IMG = {
+  hero: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200&auto=format&fit=crop",
+  kitchen: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?q=80&w=800&auto=format&fit=crop",
+  bathroom: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=800&auto=format&fit=crop",
+  living: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=800&auto=format&fit=crop",
+  interior: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=800&auto=format&fit=crop",
+  detail: "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?q=80&w=800&auto=format&fit=crop",
+  site: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1000&auto=format&fit=crop",
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Finition R: Renovation Contractor in Montréal</title>
+  <meta name="description" content="Finition R: Montréal renovation contractor. Kitchens, bathrooms, full interiors. Fixed quotes, licensed RBQ, 240 projects delivered." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+</head>
+<body class="fnr">
+
+  <!-- UTILITY BAR -->
+  <div class="fnr-util">
+    <span>RBQ 1234-5678-01 · Licensed & insured</span>
+    <span>Montréal QC</span>
+    <a href="tel:+15145550142">(514) 555-0142</a>
+  </div>
+
+  <!-- NAV -->
+  <header class="fnr-navwrap">
+    <nav class="fnr-nav" aria-label="Primary">
+      <a class="fnr-wordmark" href="#top" aria-label="Finition R, home">FINITION&nbsp;R<span class="fnr-sq" aria-hidden="true"></span></a>
+      <div class="fnr-nav-links">
+        <a href="#services">Services</a>
+        <a href="#work">Work</a>
+        <a href="#process">Process</a>
+        <a href="#quote">Contact</a>
+      </div>
+      <a class="fnr-btn" href="#quote">Get a quote</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="fnr-hero">
+      <div class="fnr-hero-grid">
+        <div class="fnr-hero-type">
+          <p class="fnr-index">RÉNOVATION · MONTRÉAL · EST. 2008</p>
+          <h1 class="fnr-h1">We finish what others <span class="fnr-orange">start.</span></h1>
+          <p class="fnr-lede">Finition R is a renovation contractor for people who read the fine print. Kitchens, bathrooms, and full interiors, delivered on a fixed quote with a licensed crew.</p>
+          <div class="fnr-hero-meta">
+            <div><strong>18</strong><span>years on site</span></div>
+            <div><strong>240</strong><span>projects delivered</span></div>
+            <div><strong>4.9</strong><span>average rating</span></div>
+          </div>
+          <a class="fnr-btn fnr-btn-big" href="#quote">Request a fixed quote</a>
+        </div>
+        <figure class="fnr-hero-media">
+          <img src={IMG.hero} alt="Completed modern home exterior by Finition R" loading="eager" fetchpriority="high" />
+          <figcaption><span class="fnr-tag">PROJECT 047</span> Full interior, Rosemont · 2025</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="fnr-marquee" aria-hidden="true">
+      <div class="fnr-marquee-track">
+        <span>Kitchens</span><span class="fnr-orange">·</span><span>Bathrooms</span><span class="fnr-orange">·</span><span>Basements</span><span class="fnr-orange">·</span><span>Full interiors</span><span class="fnr-orange">·</span><span>Millwork</span><span class="fnr-orange">·</span>
+        <span>Kitchens</span><span class="fnr-orange">·</span><span>Bathrooms</span><span class="fnr-orange">·</span><span>Basements</span><span class="fnr-orange">·</span><span>Full interiors</span><span class="fnr-orange">·</span><span>Millwork</span><span class="fnr-orange">·</span>
+      </div>
+    </div>
+
+    <!-- SERVICES -->
+    <section class="fnr-section" id="services">
+      <div class="fnr-wrap">
+        <div class="fnr-sec-head">
+          <p class="fnr-index">01 ,  Services</p>
+          <h2 class="fnr-h2">What we build</h2>
+        </div>
+        <div class="fnr-rows">
+          <article class="fnr-row">
+            <span class="fnr-row-n">01</span>
+            <h3>Kitchens</h3>
+            <p class="fnr-row-scope">Cabinetry, stone, lighting, layout rework</p>
+            <p class="fnr-row-time">4-6 weeks</p>
+            <p class="fnr-row-price">from $28k</p>
+          </article>
+          <article class="fnr-row">
+            <span class="fnr-row-n">02</span>
+            <h3>Bathrooms</h3>
+            <p class="fnr-row-scope">Waterproofing, tile, fixtures, ventilation</p>
+            <p class="fnr-row-time">3-4 weeks</p>
+            <p class="fnr-row-price">from $18k</p>
+          </article>
+          <article class="fnr-row">
+            <span class="fnr-row-n">03</span>
+            <h3>Basements</h3>
+            <p class="fnr-row-scope">Insulation, framing, flooring, egress</p>
+            <p class="fnr-row-time">5-8 weeks</p>
+            <p class="fnr-row-price">from $35k</p>
+          </article>
+          <article class="fnr-row">
+            <span class="fnr-row-n">04</span>
+            <h3>Full interiors</h3>
+            <p class="fnr-row-scope">Multi-room, structural, permits handled</p>
+            <p class="fnr-row-time">10-16 weeks</p>
+            <p class="fnr-row-price">from $90k</p>
+          </article>
+          <article class="fnr-row">
+            <span class="fnr-row-n">05</span>
+            <h3>Millwork</h3>
+            <p class="fnr-row-scope">Built-ins, libraries, custom vanities</p>
+            <p class="fnr-row-time">2-4 weeks</p>
+            <p class="fnr-row-price">from $9k</p>
+          </article>
+        </div>
+        <p class="fnr-note">Every project starts with a fixed written quote. The number we sign is the number you pay.</p>
+      </div>
+    </section>
+
+    <!-- WORK -->
+    <section class="fnr-work" id="work">
+      <div class="fnr-wrap">
+        <div class="fnr-sec-head">
+          <p class="fnr-index">02 ,  Selected work</p>
+          <h2 class="fnr-h2">Recent projects</h2>
+        </div>
+        <div class="fnr-grid">
+          <figure class="fnr-proj">
+            <img src={IMG.kitchen} alt="Renovated kitchen with island" loading="lazy" />
+            <figcaption><span>042</span> Kitchen, Villeray · 2025</figcaption>
+          </figure>
+          <figure class="fnr-proj">
+            <img src={IMG.bathroom} alt="Renovated bathroom with walk-in shower" loading="lazy" />
+            <figcaption><span>039</span> Bathroom, Plateau · 2024</figcaption>
+          </figure>
+          <figure class="fnr-proj">
+            <img src={IMG.living} alt="Renovated open living room" loading="lazy" />
+            <figcaption><span>035</span> Full interior, Hochelaga · 2024</figcaption>
+          </figure>
+          <figure class="fnr-proj">
+            <img src={IMG.interior} alt="Renovated hallway with custom millwork" loading="lazy" />
+            <figcaption><span>031</span> Millwork, Outremont · 2023</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROCESS -->
+    <section class="fnr-section" id="process">
+      <div class="fnr-wrap">
+        <div class="fnr-sec-head">
+          <p class="fnr-index">03 ,  Process</p>
+          <h2 class="fnr-h2">How it runs</h2>
+        </div>
+        <div class="fnr-steps">
+          <article class="fnr-step">
+            <p class="fnr-step-n">01</p>
+            <h3>Site visit</h3>
+            <p>We measure everything, ask annoying questions, and photograph what is behind your walls. 45 minutes, free.</p>
+          </article>
+          <article class="fnr-step">
+            <p class="fnr-step-n">02</p>
+            <h3>Fixed quote</h3>
+            <p>Itemized, written, valid 30 days. If we missed something in our own measurements, that is our problem.</p>
+          </article>
+          <article class="fnr-step">
+            <p class="fnr-step-n">03</p>
+            <h3>The build</h3>
+            <p>One project manager, daily photo updates, dust barriers that actually work. You always know who is in your house.</p>
+          </article>
+          <article class="fnr-step">
+            <p class="fnr-step-n">04</p>
+            <h3>Walkthrough</h3>
+            <p>We go room by room with a checklist. Anything not perfect gets fixed before final payment, in writing.</p>
+          </article>
+        </div>
+        <figure class="fnr-site">
+          <img src={IMG.site} alt="Finition R crew at work on a renovation site" loading="lazy" />
+          <figcaption><span class="fnr-tag">SITE 048</span> In progress, Verdun · dust barriers up, coffee flowing</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- QUOTE -->
+    <section class="fnr-quote" id="quote">
+      <div class="fnr-wrap fnr-quote-grid">
+        <div>
+          <p class="fnr-index">04 ,  Contact</p>
+          <h2 class="fnr-h2">Describe the project.<br />We do the math.</h2>
+          <p class="fnr-quote-copy">Tell us the room, the rough size, and your timeline. We reply within one business day with next steps and a site visit slot.</p>
+          <p class="fnr-quote-direct">In a hurry? <a href="tel:+15145550142">(514) 555-0142</a></p>
+        </div>
+        <form class="fnr-form" id="fnr-form" novalidate>
+          <label>Name<input type="text" name="name" required placeholder="Alex Tremblay" /></label>
+          <label>Phone<input type="tel" name="phone" required placeholder="(514) 555-0100" /></label>
+          <label>Project type
+            <select name="type">
+              <option>Kitchen</option>
+              <option>Bathroom</option>
+              <option>Basement</option>
+              <option>Full interior</option>
+              <option>Millwork</option>
+            </select>
+          </label>
+          <label>Details<textarea name="details" rows="3" placeholder="Approx. size, borough, ideal start date"></textarea></label>
+          <button class="fnr-btn fnr-btn-full" type="submit">Request my fixed quote</button>
+          <p class="fnr-form-note" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="fnr-footer">
+    <p class="fnr-footer-giant" aria-hidden="true">FINITION R</p>
+    <div class="fnr-wrap fnr-footer-in">
+      <p>© 2026 Finition R. Fictional demo, real standards.</p>
+      <p>RBQ 1234-5678-01 · 88, rue Fictive, Montréal QC · <a href="tel:+15145550142">(514) 555-0142</a></p>
+    </div>
+  </footer>
+
+  <EscapeHatch locale="en" />
+
+  <script>
+    // Demo form: never submits anywhere
+    (function () {
+      var form = document.getElementById('fnr-form') as HTMLFormElement | null;
+      form?.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var note = form?.querySelector('.fnr-form-note');
+        if (note) note.textContent = 'Received. We reply within one business day with a site visit slot.';
+        form?.reset();
+      });
+    })();
+  </script>
+
+  <style>
+    .fnr {
+      --fnr-white: #FFFFFF;
+      --fnr-ink: #111111;
+      --fnr-gray: #6E6E6E;
+      --fnr-line: #E4E4E4;
+      --fnr-orange: #FF6B00;
+      --fnr-black: #0E0E0E;
+      --fnr-font: "Archivo", "Helvetica Neue", Arial, sans-serif;
+      margin: 0;
+      background: var(--fnr-white);
+      color: var(--fnr-ink);
+      font-family: var(--fnr-font);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: clip;
+    }
+    .fnr *, .fnr *::before, .fnr *::after { box-sizing: border-box; }
+    .fnr img { display: block; max-width: 100%; }
+    .fnr-wrap { max-width: 1240px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 44px); }
+    .fnr-orange { color: var(--fnr-orange); }
+
+    /* utility bar */
+    .fnr-util {
+      display: flex; justify-content: space-between; gap: 16px;
+      font-size: 11.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 10px clamp(20px, 4vw, 44px); border-bottom: 1px solid var(--fnr-line);
+      color: var(--fnr-gray); background: var(--fnr-white);
+    }
+    .fnr-util a { color: var(--fnr-ink); text-decoration: none; }
+
+    /* nav */
+    .fnr-navwrap { position: sticky; top: 0; z-index: 60; background: rgba(255,255,255,0.94); backdrop-filter: blur(10px); border-bottom: 1px solid var(--fnr-line); }
+    .fnr-nav { display: flex; align-items: center; gap: 30px; padding: 16px clamp(20px, 4vw, 44px); max-width: 1440px; margin: 0 auto; }
+    .fnr-wordmark {
+      font-weight: 900; font-size: 22px; letter-spacing: -0.02em; color: var(--fnr-ink);
+      text-decoration: none; display: flex; align-items: center; gap: 8px; margin-right: auto;
+    }
+    .fnr-sq { width: 12px; height: 12px; background: var(--fnr-orange); }
+    .fnr-nav-links { display: flex; gap: 4px; }
+    .fnr-nav-links a {
+      color: var(--fnr-ink); text-decoration: none; font-weight: 600; font-size: 13px;
+      letter-spacing: 0.12em; text-transform: uppercase; padding: 10px 14px;
+    }
+    .fnr-nav-links a:hover { color: var(--fnr-orange); }
+
+    /* buttons */
+    .fnr-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      font-family: var(--fnr-font); font-weight: 700; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase;
+      background: var(--fnr-ink); color: #fff; text-decoration: none; cursor: pointer;
+      padding: 15px 28px; border: none; transition: background 0.15s ease;
+    }
+    .fnr-btn:hover { background: var(--fnr-orange); }
+    .fnr-btn-big { font-size: 14px; padding: 18px 36px; margin-top: 8px; }
+    .fnr-btn-full { width: 100%; }
+
+    /* type */
+    .fnr-index { font-size: 12px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: var(--fnr-gray); margin: 0 0 18px; }
+    .fnr-h1 {
+      font-weight: 900; font-size: clamp(3rem, 7.5vw, 6.2rem);
+      line-height: 0.94; letter-spacing: -0.03em; margin: 0 0 26px; text-transform: uppercase;
+    }
+    .fnr-h2 { font-weight: 800; font-size: clamp(2.2rem, 5vw, 3.8rem); letter-spacing: -0.025em; line-height: 1; margin: 0; text-transform: uppercase; }
+    .fnr-sec-head { display: grid; gap: 6px; margin-bottom: 44px; border-top: 3px solid var(--fnr-ink); padding-top: 22px; }
+
+    /* hero */
+    .fnr-hero { padding: clamp(48px, 6vw, 96px) clamp(20px, 4vw, 44px); max-width: 1440px; margin: 0 auto; }
+    .fnr-hero-grid { display: grid; grid-template-columns: 1.08fr 0.92fr; gap: clamp(36px, 5vw, 80px); align-items: end; }
+    .fnr-lede { font-size: 18px; line-height: 1.6; max-width: 44ch; margin: 0 0 34px; color: #333; }
+    .fnr-hero-meta { display: flex; gap: 44px; margin-bottom: 30px; border-top: 1px solid var(--fnr-line); padding-top: 24px; }
+    .fnr-hero-meta div { display: grid; gap: 4px; }
+    .fnr-hero-meta strong { font-size: 40px; font-weight: 900; letter-spacing: -0.03em; }
+    .fnr-hero-meta span { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fnr-gray); }
+    .fnr-hero-media { margin: 0; }
+    .fnr-hero-media img { width: 100%; height: clamp(380px, 44vw, 560px); object-fit: cover; }
+    .fnr-hero-media figcaption, .fnr-site figcaption {
+      display: flex; align-items: center; gap: 10px; padding-top: 12px;
+      font-size: 12.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--fnr-gray);
+    }
+    .fnr-tag { background: var(--fnr-orange); color: #fff; font-size: 11px; font-weight: 800; letter-spacing: 0.14em; padding: 5px 10px; }
+
+    /* marquee */
+    .fnr-marquee { background: var(--fnr-black); color: #fff; overflow: hidden; padding: 16px 0; }
+    .fnr-marquee-track { display: flex; gap: 26px; width: max-content; animation: fnr-tick 24s linear infinite; font-weight: 800; font-size: 20px; letter-spacing: 0.06em; text-transform: uppercase; }
+    @keyframes fnr-tick { to { transform: translateX(-50%); } }
+
+    /* sections */
+    .fnr-section { padding: clamp(70px, 9vw, 130px) 0; }
+
+    /* service rows */
+    .fnr-rows { border-top: 1px solid var(--fnr-line); }
+    .fnr-row {
+      display: grid; grid-template-columns: 70px 1.2fr 1.6fr 0.7fr 0.7fr; gap: 20px; align-items: baseline;
+      padding: 26px 12px; border-bottom: 1px solid var(--fnr-line);
+      transition: background 0.16s ease, color 0.16s ease;
+    }
+    .fnr-row:hover { background: var(--fnr-ink); color: #fff; }
+    .fnr-row:hover .fnr-row-scope, .fnr-row:hover .fnr-row-time { color: #BDBDBD; }
+    .fnr-row:hover .fnr-row-n { color: var(--fnr-orange); }
+    .fnr-row-n { font-weight: 800; font-size: 15px; color: var(--fnr-orange); font-variant-numeric: tabular-nums; }
+    .fnr-row h3 { margin: 0; font-size: 26px; font-weight: 800; letter-spacing: -0.02em; text-transform: uppercase; }
+    .fnr-row-scope { margin: 0; font-size: 14.5px; color: var(--fnr-gray); }
+    .fnr-row-time { margin: 0; font-size: 14px; font-weight: 600; color: var(--fnr-gray); font-variant-numeric: tabular-nums; }
+    .fnr-row-price { margin: 0; font-size: 16px; font-weight: 800; text-align: right; font-variant-numeric: tabular-nums; }
+    .fnr-note { margin: 26px 0 0; font-size: 14.5px; color: var(--fnr-gray); border-left: 4px solid var(--fnr-orange); padding-left: 16px; max-width: 62ch; }
+
+    /* work grid */
+    .fnr-work { background: #F7F7F5; border-block: 1px solid var(--fnr-line); padding: clamp(70px, 9vw, 130px) 0; }
+    .fnr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+    .fnr-proj { margin: 0; background: #fff; border: 1px solid var(--fnr-line); }
+    .fnr-proj img { width: 100%; height: 340px; object-fit: cover; }
+    .fnr-proj figcaption {
+      display: flex; gap: 12px; align-items: baseline; padding: 16px 20px;
+      font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fnr-gray);
+    }
+    .fnr-proj figcaption span { color: var(--fnr-orange); font-weight: 800; }
+
+    /* process */
+    .fnr-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-left: 1px solid var(--fnr-line); }
+    .fnr-step { padding: 8px 26px 0; border-right: 1px solid var(--fnr-line); }
+    .fnr-step-n { font-size: 15px; font-weight: 800; color: var(--fnr-orange); margin: 0 0 34px; font-variant-numeric: tabular-nums; }
+    .fnr-step h3 { margin: 0 0 12px; font-size: 21px; font-weight: 800; letter-spacing: -0.01em; text-transform: uppercase; }
+    .fnr-step p { margin: 0; font-size: 14.5px; line-height: 1.65; color: #444; }
+    .fnr-step { border-top: 3px solid var(--fnr-ink); padding-top: 20px; }
+    .fnr-site { margin: 60px 0 0; }
+    .fnr-site img { width: 100%; height: clamp(280px, 36vw, 480px); object-fit: cover; }
+
+    /* quote */
+    .fnr-quote { background: var(--fnr-black); color: #fff; padding: clamp(70px, 9vw, 130px) 0; }
+    .fnr-quote-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 6vw, 90px); align-items: start; }
+    .fnr-quote .fnr-index { color: #8A8A8A; }
+    .fnr-quote-copy { font-size: 17px; line-height: 1.65; color: #CFCFCF; max-width: 42ch; margin: 24px 0; }
+    .fnr-quote-direct { font-size: 15px; color: #CFCFCF; }
+    .fnr-quote-direct a { color: var(--fnr-orange); font-weight: 700; }
+    .fnr-form { display: grid; gap: 20px; }
+    .fnr-form label { display: grid; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #8A8A8A; }
+    .fnr-form input, .fnr-form select, .fnr-form textarea {
+      font-family: var(--fnr-font); font-size: 16px; color: #fff;
+      background: transparent; border: none; border-bottom: 2px solid #333;
+      padding: 12px 2px; width: 100%; border-radius: 0;
+    }
+    .fnr-form select option { color: #111; }
+    .fnr-form textarea { resize: vertical; }
+    .fnr-form input:focus, .fnr-form select:focus, .fnr-form textarea:focus { outline: none; border-bottom-color: var(--fnr-orange); }
+    .fnr-form .fnr-btn { background: var(--fnr-orange); }
+    .fnr-form .fnr-btn:hover { background: #fff; color: var(--fnr-ink); }
+    .fnr-form-note { margin: 0; font-size: 15px; font-weight: 600; color: var(--fnr-orange); }
+    .fnr-form-note:empty { display: none; }
+
+    /* footer */
+    .fnr-footer { background: var(--fnr-black); color: #fff; padding: 30px 0 90px; text-align: center; overflow: hidden; border-top: 1px solid #222; }
+    .fnr-footer-giant {
+      font-weight: 900; font-size: clamp(3.2rem, 12.5vw, 10rem); line-height: 1; margin: 0 0 30px;
+      letter-spacing: -0.03em; color: #1C1C1C;
+    }
+    .fnr-footer-in { display: grid; gap: 10px; font-size: 13.5px; color: #8A8A8A; }
+    .fnr-footer-in p { margin: 0; }
+    .fnr-footer-in a { color: var(--fnr-orange); }
+
+    @media (max-width: 1020px) {
+      .fnr-row { grid-template-columns: 56px 1fr 1fr; row-gap: 8px; }
+      .fnr-row-time, .fnr-row-price { grid-column: auto; }
+      .fnr-steps { grid-template-columns: 1fr 1fr; row-gap: 36px; }
+    }
+    @media (max-width: 860px) {
+      .fnr-nav-links, .fnr-util span:nth-child(2) { display: none; }
+      .fnr-hero-grid, .fnr-quote-grid { grid-template-columns: 1fr; }
+      .fnr-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .fnr-row { grid-template-columns: 44px 1fr; }
+      .fnr-row-scope { grid-column: 2; }
+      .fnr-steps { grid-template-columns: 1fr; }
+      .fnr-hero-meta { gap: 26px; flex-wrap: wrap; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .fnr-marquee-track { animation: none; }
+      .fnr-btn, .fnr-row { transition: none; }
+    }
+  </style>
+</body>
+</html>
