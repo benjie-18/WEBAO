@@ -7,7 +7,7 @@ import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
 const IMG = {
   hero: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1800&auto=format&fit=crop",
   garage: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1200&auto=format&fit=crop",
-  detail: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=1200&auto=format&fit=crop",
+  detail: "/demos/atelier-nord/01.jpg",
   engine: "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?q=80&w=1200&auto=format&fit=crop",
 };
 ---
@@ -179,7 +179,7 @@ const IMG = {
             </figure>
             <div class="an-log-pair">
               <figure class="an-log-fig">
-                <img src={IMG.detail} alt="Berline sport bleue après polissage" loading="lazy" />
+                <img src={IMG.detail} alt="Polissage en cours sur un coupé noir" loading="lazy" />
                 <figcaption class="an-mono">Baie 01 · polissage</figcaption>
               </figure>
               <figure class="an-log-fig">
@@ -416,6 +416,7 @@ const IMG = {
     .an-log-media { display: grid; gap: 14px; }
     .an-log-fig { margin: 0; position: relative; }
     .an-log-fig img { width: 100%; height: 300px; object-fit: cover; border-radius: 14px; border: 1px solid var(--an-line); }
+    .an-log-fig figcaption::before { content: ""; display: inline-block; width: 7px; height: 7px; background: var(--an-accent); margin-right: 9px; vertical-align: 1px; }
     .an-log-fig figcaption { position: absolute; left: 14px; bottom: 14px; background: rgba(10,15,26,0.78); backdrop-filter: blur(8px); padding: 8px 14px; border-radius: 8px; border: 1px solid var(--an-line); margin: 0; }
     .an-log-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     .an-log-pair img { height: 190px; }
