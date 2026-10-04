@@ -3,12 +3,20 @@ import EscapeHatch from "../../components/demos/EscapeHatch.astro";
 
 // Demo microsite: Tactile, fictional smart home control brand, Portland.
 // Standalone art direction. Full neumorphism. Not connected to the WEBAO theme system.
+// Structure: ROOM CONFIGURATOR. The page IS an interactive room panel;
+// material swatches and live controls re-tint the room photo in real time.
 const IMG = {
   living: "/demos/tactile/01.jpg",
   lounge: "/demos/tactile/02.jpg",
   bedroom: "/demos/tactile/03.jpg",
-  kitchen: "/demos/tactile/04.jpg",
+  kitchen: "https://images.pexels.com/photos/6920631/pexels-photo-6920631.jpeg?auto=compress&cs=tinysrgb&w=800",
 };
+const ROOMS = [
+  { id: "living", label: "Living room", img: IMG.living, alt: "Calm living room with soft daylight", devices: "6 devices", temp: 21, scene: "Evening scene ready" },
+  { id: "lounge", label: "Lounge", img: IMG.lounge, alt: "Cozy lounge with warm lamp light", devices: "4 devices", temp: 20, scene: "Movie mode armed" },
+  { id: "bedroom", label: "Bedroom", img: IMG.bedroom, alt: "Quiet bedroom in neutral tones", devices: "5 devices", temp: 19, scene: "Wake-up at 7:00" },
+  { id: "kitchen", label: "Kitchen", img: IMG.kitchen, alt: "Bright modern kitchen", devices: "7 devices", temp: 22, scene: "Speaker playing" },
+];
 ---
 
 <!DOCTYPE html>
@@ -27,247 +35,152 @@ const IMG = {
 
   <EscapeHatch locale="en" />
 
-  <!-- NAV -->
-  <header class="tx-navwrap">
-    <nav class="tx-nav" aria-label="Primary">
-      <a class="tx-logo" href="#top" aria-label="Tactile, home">
-        <span class="tx-logo-dot" aria-hidden="true"></span>tactile
-      </a>
-      <button class="tx-burger" aria-label="Open menu" aria-expanded="false" aria-controls="tx-menu">
-        <span></span><span></span><span></span>
-      </button>
-      <div class="tx-menu" id="tx-menu">
-        <div class="tx-nav-links">
-          <a href="#controls">Controls</a>
-          <a href="#rooms">Rooms</a>
-          <a href="#specs">Specs</a>
-          <a href="#pricing">Kits</a>
-        </div>
-        <a class="tx-btn" href="#contact">Get Tactile</a>
-      </div>
+  <!-- Slim configurator bar -->
+  <header class="tx-bar">
+    <a class="tx-logo" href="#top" aria-label="Tactile, home">
+      <span class="tx-logo-dot" aria-hidden="true"></span>tactile
+    </a>
+    <nav aria-label="Primary">
+      <a href="#room">The room</a>
+      <a href="#specify">Specify</a>
+      <a href="#kits">Kits</a>
     </nav>
+    <a class="tx-btn tx-btn-small" href="#contact">Get Tactile</a>
   </header>
 
   <main id="top">
 
-    <!-- HERO -->
-    <section class="tx-hero">
-      <div class="tx-wrap tx-hero-grid">
-        <div class="tx-hero-copy">
-          <p class="tx-eyebrow">Smart home, soft touch</p>
-          <h1 class="tx-h1">Your home,<br />under your thumb.</h1>
-          <p class="tx-lede">Tactile replaces cold glass panels with controls you can actually feel. Press, slide, and twist your way to the perfect evening, no app digging required.</p>
-          <div class="tx-hero-cta">
-            <a class="tx-btn" href="#pricing">See the kits</a>
-            <a class="tx-btn-soft" href="#controls">Try the controls</a>
+    <!-- THE ROOM: the configurator is the page -->
+    <section class="tx-room" id="room" aria-label="Interactive room configurator">
+      <div class="tx-wrap">
+        <p class="tx-kicker">The configurator</p>
+        <h1 class="tx-h1">Press things.<br />This room is live.</h1>
+        <p class="tx-sub">Pick a room, choose a finish, then dim the lights and nudge the temperature. Every control below is real hardware behavior, running right here.</p>
+
+        <div class="tx-panel" id="tx-panel">
+          <!-- room tabs -->
+          <div class="tx-tabs" role="tablist" aria-label="Choose a room">
+            {ROOMS.map((r, i) => (
+              <button class="tx-tab tx-press" type="button" role="tab" aria-selected={i === 0 ? "true" : "false"} data-room={r.id}>{r.label}</button>
+            ))}
           </div>
-          <div class="tx-hero-stats">
-            <div class="tx-stat"><strong>38k</strong><span>homes softened</span></div>
-            <div class="tx-stat"><strong>4.9</strong><span>average rating</span></div>
-            <div class="tx-stat"><strong>12ms</strong><span>press response</span></div>
-          </div>
-        </div>
-        <div class="tx-hero-device">
-          <div class="tx-hub" role="img" aria-label="Tactile Hub device mockup showing temperature and quick controls">
-            <div class="tx-hub-screen tx-inset">
-              <p class="tx-hub-label">Living room</p>
-              <p class="tx-hub-temp"><span id="tx-hero-temp">21</span>°</p>
-              <p class="tx-hub-sub">Feels just right</p>
-            </div>
-            <div class="tx-hub-row">
-              <button class="tx-chip tx-press" type="button" aria-pressed="true"><span class="tx-chip-dot tx-on" aria-hidden="true"></span>Lights</button>
-              <button class="tx-chip tx-press" type="button" aria-pressed="false"><span class="tx-chip-dot" aria-hidden="true"></span>Blinds</button>
-            </div>
-            <div class="tx-hub-row">
-              <button class="tx-chip tx-press" type="button" aria-pressed="true"><span class="tx-chip-dot tx-on" aria-hidden="true"></span>Music</button>
-              <button class="tx-chip tx-press" type="button" aria-pressed="false"><span class="tx-chip-dot" aria-hidden="true"></span>Away</button>
-            </div>
-            <div class="tx-hub-tempctl">
-              <button class="tx-round tx-press" type="button" data-temp="-1" aria-label="Cooler">−</button>
-              <button class="tx-round tx-press" type="button" data-temp="1" aria-label="Warmer">+</button>
+
+          <!-- room visualization -->
+          <div class="tx-stage">
+            <div class="tx-img-frame">
+              <img id="tx-room-img" src={ROOMS[0].img} alt={ROOMS[0].alt} loading="eager" fetchpriority="high" />
+              <div class="tx-stage-meta">
+                <p id="tx-room-label"><strong>{ROOMS[0].label}</strong> · {ROOMS[0].devices} · <span id="tx-room-temp">{ROOMS[0].temp}</span>°</p>
+                <p id="tx-room-scene">{ROOMS[0].scene}</p>
+              </div>
             </div>
           </div>
+
+          <!-- material swatches -->
+          <div class="tx-swatches" role="group" aria-label="Choose a finish">
+            <p class="tx-ctl-label">Finish</p>
+            <div class="tx-swatch-row">
+              <button class="tx-swatch tx-press is-active" type="button" data-finish="linen" aria-pressed="true" title="Linen"><span style="background:#EDE6DA"></span>Linen</button>
+              <button class="tx-swatch tx-press" type="button" data-finish="oak" aria-pressed="false" title="Oak"><span style="background:#C8A97E"></span>Oak</button>
+              <button class="tx-swatch tx-press" type="button" data-finish="slate" aria-pressed="false" title="Slate"><span style="background:#8FA8C8"></span>Slate</button>
+              <button class="tx-swatch tx-press" type="button" data-finish="moss" aria-pressed="false" title="Moss"><span style="background:#A8C3A0"></span>Moss</button>
+            </div>
+          </div>
+
+          <!-- live controls -->
+          <div class="tx-ctls">
+            <div class="tx-ctl">
+              <p class="tx-ctl-label">Lights <span id="tx-light-val">72%</span></p>
+              <input class="tx-slider" id="tx-light" type="range" min="10" max="100" value="72" aria-label="Light brightness" />
+            </div>
+            <div class="tx-ctl">
+              <p class="tx-ctl-label">Temperature <span id="tx-temp-val">21°</span></p>
+              <div class="tx-temp-row">
+                <button class="tx-round tx-press" type="button" data-temp="-1" aria-label="Cooler">−</button>
+                <button class="tx-round tx-press" type="button" data-temp="1" aria-label="Warmer">+</button>
+                <button class="tx-toggle" type="button" role="switch" aria-checked="false" aria-label="Evening scene"><span class="tx-toggle-knob"></span></button>
+                <span class="tx-ctl-hint">Evening scene</span>
+              </div>
+            </div>
+            <div class="tx-ctl">
+              <p class="tx-ctl-label">Blinds <span id="tx-blind-val">35%</span></p>
+              <input class="tx-slider" id="tx-blind" type="range" min="0" max="100" value="35" aria-label="Blind openness" />
+            </div>
+          </div>
+
+          <p class="tx-panel-note">38k homes softened · 4.9 average rating · 12ms press response</p>
         </div>
       </div>
     </section>
 
-    <!-- CONTROLS -->
-    <section class="tx-section" id="controls">
+    <!-- WHAT WE SPECIFY: a spec list, not cards -->
+    <section class="tx-specify" id="specify">
       <div class="tx-wrap">
-        <p class="tx-kicker">Touch everything</p>
-        <h2 class="tx-h2">Controls with a<br />satisfying click</h2>
-        <p class="tx-sub">Go ahead, press things. Every Tactile control is real hardware with a real press, and every demo below is live.</p>
-        <div class="tx-controls-grid">
-          <article class="tx-card">
-            <div class="tx-card-head"><h3>Porch light</h3><span class="tx-pill">Front door</span></div>
-            <p class="tx-card-desc">Dim from the couch, or tap twice for full bright when the dog needs out.</p>
-            <div class="tx-control-row">
-              <button class="tx-toggle" type="button" role="switch" aria-checked="true" aria-label="Porch light"><span class="tx-toggle-knob"></span></button>
-              <input class="tx-slider" type="range" min="0" max="100" value="72" aria-label="Porch light brightness" />
-              <span class="tx-slider-val">72%</span>
-            </div>
-          </article>
-          <article class="tx-card">
-            <div class="tx-card-head"><h3>Thermostat</h3><span class="tx-pill">Hallway</span></div>
-            <p class="tx-card-desc">Twist the ring or tap. Learns your routine in a week, keeps it simple forever.</p>
-            <div class="tx-control-row">
-              <button class="tx-round tx-press" type="button" data-room-temp="-1" aria-label="Cooler">−</button>
-              <p class="tx-big-num"><span data-room-display>21</span>°</p>
-              <button class="tx-round tx-press" type="button" data-room-temp="1" aria-label="Warmer">+</button>
-            </div>
-          </article>
-          <article class="tx-card">
-            <div class="tx-card-head"><h3>Front door</h3><span class="tx-pill">Security</span></div>
-            <p class="tx-card-desc">Locked, unlocked, and everything in between, with a press you can hear from the kitchen.</p>
-            <div class="tx-control-row">
-              <button class="tx-toggle" type="button" role="switch" aria-checked="false" aria-label="Front door lock"><span class="tx-toggle-knob"></span></button>
-              <p class="tx-lock-state">Unlocked</p>
-            </div>
-          </article>
-          <article class="tx-card">
-            <div class="tx-card-head"><h3>Blinds</h3><span class="tx-pill">Bedroom</span></div>
-            <p class="tx-card-desc">Slide for morning light, press and hold for blackout movie mode.</p>
-            <div class="tx-control-row">
-              <input class="tx-slider" type="range" min="0" max="100" value="35" aria-label="Blind openness" />
-              <span class="tx-slider-val">35%</span>
-            </div>
-          </article>
-          <article class="tx-card">
-            <div class="tx-card-head"><h3>Evening scene</h3><span class="tx-pill">One press</span></div>
-            <p class="tx-card-desc">Dims every light, drops the blinds, warms the thermostat. Dinner party in one tap.</p>
-            <div class="tx-control-row">
-              <button class="tx-btn-wide tx-press" type="button" data-scene>Start evening</button>
-            </div>
-          </article>
-          <article class="tx-card">
-            <div class="tx-card-head"><h3>Speaker</h3><span class="tx-pill">Kitchen</span></div>
-            <p class="tx-card-desc">A chunky volume ring, because nobody ever found the tiny plus button in a hurry.</p>
-            <div class="tx-control-row">
-              <button class="tx-toggle" type="button" role="switch" aria-checked="true" aria-label="Kitchen speaker"><span class="tx-toggle-knob"></span></button>
-              <input class="tx-slider" type="range" min="0" max="100" value="48" aria-label="Speaker volume" />
-              <span class="tx-slider-val">48%</span>
-            </div>
-          </article>
+        <p class="tx-kicker">What we specify</p>
+        <h2 class="tx-h2">Six controls.<br />Nothing you have to learn.</h2>
+        <dl class="tx-speclist">
+          <div><dt>Dimmer switch</dt><dd>Press, slide, done. The click alone is worth it.</dd></div>
+          <div><dt>Thermostat ring</dt><dd>Twist it like a volume knob. Learns your week, keeps it simple.</dd></div>
+          <div><dt>Blind slider</dt><dd>Slide for morning light, hold for blackout movie mode.</dd></div>
+          <div><dt>Scene button</dt><dd>One press: lights low, blinds down, thermostat warm.</dd></div>
+          <div><dt>Speaker ring</dt><dd>A chunky volume ring, because the tiny plus button never worked in a hurry.</dd></div>
+          <div><dt>Door toggle</dt><dd>Locked and unlocked with a press you can hear from the kitchen.</dd></div>
+        </dl>
+        <div class="tx-tech">
+          <span>Wi-Fi 6 · Thread · Matter</span>
+          <span>12 ms local press</span>
+          <span>2-year coin-cell battery</span>
+          <span>On-device, no cloud mic</span>
+          <span>Apple Home · Google · Alexa</span>
+          <span>3-year warranty, no questions</span>
         </div>
       </div>
     </section>
 
-    <!-- ROOMS -->
-    <section class="tx-section" id="rooms">
+    <!-- TRANSFORMATIONS: a filmstrip, not a grid -->
+    <section class="tx-strip">
       <div class="tx-wrap">
-        <p class="tx-kicker">Room by room</p>
-        <h2 class="tx-h2">Every room,<br />softly in control</h2>
-        <div class="tx-rooms-grid">
-          <article class="tx-room">
-            <div class="tx-img-frame tx-inset"><img src={IMG.living} alt="Calm living room with soft daylight" loading="lazy" /></div>
-            <h3>Living room</h3>
-            <p>6 devices · 21° · Evening scene ready</p>
-          </article>
-          <article class="tx-room">
-            <div class="tx-img-frame tx-inset"><img src={IMG.lounge} alt="Cozy lounge with warm lamp light" loading="lazy" /></div>
-            <h3>Lounge</h3>
-            <p>4 devices · 20° · Movie mode armed</p>
-          </article>
-          <article class="tx-room">
-            <div class="tx-img-frame tx-inset"><img src={IMG.bedroom} alt="Quiet bedroom in neutral tones" loading="lazy" /></div>
-            <h3>Bedroom</h3>
-            <p>5 devices · 19° · Wake-up at 7:00</p>
-          </article>
-          <article class="tx-room">
-            <div class="tx-img-frame tx-inset"><img src={IMG.kitchen} alt="Bright modern kitchen" loading="lazy" /></div>
-            <h3>Kitchen</h3>
-            <p>7 devices · 22° · Speaker playing</p>
-          </article>
-        </div>
+        <p class="tx-kicker">Softened in a weekend</p>
+        <h2 class="tx-h2">Rooms we have calmed</h2>
+      </div>
+      <div class="tx-film" role="list" aria-label="Room transformations">
+        {ROOMS.map((r) => (
+          <figure class="tx-frame" role="listitem">
+            <img src={r.img} alt={r.alt} loading="lazy" />
+            <figcaption><strong>{r.label}</strong><span>{r.devices} · fully tactile</span></figcaption>
+          </figure>
+        ))}
       </div>
     </section>
 
-    <!-- SPECS -->
-    <section class="tx-section" id="specs">
-      <div class="tx-wrap">
-        <p class="tx-kicker">Under the softness</p>
-        <h2 class="tx-h2">Serious tech,<br />gentle manners</h2>
-        <div class="tx-spec-list">
-          <div class="tx-spec"><span>Connectivity</span><strong>Wi-Fi 6, Thread, Matter</strong></div>
-          <div class="tx-spec"><span>Response time</span><strong>12 ms local press</strong></div>
-          <div class="tx-spec"><span>Battery</span><strong>2 years, coin cell</strong></div>
-          <div class="tx-spec"><span>Privacy</span><strong>On-device, no cloud mic</strong></div>
-          <div class="tx-spec"><span>Works with</span><strong>Apple Home, Google, Alexa</strong></div>
-          <div class="tx-spec"><span>Warranty</span><strong>3 years, no questions</strong></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- PRICING -->
-    <section class="tx-section" id="pricing">
+    <!-- KITS: a price list, not cards -->
+    <section class="tx-kits" id="kits">
       <div class="tx-wrap">
         <p class="tx-kicker">Starter kits</p>
-        <h2 class="tx-h2">Begin with<br />one soft press</h2>
-        <div class="tx-kits">
-          <article class="tx-kit">
-            <h3>Starter</h3>
-            <p class="tx-price">$149</p>
-            <p class="tx-kit-desc">One room, fully tactile.</p>
-            <ul>
-              <li>1 Tactile Hub</li>
-              <li>2 dimmer switches</li>
-              <li>1 thermostat ring</li>
-            </ul>
-            <a class="tx-btn-soft" href="#contact">Choose Starter</a>
-          </article>
-          <article class="tx-kit tx-kit-pop">
-            <p class="tx-flag">Most loved</p>
-            <h3>Home</h3>
-            <p class="tx-price">$349</p>
-            <p class="tx-kit-desc">The whole main floor.</p>
-            <ul>
-              <li>2 Tactile Hubs</li>
-              <li>6 dimmer switches</li>
-              <li>1 thermostat ring</li>
-              <li>2 blind sliders</li>
-            </ul>
-            <a class="tx-btn" href="#contact">Choose Home</a>
-          </article>
-          <article class="tx-kit">
-            <h3>Pro</h3>
-            <p class="tx-price">$699</p>
-            <p class="tx-kit-desc">Every room, plus install.</p>
-            <ul>
-              <li>4 Tactile Hubs</li>
-              <li>12 dimmer switches</li>
-              <li>2 thermostat rings</li>
-              <li>White-glove install</li>
-            </ul>
-            <a class="tx-btn-soft" href="#contact">Choose Pro</a>
-          </article>
+        <h2 class="tx-h2">Begin with one soft press</h2>
+        <div class="tx-pricelist">
+          <a class="tx-row" href="#contact">
+            <div><h3>Starter</h3><p>One room, fully tactile. 1 hub · 2 dimmers · 1 thermostat ring.</p></div>
+            <span class="tx-amount">$149</span>
+          </a>
+          <a class="tx-row tx-row-hot" href="#contact">
+            <div><h3>Home <em>most loved</em></h3><p>The whole main floor. 2 hubs · 6 dimmers · 1 ring · 2 blind sliders.</p></div>
+            <span class="tx-amount">$349</span>
+          </a>
+          <a class="tx-row" href="#contact">
+            <div><h3>Pro</h3><p>Every room, plus install. 4 hubs · 12 dimmers · 2 rings · white-glove install.</p></div>
+            <span class="tx-amount">$699</span>
+          </a>
         </div>
-      </div>
-    </section>
-
-    <!-- PROOF -->
-    <section class="tx-section">
-      <div class="tx-wrap">
-        <p class="tx-kicker">Soft words</p>
-        <h2 class="tx-h2">Homes that<br />feel the difference</h2>
-        <div class="tx-proof-grid">
-          <figure class="tx-quote">
-            <blockquote>"My kids fight over who gets to press the evening scene button. The click alone is worth it."</blockquote>
-            <figcaption><strong>Mara J.</strong><span>Portland, Home kit</span></figcaption>
-          </figure>
-          <figure class="tx-quote">
-            <blockquote>"Finally, smart home controls my grandmother can use without calling me. She just twists the ring."</blockquote>
-            <figcaption><strong>Devon A.</strong><span>Austin, Pro kit</span></figcaption>
-          </figure>
-          <figure class="tx-quote">
-            <blockquote>"It feels like pressing a cloud that does what you ask. My apartment has never been this calm."</blockquote>
-            <figcaption><strong>Priya S.</strong><span>Chicago, Starter kit</span></figcaption>
-          </figure>
-        </div>
+        <figure class="tx-quote">
+          <blockquote>"My kids fight over who gets to press the evening scene button. The click alone is worth it."</blockquote>
+          <figcaption><strong>Mara J.</strong> · Portland, Home kit</figcaption>
+        </figure>
       </div>
     </section>
 
     <!-- CONTACT -->
-    <section class="tx-section" id="contact">
+    <section class="tx-contact" id="contact">
       <div class="tx-wrap tx-contact-grid">
         <div>
           <p class="tx-kicker">Say hello</p>
@@ -301,20 +214,108 @@ const IMG = {
   </main>
 
   <footer class="tx-footer">
-    <div class="tx-wrap tx-footer-grid">
-      <div>
-        <a class="tx-logo" href="#top" aria-label="Tactile, home"><span class="tx-logo-dot" aria-hidden="true"></span>tactile</a>
-        <p>Soft controls for calm homes.<br />Designed in Portland.</p>
-      </div>
-      <nav aria-label="Footer">
-        <a href="#controls">Controls</a>
-        <a href="#rooms">Rooms</a>
-        <a href="#specs">Specs</a>
-        <a href="#pricing">Kits</a>
-      </nav>
+    <div class="tx-wrap">
+      <a class="tx-logo" href="#top" aria-label="Tactile, home"><span class="tx-logo-dot" aria-hidden="true"></span>tactile</a>
+      <p>Soft controls for calm homes. Designed in Portland.</p>
       <p class="tx-fine">Fictional demo site crafted by WEBAO. Tactile Home Co. does not exist.</p>
     </div>
   </footer>
+
+  <script define:vars={{ rooms: ROOMS }}>
+    (function () {
+      var panel = document.getElementById('tx-panel');
+      var img = document.getElementById('tx-room-img');
+      var label = document.getElementById('tx-room-label');
+      var scene = document.getElementById('tx-room-scene');
+      var tempVal = document.getElementById('tx-temp-val');
+      var roomTemp = document.getElementById('tx-room-temp');
+      var light = document.getElementById('tx-light');
+      var lightVal = document.getElementById('tx-light-val');
+      var blind = document.getElementById('tx-blind');
+      var blindVal = document.getElementById('tx-blind-val');
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function applyLight() {
+        if (!img || !(light instanceof HTMLInputElement)) return;
+        var v = parseInt(light.value, 10);
+        if (lightVal) lightVal.textContent = v + '%';
+        if (reduce) { img.style.transition = 'none'; }
+        img.style.filter = 'brightness(' + (0.45 + (v / 100) * 0.65) + ')';
+      }
+      function applyBlind() {
+        if (!(blind instanceof HTMLInputElement)) return;
+        if (blindVal) blindVal.textContent = blind.value + '%';
+      }
+
+      var tabs = panel ? panel.querySelectorAll('.tx-tab') : [];
+      tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          var id = tab.getAttribute('data-room');
+          var r = null;
+          for (var i = 0; i < rooms.length; i++) { if (rooms[i].id === id) r = rooms[i]; }
+          if (!r || !img) return;
+          tabs.forEach(function (t) { t.setAttribute('aria-selected', t === tab ? 'true' : 'false'); });
+          img.setAttribute('src', r.img);
+          img.setAttribute('alt', r.alt);
+          if (label) label.innerHTML = '<strong>' + r.label + '</strong> · ' + r.devices + ' · <span id="tx-room-temp">' + r.temp + '</span>°';
+          if (scene) scene.textContent = r.scene;
+          roomTemp = document.getElementById('tx-room-temp');
+          if (tempVal) tempVal.textContent = r.temp + '°';
+        });
+      });
+
+      var FINISH = { linen: '#EDE6DA', oak: '#C8A97E', slate: '#8FA8C8', moss: '#A8C3A0' };
+      var swatches = panel ? panel.querySelectorAll('.tx-swatch') : [];
+      swatches.forEach(function (sw) {
+        sw.addEventListener('click', function () {
+          swatches.forEach(function (s) { s.classList.remove('is-active'); s.setAttribute('aria-pressed', 'false'); });
+          sw.classList.add('is-active');
+          sw.setAttribute('aria-pressed', 'true');
+          var f = sw.getAttribute('data-finish') || 'linen';
+          if (panel) panel.style.setProperty('--accent', FINISH[f] || FINISH.linen);
+        });
+      });
+
+      var tbtns = panel ? panel.querySelectorAll('[data-temp]') : [];
+      tbtns.forEach(function (b) {
+        b.addEventListener('click', function () {
+          var d = parseInt(b.getAttribute('data-temp') || '0', 10);
+          var cur = tempVal ? parseInt(tempVal.textContent || '21', 10) : 21;
+          var next = Math.min(28, Math.max(16, cur + d));
+          if (tempVal) tempVal.textContent = next + '°';
+          if (roomTemp) roomTemp.textContent = String(next);
+        });
+      });
+
+      var toggle = panel ? panel.querySelector('.tx-toggle') : null;
+      if (toggle) toggle.addEventListener('click', function () {
+        var on = toggle.getAttribute('aria-checked') === 'true';
+        toggle.setAttribute('aria-checked', on ? 'false' : 'true');
+        if (light instanceof HTMLInputElement) {
+          light.value = on ? '72' : '28';
+          applyLight();
+        }
+      });
+
+      if (light) light.addEventListener('input', applyLight);
+      if (blind) blind.addEventListener('input', applyBlind);
+      applyLight();
+      applyBlind();
+
+      var form = document.getElementById('tx-form');
+      if (form instanceof HTMLFormElement) {
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var note = document.getElementById('tx-form-note');
+          if (note) {
+            note.hidden = false;
+            note.textContent = 'Received. A real human will reply within a day with your kit sketch.';
+          }
+          form.reset();
+        });
+      }
+    })();
+  </script>
 
 <style>
   .tx {
@@ -323,325 +324,198 @@ const IMG = {
     --ink-soft: #7b8499;
     --dark: #a3b1c6;
     --light: #ffffff;
-    --sage: #A8C3A0;
-    --blue: #8FA8C8;
+    --accent: #EDE6DA;
     --radius: 26px;
     background: var(--bg);
     color: var(--ink);
     font-family: "Nunito", system-ui, sans-serif;
     overflow-x: clip;
     line-height: 1.6;
+    margin: 0;
   }
   .tx *, .tx *::before, .tx *::after { box-sizing: border-box; }
   .tx img { display: block; max-width: 100%; }
   .tx a { color: inherit; }
-  .tx-wrap { width: min(1120px, 92%); margin-inline: auto; }
+  .tx-wrap { width: min(1080px, 92%); margin-inline: auto; }
 
-  .tx-raised { background: var(--bg); box-shadow: 8px 8px 18px var(--dark), -8px -8px 18px var(--light); border-radius: var(--radius); }
-  .tx-inset { background: var(--bg); box-shadow: inset 6px 6px 14px var(--dark), inset -6px -6px 14px var(--light); border-radius: var(--radius); }
+  .tx-press { transition: box-shadow .18s ease, transform .18s ease; }
+  .tx-press:active { transform: translateY(1px); }
 
-  /* Nav */
-  .tx-navwrap { position: sticky; top: 0; z-index: 50; padding: 14px 0; }
-  .tx-nav { width: min(1120px, 92%); margin-inline: auto; background: var(--bg); border-radius: 999px;
+  .tx-bar {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; gap: 26px;
+    padding: 14px clamp(18px, 4vw, 40px);
+    background: rgba(224, 229, 236, 0.88);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 6px 18px rgba(163, 177, 198, 0.45);
+  }
+  .tx-bar nav { display: flex; gap: 22px; margin-left: auto; font-weight: 700; font-size: 0.95rem; }
+  .tx-bar nav a { text-decoration: none; opacity: 0.75; }
+  .tx-bar nav a:hover { opacity: 1; }
+  .tx-logo { display: inline-flex; align-items: center; gap: 8px; font-weight: 900; font-size: 1.25rem; text-decoration: none; }
+  .tx-logo-dot { width: 14px; height: 14px; border-radius: 50%; background: var(--bg); box-shadow: 3px 3px 7px var(--dark), -3px -3px 7px var(--light), inset 2px 2px 4px var(--dark); }
+
+  .tx-btn {
+    display: inline-block; padding: 14px 28px; border: 0; border-radius: 999px;
+    background: var(--bg); color: var(--ink); font: inherit; font-weight: 800; text-decoration: none; cursor: pointer;
     box-shadow: 6px 6px 14px var(--dark), -6px -6px 14px var(--light);
-    display: flex; align-items: center; justify-content: space-between; padding: 10px 12px 10px 22px; position: relative; }
-  .tx-logo { display: inline-flex; align-items: center; gap: 10px; font-weight: 900; font-size: 1.35rem; letter-spacing: -0.02em; text-decoration: none; color: var(--ink); }
-  .tx-logo-dot { width: 18px; height: 18px; border-radius: 50%; background: var(--sage);
-    box-shadow: 3px 3px 6px var(--dark), -3px -3px 6px var(--light); }
-  .tx-menu { display: flex; align-items: center; gap: 26px; }
-  .tx-nav-links { display: flex; gap: 24px; }
-  .tx-nav-links a { text-decoration: none; font-weight: 700; font-size: 0.95rem; color: var(--ink-soft); padding: 8px 4px; }
-  .tx-nav-links a:hover { color: var(--ink); }
-  .tx-burger { display: none; background: var(--bg); border: 0; border-radius: 14px; padding: 12px;
-    box-shadow: 4px 4px 10px var(--dark), -4px -4px 10px var(--light); cursor: pointer; }
-  .tx-burger span { display: block; width: 22px; height: 3px; border-radius: 3px; background: var(--ink); margin: 4px 0; }
+  }
+  .tx-btn:hover { box-shadow: 8px 8px 20px var(--dark), -8px -8px 20px var(--light); }
+  .tx-btn-small { padding: 10px 20px; font-size: 0.9rem; }
 
-  /* Buttons */
-  .tx-btn { display: inline-block; text-decoration: none; font-weight: 800; color: var(--ink);
-    background: var(--bg); border: 0; border-radius: 999px; padding: 14px 30px; cursor: pointer; font-family: inherit; font-size: 1rem;
-    box-shadow: 6px 6px 14px var(--dark), -6px -6px 14px var(--light); transition: box-shadow .15s ease, transform .15s ease; }
-  .tx-btn:hover { transform: translateY(-1px); }
-  .tx-btn:active, .tx-press:active { box-shadow: inset 5px 5px 12px var(--dark), inset -5px -5px 12px var(--light); transform: translateY(0); }
-  .tx-btn-soft { display: inline-block; text-decoration: none; font-weight: 800; color: var(--ink-soft);
-    border-radius: 999px; padding: 14px 30px; box-shadow: inset 5px 5px 12px var(--dark), inset -5px -5px 12px var(--light); }
-  .tx-btn-soft:hover { color: var(--ink); }
-  .tx-btn-wide { width: 100%; }
+  .tx-kicker { font-weight: 800; font-size: 0.85rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); margin: 0 0 10px; }
+  .tx-h1 { font-size: clamp(2.4rem, 6vw, 4rem); line-height: 1.04; font-weight: 900; margin: 0 0 14px; letter-spacing: -0.01em; }
+  .tx-h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); line-height: 1.08; font-weight: 900; margin: 0 0 18px; }
+  .tx-sub { color: var(--ink-soft); font-size: 1.08rem; max-width: 60ch; }
 
-  /* Hero */
-  .tx-hero { padding: 56px 0 70px; }
-  .tx-hero-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 48px; align-items: center; }
-  .tx-eyebrow { font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; font-size: 0.8rem; color: var(--ink-soft); margin: 0 0 18px; }
-  .tx-h1 { font-size: clamp(2.6rem, 5.5vw, 4.3rem); line-height: 1.04; letter-spacing: -0.02em; font-weight: 900; margin: 0 0 20px; color: #3d4657; }
-  .tx-lede { font-size: 1.12rem; color: var(--ink-soft); max-width: 44ch; margin: 0 0 28px; }
-  .tx-hero-cta { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 34px; }
-  .tx-hero-stats { display: flex; gap: 14px; flex-wrap: wrap; }
-  .tx-stat { border-radius: 20px; padding: 14px 20px; box-shadow: inset 5px 5px 12px var(--dark), inset -5px -5px 12px var(--light); text-align: center; }
-  .tx-stat strong { display: block; font-size: 1.5rem; font-weight: 900; color: #3d4657; }
-  .tx-stat span { font-size: 0.8rem; color: var(--ink-soft); font-weight: 700; }
+  .tx-room { padding: clamp(48px, 8vw, 96px) 0 24px; }
+  .tx-panel {
+    margin-top: 30px; padding: clamp(20px, 4vw, 40px);
+    background: var(--bg); border-radius: 34px;
+    box-shadow: 12px 12px 30px var(--dark), -12px -12px 30px var(--light);
+    border-top: 6px solid var(--accent);
+  }
+  .tx-tabs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 22px; }
+  .tx-tab {
+    padding: 11px 20px; border: 0; border-radius: 999px; background: var(--bg); color: var(--ink);
+    font: inherit; font-weight: 800; cursor: pointer;
+    box-shadow: 5px 5px 12px var(--dark), -5px -5px 12px var(--light);
+  }
+  .tx-tab[aria-selected="true"] { box-shadow: inset 5px 5px 12px var(--dark), inset -5px -5px 12px var(--light); }
 
-  /* Hub device mockup */
-  .tx-hero-device { display: flex; justify-content: center; }
-  .tx-hub { width: min(340px, 100%); border-radius: 40px; padding: 30px 26px;
-    background: var(--bg); box-shadow: 14px 14px 30px var(--dark), -14px -14px 30px var(--light); }
-  .tx-hub-screen { border-radius: 28px; padding: 26px 20px; text-align: center; margin-bottom: 22px; }
-  .tx-hub-label { margin: 0; font-weight: 800; font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); }
-  .tx-hub-temp { margin: 6px 0 0; font-size: 4.2rem; font-weight: 900; color: #3d4657; line-height: 1; }
-  .tx-hub-sub { margin: 4px 0 0; color: var(--ink-soft); font-weight: 700; }
-  .tx-hub-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
-  .tx-chip { display: inline-flex; align-items: center; justify-content: center; gap: 9px; border: 0; cursor: pointer;
-    background: var(--bg); color: var(--ink); font-family: inherit; font-weight: 800; font-size: 0.9rem;
-    border-radius: 999px; padding: 13px 10px; box-shadow: 5px 5px 12px var(--dark), -5px -5px 12px var(--light); transition: box-shadow .15s ease; }
-  .tx-chip[aria-pressed="true"] { box-shadow: inset 4px 4px 10px var(--dark), inset -4px -4px 10px var(--light); color: #3d4657; }
-  .tx-chip-dot { width: 11px; height: 11px; border-radius: 50%; background: var(--dark); box-shadow: inset 2px 2px 4px rgba(0,0,0,.18); }
-  .tx-chip-dot.tx-on { background: var(--sage); box-shadow: 0 0 8px rgba(168,195,160,.9); }
-  .tx-hub-tempctl { display: flex; justify-content: center; gap: 18px; margin-top: 4px; }
-  .tx-round { width: 58px; height: 58px; border-radius: 50%; border: 0; cursor: pointer; background: var(--bg); color: var(--ink);
-    font-size: 1.6rem; font-weight: 900; font-family: inherit; line-height: 1;
-    box-shadow: 5px 5px 12px var(--dark), -5px -5px 12px var(--light); transition: box-shadow .15s ease; }
+  .tx-stage { margin-bottom: 26px; }
+  .tx-img-frame {
+    border-radius: var(--radius); overflow: hidden; position: relative;
+    box-shadow: inset 8px 8px 20px rgba(76, 86, 106, 0.35);
+    background: #c9d2de;
+  }
+  .tx-img-frame img { width: 100%; height: clamp(280px, 46vw, 480px); object-fit: cover; transition: filter .5s ease; }
+  .tx-stage-meta {
+    position: absolute; left: 18px; bottom: 16px; right: 18px;
+    display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap;
+    background: rgba(224, 229, 236, 0.82); backdrop-filter: blur(8px);
+    border-radius: 16px; padding: 10px 18px;
+    box-shadow: 4px 4px 12px rgba(163, 177, 198, 0.6);
+  }
+  .tx-stage-meta p { margin: 0; font-size: 0.95rem; }
+  .tx-stage-meta p:last-child { color: var(--ink-soft); font-weight: 700; }
 
-  /* Sections */
-  .tx-section { padding: 64px 0; }
-  .tx-kicker { font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; font-size: 0.8rem; color: var(--ink-soft); margin: 0 0 14px; }
-  .tx-h2 { font-size: clamp(2rem, 4vw, 3rem); line-height: 1.08; letter-spacing: -0.02em; font-weight: 900; color: #3d4657; margin: 0 0 16px; }
-  .tx-sub { color: var(--ink-soft); max-width: 60ch; margin: 0 0 36px; font-size: 1.05rem; }
+  .tx-swatches { margin-bottom: 26px; }
+  .tx-ctl-label { font-weight: 800; font-size: 0.9rem; color: var(--ink-soft); margin: 0 0 10px; }
+  .tx-ctl-label span { color: var(--ink); }
+  .tx-swatch-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .tx-swatch {
+    display: inline-flex; align-items: center; gap: 9px;
+    padding: 9px 18px 9px 10px; border: 0; border-radius: 999px; background: var(--bg);
+    font: inherit; font-weight: 800; font-size: 0.92rem; color: var(--ink); cursor: pointer;
+    box-shadow: 5px 5px 12px var(--dark), -5px -5px 12px var(--light);
+  }
+  .tx-swatch span { width: 26px; height: 26px; border-radius: 50%; box-shadow: inset 2px 2px 5px rgba(76,86,106,.35); }
+  .tx-swatch.is-active { box-shadow: inset 5px 5px 12px var(--dark), inset -5px -5px 12px var(--light); }
 
-  /* Controls */
-  .tx-controls-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
-  .tx-card { border-radius: var(--radius); padding: 26px; background: var(--bg);
-    box-shadow: 9px 9px 20px var(--dark), -9px -9px 20px var(--light); }
-  .tx-card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
-  .tx-card-head h3 { margin: 0; font-size: 1.25rem; font-weight: 900; color: #3d4657; }
-  .tx-pill { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft);
-    border-radius: 999px; padding: 6px 12px; box-shadow: inset 4px 4px 9px var(--dark), inset -4px -4px 9px var(--light); white-space: nowrap; }
-  .tx-card-desc { color: var(--ink-soft); font-size: 0.95rem; margin: 0 0 20px; }
-  .tx-control-row { display: flex; align-items: center; gap: 14px; }
-  .tx-toggle { width: 74px; height: 40px; border-radius: 999px; border: 0; cursor: pointer; background: var(--bg);
-    box-shadow: inset 4px 4px 10px var(--dark), inset -4px -4px 10px var(--light); position: relative; flex: none; transition: box-shadow .2s ease; }
-  .tx-toggle-knob { position: absolute; top: 6px; left: 7px; width: 28px; height: 28px; border-radius: 50%;
-    background: var(--bg); box-shadow: 3px 3px 8px var(--dark), -3px -3px 8px var(--light); transition: left .22s ease, background .22s ease; }
-  .tx-toggle[aria-checked="true"] .tx-toggle-knob { left: 39px; background: var(--sage); }
-  .tx-toggle[aria-checked="true"] { box-shadow: inset 4px 4px 10px rgba(120,140,110,.55), inset -4px -4px 10px var(--light); }
-  .tx-slider { -webkit-appearance: none; appearance: none; flex: 1; height: 14px; border-radius: 999px; background: var(--bg);
-    box-shadow: inset 4px 4px 9px var(--dark), inset -4px -4px 9px var(--light); outline: none; cursor: pointer; }
-  .tx-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 30px; height: 30px; border-radius: 50%; background: var(--bg);
-    box-shadow: 3px 3px 8px var(--dark), -3px -3px 8px var(--light); cursor: grab; }
-  .tx-slider::-moz-range-thumb { width: 30px; height: 30px; border-radius: 50%; background: var(--bg); border: 0;
-    box-shadow: 3px 3px 8px var(--dark), -3px -3px 8px var(--light); cursor: grab; }
-  .tx-slider-val { font-weight: 900; color: #3d4657; min-width: 52px; text-align: right; }
-  .tx-big-num { margin: 0; font-size: 2.6rem; font-weight: 900; color: #3d4657; min-width: 90px; text-align: center; }
-  .tx-lock-state { margin: 0; font-weight: 800; color: var(--ink-soft); }
+  .tx-ctls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; margin-bottom: 8px; }
+  .tx-slider { width: 100%; appearance: none; -webkit-appearance: none; height: 14px; border-radius: 999px; background: var(--bg); box-shadow: inset 4px 4px 10px var(--dark), inset -4px -4px 10px var(--light); outline: none; }
+  .tx-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 30px; height: 30px; border-radius: 50%; background: var(--bg); box-shadow: 4px 4px 10px var(--dark), -4px -4px 10px var(--light); cursor: pointer; }
+  .tx-slider::-moz-range-thumb { width: 30px; height: 30px; border: 0; border-radius: 50%; background: var(--bg); box-shadow: 4px 4px 10px var(--dark), -4px -4px 10px var(--light); cursor: pointer; }
+  .tx-temp-row { display: flex; align-items: center; gap: 12px; }
+  .tx-round {
+    width: 52px; height: 52px; border: 0; border-radius: 50%; background: var(--bg); color: var(--ink);
+    font: inherit; font-size: 1.5rem; font-weight: 800; cursor: pointer;
+    box-shadow: 5px 5px 12px var(--dark), -5px -5px 12px var(--light);
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .tx-toggle {
+    width: 64px; height: 34px; border: 0; border-radius: 999px; background: var(--bg); cursor: pointer; position: relative;
+    box-shadow: inset 4px 4px 10px var(--dark), inset -4px -4px 10px var(--light);
+  }
+  .tx-toggle-knob {
+    position: absolute; top: 5px; left: 5px; width: 24px; height: 24px; border-radius: 50%; background: var(--bg);
+    box-shadow: 3px 3px 8px var(--dark), -3px -3px 8px var(--light);
+    transition: left .2s ease;
+  }
+  .tx-toggle[aria-checked="true"] .tx-toggle-knob { left: 35px; background: var(--accent); }
+  .tx-ctl-hint { font-size: 0.9rem; font-weight: 700; color: var(--ink-soft); }
+  .tx-panel-note { text-align: center; color: var(--ink-soft); font-weight: 700; font-size: 0.92rem; margin: 18px 0 0; }
 
-  /* Rooms */
-  .tx-rooms-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px; }
-  .tx-room { border-radius: var(--radius); padding: 18px; background: var(--bg);
-    box-shadow: 9px 9px 20px var(--dark), -9px -9px 20px var(--light); }
-  .tx-img-frame { border-radius: 18px; overflow: hidden; padding: 10px; margin-bottom: 16px; }
-  .tx-img-frame img { border-radius: 12px; width: 100%; height: 170px; object-fit: cover; filter: sepia(.14) saturate(.92) brightness(1.03); }
-  .tx-room h3 { margin: 0 0 4px; font-size: 1.15rem; font-weight: 900; color: #3d4657; }
-  .tx-room p { margin: 0; color: var(--ink-soft); font-size: 0.92rem; font-weight: 700; }
+  .tx-specify { padding: clamp(56px, 9vw, 110px) 0; }
+  .tx-speclist { margin: 34px 0 0; border-top: 2px solid rgba(163,177,198,.5); }
+  .tx-speclist > div {
+    display: grid; grid-template-columns: 220px 1fr; gap: 8px 28px; align-items: baseline;
+    padding: 18px 4px; border-bottom: 2px solid rgba(163,177,198,.5);
+  }
+  .tx-speclist dt { font-weight: 900; font-size: 1.08rem; margin: 0; }
+  .tx-speclist dd { margin: 0; color: var(--ink-soft); }
+  .tx-tech { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+  .tx-tech span {
+    padding: 9px 18px; border-radius: 999px; font-size: 0.88rem; font-weight: 800; color: var(--ink-soft);
+    box-shadow: inset 4px 4px 10px var(--dark), inset -4px -4px 10px var(--light);
+  }
 
-  /* Specs */
-  .tx-spec-list { border-radius: var(--radius); background: var(--bg); padding: 14px;
-    box-shadow: 9px 9px 20px var(--dark), -9px -9px 20px var(--light); }
-  .tx-spec { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 18px 22px; border-radius: 18px; }
-  .tx-spec + .tx-spec { margin-top: 6px; box-shadow: inset 3px 3px 8px var(--dark), inset -3px -3px 8px var(--light); }
-  .tx-spec span { color: var(--ink-soft); font-weight: 700; }
-  .tx-spec strong { color: #3d4657; font-weight: 900; text-align: right; }
+  .tx-strip { padding: 20px 0 clamp(56px, 9vw, 110px); overflow: hidden; }
+  .tx-strip .tx-wrap { margin-bottom: 26px; }
+  .tx-film {
+    display: flex; gap: 22px; overflow-x: auto; padding: 10px 4vw 26px;
+    scroll-snap-type: x mandatory; scrollbar-width: thin;
+  }
+  .tx-frame {
+    flex: 0 0 clamp(240px, 34vw, 380px); margin: 0; scroll-snap-align: start;
+    background: var(--bg); border-radius: 22px; padding: 12px;
+    box-shadow: 8px 8px 18px var(--dark), -8px -8px 18px var(--light);
+  }
+  .tx-frame img { border-radius: 14px; height: 220px; width: 100%; object-fit: cover; }
+  .tx-frame figcaption { padding: 12px 6px 4px; display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+  .tx-frame figcaption span { color: var(--ink-soft); font-size: 0.88rem; font-weight: 700; }
 
-  /* Kits */
-  .tx-kits { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; align-items: stretch; }
-  .tx-kit { border-radius: var(--radius); padding: 34px 30px; background: var(--bg); text-align: center;
-    box-shadow: 9px 9px 20px var(--dark), -9px -9px 20px var(--light); position: relative; display: flex; flex-direction: column; }
-  .tx-kit-pop { box-shadow: 12px 12px 28px var(--dark), -12px -12px 28px var(--light); }
-  .tx-flag { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); margin: 0; background: var(--sage); color: #3d4657;
-    font-weight: 900; font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 999px; padding: 6px 16px;
-    box-shadow: 4px 4px 10px var(--dark), -4px -4px 10px var(--light); }
-  .tx-kit h3 { margin: 0; font-size: 1.4rem; font-weight: 900; color: #3d4657; }
-  .tx-price { font-size: 2.8rem; font-weight: 900; color: #3d4657; margin: 10px 0 4px; }
-  .tx-kit-desc { color: var(--ink-soft); font-weight: 700; margin: 0 0 20px; }
-  .tx-kit ul { list-style: none; padding: 0; margin: 0 0 28px; display: grid; gap: 12px; }
-  .tx-kit li { border-radius: 14px; padding: 10px; font-weight: 700; color: var(--ink-soft);
-    box-shadow: inset 4px 4px 9px var(--dark), inset -4px -4px 9px var(--light); }
-  .tx-kit .tx-btn, .tx-kit .tx-btn-soft { margin-top: auto; }
+  .tx-kits { padding: 0 0 clamp(56px, 9vw, 110px); }
+  .tx-pricelist { margin-top: 30px; border-radius: var(--radius); overflow: hidden; box-shadow: 8px 8px 18px var(--dark), -8px -8px 18px var(--light); }
+  .tx-row {
+    display: flex; justify-content: space-between; align-items: center; gap: 20px;
+    padding: 22px 28px; text-decoration: none; background: var(--bg);
+    border-bottom: 2px solid rgba(163,177,198,.45);
+  }
+  .tx-row:last-child { border-bottom: 0; }
+  .tx-row:hover { background: rgba(255,255,255,.35); }
+  .tx-row h3 { margin: 0 0 4px; font-size: 1.25rem; font-weight: 900; }
+  .tx-row h3 em { font-style: normal; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-soft); margin-left: 8px; }
+  .tx-row p { margin: 0; color: var(--ink-soft); }
+  .tx-amount { font-size: 1.7rem; font-weight: 900; white-space: nowrap; }
+  .tx-quote { margin: 34px 0 0; padding: 0 6px; }
+  .tx-quote blockquote { font-size: 1.25rem; font-weight: 700; margin: 0 0 8px; line-height: 1.45; }
+  .tx-quote figcaption { color: var(--ink-soft); font-weight: 700; }
 
-  /* Proof */
-  .tx-proof-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
-  .tx-quote { margin: 0; border-radius: var(--radius); padding: 28px; background: var(--bg);
-    box-shadow: 9px 9px 20px var(--dark), -9px -9px 20px var(--light); }
-  .tx-quote blockquote { margin: 0 0 18px; font-size: 1.05rem; font-weight: 600; color: var(--ink); }
-  .tx-quote figcaption strong { display: block; color: #3d4657; }
-  .tx-quote figcaption span { color: var(--ink-soft); font-size: 0.9rem; font-weight: 700; }
+  .tx-contact { padding: 0 0 clamp(64px, 10vw, 120px); }
+  .tx-contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+  .tx-address { font-style: normal; margin-top: 22px; }
+  .tx-address p { margin: 6px 0; }
+  .tx-form { padding: clamp(22px, 4vw, 36px); background: var(--bg); border-radius: var(--radius); box-shadow: 10px 10px 24px var(--dark), -10px -10px 24px var(--light); }
+  .tx-field { display: block; margin-bottom: 18px; }
+  .tx-field span { display: block; font-weight: 800; font-size: 0.9rem; margin-bottom: 7px; }
+  .tx-input {
+    width: 100%; padding: 13px 18px; border: 0; border-radius: 16px; background: var(--bg);
+    font: inherit; color: var(--ink);
+    box-shadow: inset 5px 5px 12px var(--dark), inset -5px -5px 12px var(--light);
+  }
+  .tx-input:focus { outline: 2px solid var(--ink-soft); outline-offset: 2px; }
+  .tx-form-note { margin: 14px 0 0; font-weight: 800; }
 
-  /* Contact */
-  .tx-contact-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 48px; align-items: start; }
-  .tx-address { font-style: normal; color: var(--ink-soft); font-weight: 600; }
-  .tx-address a { font-weight: 800; color: #3d4657; }
-  .tx-form { border-radius: var(--radius); padding: 34px 30px; background: var(--bg);
-    box-shadow: 9px 9px 20px var(--dark), -9px -9px 20px var(--light); display: grid; gap: 18px; }
-  .tx-field { display: grid; gap: 8px; }
-  .tx-field span { font-weight: 800; font-size: 0.9rem; color: var(--ink-soft); }
-  .tx-input { width: 100%; border: 0; border-radius: 16px; padding: 14px 18px; background: var(--bg); color: var(--ink);
-    font-family: inherit; font-size: 1rem; font-weight: 600;
-    box-shadow: inset 5px 5px 11px var(--dark), inset -5px -5px 11px var(--light); }
-  .tx-input:focus { outline: 3px solid var(--blue); outline-offset: 2px; }
-  .tx-form-note { margin: 0; border-radius: 16px; padding: 14px 18px; font-weight: 800; color: #3d4657; background: var(--sage);
-    box-shadow: inset 4px 4px 9px rgba(0,0,0,.12); }
-
-  /* Footer */
-  .tx-footer { padding: 50px 0 90px; }
-  .tx-footer-grid { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 30px; align-items: start; }
-  .tx-footer-grid nav { display: grid; gap: 10px; }
-  .tx-footer-grid nav a { text-decoration: none; font-weight: 700; color: var(--ink-soft); }
-  .tx-footer p { color: var(--ink-soft); font-weight: 600; }
+  .tx-footer { padding: 44px 0 90px; text-align: center; color: var(--ink-soft); }
+  .tx-footer .tx-logo { justify-content: center; margin-bottom: 10px; }
+  .tx-footer p { margin: 6px 0; }
   .tx-fine { font-size: 0.85rem; }
 
-  @media (max-width: 960px) {
-    .tx-hero-grid { grid-template-columns: 1fr; }
-    .tx-controls-grid, .tx-proof-grid { grid-template-columns: 1fr 1fr; }
-    .tx-rooms-grid { grid-template-columns: 1fr 1fr; }
-    .tx-kits { grid-template-columns: 1fr; max-width: 460px; margin-inline: auto; }
-    .tx-contact-grid { grid-template-columns: 1fr; }
+  @media (max-width: 760px) {
+    .tx-bar nav { display: none; }
+    .tx-bar { gap: 14px; }
+    .tx-bar .tx-btn-small { margin-left: auto; }
+    .tx-ctls { grid-template-columns: 1fr; gap: 20px; }
+    .tx-speclist > div { grid-template-columns: 1fr; gap: 2px; }
+    .tx-contact-grid { grid-template-columns: 1fr; gap: 30px; }
+    .tx-row { padding: 18px; }
+    .tx-amount { font-size: 1.4rem; }
   }
-  @media (max-width: 700px) {
-    .tx-burger { display: block; }
-    .tx-menu { display: none; position: absolute; top: calc(100% + 10px); left: 0; right: 0; flex-direction: column; align-items: stretch;
-      gap: 6px; background: var(--bg); border-radius: 26px; padding: 18px;
-      box-shadow: 9px 9px 20px var(--dark), -9px -9px 20px var(--light); }
-    .tx-menu.tx-open { display: flex; }
-    .tx-nav-links { flex-direction: column; gap: 2px; }
-    .tx-nav-links a { padding: 12px 14px; border-radius: 14px; }
-    .tx-nav-links a:hover { box-shadow: inset 4px 4px 9px var(--dark), inset -4px -4px 9px var(--light); }
-    .tx-controls-grid, .tx-proof-grid, .tx-rooms-grid { grid-template-columns: 1fr; }
-    .tx-footer-grid { grid-template-columns: 1fr; }
-  }
-
   @media (prefers-reduced-motion: reduce) {
-    .tx *, .tx *::before, .tx *::after { transition: none !important; animation: none !important; }
-    .tx-btn:hover { transform: none; }
+    .tx-press, .tx-img-frame img, .tx-toggle-knob { transition: none !important; }
   }
 </style>
-
-<script>
-  (function () {
-    var rootEl = document.querySelector(".tx");
-    if (!(rootEl instanceof HTMLElement)) return;
-    const root = rootEl;
-
-    // Mobile menu
-    var burgerEl = root.querySelector(".tx-burger");
-    var menuEl = root.querySelector("#tx-menu");
-    if (burgerEl instanceof HTMLButtonElement && menuEl instanceof HTMLElement) {
-      const burger = burgerEl;
-      const menu = menuEl;
-      burger.addEventListener("click", function () {
-        var open = menu.classList.toggle("tx-open");
-        burger.setAttribute("aria-expanded", open ? "true" : "false");
-        burger.setAttribute("aria-label", open ? "Close menu" : "Open menu");
-      });
-      menu.querySelectorAll("a").forEach(function (a) {
-        a.addEventListener("click", function () {
-          menu.classList.remove("tx-open");
-          burger.setAttribute("aria-expanded", "false");
-        });
-      });
-    }
-
-    // Toggle switches
-    root.querySelectorAll(".tx-toggle").forEach(function (node) {
-      if (!(node instanceof HTMLButtonElement)) return;
-      const btn = node;
-      btn.addEventListener("click", function () {
-        var on = btn.getAttribute("aria-checked") === "true";
-        btn.setAttribute("aria-checked", on ? "false" : "true");
-        var card = btn.closest(".tx-card");
-        var lockEl = card ? card.querySelector(".tx-lock-state") : null;
-        if (lockEl instanceof HTMLElement) lockEl.textContent = on ? "Unlocked" : "Locked";
-      });
-    });
-
-    // Chips
-    root.querySelectorAll(".tx-chip").forEach(function (node) {
-      if (!(node instanceof HTMLButtonElement)) return;
-      const chip = node;
-      chip.addEventListener("click", function () {
-        var on = chip.getAttribute("aria-pressed") === "true";
-        chip.setAttribute("aria-pressed", on ? "false" : "true");
-        var dot = chip.querySelector(".tx-chip-dot");
-        if (dot instanceof HTMLElement) dot.classList.toggle("tx-on", !on);
-      });
-    });
-
-    // Sliders show their value
-    root.querySelectorAll(".tx-slider").forEach(function (node) {
-      if (!(node instanceof HTMLInputElement)) return;
-      const slider = node;
-      var valEl = slider.parentElement ? slider.parentElement.querySelector(".tx-slider-val") : null;
-      slider.addEventListener("input", function () {
-        if (valEl instanceof HTMLElement) valEl.textContent = slider.value + "%";
-      });
-    });
-
-    // Temperature steppers
-    var heroTempEl = root.querySelector("#tx-hero-temp");
-    const heroTemp = heroTempEl instanceof HTMLElement ? heroTempEl : null;
-    root.querySelectorAll("[data-temp]").forEach(function (node) {
-      if (!(node instanceof HTMLButtonElement)) return;
-      const b = node;
-      b.addEventListener("click", function () {
-        if (heroTemp) {
-          var n = parseInt(heroTemp.textContent || "21", 10) || 21;
-          n = Math.min(30, Math.max(15, n + parseInt(b.getAttribute("data-temp") || "0", 10)));
-          heroTemp.textContent = String(n);
-        }
-      });
-    });
-    root.querySelectorAll("[data-room-temp]").forEach(function (node) {
-      if (!(node instanceof HTMLButtonElement)) return;
-      const b = node;
-      b.addEventListener("click", function () {
-        var card = b.closest(".tx-card");
-        var dispEl = card ? card.querySelector("[data-room-display]") : null;
-        if (dispEl instanceof HTMLElement) {
-          var m = parseInt(dispEl.textContent || "21", 10) || 21;
-          m = Math.min(30, Math.max(15, m + parseInt(b.getAttribute("data-room-temp") || "0", 10)));
-          dispEl.textContent = String(m);
-        }
-      });
-    });
-
-    // Scene button
-    var sceneEl = root.querySelector("[data-scene]");
-    if (sceneEl instanceof HTMLButtonElement) {
-      const scene = sceneEl;
-      scene.addEventListener("click", function () {
-        var label = scene.textContent || "";
-        scene.textContent = label.indexOf("Running") === 0 ? "Start evening" : "Running: evening";
-      });
-    }
-
-    // Contact form
-    var formEl = root.querySelector("#tx-form");
-    var noteEl = root.querySelector("#tx-form-note");
-    if (formEl instanceof HTMLFormElement && noteEl instanceof HTMLElement) {
-      const form = formEl;
-      const note = noteEl;
-      form.addEventListener("submit", function (e) {
-        e.preventDefault();
-        var nameEl = form.querySelector('[name="name"]');
-        var emailEl = form.querySelector('[name="email"]');
-        var name = nameEl instanceof HTMLInputElement ? nameEl.value.trim() : "";
-        var email = emailEl instanceof HTMLInputElement ? emailEl.value.trim() : "";
-        if (!name || !email) {
-          note.hidden = false;
-          note.textContent = "Please add your name and email so we can reply.";
-          return;
-        }
-        note.hidden = false;
-        note.textContent = "Thanks, " + name.split(" ")[0] + ". Your kit sketch is on its way, check your inbox soon.";
-        form.reset();
-      });
-    }
-  })();
-</script>
 </body>
 </html>
