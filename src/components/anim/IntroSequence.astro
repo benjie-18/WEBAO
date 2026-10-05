@@ -1118,7 +1118,7 @@ const promptKey = t.intro.prompt.key;
       root.style.setProperty("--wi-lip-h", `${r1(CFG.layout.lipHeight)}px`);
       root.style.setProperty("--wi-cu", `calc(${r2(cursorScale)} * 1px)`);
       root.style.setProperty("--wi-floor-h", `${r1(floorH)}px`);
-      debris.resize(w, Math.max(surfaceY, 1), surfaceY, isSmallPerf ? 1.25 : 2);
+      debris.resize(w, Math.max(surfaceY, 1), isSmallPerf ? 1.25 : 2);
       refs.debris.style.height = `${r1(surfaceY)}px`;
       if (!currentTarget) resolveTarget();
     }
