@@ -16,41 +16,20 @@ const STRIPE_PUBLISHABLE_KEY = "pk_live_YOUR_PUBLISHABLE_KEY_HERE";
       <div class="eyebrow">Paiement</div>
       <h1 class="display" style="font-size: clamp(2rem, 5vw, 3.2rem); line-height:.92; margin-top:12px;">Plus qu'une étape</h1>
       <p class="prose" style="margin-top:12px; max-width: 52ch;">
-        Finalisez le paiement ci-dessous pour démarrer votre abonnement de
-        149 $/mois. La création de votre site commence dès la confirmation.
+        Finalisez votre commande ci-dessous.
       </p>
 
-      <div class="checkout-grid" style="margin-top: 32px;">
-        <!-- Résumé de commande -->
-        <div class="checkout-card">
-          <div class="mono" style="font-size:10px; letter-spacing:.14em; opacity:.5;">RÉSUMÉ</div>
-          <div style="margin-top:16px; display:flex; align-items:baseline; gap:8px;">
-            <span class="display" style="font-size: 2.6rem; line-height:.9;">149 $</span>
-            <span class="mono" style="font-size:11px; opacity:.6;">CAD/mois</span>
-          </div>
-          <ul style="margin:18px 0 0; padding:0; list-style:none; display:grid; gap:10px; font-size:13.5px;">
-            <li>✓ Site web sur mesure de 3–5 pages</li>
-            <li>✓ Domaine, hébergement et SSL</li>
-            <li>✓ Bases SEO et analytique</li>
-            <li>✓ Mises à jour et soutien inclus</li>
-          </ul>
-          <div class="mono" style="margin-top:18px; padding-top:14px; border-top:1px solid var(--line); font-size:11px; color: var(--muted);">
-            Sans frais d'installation · Annulez en tout temps<br/>
-            <a href="/fr/refunds" style="color: var(--accent-text);">Politique de remboursement</a>
-          </div>
-          <div id="checkout-customer" class="mono" style="margin-top:14px; font-size:12px; line-height:1.7; color: var(--muted);"></div>
-        </div>
-
-        <!-- Stripe intégré -->
+      <div style="margin-top: 32px; max-width: 640px;">
         <div class="checkout-card checkout-card--pay">
-          <div class="mono" style="font-size:10px; letter-spacing:.14em; opacity:.5; margin-bottom:12px;">PAIEMENT SÉCURISÉ</div>
+          <div class="mono" style="font-size:10px; letter-spacing:.14em; opacity:.5; margin-bottom:12px;">PAIEMENT SÉCURISÉ · 149 $ CAD/MOIS</div>
+          <div id="checkout-customer" class="mono" style="margin-bottom:16px; font-size:12px; line-height:1.7; color: var(--muted);"></div>
           <div id="stripe-checkout">
             <div class="mono" style="padding:40px 20px; text-align:center; color: var(--muted); font-size:12.5px;" id="checkout-loading">
               Chargement du formulaire de paiement…
             </div>
           </div>
           <div class="mono" style="margin-top:12px; font-size:10.5px; text-align:center; color: var(--muted);">
-            🔒 Chiffré et sécurisé · Propulsé par Stripe
+            🔒 Chiffré et sécurisé · Propulsé par Stripe · <a href="/fr/refunds" style="color: var(--accent-text);">Politique de remboursement</a>
           </div>
         </div>
       </div>
@@ -116,14 +95,6 @@ const STRIPE_PUBLISHABLE_KEY = "pk_live_YOUR_PUBLISHABLE_KEY_HERE";
 </script>
 
 <style>
-  .checkout-grid {
-    display: grid;
-    gap: 20px;
-    grid-template-columns: 1fr;
-  }
-  @media (min-width: 760px) {
-    .checkout-grid { grid-template-columns: 1fr 1.4fr; }
-  }
   .checkout-card {
     border: 1px solid var(--line);
     border-radius: 18px;
@@ -133,9 +104,6 @@ const STRIPE_PUBLISHABLE_KEY = "pk_live_YOUR_PUBLISHABLE_KEY_HERE";
   .checkout-card--pay {
     background: var(--paper-2);
     border-color: var(--line-strong);
-  }
-  .checkout-card ul li {
-    color: var(--ink);
   }
   #stripe-checkout {
     min-height: 320px;
