@@ -505,7 +505,7 @@ const fr = {
       countNote: "30 DIRECTIONS · ENTREPRISES TOUTES FICTIVES · AUCUNE N’EST CLIENTE DE WEBAO",
       howTitle: "COMMENT UTILISER CE CATALOGUE",
       howSteps: [
-        "Filtrez par métier : électricien, restaurant, clinique…",
+        "Filtrez par style : Y2K, brutaliste, art déco…",
         "Cherchez : « éditorial », « Laval », « audacieux »…",
         "Touchez une démo : voyez sa direction, puis dites-nous laquelle vous ressemble.",
       ],
