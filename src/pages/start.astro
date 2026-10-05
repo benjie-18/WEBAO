@@ -57,7 +57,11 @@ const STRIPE_PUBLISHABLE_KEY = "pk_live_51UMzZYE57vVzxI418WAmnlUuIXMLMWtNxjYa6We
 <script src="https://js.stripe.com/v3/"></script>
 <script define:vars={{ pk: STRIPE_PUBLISHABLE_KEY }}>
   (function() {
+    // Prevent double-init on Astro view transitions: Stripe.js allows only
+    // one embedded checkout object per page lifecycle.
+    if (window.__webaoStartMounted) return;
     const form = document.getElementById('start-form');
+    if (!form) return;
     const loadingEl = document.getElementById('checkout-loading');
     let checkoutMounted = false;
     let mountInFlight = false;
@@ -147,6 +151,7 @@ const STRIPE_PUBLISHABLE_KEY = "pk_live_51UMzZYE57vVzxI418WAmnlUuIXMLMWtNxjYa6We
         });
         checkout.mount('#stripe-checkout');
         checkoutMounted = true;
+        window.__webaoStartMounted = true;
       } catch (e) {
         console.error('Stripe checkout error:', e);
         if (loadingEl) loadingEl.textContent = 'Payment could not be loaded (' + (e.message || 'unknown error') + '). Please check your connection and re-enter your details.';
