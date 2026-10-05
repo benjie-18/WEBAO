@@ -429,6 +429,7 @@ function initAdmin(): void {
 
   /* ── Forms tab ── */
   let formsCursor: string | null = null;
+  let formsFilter: string = "all";
 
   function prettyKey(k: string): string {
     const map: Record<string, string> = {
@@ -493,8 +494,9 @@ function initAdmin(): void {
     }
     more.hidden = true;
     try {
+      const typeParam = formsFilter !== "all" ? `&type=${encodeURIComponent(formsFilter)}` : "";
       const data = (await api(
-        `/api/admin/forms?limit=50${formsCursor ? `&cursor=${encodeURIComponent(formsCursor)}` : ""}`
+        `/api/admin/forms?limit=50${formsCursor ? `&cursor=${encodeURIComponent(formsCursor)}` : ""}${typeParam}`
       )) as unknown as FormsResponse;
       if (reset && data.items.length === 0) {
         list.innerHTML = `<div class="admin-empty">${esc(I18N.forms.empty)}</div>`;
@@ -648,6 +650,18 @@ function initAdmin(): void {
         range = r as "day" | "week" | "month" | "year";
         rangeBtns.forEach((x) => x.classList.toggle("is-active", x === b));
         void loadStats();
+      }
+    })
+  );
+
+  const filterBtns = Array.from(rootEl.querySelectorAll<HTMLElement>("[data-forms-filter]"));
+  filterBtns.forEach((b) =>
+    b.addEventListener("click", () => {
+      const f = b.dataset.formsFilter || "all";
+      if (f !== formsFilter) {
+        formsFilter = f;
+        filterBtns.forEach((x) => x.classList.toggle("is-active", x === b));
+        void loadForms(true);
       }
     })
   );

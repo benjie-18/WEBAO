@@ -202,26 +202,34 @@ async function handleStats(kv: KVNamespace, url: URL): Promise<Response> {
 // Form submissions
 // ---------------------------------------------------------------------------
 
-/** GET /api/admin/forms?limit=50&cursor= — newest-first, cursor-paginated. */
+/** GET /api/admin/forms?limit=50&cursor=&type= — newest-first, cursor-paginated. */
 async function handleFormsList(kv: KVNamespace, url: URL): Promise<Response> {
   const rawLimit = parseInt(url.searchParams.get("limit") || "50", 10);
   const limit = Math.min(Math.max(isNaN(rawLimit) ? 50 : rawLimit, 1), 100);
   const rawCursor = parseInt(url.searchParams.get("cursor") || "0", 10);
   const cursor = Math.max(isNaN(rawCursor) ? 0 : rawCursor, 0);
+  const typeFilter = url.searchParams.get("type");
 
   const index = (await getJson<string[]>(kv, FORMS_INDEX)) || [];
-  const slice = index.slice(cursor, cursor + limit);
-  const items = (
+  // Fetch a wider slice when filtering, since we filter after fetch
+  const fetchLimit = typeFilter ? limit * 4 : limit;
+  const slice = index.slice(cursor, cursor + fetchLimit);
+  let items = (
     await batch(slice, 25, async (key) => {
       const rec = await getJson<Record<string, unknown>>(kv, key);
       return rec ? { id: key.slice("form:".length), ...rec } : null;
     })
   ).filter((x): x is Record<string, unknown> & { id: string } => x !== null);
 
+  if (typeFilter) {
+    items = items.filter((item) => (item as { form?: string }).form === typeFilter);
+    items = items.slice(0, limit);
+  }
+
   return json({
     ok: true,
     items,
-    nextCursor: cursor + limit < index.length ? String(cursor + limit) : null,
+    nextCursor: cursor + fetchLimit < index.length ? String(cursor + fetchLimit) : null,
   });
 }
 
