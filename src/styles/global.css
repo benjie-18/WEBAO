@@ -539,6 +539,17 @@ html.theming *::after {
   line-height: 1;
 }
 .site-header--dark .brand-mark { background: var(--paper); color: var(--ink); }
+
+/* Brand logo images (light/dark variants) */
+.brand-logo {
+  display: block;
+  height: 34px;
+  width: auto;
+  border-radius: 6px;
+}
+.brand-logo--dark { display: none; }
+[data-theme="dark"] .brand-logo--light { display: none; }
+[data-theme="dark"] .brand-logo--dark { display: block; }
 .nav {
   display: flex;
   align-items: center;
