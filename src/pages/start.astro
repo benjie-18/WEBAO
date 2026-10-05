@@ -57,14 +57,16 @@ const STRIPE_PUBLISHABLE_KEY = "pk_live_51UMzZYE57vVzxI418WAmnlUuIXMLMWtNxjYa6We
 <script src="https://js.stripe.com/v3/"></script>
 <script define:vars={{ pk: STRIPE_PUBLISHABLE_KEY }}>
   (function() {
-    // Prevent double-init on Astro view transitions: Stripe.js allows only
-    // one embedded checkout object per page lifecycle.
-    if (window.__webaoStartMounted) return;
+    // Per-form init guard (not window-global): Astro view transitions keep
+    // the same window across EN/FR pages, so a global flag would block the
+    // second page's init. The form element is fresh on each navigation.
     const form = document.getElementById('start-form');
-    if (!form) return;
+    if (!form || form.dataset.webaoInit) return;
+    form.dataset.webaoInit = "1";
     const loadingEl = document.getElementById('checkout-loading');
     let checkoutMounted = false;
     let mountInFlight = false;
+    let checkoutInstance = null;
     const touched = { name: false, email: false, business: false };
 
     const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -152,9 +154,9 @@ const STRIPE_PUBLISHABLE_KEY = "pk_live_51UMzZYE57vVzxI418WAmnlUuIXMLMWtNxjYa6We
         // Stripe requires the mount element to be empty: clear the loading message first.
         const mountEl = document.getElementById('stripe-checkout');
         if (mountEl) mountEl.innerHTML = '';
+        checkoutInstance = checkout;
         checkout.mount(mountEl || '#stripe-checkout');
         checkoutMounted = true;
-        window.__webaoStartMounted = true;
       } catch (e) {
         console.error('Stripe checkout error:', e);
         if (loadingEl) loadingEl.textContent = 'Payment could not be loaded (' + (e.message || 'unknown error') + '). Please check your connection and re-enter your details.';
@@ -182,6 +184,30 @@ const STRIPE_PUBLISHABLE_KEY = "pk_live_51UMzZYE57vVzxI418WAmnlUuIXMLMWtNxjYa6We
       });
       // Prevent accidental submit (no button; Enter key)
       form.addEventListener('submit', (e) => e.preventDefault());
+
+      // Unmount Stripe checkout on navigation: Stripe.js allows only one
+      // embedded checkout object, so clean up before Astro swaps the page.
+      document.addEventListener('astro:before-swap', () => {
+        if (checkoutInstance) {
+          try { checkoutInstance.unmount(); } catch (e) {}
+          checkoutInstance = null;
+        }
+        checkoutMounted = false;
+        mountInFlight = false;
+      }, { once: true });
+
+      // Hide the custom cursor over the Stripe iframe: the iframe captures
+      // mouse events, so the custom cursor would freeze at the edge.
+      // Restore the native cursor while hovering the payment area.
+      const payCard = document.querySelector('.checkout-card--pay');
+      if (payCard) {
+        payCard.addEventListener('mouseenter', () => {
+          document.documentElement.classList.add('cc-hidden-pay');
+        });
+        payCard.addEventListener('mouseleave', () => {
+          document.documentElement.classList.remove('cc-hidden-pay');
+        });
+      }
     }
   })();
 </script>
@@ -224,6 +250,10 @@ const STRIPE_PUBLISHABLE_KEY = "pk_live_51UMzZYE57vVzxI418WAmnlUuIXMLMWtNxjYa6We
     color: #c0392b;
     margin-top: 2px;
   }
+  /* Hide custom cursor over Stripe iframe; restore native cursor */
+  html.cc-hidden-pay .cc { display: none !important; }
+  html.cc-hidden-pay .checkout-card--pay,
+  html.cc-hidden-pay .checkout-card--pay * { cursor: auto !important; }
   .checkout-card {
     border: 1px solid var(--line);
     border-radius: 18px;
