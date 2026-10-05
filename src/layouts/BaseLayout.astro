@@ -403,6 +403,20 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
       </div>
     </footer>
 
+    {pageKey !== "start" && (
+      <div class="sticky-cta" data-sticky-cta role="region" aria-label={t.nav.stickyCta}>
+        <span class="sticky-cta-text">
+          <strong>{t.nav.stickyCtaPrice}</strong>
+        </span>
+        <a
+          href={navLinks.start}
+          class="sticky-cta-btn"
+          data-track="cta"
+          data-track-label={t.nav.stickyCta}
+        >{t.nav.stickyCta}</a>
+      </div>
+    )}
+
     <script>
       let scrollCleanup: (() => void) | null = null;
 
@@ -525,6 +539,36 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
           window.addEventListener('scroll', onScroll, { passive: true });
           onScroll();
           scrollCleanup = () => window.removeEventListener('scroll', onScroll);
+        }
+
+        // Sticky mobile CTA bar: slides up after scrolling past the hero.
+        // Mobile only (CSS media query); not rendered on the start page.
+        const stickyCta = document.querySelector('[data-sticky-cta]') as HTMLElement | null;
+        if (stickyCta) {
+          const coarse = window.matchMedia('(max-width: 768px)');
+          let ctaTicking = false;
+          const prevCleanup = scrollCleanup;
+          const updateCta = () => {
+            const show = coarse.matches && window.scrollY > 480;
+            stickyCta.classList.toggle('is-visible', show);
+            document.body.classList.toggle('has-sticky-cta', show);
+            ctaTicking = false;
+          };
+          const onScrollCta = () => {
+            if (!ctaTicking) {
+              ctaTicking = true;
+              requestAnimationFrame(updateCta);
+            }
+          };
+          window.addEventListener('scroll', onScrollCta, { passive: true });
+          if (typeof coarse.addEventListener === 'function') {
+            coarse.addEventListener('change', updateCta);
+          }
+          updateCta();
+          scrollCleanup = () => {
+            window.removeEventListener('scroll', onScrollCta);
+            if (prevCleanup) prevCleanup();
+          };
         }
 
         // Magnetic buttons: desktop only, respects reduced motion
