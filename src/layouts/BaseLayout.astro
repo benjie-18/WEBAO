@@ -275,7 +275,7 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
         logo: "https://webao.ca/light-logo.jpg",
         contactPoint: {
           "@type": "ContactPoint",
-          email: "hello@webao.ca",
+          email: "contact@webao.ca",
           contactType: "customer service",
           availableLanguage: ["en", "fr"],
           areaServed: "CA",
@@ -302,7 +302,7 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
             <a href={navLinks.demos}>{t.nav.demos}</a>
             <a href={navLinks.pricing}>{t.nav.pricing}</a>
             <a href={navLinks.contact}>{t.nav.contact}</a>
-            <a href={navLinks.pricing} class="cta" data-track="cta" data-track-label={t.nav.startSite}>{t.nav.startSite}</a>
+            <a href={navLinks.contact} class="cta" data-track="cta" data-track-label={t.nav.startSite}>{t.nav.startSite}</a>
           </nav>
 
           <LanguageSwitcher locale={locale} currentPath={url.pathname} />
@@ -321,7 +321,7 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
       <a href={navLinks.pricing}>{t.nav.pricing} <span aria-hidden="true">→</span></a>
       <a href={navLinks.contact}>{t.nav.contact} <span aria-hidden="true">→</span></a>
       <a
-        href={navLinks.pricing}
+        href={navLinks.contact}
         data-track="cta"
         data-track-label={t.nav.startSite}
         style="background: var(--ink); color: var(--paper); border-radius: 12px; padding-inline: 16px; margin-top: 12px; border-bottom:0;"
@@ -385,7 +385,7 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
           </div>
           <div class="footer-col">
             <h4>{t.footer.contactTitle}</h4>
-            <a href="mailto:hello@webao.ca">hello@webao.ca</a>
+            <a href="mailto:contact@webao.ca">contact@webao.ca</a>
             <span style="display:block; margin-top:10px; color: rgba(248,245,239,.55); font-size:13px; line-height:1.5;" set:html={t.footer.replyTime}></span>
           </div>
         </div>
