@@ -4,7 +4,8 @@
 // - Default state is a tiny fracture shard (rotated square), echoing the
 //   intro's barrier-break motif.
 // - Morphs per hovered element: links expand the ring, buttons get a bold
-//   ring + dot, text gets an I-beam, media gets viewfinder corners.
+//   ring + dot, media gets viewfinder corners. Text keeps the default shard
+//   (no typing indicator).
 // - The trailing ring uses spring physics (velocity integration) so it
 //   overshoots and settles, driven with --ease-spring on morphs.
 // - Fine pointers only: (hover: hover) and (pointer: fine)
@@ -23,7 +24,6 @@
   <div class="cc-layer" data-cc-cur>
     <span class="cc-shape cc-shard"></span>
     <span class="cc-shape cc-dotm"></span>
-    <span class="cc-shape cc-ibeam"><i></i></span>
     <span class="cc-shape cc-corners"><i></i><i></i><i></i><i></i></span>
   </div>
 </div>
@@ -90,29 +90,6 @@
     border-radius: 50%;
     background: var(--ink);
   }
-  /* Text: I-beam built from a bar plus serif caps */
-  .cc-ibeam i {
-    display: block;
-    position: relative;
-    width: 2px;
-    height: 22px;
-    margin: -11px 0 0 -1px;
-    border-radius: 1px;
-    background: var(--ink);
-  }
-  .cc-ibeam i::before,
-  .cc-ibeam i::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    width: 11px;
-    height: 2px;
-    border-radius: 1px;
-    background: inherit;
-    transform: translateX(-50%);
-  }
-  .cc-ibeam i::before { top: 0; }
-  .cc-ibeam i::after { bottom: 0; }
   /* Media: viewfinder corners */
   .cc-corners { width: 0; height: 0; }
   .cc-corners i {
@@ -144,10 +121,6 @@
     border-color: color-mix(in srgb, var(--accent) 85%, transparent);
     background: color-mix(in srgb, var(--accent) 10%, transparent);
   }
-  /* ---- Morph state: text ---- */
-  html.cc-m-text .cc-shard { opacity: 0; transform: scale(0.5) rotate(45deg); }
-  html.cc-m-text .cc-ibeam { opacity: 1; transform: scale(1); }
-  html.cc-m-text .cc-ring-i { opacity: 0; transform: scale(0.7); }
   /* ---- Morph state: media ---- */
   html.cc-m-media .cc-shard { opacity: 0; transform: scale(0.5) rotate(45deg); }
   html.cc-m-media .cc-corners { opacity: 1; transform: scale(1); }
@@ -180,15 +153,13 @@
 
     var html = document.documentElement;
     // Morph priority: controls/links first (an <img> icon inside a button
-    // is a button, not media), then standalone media, then text, then the
-    // default shard.
+    // is a button, not media), then standalone media, then the
+    // default shard. Text keeps the default shard (no typing indicator).
     var BTN_SEL =
       "button, [role='button'], summary, label, .chip, input, select, textarea, [data-cc-hot]";
     var LINK_SEL = "a";
     var MEDIA_SEL = "img, video, canvas, [data-cc-media]";
-    var TEXT_SEL =
-      "p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption, dd, dt, td, th, [data-cc-text]";
-    var MORPH_CLASSES = ["cc-m-link", "cc-m-btn", "cc-m-text", "cc-m-media"];
+    var MORPH_CLASSES = ["cc-m-link", "cc-m-btn", "cc-m-media"];
 
     var cur, ring;
     var mx = -100, my = -100;
@@ -247,7 +218,6 @@
       if (t.closest(BTN_SEL)) return "cc-m-btn";
       if (t.closest(LINK_SEL)) return "cc-m-link";
       if (t.closest(MEDIA_SEL)) return "cc-m-media";
-      if (t.closest(TEXT_SEL)) return "cc-m-text";
       return "";
     }
 
