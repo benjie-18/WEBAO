@@ -1,0 +1,24 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const locale = "en" as const;
+const title = "Payment confirmed · WEBAO";
+const description = "Your WEBAO subscription is active. We'll be in touch shortly to start your site.";
+---
+
+<BaseLayout title={title} description={description} locale={locale}>
+  <section class="section">
+    <div class="shell" style="max-width: 640px; text-align:center;">
+      <div class="eyebrow" style="justify-content:center;">Payment confirmed</div>
+      <h1 class="display" style="font-size: clamp(2rem, 5vw, 3.2rem); line-height:.92; margin-top:12px;">You're in.</h1>
+      <p class="prose" style="margin-top:14px; max-width: 48ch; margin-inline:auto;">
+        Your $149/month subscription is active. We'll reach out within one
+        business day to kick off your site build. Welcome to WEBAO.
+      </p>
+      <div style="margin-top:28px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+        <a href="/demos" class="btn btn--primary">Browse demo styles</a>
+        <a href="/contact" class="btn btn--ghost">Contact us</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
