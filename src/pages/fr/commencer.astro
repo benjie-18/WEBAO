@@ -1,0 +1,191 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const locale = "fr" as const;
+const title = "Démarrer mon site · WEBAO";
+const description = "Démarrez votre site WEBAO : dites-nous qui vous êtes, puis finalisez votre abonnement de 149 $/mois.";
+
+// Clé publique Stripe; sûre à intégrer dans le code frontend.
+const STRIPE_PUBLISHABLE_KEY = "pk_live_51UMzZYE57vVzxI418WAmnlUuIXMLMWtNxjYa6WeWauaSmAhF3xfwaFfdP4D4kJUG2k1nieWrIGSYVMDcy2WYIJ2T00TPmrTePT";
+---
+
+<BaseLayout title={title} description={description} locale={locale}>
+  <section class="section">
+    <div class="shell" style="max-width: 640px;">
+      <div class="eyebrow">Démarrer mon site</div>
+      <h1 class="display" style="font-size: clamp(2rem, 5vw, 3.2rem); line-height:.92; margin-top:12px;">Allons-y.</h1>
+      <p class="prose" style="margin-top:12px; max-width: 52ch;">
+        Dites-nous qui vous êtes, puis finalisez le paiement ci-dessous.
+        Votre abonnement de 149 $/mois débute aujourd'hui; nous vous contactons dans un délai d'un jour ouvrable pour démarrer votre site.
+      </p>
+
+      <form id="start-form" class="start-form" novalidate style="margin-top: 28px;">
+        <label>Votre nom
+          <input name="name" placeholder="Votre nom" autocomplete="name" required />
+        </label>
+        <label>Courriel
+          <input name="email" type="email" placeholder="vous@votreentreprise.ca" autocomplete="email" required />
+        </label>
+        <label>Nom de l'entreprise
+          <input name="business" placeholder="Nom de votre entreprise" autocomplete="organization" required />
+        </label>
+        <div id="start-form-error" class="mono" role="alert" hidden style="font-size:12px; color: #c0392b;"></div>
+      </form>
+
+      <div class="checkout-card checkout-card--pay" style="margin-top: 20px;">
+        <div class="mono" style="font-size:10px; letter-spacing:.14em; opacity:.5; margin-bottom:12px;">PAIEMENT SÉCURISÉ · 149 $ CAD/MOIS</div>
+        <div id="stripe-checkout">
+          <div class="mono" style="padding:40px 20px; text-align:center; color: var(--muted); font-size:12.5px;" id="checkout-loading">
+            Remplissez vos coordonnées ci-dessus pour charger le formulaire de paiement.
+          </div>
+        </div>
+        <div class="mono" style="margin-top:12px; font-size:10.5px; text-align:center; color: var(--muted);">
+          🔒 Chiffré et sécurisé · Propulsé par Stripe · <a href="/fr/refunds" style="color: var(--accent-text);">Politique de remboursement</a>
+        </div>
+      </div>
+
+      <p class="mono" style="margin-top:24px; font-size:11px; color: var(--muted); text-align:center;">
+        Une simple question? <a href="/fr/contact" style="color: var(--ink);">Contactez-nous</a> plutôt.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script define:vars={{ pk: STRIPE_PUBLISHABLE_KEY }}>
+  (function() {
+    const form = document.getElementById('start-form');
+    const loadingEl = document.getElementById('checkout-loading');
+    const errorEl = document.getElementById('start-form-error');
+    let checkoutMounted = false;
+
+    function showError(msg) {
+      if (errorEl) {
+        errorEl.textContent = msg;
+        errorEl.hidden = false;
+      }
+    }
+    function hideError() {
+      if (errorEl) errorEl.hidden = true;
+    }
+
+    function getFormData() {
+      const data = new FormData(form);
+      return {
+        name: String(data.get('name') || '').trim(),
+        email: String(data.get('email') || '').trim(),
+        business: String(data.get('business') || '').trim(),
+      };
+    }
+
+    function validate(d) {
+      if (!d.name || !d.email || !d.business) return 'Veuillez remplir les trois champs.';
+      if (!d.email.includes('@')) return 'Veuillez entrer une adresse courriel valide.';
+      return null;
+    }
+
+    async function mountCheckout() {
+      const d = getFormData();
+      const err = validate(d);
+      if (err) {
+        showError(err);
+        return;
+      }
+      hideError();
+
+      if (!window.Stripe) {
+        if (loadingEl) loadingEl.textContent = 'Stripe n\'a pas pu être chargé. Vérifiez votre connexion et actualisez.';
+        return;
+      }
+      if (checkoutMounted) return;
+
+      if (loadingEl) loadingEl.textContent = 'Chargement du formulaire de paiement…';
+
+      try {
+        sessionStorage.setItem('webao-checkout', JSON.stringify(d));
+        fetch('/api/forms/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          keepalive: true,
+          body: JSON.stringify({ form: 'start', fields: { ...d, page: location.pathname, locale: 'fr' } }),
+        }).catch(() => {});
+      } catch (e) {}
+
+      try {
+        const res = await fetch('/api/checkout/session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...d, locale: 'fr' }),
+        });
+        const data = await res.json();
+        if (!data.ok || !data.clientSecret) {
+          if (loadingEl) loadingEl.textContent = data.error || 'Paiement indisponible. Réessayez.';
+          return;
+        }
+        const stripe = window.Stripe(pk);
+        const checkout = await stripe.initEmbeddedCheckout({ clientSecret: data.clientSecret });
+        checkout.mount('#stripe-checkout');
+        checkoutMounted = true;
+      } catch (e) {
+        if (loadingEl) loadingEl.textContent = 'Paiement indisponible. Réessayez.';
+      }
+    }
+
+    if (form) {
+      form.addEventListener('input', () => {
+        hideError();
+        const d = getFormData();
+        if (!validate(d) && !checkoutMounted) {
+          mountCheckout();
+        }
+      });
+    }
+  })();
+</script>
+
+<style>
+  .start-form {
+    display: grid;
+    gap: 14px;
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 24px;
+  }
+  .start-form label {
+    display: grid;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-3);
+  }
+  .start-form input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    background: var(--paper-3);
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .start-form input:focus {
+    outline: none;
+    border-color: var(--ink);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+  }
+  .checkout-card {
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 28px;
+    background: var(--card-bg);
+  }
+  .checkout-card--pay {
+    background: var(--paper-2);
+    border-color: var(--line-strong);
+  }
+  #stripe-checkout {
+    min-height: 320px;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+</style>
