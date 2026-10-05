@@ -26,7 +26,7 @@ interface Props {
 const {
   title: titleProp,
   description: descProp,
-  ogImage = "/favicon.svg",
+  ogImage = "/light-icon.jpg",
   noIndex = false,
   headerVariant = "light",
   locale: localeProp,
@@ -250,9 +250,10 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
       rel="stylesheet"
     />
 
-    <!-- Favicon -->
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <!-- Favicon: theme-aware icons -->
+    <link rel="icon" href="/light-icon.jpg" media="(prefers-color-scheme: light)" type="image/jpeg" />
+    <link rel="icon" href="/dark-icon.jpg" media="(prefers-color-scheme: dark)" type="image/jpeg" />
+    <link rel="apple-touch-icon" href="/light-icon.jpg" />
 
     <!-- Global styles -->
     <style is:global>
@@ -270,7 +271,7 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
         "@type": "Organization",
         name: "WEBAO",
         url: "https://webao.ca",
-        logo: "https://webao.ca/favicon.svg",
+        logo: "https://webao.ca/light-logo.jpg",
         contactPoint: {
           "@type": "ContactPoint",
           email: "hello@webao.ca",
@@ -291,9 +292,8 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
     <header class:list={["site-header", headerVariant === "dark" && "site-header--dark"]} role="banner">
       <div class="header-inner">
         <a href={navLinks.home} class="brand" aria-label={t.nav.homeAria}>
-          <span class="brand-mark" aria-hidden="true"><span class="oglyph">W</span></span>
-          <span>WEBAO</span>
-          <span class="mono brand-domain" style="font-size: 10px; letter-spacing: .16em; opacity:.55; margin-left:2px; font-weight:500;">WEBAO.CA</span>
+          <img src="/light-logo.jpg" alt="WEBAO" class="brand-logo brand-logo--light" width="120" height="40" />
+          <img src="/dark-logo.jpg" alt="WEBAO" class="brand-logo brand-logo--dark" width="120" height="40" />
         </a>
 
         <div class="header-right">
@@ -360,9 +360,8 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
       <div class="shell">
         <div class="footer-grid">
           <div class="footer-brand">
-            <a href={navLinks.home} class="brand" style="color: var(--section-dark-text);">
-              <span class="brand-mark" style="background: var(--section-dark-text); color: var(--section-dark-bg);"><span class="oglyph">W</span></span>
-              <span>WEBAO</span>
+            <a href={navLinks.home} class="brand" style="color: var(--section-dark-text);" aria-label={t.nav.homeAria}>
+              <img src="/dark-logo.jpg" alt="WEBAO" class="brand-logo" width="120" height="40" />
             </a>
             <p>{t.footer.tagline}</p>
             <div class="cluster" style="margin-top: 20px;">
