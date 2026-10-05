@@ -1,0 +1,58 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const locale = "en" as const;
+const title = "Refund policy · WEBAO";
+const description = "WEBAO refund policy: setup fee refunds, subscription cancellation terms.";
+---
+
+<BaseLayout title={title} description={description} locale={locale}>
+  <section class="section">
+    <div class="shell" style="max-width: 860px;">
+      <div class="eyebrow">Policy</div>
+      <h1 class="display" style="font-size: clamp(2rem, 5vw, 3.6rem); line-height:.92; margin-top:12px;">Refund policy</h1>
+      <p class="prose" style="margin-top:14px; max-width: 60ch;">
+        Simple and straightforward. If you change your mind early, you get your
+        money back. Once work is underway, the setup fee covers custom work
+        already done.
+      </p>
+
+      <div style="margin-top: 36px; display:grid; gap: 20px;">
+        <div style="border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 12px;">Setup fee ($149)</h2>
+          <p class="prose" style="font-size:14px; margin:0;">
+            Full refund if you request it <strong>within 48 hours of payment</strong>,
+            or <strong>before work on your site has started</strong>, whichever comes first.
+          </p>
+          <p class="prose" style="font-size:14px; margin:12px 0 0; color: var(--muted);">
+            Once work has started, the setup fee is non-refundable. Every site is
+            built from scratch for your business, and that work can't be undone.
+          </p>
+        </div>
+
+        <div style="border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 12px;">Monthly subscription ($29/mo)</h2>
+          <p class="prose" style="font-size:14px; margin:0;">
+            Cancel anytime. There is <strong>no refund for the current billing period</strong>,
+            but your site stays live until the end of the period you've paid for.
+            No cancellation fees, no notice period.
+          </p>
+        </div>
+
+        <div style="border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 12px;">How to request a refund or cancel</h2>
+          <p class="prose" style="font-size:14px; margin:0;">
+            Just <a href="/contact" style="color: var(--accent-text);">contact us</a> and
+            tell us you'd like a refund or to cancel. We'll confirm within one
+            business day. Refunds are issued to the original payment method.
+          </p>
+        </div>
+      </div>
+
+      <p class="mono" style="margin-top:28px; font-size:11px; color: var(--muted);">
+        Last updated October 2026. WEBAO reserves the right to update this policy;
+        the version in effect at the time of your purchase applies.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
