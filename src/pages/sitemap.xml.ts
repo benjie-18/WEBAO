@@ -7,12 +7,14 @@ const pagesByLocale: Record<Locale, { key: keyof typeof localizedPaths.en; chang
     { key: "pricing", changefreq: "monthly", priority: "0.8" },
     { key: "contact", changefreq: "monthly", priority: "0.8" },
     { key: "demos", changefreq: "weekly", priority: "0.9" },
+    { key: "start", changefreq: "monthly", priority: "0.9" },
   ],
   fr: [
     { key: "home", changefreq: "weekly", priority: "1.0" },
     { key: "pricing", changefreq: "monthly", priority: "0.8" },
     { key: "contact", changefreq: "monthly", priority: "0.8" },
     { key: "demos", changefreq: "weekly", priority: "0.9" },
+    { key: "start", changefreq: "monthly", priority: "0.9" },
   ],
 };
 
