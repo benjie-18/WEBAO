@@ -47,12 +47,15 @@ const extraPages: { path: string; changefreq: string; priority: string; alternat
 export const GET: APIRoute = () => {
   const site = "https://webao.ca";
   const lastmod = new Date().toISOString().slice(0, 10);
+  // Directory-style URLs carry a trailing slash on this site; the sitemap
+  // must list the final (post-redirect) URLs.
+  const slash = (path: string) => (path === "/" ? `${site}/` : `${site}${path.replace(/\/$/, "")}/`);
   const urls: { loc: string; changefreq: string; priority: string; alternates: { hreflang: string; href: string }[] }[] = [];
 
   for (const locale of ["en", "fr"] as Locale[]) {
     for (const p of pagesByLocale[locale]) {
       const path = localizedPaths[locale][p.key];
-      const loc = `${site}${path}`;
+      const loc = slash(path);
       const enPath = localizedPaths.en[p.key];
       const frPath = localizedPaths.fr[p.key];
       urls.push({
@@ -60,16 +63,21 @@ export const GET: APIRoute = () => {
         changefreq: p.changefreq,
         priority: p.priority,
         alternates: [
-          { hreflang: "en", href: `${site}${enPath}` },
-          { hreflang: "fr", href: `${site}${frPath}` },
-          { hreflang: "x-default", href: `${site}${enPath}` },
+          { hreflang: "en", href: slash(enPath) },
+          { hreflang: "fr", href: slash(frPath) },
+          { hreflang: "x-default", href: slash(enPath) },
         ],
       });
     }
   }
 
   for (const e of extraPages) {
-    urls.push({ loc: `${site}${e.path}`, changefreq: e.changefreq, priority: e.priority, alternates: e.alternates });
+    urls.push({
+      loc: slash(e.path),
+      changefreq: e.changefreq,
+      priority: e.priority,
+      alternates: e.alternates.map((a) => ({ ...a, href: slash(new URL(a.href).pathname) })),
+    });
   }
 
   // Deduplicate by loc

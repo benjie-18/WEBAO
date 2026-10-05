@@ -98,7 +98,10 @@ export function getAlternateUrls(currentPath: string, site: string): Record<Loca
   const result = {} as Record<Locale, string>;
   for (const locale of locales) {
     const altPath = getAlternatePath(currentPath, locale);
-    result[locale] = `${base}${altPath}`;
+    // The site serves directory-style URLs with a trailing slash
+    // (e.g. /pricing/); hreflang must match the canonical form exactly.
+    const slashPath = altPath === "/" ? "/" : altPath.replace(/\/$/, "") + "/";
+    result[locale] = `${base}${slashPath}`;
   }
   return result;
 }
