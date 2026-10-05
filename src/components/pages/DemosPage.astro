@@ -1,5 +1,6 @@
 ---
 import { useTranslations, localizedPaths, getDemos, type Locale } from "../../lib/i18n";
+import { styleFamilies, getDemoFamily } from "../../lib/demos";
 
 interface Props {
   locale: Locale;
@@ -16,8 +17,8 @@ const hiddenDemos = new Set(["boba-club"]);
 const visibleDemos = demos.filter((d) => !hiddenDemos.has(d.id));
 const demoHref = (id: string) => `${paths.demos}/${id}`;
 
-// Unique design styles (tones) for the style filter, alphabetical
-const tones = [...new Set(visibleDemos.map((d) => d.tone))].sort((a, b) => a.localeCompare(b));
+// Style families for the filter: broad, plain-language groups
+const families = styleFamilies;
 ---
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -63,8 +64,8 @@ const tones = [...new Set(visibleDemos.map((d) => d.tone))].sort((a, b) => a.loc
       </label>
       <div class="filters" role="group" aria-label={t.demos.styleLabel}>
         <button class="chip chip--active" data-filter="All" aria-pressed="true">{t.demos.allStyles}</button>
-        {tones.map((tone) => (
-          <button class="chip" data-filter={tone} aria-pressed="false">{tone}</button>
+        {families.map((family) => (
+          <button class="chip" data-filter={family} aria-pressed="false">{t.demos.families[family]}</button>
         ))}
       </div>
     </div>
@@ -75,7 +76,7 @@ const tones = [...new Set(visibleDemos.map((d) => d.tone))].sort((a, b) => a.loc
   <div class="shell">
     <div id="demo-grid" class="demo-grid" data-reveal>
       {visibleDemos.map((d, i) => (
-        <a href={liveDemos.has(d.id) ? demoHref(d.id) : "#"} class="demo-card-demo" data-category={d.category} data-search={`${d.name} ${d.category} ${d.city} ${d.tone} ${d.palette} ${d.localizedDescription}`.toLowerCase()} data-reveal style={`--d:${(i%3)*80}ms`} data-demo-id={d.id} data-demo-tone={d.tone} data-demo-palette={d.palette} data-live={liveDemos.has(d.id) ? "true" : undefined} aria-label={`${t.demos.searchPlaceholder} ${d.name}`}>
+        <a href={liveDemos.has(d.id) ? demoHref(d.id) : "#"} class="demo-card-demo" data-category={d.category} data-search={`${d.name} ${d.category} ${d.city} ${d.tone} ${d.palette} ${d.localizedDescription}`.toLowerCase()} data-reveal style={`--d:${(i%3)*80}ms`} data-demo-id={d.id} data-demo-tone={d.tone} data-demo-family={getDemoFamily(d.id)} data-demo-palette={d.palette} data-live={liveDemos.has(d.id) ? "true" : undefined} aria-label={`${t.demos.searchPlaceholder} ${d.name}`}>
           {liveDemos.has(d.id) ? (
             <div class={`demo-thumb dthumb dthumb-${d.id}`}>
               {d.id === "nora" && (
@@ -410,9 +411,9 @@ const tones = [...new Set(visibleDemos.map((d) => d.tone))].sort((a, b) => a.loc
       let visible = 0;
       const q = query.trim().toLowerCase();
       for (const c of cards) {
-        const tone = c.getAttribute('data-demo-tone') || '';
+        const family = c.getAttribute('data-demo-family') || '';
         const txt = c.getAttribute('data-search') || '';
-        const matchStyle = active === 'All' || tone === active;
+        const matchStyle = active === 'All' || family === active;
         const matchQ = !q || txt.includes(q);
         const show = matchStyle && matchQ;
         (c as HTMLElement).style.display = show ? '' : 'none';
