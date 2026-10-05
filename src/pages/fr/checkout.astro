@@ -92,6 +92,16 @@ const STRIPE_PUBLISHABLE_KEY = "pk_live_51UMzZYE57vVzxI418WAmnlUuIXMLMWtNxjYa6We
         checkout.mount(mountEl || '#stripe-checkout');
       })
       .catch(() => fail());
+
+    const payCard = document.querySelector('.checkout-card--pay');
+    if (payCard) {
+      payCard.addEventListener('mouseenter', () => {
+        document.documentElement.classList.add('cc-hidden-pay');
+      });
+      payCard.addEventListener('mouseleave', () => {
+        document.documentElement.classList.remove('cc-hidden-pay');
+      });
+    }
   })();
 </script>
 
@@ -111,4 +121,7 @@ const STRIPE_PUBLISHABLE_KEY = "pk_live_51UMzZYE57vVzxI418WAmnlUuIXMLMWtNxjYa6We
     border-radius: 12px;
     overflow: hidden;
   }
+  html.cc-hidden-pay .cc { display: none !important; }
+  html.cc-hidden-pay .checkout-card--pay,
+  html.cc-hidden-pay .checkout-card--pay * { cursor: auto !important; }
 </style>
