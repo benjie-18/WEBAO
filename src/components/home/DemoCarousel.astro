@@ -23,8 +23,9 @@ const total = String(demos.length).padStart(2, "0");
 ---
 
 <!--
-  Marks JS availability before first paint so the horizontal strip layout can
-  engage without a flash of the no-JS vertical stack.
+  Marks JS availability before first paint so auto-scroll, drag, arrows,
+  and progress can engage. The horizontal strip layout itself is pure CSS
+  and works without JS (native horizontal scroll).
 -->
 <script is:inline>
   try { document.documentElement.classList.add("proof-js"); } catch (e) {}
@@ -46,8 +47,9 @@ const total = String(demos.length).padStart(2, "0");
 
   <!-- Horizontal strip. The page scrolls vertically past it freely; the
        track scrolls horizontally on its own (auto-scroll, drag, arrows,
-       native swipe). Without JS (or with reduced motion) this collapses to
-       a plain vertical stack. -->
+       native swipe). Pure CSS horizontal scroll works without JS;
+       JS enhances with auto-scroll, drag, progress, and counters.
+       Reduced motion falls back to a calm vertical stack. -->
   <div class="proof-scroll">
     <div class="proof-pin" data-proof-pin tabindex="0" aria-keyshortcuts="ArrowLeft ArrowRight Home End">
       <div class="proof-topbar" aria-hidden="true">
@@ -253,34 +255,13 @@ const total = String(demos.length).padStart(2, "0");
 <style>
   .proof { padding-block: clamp(48px, 7vw, 96px); overflow: clip; }
 
-  /* ---------- Base: vertical stack (no-JS default) ---------- */
-  .proof-scroll { margin-top: 34px; }
-  .proof-pin { position: relative; }
-  .proof-topbar { display: none; }
-  .proof-track { display: grid; gap: clamp(36px, 5vw, 64px); padding: 6px 0 48px; }
-  .proof-panel { position: relative; min-width: 0; }
-  .proof-shot {
-    display: block; border-radius: var(--r-lg, 18px); overflow: clip;
-    border: 1px solid var(--line); background: var(--paper-2);
-    box-shadow: var(--shadow-sm);
-    transition: transform .45s var(--ease-out, cubic-bezier(.16,1,.3,1)), box-shadow .45s var(--ease-out, cubic-bezier(.16,1,.3,1));
-  }
-  .proof-shot:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
-  .proof-shot img { width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: top; display: block; }
-  .proof-meta { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-top: 14px; padding-inline: 4px; }
-  .proof-index { font-size: 11px; color: var(--accent-text, var(--accent)); letter-spacing: .08em; }
-  .proof-name { font-size: clamp(1.2rem, 2.4vw, 1.7rem); letter-spacing: -0.02em; font-weight: 700; }
-  .proof-tags { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-left: auto; }
-  .proof-fracture { display: none; }
-  .proof-controls { display: none; }
-
-  /* ---------- Enhanced: free horizontal strip (no pin) ----------
+  /* ---------- Horizontal strip (default, pure CSS) ----------
      The page scrolls vertically past this section at all times; the track
      scrolls horizontally on its own via auto-scroll, drag, arrows, or
-     native touch swipe. */
-  :global(html.proof-js) .proof-scroll { margin-top: 34px; }
-  :global(html.proof-js) .proof-pin { position: relative; }
-  :global(html.proof-js) .proof-topbar {
+     native touch swipe. Works without JS via native horizontal scroll. */
+  .proof-scroll { margin-top: 34px; }
+  .proof-pin { position: relative; }
+  .proof-topbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -290,7 +271,7 @@ const total = String(demos.length).padStart(2, "0");
   .proof-count { font-size: 11px; letter-spacing: .12em; color: var(--muted); }
   .proof-count-sep { opacity: .45; }
 
-  :global(html.proof-js) .proof-track {
+  .proof-track {
     display: flex;
     gap: clamp(24px, 3vw, 44px);
     overflow-x: auto;
@@ -299,22 +280,36 @@ const total = String(demos.length).padStart(2, "0");
     padding: 6px clamp(20px, 6vw, 88px) 30px;
     scrollbar-width: thin;
   }
-  :global(html.proof-js) .proof-panel {
+  .proof-panel {
+    position: relative;
     flex: 0 0 auto;
     width: min(620px, 84vw);
     scroll-snap-align: start;
+    min-width: 0;
   }
-  :global(html.proof-js) .proof-shot img {
+  .proof-shot {
+    display: block; border-radius: var(--r-lg, 18px); overflow: clip;
+    border: 1px solid var(--line); background: var(--paper-2);
+    box-shadow: var(--shadow-sm);
+    transition: transform .45s var(--ease-out, cubic-bezier(.16,1,.3,1)), box-shadow .45s var(--ease-out, cubic-bezier(.16,1,.3,1));
+  }
+  .proof-shot:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+  .proof-shot img {
+    width: 100%; display: block;
     height: clamp(200px, 32vw, 360px);
-    aspect-ratio: auto;
+    object-fit: cover; object-position: top;
   }
-  :global(html.proof-js) .proof-panel.is-active .proof-shot {
+  .proof-panel.is-active .proof-shot {
     box-shadow: var(--shadow-md);
   }
+  .proof-meta { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-top: 14px; padding-inline: 4px; }
+  .proof-index { font-size: 11px; color: var(--accent-text, var(--accent)); letter-spacing: .08em; }
+  .proof-name { font-size: clamp(1.2rem, 2.4vw, 1.7rem); letter-spacing: -0.02em; font-weight: 700; }
+  .proof-tags { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-left: auto; }
 
   /* Fracture motif: a jagged dark crack splitting each panel boundary,
      like a torn page edge. Reads on paper in both themes. */
-  :global(html.proof-js) .proof-fracture {
+  .proof-fracture {
     display: block;
     position: absolute;
     top: -3%; bottom: -3%; left: 0;
@@ -334,7 +329,7 @@ const total = String(demos.length).padStart(2, "0");
   }
 
   /* Crack-fill progress + controls in normal flow under the track. */
-  :global(html.proof-js) .proof-controls {
+  .proof-controls {
     display: flex;
     align-items: center;
     gap: 18px;
@@ -367,25 +362,25 @@ const total = String(demos.length).padStart(2, "0");
 
   /* Drag affordance, fine pointers only. */
   @media (hover: hover) and (pointer: fine) {
-    :global(html.proof-js) .proof-track { cursor: grab; }
-    :global(html.proof-js) .proof-track.is-dragging { cursor: grabbing; }
-    :global(html.proof-js) .proof-track.is-dragging * { user-select: none; }
-    :global(html.proof-js) .proof-panel a { cursor: pointer; }
+    .proof-track { cursor: grab; }
+    .proof-track.is-dragging { cursor: grabbing; }
+    .proof-track.is-dragging * { user-select: none; }
+    .proof-panel a { cursor: pointer; }
   }
 
   /* ---------- Reduced motion: calm vertical stack, no auto-scroll ---------- */
   @media (prefers-reduced-motion: reduce) {
-    :global(html.proof-js) .proof-track {
+    .proof-track {
       display: grid;
       gap: clamp(36px, 5vw, 64px);
       overflow: visible;
       padding: 6px 0 48px;
     }
-    :global(html.proof-js) .proof-panel { width: 100%; }
-    :global(html.proof-js) .proof-shot img { height: auto; aspect-ratio: 16 / 10; }
-    :global(html.proof-js) .proof-topbar,
-    :global(html.proof-js) .proof-controls,
-    :global(html.proof-js) .proof-fracture { display: none; }
+    .proof-panel { width: 100%; }
+    .proof-shot img { height: auto; aspect-ratio: 16 / 10; }
+    .proof-topbar,
+    .proof-controls,
+    .proof-fracture { display: none; }
     .proof-shot, .proof-btn { transition: none; }
   }
 </style>
