@@ -26,6 +26,13 @@ export default {
   async fetch(request: Request, env: Env, _ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
 
+    // Redirect old subdomain to the canonical domain.
+    if (url.hostname === "webao.bnji.net") {
+      url.hostname = "webao.ca";
+      url.protocol = "https:";
+      return Response.redirect(url.toString(), 301);
+    }
+
     if (url.pathname.startsWith("/api/")) {
       try {
         return await routeApi(request, env);
