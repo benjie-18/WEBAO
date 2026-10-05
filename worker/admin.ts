@@ -237,7 +237,18 @@ async function handleFormsList(kv: KVNamespace, url: URL): Promise<Response> {
 async function handleFormDelete(kv: KVNamespace, path: string): Promise<Response> {
   const m = /^\/api\/admin\/forms\/([^/]+)$/.exec(path);
   if (!m) return err("Invalid id", 400);
-  const key = "form:" + m[1];
+  // The frontend sends encodeURIComponent(id), so the captured id is still
+  // percent-encoded here (URL.pathname does not decode %3A). Decode it before
+  // rebuilding the KV key; otherwise we delete a non-existent key, drop
+  // nothing from the index, and the submission silently survives.
+  let id: string;
+  try {
+    id = decodeURIComponent(m[1]);
+  } catch {
+    return err("Invalid id", 400);
+  }
+  if (!/^[\w:.-]+$/.test(id) || id.length > 64) return err("Invalid id", 400);
+  const key = "form:" + id;
   await deleteKey(kv, key);
   const index = (await getJson<string[]>(kv, FORMS_INDEX)) || [];
   const next = index.filter((k) => k !== key);
