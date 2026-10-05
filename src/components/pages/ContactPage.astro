@@ -20,7 +20,7 @@ const paths = localizedPaths[locale];
         </p>
 
         <div class="contact-cards">
-          <a href="mailto:hello@webao.ca" class="c-card">
+          <a href="mailto:contact@webao.ca" class="c-card">
             <span class="c-icon">✉</span>
             <span>
               <strong>{t.contact.hero.email}</strong>
@@ -85,7 +85,7 @@ const paths = localizedPaths[locale];
           <button type="submit" class="btn btn--primary" style="width:100%; justify-content:center; margin-top:6px;">
             {t.contact.form.submit}
           </button>
-          <div class="mono" style="text-align:center; font-size:11px; color: var(--muted); margin-top:8px;">{t.contact.form.submitNote} <a href="mailto:hello@webao.ca" style="color: var(--ink); font-weight:650; text-decoration: underline; text-underline-offset:3px;">{t.contact.form.submitNoteEmail}</a></div>
+          <div class="mono" style="text-align:center; font-size:11px; color: var(--muted); margin-top:8px;">{t.contact.form.submitNote} <a href="mailto:contact@webao.ca" style="color: var(--ink); font-weight:650; text-decoration: underline; text-underline-offset:3px;">{t.contact.form.submitNoteEmail}</a></div>
 
           <div id="form-status" role="status" aria-live="polite" class="form-status mono" hidden></div>
         </form>
@@ -124,7 +124,7 @@ const paths = localizedPaths[locale];
         <div class="mono" style="margin-top:10px; display:grid; gap:6px; font-size:12.5px;">
           {t.contact.info.plain.lines.map(l => <span>{l}</span>)}
         </div>
-        <a href="mailto:hello@webao.ca" class="btn btn--dark btn--sm" style="margin-top:14px; width:100%; justify-content:center;">{t.contact.info.plain.cta}</a>
+        <a href="mailto:contact@webao.ca" class="btn btn--dark btn--sm" style="margin-top:14px; width:100%; justify-content:center;">{t.contact.info.plain.cta}</a>
       </div>
     </div>
   </div>
@@ -137,7 +137,7 @@ const paths = localizedPaths[locale];
     const locale = document.documentElement.lang === 'fr' ? 'fr' : 'en';
     if (form && status) {
       const validationError = form.getAttribute('data-validation-error') || 'Please fill in the required fields with a valid email, and tick the contact checkbox.';
-      const successMsg = form.getAttribute('data-success') || 'Your email app should open with the message ready to send. If nothing opened, just email us directly at hello@webao.ca.';
+      const successMsg = form.getAttribute('data-success') || 'Your email app should open with the message ready to send. If nothing opened, just email us directly at contact@webao.ca.';
       const readyText = form.getAttribute('data-ready') || 'Email ready ✓';
 
       form.addEventListener('submit', (e) => {
@@ -186,8 +186,8 @@ const paths = localizedPaths[locale];
           .catch(() => {
             status.hidden = false;
             status.textContent = locale === 'fr'
-              ? "Envoi impossible pour le moment. Écrivez-nous directement à hello@webao.ca."
-              : "Could not send right now. Email us directly at hello@webao.ca.";
+              ? "Envoi impossible pour le moment. Écrivez-nous directement à contact@webao.ca."
+              : "Could not send right now. Email us directly at contact@webao.ca.";
             status.classList.remove('form-status--success');
             status.classList.add('form-status--error');
           });
