@@ -4,22 +4,22 @@ const fr = {
 
   meta: {
     home: {
-      title: "WEBAO · Sites web sur mesure pour PME · webao.ca",
+      title: "Sites web sur mesure pour PME au Canada | WEBAO",
       description:
         "Des sites web sur mesure pour les entreprises partout au Canada, à 149 $ CAD par mois. Design, domaine, hébergement, mises à jour et soutien inclus. Parcourez le catalogue de démos.",
     },
     pricing: {
-      title: "Tarifs · WEBAO · Un seul forfait simple à 149 $ CAD/mois",
+      title: "Tarifs site web · 149 $ CAD/mois, tout inclus | WEBAO",
       description:
         "Un forfait qui inclut tout : un site sur mesure de 3 à 5 pages, domaine, hébergement, bases SEO, analytique, mises à jour et soutien. Sans frais d’installation, sans contrat à long terme.",
     },
     contact: {
-      title: "Contact · WEBAO · Démarrez votre site web",
+      title: "Contact WEBAO · Démarrez votre site sur mesure",
       description:
         "Parlez-nous de votre entreprise et on vous répond avec deux directions de démo et un échéancier honnête. Écrivez à contact@webao.ca ou utilisez le formulaire.",
     },
     demos: {
-      title: "Catalogue de démos · WEBAO · 30 directions artistiques",
+      title: "Exemples de sites web · 30 démos pour entreprises locales | WEBAO",
       description:
         "Parcourez 30 directions de design pour des entreprises locales fictives. Filtrez par métier, ton ou ville. Chaque démo est un design différent, pas le même modèle en 30 couleurs.",
     },

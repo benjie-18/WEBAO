@@ -1,22 +1,22 @@
 const en = {
   meta: {
     home: {
-      title: "WEBAO · Custom websites for businesses · webao.ca",
+      title: "Custom Websites for Small Businesses in Canada | WEBAO",
       description:
         "Custom websites for businesses across Canada, for $149 CAD a month. Design, domain, hosting, updates, and support included. See the demo catalog.",
     },
     pricing: {
-      title: "Pricing · WEBAO · One simple plan, $149 CAD/month",
+      title: "Website Pricing · $149 CAD/month, Everything Included | WEBAO",
       description:
         "One plan that includes everything: a custom 3 to 5 page site, domain, hosting, SEO basics, analytics, updates, and support. No setup fee, no long-term contract.",
     },
     contact: {
-      title: "Contact · WEBAO · Start your website",
+      title: "Contact WEBAO · Start Your Custom Website",
       description:
         "Tell us about your business and we’ll reply with two demo directions and an honest timeline. Email contact@webao.ca or send the form.",
     },
     demos: {
-      title: "Demo catalog · WEBAO · 30 art-directed site designs",
+      title: "Website Design Examples · 30 Demos for Local Businesses | WEBAO",
       description:
         "Browse 30 art-directed design directions for fictional local businesses. Search by trade, tone, or city. Each demo is a different design, not the same template in 30 colors.",
     },
@@ -31,8 +31,6 @@ const en = {
     pricing: "Pricing",
     contact: "Contact",
     startSite: "Start your site →",
-    stickyCtaPrice: "$149/mo",
-    stickyCta: "Start →",
     openMenu: "Open menu",
     homeAria: "WEBAO home",
     skip: "Skip to content",
@@ -240,26 +238,6 @@ const en = {
         {
           q: "How fast is “fast”?",
           a: "Fast enough that nobody waits. The sites are static (no heavy CMS or page builder), images are optimized, and everything is served from a global CDN, so pages load quickly even on older phones. We check every page on real devices before launch, and we don’t quote speed numbers we can’t stand behind.",
-        },
-        {
-          q: "How long until my site is live?",
-          a: "Most sites launch within 2–3 weeks of the day you send your photos, logo, and basic info — simple one-pagers can go faster. We’ll give you an honest timeline before you pay anything, and if we’re ever running behind, you’ll hear it from us first.",
-        },
-        {
-          q: "What’s actually included in the $149/month?",
-          a: "Everything a small business site needs: a custom 3–5 page website, your domain, hosting, SSL, mobile-friendly design, a contact or quote form, basic SEO setup, analytics, security and maintenance — plus small content updates whenever you need them. No setup fee, no per-change billing.",
-        },
-        {
-          q: "Will my site show up on Google?",
-          a: "Yes — that’s the point. Every site ships with SEO fundamentals: proper titles and descriptions, a sitemap, fast load times, and mobile-friendly pages. We also set up your Google Business Profile, which is how most local customers actually find trades. No one can promise #1 rankings, and you should distrust anyone who does.",
-        },
-        {
-          q: "Can I pause or change things later?",
-          a: "Yes. It’s month-to-month, so you can pause or cancel anytime. Need an extra page or a new feature down the road? We’ll quote it clearly before doing the work — nothing is ever added to your bill without your approval.",
-        },
-        {
-          q: "Do you only build sites for trades?",
-          a: "Trades are our home turf — electricians, plumbers, HVAC, landscapers — but we build for any local service business: restaurants, clinics, auto shops, cleaners, and more. If you serve customers in person, we can probably help. Just ask.",
         },
       ],
     },
@@ -505,14 +483,6 @@ const en = {
     filterLabel: "Filter by category",
     styleLabel: "Style",
     allStyles: "All styles",
-    tradeLabel: "Trade",
-    allTrades: "All trades",
-    trades: {
-      plumbing: "Plumbers",
-      electrical: "Electricians",
-      roofing: "Roofers",
-      renovation: "Renovation",
-    },
     families: {
       timeless: "Timeless",
       elegant: "Elegant",

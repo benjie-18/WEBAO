@@ -5,8 +5,37 @@ import { useTranslations } from "../../../lib/i18n";
 
 const locale = "fr" as const;
 const t = useTranslations(locale);
+
+// Product + Offer structured data: lets Google show price/currency in results.
+const productSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: "Site web sur mesure WEBAO",
+  description: t.meta.pricing.description,
+  brand: { "@type": "Brand", name: "WEBAO" },
+  offers: {
+    "@type": "Offer",
+    url: "https://webao.ca/fr/tarifs",
+    priceCurrency: "CAD",
+    price: "149",
+    availability: "https://schema.org/InStock",
+  },
+});
+
+// FAQPage structured data for search snippets, built from the translated FAQ.
+const faqSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: t.pricing.faq.items.map((item) => ({
+    "@type": "Question",
+    name: item.q,
+    acceptedAnswer: { "@type": "Answer", text: item.a },
+  })),
+});
 ---
 
 <BaseLayout title={t.meta.pricing.title} description={t.meta.pricing.description} locale={locale} pageKey="pricing">
+  <script slot="head" type="application/ld+json" set:html={productSchema} />
+  <script slot="head" type="application/ld+json" set:html={faqSchema} />
   <PricingPage locale={locale} />
 </BaseLayout>
