@@ -20,7 +20,7 @@ const paths = localizedPaths[locale];
           {t.pricing.hero.desc}
         </p>
         <div class="cluster" style="margin-top:18px;">
-          <a href={paths.start} class="btn btn--primary">{t.pricing.hero.cta}</a>
+          <a href={paths.contact} class="btn btn--primary">{t.pricing.hero.cta}</a>
           <span class="mono" style="font-size:11px; color: var(--muted);">{t.pricing.hero.emailNote}</span>
         </div>
       </div>
@@ -31,7 +31,7 @@ const paths = localizedPaths[locale];
           <span class="mono" style="font-size:11px; line-height:1.3; opacity:.6;" set:html={t.pricing.hero.card.suffix}></span>
         </div>
         <div style="margin-top:10px; font-size:13px; color: var(--muted);">{t.pricing.hero.card.desc}</div>
-        <a href={paths.start} class="btn btn--dark" style="width:100%; margin-top:18px; justify-content:center;">{t.pricing.hero.card.cta}</a>
+        <a href={paths.contact} class="btn btn--dark" style="width:100%; margin-top:18px; justify-content:center;">{t.pricing.hero.card.cta}</a>
         <div class="mono" style="margin-top:10px; font-size:11px; text-align:center; color: var(--muted);">{t.pricing.hero.card.note}</div>
         <div class="trust-row">
           {t.pricing.hero.card.trust.map(tr => <span>{tr}</span>)}
@@ -133,7 +133,7 @@ const paths = localizedPaths[locale];
         <ul class="check-list">
           {t.pricing.quote.checks.map(c => <li>{c}</li>)}
         </ul>
-        <a href={paths.start} class="btn btn--primary" style="margin-top:16px;">{t.pricing.quote.cta}</a>
+        <a href={paths.contact} class="btn btn--primary" style="margin-top:16px;">{t.pricing.quote.cta}</a>
       </div>
     </div>
   </div>
@@ -161,7 +161,7 @@ const paths = localizedPaths[locale];
       <h2 class="display" style="font-size: clamp(1.8rem, 4vw, 2.8rem); margin-top:6px; color: var(--section-dark-text);" set:html={t.pricing.ctaBand.title}></h2>
     </div>
     <div class="cluster">
-      <a href={paths.start} class="btn btn--on-dark">{t.pricing.ctaBand.primary}</a>
+      <a href={paths.contact} class="btn btn--on-dark">{t.pricing.ctaBand.primary}</a>
       <a href={paths.demos} class="btn btn--ghost-on-dark">{t.pricing.ctaBand.secondary}</a>
     </div>
   </div>
