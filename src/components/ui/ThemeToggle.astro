@@ -28,7 +28,7 @@ const t = useTranslations(locale);
      wipes in as an expanding circle. Transform/clip-path only. */
   ::view-transition-old(root),
   ::view-transition-new(root) {
-    animation-duration: var(--dur-4, 600ms);
+    animation-duration: var(--dur-4, 1200ms);
     animation-timing-function: var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1));
   }
   ::view-transition-old(root) {
@@ -146,7 +146,7 @@ const t = useTranslations(locale);
         }
         // Safety net: the finished promise can resolve later than the
         // nominal animation duration; never leak the custom properties.
-        window.setTimeout(cleanup, 1200);
+        window.setTimeout(cleanup, 2400);
         return;
       }
 
