@@ -43,7 +43,7 @@ const paths = localizedPaths[locale];
 
         <div class="testi">
           <p>{t.contact.hero.browseText}</p>
-          <a href={paths.demos} class="mono" style="display:inline-block; margin-top:8px; font-size:12px; font-weight:600; color: var(--accent-text); text-decoration: underline; text-underline-offset:3px;">{t.contact.hero.browseCta}</a>
+          <a href={paths.start} class="mono" style="display:inline-block; margin-top:8px; font-size:12px; font-weight:600; color: var(--accent-text); text-decoration: underline; text-underline-offset:3px;">{t.contact.hero.browseCta}</a>
         </div>
       </div>
 
@@ -55,56 +55,26 @@ const paths = localizedPaths[locale];
           data-validation-error={t.contact.form.validationError}
           data-success={t.contact.form.success}
           data-ready={t.contact.form.ready}
-          data-label-business={locale==="fr" ? "Entreprise" : "Business"}
-          data-label-trade={locale==="fr" ? "Métier" : "Trade"}
-          data-label-city={locale==="fr" ? "Ville" : "City"}
           data-label-name={locale==="fr" ? "Nom" : "Name"}
           data-label-email={locale==="fr" ? "Courriel" : "Email"}
-          data-label-phone={locale==="fr" ? "Téléphone" : "Phone"}
-          data-label-goal={locale==="fr" ? "Objectif" : "Goal"}
-          data-label-details={locale==="fr" ? "Détails" : "Details"}
-          data-subject-prefix={locale==="fr" ? "Nouvelle demande de site" : "New website enquiry"}
+          data-label-message={locale==="fr" ? "Message" : "Message"}
+          data-subject-prefix={locale==="fr" ? "Message du site" : "Website message"}
         >
           <div class="form-head">
             <h2>{t.contact.form.title}</h2>
             <p class="mono">{t.contact.form.subtitle}</p>
           </div>
 
-          <div class="field-grid">
-            <label>{t.contact.form.business}
-              <input name="business" placeholder={t.contact.form.businessPlaceholder} autocomplete="organization" required />
-            </label>
-            <label>{t.contact.form.trade}
-              <select name="trade" required>
-                <option value="" disabled selected>{t.contact.form.tradePlaceholder}</option>
-                {t.contact.form.trades.map(tr => <option>{tr}</option>)}
-              </select>
-            </label>
-          </div>
-
-          <div class="field-grid">
-            <label>{t.contact.form.city}
-              <input name="city" placeholder={t.contact.form.cityPlaceholder} autocomplete="address-level2" required />
-            </label>
-            <label>{t.contact.form.name}
-              <input name="name" placeholder={t.contact.form.namePlaceholder} autocomplete="name" required />
-            </label>
-          </div>
+          <label>{t.contact.form.name}
+            <input name="name" placeholder={t.contact.form.namePlaceholder} autocomplete="name" required />
+          </label>
 
           <label>{t.contact.form.email}
             <input name="email" type="email" placeholder={t.contact.form.emailPlaceholder} autocomplete="email" required />
           </label>
 
-          <label>{t.contact.form.phone} <span class="optional mono">{t.contact.form.optional}</span>
-            <input name="phone" type="tel" placeholder={t.contact.form.phonePlaceholder} autocomplete="tel" />
-          </label>
-
-          <label>{t.contact.form.goal}
-            <textarea name="goal" rows="3" placeholder={t.contact.form.goalPlaceholder}></textarea>
-          </label>
-
-          <label>{t.contact.form.details}
-            <textarea name="details" rows="3" placeholder={t.contact.form.detailsPlaceholder}></textarea>
+          <label>{t.contact.form.message}
+            <textarea name="message" rows="5" placeholder={t.contact.form.messagePlaceholder} required></textarea>
           </label>
 
           <div class="form-meta mono">
@@ -164,6 +134,7 @@ const paths = localizedPaths[locale];
   function initContactPage() {
     const form = document.getElementById('contact-form') as HTMLFormElement | null;
     const status = document.getElementById('form-status') as HTMLElement | null;
+    const locale = document.documentElement.lang === 'fr' ? 'fr' : 'en';
     if (form && status) {
       const validationError = form.getAttribute('data-validation-error') || 'Please fill in the required fields with a valid email, and tick the contact checkbox.';
       const successMsg = form.getAttribute('data-success') || 'Your email app should open with the message ready to send. If nothing opened, just email us directly at hello@webao.ca.';
@@ -172,13 +143,11 @@ const paths = localizedPaths[locale];
       form.addEventListener('submit', (e) => {
         e.preventDefault();
         const data = new FormData(form as HTMLFormElement);
-        const required = ['business','trade','city','name','email'];
+        const name = String(data.get('name') || '').trim();
+        const email = String(data.get('email') || '').trim();
+        const message = String(data.get('message') || '').trim();
         let valid = true;
-        for (const k of required) {
-          const v = data.get(k);
-          if (!v || String(v).trim() === '') valid = false;
-        }
-        const email = String(data.get('email') || '');
+        if (!name || !email || !message) valid = false;
         if (!email.includes('@')) valid = false;
         const consent = form.querySelector('.check-row input') as HTMLInputElement | null;
         if (consent && !consent.checked) valid = false;
@@ -189,65 +158,39 @@ const paths = localizedPaths[locale];
           status.classList.add('form-status--error');
           return;
         }
-        const fields: Array<[string, string]> = [
-          [form.getAttribute('data-label-business') || 'Business', String(data.get('business') || '')],
-          [form.getAttribute('data-label-trade') || 'Trade', String(data.get('trade') || '')],
-          [form.getAttribute('data-label-city') || 'City', String(data.get('city') || '')],
-          [form.getAttribute('data-label-name') || 'Name', String(data.get('name') || '')],
-          [form.getAttribute('data-label-email') || 'Email', email],
-          [form.getAttribute('data-label-phone') || 'Phone', String(data.get('phone') || '')],
-          [form.getAttribute('data-label-goal') || 'Goal', String(data.get('goal') || '')],
-          [form.getAttribute('data-label-details') || 'Details', String(data.get('details') || '')],
-        ];
-        const body = fields
-          .filter(([, v]) => v.trim() !== '')
-          .map(([k, v]) => `${k}: ${v}`)
-          .join('\n');
-        const subjectPrefix = form.getAttribute('data-subject-prefix') || 'New website enquiry';
-        const subject = `${subjectPrefix}: ${fields[0][1] || 'WEBAO'}`;
-        // Catalog the submission for the admin panel (fail-silent; the mailto
-        // below remains the primary channel so nothing breaks if the API is down).
-        try {
-          fetch("/api/forms/submit", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            keepalive: true,
-            body: JSON.stringify({
-              form: "pricing",
-              fields: {
-                name: String(data.get('name') || ''),
-                email: email,
-                business: String(data.get('business') || ''),
-                trade: String(data.get('trade') || ''),
-                city: String(data.get('city') || ''),
-                phone: String(data.get('phone') || ''),
-                goal: String(data.get('goal') || ''),
-                details: String(data.get('details') || ''),
-                page: location.pathname,
-              },
-            }),
-          }).catch(() => {});
-        } catch (err) { /* never break the mailto flow */ }
-        // Save the form data for the checkout page, then redirect there.
-        // The API catalog call above remains fail-silent.
-        try {
-          sessionStorage.setItem('webao-checkout', JSON.stringify({
-            name: String(data.get('name') || ''),
-            email: email,
-            business: String(data.get('business') || ''),
-            trade: String(data.get('trade') || ''),
-            city: String(data.get('city') || ''),
-            phone: String(data.get('phone') || ''),
-            goal: String(data.get('goal') || ''),
-            details: String(data.get('details') || ''),
-          }));
-        } catch (err) { /* sessionStorage unavailable; checkout still works */ }
-        const checkoutPath = document.documentElement.lang === 'fr' ? '/fr/checkout' : '/checkout';
-        window.location.href = checkoutPath;
-        status.classList.remove('form-status--error');
-        status.classList.add('form-status--success');
-        const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
-        if (btn) { btn.textContent = readyText; }
+        // Send the message to the site inbox (fail-silent is not an option here;
+        // show an error if the API is unreachable).
+        fetch("/api/forms/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          keepalive: true,
+          body: JSON.stringify({
+            form: "contact",
+            fields: { name, email, message, page: location.pathname },
+          }),
+        })
+          .then((r) => r.json())
+          .then((res) => {
+            if (res && res.ok) {
+              status.hidden = false;
+              status.textContent = successMsg;
+              status.classList.remove('form-status--error');
+              status.classList.add('form-status--success');
+              const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+              if (btn) { btn.textContent = readyText; btn.disabled = true; }
+              form.querySelectorAll('input, textarea').forEach((el) => { (el as HTMLInputElement).disabled = true; });
+            } else {
+              throw new Error('submit failed');
+            }
+          })
+          .catch(() => {
+            status.hidden = false;
+            status.textContent = locale === 'fr'
+              ? "Envoi impossible pour le moment. Écrivez-nous directement à hello@webao.ca."
+              : "Could not send right now. Email us directly at hello@webao.ca.";
+            status.classList.remove('form-status--success');
+            status.classList.add('form-status--error');
+          });
       });
     }
   }
