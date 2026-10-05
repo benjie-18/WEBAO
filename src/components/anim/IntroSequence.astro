@@ -1913,13 +1913,16 @@ const promptKey = t.intro.prompt.key;
           refs.veil.style.opacity = String(r2(1 - veilOut));
             },
         onComplete: () => {
+          // Release the CSS hold FIRST, then clear inline transforms.
+          // Clearing inline transforms while the CSS hold still applies
+          // makes the page jump to the hold position for one frame (flicker).
+          html.classList.add("wi-released");
           if (refs.main) refs.main.style.transform = "";
           if (refs.footer) refs.footer.style.transform = "";
           if (refs.header) refs.header.style.transform = "";
           pageShift = 0;
           // the site is fully in place: release the page (scroll, clicks and
           // the real cursor all come back) while the overlay finishes its glow
-          html.classList.add("wi-released");
           try {
             sessionStorage.setItem(CFG.master.sessionKey, "1");
           } catch {
