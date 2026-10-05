@@ -181,7 +181,7 @@ const fr = {
         title: "30 directions de design,<br />toutes fictives.",
         desc: "Parcourez le catalogue par métier : électricien, restaurant, clinique. Chaque démo est un concept à direction artistique pour une entreprise fictive, pour voir l’étendue avant de choisir.",
         cta: "Parcourir le catalogue de démos",
-        mini: ["Filtrable", "·", "Recherchable", "·", "30 styles"],
+        mini: ["Filtrable", "·", "Recherchable", "·", "41 styles"],
       },
       noteLeft: "FAIT À MONTRÉAL · CONÇU POUR LES MÉTIERS, COMMERCES ET ENTREPRISES LOCALES PARTOUT AU CANADA",
       noteRight: "→ Survolez, jetez un œil, puis choisissez votre chemin.",
@@ -498,14 +498,14 @@ const fr = {
       eyebrow: "Démos · Directions de design pour entreprises fictives.",
       title: "À quoi pourrait ressembler <span>le vôtre</span> ?",
       desc: "Chaque démo a sa propre direction artistique avec sa typo, sa palette, sa mise en page et sa voix, créée pour une entreprise locale fictive. Cherchez par métier pour sentir l’étendue.",
-      countNote: "30 DIRECTIONS · ENTREPRISES TOUTES FICTIVES · AUCUNE N’EST CLIENTE DE WEBAO",
+      countNote: "41 DIRECTIONS · ENTREPRISES TOUTES FICTIVES · AUCUNE N’EST CLIENTE DE WEBAO",
       howTitle: "COMMENT UTILISER CE CATALOGUE",
       howSteps: [
         "Filtrez par famille : Intemporel, Audacieux, Ludique…",
         "Cherchez : « éditorial », « Laval », « audacieux »…",
         "Touchez une démo : voyez sa direction, puis dites-nous laquelle vous ressemble.",
       ],
-      pills: ["Recherchable", "Filtrable", "30 styles"],
+      pills: ["Recherchable", "Filtrable", "41 styles"],
       fictionalNote:
         "CHAQUE ENTREPRISE ICI EST INVENTÉE · NOMS, VILLES ET DÉTAILS SONT DES EXEMPLES SEULEMENT",
     },
@@ -521,6 +521,7 @@ const fr = {
       electrical: "Électriciens",
       roofing: "Couvreurs",
       renovation: "Rénovation",
+      hvac: "CVAC",
     },
     families: {
       timeless: "Intemporel",
