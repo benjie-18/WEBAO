@@ -129,23 +129,26 @@ const STRIPE_PUBLISHABLE_KEY = "pk_live_51UMzZYE57vVzxI418WAmnlUuIXMLMWtNxjYa6We
       } catch (e) {}
 
       try {
-        const res = await fetch('/api/checkout/session', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...d, locale: 'fr' }),
-        });
-        const data = await res.json();
-        if (!data.ok || !data.clientSecret) {
-          if (loadingEl) loadingEl.textContent = data.error || 'Paiement indisponible. Vérifiez vos infos et réessayez.';
-          mountInFlight = false;
-          return;
-        }
         const stripe = window.Stripe(pk);
-        const checkout = await stripe.initEmbeddedCheckout({ clientSecret: data.clientSecret });
+        const checkout = await stripe.initEmbeddedCheckout({
+          fetchClientSecret: async () => {
+            const res = await fetch('/api/checkout/session', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ ...d, locale: 'fr' }),
+            });
+            const data = await res.json();
+            if (!data.ok || !data.clientSecret) {
+              throw new Error(data.error || 'Paiement indisponible');
+            }
+            return data.clientSecret;
+          },
+        });
         checkout.mount('#stripe-checkout');
         checkoutMounted = true;
       } catch (e) {
-        if (loadingEl) loadingEl.textContent = 'Paiement indisponible. Vérifiez votre connexion et vos infos.';
+        console.error('Stripe checkout error:', e);
+        if (loadingEl) loadingEl.textContent = 'Paiement indisponible (' + (e.message || 'erreur inconnue') + '). Vérifiez votre connexion et vos infos.';
         mountInFlight = false;
       }
     }
