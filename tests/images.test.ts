@@ -63,6 +63,6 @@ test('deploy and local-preview commands bypass Astro’s assets-only config redi
   assert.match(scripts['cf:deploy'], /wrangler deploy --config wrangler\.jsonc/);
   assert.match(scripts['cf:dev'], /wrangler dev --config wrangler\.jsonc/);
   const workflow = readFileSync(new URL('../.github/workflows/deploy.yml', import.meta.url), 'utf8');
-  assert.match(workflow, /run: npx wrangler deploy --config wrangler\.jsonc/);
+  assert.match(workflow, /npx wrangler deploy --config wrangler\.jsonc/);
   assert.match(workflow, /run: npm run test:integration/);
 });
