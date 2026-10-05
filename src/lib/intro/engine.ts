@@ -384,16 +384,17 @@ type Shard = {
  * Canvas debris field. Starts on demand, stops itself when the last fragment
  * dies, so nothing keeps running (and nothing paints) after the intro.
  *
- * Fracture shards (spawned via fractureBurst) are pure triangles with their
- * own physics: they fly outward from the impact, spin fast, fade over ~1.2s,
- * and are gently repelled by the live pointer position (set via setPointer).
+ * Shards fly outward from the impact under gravity and are culled once they
+ * fall out of view; nothing settles on a floor, so debris never appears to
+ * rest on an invisible surface while the page scrolls. Fracture triangles
+ * (spawned via fractureBurst) are additionally repelled by the live pointer
+ * (see setPointer).
  */
 export class Debris {
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D | null;
   private shards: Shard[] = [];
   private dpr = 1;
-  private floorY = 0;
   private rng: () => number;
   private palette: readonly string[];
   private painted = false;
@@ -412,11 +413,10 @@ export class Debris {
     return this.shards.length;
   }
 
-  resize(w: number, h: number, floorY: number, dprCap = 2) {
+  resize(w: number, h: number, dprCap = 2) {
     this.dpr = Math.min(window.devicePixelRatio || 1, dprCap);
     this.canvas.width = Math.max(1, Math.round(w * this.dpr));
     this.canvas.height = Math.max(1, Math.round(h * this.dpr));
-    this.floorY = floorY;
   }
 
   burst(
@@ -531,6 +531,10 @@ export class Debris {
     const drag = 0.86;
     const px = this.pointer?.x ?? null;
     const py = this.pointer?.y ?? null;
+    // Shards fall freely under gravity; they're culled once well below the
+    // viewport instead of settling on the barrier's old floorY (which reads
+    // as an invisible floor once the page starts scrolling).
+    const cullY = this.canvas.height / this.dpr + 120;
     for (let i = this.shards.length - 1; i >= 0; i--) {
       const s = this.shards[i];
       s.life += dt;
@@ -558,17 +562,11 @@ export class Debris {
       s.x += s.vx * dt;
       s.y += s.vy * dt;
       s.rot += s.vrot * dt;
-      // settle on the barrier lip instead of falling through it
-      // (fracture triangles keep flying: they arc over the break)
-      if (!s.triangle && s.y > this.floorY) {
-        s.y = this.floorY;
-        s.vy *= -0.34;
-        s.vx *= 0.7;
-        s.vrot *= 0.5;
-        if (Math.abs(s.vy) < 26) {
-          s.vy = 0;
-          s.vrot = 0;
-        }
+      // Cull once the shard has fallen out of view; no floor bounce, so
+      // nothing ever appears to rest on an invisible surface.
+      if (s.y > cullY) {
+        this.shards.splice(i, 1);
+        continue;
       }
       const k = s.life / s.maxLife;
       // triangles fade over the last ~35% of their 1.2s life
