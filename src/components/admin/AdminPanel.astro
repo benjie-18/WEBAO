@@ -129,6 +129,13 @@ const a = t.admin;
       id="admin-panel-forms" role="tabpanel" aria-labelledby="admin-tab-forms"
       data-panel="forms" class="admin-panel" hidden
     >
+      <div class="admin-controls">
+        <div class="admin-seg" role="group" aria-label={a.forms.filterLabel}>
+          <button type="button" class="admin-seg-btn is-active" data-forms-filter="all">{a.forms.filterAll}</button>
+          <button type="button" class="admin-seg-btn" data-forms-filter="contact">{a.forms.filterContact}</button>
+          <button type="button" class="admin-seg-btn" data-forms-filter="pricing">{a.forms.filterPricing}</button>
+        </div>
+      </div>
       <div class="admin-forms-list" data-forms-list></div>
       <div class="admin-center">
         <button type="button" class="admin-ghost-btn" data-forms-more hidden>{a.forms.loadMore}</button>
@@ -204,7 +211,7 @@ const a = t.admin;
   .admin h2 { font-size: 1.05rem; letter-spacing: -0.01em; font-weight: 700; }
   .admin-muted { color: var(--muted); font-size: 14px; line-height: 1.55; }
   .admin-brand { display: flex; align-items: center; gap: 10px; font-size: 12px; letter-spacing: 0.14em; font-weight: 600; }
-  .admin-logo { width: 30px; height: 30px; border-radius: 6px; }
+  .admin-logo { width: 30px; height: 30px; border-radius: 6px; object-fit: cover; }
   .admin-logo--dark { display: none; }
   [data-theme="dark"] .admin-logo--light { display: none; }
   [data-theme="dark"] .admin-logo--dark { display: block; }
