@@ -506,6 +506,13 @@ const en = {
     filterLabel: "Filter by category",
     styleLabel: "Style",
     allStyles: "All styles",
+    families: {
+      timeless: "Timeless",
+      elegant: "Elegant",
+      bold: "Bold",
+      playful: "Playful",
+      soft: "Soft",
+    },
     empty: "No demos match. Try “trades” or “restaurant”, or clear the filters.",
     clear: "Clear search",
     details: "Details →",
