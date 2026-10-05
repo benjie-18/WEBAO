@@ -175,6 +175,8 @@ interface HeartbeatBody {
   sid?: unknown;
   path?: unknown;
   durationMs?: unknown;
+  /** True for the final heartbeat (pagehide / tab hidden / navigation away). */
+  final?: unknown;
 }
 
 /** POST /api/track/heartbeat — record time spent on the current page. */
@@ -202,6 +204,13 @@ export async function handleHeartbeat(req: Request, env: Env): Promise<Response>
   const s = await getJson<Session>(kv, key);
   if (!s) return err("Unknown session", 404);
 
+  const now = Date.now();
+  // Coalesce periodic heartbeats: a write every minute per open tab burns the
+  // KV daily write budget fast. Persist at most once per 2 minutes; the final
+  // heartbeat (pagehide / tab hidden) always persists so durations stay exact.
+  const isFinal = body.final === true;
+  if (!isFinal && now - s.lastSeenAt < 120_000) return json({ ok: true });
+
   // Update the most recent visit of this path (monotonic — never shrink).
   for (let i = s.pages.length - 1; i >= 0; i--) {
     if (s.pages[i].path === path) {
@@ -209,7 +218,7 @@ export async function handleHeartbeat(req: Request, env: Env): Promise<Response>
       break;
     }
   }
-  s.lastSeenAt = Date.now();
+  s.lastSeenAt = now;
   await putJson(kv, key, s, SESSION_TTL);
   return json({ ok: true });
 }

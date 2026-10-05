@@ -1,7 +1,7 @@
 // Public form submissions (pricing + contact).
 // Stored as form:<ts>:<rand> with a newest-first index capped at 1000 entries.
 
-import { getJson, putJson } from "./kv";
+import { getJson, putJson, deleteKey } from "./kv";
 import { clientIp, clientCountry, readJson, json, err, originAllowed, uuid } from "./util";
 
 const INDEX_KEY = "forms:index";
@@ -80,7 +80,7 @@ export async function handleFormSubmit(req: Request, env: Env): Promise<Response
   await putJson(kv, INDEX_KEY, index);
   for (const old of overflow) {
     try {
-      await kv.delete(old);
+      await deleteKey(kv, old);
     } catch {
       /* best effort */
     }

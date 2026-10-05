@@ -172,11 +172,11 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
             post("/api/track/pageview", body, false);
           }
 
-          function heartbeat(useBeacon) {
+          function heartbeat(useBeacon, isFinal) {
             if (!startTs) return;
             post(
               "/api/track/heartbeat",
-              { sid: sid, path: curPath, durationMs: Date.now() - startTs },
+              { sid: sid, path: curPath, durationMs: Date.now() - startTs, final: !!isFinal },
               useBeacon
             );
           }
@@ -214,15 +214,16 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
 
           document.addEventListener("astro:page-load", pageview);
           // Client-router navigation away: flush time-on-page before the DOM swaps.
-          document.addEventListener("astro:before-preparation", function () { heartbeat(true); });
+          document.addEventListener("astro:before-preparation", function () { heartbeat(true, true); });
           document.addEventListener("visibilitychange", function () {
-            if (document.visibilityState === "hidden") heartbeat(true);
+            if (document.visibilityState === "hidden") heartbeat(true, true);
           });
-          window.addEventListener("pagehide", function () { heartbeat(true); });
-          // Periodic heartbeat while the page stays open (backend keeps the max).
+          window.addEventListener("pagehide", function () { heartbeat(true, true); });
+          // Periodic heartbeat while the page stays open (backend keeps the max,
+          // coalescing writes to stay inside the KV daily write budget).
           window.setInterval(function () {
-            if (document.visibilityState === "visible") heartbeat(false);
-          }, 25000);
+            if (document.visibilityState === "visible") heartbeat(false, false);
+          }, 60000);
 
           if (document.readyState !== "loading") pageview();
           else document.addEventListener("DOMContentLoaded", pageview, { once: true });

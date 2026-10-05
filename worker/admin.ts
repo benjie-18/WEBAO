@@ -1,7 +1,7 @@
 // Admin API: login, stats, form submissions, config, password change.
 // Every route below (except /api/admin/login) requires a valid Bearer token.
 
-import { getJson, putJson, listAllKeys } from "./kv";
+import { getJson, putJson, deleteKey, listAllKeys } from "./kv";
 import {
   getSettings,
   setPasswordHash,
@@ -230,7 +230,7 @@ async function handleFormDelete(kv: KVNamespace, path: string): Promise<Response
   const m = /^\/api\/admin\/forms\/(\d+:[a-f0-9]{16})$/.exec(path);
   if (!m) return err("Invalid id", 400);
   const key = "form:" + m[1];
-  await kv.delete(key);
+  await deleteKey(kv, key);
   const index = (await getJson<string[]>(kv, FORMS_INDEX)) || [];
   const next = index.filter((k) => k !== key);
   if (next.length !== index.length) await putJson(kv, FORMS_INDEX, next);

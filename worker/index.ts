@@ -7,6 +7,7 @@ import { handleFormSubmit } from "./forms";
 import { handleAdmin } from "./admin";
 import { handleCheckoutSession } from "./checkout";
 import { json } from "./util";
+import { KvWriteError } from "./kv";
 
 async function routeApi(req: Request, env: Env): Promise<Response> {
   const url = new URL(req.url);
@@ -37,6 +38,16 @@ export default {
       try {
         return await routeApi(request, env);
       } catch (e) {
+        if (e instanceof KvWriteError) {
+          // Storage writes are unavailable (e.g. the daily KV write quota is
+          // exhausted). Say so honestly instead of a cryptic 500; the quota
+          // resets daily and nothing the user did caused this.
+          console.error("api KV write unavailable", (e as Error)?.cause);
+          return json(
+            { ok: false, error: "Storage is temporarily unavailable. Please try again shortly." },
+            503,
+          );
+        }
         // Never leak internals; log via observability.
         console.error("api error", (e as Error)?.message);
         return json({ ok: false, error: "Internal error" }, 500);

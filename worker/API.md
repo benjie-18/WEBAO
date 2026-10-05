@@ -28,10 +28,12 @@ Body: `{ sid, path, kind, label }` — `kind` e.g. `"cta"`, `"nav"`, `"link"`;
 Same rate limit as pageview.
 
 ### `POST /api/track/heartbeat`
-Body: `{ sid, path, durationMs }`
+Body: `{ sid, path, durationMs, final? }`
 → `{ "ok": true }`. Records time-on-page for the most recent visit of `path`
-(monotonic — the stored value never shrinks). Send every ~15–30s and on
-`visibilitychange`/`pagehide`.
+(monotonic — the stored value never shrinks). Send every ~60s and on
+`visibilitychange`/`pagehide`; pass `final: true` for those last-chance sends —
+periodic beats are coalesced server-side (persisted at most every 2 min) to
+stay inside the KV daily write budget, while final beats always persist.
 
 ## Forms (public)
 
