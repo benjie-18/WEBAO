@@ -23,7 +23,8 @@ const a = t.admin;
   <section class="admin-login" data-view="login" aria-labelledby="admin-login-title">
     <div class="admin-card admin-login-card">
       <div class="admin-brand">
-        <span class="brand-mark" aria-hidden="true"><span class="oglyph">W</span></span>
+        <img src="/light-icon.jpg" alt="WEBAO" class="admin-logo admin-logo--light" width="30" height="30" />
+        <img src="/dark-icon.jpg" alt="WEBAO" class="admin-logo admin-logo--dark" width="30" height="30" />
         <span class="mono">WEBAO · ADMIN</span>
       </div>
       <h1 id="admin-login-title">{a.login.title}</h1>
@@ -53,7 +54,8 @@ const a = t.admin;
   <section class="admin-app" data-view="app" hidden aria-label="WEBAO admin">
     <header class="admin-topbar">
       <div class="admin-brand">
-        <span class="brand-mark" aria-hidden="true"><span class="oglyph">W</span></span>
+        <img src="/light-icon.jpg" alt="WEBAO" class="admin-logo admin-logo--light" width="30" height="30" />
+        <img src="/dark-icon.jpg" alt="WEBAO" class="admin-logo admin-logo--dark" width="30" height="30" />
         <span class="mono">WEBAO · ADMIN</span>
       </div>
       <button type="button" class="admin-ghost-btn" data-logout>{a.logout}</button>
@@ -202,7 +204,10 @@ const a = t.admin;
   .admin h2 { font-size: 1.05rem; letter-spacing: -0.01em; font-weight: 700; }
   .admin-muted { color: var(--muted); font-size: 14px; line-height: 1.55; }
   .admin-brand { display: flex; align-items: center; gap: 10px; font-size: 12px; letter-spacing: 0.14em; font-weight: 600; }
-  .admin-brand .brand-mark { width: 30px; height: 30px; font-size: 15px; }
+  .admin-logo { width: 30px; height: 30px; border-radius: 6px; }
+  .admin-logo--dark { display: none; }
+  [data-theme="dark"] .admin-logo--light { display: none; }
+  [data-theme="dark"] .admin-logo--dark { display: block; }
 
   .admin-card {
     background: var(--card-bg);
