@@ -1,0 +1,315 @@
+---
+import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+
+// Demo microsite: Bec Fin Plomberie · fictional plumber, Sherbrooke QC.
+// Concept: 1950s PASTEL BATHROOM SHOWROOM. Mint, blush pink and cream with
+// chrome gradient accents and rounded bold display type. The plumber as a
+// bathroom designer: pastel project gallery, services as a retro diner menu,
+// starburst promise badges. Cheerful, curvy, chrome-trimmed.
+const IMG = {
+  hero: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=1600&auto=format&fit=crop",
+  g1: "https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=900&auto=format&fit=crop",
+  g2: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=900&auto=format&fit=crop",
+  g3: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?q=80&w=900&auto=format&fit=crop",
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bec Fin Plomberie · Sherbrooke's pastel bathroom studio · (819) 555-0142</title>
+  <meta name="description" content="Bec Fin Plomberie: Sherbrooke's cheerful bathroom design-and-plumbing studio. Renovations, fixtures, repairs — with a satisfaction guarantee and a spotless clean-up promise." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Fredoka:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body class="bf">
+
+  <!-- HEADER -->
+  <header class="bf-bar">
+    <p class="bf-brand">Bec Fin <span>Plomberie</span></p>
+    <nav class="bf-nav" aria-label="Sections">
+      <a href="#bf-gallery">Showroom</a>
+      <a href="#bf-menu">Menu</a>
+      <a href="#bf-promises">Promises</a>
+      <a href="#bf-studio">Studio</a>
+    </nav>
+    <a class="bf-call" href="tel:+18195550142">(819) 555-0142</a>
+  </header>
+
+  <!-- HERO -->
+  <section class="bf-hero" aria-label="Introduction">
+    <div class="bf-hero-in">
+      <p class="bf-eyebrow">★ Sherbrooke's happiest plumbing studio ★</p>
+      <h1 class="bf-h1">A dreamier<br />bathroom<br />starts here.</h1>
+      <p class="bf-lede">We're plumbers who think like interior designers. Leaky tap or full retro remodel — we fix it, style it, and leave it sparkling.</p>
+      <div class="bf-hero-actions">
+        <a class="bf-btn" href="tel:+18195550142">Book a visit</a>
+        <a class="bf-btn bf-btn-soft" href="#bf-gallery">Peek the showroom</a>
+      </div>
+    </div>
+    <figure class="bf-hero-fig">
+      <img src={IMG.hero} alt="Bright pastel bathroom with a round mirror and mint walls" />
+      <span class="bf-burst" aria-hidden="true">WOW!</span>
+    </figure>
+  </section>
+  <div class="bf-chrome" aria-hidden="true"></div>
+
+  <!-- GALLERY -->
+  <section class="bf-sect" id="bf-gallery" aria-label="Project gallery">
+    <div class="bf-sect-head">
+      <h2 class="bf-h2">Fresh from the showroom</h2>
+      <p class="bf-sub">Real pastel projects around Sherbrooke — every one finished on time and under budget.</p>
+    </div>
+    <div class="bf-cards">
+      <figure class="bf-card bf-card-mint">
+        <img src={IMG.g1} alt="Mint-tiled bathroom with a vintage-style tub" />
+        <figcaption><strong>The Mint Condition</strong><span>Rue Wellington · full remodel</span></figcaption>
+      </figure>
+      <figure class="bf-card bf-card-blush">
+        <img src={IMG.g2} alt="Blush pink bathroom with a white vanity" />
+        <figcaption><strong>The Blush Hour</strong><span>Rue King Ouest · fixture refresh</span></figcaption>
+      </figure>
+      <figure class="bf-card bf-card-cream">
+        <img src={IMG.g3} alt="Cream bathroom with patterned floor tiles" />
+        <figcaption><strong>The Cream Dream</strong><span>Secteur Lennoxville · guest bath</span></figcaption>
+      </figure>
+    </div>
+  </section>
+  <div class="bf-chrome" aria-hidden="true"></div>
+
+  <!-- THE BATHROOM MENU -->
+  <section class="bf-sect bf-menu-sect" id="bf-menu" aria-label="Services menu">
+    <div class="bf-sect-head">
+      <h2 class="bf-h2">The bathroom menu</h2>
+      <p class="bf-sub">Order à la carte or ask for the chef's special (that's a full remodel). Prices up front, always.</p>
+    </div>
+    <div class="bf-menu">
+      <p class="bf-menu-title">★ Today's specials ★</p>
+      <dl class="bf-menu-list">
+        <div><dt>Drip detective <span>Find and fix any leak, with photos of the culprit.</span></dt><dd>$89</dd></div>
+        <div><dt>The unclogger <span>Drains, toilets and tubs flowing like opening day.</span></dt><dd>$119</dd></div>
+        <div><dt>Hot water hero <span>Water heater installed, hauled away, warranty in hand.</span></dt><dd>$1,450</dd></div>
+        <div><dt>Fixture facelift <span>New taps, shower head and toilet — one visit.</span></dt><dd>$390</dd></div>
+        <div><dt>The full sundae <span>Complete bathroom remodel, design included.</span></dt><dd>from $9,800</dd></div>
+      </dl>
+      <p class="bf-menu-foot">Free estimates · Senior discount Tuesdays · We wear the little booties</p>
+    </div>
+  </section>
+
+  <!-- PROMISE BADGES -->
+  <section class="bf-sect bf-badges-sect" id="bf-promises" aria-label="Our promises">
+    <div class="bf-sect-head">
+      <h2 class="bf-h2">Pinky-swear promises</h2>
+    </div>
+    <div class="bf-badges">
+      <div class="bf-badge bf-badge-mint">
+        <svg viewBox="0 0 120 120" aria-hidden="true"><path d="M60 2l9 12 14-5 4 14 15 1-2 15 14 6-8 13 11 10-12 9 5 14-14 4-1 15-15-2-6 14-13-8-10 11-9-12-14 5-4-14-15-1 2-15-14-6 8-13-11-10 12-9-5-14 14-4 1-15 15 2 6-14z" /></svg>
+        <p><strong>Satisfaction<br />guaranteed</strong><span>Love it or we come back free.</span></p>
+      </div>
+      <div class="bf-badge bf-badge-blush">
+        <svg viewBox="0 0 120 120" aria-hidden="true"><path d="M60 2l9 12 14-5 4 14 15 1-2 15 14 6-8 13 11 10-12 9 5 14-14 4-1 15-15-2-6 14-13-8-10 11-9-12-14 5-4-14-15-1 2-15-14-6 8-13-11-10 12-9-5-14 14-4 1-15 15 2 6-14z" /></svg>
+        <p><strong>Licensed<br />&amp; insured</strong><span>RBQ 5721-9090-03, fully covered.</span></p>
+      </div>
+      <div class="bf-badge bf-badge-cream">
+        <svg viewBox="0 0 120 120" aria-hidden="true"><path d="M60 2l9 12 14-5 4 14 15 1-2 15 14 6-8 13 11 10-12 9 5 14-14 4-1 15-15-2-6 14-13-8-10 11-9-12-14 5-4-14-15-1 2-15-14-6 8-13-11-10 12-9-5-14 14-4 1-15 15 2 6-14z" /></svg>
+        <p><strong>Clean-up<br />promise</strong><span>We leave it cleaner than we found it.</span></p>
+      </div>
+    </div>
+  </section>
+  <div class="bf-chrome" aria-hidden="true"></div>
+
+  <!-- KIND WORDS -->
+  <section class="bf-sect" id="bf-words" aria-label="Testimonials">
+    <div class="bf-sect-head">
+      <h2 class="bf-h2">Kind words</h2>
+    </div>
+    <div class="bf-quotes">
+      <blockquote class="bf-quote">
+        <p>"They turned our avocado-green 1974 bathroom into a mint dream. I cried a little. The plumber hugged my mom."</p>
+        <cite>— Chantal D., Sherbrooke</cite>
+      </blockquote>
+      <blockquote class="bf-quote bf-quote-alt">
+        <p>"Quoted Tuesday, fixed Wednesday, and they left the bathroom cleaner than my teenager ever has."</p>
+        <cite>— Marc-André L., Fleurimont</cite>
+      </blockquote>
+      <blockquote class="bf-quote">
+        <p>"Finally, a plumber who asks about tile colour before asking about pipe size. Ten out of ten."</p>
+        <cite>— Priya S., Lennoxville</cite>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- THE STUDIO -->
+  <section class="bf-sect bf-studio" id="bf-studio" aria-label="About the studio">
+    <div class="bf-studio-in">
+      <h2 class="bf-h2">Meet your bathroom buddy</h2>
+      <p>Bec Fin started in 2019 when Béatrice "Bec" Finnegan, a third-generation plumber with an interior-design diploma, decided pipes and pretty belong together. Today it's a six-person studio in Sherbrooke's old north end: licensed plumbers, one tile obsessive, and a van painted mint green that kids wave at.</p>
+      <ul class="bf-studio-facts">
+        <li><strong>6</strong><span>happy humans</span></li>
+        <li><strong>340+</strong><span>bathrooms beautified</span></li>
+        <li><strong>0</strong><span>messes left behind</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bf-foot" aria-label="Contact">
+    <p class="bf-eyebrow">★ Ready when you are ★</p>
+    <h2 class="bf-h2">Let's make it lovely.</h2>
+    <a class="bf-foot-num" href="tel:+18195550142">(819) 555-0142</a>
+    <p class="bf-foot-sub">Mon–Sat · Sherbrooke &amp; the Eastern Townships<br />Emergencies welcome — leaks don't care about pretty, either.</p>
+    <p class="bf-foot-fine">© 2026 Bec Fin Plomberie · Fictional demo site for design showcase · Not a real business</p>
+  </footer>
+
+  <style>
+    .bf { margin: 0; background: #FFF9EF; color: #50322B; font-family: "Fredoka", system-ui, sans-serif; }
+    .bf * { box-sizing: border-box; }
+    .bf img { display: block; max-width: 100%; }
+    .bf a { color: inherit; }
+
+    .bf-bar {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      padding: 16px clamp(18px, 4vw, 40px);
+      background: #FFF9EF; border-bottom: 4px solid #FFC9D6;
+      position: sticky; top: 0; z-index: 10;
+    }
+    .bf-brand { margin: 0; font-family: "Baloo 2", cursive; font-weight: 800; font-size: 30px; color: #E2547A; letter-spacing: .01em; }
+    .bf-brand span { display: block; font-family: "Fredoka", sans-serif; font-weight: 500; font-size: 13px; letter-spacing: .34em; color: #3FA98B; margin-top: -4px; }
+    .bf-nav { display: flex; gap: 10px; }
+    .bf-nav a {
+      text-decoration: none; font-weight: 600; font-size: 15px; color: #50322B;
+      background: #DFF5E9; padding: 10px 18px; border-radius: 999px; border: 2px solid #3FA98B;
+    }
+    .bf-nav a:hover { background: #3FA98B; color: #fff; }
+    .bf-call {
+      font-family: "Baloo 2", cursive; font-weight: 700; font-size: 18px; text-decoration: none;
+      background: #E2547A; color: #fff; padding: 12px 24px; border-radius: 999px;
+      box-shadow: 0 4px 0 #B23A5B;
+    }
+    .bf-call:hover { transform: translateY(2px); box-shadow: 0 2px 0 #B23A5B; }
+
+    .bf-hero {
+      display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 56px); align-items: center;
+      padding: clamp(48px, 9vh, 100px) clamp(18px, 5vw, 64px);
+      background: linear-gradient(160deg, #CDEEDC 0%, #DFF5E9 55%, #FFF9EF 100%);
+      border-radius: 0 0 60px 60px;
+    }
+    .bf-eyebrow { font-weight: 600; letter-spacing: .18em; font-size: 13px; color: #E2547A; margin: 0 0 16px; }
+    .bf-h1 { font-family: "Baloo 2", cursive; font-weight: 800; font-size: clamp(3rem, 8vw, 5.6rem); line-height: 1; margin: 0 0 20px; color: #3FA98B; }
+    .bf-lede { font-size: 18px; line-height: 1.7; max-width: 42ch; margin: 0 0 30px; }
+    .bf-hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .bf-btn {
+      font-family: "Baloo 2", cursive; font-weight: 700; font-size: 18px; text-decoration: none;
+      background: #E2547A; color: #fff; padding: 16px 34px; border-radius: 999px;
+      box-shadow: 0 5px 0 #B23A5B;
+    }
+    .bf-btn:hover { transform: translateY(2px); box-shadow: 0 3px 0 #B23A5B; }
+    .bf-btn-soft { background: #fff; color: #3FA98B; box-shadow: 0 5px 0 #9FD8BE; }
+    .bf-btn-soft:hover { box-shadow: 0 3px 0 #9FD8BE; }
+    .bf-hero-fig { margin: 0; position: relative; }
+    .bf-hero-fig img { border-radius: 48px; border: 6px solid #fff; box-shadow: 0 24px 50px rgba(80,50,43,.18); width: 100%; height: 440px; object-fit: cover; }
+    .bf-burst {
+      position: absolute; top: -24px; right: 12px; font-family: "Baloo 2", cursive; font-weight: 800;
+      background: #FFD166; color: #50322B; padding: 22px 20px; border-radius: 50%;
+      transform: rotate(10deg); box-shadow: 0 6px 0 rgba(80,50,43,.15);
+      animation: bf-wiggle 3s ease-in-out infinite;
+    }
+    @keyframes bf-wiggle { 50% { transform: rotate(-6deg) scale(1.06); } }
+
+    .bf-chrome {
+      height: 22px; margin: 6px clamp(18px, 5vw, 64px); border-radius: 999px;
+      background: linear-gradient(180deg, #FAFCFF 0%, #C7D3E0 28%, #F1F5F9 50%, #8FA1B5 72%, #E6EDF5 100%);
+      box-shadow: inset 0 2px 3px rgba(255,255,255,.9), 0 3px 8px rgba(80,50,43,.12);
+    }
+
+    .bf-sect { padding: clamp(52px, 9vh, 96px) clamp(18px, 5vw, 64px); max-width: 1180px; margin: 0 auto; }
+    .bf-sect-head { text-align: center; margin-bottom: 40px; }
+    .bf-h2 { font-family: "Baloo 2", cursive; font-weight: 800; font-size: clamp(2.2rem, 5.5vw, 3.6rem); margin: 0 0 10px; color: #E2547A; }
+    .bf-sub { font-size: 17px; max-width: 56ch; margin: 0 auto; line-height: 1.65; }
+
+    .bf-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .bf-card { margin: 0; border-radius: 36px; padding: 14px 14px 20px; box-shadow: 0 16px 34px rgba(80,50,43,.12); }
+    .bf-card img { border-radius: 26px; width: 100%; height: 260px; object-fit: cover; border: 4px solid #fff; }
+    .bf-card figcaption { padding: 16px 10px 0; text-align: center; }
+    .bf-card strong { display: block; font-family: "Baloo 2", cursive; font-size: 22px; font-weight: 700; }
+    .bf-card span { font-size: 14.5px; opacity: .75; }
+    .bf-card-mint { background: #DFF5E9; } .bf-card-mint strong { color: #2E8B6C; }
+    .bf-card-blush { background: #FFE7EE; } .bf-card-blush strong { color: #E2547A; }
+    .bf-card-cream { background: #FFF3D9; } .bf-card-cream strong { color: #B07E2B; }
+
+    .bf-menu-sect { max-width: 760px; }
+    .bf-menu {
+      background: #fff; border-radius: 32px; padding: clamp(28px, 4vw, 52px);
+      border: 4px dashed #FFC9D6; box-shadow: 0 20px 44px rgba(226,84,122,.14);
+    }
+    .bf-menu-title { font-family: "Baloo 2", cursive; font-weight: 800; font-size: 24px; text-align: center; color: #E2547A; margin: 0 0 22px; }
+    .bf-menu-list { margin: 0; }
+    .bf-menu-list div {
+      display: flex; justify-content: space-between; align-items: baseline; gap: 18px;
+      padding: 18px 4px; border-bottom: 2px dotted #F3B7C8;
+    }
+    .bf-menu-list dt { font-family: "Baloo 2", cursive; font-weight: 700; font-size: 20px; color: #50322B; }
+    .bf-menu-list dt span { display: block; font-family: "Fredoka", sans-serif; font-weight: 400; font-size: 14.5px; color: #8a6a5e; margin-top: 3px; }
+    .bf-menu-list dd { margin: 0; font-family: "Baloo 2", cursive; font-weight: 800; font-size: 22px; color: #3FA98B; white-space: nowrap; }
+    .bf-menu-foot { text-align: center; font-size: 14px; color: #8a6a5e; margin: 22px 0 0; font-weight: 500; }
+
+    .bf-badges-sect { max-width: 1000px; }
+    .bf-badges { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; text-align: center; }
+    .bf-badge { position: relative; padding: 20px 10px; }
+    .bf-badge svg { width: 190px; height: 190px; }
+    .bf-badge-mint svg path { fill: #9FE0C7; } .bf-badge-blush svg path { fill: #FFC9D6; } .bf-badge-cream svg path { fill: #FFE3A3; }
+    .bf-badge p { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0; padding: 0 34px; }
+    .bf-badge strong { font-family: "Baloo 2", cursive; font-size: 21px; font-weight: 800; line-height: 1.15; margin-bottom: 6px; }
+    .bf-badge span { font-size: 13.5px; font-weight: 500; }
+
+    .bf-quotes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .bf-quote {
+      margin: 0; background: #fff; border-radius: 28px; padding: 28px 26px; position: relative;
+      border: 3px solid #DFF5E9; box-shadow: 0 12px 28px rgba(80,50,43,.1);
+    }
+    .bf-quote::after {
+      content: ""; position: absolute; bottom: -16px; left: 48px; width: 26px; height: 26px;
+      background: #fff; border-right: 3px solid #DFF5E9; border-bottom: 3px solid #DFF5E9; transform: rotate(45deg);
+    }
+    .bf-quote-alt { border-color: #FFE7EE; } .bf-quote-alt::after { border-color: #FFE7EE; }
+    .bf-quote p { font-size: 16.5px; line-height: 1.65; margin: 0 0 14px; }
+    .bf-quote cite { font-style: normal; font-weight: 600; color: #E2547A; font-size: 15px; }
+
+    .bf-studio { background: linear-gradient(160deg, #FFE7EE 0%, #FFF9EF 100%); border-radius: 60px; max-width: 1120px; }
+    .bf-studio-in { max-width: 720px; margin: 0 auto; text-align: center; }
+    .bf-studio-in .bf-h2 { color: #3FA98B; }
+    .bf-studio-in > p { font-size: 17.5px; line-height: 1.75; margin: 0 0 30px; }
+    .bf-studio-facts { list-style: none; display: flex; justify-content: center; gap: clamp(20px, 6vw, 70px); padding: 0; margin: 0; }
+    .bf-studio-facts strong { display: block; font-family: "Baloo 2", cursive; font-weight: 800; font-size: 46px; color: #E2547A; }
+    .bf-studio-facts span { font-size: 14.5px; font-weight: 500; opacity: .75; }
+
+    .bf-foot { text-align: center; padding: clamp(60px, 10vh, 100px) 20px 44px; background: linear-gradient(180deg, #FFF9EF 0%, #DFF5E9 100%); border-radius: 60px 60px 0 0; }
+    .bf-foot .bf-h2 { color: #3FA98B; margin-bottom: 20px; }
+    .bf-foot-num {
+      display: inline-block; font-family: "Baloo 2", cursive; font-weight: 800; text-decoration: none;
+      font-size: clamp(2.4rem, 8vw, 4.4rem); color: #fff; background: #E2547A;
+      padding: 14px 44px; border-radius: 999px; box-shadow: 0 8px 0 #B23A5B; margin-bottom: 22px;
+    }
+    .bf-foot-num:hover { transform: translateY(3px); box-shadow: 0 5px 0 #B23A5B; }
+    .bf-foot-sub { font-size: 16.5px; line-height: 1.7; margin: 0 0 28px; }
+    .bf-foot-fine { font-size: 13px; opacity: .6; margin: 0; }
+
+    @media (max-width: 900px) {
+      .bf-hero { grid-template-columns: 1fr; border-radius: 0 0 36px 36px; }
+      .bf-hero-fig img { height: 320px; }
+      .bf-cards, .bf-badges, .bf-quotes { grid-template-columns: 1fr; max-width: 440px; margin-inline: auto; }
+      .bf-nav { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .bf-burst { animation: none; }
+      .bf * { transition: none !important; }
+    }
+  </style>
+
+  <EscapeHatch locale="en" />
+</body>
+</html>

@@ -1,0 +1,434 @@
+---
+import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+
+// Demo microsite: Lueur Électrique · fictional lighting-design electricians, Gatineau QC.
+// Warm Scandinavian hygge: oat backgrounds, amber lamplight gradients, Fraunces serif.
+// Positioned as lighting designers — "we design light, not just wiring."
+const IMG = {
+  hero: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1600&auto=format&fit=crop",
+  lamp: "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?q=80&w=1200&auto=format&fit=crop",
+  living: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=1200&auto=format&fit=crop",
+  evening: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?q=80&w=1200&auto=format&fit=crop",
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lueur Électrique · Lighting designers · Electrician in Gatineau · (819) 555-0182</title>
+  <meta name="description" content="Lueur Électrique: Gatineau lighting designers and electricians. Layered lighting plans, dimming scenes, warm retrofits. We design light, not just wiring." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body class="lu">
+
+  <header class="lu-top">
+    <a class="lu-logo" href="#top">Lueur <span aria-hidden="true">✦</span></a>
+    <nav class="lu-nav" aria-label="Primary">
+      <a href="#services">Lighting</a>
+      <a href="#homes">Homes</a>
+      <a href="#studio">Studio</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a class="lu-call" href="tel:+18195550182">(819) 555-0182</a>
+  </header>
+
+  <main>
+    <!-- HERO: lamplight -->
+    <section class="lu-hero" id="top">
+      <div class="lu-hero-glow" aria-hidden="true"></div>
+      <div class="lu-hero-in">
+        <p class="lu-eyebrow">Éclairagistes · Gatineau, QC</p>
+        <h1 class="lu-h1">We design light,<br /><em>not just wiring.</em></h1>
+        <p class="lu-lede">Lueur is a small Gatineau studio of electricians who think like lighting designers. We plan every room in layers — ambient, task, accent — so your home glows the way it should at 7pm in February.</p>
+        <div class="lu-cta">
+          <a class="lu-btn" href="#contact">Book a lighting walkthrough</a>
+          <a class="lu-btn lu-btn-ghost" href="#services">See what we do</a>
+        </div>
+        <dl class="lu-hero-stats">
+          <div><dt>480+</dt><dd>homes lit</dd></div>
+          <div><dt>4.9</dt><dd>average rating</dd></div>
+          <div><dt>12</dt><dd>years of glow</dd></div>
+        </dl>
+      </div>
+      <figure class="lu-hero-fig">
+        <img src={IMG.hero} alt="A Gatineau living room layered with warm lamplight designed by Lueur" fetchpriority="high" />
+        <figcaption class="lu-hero-card"><strong>Scene · “February evening”</strong><span>2700K · dimmed to 40%</span></figcaption>
+      </figure>
+    </section>
+
+    <!-- SERVICES: four soft cards -->
+    <section class="lu-services" id="services" aria-label="Services">
+      <p class="lu-eyebrow">What we do</p>
+      <h2 class="lu-h2">Every room, lit in <em>three layers.</em></h2>
+      <p class="lu-sec-lede">Most homes have one switch per room and live with it. We design ambient, task, and accent light together — then wire it properly.</p>
+      <div class="lu-cards">
+        <article class="lu-card">
+          <p class="lu-card-n" aria-hidden="true">01</p>
+          <h3>Lighting design</h3>
+          <p>A room-by-room plan: where the pools of light fall, where the shadows rest. Sketches you can hold, not jargon.</p>
+          <p class="lu-card-price">from $290 / plan</p>
+        </article>
+        <article class="lu-card">
+          <p class="lu-card-n" aria-hidden="true">02</p>
+          <h3>Dimming &amp; scenes</h3>
+          <p>Every light on a dimmer. One-tap scenes — dinner, reading, winding down — from a switch that makes sense.</p>
+          <p class="lu-card-price">from $180 / room</p>
+        </article>
+        <article class="lu-card">
+          <p class="lu-card-n" aria-hidden="true">03</p>
+          <h3>Warm retrofits</h3>
+          <p>We replace cold, flat LEDs with warm 2700K sources and fix the glare. Same fixtures, entirely different home.</p>
+          <p class="lu-card-price">quoted per home</p>
+        </article>
+        <article class="lu-card">
+          <p class="lu-card-n" aria-hidden="true">04</p>
+          <h3>Panels &amp; safety</h3>
+          <p>The unglamorous part, done right: panel upgrades, aluminum wiring remediation, permits and inspections handled.</p>
+          <p class="lu-card-price">from $1,750</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- GLOW BAND: a breath between sections -->
+    <section class="lu-glowband" aria-label="A note on light">
+      <div class="lu-glowband-glow" aria-hidden="true"></div>
+      <blockquote>
+        <p>“The right light makes a house feel like home at any hour. That's the whole job.”</p>
+        <footer>— Marie Aubut, founder</footer>
+      </blockquote>
+    </section>
+
+    <!-- PROOF: homes we've lit -->
+    <section class="lu-homes" id="homes" aria-label="Homes we've lit">
+      <p class="lu-eyebrow">Homes we've lit</p>
+      <h2 class="lu-h2">Evenings, <em>improved.</em></h2>
+      <div class="lu-homes-grid">
+        <figure class="lu-home">
+          <img src={IMG.living} alt="Warm layered lighting in a renovated Gatineau living room" loading="lazy" />
+          <figcaption><strong>Plateau · whole-home relight</strong><span>23 fixtures · 4 scenes · “It feels like a chalet now.”</span></figcaption>
+        </figure>
+        <figure class="lu-home">
+          <img src={IMG.evening} alt="A single warm lamp glowing in a darkened room" loading="lazy" />
+          <figcaption><strong>Hull · reading corner</strong><span>One lamp, one dimmer, done right.</span></figcaption>
+        </figure>
+      </div>
+      <div class="lu-quotes">
+        <blockquote>
+          <p>“They spent an hour just watching how the evening light moved through our living room before suggesting a thing. Nobody does that.”</p>
+          <footer>Chantal R. · Gatineau <span aria-label="5 out of 5 stars">★★★★★</span></footer>
+        </blockquote>
+        <blockquote>
+          <p>“Our kitchen went from interrogation room to the place everyone gathers. The dimmer scene is called ‘souper’ and we use it nightly.”</p>
+          <footer>Marc &amp; Julie T. · Aylmer <span aria-label="5 out of 5 stars">★★★★★</span></footer>
+        </blockquote>
+        <blockquote>
+          <p>“On time, dust-free, and the quote was the price. The panel upgrade was boring in the best way — then the lighting plan was magic.”</p>
+          <footer>Sam D. · Chelsea <span aria-label="5 out of 5 stars">★★★★★</span></footer>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- STUDIO: about -->
+    <section class="lu-studio" id="studio">
+      <img class="lu-studio-img" src={IMG.lamp} alt="A warm Edison bulb glowing against a dark background" loading="lazy" />
+      <div class="lu-studio-in">
+        <p class="lu-eyebrow">The studio</p>
+        <h2 class="lu-h2">Electricians with a <em>designer's eye.</em></h2>
+        <p>Marie Aubut apprenticed as an electrician and fell in love with the part nobody photographs: how a room feels when the light is right. She founded Lueur in 2014 with her partner Julien, and the studio has stayed deliberately small — two vans, four people, one rule.</p>
+        <p class="lu-studio-rule">“We never install a light we wouldn't want in our own home.”</p>
+        <ul class="lu-studio-facts">
+          <li>Licensed · RBQ 0000-0000-00 (fictional)</li>
+          <li>Gatineau · Ottawa · Chelsea · Cantley</li>
+          <li>5-year warranty on labour</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- PROCESS: three calm steps -->
+    <section class="lu-process" aria-label="How it works">
+      <p class="lu-eyebrow">How it works</p>
+      <h2 class="lu-h2">Slow looking, <em>then wiring.</em></h2>
+      <ol class="lu-steps">
+        <li><strong>Walkthrough</strong><span>We visit at dusk, when light matters. We watch, measure, and listen — 45 minutes, no charge.</span></li>
+        <li><strong>Design</strong><span>A layered lighting plan with a fixed quote. You approve every fixture before we order.</span></li>
+        <li><strong>Install</strong><span>Clean, quiet work. We dim every scene with you before we leave, and hand you the cheat sheet.</span></li>
+      </ol>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="lu-contact" id="contact">
+      <div class="lu-contact-in">
+        <div>
+          <p class="lu-eyebrow">Say hello</p>
+          <h2 class="lu-h2">Let's talk about <em>your evenings.</em></h2>
+          <p class="lu-sec-lede">Tell us about the room that never feels right. We'll bring the plan.</p>
+          <a class="lu-bigphone" href="tel:+18195550182">(819) 555-0182</a>
+          <p class="lu-contact-facts">123, rue Fictive, Gatineau QC<br />bonjour@lueur-electrique-demo.ca<br />Mon–Fri 8:00–17:00 · walkthroughs at dusk</p>
+        </div>
+        <form class="lu-form" id="lu-form" novalidate>
+          <label>Name<input type="text" name="name" required placeholder="Jane Doe" autocomplete="name" /></label>
+          <label>Phone<input type="tel" name="phone" required placeholder="(819) 555-0000" autocomplete="tel" /></label>
+          <label>Project
+            <select name="project">
+              <option>Whole-home lighting plan</option>
+              <option>Single room relight</option>
+              <option>Dimming &amp; scenes</option>
+              <option>Panel / safety work</option>
+            </select>
+          </label>
+          <label>About the room<textarea name="details" rows="3" placeholder="The living room feels flat after dark…"></textarea></label>
+          <button class="lu-btn" type="submit">Request a walkthrough</button>
+          <p class="lu-form-note" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="lu-foot">
+    <p><strong>Lueur Électrique</strong> · Gatineau QC · © 2026<br />Fictional demo business — a WEBAO design showcase.</p>
+  </footer>
+
+  <EscapeHatch locale="en" />
+
+  <script>
+    (function () {
+      var form = document.getElementById('lu-form');
+      form?.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var note = form?.querySelector('.lu-form-note');
+        if (note) note.textContent = 'Merci! We\u2019ll call within one business day to schedule your dusk walkthrough.';
+        if (form instanceof HTMLFormElement) form.reset();
+      });
+    })();
+  </script>
+
+  <style>
+    .lu {
+      --lu-oat: #EFE9DD;
+      --lu-oat-2: #E6DCC9;
+      --lu-card: #F8F3E8;
+      --lu-ink: #38312A;
+      --lu-ink-2: #6E6455;
+      --lu-amber: #D99A2B;
+      --lu-amber-deep: #B57A1E;
+      --lu-glow: #F2B950;
+      --lu-serif: "Fraunces", Georgia, serif;
+      --lu-sans: "Inter", system-ui, sans-serif;
+      margin: 0;
+      background: var(--lu-oat);
+      color: var(--lu-ink);
+      font-family: var(--lu-sans);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: clip;
+    }
+    .lu *, .lu *::before, .lu *::after { box-sizing: border-box; }
+    .lu img { display: block; max-width: 100%; }
+    .lu a { color: inherit; }
+
+    .lu-top {
+      position: sticky; top: 0; z-index: 20;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      padding: 14px clamp(18px, 4vw, 44px);
+      background: rgba(239, 233, 221, 0.88);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(56, 49, 42, 0.1);
+    }
+    .lu-logo { font-family: var(--lu-serif); font-weight: 600; font-size: 24px; text-decoration: none; letter-spacing: 0.01em; }
+    .lu-logo span { color: var(--lu-amber-deep); font-size: 18px; }
+    .lu-nav { display: flex; gap: 26px; }
+    .lu-nav a { text-decoration: none; font-size: 14.5px; font-weight: 500; color: var(--lu-ink-2); }
+    .lu-nav a:hover { color: var(--lu-ink); }
+    .lu-call {
+      text-decoration: none; font-weight: 600; font-size: 14.5px;
+      border: 1.5px solid var(--lu-ink); border-radius: 999px; padding: 9px 18px;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .lu-call:hover { background: var(--lu-ink); color: var(--lu-oat); }
+
+    .lu-hero {
+      position: relative;
+      display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(28px, 5vw, 72px);
+      align-items: center;
+      padding: clamp(48px, 9vh, 110px) clamp(20px, 5vw, 64px) clamp(56px, 9vh, 110px);
+      max-width: 1280px; margin: 0 auto;
+    }
+    .lu-hero-glow {
+      position: absolute; top: -12%; right: -8%; width: 62vw; height: 62vw; max-width: 760px; max-height: 760px;
+      background: radial-gradient(circle, rgba(242, 185, 80, 0.4) 0%, rgba(242, 185, 80, 0.12) 42%, transparent 68%);
+      pointer-events: none;
+    }
+    .lu-eyebrow {
+      margin: 0 0 18px; font-size: 12.5px; font-weight: 600;
+      letter-spacing: 0.22em; text-transform: uppercase; color: var(--lu-amber-deep);
+    }
+    .lu-h1 {
+      font-family: var(--lu-serif); font-weight: 500;
+      font-size: clamp(2.9rem, 6.4vw, 5.2rem);
+      line-height: 1.02; letter-spacing: -0.015em; margin: 0 0 24px;
+    }
+    .lu-h1 em { font-style: italic; color: var(--lu-amber-deep); }
+    .lu-lede { font-size: 17.5px; line-height: 1.75; color: var(--lu-ink-2); max-width: 46ch; margin: 0 0 32px; }
+    .lu-cta { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 40px; }
+    .lu-btn {
+      display: inline-block; text-decoration: none; font-weight: 600; font-size: 15.5px;
+      background: var(--lu-ink); color: var(--lu-oat);
+      padding: 16px 30px; border-radius: 999px; border: 0; cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      font-family: var(--lu-sans);
+    }
+    .lu-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(56, 49, 42, 0.22); }
+    .lu-btn-ghost { background: transparent; color: var(--lu-ink); border: 1.5px solid rgba(56, 49, 42, 0.3); }
+    .lu-btn-ghost:hover { box-shadow: none; border-color: var(--lu-ink); }
+    .lu-hero-stats { display: flex; gap: clamp(24px, 4vw, 56px); margin: 0; }
+    .lu-hero-stats div { display: grid; gap: 4px; }
+    .lu-hero-stats dt { font-family: var(--lu-serif); font-size: 30px; font-weight: 600; }
+    .lu-hero-stats dd { margin: 0; font-size: 13px; color: var(--lu-ink-2); }
+
+    .lu-hero-fig { position: relative; margin: 0; }
+    .lu-hero-fig img {
+      width: 100%; height: clamp(340px, 52vh, 560px); object-fit: cover;
+      border-radius: 28px; box-shadow: 0 30px 70px rgba(120, 84, 30, 0.28);
+    }
+    .lu-hero-card {
+      position: absolute; left: 22px; bottom: 22px;
+      background: rgba(248, 243, 232, 0.94); backdrop-filter: blur(6px);
+      border-radius: 18px; padding: 14px 20px;
+      display: grid; gap: 3px; box-shadow: 0 10px 30px rgba(56, 49, 42, 0.18);
+    }
+    .lu-hero-card strong { font-family: var(--lu-serif); font-size: 16px; font-weight: 600; }
+    .lu-hero-card span { font-size: 12.5px; color: var(--lu-ink-2); }
+
+    .lu-services { max-width: 1280px; margin: 0 auto; padding: clamp(56px, 9vh, 110px) clamp(20px, 5vw, 64px); }
+    .lu-h2 {
+      font-family: var(--lu-serif); font-weight: 500; letter-spacing: -0.01em;
+      font-size: clamp(2rem, 4.4vw, 3.2rem); line-height: 1.08; margin: 0 0 16px; max-width: 18ch;
+    }
+    .lu-h2 em { font-style: italic; color: var(--lu-amber-deep); }
+    .lu-sec-lede { font-size: 16.5px; line-height: 1.7; color: var(--lu-ink-2); max-width: 58ch; margin: 0 0 40px; }
+    .lu-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+    .lu-card {
+      background: var(--lu-card); border-radius: 24px; padding: 30px 26px;
+      border: 1px solid rgba(56, 49, 42, 0.08);
+      box-shadow: 0 14px 34px rgba(120, 84, 30, 0.08);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .lu-card:hover { transform: translateY(-5px); box-shadow: 0 22px 44px rgba(120, 84, 30, 0.16); }
+    .lu-card-n {
+      margin: 0 0 18px; font-family: var(--lu-serif); font-style: italic;
+      font-size: 15px; color: var(--lu-amber-deep);
+    }
+    .lu-card h3 { font-family: var(--lu-serif); font-weight: 600; font-size: 21px; margin: 0 0 12px; }
+    .lu-card p { font-size: 14.5px; line-height: 1.7; color: var(--lu-ink-2); margin: 0 0 18px; }
+    .lu-card-price { font-weight: 600; font-size: 14px; color: var(--lu-ink); margin: 0; }
+
+    .lu-glowband { position: relative; overflow: clip; background: var(--lu-oat-2); }
+    .lu-glowband-glow {
+      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+      width: 720px; height: 720px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(242, 185, 80, 0.5) 0%, rgba(242, 185, 80, 0.14) 45%, transparent 70%);
+      pointer-events: none;
+    }
+    .lu-glowband blockquote { position: relative; max-width: 760px; margin: 0 auto; padding: clamp(72px, 12vh, 130px) 24px; text-align: center; }
+    .lu-glowband p { font-family: var(--lu-serif); font-style: italic; font-weight: 500; font-size: clamp(1.6rem, 3.6vw, 2.5rem); line-height: 1.35; margin: 0 0 20px; }
+    .lu-glowband footer { font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--lu-ink-2); }
+
+    .lu-homes { max-width: 1280px; margin: 0 auto; padding: clamp(56px, 9vh, 110px) clamp(20px, 5vw, 64px); }
+    .lu-homes-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 18px; margin: 40px 0 46px; }
+    .lu-home { margin: 0; }
+    .lu-home img { width: 100%; height: 380px; object-fit: cover; border-radius: 24px; }
+    .lu-home figcaption { display: grid; gap: 4px; padding: 16px 6px 0; }
+    .lu-home strong { font-family: var(--lu-serif); font-size: 18px; font-weight: 600; }
+    .lu-home span { font-size: 14px; color: var(--lu-ink-2); }
+    .lu-quotes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .lu-quotes blockquote {
+      margin: 0; background: var(--lu-card); border-radius: 24px; padding: 28px 26px;
+      border: 1px solid rgba(56, 49, 42, 0.08); display: grid; align-content: space-between; gap: 20px;
+    }
+    .lu-quotes p { margin: 0; font-family: var(--lu-serif); font-size: 17.5px; line-height: 1.6; }
+    .lu-quotes footer { font-size: 13px; color: var(--lu-ink-2); display: flex; justify-content: space-between; gap: 10px; align-items: center; }
+    .lu-quotes footer span { color: var(--lu-amber-deep); letter-spacing: 0.1em; }
+
+    .lu-studio {
+      background: var(--lu-ink); color: #F3EDE0;
+      display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(28px, 5vw, 72px); align-items: center;
+    }
+    .lu-studio-img { width: 100%; height: 100%; min-height: 420px; max-height: 640px; object-fit: cover; }
+    .lu-studio-in { padding: clamp(48px, 8vh, 96px) clamp(20px, 5vw, 64px) clamp(48px, 8vh, 96px) 0; max-width: 640px; }
+    .lu-studio .lu-eyebrow { color: var(--lu-glow); }
+    .lu-studio .lu-h2 em { color: var(--lu-glow); }
+    .lu-studio p { font-size: 16.5px; line-height: 1.75; color: rgba(243, 237, 224, 0.82); margin: 0 0 18px; }
+    .lu-studio-rule { font-family: var(--lu-serif); font-style: italic; font-size: 21px; color: #F3EDE0; border-left: 3px solid var(--lu-glow); padding-left: 20px; }
+    .lu-studio-facts { list-style: none; margin: 26px 0 0; padding: 0; display: grid; gap: 10px; font-size: 14.5px; color: rgba(243, 237, 224, 0.75); }
+    .lu-studio-facts li::before { content: "✦ "; color: var(--lu-glow); }
+
+    .lu-process { max-width: 1280px; margin: 0 auto; padding: clamp(56px, 9vh, 110px) clamp(20px, 5vw, 64px); }
+    .lu-steps { list-style: none; margin: 40px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; counter-reset: lu-step; }
+    .lu-steps li {
+      counter-increment: lu-step; background: var(--lu-card); border-radius: 24px; padding: 30px 28px;
+      border: 1px solid rgba(56, 49, 42, 0.08); display: grid; gap: 12px; align-content: start;
+    }
+    .lu-steps li::before {
+      content: "0" counter(lu-step); font-family: var(--lu-serif); font-style: italic;
+      font-size: 15px; color: var(--lu-amber-deep);
+    }
+    .lu-steps strong { font-family: var(--lu-serif); font-size: 22px; font-weight: 600; }
+    .lu-steps span { font-size: 14.5px; line-height: 1.7; color: var(--lu-ink-2); }
+
+    .lu-contact { background: var(--lu-oat-2); }
+    .lu-contact-in {
+      max-width: 1280px; margin: 0 auto; padding: clamp(56px, 9vh, 110px) clamp(20px, 5vw, 64px);
+      display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 90px); align-items: start;
+    }
+    .lu-bigphone {
+      display: inline-block; font-family: var(--lu-serif); font-weight: 600;
+      font-size: clamp(2rem, 4.6vw, 3.2rem); text-decoration: none; margin: 6px 0 22px;
+      border-bottom: 3px solid var(--lu-glow); padding-bottom: 6px;
+    }
+    .lu-bigphone:hover { color: var(--lu-amber-deep); }
+    .lu-contact-facts { font-size: 15px; line-height: 1.9; color: var(--lu-ink-2); margin: 0; }
+    .lu-form {
+      background: var(--lu-card); border-radius: 28px; padding: clamp(26px, 3vw, 40px);
+      border: 1px solid rgba(56, 49, 42, 0.08);
+      box-shadow: 0 24px 60px rgba(120, 84, 30, 0.14);
+      display: grid; gap: 18px;
+    }
+    .lu-form label { display: grid; gap: 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--lu-ink-2); }
+    .lu-form input, .lu-form select, .lu-form textarea {
+      font-family: var(--lu-sans); font-size: 15.5px; letter-spacing: 0; text-transform: none;
+      padding: 14px 16px; border-radius: 14px; border: 1.5px solid rgba(56, 49, 42, 0.2);
+      background: #FFFDF8; color: var(--lu-ink); width: 100%;
+    }
+    .lu-form input:focus, .lu-form select:focus, .lu-form textarea:focus { outline: 3px solid var(--lu-glow); outline-offset: 1px; border-color: var(--lu-amber-deep); }
+    .lu-form-note { margin: 0; font-size: 14.5px; font-weight: 600; color: #4C7A3F; text-align: center; }
+    .lu-form-note:empty { display: none; }
+
+    .lu-foot { text-align: center; padding: 40px 20px; font-size: 13.5px; line-height: 1.9; color: var(--lu-ink-2); }
+    .lu-foot p { margin: 0; }
+    .lu-foot strong { font-family: var(--lu-serif); color: var(--lu-ink); }
+
+    @media (max-width: 960px) {
+      .lu-hero { grid-template-columns: 1fr; }
+      .lu-cards { grid-template-columns: 1fr 1fr; }
+      .lu-homes-grid { grid-template-columns: 1fr; }
+      .lu-quotes { grid-template-columns: 1fr; }
+      .lu-studio { grid-template-columns: 1fr; }
+      .lu-studio-img { max-height: 320px; min-height: 0; }
+      .lu-studio-in { padding: 8px 24px 56px; }
+      .lu-steps { grid-template-columns: 1fr; }
+      .lu-contact-in { grid-template-columns: 1fr; }
+      .lu-nav { display: none; }
+    }
+    @media (max-width: 560px) {
+      .lu-cards { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .lu-btn, .lu-card { transition: none; }
+    }
+  </style>
+</body>
+</html>
