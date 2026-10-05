@@ -22,14 +22,19 @@ const STRIPE_PUBLISHABLE_KEY = "pk_live_51UMzZYE57vVzxI418WAmnlUuIXMLMWtNxjYa6We
       <form id="start-form" class="start-form" novalidate style="margin-top: 28px;">
         <label>Your name
           <input name="name" placeholder="Your name" autocomplete="name" required />
+          <span class="field-error mono" data-error="name" hidden></span>
         </label>
         <label>Email
           <input name="email" type="email" placeholder="you@yourbusiness.ca" autocomplete="email" required />
+          <span class="field-error mono" data-error="email" hidden></span>
         </label>
         <label>Business name
           <input name="business" placeholder="Your business name" autocomplete="organization" required />
+          <span class="field-error mono" data-error="business" hidden></span>
         </label>
-        <div id="start-form-error" class="mono" role="alert" hidden style="font-size:12px; color: #c0392b;"></div>
+        <button type="submit" class="btn btn--primary" id="start-continue" style="width:100%; justify-content:center; margin-top:4px;">
+          Continue to payment →
+        </button>
       </form>
 
       <div class="checkout-card checkout-card--pay" style="margin-top: 20px;">
@@ -56,18 +61,23 @@ const STRIPE_PUBLISHABLE_KEY = "pk_live_51UMzZYE57vVzxI418WAmnlUuIXMLMWtNxjYa6We
   (function() {
     const form = document.getElementById('start-form');
     const loadingEl = document.getElementById('checkout-loading');
-    const errorEl = document.getElementById('start-form-error');
+    const continueBtn = document.getElementById('start-continue');
     let checkoutMounted = false;
-    let stripe = null;
 
-    function showError(msg) {
-      if (errorEl) {
-        errorEl.textContent = msg;
-        errorEl.hidden = false;
+    const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+    function setFieldError(field, msg) {
+      const el = form.querySelector('[data-error="' + field + '"]');
+      const input = form.querySelector('[name="' + field + '"]');
+      if (el) {
+        if (msg) {
+          el.textContent = msg;
+          el.hidden = false;
+        } else {
+          el.hidden = true;
+        }
       }
-    }
-    function hideError() {
-      if (errorEl) errorEl.hidden = true;
+      if (input) input.classList.toggle('input-error', !!msg);
     }
 
     function getFormData() {
@@ -80,19 +90,20 @@ const STRIPE_PUBLISHABLE_KEY = "pk_live_51UMzZYE57vVzxI418WAmnlUuIXMLMWtNxjYa6We
     }
 
     function validate(d) {
-      if (!d.name || !d.email || !d.business) return 'Please fill in all three fields.';
-      if (!d.email.includes('@')) return 'Please enter a valid email address.';
-      return null;
+      let ok = true;
+      if (!d.name) { setFieldError('name', 'Please enter your name.'); ok = false; }
+      else setFieldError('name', null);
+      if (!d.email) { setFieldError('email', 'Please enter your email.'); ok = false; }
+      else if (!EMAIL_RE.test(d.email)) { setFieldError('email', 'Enter a valid email like name@domain.com.'); ok = false; }
+      else setFieldError('email', null);
+      if (!d.business) { setFieldError('business', 'Please enter your business name.'); ok = false; }
+      else setFieldError('business', null);
+      return ok;
     }
 
     async function mountCheckout() {
       const d = getFormData();
-      const err = validate(d);
-      if (err) {
-        showError(err);
-        return;
-      }
-      hideError();
+      if (!validate(d)) return;
 
       if (!window.Stripe) {
         if (loadingEl) loadingEl.textContent = 'Stripe could not be loaded. Check your connection and refresh.';
@@ -100,9 +111,12 @@ const STRIPE_PUBLISHABLE_KEY = "pk_live_51UMzZYE57vVzxI418WAmnlUuIXMLMWtNxjYa6We
       }
       if (checkoutMounted) return;
 
+      if (continueBtn) {
+        continueBtn.disabled = true;
+        continueBtn.textContent = 'Loading payment…';
+      }
       if (loadingEl) loadingEl.textContent = 'Loading secure payment form…';
 
-      // Save details for the success page and catalog the submission
       try {
         sessionStorage.setItem('webao-checkout', JSON.stringify(d));
         fetch('/api/forms/submit', {
@@ -122,25 +136,31 @@ const STRIPE_PUBLISHABLE_KEY = "pk_live_51UMzZYE57vVzxI418WAmnlUuIXMLMWtNxjYa6We
         const data = await res.json();
         if (!data.ok || !data.clientSecret) {
           if (loadingEl) loadingEl.textContent = data.error || 'Could not start checkout. Please try again.';
+          if (continueBtn) { continueBtn.disabled = false; continueBtn.textContent = 'Continue to payment →'; }
           return;
         }
-        stripe = window.Stripe(pk);
+        const stripe = window.Stripe(pk);
         const checkout = await stripe.initEmbeddedCheckout({ clientSecret: data.clientSecret });
         checkout.mount('#stripe-checkout');
         checkoutMounted = true;
+        // Hide the form, show payment
+        form.style.display = 'none';
+        document.getElementById('stripe-checkout').scrollIntoView({ behavior: 'smooth', block: 'center' });
       } catch (e) {
         if (loadingEl) loadingEl.textContent = 'Payment could not be loaded. Please try again.';
+        if (continueBtn) { continueBtn.disabled = false; continueBtn.textContent = 'Continue to payment →'; }
       }
     }
 
-    // Mount the payment form when all fields are valid (on blur/change)
     if (form) {
-      form.addEventListener('input', () => {
-        hideError();
-        const d = getFormData();
-        if (!validate(d) && !checkoutMounted) {
-          mountCheckout();
-        }
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        mountCheckout();
+      });
+      // Clear field errors as the user types
+      form.addEventListener('input', (e) => {
+        const input = e.target;
+        if (input && input.name) setFieldError(input.name, null);
       });
     }
   })();
@@ -175,6 +195,14 @@ const STRIPE_PUBLISHABLE_KEY = "pk_live_51UMzZYE57vVzxI418WAmnlUuIXMLMWtNxjYa6We
     outline: none;
     border-color: var(--ink);
     box-shadow: 0 0 0 3px var(--focus-ring);
+  }
+  .start-form input.input-error {
+    border-color: #c0392b;
+  }
+  .field-error {
+    font-size: 11.5px;
+    color: #c0392b;
+    margin-top: 2px;
   }
   .checkout-card {
     border: 1px solid var(--line);
