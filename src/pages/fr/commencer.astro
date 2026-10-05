@@ -32,9 +32,7 @@ const STRIPE_PUBLISHABLE_KEY = "pk_live_51UMzZYE57vVzxI418WAmnlUuIXMLMWtNxjYa6We
           <input name="business" placeholder="Nom de votre entreprise" autocomplete="organization" required />
           <span class="field-error mono" data-error="business" hidden></span>
         </label>
-        <button type="submit" class="btn btn--primary" id="start-continue" style="width:100%; justify-content:center; margin-top:4px;">
-          Continuer vers le paiement →
-        </button>
+        <p class="mono" style="font-size:11px; color: var(--muted); margin: 4px 0 0;">Le formulaire de paiement apparaît ci-dessous une fois vos infos valides.</p>
       </form>
 
       <div class="checkout-card checkout-card--pay" style="margin-top: 20px;">
@@ -61,8 +59,9 @@ const STRIPE_PUBLISHABLE_KEY = "pk_live_51UMzZYE57vVzxI418WAmnlUuIXMLMWtNxjYa6We
   (function() {
     const form = document.getElementById('start-form');
     const loadingEl = document.getElementById('checkout-loading');
-    const continueBtn = document.getElementById('start-continue');
     let checkoutMounted = false;
+    let mountInFlight = false;
+    const touched = { name: false, email: false, business: false };
 
     const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -89,32 +88,34 @@ const STRIPE_PUBLISHABLE_KEY = "pk_live_51UMzZYE57vVzxI418WAmnlUuIXMLMWtNxjYa6We
       };
     }
 
-    function validate(d) {
-      let ok = true;
-      if (!d.name) { setFieldError('name', 'Veuillez entrer votre nom.'); ok = false; }
-      else setFieldError('name', null);
-      if (!d.email) { setFieldError('email', 'Veuillez entrer votre courriel.'); ok = false; }
-      else if (!EMAIL_RE.test(d.email)) { setFieldError('email', 'Entrez un courriel valide comme nom@domaine.com.'); ok = false; }
-      else setFieldError('email', null);
-      if (!d.business) { setFieldError('business', "Veuillez entrer le nom de l'entreprise."); ok = false; }
-      else setFieldError('business', null);
-      return ok;
+    function validateField(field, value) {
+      let msg = null;
+      if (field === 'name' && !value) msg = 'Veuillez entrer votre nom.';
+      else if (field === 'business' && !value) msg = "Veuillez entrer le nom de l'entreprise.";
+      else if (field === 'email') {
+        if (!value) msg = 'Veuillez entrer votre courriel.';
+        else if (!EMAIL_RE.test(value)) msg = 'Entrez un courriel valide comme nom@domaine.com.';
+      }
+      if (touched[field]) setFieldError(field, msg);
+      return !msg;
+    }
+
+    function allValid(d) {
+      return d.name && d.business && EMAIL_RE.test(d.email);
     }
 
     async function mountCheckout() {
+      if (checkoutMounted || mountInFlight) return;
       const d = getFormData();
-      if (!validate(d)) return;
+      if (!allValid(d)) return;
+      mountInFlight = true;
 
       if (!window.Stripe) {
         if (loadingEl) loadingEl.textContent = 'Stripe n\'a pas pu être chargé. Vérifiez votre connexion et actualisez.';
+        mountInFlight = false;
         return;
       }
-      if (checkoutMounted) return;
 
-      if (continueBtn) {
-        continueBtn.disabled = true;
-        continueBtn.textContent = 'Chargement du paiement…';
-      }
       if (loadingEl) loadingEl.textContent = 'Chargement du formulaire de paiement…';
 
       try {
@@ -135,31 +136,37 @@ const STRIPE_PUBLISHABLE_KEY = "pk_live_51UMzZYE57vVzxI418WAmnlUuIXMLMWtNxjYa6We
         });
         const data = await res.json();
         if (!data.ok || !data.clientSecret) {
-          if (loadingEl) loadingEl.textContent = data.error || 'Paiement indisponible. Réessayez.';
-          if (continueBtn) { continueBtn.disabled = false; continueBtn.textContent = 'Continuer vers le paiement →'; }
+          if (loadingEl) loadingEl.textContent = data.error || 'Paiement indisponible. Vérifiez vos infos et réessayez.';
+          mountInFlight = false;
           return;
         }
         const stripe = window.Stripe(pk);
         const checkout = await stripe.initEmbeddedCheckout({ clientSecret: data.clientSecret });
         checkout.mount('#stripe-checkout');
         checkoutMounted = true;
-        form.style.display = 'none';
-        document.getElementById('stripe-checkout').scrollIntoView({ behavior: 'smooth', block: 'center' });
       } catch (e) {
-        if (loadingEl) loadingEl.textContent = 'Paiement indisponible. Réessayez.';
-        if (continueBtn) { continueBtn.disabled = false; continueBtn.textContent = 'Continuer vers le paiement →'; }
+        if (loadingEl) loadingEl.textContent = 'Paiement indisponible. Vérifiez votre connexion et vos infos.';
+        mountInFlight = false;
       }
     }
 
     if (form) {
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        mountCheckout();
-      });
       form.addEventListener('input', (e) => {
         const input = e.target;
-        if (input && input.name) setFieldError(input.name, null);
+        if (!input || !input.name || !(input.name in touched)) return;
+        touched[input.name] = true;
+        const d = getFormData();
+        validateField(input.name, d[input.name]);
+        if (allValid(d)) mountCheckout();
       });
+      form.addEventListener('focusout', (e) => {
+        const input = e.target;
+        if (!input || !input.name || !(input.name in touched)) return;
+        touched[input.name] = true;
+        const d = getFormData();
+        validateField(input.name, d[input.name]);
+      });
+      form.addEventListener('submit', (e) => e.preventDefault());
     }
   })();
 </script>
