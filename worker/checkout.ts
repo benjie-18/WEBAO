@@ -32,7 +32,7 @@ export async function handleCheckoutSession(req: Request, env: Env): Promise<Res
 
   // Build form-encoded body for Stripe API
   const params = new URLSearchParams();
-  params.set("ui_mode", "embedded");
+  params.set("ui_mode", "embedded_page");
   params.set("mode", "subscription");
   params.set("line_items[0][price]", priceId);
   params.set("line_items[0][quantity]", "1");
