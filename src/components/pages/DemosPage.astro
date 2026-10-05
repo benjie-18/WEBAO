@@ -11,7 +11,7 @@ const paths = localizedPaths[locale];
 const demos = getDemos(locale);
 
 // Demos with published standalone microsites
-const liveDemos = new Set(["nora", "mira", "atelier-nord", "encre-brute", "kanso", "leduc", "boise", "sora", "forma", "toit-fils", "verte", "lune", "maison-lune", "finition-r", "pouf", "hexline", "papier-ciseaux", "studio-reve", "cyberdoll", "pixelforge", "vhs-dreams", "prism", "tactile", "lattice", "maximal", "atelier-caractere", "esquisse", "brume", "sahara-sage", "aeris"]);
+const liveDemos = new Set(["nora", "mira", "atelier-nord", "encre-brute", "kanso", "leduc", "boise", "sora", "forma", "toit-fils", "verte", "lune", "maison-lune", "finition-r", "pouf", "hexline", "papier-ciseaux", "studio-reve", "cyberdoll", "pixelforge", "vhs-dreams", "prism", "tactile", "lattice", "maximal", "atelier-caractere", "esquisse", "brume", "sahara-sage", "aeris", "debit", "bec-fin", "voltige", "lueur", "21-degres", "extreme-climat", "confort-76", "zenith", "toitures-tempete", "chantier-brut", "maison-dore"]);
 // Hidden from the catalog: style already covered by another demo (boba-club = Y2K, covered by cyberdoll)
 const hiddenDemos = new Set(["boba-club"]);
 const visibleDemos = demos.filter((d) => !hiddenDemos.has(d.id));
@@ -342,6 +342,176 @@ const families = styleFamilies;
                   <div class="ae-orb" aria-hidden="true"></div>
                   <div class="ae-name">AERIS</div>
                   <div class="ae-sub">CLEAN TECH</div>
+                  {d.id === "debit" && (
+                <div class="dthumb-art">
+                  <div class="dt-top"><span class="dt-grid" aria-hidden="true"></span>BROSSARD · PLUMBING</div>
+                  <div class="dt-name">DÉBIT</div>
+                  <div class="dt-pipe" aria-hidden="true"><i></i><b></b><i></i></div>
+                  <div class="dt-bar">FLOW 12.4 L/min · Ø 110mm PVC</div>
+                </div>
+              )}
+              {d.id === "bec-fin" && (
+                <div class="dthumb-art">
+                  <div class="bft-top">SHERBROOKE · PLOMBERIE</div>
+                  <div class="bft-name">Bec Fin</div>
+                  <div class="bft-chrome" aria-hidden="true"><i></i><i></i><i></i></div>
+                  <div class="bft-burst">SPÉCIAL SALLE DE BAIN</div>
+                </div>
+              )}
+              {d.id === "voltige" && (
+                <div class="dthumb-art">
+                  <div class="dv-tape" aria-hidden="true"></div>
+                  <div class="dv-top">TROIS-RIVIÈRES · ÉLECTRICITÉ</div>
+                  <div class="dv-name">VOLTIGE</div>
+                  <div class="dv-num">600V · 200A · 24/7</div>
+                </div>
+              )}
+              {d.id === "lueur" && (
+                <div class="dthumb-art">
+                  <div class="lu-glow" aria-hidden="true"><span class="lu-dot"></span></div>
+                  <div class="lu-top">GATINEAU · ÉCLAIRAGE</div>
+                  <div class="lu-name">Lueur</div>
+                  <div class="lu-bar">design lumière chaleureux</div>
+                </div>
+              )}
+              {d.id === "21-degres" && (
+                <div class="dthumb-art">
+                  <div class="dg-top"><span class="dg-led" aria-hidden="true"></span>TERREBONNE · HVAC</div>
+                  <div class="dg-dial" aria-hidden="true"><span class="dg-needle"></span><span class="dg-num">21.5°</span></div>
+                  <div class="dg-modes"><span class="dg-on">HEAT</span><span>COOL</span><span>VENT</span></div>
+                </div>
+              )}
+              {d.id === "extreme-climat" && (
+                <div class="dthumb-art">
+                  <div class="xt-split" aria-hidden="true"><span class="xt-ice">−30°</span><span class="xt-fire">+35°</span></div>
+                  <div class="xt-title">EXTRÊME<br/>CLIMAT</div>
+                  <div class="xt-sub">LÉVIS · ON MAÎTRISE LES DEUX</div>
+                </div>
+              )}
+              {d.id === "confort-76" && (
+                <div class="dthumb-art">
+                  <div class="dc76-top">DRUMMONDVILLE · DEPUIS 1976</div>
+                  <div class="dc76-name">Confort <span>76</span></div>
+                  <div class="dc76-burst" aria-hidden="true">★</div>
+                  <div class="dc76-bar">CHAUFFAGE · CLIMATISATION</div>
+                </div>
+              )}
+              {d.id === "zenith" && (
+                <div class="dthumb-art">
+                  <div class="dz-top"><span class="dz-pin" aria-hidden="true"></span>BLAINVILLE · RELEVÉ DRONE</div>
+                  <div class="dz-name">Zénith</div>
+                  <div class="dz-sub">Toitures · cartographie aérienne</div>
+                  <div class="dz-shingles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+                </div>
+              )}
+              {d.id === "toitures-tempete" && (
+                <div class="dthumb-art">
+                  <div class="tp-top"><span class="tp-dot" aria-hidden="true"></span>REPENTIGNY · URGENCE 24/7</div>
+                  <div class="tp-name">TEMPÊTE</div>
+                  <div class="tp-bar">BÂCHAGE · FUITES · TOITURES</div>
+                </div>
+              )}
+              {d.id === "chantier-brut" && (
+                <div class="dthumb-art">
+                  <div class="cb-top"><span class="cb-dot" aria-hidden="true"></span>VERDUN · RÉNOVATION</div>
+                  <div class="cb-name">CHANTIER<br />BRUT</div>
+                  <div class="cb-tape" aria-hidden="true"></div>
+                  <div class="cb-bar">PAS DE VERNIS. JUSTE DU SOLIDE.</div>
+                </div>
+              )}
+              {d.id === "maison-dore" && (
+                <div class="dthumb-art">
+                  <div class="md-mono">MD</div>
+                  <div class="md-name">Maison Doré</div>
+                  <div class="md-rule" aria-hidden="true"><i></i></div>
+                  <div class="md-bar">WESTMOUNT · ATELIER DE RÉNOVATION</div>
+                </div>
+              )}
+            </div>
+              )}
+              {d.id === "debit" && (
+                <div class="dthumb-art">
+                  <div class="dt-top"><span class="dt-grid" aria-hidden="true"></span>BROSSARD · PLUMBING</div>
+                  <div class="dt-name">DÉBIT</div>
+                  <div class="dt-pipe" aria-hidden="true"><i></i><b></b><i></i></div>
+                  <div class="dt-bar">FLOW 12.4 L/min · Ø 110mm PVC</div>
+                </div>
+              )}
+              {d.id === "bec-fin" && (
+                <div class="dthumb-art">
+                  <div class="bft-top">SHERBROOKE · PLOMBERIE</div>
+                  <div class="bft-name">Bec Fin</div>
+                  <div class="bft-chrome" aria-hidden="true"><i></i><i></i><i></i></div>
+                  <div class="bft-burst">SPÉCIAL SALLE DE BAIN</div>
+                </div>
+              )}
+              {d.id === "voltige" && (
+                <div class="dthumb-art">
+                  <div class="dv-tape" aria-hidden="true"></div>
+                  <div class="dv-top">TROIS-RIVIÈRES · ÉLECTRICITÉ</div>
+                  <div class="dv-name">VOLTIGE</div>
+                  <div class="dv-num">600V · 200A · 24/7</div>
+                </div>
+              )}
+              {d.id === "lueur" && (
+                <div class="dthumb-art">
+                  <div class="lt-glow" aria-hidden="true"><span class="lt-dot"></span></div>
+                  <div class="lt-top">GATINEAU · ÉCLAIRAGE</div>
+                  <div class="lt-name">Lueur</div>
+                  <div class="lt-bar">design lumière chaleureux</div>
+                </div>
+              )}
+              {d.id === "21-degres" && (
+                <div class="dthumb-art">
+                  <div class="dg-top"><span class="dg-led" aria-hidden="true"></span>TERREBONNE · HVAC</div>
+                  <div class="dg-dial" aria-hidden="true"><span class="dg-needle"></span><span class="dg-num">21.5°</span></div>
+                  <div class="dg-modes"><span class="dg-on">HEAT</span><span>COOL</span><span>VENT</span></div>
+                </div>
+              )}
+              {d.id === "extreme-climat" && (
+                <div class="dthumb-art">
+                  <div class="xt-split" aria-hidden="true"><span class="xt-ice">−30°</span><span class="xt-fire">+35°</span></div>
+                  <div class="xt-title">EXTRÊME<br/>CLIMAT</div>
+                  <div class="xt-sub">LÉVIS · ON MAÎTRISE LES DEUX</div>
+                </div>
+              )}
+              {d.id === "confort-76" && (
+                <div class="dthumb-art">
+                  <div class="dc76-top">DRUMMONDVILLE · DEPUIS 1976</div>
+                  <div class="dc76-name">Confort <span>76</span></div>
+                  <div class="dc76-burst" aria-hidden="true">★</div>
+                  <div class="dc76-bar">CHAUFFAGE · CLIMATISATION</div>
+                </div>
+              )}
+              {d.id === "zenith" && (
+                <div class="dthumb-art">
+                  <div class="dz-top"><span class="dz-pin" aria-hidden="true"></span>BLAINVILLE · RELEVÉ DRONE</div>
+                  <div class="dz-name">Zénith</div>
+                  <div class="dz-sub">Toitures · cartographie aérienne</div>
+                  <div class="dz-shingles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+                </div>
+              )}
+              {d.id === "toitures-tempete" && (
+                <div class="dthumb-art">
+                  <div class="tp-top"><span class="tp-dot" aria-hidden="true"></span>REPENTIGNY · URGENCE 24/7</div>
+                  <div class="tp-name">TEMPÊTE</div>
+                  <div class="tp-bar">BÂCHAGE · FUITES · TOITURES</div>
+                </div>
+              )}
+              {d.id === "chantier-brut" && (
+                <div class="dthumb-art">
+                  <div class="cb-top"><span class="cb-dot" aria-hidden="true"></span>VERDUN · RÉNOVATION</div>
+                  <div class="cb-name">CHANTIER<br />BRUT</div>
+                  <div class="cb-tape" aria-hidden="true"></div>
+                  <div class="cb-bar">PAS DE VERNIS. JUSTE DU SOLIDE.</div>
+                </div>
+              )}
+              {d.id === "maison-dore" && (
+                <div class="dthumb-art">
+                  <div class="md-mono">MD</div>
+                  <div class="md-name">Maison Doré</div>
+                  <div class="md-rule" aria-hidden="true"><i></i></div>
+                  <div class="md-bar">WESTMOUNT · ATELIER DE RÉNOVATION</div>
                 </div>
               )}
             </div>
@@ -838,6 +1008,231 @@ const families = styleFamilies;
   .ae-orb { position: absolute; top: 10px; right: 16px; width: 88px; height: 88px; border-radius: 50%; background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.95) 0%, rgba(255,255,255,.25) 32%, rgba(79,195,247,.35) 70%, rgba(11,61,74,.25) 100%); box-shadow: 0 8px 24px rgba(11,61,74,.25), inset -6px -8px 16px rgba(255,255,255,.4); }
   .ae-name { font-family: "Nunito", system-ui, sans-serif; font-weight: 900; font-size: 44px; letter-spacing: .04em; color: #fff; text-shadow: 0 2px 12px rgba(11,61,74,.45), 0 1px 0 rgba(11,61,74,.4); }
   .ae-sub { font-size: 10px; letter-spacing: .3em; font-weight: 800; color: #0B3D4A; }
+  /* DÉBIT: blueprint */
+  .dthumb-debit {
+    background: #0d2f8c;
+    background-image:
+      linear-gradient(rgba(255,255,255,.10) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.10) 1px, transparent 1px);
+    background-size: 18px 18px;
+    color: #fff;
+  }
+  .dthumb-debit .dthumb-art { height: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding: 20px; }
+  .dthumb-debit .dt-top {
+    font-family: "IBM Plex Mono", monospace; font-size: 10px; letter-spacing: .22em;
+    color: #7dd7ff; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;
+  }
+  .dthumb-debit .dt-grid { width: 10px; height: 10px; border: 2px solid #7dd7ff; display: inline-block; }
+  .dthumb-debit .dt-name {
+    font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 34px;
+    letter-spacing: .06em; line-height: 1; margin-bottom: 10px;
+  }
+  .dthumb-debit .dt-pipe { display: flex; align-items: center; gap: 0; margin-bottom: 12px; }
+  .dthumb-debit .dt-pipe i { display: block; height: 6px; width: 44px; background: #fff; }
+  .dthumb-debit .dt-pipe b {
+    display: block; width: 18px; height: 18px; border: 4px solid #fff; border-radius: 50%;
+    background: #0d2f8c; flex: none;
+  }
+  .dthumb-debit .dt-bar {
+    font-family: "IBM Plex Mono", monospace; font-size: 10.5px; letter-spacing: .08em;
+    border: 1px solid rgba(255,255,255,.6); padding: 7px 10px; color: #7dd7ff;
+  }
+  /* BEC FIN: pastel diner */
+  .dthumb-bec-fin { background: #FFF6EC; color: #4A3B32; overflow: hidden; }
+  .dthumb-bec-fin .dthumb-art { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 16px; text-align: center; }
+  .dthumb-bec-fin .bft-top { font-family: "Fredoka", sans-serif; font-size: 10px; letter-spacing: .24em; color: #B08968; font-weight: 600; }
+  .dthumb-bec-fin .bft-name { font-family: "Baloo 2", "Fredoka", sans-serif; font-weight: 700; font-size: 40px; line-height: 1; color: #E2547A; }
+  .dthumb-bec-fin .bft-chrome { display: flex; gap: 6px; }
+  .dthumb-bec-fin .bft-chrome i { width: 34px; height: 8px; border-radius: 4px; background: linear-gradient(180deg, #B8E0D2 0%, #7FB69E 100%); display: block; }
+  .dthumb-bec-fin .bft-chrome i:nth-child(2) { background: linear-gradient(180deg, #F4A7B9 0%, #E2547A 100%); }
+  .dthumb-bec-fin .bft-chrome i:nth-child(3) { background: linear-gradient(180deg, #FFE9C7 0%, #F2C57C 100%); }
+  .dthumb-bec-fin .bft-burst { font-family: "Fredoka", sans-serif; font-size: 10px; font-weight: 700; letter-spacing: .14em; color: #fff; background: #E2547A; border-radius: 999px; padding: 7px 14px; }
+  /* VOLTIGE: high voltage */
+  .dthumb-voltige { background: #141414; color: #fff; overflow: hidden; }
+  .dthumb-voltige .dthumb-art { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 16px; text-align: center; position: relative; }
+  .dthumb-voltige .dv-tape { position: absolute; top: 0; left: 0; right: 0; height: 14px; background: repeating-linear-gradient(-45deg, #FFD400 0 14px, #141414 14px 28px); }
+  .dthumb-voltige .dv-top { font-family: "IBM Plex Mono", monospace; font-size: 10px; letter-spacing: .22em; color: #FFD400; margin-top: 8px; }
+  .dthumb-voltige .dv-name { font-family: "Oswald", sans-serif; font-weight: 700; font-size: 44px; letter-spacing: .04em; line-height: 1; }
+  .dthumb-voltige .dv-num { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .18em; color: #FFD400; border: 1px solid #FFD400; padding: 7px 12px; }
+  /* LUEUR: scandi hygge */
+  .dthumb-lueur { background: #F3EDE0; color: #38312A; overflow: hidden; }
+  .dthumb-lueur .dthumb-art { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 9px; padding: 18px; text-align: center; position: relative; }
+  .dthumb-lueur .lu-glow { position: absolute; top: 50%; left: 50%; width: 190px; height: 190px; transform: translate(-50%, -58%); background: radial-gradient(circle, rgba(242,185,80,.55) 0%, rgba(242,185,80,0) 70%); pointer-events: none; }
+  .dthumb-lueur .lu-dot { position: absolute; top: 50%; left: 50%; width: 14px; height: 14px; transform: translate(-50%,-50%); border-radius: 50%; background: #F2B950; box-shadow: 0 0 22px 6px rgba(242,185,80,.8); }
+  .dthumb-lueur .lu-top { font-family: "Inter", sans-serif; font-size: 10px; letter-spacing: .26em; color: #8A7A5C; position: relative; z-index: 1; }
+  .dthumb-lueur .lu-name { position: relative; z-index: 1; font-family: "Fraunces", Georgia, serif; font-size: 42px; font-weight: 500; font-style: italic; line-height: 1; }
+  .dthumb-lueur .lu-bar { position: relative; z-index: 1; font-family: "Inter", sans-serif; font-size: 11px; letter-spacing: .12em; color: #B57A1E; }
+  /* 21 DEGRÉS: thermostat */
+  .dthumb-21-degres { background: #0B0E14; color: #E8ECF4; }
+  .dthumb-21-degres .dthumb-art {
+    height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 12px; padding: 18px; font-family: ui-monospace, "JetBrains Mono", monospace;
+  }
+  .dthumb-21-degres .dg-top {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 10px; letter-spacing: 0.22em; color: #8A93A6;
+  }
+  .dthumb-21-degres .dg-led { width: 8px; height: 8px; border-radius: 50%; background: #3DFF88; box-shadow: 0 0 8px #3DFF88; flex: none; }
+  .dthumb-21-degres .dg-dial {
+    position: relative; width: 92px; height: 92px; border-radius: 50%; flex: none;
+    background: conic-gradient(from 210deg, #4DA3FF 0deg, #9B8CFF 130deg, #FF5A4D 260deg, rgba(255,255,255,0.08) 260deg 360deg);
+    -webkit-mask: radial-gradient(circle, transparent 58%, #000 60%);
+    mask: radial-gradient(circle, transparent 58%, #000 60%);
+  }
+  .dthumb-21-degres .dg-needle {
+    position: absolute; left: calc(50% - 2px); top: 8px; width: 4px; height: 34px;
+    background: #fff; border-radius: 2px; transform-origin: 50% 38px; transform: rotate(38deg);
+  }
+  .dthumb-21-degres .dg-num {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-size: 17px; font-weight: 700; letter-spacing: -0.02em;
+  }
+  .dthumb-21-degres .dg-modes { display: flex; gap: 6px; }
+  .dthumb-21-degres .dg-modes span {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.12em;
+    border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 6px; padding: 6px 9px; color: #8A93A6;
+  }
+  .dthumb-21-degres .dg-modes .dg-on { border-color: #FF5A4D; color: #FF5A4D; background: rgba(255, 90, 77, 0.12); }
+  /* EXTRÊME CLIMAT: duality */
+  .dthumb-extreme-climat { background: #0A0A0B; color: #fff; overflow: hidden; }
+  .dthumb-extreme-climat .dthumb-art { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 16px; text-align: center; }
+  .dthumb-extreme-climat .xt-split { display: flex; width: 100%; border-radius: 8px; overflow: hidden; font-family: "Archivo", sans-serif; font-weight: 800; font-size: 15px; }
+  .dthumb-extreme-climat .xt-ice { flex: 1; background: linear-gradient(135deg, #0E2A4A, #1B4D7A); color: #8FD8FF; padding: 10px 0; }
+  .dthumb-extreme-climat .xt-fire { flex: 1; background: linear-gradient(135deg, #7A1E08, #2A0F08); color: #FF7A3C; padding: 10px 0; }
+  .dthumb-extreme-climat .xt-title { font-family: "Anton", sans-serif; font-size: 38px; line-height: .95; letter-spacing: .02em; }
+  .dthumb-extreme-climat .xt-sub { font-family: "IBM Plex Mono", monospace; font-size: 9.5px; letter-spacing: .2em; color: #9aa3b5; }
+  /* CONFORT 76: 70s ad */
+  .dthumb-confort-76 { background: #F2E3C6; color: #4a2e1b; overflow: hidden; }
+  .dthumb-confort-76 .dthumb-art { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px; padding: 16px; text-align: center; position: relative; }
+  .dthumb-confort-76 .dc76-top { font-family: monospace; font-size: 10px; letter-spacing: 0.22em; color: #5c6539; font-weight: 700; }
+  .dthumb-confort-76 .dc76-name { font-family: "Shrikhand", cursive; font-size: 36px; line-height: 1.1; color: #4a2e1b; margin: 2px 0; }
+  .dthumb-confort-76 .dc76-name span { color: #b4552d; }
+  .dthumb-confort-76 .dc76-burst { font-size: 26px; color: #b4552d; line-height: 1; }
+  .dthumb-confort-76 .dc76-bar { font-family: "Bungee", sans-serif; font-size: 10px; letter-spacing: 0.08em; border: 2px dashed #b4552d; border-radius: 6px; padding: 6px 10px; display: inline-block; color: #b4552d; }
+  /* ZÉNITH: aerial cartography */
+  .dthumb-zenith { background: #23282e; color: #f4f1ea; overflow: hidden; }
+  .dthumb-zenith .dthumb-art {
+    height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 8px; padding: 18px; text-align: center; position: relative;
+    background-image:
+      radial-gradient(ellipse 120px 80px at 78% 18%, transparent 58%, rgba(208,141,74,.28) 59%, transparent 62%),
+      radial-gradient(ellipse 190px 130px at 78% 18%, transparent 58%, rgba(208,141,74,.18) 59%, transparent 62%),
+      radial-gradient(ellipse 260px 180px at 78% 18%, transparent 58%, rgba(208,141,74,.12) 59%, transparent 62%);
+  }
+  .dthumb-zenith .dz-top {
+    font-family: "IBM Plex Mono", monospace; font-size: 10px; letter-spacing: .22em;
+    color: #d08d4a; display: flex; align-items: center; gap: 8px;
+  }
+  .dthumb-zenith .dz-pin {
+    width: 10px; height: 10px; border: 2px solid #d08d4a; border-radius: 50%;
+    box-shadow: 0 0 0 3px rgba(208,141,74,.25); display: inline-block; flex: none;
+  }
+  .dthumb-zenith .dz-name {
+    font-family: "Spectral", Georgia, serif; font-weight: 500; font-size: 38px;
+    letter-spacing: .06em; line-height: 1; color: #f4f1ea;
+  }
+  .dthumb-zenith .dz-sub {
+    font-family: "Spectral", Georgia, serif; font-style: italic; font-size: 12px;
+    letter-spacing: .08em; color: rgba(244,241,234,.72);
+  }
+  .dthumb-zenith .dz-shingles { display: flex; gap: 5px; margin-top: 6px; }
+  .dthumb-zenith .dz-shingles i {
+    display: block; width: 30px; height: 9px; background: #b87333; transform: skewX(-18deg);
+  }
+  .dthumb-zenith .dz-shingles i:nth-child(odd) { background: #d08d4a; }
+  /* TEMPÊTE: storm response */
+  .dthumb-toitures-tempete {
+    background: radial-gradient(circle at 70% 20%, #2a1f4d 0%, #0b0d12 65%);
+    color: #eef0f6;
+    overflow: hidden;
+  }
+  .dthumb-toitures-tempete .dthumb-art {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 10px;
+    padding: 22px;
+    font-family: "Inter", system-ui, sans-serif;
+  }
+  .dthumb-toitures-tempete .tp-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: #a78bfa;
+  }
+  .dthumb-toitures-tempete .tp-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #a78bfa;
+    box-shadow: 0 0 12px #8b5cf6, 0 0 26px rgba(139, 92, 246, 0.6);
+    flex: none;
+  }
+  .dthumb-toitures-tempete .tp-name {
+    font-family: "Archivo Black", "Arial Black", sans-serif;
+    font-size: 40px;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    color: #fff;
+    text-shadow: 0 0 22px rgba(139, 92, 246, 0.75);
+  }
+  .dthumb-toitures-tempete .tp-bar {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: #0b0d12;
+    background: #8b5cf6;
+    border-radius: 5px;
+    padding: 7px 12px;
+  }
+  /* CHANTIER BRUT: raw site */
+  .dthumb-chantier-brut { background: #141414; color: #f2ede1; }
+  .dthumb-chantier-brut .dthumb-art { height: 100%; display: flex; flex-direction: column; justify-content: center; gap: 10px; padding: 18px; font-family: "Barlow Condensed", "Arial Narrow", sans-serif; }
+  .dthumb-chantier-brut .cb-top { display: flex; align-items: center; gap: 8px; font-size: 10px; font-weight: 600; letter-spacing: 0.24em; color: #8f8f8f; }
+  .dthumb-chantier-brut .cb-dot { width: 10px; height: 10px; border-radius: 50%; background: #ffd400; display: inline-block; flex: none; }
+  .dthumb-chantier-brut .cb-name { font-family: "Saira Stencil One", "Arial Black", sans-serif; font-size: 38px; line-height: 1; letter-spacing: 0.02em; color: #f2ede1; }
+  .dthumb-chantier-brut .cb-tape { height: 12px; background: repeating-linear-gradient(-45deg, #ffd400 0 12px, #141414 12px 24px); border: 2px solid #000; }
+  .dthumb-chantier-brut .cb-bar { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; color: #141414; background: #ffd400; padding: 7px 10px; display: inline-block; align-self: flex-start; }
+  /* MAISON DORÉ: art deco */
+  .dthumb-maison-dore {
+    background: radial-gradient(circle at 50% 0%, #1a1a1e 0%, #0d0d0f 70%);
+    color: #f6f1e5;
+    font-family: Georgia, "Times New Roman", serif;
+  }
+  .dthumb-maison-dore .dthumb-art {
+    padding: 16px; height: 100%; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 10px; text-align: center;
+    border: 1px solid rgba(201,162,39,.6); outline: 1px solid rgba(201,162,39,.3); outline-offset: 5px;
+    margin: 10px;
+  }
+  .dthumb-maison-dore .md-mono {
+    font-size: 15px; letter-spacing: .1em; color: #0d0d0f;
+    background: linear-gradient(135deg, #e6c96a, #c9a227);
+    width: 44px; height: 44px; display: grid; place-items: center;
+    transform: rotate(45deg); font-family: Georgia, serif; font-weight: 700;
+  }
+  .dthumb-maison-dore .md-name { font-size: 30px; font-weight: 500; letter-spacing: .05em; color: #f6f1e5; font-style: italic; }
+  .dthumb-maison-dore .md-rule { position: relative; height: 12px; width: 150px; }
+  .dthumb-maison-dore .md-rule::before, .dthumb-maison-dore .md-rule::after {
+    content: ""; position: absolute; left: 0; right: 0; border-top: 1px solid #c9a227;
+  }
+  .dthumb-maison-dore .md-rule::before { top: 2px; }
+  .dthumb-maison-dore .md-rule::after { top: 8px; opacity: .55; }
+  .dthumb-maison-dore .md-rule i {
+    position: absolute; top: 0; left: 50%; width: 9px; height: 9px;
+    background: #0d0d0f; border: 1px solid #c9a227; transform: translateX(-50%) rotate(45deg);
+  }
+  .dthumb-maison-dore .md-bar {
+    font-size: 10.5px; letter-spacing: .3em; color: #e6c96a;
+    font-family: Georgia, serif; text-transform: uppercase;
+  }
   .empty { text-align:center; padding:32px; background: var(--paper-2); border:1px dashed var(--line-strong); border-radius:16px; font-size:13px; color: var(--muted); margin-top:12px; }
   .demos-note { margin-top:14px; display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; font-size:10px; color: var(--muted); border-top:1px solid var(--line); padding-top:12px; }
   @media (max-width: 960px) { .demos-hero-grid, .demo-grid { grid-template-columns: 1fr; } .demo-thumb { min-height: 180px; } }
