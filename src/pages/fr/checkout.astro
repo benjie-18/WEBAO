@@ -5,9 +5,9 @@ const locale = "fr" as const;
 const title = "Paiement · WEBAO";
 const description = "Finalisez votre abonnement WEBAO : 149 $ CAD/mois, sans frais d'installation, annulez en tout temps.";
 
-// TODO: Remplacez par votre URL de lien de paiement Stripe (créez dans Tableau de bord Stripe > Liens de paiement)
-// Pour l'abonnement récurrent de 149 $ CAD/mois
-const STRIPE_PAYMENT_URL = "https://buy.stripe.com/YOUR_PAYMENT_LINK_HERE";
+// Clé publique Stripe; remplacez par votre clé publique (pk_live_...).
+// Tableau de bord Stripe > Développeurs > Clés API.
+const STRIPE_PUBLISHABLE_KEY = "pk_live_YOUR_PUBLISHABLE_KEY_HERE";
 ---
 
 <BaseLayout title={title} description={description} locale={locale}>
@@ -16,9 +16,8 @@ const STRIPE_PAYMENT_URL = "https://buy.stripe.com/YOUR_PAYMENT_LINK_HERE";
       <div class="eyebrow">Paiement</div>
       <h1 class="display" style="font-size: clamp(2rem, 5vw, 3.2rem); line-height:.92; margin-top:12px;">Plus qu'une étape</h1>
       <p class="prose" style="margin-top:12px; max-width: 52ch;">
-        Vérifiez vos informations ci-dessous, puis finalisez le paiement en
-        toute sécurité avec Stripe. La création de votre site commence dès
-        la confirmation du paiement.
+        Finalisez le paiement ci-dessous pour démarrer votre abonnement de
+        149 $/mois. La création de votre site commence dès la confirmation.
       </p>
 
       <div class="checkout-grid" style="margin-top: 32px;">
@@ -39,32 +38,19 @@ const STRIPE_PAYMENT_URL = "https://buy.stripe.com/YOUR_PAYMENT_LINK_HERE";
             Sans frais d'installation · Annulez en tout temps<br/>
             <a href="/fr/refunds" style="color: var(--accent-text);">Politique de remboursement</a>
           </div>
+          <div id="checkout-customer" class="mono" style="margin-top:14px; font-size:12px; line-height:1.7; color: var(--muted);"></div>
         </div>
 
-        <!-- Client + paiement -->
+        <!-- Stripe intégré -->
         <div class="checkout-card checkout-card--pay">
-          <div class="mono" style="font-size:10px; letter-spacing:.14em; opacity:.5;">VOS INFORMATIONS</div>
-          <div id="checkout-customer" class="mono" style="margin-top:12px; font-size:12.5px; line-height:1.7; color: var(--muted);">
-            <!-- Rempli par JS depuis sessionStorage -->
-          </div>
-
-          <div style="margin-top:24px; padding-top:20px; border-top:1px solid var(--line);">
-            <div class="mono" style="font-size:10px; letter-spacing:.14em; opacity:.5;">PAIEMENT</div>
-            <p class="prose" style="font-size:13px; margin-top:10px; color: var(--muted);">
-              Paiement sécurisé propulsé par Stripe. Vous serez redirigé pour
-              finaliser votre abonnement de 149 $/mois.
-            </p>
-            <a
-              href={STRIPE_PAYMENT_URL}
-              class="btn btn--primary"
-              style="width:100%; justify-content:center; margin-top:14px; font-size:15px; padding:14px 20px;"
-              data-stripe-link
-            >
-              Payer 149 $/mois →
-            </a>
-            <div class="mono" style="margin-top:10px; font-size:10.5px; text-align:center; color: var(--muted);">
-              🔒 Chiffré et sécurisé · Propulsé par Stripe
+          <div class="mono" style="font-size:10px; letter-spacing:.14em; opacity:.5; margin-bottom:12px;">PAIEMENT SÉCURISÉ</div>
+          <div id="stripe-checkout">
+            <div class="mono" style="padding:40px 20px; text-align:center; color: var(--muted); font-size:12.5px;" id="checkout-loading">
+              Chargement du formulaire de paiement…
             </div>
+          </div>
+          <div class="mono" style="margin-top:12px; font-size:10.5px; text-align:center; color: var(--muted);">
+            🔒 Chiffré et sécurisé · Propulsé par Stripe
           </div>
         </div>
       </div>
@@ -76,34 +62,57 @@ const STRIPE_PAYMENT_URL = "https://buy.stripe.com/YOUR_PAYMENT_LINK_HERE";
   </section>
 </BaseLayout>
 
-<script>
-  // Remplit les infos client depuis le formulaire de contact (sessionStorage)
-  try {
-    const raw = sessionStorage.getItem('webao-checkout');
-    const el = document.getElementById('checkout-customer');
-    if (raw && el) {
-      const d = JSON.parse(raw);
-      const lines = [];
-      if (d.business) lines.push(`<strong style="color:var(--ink)">${d.business}</strong>`);
-      if (d.name) lines.push(d.name);
-      if (d.email) lines.push(d.email);
-      if (d.city || d.trade) lines.push([d.trade, d.city].filter(Boolean).join(' · '));
-      el.innerHTML = lines.length ? lines.join('<br/>') : 'Informations non fournies.';
-    } else if (el) {
-      el.innerHTML = 'Aucune info — <a href="/fr/contact" style="color:var(--accent-text)">remplissez le formulaire</a> d\'abord.';
-    }
-  } catch (e) { /* noop */ }
+<script src="https://js.stripe.com/v3/"></script>
+<script define:vars={{ pk: STRIPE_PUBLISHABLE_KEY }}>
+  (function() {
+    const loadingEl = document.getElementById('checkout-loading');
 
-  // Avertit si le lien Stripe est encore un placeholder
-  document.querySelectorAll('[data-stripe-link]').forEach((a) => {
-    const href = a.getAttribute('href') || '';
-    if (href.includes('YOUR_PAYMENT_LINK_HERE')) {
-      a.addEventListener('click', (e) => {
-        e.preventDefault();
-        alert('Lien de paiement Stripe non configuré. Contactez-nous à hello@webao.ca pour finaliser votre abonnement.');
-      });
+    try {
+      const raw = sessionStorage.getItem('webao-checkout');
+      const custEl = document.getElementById('checkout-customer');
+      if (raw && custEl) {
+        const d = JSON.parse(raw);
+        const lines = [];
+        if (d.business) lines.push('<strong style="color:var(--ink)">' + d.business + '</strong>');
+        if (d.name) lines.push(d.name);
+        if (d.email) lines.push(d.email);
+        if (custEl && lines.length) custEl.innerHTML = lines.join('<br/>');
+      }
+    } catch (e) {}
+
+    function fail(msg) {
+      if (loadingEl) loadingEl.textContent = msg || 'Paiement indisponible. Contactez-nous à hello@webao.ca.';
     }
-  });
+
+    if (!window.Stripe) { fail('Stripe n\'a pas pu être chargé. Vérifiez votre connexion et actualisez.'); return; }
+    if (!pk || pk.includes('YOUR_PUBLISHABLE_KEY_HERE')) {
+      fail('Paiement non configuré. Contactez-nous à hello@webao.ca pour finaliser votre abonnement.');
+      return;
+    }
+
+    let customer = {};
+    try {
+      const raw = sessionStorage.getItem('webao-checkout');
+      if (raw) customer = JSON.parse(raw);
+    } catch (e) {}
+
+    fetch('/api/checkout/session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: customer.email || '', name: customer.name || '', business: customer.business || '', locale: 'fr' }),
+    })
+      .then((r) => r.json())
+      .then(async (data) => {
+        if (!data.ok || !data.clientSecret) {
+          fail(data.error || 'Paiement indisponible. Réessayez ou contactez-nous.');
+          return;
+        }
+        const stripe = window.Stripe(pk);
+        const checkout = await stripe.initEmbeddedCheckout({ clientSecret: data.clientSecret });
+        checkout.mount('#stripe-checkout');
+      })
+      .catch(() => fail());
+  })();
 </script>
 
 <style>
@@ -113,7 +122,7 @@ const STRIPE_PAYMENT_URL = "https://buy.stripe.com/YOUR_PAYMENT_LINK_HERE";
     grid-template-columns: 1fr;
   }
   @media (min-width: 760px) {
-    .checkout-grid { grid-template-columns: 1fr 1.2fr; }
+    .checkout-grid { grid-template-columns: 1fr 1.4fr; }
   }
   .checkout-card {
     border: 1px solid var(--line);
@@ -127,5 +136,10 @@ const STRIPE_PAYMENT_URL = "https://buy.stripe.com/YOUR_PAYMENT_LINK_HERE";
   }
   .checkout-card ul li {
     color: var(--ink);
+  }
+  #stripe-checkout {
+    min-height: 320px;
+    border-radius: 12px;
+    overflow: hidden;
   }
 </style>
