@@ -5,9 +5,9 @@ const locale = "en" as const;
 const title = "Checkout · WEBAO";
 const description = "Complete your WEBAO subscription: $149 CAD/month, no setup fee, cancel anytime.";
 
-// TODO: Replace with your Stripe Payment Link URL (create in Stripe Dashboard > Payment Links)
-// For the $149 CAD/month recurring subscription
-const STRIPE_PAYMENT_URL = "https://buy.stripe.com/YOUR_PAYMENT_LINK_HERE";
+// Publishable key is public; replace with your Stripe publishable key (pk_live_...).
+// Get it from Stripe Dashboard > Developers > API keys.
+const STRIPE_PUBLISHABLE_KEY = "pk_live_YOUR_PUBLISHABLE_KEY_HERE";
 ---
 
 <BaseLayout title={title} description={description} locale={locale}>
@@ -16,7 +16,7 @@ const STRIPE_PAYMENT_URL = "https://buy.stripe.com/YOUR_PAYMENT_LINK_HERE";
       <div class="eyebrow">Checkout</div>
       <h1 class="display" style="font-size: clamp(2rem, 5vw, 3.2rem); line-height:.92; margin-top:12px;">Almost there</h1>
       <p class="prose" style="margin-top:12px; max-width: 52ch;">
-        Review your details below, then complete payment securely with Stripe.
+        Complete payment below to start your $149/month subscription.
         Your site build starts as soon as payment confirms.
       </p>
 
@@ -38,32 +38,19 @@ const STRIPE_PAYMENT_URL = "https://buy.stripe.com/YOUR_PAYMENT_LINK_HERE";
             No setup fee · Cancel anytime<br/>
             <a href="/refunds" style="color: var(--accent-text);">Refund policy</a>
           </div>
+          <div id="checkout-customer" class="mono" style="margin-top:14px; font-size:12px; line-height:1.7; color: var(--muted);"></div>
         </div>
 
-        <!-- Customer + payment -->
+        <!-- Embedded Stripe checkout -->
         <div class="checkout-card checkout-card--pay">
-          <div class="mono" style="font-size:10px; letter-spacing:.14em; opacity:.5;">YOUR DETAILS</div>
-          <div id="checkout-customer" class="mono" style="margin-top:12px; font-size:12.5px; line-height:1.7; color: var(--muted);">
-            <!-- Filled by JS from sessionStorage -->
-          </div>
-
-          <div style="margin-top:24px; padding-top:20px; border-top:1px solid var(--line);">
-            <div class="mono" style="font-size:10px; letter-spacing:.14em; opacity:.5;">PAYMENT</div>
-            <p class="prose" style="font-size:13px; margin-top:10px; color: var(--muted);">
-              Secure payment powered by Stripe. You'll be redirected to complete
-              your $149/month subscription.
-            </p>
-            <a
-              href={STRIPE_PAYMENT_URL}
-              class="btn btn--primary"
-              style="width:100%; justify-content:center; margin-top:14px; font-size:15px; padding:14px 20px;"
-              data-stripe-link
-            >
-              Pay $149/month →
-            </a>
-            <div class="mono" style="margin-top:10px; font-size:10.5px; text-align:center; color: var(--muted);">
-              🔒 Encrypted & secure · Powered by Stripe
+          <div class="mono" style="font-size:10px; letter-spacing:.14em; opacity:.5; margin-bottom:12px;">SECURE PAYMENT</div>
+          <div id="stripe-checkout">
+            <div class="mono" style="padding:40px 20px; text-align:center; color: var(--muted); font-size:12.5px;" id="checkout-loading">
+              Loading secure payment form…
             </div>
+          </div>
+          <div class="mono" style="margin-top:12px; font-size:10.5px; text-align:center; color: var(--muted);">
+            🔒 Encrypted & secure · Powered by Stripe
           </div>
         </div>
       </div>
@@ -75,34 +62,59 @@ const STRIPE_PAYMENT_URL = "https://buy.stripe.com/YOUR_PAYMENT_LINK_HERE";
   </section>
 </BaseLayout>
 
-<script>
-  // Fill customer details from the contact form (sessionStorage)
-  try {
-    const raw = sessionStorage.getItem('webao-checkout');
-    const el = document.getElementById('checkout-customer');
-    if (raw && el) {
-      const d = JSON.parse(raw);
-      const lines = [];
-      if (d.business) lines.push(`<strong style="color:var(--ink)">${d.business}</strong>`);
-      if (d.name) lines.push(d.name);
-      if (d.email) lines.push(d.email);
-      if (d.city || d.trade) lines.push([d.trade, d.city].filter(Boolean).join(' · '));
-      el.innerHTML = lines.length ? lines.join('<br/>') : 'Details not provided.';
-    } else if (el) {
-      el.innerHTML = 'No details yet — <a href="/contact" style="color:var(--accent-text)">fill out the form</a> first.';
-    }
-  } catch (e) { /* noop */ }
+<script src="https://js.stripe.com/v3/"></script>
+<script define:vars={{ pk: STRIPE_PUBLISHABLE_KEY }}>
+  (function() {
+    const mountEl = document.getElementById('stripe-checkout');
+    const loadingEl = document.getElementById('checkout-loading');
 
-  // Warn if the Stripe link is still a placeholder
-  document.querySelectorAll('[data-stripe-link]').forEach((a) => {
-    const href = a.getAttribute('href') || '';
-    if (href.includes('YOUR_PAYMENT_LINK_HERE')) {
-      a.addEventListener('click', (e) => {
-        e.preventDefault();
-        alert('Stripe payment link not configured yet. Please contact us at hello@webao.ca to complete your subscription.');
-      });
+    // Show customer details from the contact form
+    try {
+      const raw = sessionStorage.getItem('webao-checkout');
+      const custEl = document.getElementById('checkout-customer');
+      if (raw && custEl) {
+        const d = JSON.parse(raw);
+        const lines = [];
+        if (d.business) lines.push('<strong style="color:var(--ink)">' + d.business + '</strong>');
+        if (d.name) lines.push(d.name);
+        if (d.email) lines.push(d.email);
+        if (custEl && lines.length) custEl.innerHTML = lines.join('<br/>');
+      }
+    } catch (e) {}
+
+    function fail(msg) {
+      if (loadingEl) loadingEl.textContent = msg || 'Payment could not be loaded. Please contact us at hello@webao.ca.';
     }
-  });
+
+    if (!window.Stripe) { fail('Stripe could not be loaded. Check your connection and refresh.'); return; }
+    if (!pk || pk.includes('YOUR_PUBLISHABLE_KEY_HERE')) {
+      fail('Payment is not configured yet. Please contact us at hello@webao.ca to complete your subscription.');
+      return;
+    }
+
+    let customer = {};
+    try {
+      const raw = sessionStorage.getItem('webao-checkout');
+      if (raw) customer = JSON.parse(raw);
+    } catch (e) {}
+
+    fetch('/api/checkout/session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: customer.email || '', name: customer.name || '', business: customer.business || '' }),
+    })
+      .then((r) => r.json())
+      .then(async (data) => {
+        if (!data.ok || !data.clientSecret) {
+          fail(data.error || 'Could not start checkout. Please try again or contact us.');
+          return;
+        }
+        const stripe = window.Stripe(pk);
+        const checkout = await stripe.initEmbeddedCheckout({ clientSecret: data.clientSecret });
+        checkout.mount('#stripe-checkout');
+      })
+      .catch(() => fail());
+  })();
 </script>
 
 <style>
@@ -112,7 +124,7 @@ const STRIPE_PAYMENT_URL = "https://buy.stripe.com/YOUR_PAYMENT_LINK_HERE";
     grid-template-columns: 1fr;
   }
   @media (min-width: 760px) {
-    .checkout-grid { grid-template-columns: 1fr 1.2fr; }
+    .checkout-grid { grid-template-columns: 1fr 1.4fr; }
   }
   .checkout-card {
     border: 1px solid var(--line);
@@ -127,5 +139,10 @@ const STRIPE_PAYMENT_URL = "https://buy.stripe.com/YOUR_PAYMENT_LINK_HERE";
   .checkout-card ul li {
     color: var(--ink);
   }
-  /* Dark theme adjustments are automatic via CSS variables */
+  /* Stripe's embedded iframe inherits page background; keep the card readable */
+  #stripe-checkout {
+    min-height: 320px;
+    border-radius: 12px;
+    overflow: hidden;
+  }
 </style>
