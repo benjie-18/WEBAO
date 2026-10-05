@@ -447,21 +447,33 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
           document.addEventListener('keydown', onKeyDown);
         }
 
-        // Reveal on scroll, respects prefers-reduced-motion
+        // Reveal on scroll, respects prefers-reduced-motion.
+        // Gated on fonts.ready: revealing text before webfonts load causes
+        // layout shifts mid-animation (stutter), especially on slower connections.
         const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         const isCoarse = window.matchMedia('(pointer: coarse), (hover: none)').matches;
-        if (!prefersReduced && 'IntersectionObserver' in window) {
-          const io = new IntersectionObserver((entries) => {
-            for (const e of entries) {
-              if (e.isIntersecting) {
-                e.target.classList.add('is-visible');
-                io.unobserve(e.target);
+        const initReveals = () => {
+          if (!prefersReduced && 'IntersectionObserver' in window) {
+            const io = new IntersectionObserver((entries) => {
+              for (const e of entries) {
+                if (e.isIntersecting) {
+                  e.target.classList.add('is-visible');
+                  io.unobserve(e.target);
+                }
               }
-            }
-          }, { threshold: 0.05, rootMargin: '0px 0px 12% 0px' });
-          document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
+            }, { threshold: 0.05, rootMargin: '0px 0px 12% 0px' });
+            document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
+          } else {
+            document.querySelectorAll('[data-reveal]').forEach(el => el.classList.add('is-visible'));
+          }
+        };
+        if ('fonts' in document && (document as any).fonts.ready) {
+          let revealed = false;
+          const doReveal = () => { if (!revealed) { revealed = true; initReveals(); } };
+          (document as any).fonts.ready.then(doReveal);
+          window.setTimeout(doReveal, 1500);
         } else {
-          document.querySelectorAll('[data-reveal]').forEach(el => el.classList.add('is-visible'));
+          initReveals();
         }
 
         // Subtle header shadow + scroll progress + header bg opacity
