@@ -457,7 +457,7 @@ const fr = {
         "Collez un lien Google Drive / Photos, listez vos services, ajoutez des notes… (vous pouvez aussi nous écrire après)",
       consent: "J’aimerais que WEBAO me contacte au sujet d’un site web.",
       privacy: "Vos infos servent juste à vous répondre. Pas d’infolettre, pas de partage.",
-      submit: "Envoyer mes infos →",
+      submit: "Soumettre et payer →",
       submitNote: "Ça ouvre votre appli courriel avec le message prêt à envoyer. Vous préférez l’écrire vous-même ? Écrivez à",
       submitNoteEmail: "hello@webao.ca",
       lock: "Ce formulaire compose un courriel depuis votre propre appli. Rien n’est stocké sur nos serveurs et il n’y a aucun traqueur à l’envoi.",
