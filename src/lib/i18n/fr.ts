@@ -34,6 +34,8 @@ const fr = {
     pricing: "Tarifs",
     contact: "Contact",
     startSite: "Démarrer mon site →",
+    stickyCtaPrice: "149 $/mois",
+    stickyCta: "Démarrer →",
     openMenu: "Ouvrir le menu",
     homeAria: "Accueil WEBAO",
     skip: "Aller au contenu",
@@ -241,6 +243,26 @@ const fr = {
         {
           q: "C’est quoi « rapide » ?",
           a: "Assez rapide pour que personne n’attende. Les sites sont statiques (pas de CMS lourd ou de constructeur de pages), les images sont optimisées et tout est servi depuis un CDN mondial, donc les pages chargent vite même sur des téléphones plus vieux. On vérifie chaque page sur de vrais appareils avant le lancement, et on ne lance pas de chiffres de vitesse qu’on ne peut pas assumer.",
+        },
+        {
+          q: "En combien de temps mon site sera-t-il en ligne ?",
+          a: "La plupart des sites sont lancés en 2 à 3 semaines à partir du jour où vous nous envoyez vos photos, votre logo et vos infos de base — les sites simples d’une page peuvent aller plus vite. On vous donne un échéancier honnête avant que vous payiez quoi que ce soit, et si on prend du retard, vous serez les premiers au courant.",
+        },
+        {
+          q: "Qu’est-ce qui est vraiment inclus dans le 149 $/mois ?",
+          a: "Tout ce dont un site de petite entreprise a besoin : un site sur mesure de 3 à 5 pages, votre domaine, l’hébergement, le SSL, un design adapté au mobile, un formulaire de contact ou de devis, le référencement de base, les statistiques, la sécurité et la maintenance — plus des petites mises à jour de contenu quand vous en avez besoin. Pas de frais d’installation, pas de facturation à la pièce.",
+        },
+        {
+          q: "Est-ce que mon site va apparaître sur Google ?",
+          a: "Oui — c’est le but. Chaque site est livré avec les bases du référencement : titres et descriptions soignés, plan du site, temps de chargement rapides et pages adaptées au mobile. On configure aussi votre fiche d’établissement Google, qui est la façon dont la plupart des clients locaux trouvent les artisans. Personne ne peut promettre la 1re position, et méfiez-vous de ceux qui le font.",
+        },
+        {
+          q: "Est-ce que je peux mettre en pause ou changer des choses plus tard ?",
+          a: "Oui. C’est du mois par mois, donc vous pouvez mettre en pause ou annuler en tout temps. Besoin d’une page supplémentaire ou d’une nouvelle fonction plus tard ? On vous fait un devis clair avant de faire le travail — rien n’est ajouté à votre facture sans votre approbation.",
+        },
+        {
+          q: "Vous faites seulement des sites pour les métiers ?",
+          a: "Les métiers sont notre terrain de jeu — électriciens, plombiers, chauffage-climatisation, paysagistes — mais on crée des sites pour toute entreprise de services locale : restaurants, cliniques, garages, entretien ménager et plus. Si vous servez des clients en personne, on peut probablement vous aider. Demandez-nous.",
         },
       ],
     },
@@ -492,6 +514,14 @@ const fr = {
     filterLabel: "Filtrer par catégorie",
     styleLabel: "Style",
     allStyles: "Tous les styles",
+    tradeLabel: "Métier",
+    allTrades: "Tous les métiers",
+    trades: {
+      plumbing: "Plombiers",
+      electrical: "Électriciens",
+      roofing: "Couvreurs",
+      renovation: "Rénovation",
+    },
     families: {
       timeless: "Intemporel",
       elegant: "Élégant",
