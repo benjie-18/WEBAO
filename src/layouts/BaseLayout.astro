@@ -67,6 +67,7 @@ const navLinks = {
   pricing: localizedPaths[locale].pricing,
   contact: localizedPaths[locale].contact,
   home: localizedPaths[locale].home,
+  start: localizedPaths[locale].start,
   process: locale === "fr" ? "/fr#processus" : "/#process",
 };
 
@@ -301,7 +302,7 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
             <a href={navLinks.demos}>{t.nav.demos}</a>
             <a href={navLinks.pricing}>{t.nav.pricing}</a>
             <a href={navLinks.contact}>{t.nav.contact}</a>
-            <a href={navLinks.contact} class="cta" data-track="cta" data-track-label={t.nav.startSite}>{t.nav.startSite}</a>
+            <a href={navLinks.start} class="cta" data-track="cta" data-track-label={t.nav.startSite}>{t.nav.startSite}</a>
           </nav>
 
           <LanguageSwitcher locale={locale} currentPath={url.pathname} />
@@ -320,7 +321,7 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
       <a href={navLinks.pricing}>{t.nav.pricing} <span aria-hidden="true">→</span></a>
       <a href={navLinks.contact}>{t.nav.contact} <span aria-hidden="true">→</span></a>
       <a
-        href={navLinks.contact}
+        href={navLinks.start}
         data-track="cta"
         data-track-label={t.nav.startSite}
         style="background: var(--ink); color: var(--paper); border-radius: 12px; padding-inline: 16px; margin-top: 12px; border-bottom:0;"
