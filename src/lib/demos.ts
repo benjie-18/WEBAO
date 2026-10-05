@@ -21,10 +21,16 @@ export type DemoCategory =
   | "Design"
   | "Beauty";
 
+// Trade filter for the demo catalog: a finer-grained business trade than the
+// broad DemoCategory. Only set on demos that represent a specific trade;
+// the catalog derives its trade filter chips from demos that have one.
+export type DemoTrade = "plumbing" | "electrical" | "roofing" | "renovation";
+
 export type Demo = {
   id: string; // slug, used for future microsite routing e.g. /demos/nora
   name: string;
   category: DemoCategory;
+  trade?: DemoTrade;
   city: string;
   tone: string; // design direction
   palette: string;
@@ -120,6 +126,7 @@ export const demos: Demo[] = [
     palette: "Concrete / Safety Orange",
     accent: "#FF6B00",
     description: "Rénovation & finition, devis rapide.",
+    trade: "renovation",
     pages: ["Home", "Services", "Projects", "Process", "Contact"],
   },
   {
@@ -208,6 +215,7 @@ export const demos: Demo[] = [
     palette: "Oxide / Paper",
     accent: "#9A3412",
     description: "Couvreurs, membrane & tôle, travail garanti.",
+    trade: "roofing",
     pages: ["Home", "Services", "Guarantee", "Projects", "Contact"],
   },
   {
@@ -252,6 +260,7 @@ export const demos: Demo[] = [
     palette: "Cobalt / White",
     accent: "#0B5FFF",
     description: "Plombiers de père en fils. Dépannage rapide.",
+    trade: "plumbing",
     pages: ["Home", "Services", "Emergency", "Reviews", "Contact"],
   },
   {
@@ -362,6 +371,7 @@ export const demos: Demo[] = [
     palette: "Ink / Paper / Vermillion",
     accent: "#FF3B30",
     description: "Emergency residential + commercial, 24h dispatch.",
+    trade: "electrical",
     pages: ["Home", "Services", "About", "Service Area", "Contact"],
   },
   {
@@ -455,3 +465,7 @@ export function searchDemos(query: string, category: string = "All") {
     return matchCat && matchQ;
   });
 }
+
+// Trade filters for the catalog: only trades with at least one demo get a chip.
+// Enables trade-specific landing views like /demos?trade=plumbing.
+export const tradeFilters: DemoTrade[] = ["plumbing", "electrical", "roofing", "renovation"];

@@ -6,6 +6,17 @@ import { useTranslations } from "../../lib/i18n";
 
 const locale = "fr" as const;
 const t = useTranslations(locale);
+
+// FAQPage structured data for search snippets, built from the translated FAQ.
+const faqSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: t.home.faq.items.map((item) => ({
+    "@type": "Question",
+    name: item.q,
+    acceptedAnswer: { "@type": "Answer", text: item.a },
+  })),
+});
 ---
 
 <BaseLayout
@@ -14,6 +25,8 @@ const t = useTranslations(locale);
   locale={locale}
   pageKey="home"
 >
+  <script slot="head" type="application/ld+json" set:html={faqSchema} />
+
   <!-- Signature intro: cursor flies in, hits the barrier, bounces, invites the
        click, breaks through and hands the visitor to the primary CTA.
        Only runs on the landing page, once per session, and never blocks the
