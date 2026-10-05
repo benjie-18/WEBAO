@@ -31,6 +31,8 @@ const en = {
     pricing: "Pricing",
     contact: "Contact",
     startSite: "Start your site →",
+    stickyCtaPrice: "$149/mo",
+    stickyCta: "Start →",
     openMenu: "Open menu",
     homeAria: "WEBAO home",
     skip: "Skip to content",
@@ -483,6 +485,14 @@ const en = {
     filterLabel: "Filter by category",
     styleLabel: "Style",
     allStyles: "All styles",
+    tradeLabel: "Trade",
+    allTrades: "All trades",
+    trades: {
+      plumbing: "Plumbing",
+      electrical: "Electrical",
+      roofing: "Roofing",
+      renovation: "Renovation",
+    },
     families: {
       timeless: "Timeless",
       elegant: "Elegant",
