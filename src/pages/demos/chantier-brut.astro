@@ -1,0 +1,310 @@
+---
+import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+---
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>Chantier Brut — Entrepreneur général à Verdun | On bâtit dur.</title>
+  <meta name="description" content="Chantier Brut : entrepreneur général à Verdun, Montréal. Rénovation, sous-sol, salle de bain. Pas de vernis, juste du solide. (Site fictif de démonstration)" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600;700&family=Saira+Stencil+One&display=swap" rel="stylesheet" />
+  <style>
+    .cbr-root { --cbr-black:#141414; --cbr-ink:#1b1b1b; --cbr-yellow:#ffd400; --cbr-paper:#f2ede1; --cbr-ply:#bd8f52; --cbr-steel:#8f8f8f; }
+    .cbr-body { margin:0; background:var(--cbr-black); color:var(--cbr-paper); font-family:"Barlow",system-ui,sans-serif; line-height:1.55; -webkit-font-smoothing:antialiased; }
+    .cbr-wrap { max-width:1120px; margin:0 auto; padding:0 20px; }
+    .cbr-tape { height:26px; background:repeating-linear-gradient(-45deg,var(--cbr-yellow) 0 26px,var(--cbr-black) 26px 52px); border-top:3px solid var(--cbr-black); border-bottom:3px solid var(--cbr-black); }
+    .cbr-tape-thin { height:12px; background:repeating-linear-gradient(-45deg,var(--cbr-yellow) 0 14px,var(--cbr-black) 14px 28px); }
+    /* NAV */
+    .cbr-nav { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:16px 0; }
+    .cbr-brand { font-family:"Saira Stencil One",cursive; font-size:22px; letter-spacing:.04em; color:var(--cbr-paper); text-decoration:none; }
+    .cbr-brand span { color:var(--cbr-yellow); }
+    .cbr-links { display:flex; gap:22px; align-items:center; }
+    .cbr-links a { color:var(--cbr-paper); text-decoration:none; font-family:"Barlow Condensed",sans-serif; font-weight:600; font-size:17px; letter-spacing:.12em; text-transform:uppercase; }
+    .cbr-links a:hover { color:var(--cbr-yellow); }
+    .cbr-call { background:var(--cbr-yellow); color:var(--cbr-black); font-family:"Barlow Condensed",sans-serif; font-weight:700; font-size:17px; letter-spacing:.1em; text-transform:uppercase; text-decoration:none; padding:10px 18px; border:3px solid var(--cbr-black); box-shadow:4px 4px 0 var(--cbr-black); }
+    .cbr-call:hover { transform:translate(-1px,-1px); box-shadow:5px 5px 0 var(--cbr-black); }
+    /* HERO */
+    .cbr-hero { padding:56px 0 64px; position:relative; overflow:hidden; }
+    .cbr-kicker { display:inline-block; font-family:"Barlow Condensed",sans-serif; font-weight:600; font-size:15px; letter-spacing:.28em; text-transform:uppercase; color:var(--cbr-black); background:var(--cbr-yellow); padding:6px 14px; margin-bottom:22px; }
+    .cbr-h1 { font-family:"Saira Stencil One",cursive; font-size:clamp(2.6rem,8vw,5.6rem); line-height:1.02; margin:0 0 18px; text-transform:uppercase; }
+    .cbr-h1 em { font-style:normal; color:var(--cbr-yellow); }
+    .cbr-sub { font-size:19px; max-width:56ch; color:#d8d2c2; margin:0 0 30px; }
+    .cbr-cta-row { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:40px; }
+    .cbr-btn { font-family:"Barlow Condensed",sans-serif; font-weight:700; font-size:19px; letter-spacing:.1em; text-transform:uppercase; text-decoration:none; padding:14px 26px; border:3px solid var(--cbr-black); }
+    .cbr-btn-solid { background:var(--cbr-yellow); color:var(--cbr-black); box-shadow:5px 5px 0 rgba(0,0,0,.55); }
+    .cbr-btn-ghost { background:transparent; color:var(--cbr-paper); border-color:var(--cbr-paper); }
+    .cbr-btn-ghost:hover { border-color:var(--cbr-yellow); color:var(--cbr-yellow); }
+    .cbr-hero-media { position:relative; border:4px solid var(--cbr-ply); }
+    .cbr-hero-media img { display:block; width:100%; height:340px; object-fit:cover; filter:saturate(.85) contrast(1.05); }
+    .cbr-stamp { position:absolute; top:18px; right:18px; background:var(--cbr-yellow); color:var(--cbr-black); font-family:"Saira Stencil One",cursive; font-size:15px; padding:10px 14px; transform:rotate(6deg); border:3px solid var(--cbr-black); }
+    .cbr-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:0; margin-top:0; border:3px solid var(--cbr-ply); border-top:none; background:var(--cbr-ink); }
+    .cbr-stat { padding:18px 14px; text-align:center; border-left:1px solid #2c2c2c; }
+    .cbr-stat:first-child { border-left:none; }
+    .cbr-stat strong { display:block; font-family:"Barlow Condensed",sans-serif; font-weight:700; font-size:34px; color:var(--cbr-yellow); line-height:1; }
+    .cbr-stat span { font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--cbr-steel); }
+    /* SECTIONS */
+    .cbr-section { padding:72px 0; }
+    .cbr-section-paper { background:var(--cbr-paper); color:var(--cbr-black); }
+    .cbr-h2 { font-family:"Saira Stencil One",cursive; font-size:clamp(1.9rem,4.5vw,3rem); text-transform:uppercase; margin:0 0 8px; line-height:1.05; }
+    .cbr-h2 em { font-style:normal; color:var(--cbr-yellow); }
+    .cbr-section-paper .cbr-h2 em { color:#8a6a00; }
+    .cbr-lede { font-size:18px; max-width:62ch; margin:0 0 36px; color:#cfc8b6; }
+    .cbr-section-paper .cbr-lede { color:#4a4436; }
+    .cbr-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+    .cbr-card { background:var(--cbr-ink); border:2px solid #333; padding:26px 22px; position:relative; }
+    .cbr-card::before { content:""; position:absolute; top:0; left:0; right:0; height:8px; background:repeating-linear-gradient(-45deg,var(--cbr-yellow) 0 12px,var(--cbr-black) 12px 24px); }
+    .cbr-card h3 { font-family:"Barlow Condensed",sans-serif; font-weight:700; font-size:24px; letter-spacing:.06em; text-transform:uppercase; margin:14px 0 10px; color:var(--cbr-paper); }
+    .cbr-card p { margin:0; color:#b9b2a0; font-size:16px; }
+    .cbr-num { font-family:"Saira Stencil One",cursive; color:var(--cbr-yellow); font-size:15px; }
+    /* RULES */
+    .cbr-rules { list-style:none; margin:0; padding:0; display:grid; gap:0; border:3px solid var(--cbr-black); }
+    .cbr-rule { display:grid; grid-template-columns:110px 1fr; background:#fff; border-bottom:3px solid var(--cbr-black); }
+    .cbr-rule:last-child { border-bottom:none; }
+    .cbr-rule-no { font-family:"Saira Stencil One",cursive; font-size:30px; background:var(--cbr-black); color:var(--cbr-yellow); display:flex; align-items:center; justify-content:center; padding:20px 10px; }
+    .cbr-rule-body { padding:20px 24px; }
+    .cbr-rule-body h3 { font-family:"Barlow Condensed",sans-serif; font-weight:700; font-size:22px; letter-spacing:.05em; text-transform:uppercase; margin:0 0 6px; }
+    .cbr-rule-body p { margin:0; color:#4a4436; font-size:16px; }
+    /* BUILDS */
+    .cbr-builds { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+    .cbr-build { background:var(--cbr-ink); border:2px solid #333; }
+    .cbr-build img { display:block; width:100%; height:210px; object-fit:cover; filter:saturate(.8) contrast(1.05); }
+    .cbr-build-body { padding:20px; }
+    .cbr-tag { display:inline-block; font-family:"Barlow Condensed",sans-serif; font-weight:600; font-size:13px; letter-spacing:.2em; text-transform:uppercase; color:var(--cbr-black); background:var(--cbr-yellow); padding:4px 10px; margin-bottom:10px; }
+    .cbr-build-body h3 { font-family:"Barlow Condensed",sans-serif; font-weight:700; font-size:22px; letter-spacing:.05em; text-transform:uppercase; margin:0 0 8px; }
+    .cbr-build-body p { margin:0; color:#b9b2a0; font-size:15px; }
+    /* ABOUT */
+    .cbr-about-grid { display:grid; grid-template-columns:1fr 1fr; gap:36px; align-items:center; }
+    .cbr-about-grid img { width:100%; height:380px; object-fit:cover; border:4px solid var(--cbr-ply); filter:saturate(.8); }
+    .cbr-about-grid p { font-size:18px; color:#4a4436; }
+    .cbr-about-grid p strong { color:var(--cbr-black); }
+    .cbr-quote { border-left:8px solid var(--cbr-yellow); background:#fff; padding:18px 22px; font-size:19px; font-weight:600; margin:26px 0 0; }
+    /* CONTACT */
+    .cbr-contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:36px; }
+    .cbr-phone-big { font-family:"Saira Stencil One",cursive; font-size:clamp(1.8rem,4vw,2.8rem); color:var(--cbr-paper); text-decoration:none; display:inline-block; margin:8px 0 18px; }
+    .cbr-phone-big:hover { color:var(--cbr-yellow); }
+    .cbr-hours { color:#b9b2a0; font-size:16px; }
+    .cbr-hours strong { color:var(--cbr-paper); }
+    .cbr-form { background:var(--cbr-ink); border:2px solid #333; padding:28px; }
+    .cbr-field { margin-bottom:16px; }
+    .cbr-field label { display:block; font-family:"Barlow Condensed",sans-serif; font-weight:600; font-size:15px; letter-spacing:.16em; text-transform:uppercase; color:var(--cbr-steel); margin-bottom:6px; }
+    .cbr-field input, .cbr-field select, .cbr-field textarea { width:100%; box-sizing:border-box; background:#0f0f0f; border:2px solid #3a3a3a; color:var(--cbr-paper); font-family:"Barlow",sans-serif; font-size:16px; padding:12px; }
+    .cbr-field input:focus, .cbr-field select:focus, .cbr-field textarea:focus { outline:none; border-color:var(--cbr-yellow); }
+    .cbr-submit { width:100%; cursor:pointer; background:var(--cbr-yellow); color:var(--cbr-black); font-family:"Saira Stencil One",cursive; font-size:18px; padding:16px; border:3px solid var(--cbr-black); box-shadow:5px 5px 0 rgba(0,0,0,.55); }
+    .cbr-submit:hover { transform:translate(-1px,-1px); }
+    .cbr-fineprint { font-size:13px; color:var(--cbr-steel); margin-top:14px; }
+    /* PROCESS */
+    .cbr-steps { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; counter-reset:cbr-step; }
+    .cbr-step { background:var(--cbr-ink); border:2px solid #333; padding:26px 22px; position:relative; }
+    .cbr-step::before { counter-increment:cbr-step; content:"0" counter(cbr-step); font-family:"Saira Stencil One",cursive; font-size:44px; color:var(--cbr-yellow); display:block; margin-bottom:10px; }
+    .cbr-step h3 { font-family:"Barlow Condensed",sans-serif; font-weight:700; font-size:22px; letter-spacing:.06em; text-transform:uppercase; margin:0 0 8px; }
+    .cbr-step p { margin:0; color:#b9b2a0; font-size:16px; }
+    /* QUOTES */
+    .cbr-quotes { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+    .cbr-quote-card { background:var(--cbr-paper); color:var(--cbr-black); border:3px solid var(--cbr-black); padding:24px; box-shadow:6px 6px 0 var(--cbr-yellow); }
+    .cbr-quote-card p { font-size:18px; font-weight:500; margin:0 0 12px; }
+    .cbr-quote-card cite { font-style:normal; font-family:"Barlow Condensed",sans-serif; font-weight:600; letter-spacing:.14em; text-transform:uppercase; font-size:14px; color:#6b6250; }
+    .cbr-stars { color:#8a6a00; letter-spacing:.2em; font-size:14px; display:block; margin-bottom:10px; }
+    /* FOOTER */
+    .cbr-footer { border-top:3px solid var(--cbr-ply); padding:28px 0 40px; }
+    .cbr-footer-row { display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap; align-items:center; }
+    .cbr-footer p { margin:6px 0; color:var(--cbr-steel); font-size:14px; }
+    .cbr-footer .cbr-brand { font-size:18px; }
+    @media (max-width:900px) {
+      .cbr-grid, .cbr-builds { grid-template-columns:1fr 1fr; }
+      .cbr-steps, .cbr-quotes { grid-template-columns:1fr; }
+      .cbr-stats { grid-template-columns:1fr 1fr; }
+      .cbr-stat:nth-child(3) { border-left:none; }
+      .cbr-stat { border-top:1px solid #2c2c2c; }
+      .cbr-about-grid, .cbr-contact-grid { grid-template-columns:1fr; }
+      .cbr-links { display:none; }
+    }
+    @media (max-width:560px) {
+      .cbr-grid, .cbr-builds { grid-template-columns:1fr; }
+      .cbr-rule { grid-template-columns:74px 1fr; }
+      .cbr-hero-media img { height:240px; }
+      .cbr-cta-row .cbr-btn { width:100%; text-align:center; box-sizing:border-box; }
+    }
+  </style>
+</head>
+<body class="cbr-body cbr-root">
+  <div class="cbr-tape" aria-hidden="true"></div>
+
+  <header class="cbr-wrap">
+    <nav class="cbr-nav" aria-label="Navigation principale">
+      <a class="cbr-brand" href="#">CHANTIER<span>&nbsp;BRUT</span></a>
+      <div class="cbr-links">
+        <a href="#cbr-services">Services</a>
+        <a href="#cbr-regles">Règles</a>
+        <a href="#cbr-chantiers">Chantiers</a>
+        <a href="#cbr-contact">Contact</a>
+      </div>
+      <a class="cbr-call" href="tel:+15145550162">(514) 555-0162</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="cbr-hero cbr-wrap" aria-labelledby="cbr-titre">
+      <span class="cbr-kicker">Entrepreneur général — Verdun, QC</span>
+      <h1 class="cbr-h1" id="cbr-titre">On bâtit dur.<br />On parle <em>franc.</em></h1>
+      <p class="cbr-sub">Rénovation, sous-sol, salle de bain, agrandissement. Pas de vernis, pas de promesses en l'air : du solide, à l'heure, au prix dit. C'est ça, un chantier brut.</p>
+      <div class="cbr-cta-row">
+        <a class="cbr-btn cbr-btn-solid" href="tel:+15145550162">Appeler le chantier</a>
+        <a class="cbr-btn cbr-btn-ghost" href="#cbr-contact">Demander un devis</a>
+      </div>
+      <div class="cbr-hero-media">
+        <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1600&auto=format&fit=crop" alt="Grue et structure d'un chantier de construction" loading="eager" />
+        <span class="cbr-stamp" aria-hidden="true">RBQ — FICTIF</span>
+      </div>
+      <div class="cbr-stats" role="list" aria-label="Quelques chiffres">
+        <div class="cbr-stat" role="listitem"><strong>240+</strong><span>Chantiers livrés</span></div>
+        <div class="cbr-stat" role="listitem"><strong>14 ans</strong><span>Dans le métier</span></div>
+        <div class="cbr-stat" role="listitem"><strong>98 %</strong><span>Clients satisfaits</span></div>
+        <div class="cbr-stat" role="listitem"><strong>0</strong><span>Surprise sur facture</span></div>
+      </div>
+    </section>
+
+    <div class="cbr-tape-thin" aria-hidden="true"></div>
+
+    <section class="cbr-section cbr-wrap" id="cbr-services" aria-labelledby="cbr-services-t">
+      <h2 class="cbr-h2" id="cbr-services-t">Ce qu'on <em>fait</em></h2>
+      <p class="cbr-lede">Six spécialités, une seule manière de travailler : propre, carré, documenté. Si c'est pas dans notre palette, on vous le dit straight — on vous réfère à quelqu'un de bon.</p>
+      <div class="cbr-grid">
+        <article class="cbr-card"><span class="cbr-num">/ 01</span><h3>Rénovation complète</h3><p>Du plancher au plafond : démolition, structure, finition. Un seul responsable, zéro sous-traitant fantôme.</p></article>
+        <article class="cbr-card"><span class="cbr-num">/ 02</span><h3>Sous-sol fini</h3><p>Isolation, drainage, électricité : un sous-sol qui reste sec quand avril décide de tester vos fondations.</p></article>
+        <article class="cbr-card"><span class="cbr-num">/ 03</span><h3>Salle de bain</h3><p>Membrane, pente, ventilation. Une douche qui coule où ça doit couler — pas chez le voisin d'en bas.</p></article>
+        <article class="cbr-card"><span class="cbr-num">/ 04</span><h3>Cuisine</h3><p>Armoires, comptoir, plomberie déplacée sans drame. On protège le reste de la maison comme si c'était la nôtre.</p></article>
+        <article class="cbr-card"><span class="cbr-num">/ 05</span><h3>Agrandissement</h3><p>Fondation, charpente, raccordement. On agrandit votre maison sans que ça paraisse rapporté.</p></article>
+        <article class="cbr-card"><span class="cbr-num">/ 06</span><h3>Réparation &amp; urgences</h3><p>Dégât d'eau, plancher qui bounce, mur qui craque : on diagnostique, on répare, on vous explique pourquoi.</p></article>
+      </div>
+    </section>
+
+    <div class="cbr-tape" aria-hidden="true"></div>
+
+    <section class="cbr-section cbr-wrap" aria-labelledby="cbr-marche-t">
+      <h2 class="cbr-h2" id="cbr-marche-t">Comment ça <em>marche</em></h2>
+      <p class="cbr-lede">Trois étapes, pas de détour. Vous savez toujours où on est rendu — et ce que ça coûte.</p>
+      <div class="cbr-steps">
+        <div class="cbr-step"><h3>Visite &amp; devis écrit</h3><p>On se déplace, on mesure, on écoute. Devis détaillé ligne par ligne en dedans de 5 jours ouvrables.</p></div>
+        <div class="cbr-step"><h3>Chantier documenté</h3><p>Échéancier affiché sur place, photos chaque semaine, ménage quotidien. Vous visitez quand vous voulez.</p></div>
+        <div class="cbr-step"><h3>Livraison &amp; garantie</h3><p>Inspection finale ensemble, liste de déficiences réglée avant le dernier paiement. Garantie 5 ans, écrite.</p></div>
+      </div>
+    </section>
+
+    <div class="cbr-tape" aria-hidden="true"></div>
+
+    <section class="cbr-section cbr-section-paper" id="cbr-regles" aria-labelledby="cbr-regles-t">
+      <div class="cbr-wrap">
+        <h2 class="cbr-h2" id="cbr-regles-t">Règles du <em>chantier</em></h2>
+        <p class="cbr-lede">Affichées sur plywood à l'entrée de chaque job. Pas de petits caractères : ce qui est écrit ici, c'est ce qui arrive chez vous.</p>
+        <ol class="cbr-rules">
+          <li class="cbr-rule"><span class="cbr-rule-no" aria-hidden="true">01</span><div class="cbr-rule-body"><h3>On arrive à l'heure</h3><p>7 h 30 sur le perron, café en main. Si on est en retard, vous le savez avant — pas après.</p></div></li>
+          <li class="cbr-rule"><span class="cbr-rule-no" aria-hidden="true">02</span><div class="cbr-rule-body"><h3>Le prix dit est le prix payé</h3><p>Devis détaillé ligne par ligne. Un extra ? On l'écrit, on le signe, on le fait. Jamais l'inverse.</p></div></li>
+          <li class="cbr-rule"><span class="cbr-rule-no" aria-hidden="true">03</span><h3>Le chantier reste propre</h3><p>Aspirateur à la fin de chaque journée, bâches partout. Votre maison n'est pas un dépotoir.</p></div></li>
+          <li class="cbr-rule"><span class="cbr-rule-no" aria-hidden="true">04</span><h3>On montre, on explique</h3><p>Photos du progrès chaque semaine, visite quand vous voulez. Ce qui est caché dans les murs vous appartient quand même.</p></div></li>
+          <li class="cbr-rule"><span class="cbr-rule-no" aria-hidden="true">05</span><h3>Garantie écrite, 5 ans</h3><p>Main-d'œuvre garantie cinq ans, sur papier, signée. Si ça bouge, on revient. Point.</p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <div class="cbr-tape-thin" aria-hidden="true"></div>
+
+    <section class="cbr-section cbr-wrap" id="cbr-chantiers" aria-labelledby="cbr-chantiers-t">
+      <h2 class="cbr-h2" id="cbr-chantiers-t">Chantiers <em>récents</em></h2>
+      <p class="cbr-lede">Du vrai monde, des vrais adresses (fictives), des vrais délais tenus. Chaque projet : photos, budget tenu, durée réelle.</p>
+      <div class="cbr-builds">
+        <article class="cbr-build">
+          <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1200&auto=format&fit=crop" alt="Charpentiers assemblant une structure d'acier sur un chantier" loading="lazy" />
+          <div class="cbr-build-body"><span class="cbr-tag">Agrandissement</span><h3>Duplex — rue de l'Église</h3><p>Ajout de 400 pi² sur deux étages. Livré en 11 semaines, au budget écrit.</p></div>
+        </article>
+        <article class="cbr-build">
+          <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1200&auto=format&fit=crop" alt="Façade d'un bâtiment résidentiel rénové" loading="lazy" />
+          <div class="cbr-build-body"><span class="cbr-tag">Rénovation complète</span><h3>Triplex — Wellington</h3><p>Trois logements remis à neuf, électricité refaite au complet. Zéro surprise.</p></div>
+        </article>
+        <article class="cbr-build">
+          <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=1200&auto=format&fit=crop" alt="Travailleur vérifiant des plans sur un chantier" loading="lazy" />
+          <div class="cbr-build-body"><span class="cbr-tag">Sous-sol</span><h3>Bungalow — Crawford Park</h3><p>Sous-sol fini avec salle familiale et salle de bain. Sec depuis deux hivers.</p></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="cbr-section cbr-wrap" aria-labelledby="cbr-avis-t">
+      <h2 class="cbr-h2" id="cbr-avis-t">Le monde en <em>parle</em></h2>
+      <p class="cbr-lede">Des clients (fictifs) qui dormaient pas avant qu'on arrive — pis qui dorment bien depuis.</p>
+      <div class="cbr-quotes">
+        <div class="cbr-quote-card"><span class="cbr-stars" aria-label="5 étoiles sur 5">★★★★★</span><p>« Sous-sol inondé en mars, fini en juin. Ils ont tout expliqué, tout photographié. Ma blonde les invite encore à souper. »</p><cite>— Sylvie T., LaSalle (fictive)</cite></div>
+        <div class="cbr-quote-card"><span class="cbr-stars" aria-label="5 étoiles sur 5">★★★★★</span><p>« Le devis disait 42 000 $. La facture a dit 42 000 $. J'ai vérifié trois fois, je pensais qu'il y avait une erreur. »</p><cite>— Karim B., Verdun (fictif)</cite></div>
+      </div>
+    </section>
+
+    <div class="cbr-tape" aria-hidden="true"></div>
+
+    <section class="cbr-section cbr-section-paper" aria-labelledby="cbr-apropos-t">
+      <div class="cbr-wrap cbr-about-grid">
+        <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1200&auto=format&fit=crop" alt="Grue sur un chantier de construction au lever du jour" loading="lazy" />
+        <div>
+          <h2 class="cbr-h2" id="cbr-apropos-t">Pas de <em>vernis.</em></h2>
+          <p>Chantier Brut, c'est <strong>Marco et son équipe de huit</strong>, basés à Verdun. Pas de département marketing, pas de vendeur à commission : quand vous appelez, c'est nous qui répondez, et c'est nous qui venez cogner.</p>
+          <p>On fait de la rénovation comme on aimerait qu'on rénove chez nous : <strong>straight, solide, sans niaisage</strong>. Si votre projet nous tente pas, on vous le dit — et on vous envoie vers quelqu'un de compétent.</p>
+          <blockquote class="cbr-quote">« Ils ont refait notre cuisine en plein hiver, sans poussière dans le salon. Le devis au dollar près. » — Une cliente (fictive), Verdun</blockquote>
+        </div>
+      </div>
+    </section>
+
+    <div class="cbr-tape-thin" aria-hidden="true"></div>
+
+    <section class="cbr-section cbr-wrap" aria-labelledby="cbr-garantie-t">
+      <h2 class="cbr-h2" id="cbr-garantie-t">Garantie <em>plywood</em></h2>
+      <p class="cbr-lede">Écrite, signée, affichée sur le chantier. Pas de « on s'arrange » : du papier, des dates, des noms.</p>
+      <div class="cbr-steps">
+        <div class="cbr-step"><h3>5 ans main-d'œuvre</h3><p>Si ça bouge, ça craque ou ça coule à cause de nous, on revient le réparer. Gratis.</p></div>
+        <div class="cbr-step"><h3>Prix barré au devis</h3><p>Le montant signé ne bouge pas. Les extras se décident avec vous, par écrit, avant.</p></div>
+        <div class="cbr-step"><h3>Chantier propre ou remboursé</h3><p>Ménage quotidien promis. Une journée oubliée = 100 $ de rabais. C'est écrit.</p></div>
+      </div>
+    </section>
+
+    <div class="cbr-tape-thin" aria-hidden="true"></div>
+
+    <section class="cbr-section cbr-wrap" id="cbr-contact" aria-labelledby="cbr-contact-t">
+      <h2 class="cbr-h2" id="cbr-contact-t">Parlons de votre <em>projet</em></h2>
+      <p class="cbr-lede">Un appel vaut mille formulaires, mais le formulaire marche aussi. On rappelle en dedans de 24 h ouvrables — promis sur plywood.</p>
+      <div class="cbr-contact-grid">
+        <div>
+          <a class="cbr-phone-big" href="tel:+15145550162">(514) 555-0162</a>
+          <p class="cbr-hours"><strong>Heures de chantier :</strong> lun–ven 7 h 30 à 17 h.<br />Urgences (dégât d'eau, structure) : on décroche aussi la fin de semaine.<br /><strong>Zone :</strong> Verdun, LaSalle, NDG, Sud-Ouest de Montréal.<br />Écrivez-nous : <strong>allo@chantierbrut.example</strong> (fictif).</p>
+        </div>
+        <form class="cbr-form" action="#" method="post" aria-label="Formulaire de demande de devis (fictif)">
+          <div class="cbr-field"><label for="cbr-nom">Votre nom</label><input id="cbr-nom" name="nom" type="text" required autocomplete="name" /></div>
+          <div class="cbr-field"><label for="cbr-tel">Téléphone</label><input id="cbr-tel" name="tel" type="tel" required autocomplete="tel" /></div>
+          <div class="cbr-field"><label for="cbr-type">Type de projet</label>
+            <select id="cbr-type" name="type">
+              <option>Rénovation complète</option><option>Sous-sol</option><option>Salle de bain</option>
+              <option>Cuisine</option><option>Agrandissement</option><option>Réparation / urgence</option>
+            </select>
+          </div>
+          <div class="cbr-field"><label for="cbr-msg">Décrivez le projet</label><textarea id="cbr-msg" name="message" rows="4" placeholder="Ex. : refaire la salle de bain du 2e, ~60 pi²…"></textarea></div>
+          <button class="cbr-submit" type="submit">Envoyer la demande</button>
+          <p class="cbr-fineprint">Formulaire de démonstration — aucune donnée n'est envoyée. Site fictif, entreprise fictive.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <div class="cbr-tape" aria-hidden="true"></div>
+
+  <footer class="cbr-footer">
+    <div class="cbr-wrap cbr-footer-row">
+      <div>
+        <a class="cbr-brand" href="#">CHANTIER<span>&nbsp;BRUT</span></a>
+        <p>Entrepreneur général — Verdun, Montréal QC. Site fictif de démonstration.</p>
+        <p><a href="#cbr-services" style="color:var(--cbr-steel)">Services</a> · <a href="#cbr-regles" style="color:var(--cbr-steel)">Règles du chantier</a> · <a href="#cbr-chantiers" style="color:var(--cbr-steel)">Chantiers</a> · <a href="#cbr-contact" style="color:var(--cbr-steel)">Contact</a></p>
+      </div>
+      <p>(514) 555-0162 · Verdun, QC<br />© 2026 Chantier Brut (fictif)<br />Site de démonstration — aucun service réel offert.</p>
+    </div>
+  </footer>
+  <EscapeHatch />
+</body>
+</html>
