@@ -24,7 +24,7 @@ export type DemoCategory =
 // Trade filter for the demo catalog: a finer-grained business trade than the
 // broad DemoCategory. Only set on demos that represent a specific trade;
 // the catalog derives its trade filter chips from demos that have one.
-export type DemoTrade = "plumbing" | "electrical" | "roofing" | "renovation";
+export type DemoTrade = "plumbing" | "electrical" | "hvac" | "roofing" | "renovation";
 
 export type Demo = {
   id: string; // slug, used for future microsite routing e.g. /demos/nora
@@ -385,6 +385,138 @@ export const demos: Demo[] = [
     description: "Tattoo studio. Walk-ins, flash, bold lines.",
     pages: ["Home", "Artists", "Flash", "Pricing", "Booking"],
   },
+  {
+    id: "debit",
+    name: "Débit Plomberie",
+    category: "Trades",
+    trade: "plumbing",
+    city: "Brossard",
+    tone: "Technical blueprint",
+    palette: "Blueprint blue / white",
+    accent: "#2E6BFF",
+    description: "Engineering-grade plumbing. Spec-sheet pricing, test-log proof.",
+    pages: ["Home", "Spec Sheet", "Drainage Atlas", "Test Logs", "Contact"],
+  },
+  {
+    id: "bec-fin",
+    name: "Bec Fin Plomberie",
+    category: "Trades",
+    trade: "plumbing",
+    city: "Sherbrooke",
+    tone: "Mid-century pastel",
+    palette: "Mint / blush / cream",
+    accent: "#E2547A",
+    description: "Bathroom-first plumber. Pastel showroom, diner-style service menu.",
+    pages: ["Home", "Bathroom Menu", "Gallery", "Promise", "Contact"],
+  },
+  {
+    id: "voltige",
+    name: "Voltige Électrique",
+    category: "Trades",
+    trade: "electrical",
+    city: "Trois-Rivières",
+    tone: "Industrial high-voltage",
+    palette: "Charcoal / hazard yellow",
+    accent: "#FFD400",
+    description: "High-voltage electricians. Panels, amperage, zero drama.",
+    pages: ["Home", "Services", "Certifications", "Stats", "Contact"],
+  },
+  {
+    id: "lueur",
+    name: "Lueur Électrique",
+    category: "Trades",
+    trade: "electrical",
+    city: "Gatineau",
+    tone: "Warm Scandinavian",
+    palette: "Oat / amber glow",
+    accent: "#D99A2B",
+    description: "Lighting-design electricians. Warm Scandinavian glow, done right.",
+    pages: ["Home", "Lighting Moods", "Services", "About", "Contact"],
+  },
+  {
+    id: "21-degres",
+    name: "21 Degrés",
+    category: "Trades",
+    trade: "hvac",
+    city: "Terrebonne",
+    tone: "Thermostat control panel",
+    palette: "Graphite / ice blue / ember",
+    accent: "#4DA3FF",
+    description: "Heating & cooling, dialed in. The thermostat is the website.",
+    pages: ["Home", "Modes", "Systems", "Energy", "Contact"],
+  },
+  {
+    id: "extreme-climat",
+    name: "Extrême Climat",
+    category: "Trades",
+    trade: "hvac",
+    city: "Lévis",
+    tone: "Cinematic duality",
+    palette: "Ice white / flame orange",
+    accent: "#FF7A3C",
+    description: "We own both extremes. Cinematic comfort, ice to flame.",
+    pages: ["Home", "Heat", "Cold", "Proof", "Contact"],
+  },
+  {
+    id: "confort-76",
+    name: "Confort 76",
+    category: "Trades",
+    trade: "hvac",
+    city: "Drummondville",
+    tone: "1970s appliance ad",
+    palette: "Harvest gold / avocado",
+    accent: "#C98A1B",
+    description: "Old-school comfort pros. 1970s service with modern systems.",
+    pages: ["Home", "Systems", "Coupon", "Story", "Contact"],
+  },
+  {
+    id: "zenith",
+    name: "Toitures Zénith",
+    category: "Trades",
+    trade: "roofing",
+    city: "Blainville",
+    tone: "Aerial cartography",
+    palette: "Slate / copper",
+    accent: "#B87333",
+    description: "Roofing from above. Aerial surveys, copper-flashed precision.",
+    pages: ["Home", "Survey", "Materials", "Projects", "Contact"],
+  },
+  {
+    id: "toitures-tempete",
+    name: "Toitures Tempête",
+    category: "Trades",
+    trade: "roofing",
+    city: "Repentigny",
+    tone: "Storm-chaser dramatic",
+    palette: "Storm black / violet",
+    accent: "#8B5CF6",
+    description: "Storm-response roofers. When the sky falls, we're already there.",
+    pages: ["Home", "Response", "Services", "Timeline", "Contact"],
+  },
+  {
+    id: "chantier-brut",
+    name: "Chantier Brut",
+    category: "Trades",
+    trade: "renovation",
+    city: "Verdun",
+    tone: "Raw construction site",
+    palette: "Plywood / safety yellow",
+    accent: "#FFD400",
+    description: "General contractors, no varnish. Raw builds, straight talk.",
+    pages: ["Home", "Services", "Site Rules", "Builds", "Contact"],
+  },
+  {
+    id: "maison-dore",
+    name: "Maison Doré",
+    category: "Trades",
+    trade: "renovation",
+    city: "Westmount",
+    tone: "Art-deco glamour",
+    palette: "Black / gold / emerald",
+    accent: "#C9A227",
+    description: "Luxury renovations. Art-deco glamour, Gatsby-grade finishes.",
+    pages: ["Home", "Portfolio", "Craft", "Process", "Contact"],
+  },
 ];
 
 export const demoCategories = [
@@ -450,6 +582,18 @@ export const demoFamily: Record<string, StyleFamily> = {
   "sahara-sage": "soft",
   esquisse: "soft",
   tactile: "soft",
+  lueur: "soft",
+  // New trade demos
+  debit: "timeless",
+  "bec-fin": "playful",
+  voltige: "bold",
+  "21-degres": "bold",
+  "extreme-climat": "bold",
+  "confort-76": "playful",
+  zenith: "elegant",
+  "toitures-tempete": "bold",
+  "chantier-brut": "bold",
+  "maison-dore": "elegant",
 };
 
 export function getDemoFamily(id: string): StyleFamily {
@@ -468,4 +612,4 @@ export function searchDemos(query: string, category: string = "All") {
 
 // Trade filters for the catalog: only trades with at least one demo get a chip.
 // Enables trade-specific landing views like /demos?trade=plumbing.
-export const tradeFilters: DemoTrade[] = ["plumbing", "electrical", "roofing", "renovation"];
+export const tradeFilters: DemoTrade[] = ["plumbing", "electrical", "hvac", "roofing", "renovation"];
