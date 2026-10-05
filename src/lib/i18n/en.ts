@@ -618,6 +618,10 @@ const en = {
       deleteError: "Couldn’t delete the submission.",
       loadMore: "Load more",
       formName: "Form",
+      filterLabel: "Filter by form type",
+      filterAll: "All",
+      filterContact: "Contact",
+      filterPricing: "Pricing",
     },
     config: {
       title: "Settings",

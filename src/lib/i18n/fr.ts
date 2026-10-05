@@ -628,6 +628,10 @@ const fr = {
       deleteError: "Impossible de supprimer la soumission.",
       loadMore: "Charger plus",
       formName: "Formulaire",
+      filterLabel: "Filtrer par type",
+      filterAll: "Tous",
+      filterContact: "Contact",
+      filterPricing: "Tarifs",
     },
     config: {
       title: "Réglages",
