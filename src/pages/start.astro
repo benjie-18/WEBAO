@@ -32,9 +32,7 @@ const STRIPE_PUBLISHABLE_KEY = "pk_live_51UMzZYE57vVzxI418WAmnlUuIXMLMWtNxjYa6We
           <input name="business" placeholder="Your business name" autocomplete="organization" required />
           <span class="field-error mono" data-error="business" hidden></span>
         </label>
-        <button type="submit" class="btn btn--primary" id="start-continue" style="width:100%; justify-content:center; margin-top:4px;">
-          Continue to payment →
-        </button>
+        <p class="mono" style="font-size:11px; color: var(--muted); margin: 4px 0 0;">The payment form appears below once your details are valid.</p>
       </form>
 
       <div class="checkout-card checkout-card--pay" style="margin-top: 20px;">
@@ -61,8 +59,9 @@ const STRIPE_PUBLISHABLE_KEY = "pk_live_51UMzZYE57vVzxI418WAmnlUuIXMLMWtNxjYa6We
   (function() {
     const form = document.getElementById('start-form');
     const loadingEl = document.getElementById('checkout-loading');
-    const continueBtn = document.getElementById('start-continue');
     let checkoutMounted = false;
+    let mountInFlight = false;
+    const touched = { name: false, email: false, business: false };
 
     const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -89,32 +88,35 @@ const STRIPE_PUBLISHABLE_KEY = "pk_live_51UMzZYE57vVzxI418WAmnlUuIXMLMWtNxjYa6We
       };
     }
 
-    function validate(d) {
-      let ok = true;
-      if (!d.name) { setFieldError('name', 'Please enter your name.'); ok = false; }
-      else setFieldError('name', null);
-      if (!d.email) { setFieldError('email', 'Please enter your email.'); ok = false; }
-      else if (!EMAIL_RE.test(d.email)) { setFieldError('email', 'Enter a valid email like name@domain.com.'); ok = false; }
-      else setFieldError('email', null);
-      if (!d.business) { setFieldError('business', 'Please enter your business name.'); ok = false; }
-      else setFieldError('business', null);
-      return ok;
+    // Validate a single field; returns true if valid. Only shows errors for touched fields.
+    function validateField(field, value) {
+      let msg = null;
+      if (field === 'name' && !value) msg = 'Please enter your name.';
+      else if (field === 'business' && !value) msg = 'Please enter your business name.';
+      else if (field === 'email') {
+        if (!value) msg = 'Please enter your email.';
+        else if (!EMAIL_RE.test(value)) msg = 'Enter a valid email like name@domain.com.';
+      }
+      if (touched[field]) setFieldError(field, msg);
+      return !msg;
+    }
+
+    function allValid(d) {
+      return d.name && d.business && EMAIL_RE.test(d.email);
     }
 
     async function mountCheckout() {
+      if (checkoutMounted || mountInFlight) return;
       const d = getFormData();
-      if (!validate(d)) return;
+      if (!allValid(d)) return;
+      mountInFlight = true;
 
       if (!window.Stripe) {
         if (loadingEl) loadingEl.textContent = 'Stripe could not be loaded. Check your connection and refresh.';
+        mountInFlight = false;
         return;
       }
-      if (checkoutMounted) return;
 
-      if (continueBtn) {
-        continueBtn.disabled = true;
-        continueBtn.textContent = 'Loading payment…';
-      }
       if (loadingEl) loadingEl.textContent = 'Loading secure payment form…';
 
       try {
@@ -135,33 +137,40 @@ const STRIPE_PUBLISHABLE_KEY = "pk_live_51UMzZYE57vVzxI418WAmnlUuIXMLMWtNxjYa6We
         });
         const data = await res.json();
         if (!data.ok || !data.clientSecret) {
-          if (loadingEl) loadingEl.textContent = data.error || 'Could not start checkout. Please try again.';
-          if (continueBtn) { continueBtn.disabled = false; continueBtn.textContent = 'Continue to payment →'; }
+          if (loadingEl) loadingEl.textContent = data.error || 'Could not start checkout. Please check your details and try again.';
+          mountInFlight = false;
           return;
         }
         const stripe = window.Stripe(pk);
         const checkout = await stripe.initEmbeddedCheckout({ clientSecret: data.clientSecret });
         checkout.mount('#stripe-checkout');
         checkoutMounted = true;
-        // Hide the form, show payment
-        form.style.display = 'none';
-        document.getElementById('stripe-checkout').scrollIntoView({ behavior: 'smooth', block: 'center' });
       } catch (e) {
-        if (loadingEl) loadingEl.textContent = 'Payment could not be loaded. Please try again.';
-        if (continueBtn) { continueBtn.disabled = false; continueBtn.textContent = 'Continue to payment →'; }
+        if (loadingEl) loadingEl.textContent = 'Payment could not be loaded. Please check your connection and re-enter your details.';
+        mountInFlight = false;
       }
     }
 
     if (form) {
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        mountCheckout();
-      });
-      // Clear field errors as the user types
+      // Live validation on every keystroke; auto-mount payment when all valid.
       form.addEventListener('input', (e) => {
         const input = e.target;
-        if (input && input.name) setFieldError(input.name, null);
+        if (!input || !input.name || !(input.name in touched)) return;
+        touched[input.name] = true;
+        const d = getFormData();
+        validateField(input.name, d[input.name]);
+        if (allValid(d)) mountCheckout();
       });
+      // Also validate on blur so tabbing through shows errors.
+      form.addEventListener('focusout', (e) => {
+        const input = e.target;
+        if (!input || !input.name || !(input.name in touched)) return;
+        touched[input.name] = true;
+        const d = getFormData();
+        validateField(input.name, d[input.name]);
+      });
+      // Prevent accidental submit (no button; Enter key)
+      form.addEventListener('submit', (e) => e.preventDefault());
     }
   })();
 </script>
