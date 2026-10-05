@@ -518,6 +518,13 @@ const fr = {
     filterLabel: "Filtrer par catégorie",
     styleLabel: "Style",
     allStyles: "Tous les styles",
+    families: {
+      timeless: "Intemporel",
+      elegant: "Élégant",
+      bold: "Audacieux",
+      playful: "Ludique",
+      soft: "Doux",
+    },
     empty: "Aucune démo ne correspond. Essayez « métiers » ou « restaurant », ou effacez les filtres.",
     clear: "Effacer la recherche",
     details: "Détails →",
