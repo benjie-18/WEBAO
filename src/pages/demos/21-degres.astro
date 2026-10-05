@@ -1,0 +1,422 @@
+---
+import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+
+// Demo microsite: 21 Degrés · fictional HVAC, Terrebonne QC.
+// The site IS a thermostat: dark control-panel UI, giant SVG temperature dial
+// with needle, blue-to-red gradient accents, monospace readouts, mode pills.
+// Sections are control modules. An instrument panel, not a brochure.
+const IMG = {
+  tech: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1200&auto=format&fit=crop",
+  plant: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=1200&auto=format&fit=crop",
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>21 Degrés · HVAC Terrebonne · (450) 555-0176 · Setpoint 21.5°</title>
+  <meta name="description" content="21 Degrés: precision HVAC in Terrebonne. Cold-climate heat pumps, furnaces, AC and smart thermostats — installed and calibrated to hold your home at exactly 21 degrees." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body class="dg">
+
+  <header class="dg-bar">
+    <p class="dg-brand">21 DEGRÉS <span>// CLIMATE SYSTEMS · TERREBONNE QC</span></p>
+    <div class="dg-bar-right">
+      <p class="dg-status"><span class="dg-led" aria-hidden="true"></span>SYS · ONLINE</p>
+      <a class="dg-bar-call" href="tel:+14505550176">(450) 555-0176</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- MODULE 01+02: the thermostat itself -->
+    <section class="dg-panel" aria-label="Thermostat control panel">
+      <div class="dg-dialmod">
+        <p class="dg-mod-label"><span class="dg-led dg-led-blue" aria-hidden="true"></span>MODULE 01 · SETPOINT CONTROL</p>
+        <div class="dg-dialwrap">
+          <svg class="dg-dial" viewBox="0 0 320 320" role="img" aria-label="Temperature dial, setpoint 21.5 degrees">
+            <defs>
+              <linearGradient id="dg-grad" x1="0" y1="0.5" x2="1" y2="0.5">
+                <stop offset="0" stop-color="#4DA3FF" />
+                <stop offset="0.5" stop-color="#9B8CFF" />
+                <stop offset="1" stop-color="#FF5A4D" />
+              </linearGradient>
+            </defs>
+            <circle cx="160" cy="160" r="138" class="dg-track" />
+            <circle cx="160" cy="160" r="138" class="dg-arc" id="dg-arc" transform="rotate(150 160 160)" />
+            <g id="dg-ticks" aria-hidden="true"></g>
+            <line id="dg-needle" x1="160" y1="160" x2="160" y2="52" class="dg-needle" transform="rotate(33 160 160)" />
+            <circle cx="160" cy="160" r="11" class="dg-hub" />
+          </svg>
+          <div class="dg-readout">
+            <p class="dg-temp"><span id="dg-setpoint">21.5</span>°</p>
+            <p class="dg-sub">SETPOINT</p>
+          </div>
+        </div>
+        <div class="dg-stepper">
+          <button type="button" id="dg-minus" aria-label="Lower setpoint">−</button>
+          <button type="button" id="dg-plus" aria-label="Raise setpoint">+</button>
+        </div>
+        <div class="dg-modes" role="group" aria-label="System mode">
+          <button type="button" class="dg-mode dg-is-on" data-mode="HEAT">HEAT</button>
+          <button type="button" class="dg-mode" data-mode="COOL">COOL</button>
+          <button type="button" class="dg-mode" data-mode="VENT">VENT</button>
+          <button type="button" class="dg-mode" data-mode="AUTO">AUTO</button>
+        </div>
+        <p class="dg-modeline">MODE · <span id="dg-mode-label">HEAT</span> &nbsp;·&nbsp; RANGE 16.0–30.0°</p>
+      </div>
+      <div class="dg-stack">
+        <p class="dg-mod-label"><span class="dg-led dg-led-green" aria-hidden="true"></span>MODULE 02 · LIVE TELEMETRY</p>
+        <h1 class="dg-h1">Your home, held at <span>exactly 21°.</span></h1>
+        <p class="dg-lede">21 Degrés installs and calibrates heating, cooling, and ventilation in Terrebonne and the North Shore — then proves it with numbers, not adjectives. Try the dial. That's the whole pitch.</p>
+        <ul class="dg-meters">
+          <li><span>INDOOR</span><strong><span id="dg-indoor">21.4</span>°</strong></li>
+          <li><span>OUTDOOR</span><strong>−8.0°</strong></li>
+          <li><span>HUMIDITY</span><strong>42%</strong></li>
+          <li><span>FILTER</span><strong>87%</strong></li>
+        </ul>
+        <div class="dg-cta">
+          <a class="dg-btn" href="#dispatch">Book a calibration</a>
+          <a class="dg-btn dg-btn-ghost" href="#modules">Browse modules</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- TICKER: spec strip -->
+    <div class="dg-ticker" aria-hidden="true">
+      <p>±0.5° HOLD ACCURACY <span>///</span> COLD-CLIMATE HEAT PUMPS TO −30° <span>///</span> 24/7 MONITORING <span>///</span> 2,300+ SYSTEMS COMMISSIONED <span>///</span> RBQ LICENSED <span>///</span>&nbsp;</p>
+      <p>±0.5° HOLD ACCURACY <span>///</span> COLD-CLIMATE HEAT PUMPS TO −30° <span>///</span> 24/7 MONITORING <span>///</span> 2,300+ SYSTEMS COMMISSIONED <span>///</span> RBQ LICENSED <span>///</span>&nbsp;</p>
+    </div>
+
+    <!-- MODULE 03: services as control modules -->
+    <section class="dg-modules" id="modules" aria-label="Service modules">
+      <p class="dg-mod-label"><span class="dg-led dg-led-amber" aria-hidden="true"></span>MODULE 03 · SERVICE MODULES</p>
+      <h2 class="dg-h2">Six modules. <span>Zero guesswork.</span></h2>
+      <div class="dg-grid">
+        <article class="dg-mod">
+          <p class="dg-mod-code">M-01 <span class="dg-led" aria-hidden="true"></span></p>
+          <h3>Heat pumps</h3>
+          <p>Cold-climate models rated to −30°. Sized by heat-loss calculation, never by rule of thumb.</p>
+          <p class="dg-spec">FROM $4,900 · SUBSIDIES HANDLED</p>
+        </article>
+        <article class="dg-mod">
+          <p class="dg-mod-code">M-02 <span class="dg-led" aria-hidden="true"></span></p>
+          <h3>Furnaces</h3>
+          <p>High-efficiency gas and electric furnaces. Combustion tested, venting verified, quiet.</p>
+          <p class="dg-spec">FROM $3,800 · 10-YR PARTS</p>
+        </article>
+        <article class="dg-mod">
+          <p class="dg-mod-code">M-03 <span class="dg-led" aria-hidden="true"></span></p>
+          <h3>Air conditioning</h3>
+          <p>Central and mini-split systems balanced room by room. No more freezing basement, boiling upstairs.</p>
+          <p class="dg-spec">FROM $3,400 · SEER2 16+</p>
+        </article>
+        <article class="dg-mod">
+          <p class="dg-mod-code">M-04 <span class="dg-led" aria-hidden="true"></span></p>
+          <h3>Ventilation &amp; HRV</h3>
+          <p>Heat-recovery ventilation that trades stale air for fresh without throwing heat out the window.</p>
+          <p class="dg-spec">FROM $2,200 · BALANCED</p>
+        </article>
+        <article class="dg-mod">
+          <p class="dg-mod-code">M-05 <span class="dg-led" aria-hidden="true"></span></p>
+          <h3>Smart thermostats</h3>
+          <p>We install it, wire it, and program the schedules with you. It actually saves money then.</p>
+          <p class="dg-spec">FROM $349 · INSTALLED</p>
+        </article>
+        <article class="dg-mod">
+          <p class="dg-mod-code">M-06 <span class="dg-led" aria-hidden="true"></span></p>
+          <h3>Maintenance plans</h3>
+          <p>Annual tune-ups with a 21-point checklist and the report emailed before we leave the driveway.</p>
+          <p class="dg-spec">$189 / YR · PRIORITY DISPATCH</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- MODULE 04: event log proof -->
+    <section class="dg-log" aria-label="Event log">
+      <p class="dg-mod-label"><span class="dg-led dg-led-green" aria-hidden="true"></span>MODULE 04 · EVENT LOG · CUSTOMER RECORDS</p>
+      <h2 class="dg-h2">Logged, <span>not promised.</span></h2>
+      <ul class="dg-events">
+        <li><span class="dg-ts">2026-09-28 07:12</span><span class="dg-ev">Heat pump commissioning · Mascouche · hold accuracy ±0.3° over 72h</span><span class="dg-tag dg-ok">PASS</span></li>
+        <li><span class="dg-ts">2026-09-19 18:40</span><span class="dg-ev">“The upstairs finally matches the thermostat. Two winters of fighting over blankets, over.” — Nathalie G., Terrebonne</span><span class="dg-tag dg-ok">★★★★★</span></li>
+        <li><span class="dg-ts">2026-09-02 13:05</span><span class="dg-ev">Furnace swap · Repentigny · old unit out, new unit live in 6h</span><span class="dg-tag dg-ok">PASS</span></li>
+        <li><span class="dg-ts">2026-08-21 09:33</span><span class="dg-ev">“They showed me the before/after readings on their tablet. 4 degrees of difference in my office. Data people.” — Karim B., Laval</span><span class="dg-tag dg-ok">★★★★★</span></li>
+        <li><span class="dg-ts">2026-08-11 22:17</span><span class="dg-ev">Emergency no-heat call · Saint-Lin · tech on site 00:04, heat restored 01:20</span><span class="dg-tag dg-warn">NIGHT</span></li>
+      </ul>
+      <div class="dg-stats">
+        <div><strong>2,300+</strong><span>systems commissioned</span></div>
+        <div><strong>±0.5°</strong><span>hold accuracy</span></div>
+        <div><strong>4.9</strong><span>average rating</span></div>
+        <div><strong>24/7</strong><span>monitoring &amp; dispatch</span></div>
+      </div>
+    </section>
+
+    <!-- MODULE 05: field unit -->
+    <section class="dg-unit" aria-label="Field unit">
+      <img src={IMG.tech} alt="A 21 Degrés technician calibrating a system on site" loading="lazy" />
+      <div>
+        <p class="dg-mod-label"><span class="dg-led dg-led-blue" aria-hidden="true"></span>MODULE 05 · FIELD UNIT</p>
+        <h2 class="dg-h2">Technicians with <span>tablets, not clipboards.</span></h2>
+        <p class="dg-lede">Every 21 Degrés tech carries calibrated instruments and leaves you the readings: static pressure, temperature split, airflow. If we can't measure the improvement, we don't claim it.</p>
+        <ul class="dg-speclist">
+          <li><span>CERT</span>Licensed · RBQ 0000-0000-00 (fictional)</li>
+          <li><span>ZONE</span>Terrebonne · Mascouche · Repentigny · Laval</li>
+          <li><span>CREW</span>6 techs · 3 vans · 1 dispatcher</li>
+          <li><span>EST.</span>2011 · family-run</li>
+        </ul>
+      </div>
+      <img class="dg-unit-plant" src={IMG.plant} alt="Commercial rooftop HVAC units serviced by 21 Degrés" loading="lazy" />
+    </section>
+
+    <!-- MODULE 06: dispatch -->
+    <section class="dg-dispatch" id="dispatch" aria-label="Request dispatch">
+      <p class="dg-mod-label"><span class="dg-led dg-led-red" aria-hidden="true"></span>MODULE 06 · REQUEST DISPATCH</p>
+      <h2 class="dg-h2">Open a <span>service ticket.</span></h2>
+      <div class="dg-dispatch-grid">
+        <form class="dg-form" id="dg-form" novalidate>
+          <label>NAME<input type="text" name="name" required placeholder="Jane Doe" autocomplete="name" /></label>
+          <label>PHONE<input type="tel" name="phone" required placeholder="(450) 555-0000" autocomplete="tel" /></label>
+          <label>SYSTEM
+            <select name="system">
+              <option>Heat pump</option>
+              <option>Furnace</option>
+              <option>Air conditioning</option>
+              <option>Ventilation / HRV</option>
+              <option>Thermostat</option>
+              <option>Not sure — diagnose it</option>
+            </select>
+          </label>
+          <label>SYMPTOM<textarea name="symptom" rows="3" placeholder="Upstairs runs 3° colder than the setpoint…"></textarea></label>
+          <button class="dg-btn" type="submit">Transmit request</button>
+          <p class="dg-form-note" role="status" aria-live="polite"></p>
+        </form>
+        <div class="dg-dispatch-side">
+          <p class="dg-sub">DIRECT LINE</p>
+          <a class="dg-bignum" href="tel:+14505550176">(450)<br />555-0176</a>
+          <p class="dg-lede">No heat? No cool? Call — the dispatcher answers 24/7 and the on-call tech carries parts.</p>
+          <p class="dg-fine">123, rue Fictive, Terrebonne QC<br />dispatch@21degres-demo.ca<br />Mon–Fri 7:00–17:00 · emergencies 24/7</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="dg-foot">
+    <p>21 DEGRÉS · TERREBONNE QC · © 2026<br />Fictional demo business — a WEBAO design showcase. Telemetry on this page is simulated.</p>
+  </footer>
+
+  <EscapeHatch locale="en" />
+
+  <script>
+    (function () {
+      var MIN = 16, MAX = 30, STEP = 0.5, setpoint = 21.5;
+      var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var spEl = document.getElementById('dg-setpoint');
+      var needle = document.getElementById('dg-needle');
+      var arc = document.getElementById('dg-arc');
+      var ticksG = document.getElementById('dg-ticks');
+      var indoorEl = document.getElementById('dg-indoor');
+      var NS = 'http://www.w3.org/2000/svg';
+      if (ticksG) {
+        for (var a = -120; a <= 120; a += 10) {
+          var rad = a * Math.PI / 180, major = (a % 30 === 0);
+          var r1 = major ? 114 : 120, r2 = 130;
+          var line = document.createElementNS(NS, 'line');
+          line.setAttribute('x1', 160 + r1 * Math.sin(rad));
+          line.setAttribute('y1', 160 - r1 * Math.cos(rad));
+          line.setAttribute('x2', 160 + r2 * Math.sin(rad));
+          line.setAttribute('y2', 160 - r2 * Math.cos(rad));
+          line.setAttribute('class', major ? 'dg-tick-major' : 'dg-tick');
+          ticksG.appendChild(line);
+        }
+      }
+      function render() {
+        var f = (setpoint - MIN) / (MAX - MIN), angle = -120 + f * 240;
+        if (needle) needle.setAttribute('transform', 'rotate(' + angle.toFixed(1) + ' 160 160)');
+        if (arc) {
+          var C = 2 * Math.PI * 138, full = C * (240 / 360);
+          arc.setAttribute('stroke-dasharray', (full * f).toFixed(1) + ' ' + C.toFixed(1));
+        }
+        if (spEl) spEl.textContent = setpoint.toFixed(1);
+      }
+      document.getElementById('dg-minus')?.addEventListener('click', function () {
+        setpoint = Math.max(MIN, +(setpoint - STEP).toFixed(1)); render();
+      });
+      document.getElementById('dg-plus')?.addEventListener('click', function () {
+        setpoint = Math.min(MAX, +(setpoint + STEP).toFixed(1)); render();
+      });
+      var modeLabel = document.getElementById('dg-mode-label');
+      document.querySelectorAll('.dg-mode').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          document.querySelectorAll('.dg-mode').forEach(function (b) { b.classList.remove('dg-is-on'); });
+          btn.classList.add('dg-is-on');
+          if (modeLabel) modeLabel.textContent = btn.getAttribute('data-mode');
+        });
+      });
+      if (!reduced && indoorEl) {
+        setInterval(function () {
+          indoorEl.textContent = (setpoint + (Math.random() - 0.5) * 0.4).toFixed(1);
+        }, 3000);
+      }
+      render();
+      var form = document.getElementById('dg-form');
+      form?.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var note = form?.querySelector('.dg-form-note');
+        if (note) note.textContent = '>> REQUEST RECEIVED. Dispatch will confirm within 30 minutes.';
+        if (form instanceof HTMLFormElement) form.reset();
+      });
+    })();
+  </script>
+
+  <style>
+    .dg { --dg-bg: #0B0E14; --dg-panel: #11151D; --dg-panel-2: #161B26; --dg-line: rgba(255,255,255,0.09);
+      --dg-text: #E8ECF4; --dg-dim: #8A93A6; --dg-blue: #4DA3FF; --dg-red: #FF5A4D; --dg-amber: #FFB84D;
+      --dg-green: #3DFF88; --dg-mono: "JetBrains Mono", ui-monospace, monospace;
+      --dg-disp: "Chakra Petch", system-ui, sans-serif;
+      margin: 0; background: var(--dg-bg); color: var(--dg-text); font-family: var(--dg-mono);
+      -webkit-font-smoothing: antialiased; overflow-x: clip; }
+    .dg *, .dg *::before, .dg *::after { box-sizing: border-box; }
+    .dg img { display: block; max-width: 100%; }
+    .dg a { color: inherit; }
+    .dg-bar { position: sticky; top: 0; z-index: 30; display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding: 12px clamp(16px, 3vw, 32px); background: rgba(11,14,20,0.92);
+      backdrop-filter: blur(8px); border-bottom: 1px solid var(--dg-line); }
+    .dg-brand { margin: 0; font-family: var(--dg-disp); font-weight: 700; font-size: 15px; letter-spacing: 0.06em; }
+    .dg-brand span { color: var(--dg-dim); font-weight: 500; font-size: 11.5px; letter-spacing: 0.14em; }
+    .dg-bar-right { display: flex; align-items: center; gap: 20px; }
+    .dg-status { margin: 0; font-size: 11px; letter-spacing: 0.18em; color: var(--dg-dim); display: flex; align-items: center; gap: 8px; }
+    .dg-led { width: 9px; height: 9px; border-radius: 50%; background: var(--dg-green); box-shadow: 0 0 10px var(--dg-green); flex: none; display: inline-block; }
+    .dg-led-blue { background: var(--dg-blue); box-shadow: 0 0 10px var(--dg-blue); }
+    .dg-led-amber { background: var(--dg-amber); box-shadow: 0 0 10px var(--dg-amber); }
+    .dg-led-red { background: var(--dg-red); box-shadow: 0 0 10px var(--dg-red); }
+    .dg-led-green { background: var(--dg-green); box-shadow: 0 0 10px var(--dg-green); }
+    .dg-bar-call { font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-decoration: none;
+      border: 1px solid var(--dg-line); border-radius: 8px; padding: 9px 16px; background: var(--dg-panel); }
+    .dg-bar-call:hover { border-color: var(--dg-blue); color: var(--dg-blue); }
+    .dg-panel { display: grid; grid-template-columns: minmax(340px, 460px) 1fr; gap: clamp(20px, 3vw, 40px);
+      max-width: 1280px; margin: 0 auto; padding: clamp(36px, 6vh, 72px) clamp(16px, 3vw, 32px); }
+    .dg-dialmod, .dg-stack { background: var(--dg-panel); border: 1px solid var(--dg-line); border-radius: 18px; padding: clamp(22px, 3vw, 36px); }
+    .dg-mod-label { margin: 0 0 22px; font-size: 11px; letter-spacing: 0.22em; color: var(--dg-dim); display: flex; align-items: center; gap: 10px; }
+    .dg-dialwrap { position: relative; width: min(100%, 360px); margin: 0 auto; }
+    .dg-dial { width: 100%; height: auto; display: block; }
+    .dg-track { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 14; }
+    .dg-arc { fill: none; stroke: url(#dg-grad); stroke-width: 14; stroke-linecap: round; }
+    .dg-tick { stroke: rgba(255,255,255,0.22); stroke-width: 2; }
+    .dg-tick-major { stroke: rgba(255,255,255,0.5); stroke-width: 3; }
+    .dg-needle { stroke: #fff; stroke-width: 4; stroke-linecap: round; transition: transform 0.25s ease; }
+    .dg-hub { fill: #E8ECF4; }
+    .dg-readout { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 44px; pointer-events: none; }
+    .dg-temp { margin: 0; font-family: var(--dg-disp); font-weight: 700; font-size: clamp(3rem, 7vw, 4.4rem); letter-spacing: -0.02em; }
+    .dg-sub { margin: 6px 0 0; font-size: 10.5px; letter-spacing: 0.3em; color: var(--dg-dim); }
+    .dg-stepper { display: flex; gap: 12px; justify-content: center; margin: 24px 0 18px; }
+    .dg-stepper button { width: 64px; height: 52px; font-family: var(--dg-mono); font-size: 26px; font-weight: 700;
+      background: var(--dg-panel-2); color: var(--dg-text); border: 1px solid var(--dg-line); border-radius: 10px; cursor: pointer; }
+    .dg-stepper button:hover { border-color: var(--dg-blue); color: var(--dg-blue); }
+    .dg-stepper button:active { transform: scale(0.96); }
+    .dg-modes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .dg-mode { font-family: var(--dg-mono); font-size: 12px; font-weight: 700; letter-spacing: 0.1em; padding: 13px 4px;
+      border-radius: 10px; cursor: pointer; background: transparent; color: var(--dg-dim); border: 1px solid var(--dg-line); }
+    .dg-mode.dg-is-on[data-mode="HEAT"] { background: rgba(255,90,77,0.14); border-color: var(--dg-red); color: var(--dg-red); }
+    .dg-mode.dg-is-on[data-mode="COOL"] { background: rgba(77,163,255,0.14); border-color: var(--dg-blue); color: var(--dg-blue); }
+    .dg-mode.dg-is-on[data-mode="VENT"] { background: rgba(61,255,136,0.12); border-color: var(--dg-green); color: var(--dg-green); }
+    .dg-mode.dg-is-on[data-mode="AUTO"] { background: rgba(255,184,77,0.12); border-color: var(--dg-amber); color: var(--dg-amber); }
+    .dg-modeline { margin: 18px 0 0; text-align: center; font-size: 11px; letter-spacing: 0.18em; color: var(--dg-dim); }
+    .dg-modeline span { color: var(--dg-text); font-weight: 700; }
+    .dg-stack { display: flex; flex-direction: column; justify-content: center; }
+    .dg-h1 { font-family: var(--dg-disp); font-weight: 700; letter-spacing: -0.02em; font-size: clamp(2.2rem, 4.6vw, 3.6rem); line-height: 1.04; margin: 0 0 18px; }
+    .dg-h1 span { background: linear-gradient(90deg, var(--dg-blue), var(--dg-red)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .dg-lede { font-size: 14.5px; line-height: 1.75; color: var(--dg-dim); margin: 0 0 26px; max-width: 52ch; }
+    .dg-meters { list-style: none; margin: 0 0 28px; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .dg-meters li { background: var(--dg-bg); border: 1px solid var(--dg-line); border-radius: 12px; padding: 14px 12px; display: grid; gap: 8px; }
+    .dg-meters span { font-size: 10px; letter-spacing: 0.2em; color: var(--dg-dim); }
+    .dg-meters strong { font-family: var(--dg-disp); font-size: 21px; font-weight: 700; }
+    .dg-cta { display: flex; flex-wrap: wrap; gap: 12px; }
+    .dg-btn { display: inline-block; text-decoration: none; font-family: var(--dg-mono); font-weight: 700; font-size: 13.5px;
+      letter-spacing: 0.06em; padding: 15px 28px; border-radius: 10px; border: 0; cursor: pointer;
+      background: linear-gradient(90deg, var(--dg-blue), #7A6CFF); color: #0B0E14; }
+    .dg-btn:hover { filter: brightness(1.12); }
+    .dg-btn-ghost { background: transparent; color: var(--dg-text); border: 1px solid var(--dg-line); }
+    .dg-btn-ghost:hover { border-color: var(--dg-text); filter: none; }
+    .dg-ticker { border-top: 1px solid var(--dg-line); border-bottom: 1px solid var(--dg-line); overflow: clip; white-space: nowrap; display: flex; background: var(--dg-panel); }
+    .dg-ticker p { margin: 0; padding: 13px 0; font-size: 12px; letter-spacing: 0.2em; color: var(--dg-dim); animation: dg-tick 30s linear infinite; flex: none; }
+    .dg-ticker p span { color: var(--dg-blue); }
+    @keyframes dg-tick { to { transform: translateX(-100%); } }
+    .dg-modules { max-width: 1280px; margin: 0 auto; padding: clamp(48px, 8vh, 96px) clamp(16px, 3vw, 32px); }
+    .dg-h2 { font-family: var(--dg-disp); font-weight: 700; font-size: clamp(1.9rem, 4vw, 3rem); letter-spacing: -0.02em; margin: 0 0 34px; }
+    .dg-h2 span { color: var(--dg-dim); font-weight: 500; }
+    .dg-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .dg-mod { background: var(--dg-panel); border: 1px solid var(--dg-line); border-radius: 14px; padding: 26px 24px;
+      display: grid; gap: 12px; align-content: start; transition: border-color 0.15s ease, transform 0.15s ease; }
+    .dg-mod:hover { border-color: rgba(77,163,255,0.5); transform: translateY(-3px); }
+    .dg-mod-code { margin: 0; font-size: 11px; letter-spacing: 0.2em; color: var(--dg-dim); display: flex; align-items: center; justify-content: space-between; }
+    .dg-mod h3 { margin: 0; font-family: var(--dg-disp); font-size: 20px; font-weight: 700; }
+    .dg-mod p { margin: 0; font-size: 13px; line-height: 1.7; color: var(--dg-dim); }
+    .dg-spec { color: var(--dg-blue); font-size: 11px; letter-spacing: 0.12em; font-weight: 700; }
+    .dg-log { max-width: 1280px; margin: 0 auto; padding: 0 clamp(16px, 3vw, 32px) clamp(48px, 8vh, 96px); }
+    .dg-events { list-style: none; margin: 0 0 30px; padding: 0; border: 1px solid var(--dg-line); border-radius: 14px; overflow: clip; }
+    .dg-events li { display: grid; grid-template-columns: 170px 1fr auto; gap: 18px; align-items: baseline;
+      padding: 16px 20px; font-size: 13px; background: var(--dg-panel); border-bottom: 1px solid var(--dg-line); }
+    .dg-events li:last-child { border-bottom: 0; }
+    .dg-events li:nth-child(even) { background: var(--dg-panel-2); }
+    .dg-ts { color: var(--dg-dim); font-size: 11.5px; }
+    .dg-ev { line-height: 1.65; }
+    .dg-tag { font-size: 10.5px; font-weight: 700; letter-spacing: 0.14em; border: 1px solid var(--dg-line); border-radius: 6px; padding: 5px 10px; white-space: nowrap; }
+    .dg-tag.dg-ok { color: var(--dg-green); border-color: rgba(61,255,136,0.4); }
+    .dg-tag.dg-warn { color: var(--dg-amber); border-color: rgba(255,184,77,0.4); }
+    .dg-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .dg-stats div { background: var(--dg-panel); border: 1px solid var(--dg-line); border-radius: 14px; padding: 24px 20px; display: grid; gap: 8px; }
+    .dg-stats strong { font-family: var(--dg-disp); font-size: 34px; font-weight: 700; }
+    .dg-stats span { font-size: 11px; letter-spacing: 0.18em; color: var(--dg-dim); }
+    .dg-unit { max-width: 1280px; margin: 0 auto; padding: 0 clamp(16px, 3vw, 32px) clamp(48px, 8vh, 96px);
+      display: grid; grid-template-columns: 300px 1fr 300px; gap: clamp(20px, 3vw, 36px); align-items: center; }
+    .dg-unit img { width: 100%; height: 380px; object-fit: cover; border-radius: 14px; border: 1px solid var(--dg-line); filter: saturate(0.7) brightness(0.88); }
+    .dg-speclist { list-style: none; margin: 26px 0 0; padding: 0; display: grid; border: 1px solid var(--dg-line); border-radius: 12px; overflow: clip; }
+    .dg-speclist li { display: grid; grid-template-columns: 90px 1fr; gap: 14px; padding: 13px 18px; font-size: 13px; background: var(--dg-panel); border-bottom: 1px solid var(--dg-line); }
+    .dg-speclist li:last-child { border-bottom: 0; }
+    .dg-speclist span { color: var(--dg-blue); font-size: 11px; letter-spacing: 0.18em; font-weight: 700; }
+    .dg-dispatch { border-top: 1px solid var(--dg-line); background: var(--dg-panel); padding-top: clamp(48px, 8vh, 96px); }
+    .dg-dispatch > .dg-mod-label, .dg-dispatch > .dg-h2 { max-width: 1280px; margin-left: auto; margin-right: auto; padding-left: clamp(16px, 3vw, 32px); padding-right: clamp(16px, 3vw, 32px); }
+    .dg-dispatch-grid { max-width: 1280px; margin: 0 auto; padding: 0 clamp(16px, 3vw, 32px) clamp(48px, 8vh, 96px);
+      display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 60px); align-items: start; }
+    .dg-form { display: grid; gap: 16px; background: var(--dg-bg); border: 1px solid var(--dg-line); border-radius: 14px; padding: clamp(22px, 3vw, 34px); }
+    .dg-form label { display: grid; gap: 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.2em; color: var(--dg-dim); }
+    .dg-form input, .dg-form select, .dg-form textarea { font-family: var(--dg-mono); font-size: 14.5px; color: var(--dg-text);
+      background: var(--dg-panel-2); border: 1px solid var(--dg-line); border-radius: 8px; padding: 14px; width: 100%; }
+    .dg-form input:focus, .dg-form select:focus, .dg-form textarea:focus { outline: 2px solid var(--dg-blue); outline-offset: 1px; }
+    .dg-form-note { margin: 0; font-size: 13px; color: var(--dg-green); font-weight: 700; }
+    .dg-form-note:empty { display: none; }
+    .dg-bignum { display: inline-block; font-family: var(--dg-disp); font-weight: 700; text-decoration: none;
+      font-size: clamp(3rem, 7vw, 5.4rem); line-height: 1; letter-spacing: -0.02em; margin: 10px 0 20px; }
+    .dg-bignum:hover { color: var(--dg-blue); }
+    .dg-fine { font-size: 12.5px; line-height: 2; color: var(--dg-dim); margin: 22px 0 0; }
+    .dg-foot { border-top: 1px solid var(--dg-line); text-align: center; padding: 34px 20px; font-size: 11.5px; letter-spacing: 0.1em; line-height: 2; color: var(--dg-dim); }
+    .dg-foot p { margin: 0; }
+    @media (max-width: 1000px) {
+      .dg-panel { grid-template-columns: 1fr; }
+      .dg-grid { grid-template-columns: 1fr 1fr; }
+      .dg-unit { grid-template-columns: 1fr 1fr; }
+      .dg-unit > div { grid-column: 1 / -1; order: -1; }
+      .dg-dispatch-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .dg-grid { grid-template-columns: 1fr; }
+      .dg-meters { grid-template-columns: 1fr 1fr; }
+      .dg-stats { grid-template-columns: 1fr 1fr; }
+      .dg-events li { grid-template-columns: 1fr; gap: 6px; }
+      .dg-unit { grid-template-columns: 1fr; }
+      .dg-status { display: none; }
+      .dg-brand span { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .dg-ticker p { animation: none; }
+      .dg-needle { transition: none; }
+      .dg-mod, .dg-btn, .dg-stepper button { transition: none; }
+    }
+  </style>
+</body>
+</html>
