@@ -397,6 +397,55 @@ export const demoCategories = [
   "Beauty",
 ] as const;
 
+// Style families: broad, plain-language groups for the style filter.
+// Each visible demo belongs to exactly one family.
+export type StyleFamily = "timeless" | "elegant" | "bold" | "playful" | "soft";
+
+export const styleFamilies: StyleFamily[] = ["timeless", "elegant", "bold", "playful", "soft"];
+
+export const demoFamily: Record<string, StyleFamily> = {
+  // Timeless: clean, professional, never looks dated
+  "finition-r": "timeless",
+  kanso: "timeless",
+  nora: "timeless",
+  mira: "timeless",
+  "toit-fils": "timeless",
+  boise: "timeless",
+  sora: "timeless",
+  // Elegant: refined, premium, luxurious
+  forma: "elegant",
+  "atelier-caractere": "elegant",
+  "atelier-nord": "elegant",
+  "maison-lune": "elegant",
+  leduc: "elegant",
+  prism: "elegant",
+  // Bold: striking, unconventional, impossible to ignore
+  "encre-brute": "bold",
+  maximal: "bold",
+  lune: "bold",
+  hexline: "bold",
+  "studio-reve": "bold",
+  lattice: "bold",
+  // Playful: fun, creative, full of personality
+  cyberdoll: "playful",
+  "boba-club": "playful",
+  pixelforge: "playful",
+  "vhs-dreams": "playful",
+  "papier-ciseaux": "playful",
+  pouf: "playful",
+  verte: "playful",
+  aeris: "playful",
+  // Soft: gentle, calm, organic
+  brume: "soft",
+  "sahara-sage": "soft",
+  esquisse: "soft",
+  tactile: "soft",
+};
+
+export function getDemoFamily(id: string): StyleFamily {
+  return demoFamily[id] ?? "timeless";
+}
+
 export function searchDemos(query: string, category: string = "All") {
   const q = query.trim().toLowerCase();
   return demos.filter((d) => {
