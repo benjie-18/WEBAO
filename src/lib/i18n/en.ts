@@ -148,7 +148,7 @@ const en = {
           sendMessage: "Send a message →",
         },
       ],
-      cta: "Start with a 15-min call",
+      cta: "Contact us",
       ctaNote: "Or {link}, usually answered within one business day",
       sendDetails: "send your details",
     },

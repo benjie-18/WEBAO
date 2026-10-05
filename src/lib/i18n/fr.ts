@@ -151,7 +151,7 @@ const fr = {
           sendMessage: "Envoyez un message →",
         },
       ],
-      cta: "Commencer par un appel de 15 min",
+      cta: "Contactez-nous",
       ctaNote: "Ou {link}, généralement répondu en un jour ouvrable",
       sendDetails: "envoyez vos infos",
     },
