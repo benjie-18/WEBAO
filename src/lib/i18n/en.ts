@@ -448,7 +448,7 @@ const en = {
         "Paste a Google Drive / Photos link, list your services, add notes… (you can also just email us after)",
       consent: "I’d like WEBAO to contact me about a website.",
       privacy: "Your details are used only to reply to you. No mailing list, no sharing.",
-      submit: "Send details →",
+      submit: "Submit and pay →",
       submitNote: "This opens your own email app with the message ready to send. Prefer to write it yourself? Email",
       submitNoteEmail: "hello@webao.ca",
       lock: "This form composes an email from your own mail app. Nothing is stored on our servers and there are no trackers on submit.",
