@@ -494,7 +494,7 @@ const en = {
       countNote: "30 DIRECTIONS · ALL BUSINESSES FICTIONAL · NONE OF THEM ARE WEBAO CLIENTS",
       howTitle: "HOW TO USE THIS CATALOG",
       howSteps: [
-        "Filter by style: Y2K, brutalist, art deco…",
+        "Filter by family: Timeless, Bold, Playful…",
         "Search: “editorial”, “Laval”, “bold”…",
         "Tap a demo: see its direction, then tell us which one feels like you.",
       ],
