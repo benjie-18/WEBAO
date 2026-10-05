@@ -1,0 +1,131 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const locale = "en" as const;
+const title = "Checkout · WEBAO";
+const description = "Complete your WEBAO subscription: $149 CAD/month, no setup fee, cancel anytime.";
+
+// TODO: Replace with your Stripe Payment Link URL (create in Stripe Dashboard > Payment Links)
+// For the $149 CAD/month recurring subscription
+const STRIPE_PAYMENT_URL = "https://buy.stripe.com/YOUR_PAYMENT_LINK_HERE";
+---
+
+<BaseLayout title={title} description={description} locale={locale}>
+  <section class="section">
+    <div class="shell" style="max-width: 920px;">
+      <div class="eyebrow">Checkout</div>
+      <h1 class="display" style="font-size: clamp(2rem, 5vw, 3.2rem); line-height:.92; margin-top:12px;">Almost there</h1>
+      <p class="prose" style="margin-top:12px; max-width: 52ch;">
+        Review your details below, then complete payment securely with Stripe.
+        Your site build starts as soon as payment confirms.
+      </p>
+
+      <div class="checkout-grid" style="margin-top: 32px;">
+        <!-- Order summary -->
+        <div class="checkout-card">
+          <div class="mono" style="font-size:10px; letter-spacing:.14em; opacity:.5;">ORDER SUMMARY</div>
+          <div style="margin-top:16px; display:flex; align-items:baseline; gap:8px;">
+            <span class="display" style="font-size: 2.6rem; line-height:.9;">$149</span>
+            <span class="mono" style="font-size:11px; opacity:.6;">CAD/month</span>
+          </div>
+          <ul style="margin:18px 0 0; padding:0; list-style:none; display:grid; gap:10px; font-size:13.5px;">
+            <li>✓ Custom 3–5 page website</li>
+            <li>✓ Domain, hosting & SSL</li>
+            <li>✓ SEO basics & analytics</li>
+            <li>✓ Updates & support included</li>
+          </ul>
+          <div class="mono" style="margin-top:18px; padding-top:14px; border-top:1px solid var(--line); font-size:11px; color: var(--muted);">
+            No setup fee · Cancel anytime<br/>
+            <a href="/refunds" style="color: var(--accent-text);">Refund policy</a>
+          </div>
+        </div>
+
+        <!-- Customer + payment -->
+        <div class="checkout-card checkout-card--pay">
+          <div class="mono" style="font-size:10px; letter-spacing:.14em; opacity:.5;">YOUR DETAILS</div>
+          <div id="checkout-customer" class="mono" style="margin-top:12px; font-size:12.5px; line-height:1.7; color: var(--muted);">
+            <!-- Filled by JS from sessionStorage -->
+          </div>
+
+          <div style="margin-top:24px; padding-top:20px; border-top:1px solid var(--line);">
+            <div class="mono" style="font-size:10px; letter-spacing:.14em; opacity:.5;">PAYMENT</div>
+            <p class="prose" style="font-size:13px; margin-top:10px; color: var(--muted);">
+              Secure payment powered by Stripe. You'll be redirected to complete
+              your $149/month subscription.
+            </p>
+            <a
+              href={STRIPE_PAYMENT_URL}
+              class="btn btn--primary"
+              style="width:100%; justify-content:center; margin-top:14px; font-size:15px; padding:14px 20px;"
+              data-stripe-link
+            >
+              Pay $149/month →
+            </a>
+            <div class="mono" style="margin-top:10px; font-size:10.5px; text-align:center; color: var(--muted);">
+              🔒 Encrypted & secure · Powered by Stripe
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="mono" style="margin-top:24px; font-size:11px; color: var(--muted); text-align:center;">
+        Questions? <a href="/contact" style="color: var(--ink);">Contact us</a> before paying.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  // Fill customer details from the contact form (sessionStorage)
+  try {
+    const raw = sessionStorage.getItem('webao-checkout');
+    const el = document.getElementById('checkout-customer');
+    if (raw && el) {
+      const d = JSON.parse(raw);
+      const lines = [];
+      if (d.business) lines.push(`<strong style="color:var(--ink)">${d.business}</strong>`);
+      if (d.name) lines.push(d.name);
+      if (d.email) lines.push(d.email);
+      if (d.city || d.trade) lines.push([d.trade, d.city].filter(Boolean).join(' · '));
+      el.innerHTML = lines.length ? lines.join('<br/>') : 'Details not provided.';
+    } else if (el) {
+      el.innerHTML = 'No details yet — <a href="/contact" style="color:var(--accent-text)">fill out the form</a> first.';
+    }
+  } catch (e) { /* noop */ }
+
+  // Warn if the Stripe link is still a placeholder
+  document.querySelectorAll('[data-stripe-link]').forEach((a) => {
+    const href = a.getAttribute('href') || '';
+    if (href.includes('YOUR_PAYMENT_LINK_HERE')) {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        alert('Stripe payment link not configured yet. Please contact us at hello@webao.ca to complete your subscription.');
+      });
+    }
+  });
+</script>
+
+<style>
+  .checkout-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 760px) {
+    .checkout-grid { grid-template-columns: 1fr 1.2fr; }
+  }
+  .checkout-card {
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 28px;
+    background: var(--card-bg);
+  }
+  .checkout-card--pay {
+    background: var(--paper-2);
+    border-color: var(--line-strong);
+  }
+  .checkout-card ul li {
+    color: var(--ink);
+  }
+  /* Dark theme adjustments are automatic via CSS variables */
+</style>
