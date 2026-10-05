@@ -228,10 +228,22 @@ const paths = localizedPaths[locale];
             }),
           }).catch(() => {});
         } catch (err) { /* never break the mailto flow */ }
-        const mailto = `mailto:hello@webao.ca?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        window.location.href = mailto;
-        (status as HTMLElement).hidden = false;
-        status.textContent = successMsg;
+        // Save the form data for the checkout page, then redirect there.
+        // The API catalog call above remains fail-silent.
+        try {
+          sessionStorage.setItem('webao-checkout', JSON.stringify({
+            name: String(data.get('name') || ''),
+            email: email,
+            business: String(data.get('business') || ''),
+            trade: String(data.get('trade') || ''),
+            city: String(data.get('city') || ''),
+            phone: String(data.get('phone') || ''),
+            goal: String(data.get('goal') || ''),
+            details: String(data.get('details') || ''),
+          }));
+        } catch (err) { /* sessionStorage unavailable; checkout still works */ }
+        const checkoutPath = document.documentElement.lang === 'fr' ? '/fr/checkout' : '/checkout';
+        window.location.href = checkoutPath;
         status.classList.remove('form-status--error');
         status.classList.add('form-status--success');
         const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
