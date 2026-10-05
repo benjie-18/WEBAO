@@ -146,7 +146,9 @@ const STRIPE_PUBLISHABLE_KEY = "pk_live_51UMzZYE57vVzxI418WAmnlUuIXMLMWtNxjYa6We
             return data.clientSecret;
           },
         });
-        checkout.mount('#stripe-checkout');
+        const mountEl = document.getElementById('stripe-checkout');
+        if (mountEl) mountEl.innerHTML = '';
+        checkout.mount(mountEl || '#stripe-checkout');
         checkoutMounted = true;
         window.__webaoStartMounted = true;
       } catch (e) {
