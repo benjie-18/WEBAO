@@ -179,10 +179,22 @@ const total = String(demos.length).padStart(2, "0");
     });
 
     const io = new IntersectionObserver((entries) => {
-      inView = entries[0].isIntersecting;
+      const entry = entries[0];
+      if (!entry) return;
+      inView = entry.isIntersecting;
       if (inView) start(); else stop();
     }, { threshold: 0.05 });
     io.observe(root);
+    // Fallback: if the observer doesn't fire (or fires late), ensure autoplay
+    // kicks in when the carousel is visible. The observer remains the source
+    // of truth for pause/resume.
+    setTimeout(() => {
+      if (!timer && !hoverPause && !focusPause && !dragPause) {
+        const r = root.getBoundingClientRect();
+        const vh = window.innerHeight || document.documentElement.clientHeight;
+        if (r.bottom > 0 && r.top < vh) start();
+      }
+    }, 1200);
 
     // ---------- arrow buttons + keyboard ----------
     function goTo(i: number) {
@@ -272,8 +284,9 @@ const total = String(demos.length).padStart(2, "0");
   .proof-count-sep { opacity: .45; }
 
   .proof-track {
+    --proof-gap: clamp(24px, 3vw, 44px);
     display: flex;
-    gap: clamp(24px, 3vw, 44px);
+    gap: var(--proof-gap);
     overflow-x: auto;
     overscroll-behavior-x: contain;
     scroll-snap-type: x proximity;
@@ -308,13 +321,13 @@ const total = String(demos.length).padStart(2, "0");
   .proof-tags { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-left: auto; }
 
   /* Fracture motif: a jagged dark crack splitting each panel boundary,
-     like a torn page edge. Reads on paper in both themes. */
+     like a torn page edge. Centered in the gap between panels. */
   .proof-fracture {
     display: block;
     position: absolute;
     top: -3%; bottom: -3%; left: 0;
     width: 26px;
-    transform: translateX(-50%);
+    transform: translateX(calc(-50% - var(--proof-gap, 32px) / 2));
     background: var(--ink);
     opacity: .13;
     clip-path: polygon(
