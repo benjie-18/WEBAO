@@ -222,13 +222,16 @@ const a = t.admin;
     border-radius: 16px;
     padding: clamp(16px, 3vw, 24px);
     box-shadow: var(--shadow-sm);
+    transition: box-shadow .3s ease, transform .3s ease;
   }
+  .admin-card:hover { box-shadow: var(--shadow-md); }
   .admin-card h2 { margin-bottom: 14px; }
   .admin-card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
   .admin-card-head h2 { margin-bottom: 0; }
 
   /* Login */
   .admin-login { display: grid; place-items: center; min-height: min(62vh, 560px); }
+  .admin-login[hidden], .admin-app[hidden] { display: none !important; }
   .admin-login-card { width: min(420px, 100%); display: grid; gap: 14px; }
   .admin-login-card h1 { margin-top: 2px; }
   .admin-notice {
@@ -308,10 +311,17 @@ const a = t.admin;
     padding: 10px 12px;
     border-radius: 10px;
     cursor: pointer;
+    transition: background .25s ease, color .25s ease, box-shadow .25s ease, transform .15s ease;
   }
-  .admin-tab:hover { color: var(--ink); }
+  .admin-tab:hover { color: var(--ink); background: color-mix(in srgb, var(--card-bg) 60%, transparent); }
+  .admin-tab:active { transform: scale(.97); }
   .admin-tab.is-active { background: var(--card-bg); color: var(--ink); box-shadow: var(--shadow-sm); }
-  .admin-panel { display: grid; gap: 16px; }
+  .admin-panel { display: grid; gap: 16px; animation: adminFadeIn .35s ease; }
+  .admin-panel[hidden] { display: none !important; }
+  @keyframes adminFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 
   /* Stats controls */
   .admin-controls { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
@@ -354,7 +364,12 @@ const a = t.admin;
 
   /* Forms */
   .admin-forms-list { display: grid; gap: 12px; }
-  .form-card { background: var(--card-bg); border: 1px solid var(--line); border-radius: 14px; padding: 16px; box-shadow: var(--shadow-sm); display: grid; gap: 10px; }
+  .form-card { background: var(--card-bg); border: 1px solid var(--line); border-radius: 14px; padding: 16px; box-shadow: var(--shadow-sm); display: grid; gap: 10px; animation: adminFadeIn .4s ease backwards; transition: box-shadow .3s ease, border-color .3s ease; }
+  .form-card:nth-child(2) { animation-delay: .05s; }
+  .form-card:nth-child(3) { animation-delay: .1s; }
+  .form-card:nth-child(4) { animation-delay: .15s; }
+  .form-card:nth-child(5) { animation-delay: .2s; }
+  .form-card:hover { border-color: var(--line-strong); box-shadow: var(--shadow-md); }
   .form-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
   .form-card-head strong { display: block; font-size: 15px; letter-spacing: -0.01em; }
   .form-card-head .mono { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
@@ -366,7 +381,8 @@ const a = t.admin;
   .form-meta { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--muted); }
   .form-meta b { color: var(--ink-3); font-weight: 600; }
   .form-actions { display: flex; gap: 8px; }
-  .form-fields { border-top: 1px solid var(--line); padding-top: 10px; display: grid; gap: 6px; }
+  .form-fields { border-top: 1px solid var(--line); padding-top: 10px; display: grid; gap: 6px; animation: adminFadeIn .3s ease; }
+  .form-fields[hidden] { display: none !important; }
   .form-fields .ff-row { display: grid; grid-template-columns: 130px 1fr; gap: 10px; font-size: 13px; }
   .form-fields dt { color: var(--muted); font-weight: 600; }
   .form-fields dd { margin: 0; white-space: pre-wrap; word-break: break-word; }

@@ -235,7 +235,7 @@ async function handleFormsList(kv: KVNamespace, url: URL): Promise<Response> {
 
 /** DELETE /api/admin/forms/:id — id is "<ts>:<rand>" (the part after "form:"). */
 async function handleFormDelete(kv: KVNamespace, path: string): Promise<Response> {
-  const m = /^\/api\/admin\/forms\/(\d+:[a-f0-9]{16})$/.exec(path);
+  const m = /^\/api\/admin\/forms\/([^/]+)$/.exec(path);
   if (!m) return err("Invalid id", 400);
   const key = "form:" + m[1];
   await deleteKey(kv, key);
