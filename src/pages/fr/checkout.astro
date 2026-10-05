@@ -59,12 +59,12 @@ const STRIPE_PUBLISHABLE_KEY = "pk_live_51UMzZYE57vVzxI418WAmnlUuIXMLMWtNxjYa6We
     } catch (e) {}
 
     function fail(msg) {
-      if (loadingEl) loadingEl.textContent = msg || 'Paiement indisponible. Contactez-nous à hello@webao.ca.';
+      if (loadingEl) loadingEl.textContent = msg || 'Paiement indisponible. Contactez-nous à contact@webao.ca.';
     }
 
     if (!window.Stripe) { fail('Stripe n\'a pas pu être chargé. Vérifiez votre connexion et actualisez.'); return; }
     if (!pk || pk.includes('YOUR_PUBLISHABLE_KEY_HERE')) {
-      fail('Paiement non configuré. Contactez-nous à hello@webao.ca pour finaliser votre abonnement.');
+      fail('Paiement non configuré. Contactez-nous à contact@webao.ca pour finaliser votre abonnement.');
       return;
     }
 
