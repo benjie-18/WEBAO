@@ -907,34 +907,49 @@ const processId = locale === "fr" ? "processus" : "process";
     const enter = () => hero.setAttribute('data-hero-enter', 'true');
     const lang = document.documentElement.lang.startsWith('fr') ? 'fr-CA' : 'en-CA';
 
-    if (title) {
-      title.setAttribute('aria-label', (title.textContent ?? '').replace(/\s+/g, ' ').trim());
-      if (!prefersReduced && 'Segmenter' in Intl) {
-        const original = title.innerHTML;
-        splitWords(title, lang);
-        // Re-split on resize (debounced) so word spans stay in sync.
-        let rt = 0;
-        window.addEventListener('resize', () => {
-          window.clearTimeout(rt);
-          rt = window.setTimeout(() => {
-            title.innerHTML = original;
-            splitWords(title, lang);
-          }, 250);
-        });
+    const doSplitAndEnter = () => {
+      if (hero.hasAttribute('data-hero-split')) return;
+      hero.setAttribute('data-hero-split', 'true');
+      if (title) {
+        title.setAttribute('aria-label', (title.textContent ?? '').replace(/\s+/g, ' ').trim());
+        if (!prefersReduced && 'Segmenter' in Intl) {
+          const original = title.innerHTML;
+          splitWords(title, lang);
+          let rt = 0;
+          window.addEventListener('resize', () => {
+            window.clearTimeout(rt);
+            rt = window.setTimeout(() => {
+              title.innerHTML = original;
+              splitWords(title, lang);
+            }, 250);
+          });
+        }
       }
-    }
 
-    if (prefersReduced) { enter(); return; }
+      if (prefersReduced) { enter(); return; }
 
-    const html = document.documentElement;
-    if (html.classList.contains('wi-run') && !html.classList.contains('wi-released')) {
-      const mo = new MutationObserver(() => {
-        if (html.classList.contains('wi-released')) { mo.disconnect(); enter(); }
-      });
-      mo.observe(html, { attributes: true, attributeFilter: ['class'] });
-      window.setTimeout(() => { mo.disconnect(); enter(); }, 9000);
+      const html = document.documentElement;
+      if (html.classList.contains('wi-run') && !html.classList.contains('wi-released')) {
+        const mo = new MutationObserver(() => {
+          if (html.classList.contains('wi-released')) { mo.disconnect(); enter(); }
+        });
+        mo.observe(html, { attributes: true, attributeFilter: ['class'] });
+        window.setTimeout(() => { mo.disconnect(); enter(); }, 9000);
+      } else {
+        requestAnimationFrame(() => requestAnimationFrame(enter));
+      }
+    };
+
+    // Wait for fonts before splitting words: splitting with fallback fonts
+    // then swapping to webfonts shifts word positions mid-animation (stutter).
+    if (title && 'fonts' in document && (document as any).fonts.ready) {
+      (document as any).fonts.ready.then(() => doSplitAndEnter());
+      // Failsafe: don't wait more than 1.5s for fonts
+      window.setTimeout(() => {
+        if (!hero.hasAttribute('data-hero-enter')) doSplitAndEnter();
+      }, 1500);
     } else {
-      requestAnimationFrame(() => requestAnimationFrame(enter));
+      doSplitAndEnter();
     }
   }
 
