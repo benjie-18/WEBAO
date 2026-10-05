@@ -120,8 +120,18 @@ const STRIPE_PUBLISHABLE_KEY = "pk_live_51UMzZYE57vVzxI418WAmnlUuIXMLMWtNxjYa6We
     min-height: 320px;
     border-radius: 12px;
     overflow: hidden;
+    width: 100%;
+    min-width: 0;
+  }
+  #stripe-checkout iframe {
+    width: 100% !important;
+    min-width: 0 !important;
   }
   html.cc-hidden-pay .cc { display: none !important; }
   html.cc-hidden-pay .checkout-card--pay,
   html.cc-hidden-pay .checkout-card--pay * { cursor: auto !important; }
+  @media (max-width: 560px) {
+    .checkout-card { padding: 16px; }
+    #stripe-checkout { border-radius: 8px; }
+  }
 </style>
