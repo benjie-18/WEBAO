@@ -1,10 +1,11 @@
 // WEBAO worker entry: JSON API under /api/*, static-asset fallthrough otherwise.
 // The site itself is a static Astro build (dist/client); this handler preserves
-// its behavior and serves KV-backed demo/carousel images when absent from assets.
+// its behavior exactly and only intercepts /api/* requests.
 
 import { handlePageview, handleClick, handleHeartbeat } from "./track";
 import { handleFormSubmit } from "./forms";
 import { handleAdmin } from "./admin";
+import { handleCheckoutSession } from "./checkout";
 import { json } from "./util";
 
 async function routeApi(req: Request, env: Env): Promise<Response> {
@@ -15,6 +16,7 @@ async function routeApi(req: Request, env: Env): Promise<Response> {
   if (p === "/api/track/click" && req.method === "POST") return handleClick(req, env);
   if (p === "/api/track/heartbeat" && req.method === "POST") return handleHeartbeat(req, env);
   if (p === "/api/forms/submit" && req.method === "POST") return handleFormSubmit(req, env);
+  if (p === "/api/checkout/session" && req.method === "POST") return handleCheckoutSession(req, env as unknown as { STRIPE_SECRET_KEY?: string; STRIPE_PRICE_ID?: string });
   if (p.startsWith("/api/admin/")) return handleAdmin(req, env, url);
 
   return json({ ok: false, error: "Not found" }, 404);
@@ -35,9 +37,10 @@ export default {
     }
 
     // Demo/carousel imagery: served from static assets when present,
-    // otherwise from KV under img:<pathname>. The repository currently has no
-    // demo/carousel binaries or .b64 files, so KV must be provisioned separately.
-    // Handle both missing assets (404) and asset-binding failures.
+    // otherwise from KV (images are stored as base64 in the repo and
+    // restored at build time, but KV is the durable fallback).
+    // NOTE: env.ASSETS.fetch() throws (rather than returning 404) for paths
+    // absent from the asset manifest, so it must stay inside try/catch.
     if (url.pathname.startsWith("/demos/") || url.pathname.startsWith("/carousel/")) {
       try {
         const asset = await env.ASSETS.fetch(request);
