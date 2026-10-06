@@ -1,0 +1,426 @@
+---
+import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+// Demo microsite: Maison Doré · fictional luxury renovation atelier, Westmount QC.
+---
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>Maison Doré — Atelier de rénovation de luxe · Westmount</title>
+  <meta name="description" content="Maison Doré, atelier de rénovation haut de gamme à Westmount. Marbre, laiton, boiseries : des intérieurs d'exception depuis 1987. Entreprise fictive de démonstration." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --dor-black: #0d0d0f;
+      --dor-coal: #141416;
+      --dor-gold: #c9a227;
+      --dor-gold-soft: #e6c96a;
+      --dor-emerald: #0f5c4a;
+      --dor-emerald-deep: #0a3f34;
+      --dor-ivory: #f6f1e5;
+      --dor-line: rgba(201, 162, 39, 0.35);
+    }* { box-sizing: border-box; margin: 0; padding: 0; }
+    .dor-body {
+      background: var(--dor-black);
+      color: var(--dor-ivory);
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 19px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }.dor-wrap { max-width: 1180px; margin: 0 auto; padding: 0 28px; }
+    /* ---------- Nav ---------- */
+    .dor-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      background: rgba(13, 13, 15, 0.88);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--dor-line);
+    }
+    .dor-nav-inner {
+      max-width: 1180px; margin: 0 auto; padding: 14px 28px;
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    }
+    .dor-brand { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+    .dor-mono {
+      width: 46px; height: 46px; flex: none;
+      display: grid; place-items: center;
+      border: 1px solid var(--dor-gold);
+      outline: 1px solid rgba(201, 162, 39, 0.35); outline-offset: 3px;
+      transform: rotate(45deg);
+      font-family: "Cinzel", serif; font-weight: 700; font-size: 15px; color: var(--dor-gold-soft);
+    }.dor-mono span { transform: rotate(-45deg); }
+    .dor-brand-name { font-family: "Cinzel", serif; font-size: 19px; letter-spacing: 0.14em; color: var(--dor-ivory); text-transform: uppercase; }
+    .dor-brand-name em { display: block; font-family: "Jost", sans-serif; font-style: normal; font-size: 9px; letter-spacing: 0.42em; color: var(--dor-gold); margin-top: 2px; }.dor-links { display: flex; gap: 30px; list-style: none; }
+    .dor-links a {
+      font-family: "Jost", sans-serif; font-size: 12px; font-weight: 500;
+      letter-spacing: 0.24em; text-transform: uppercase; color: var(--dor-ivory);
+      text-decoration: none; padding: 6px 0; border-bottom: 1px solid transparent;
+    }.dor-links a:hover { color: var(--dor-gold-soft); border-bottom-color: var(--dor-gold); }
+    .dor-phone {
+      font-family: "Jost", sans-serif; font-size: 13px; letter-spacing: 0.12em;
+      color: var(--dor-black); background: linear-gradient(135deg, var(--dor-gold-soft), var(--dor-gold));
+      padding: 11px 20px; text-decoration: none; font-weight: 600; white-space: nowrap;
+    }.dor-phone:hover { filter: brightness(1.08); }
+    /* ---------- Hero ---------- */
+    .dor-hero {
+      position: relative; min-height: 100svh;
+      display: flex; align-items: center; justify-content: center; text-align: center;
+      padding: 130px 24px 90px; overflow: hidden;
+      background: linear-gradient(rgba(13,13,15,0.82), rgba(13,13,15,0.94)),
+        url("https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1800&q=80") center/cover;
+    }
+    .dor-sunburst {
+      position: absolute; top: 50%; left: 50%; width: 1100px; height: 1100px;
+      transform: translate(-50%, -58%);
+      background: repeating-conic-gradient(from 0deg, rgba(201,162,39,0.10) 0deg 4deg, transparent 4deg 10deg);
+      -webkit-mask: radial-gradient(circle, #000 0%, transparent 62%);
+      mask: radial-gradient(circle, #000 0%, transparent 62%);
+      border-radius: 50%; pointer-events: none;
+    }
+    .dor-hero-frame {
+      position: relative; z-index: 1; max-width: 860px;
+      border: 1px solid var(--dor-gold);
+      outline: 1px solid rgba(201,162,39,0.4); outline-offset: 10px;
+      padding: 64px 48px; background: rgba(13, 13, 15, 0.55);
+    }
+    .dor-eyebrow {
+      font-family: "Jost", sans-serif; font-size: 11px; font-weight: 500;
+      letter-spacing: 0.5em; text-transform: uppercase; color: var(--dor-gold);
+      margin-bottom: 26px;
+    }
+    .dor-h1 {
+      font-family: "Cinzel", serif; font-weight: 600;
+      font-size: clamp(2.4rem, 6vw, 4.4rem); line-height: 1.12; letter-spacing: 0.04em;
+      margin-bottom: 22px;
+    }.dor-h1 em { font-style: normal; color: var(--dor-gold-soft); }
+    .dor-lede { font-size: 21px; font-style: italic; color: rgba(246,241,229,0.85); max-width: 620px; margin: 0 auto 36px; }
+    .dor-cta-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .dor-btn {
+      font-family: "Jost", sans-serif; font-size: 12px; font-weight: 600;
+      letter-spacing: 0.28em; text-transform: uppercase; text-decoration: none;
+      padding: 17px 34px; display: inline-block;
+    }.dor-btn-gold { background: linear-gradient(135deg, var(--dor-gold-soft), var(--dor-gold)); color: var(--dor-black); }.dor-btn-gold:hover { filter: brightness(1.1); }.dor-btn-ghost { border: 1px solid var(--dor-gold); color: var(--dor-gold-soft); }.dor-btn-ghost:hover { background: rgba(201,162,39,0.12); }
+    .dor-hero-stats {
+      position: relative; z-index: 1; display: flex; gap: 54px; justify-content: center;
+      margin-top: 58px; flex-wrap: wrap;
+    }.dor-stat { text-align: center; }
+    .dor-stat b { display: block; font-family: "Cinzel", serif; font-size: 34px; font-weight: 600; color: var(--dor-gold-soft); }
+    .dor-stat span { font-family: "Jost", sans-serif; font-size: 10px; letter-spacing: 0.32em; text-transform: uppercase; color: rgba(246,241,229,0.65); }
+    /* ---------- Sections ---------- */ .dor-section { padding: 110px 0; position: relative; }.dor-section-alt { background: var(--dor-coal); }
+    .dor-kicker {
+      font-family: "Jost", sans-serif; font-size: 11px; font-weight: 500;
+      letter-spacing: 0.44em; text-transform: uppercase; color: var(--dor-gold);
+      margin-bottom: 18px; display: flex; align-items: center; gap: 16px;
+    }
+    .dor-kicker::before { content: ""; width: 44px; height: 1px; background: var(--dor-gold); }
+    .dor-h2 {
+      font-family: "Cinzel", serif; font-weight: 600;
+      font-size: clamp(1.9rem, 4vw, 2.9rem); letter-spacing: 0.03em; line-height: 1.2;
+      margin-bottom: 18px;
+    }.dor-h2 em { font-style: normal; color: var(--dor-gold-soft); }
+    .dor-intro { max-width: 640px; font-size: 20px; font-style: italic; color: rgba(246,241,229,0.8); margin-bottom: 56px; }
+    .dor-rule { display: flex; align-items: center; gap: 14px; margin: 0 auto 60px; max-width: 420px; }
+    .dor-rule::before, .dor-rule::after { content: ""; flex: 1; height: 1px; background: var(--dor-line); }
+    .dor-rule i { width: 9px; height: 9px; background: var(--dor-black); border: 1px solid var(--dor-gold); transform: rotate(45deg); }
+    /* ---------- Portfolio ---------- */ .dor-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 34px; }
+    .dor-card {
+      position: relative; overflow: hidden; text-decoration: none; color: inherit;
+      border: 1px solid rgba(201,162,39,0.28); background: var(--dor-coal); display: block;
+    }
+    .dor-card img { width: 100%; height: 340px; object-fit: cover; display: block; filter: saturate(0.92); transition: transform 0.7s ease; }.dor-card:hover img { transform: scale(1.045); }.dor-card-body { padding: 30px 32px 34px; position: relative; }
+    .dor-card-body::before {
+      content: ""; position: absolute; top: 0; left: 32px; right: 32px; height: 1px;
+      background: linear-gradient(90deg, var(--dor-gold), transparent);
+    }
+    .dor-card-tag { font-family: "Jost", sans-serif; font-size: 10px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--dor-gold); margin-bottom: 10px; }
+    .dor-card h3 { font-family: "Cinzel", serif; font-size: 24px; font-weight: 600; letter-spacing: 0.03em; margin-bottom: 8px; }.dor-card p { font-size: 18px; font-style: italic; color: rgba(246,241,229,0.72); }
+    .dor-card-num {
+      position: absolute; top: 18px; right: 22px; z-index: 2;
+      font-family: "Cinzel", serif; font-size: 15px; color: var(--dor-black);
+      background: var(--dor-gold-soft); width: 40px; height: 40px;
+      display: grid; place-items: center; transform: rotate(45deg);
+    }.dor-card-num span { transform: rotate(-45deg); }
+    /* ---------- Savoir-faire ---------- */ .dor-craft { background: linear-gradient(160deg, var(--dor-emerald-deep), var(--dor-emerald) 130%); border-top: 1px solid var(--dor-line); border-bottom: 1px solid var(--dor-line); }
+    .dor-craft-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border: 1px solid rgba(201,162,39,0.4); }.dor-craft-item { padding: 44px 30px; border-right: 1px solid rgba(201,162,39,0.4); }.dor-craft-item:last-child { border-right: none; }
+    .dor-craft-gem {
+      width: 54px; height: 54px; margin-bottom: 24px; transform: rotate(45deg);
+      border: 1px solid var(--dor-gold-soft); display: grid; place-items: center;
+      font-family: "Cinzel", serif; color: var(--dor-gold-soft); font-size: 18px;
+    }.dor-craft-gem span { transform: rotate(-45deg); }
+    .dor-craft-item h3 { font-family: "Cinzel", serif; font-size: 19px; font-weight: 600; letter-spacing: 0.05em; margin-bottom: 12px; color: var(--dor-gold-soft); }.dor-craft-item p { font-size: 17px; color: rgba(246,241,229,0.85); }
+    /* ---------- Process ---------- */
+    .dor-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; counter-reset: dor-step; }.dor-step { border-top: 2px solid var(--dor-gold); padding-top: 26px; position: relative; }
+    .dor-step::before {
+      counter-increment: dor-step; content: "0" counter(dor-step);
+      font-family: "Cinzel", serif; font-size: 15px; letter-spacing: 0.2em; color: var(--dor-gold);
+      display: block; margin-bottom: 14px;
+    }
+    .dor-step h3 { font-family: "Cinzel", serif; font-size: 21px; font-weight: 600; letter-spacing: 0.04em; margin-bottom: 10px; }.dor-step p { font-size: 17px; color: rgba(246,241,229,0.75); }
+    /* ---------- About ---------- */
+    .dor-about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }.dor-about-img { position: relative; }
+    .dor-about-img img { width: 100%; height: 480px; object-fit: cover; display: block; border: 1px solid var(--dor-line); }
+    .dor-about-img::after {
+      content: ""; position: absolute; inset: 14px; border: 1px solid rgba(201,162,39,0.55); pointer-events: none;
+    }.dor-about-copy p { margin-bottom: 20px; font-size: 19px; color: rgba(246,241,229,0.85); }.dor-about-copy p strong { color: var(--dor-gold-soft); font-weight: 600; }
+    .dor-signature { font-family: "Cormorant Garamond", serif; font-style: italic; font-size: 30px; color: var(--dor-gold-soft); margin-top: 28px; }
+    /* ---------- Contact ---------- */ .dor-contact-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 64px; }
+    .dor-contact-info h3 { font-family: "Cinzel", serif; font-size: 20px; letter-spacing: 0.06em; margin-bottom: 26px; color: var(--dor-gold-soft); }.dor-contact-line { margin-bottom: 22px; }
+    .dor-contact-line dt { font-family: "Jost", sans-serif; font-size: 10px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--dor-gold); margin-bottom: 6px; }.dor-contact-line dd { font-size: 21px; }.dor-contact-line a { color: var(--dor-ivory); text-decoration: none; border-bottom: 1px solid var(--dor-line); }.dor-contact-line a:hover { color: var(--dor-gold-soft); }.dor-form { border: 1px solid var(--dor-line); padding: 44px 40px; background: var(--dor-coal); }.dor-field { margin-bottom: 22px; }
+    .dor-field label { display: block; font-family: "Jost", sans-serif; font-size: 10px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: var(--dor-gold); margin-bottom: 10px; }
+    .dor-field input, .dor-field select, .dor-field textarea {
+      width: 100%; background: var(--dor-black); border: 1px solid rgba(201,162,39,0.35);
+      color: var(--dor-ivory); font-family: "Cormorant Garamond", serif; font-size: 18px;
+      padding: 14px 16px;
+    }.dor-field input:focus, .dor-field select:focus, .dor-field textarea:focus { outline: 1px solid var(--dor-gold); border-color: var(--dor-gold); }.dor-field textarea { min-height: 130px; resize: vertical; }
+    .dor-form-note { font-size: 15px; font-style: italic; color: rgba(246,241,229,0.55); margin-top: 18px; }
+    /* ---------- Footer ---------- */ .dor-footer { border-top: 1px solid var(--dor-line); padding: 60px 0 90px; background: #08080a; }
+    .dor-footer-inner { display: flex; justify-content: space-between; align-items: flex-start; gap: 40px; flex-wrap: wrap; }
+    .dor-footer small { display: block; margin-top: 18px; font-family: "Jost", sans-serif; font-size: 11px; letter-spacing: 0.14em; color: rgba(246,241,229,0.5); }
+    .dor-footer-links { list-style: none; display: flex; gap: 26px; flex-wrap: wrap; }
+    .dor-footer-links a { font-family: "Jost", sans-serif; font-size: 11px; letter-spacing: 0.26em; text-transform: uppercase; color: rgba(246,241,229,0.7); text-decoration: none; }.dor-footer-links a:hover { color: var(--dor-gold-soft); }
+    @media (max-width: 960px) {.dor-links { display: none; }.dor-grid, .dor-about-grid, .dor-contact-grid { grid-template-columns: 1fr; }.dor-craft-grid, .dor-steps { grid-template-columns: repeat(2, 1fr); }.dor-craft-item:nth-child(2) { border-right: none; }.dor-craft-item { border-bottom: 1px solid rgba(201,162,39,0.4); }.dor-hero-frame { padding: 44px 26px; }.dor-section { padding: 80px 0; }
+    }
+    @media (max-width: 600px) {.dor-craft-grid, .dor-steps { grid-template-columns: 1fr; }.dor-craft-item { border-right: none; }.dor-phone { display: none; }.dor-form { padding: 30px 22px; }.dor-card img { height: 260px; }.dor-about-img img { height: 340px; }
+    }</style>
+</head>
+<body class="dor-body">
+  <nav class="dor-nav" aria-label="Navigation principale">
+    <div class="dor-nav-inner">
+      <a class="dor-brand" href="#dor-haut" aria-label="Maison Doré — retour en haut">
+        <span class="dor-mono" aria-hidden="true"><span>MD</span></span>
+        <span class="dor-brand-name">Maison Doré<em>Westmount · depuis 1987</em></span>
+      </a>
+      <ul class="dor-links">
+        <li><a href="#dor-realisations">Réalisations</a></li>
+        <li><a href="#dor-savoir-faire">Savoir-faire</a></li>
+        <li><a href="#dor-processus">Processus</a></li>
+        <li><a href="#dor-atelier">Atelier</a></li>
+        <li><a href="#dor-contact">Contact</a></li>
+      </ul>
+      <a class="dor-phone" href="tel:+15145550151">(514) 555-0151</a>
+    </div>
+  </nav>
+
+  <header class="dor-hero" id="dor-haut">
+    <div class="dor-sunburst" aria-hidden="true"></div>
+    <div class="dor-hero-frame">
+      <p class="dor-eyebrow">Atelier de rénovation · Westmount</p>
+      <h1 class="dor-h1">L'art de la <em>demeure</em>,<br />signé <em>Maison Doré</em></h1>
+      <p class="dor-lede">Depuis 1987, notre atelier compose des intérieurs d'exception — marbre, laiton et boiseries — pour les plus belles résidences de Montréal.</p>
+      <div class="dor-cta-row">
+        <a class="dor-btn dor-btn-gold" href="#dor-realisations">Voir nos réalisations</a>
+        <a class="dor-btn dor-btn-ghost" href="#dor-contact">Demander une consultation</a>
+      </div>
+    </div>
+    <div class="dor-hero-stats" aria-label="Nos chiffres">
+      <div class="dor-stat"><b>38</b><span>Années d'atelier</span></div>
+      <div class="dor-stat"><b>240+</b><span>Résidences signées</span></div>
+      <div class="dor-stat"><b>14</b><span>Artisans d'art</span></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="dor-section" id="dor-realisations" aria-labelledby="dor-t-realisations">
+      <div class="dor-wrap">
+        <p class="dor-kicker">Portfolio</p>
+        <h2 class="dor-h2" id="dor-t-realisations">Des intérieurs <em>d'exception</em></h2>
+        <p class="dor-intro">Chaque projet est une pièce unique, dessinée à la main puis exécutée par nos artisans. Voici quelques-unes de nos réalisations récentes.</p>
+        <div class="dor-rule" aria-hidden="true"><i></i></div>
+        <div class="dor-grid">
+          <a class="dor-card" href="#dor-contact">
+            <span class="dor-card-num" aria-hidden="true"><span>I</span></span>
+            <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80" alt="Salon art déco avec lustre en laiton et mobilier élégant" loading="lazy" />
+            <div class="dor-card-body">
+              <p class="dor-card-tag">Westmount · Salon</p>
+              <h3>Résidence S.</h3>
+              <p>Marbre Calacatta, laiton brossé et staff sculpté — un salon de réception digne des années folles.</p>
+            </div>
+          </a>
+          <a class="dor-card" href="#dor-contact">
+            <span class="dor-card-num" aria-hidden="true"><span>II</span></span>
+            <img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1200&q=80" alt="Cuisine de luxe avec îlot en marbre et armoires sombres" loading="lazy" />
+            <div class="dor-card-body">
+              <p class="dor-card-tag">Outremont · Cuisine</p>
+              <h3>Villa C.</h3>
+              <p>Cuisine d'apparat en noyer fumé, îlot monolithe et robinetterie en bronze patiné.</p>
+            </div>
+          </a>
+          <a class="dor-card" href="#dor-contact">
+            <span class="dor-card-num" aria-hidden="true"><span>III</span></span>
+            <img src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1200&q=80" alt="Salle de bain en marbre avec baignoire îlot et détails dorés" loading="lazy" />
+            <div class="dor-card-body">
+              <p class="dor-card-tag">Westmount · Bain</p>
+              <h3>Appartement H.</h3>
+              <p>Salle de bain cathédrale : marbre veiné, baignoire îlot et mosaïque à motif éventail.</p>
+            </div>
+          </a>
+          <a class="dor-card" href="#dor-contact">
+            <span class="dor-card-num" aria-hidden="true"><span>IV</span></span>
+            <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80" alt="Bibliothèque aux boiseries sombres et fauteuils en velours émeraude" loading="lazy" />
+            <div class="dor-card-body">
+              <p class="dor-card-tag">Ville-Marie · Bibliothèque</p>
+              <h3>Bibliothèque P.</h3>
+              <p>Boiseries d'acajou, velours émeraude et parquet en point de Hongrie restauré à la main.</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="dor-section dor-craft" id="dor-savoir-faire" aria-labelledby="dor-t-savoir">
+      <div class="dor-wrap">
+        <p class="dor-kicker">Savoir-faire</p>
+        <h2 class="dor-h2" id="dor-t-savoir">Quatre métiers, <em>une exigence</em></h2>
+        <p class="dor-intro">Nos artisans perpétuent des gestes rares, du sciage du marbre à la dorure à la feuille.</p>
+        <div class="dor-craft-grid">
+          <div class="dor-craft-item">
+            <div class="dor-craft-gem" aria-hidden="true"><span>◆</span></div>
+            <h3>Marbre &amp; pierre</h3>
+            <p>Calacatta, travertin, onyx : sélection en carrière et taille sur mesure dans notre atelier.</p>
+          </div>
+          <div class="dor-craft-item">
+            <div class="dor-craft-gem" aria-hidden="true"><span>⬟</span></div>
+            <h3>Laiton &amp; bronze</h3>
+            <p>Fonderie, brossage et patine : quincaillerie, rampes et luminaires dessinés pour durer.</p>
+          </div>
+          <div class="dor-craft-item">
+            <div class="dor-craft-gem" aria-hidden="true"><span>✦</span></div>
+            <h3>Boiseries &amp; staff</h3>
+            <p>Moulures, caissons et rosaces : le vocabulaire déco, sculpté et posé au millimètre.</p>
+          </div>
+          <div class="dor-craft-item">
+            <div class="dor-craft-gem" aria-hidden="true"><span>❖</span></div>
+            <h3>Ébénisterie</h3>
+            <p>Bibliothèques, bars et dressings en noyer, acajou ou ébène, vernis au tampon.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="dor-section dor-section-alt" id="dor-processus" aria-labelledby="dor-t-processus">
+      <div class="dor-wrap">
+        <p class="dor-kicker">Processus</p>
+        <h2 class="dor-h2" id="dor-t-processus">De l'esquisse à la <em>remise des clés</em></h2>
+        <p class="dor-intro">Une méthode éprouvée, un interlocuteur unique, et le souci du détail à chaque étape.</p>
+        <div class="dor-steps">
+          <div class="dor-step">
+            <h3>Écoute</h3>
+            <p>Visite privée et étude de vos usages : nous dessinons d'abord votre manière d'habiter.</p>
+          </div>
+          <div class="dor-step">
+            <h3>Dessin</h3>
+            <p>Plans, élévations et planches de matériaux validés avec vous, sans surprise budgétaire.</p>
+          </div>
+          <div class="dor-step">
+            <h3>Réalisation</h3>
+            <p>Nos artisans d'art exécutent le chantier, protégé et orchestré comme une partition.</p>
+          </div>
+          <div class="dor-step">
+            <h3>Livraison</h3>
+            <p>Réception pièce par pièce, retouches au peigne fin et carnet d'entretien offert.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="dor-section" id="dor-atelier" aria-labelledby="dor-t-atelier">
+      <div class="dor-wrap">
+        <div class="dor-about-grid">
+          <div class="dor-about-img">
+            <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80" alt="Intérieur raffiné rénové par l'atelier, tons chauds et mobilier élégant" loading="lazy" />
+          </div>
+          <div class="dor-about-copy">
+            <p class="dor-kicker">L'atelier</p>
+            <h2 class="dor-h2" id="dor-t-atelier">Une maison, <em>un serment</em></h2>
+            <p>Fondée en <strong>1987</strong> au cœur de Westmount, la Maison Doré est née d'une conviction simple : une rénovation de prestige est un <strong>ouvrage d'art</strong>, pas un chantier.</p>
+            <p>Nos <strong>quatorze artisans</strong> — tailleurs de pierre, ébénistes, doreurs — travaillent sous un même toit, à deux pas de l'avenue Greene, pour garder la main sur chaque geste.</p>
+            <p class="dor-signature">— L'atelier Maison Doré</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="dor-section dor-section-alt" id="dor-contact" aria-labelledby="dor-t-contact">
+      <div class="dor-wrap">
+        <p class="dor-kicker">Contact</p>
+        <h2 class="dor-h2" id="dor-t-contact">Commençons par une <em>conversation</em></h2>
+        <p class="dor-intro">Consultation privée à l'atelier ou à domicile, sur rendez-vous uniquement.</p>
+        <div class="dor-contact-grid">
+          <div class="dor-contact-info">
+            <h3>Nos coordonnées</h3>
+            <dl>
+              <div class="dor-contact-line">
+                <dt>Téléphone</dt>
+                <dd><a href="tel:+15145550151">(514) 555-0151</a></dd>
+              </div>
+              <div class="dor-contact-line">
+                <dt>Courriel</dt>
+                <dd><a href="mailto:bonjour@maisondore.ca">bonjour@maisondore.ca</a></dd>
+              </div>
+              <div class="dor-contact-line">
+                <dt>Atelier</dt>
+                <dd>48, avenue de l'Atelier<br />Westmount (QC) H3Y 2H8</dd>
+              </div>
+              <div class="dor-contact-line">
+                <dt>Heures</dt>
+                <dd>Lun – ven · 9 h à 18 h<br />Samedi sur rendez-vous</dd>
+              </div>
+            </dl>
+          </div>
+          <form class="dor-form" action="#" method="post" onsubmit="return false;" aria-label="Demande de consultation">
+            <div class="dor-field">
+              <label for="dor-nom">Nom complet</label>
+              <input id="dor-nom" name="nom" type="text" autocomplete="name" required />
+            </div>
+            <div class="dor-field">
+              <label for="dor-courriel">Courriel</label>
+              <input id="dor-courriel" name="courriel" type="email" autocomplete="email" required />
+            </div>
+            <div class="dor-field">
+              <label for="dor-projet">Type de projet</label>
+              <select id="dor-projet" name="projet">
+                <option>Résidence complète</option>
+                <option>Cuisine</option>
+                <option>Salle de bain</option>
+                <option>Bibliothèque / boiseries</option>
+                <option>Autre projet sur mesure</option>
+              </select>
+            </div>
+            <div class="dor-field">
+              <label for="dor-message">Votre projet en quelques mots</label>
+              <textarea id="dor-message" name="message"></textarea>
+            </div>
+            <button class="dor-btn dor-btn-gold" type="submit">Envoyer ma demande</button>
+            <p class="dor-form-note">Formulaire de démonstration — aucune donnée n'est transmise.</p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="dor-footer">
+    <div class="dor-wrap dor-footer-inner">
+      <div>
+        <a class="dor-brand" href="#dor-haut" aria-label="Maison Doré — retour en haut">
+          <span class="dor-mono" aria-hidden="true"><span>MD</span></span>
+          <span class="dor-brand-name">Maison Doré<em>Westmount · depuis 1987</em></span>
+        </a>
+        <small>© 2026 Maison Doré — Entreprise fictive créée pour démonstration.<br />(514) 555-0151 · bonjour@maisondore.ca</small>
+      </div>
+      <ul class="dor-footer-links">
+        <li><a href="#dor-realisations">Réalisations</a></li>
+        <li><a href="#dor-savoir-faire">Savoir-faire</a></li>
+        <li><a href="#dor-processus">Processus</a></li>
+        <li><a href="#dor-atelier">Atelier</a></li>
+        <li><a href="#dor-contact">Contact</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <EscapeHatch />
+</body>
+</html>
