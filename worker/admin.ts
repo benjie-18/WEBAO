@@ -293,8 +293,8 @@ async function handlePasswordChange(req: Request, kv: KVNamespace): Promise<Resp
     return err((e as Error).message);
   }
   if (!(await verifyPassword(kv, body.current))) return err("Current password incorrect", 401);
-  if (typeof body.next !== "string" || body.next.length < 5)
-    return err("New password must be at least 5 characters");
+  if (typeof body.next !== "string" || body.next.length < 12)
+    return err("New password must be at least 12 characters");
   if (typeof body.next !== "string" || body.next.length > 256) return err("New password too long");
   await setPasswordHash(kv, await sha256Hex(body.next));
   // Log out every other session; the caller keeps its own token.
