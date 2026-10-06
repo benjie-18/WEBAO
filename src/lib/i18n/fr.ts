@@ -9,9 +9,14 @@ const fr = {
         "Des sites web sur mesure pour les entreprises partout au Canada, à 149 $ CAD par mois. Design, domaine, hébergement, mises à jour et soutien inclus. Parcourez le catalogue de démos.",
     },
     pricing: {
-      title: "Tarifs site web · 149 $ CAD/mois, tout inclus | WEBAO",
+      title: "Tarifs site web · Forfaits dès C$89/mois | WEBAO",
       description:
-        "Un forfait qui inclut tout : un site sur mesure de 3 à 5 pages, domaine, hébergement, bases SEO, analytique, mises à jour et soutien. Sans frais d’installation, sans contrat à long terme.",
+        "Trois forfaits pour sites web d'entreprises locales : Launch C$89/mois, Grow C$149/mois, Scale C$349/mois. Design, domaine, hébergement, SEO, mises à jour et soutien inclus. Sans frais d'installation.",
+    },
+    terms: {
+      title: "Conditions et détails · Notes tarifaires WEBAO",
+      description:
+        "Les conditions complètes derrière les tarifs WEBAO : facturation, contrat, détails des forfaits, packs et options. Notes numérotées comme sur la page des tarifs.",
     },
     contact: {
       title: "Contact WEBAO · Démarrez votre site sur mesure",
@@ -67,6 +72,7 @@ const fr = {
   },
 
   intro: {
+    ariaLabel: "Introduction WEBAO",
     captionBrand: "WEBAO",
     captionLeft: "WEBAO · WEBAO.CA",
     captionRight: "STUDIO · MONTRÉAL",
@@ -117,6 +123,15 @@ const fr = {
       },
     },
     marquee: "Électriciens <i></i> Plombiers <i></i> Couvreurs <i></i> Paysagistes <i></i> Restaurants <i></i> Cliniques",
+    proof: {
+      eyebrow: "Le catalogue en mouvement",
+      heading: "Quarante et une directions. Zéro modèle.",
+      sub: "Chaque vignette est la page d’accueil réelle d’un site démo. Laissez défiler, cliquez pour explorer.",
+      browse: "Parcourir les 41 démos →",
+      prev: "Précédent",
+      next: "Suivant",
+      imgAlt: "Page d’accueil de {name}",
+    },
     process: {
       eyebrow: "Fonctionnement · Trois étapes, sans réunions qui auraient pu être des courriels",
       title: "De l’idée au <span>en ligne</span>, habituellement en une semaine.",
@@ -282,152 +297,547 @@ const fr = {
   },
 
   pricing: {
+    plansTitle: "Forfaits",
     hero: {
-      eyebrow: "Tarifs · Un seul forfait, rien à décoder",
-      title: "Un seul forfait.<br /><span>Tout</span> inclus.",
-      desc: "On a voulu garder ça simple. La plupart des entreprises ont besoin de la même chose : un site crédible, trouvable, qui reste à jour. Un forfait couvre ça pour 149 $ par mois, sans frais d’installation.",
-      cta: "Démarrer mon site →",
-      emailNote: "Des questions d’abord ? Écrivez à contact@webao.ca",
-      card: {
-        label: "LE FORFAIT WEBAO",
-        price: "149 $",
-        suffix: "CAD / mois<br />+ taxes applicables",
-        desc: "Pour la plupart des métiers, commerces, restos et services locaux. 3 à 5 pages, design pensé autour de votre entreprise.",
-        cta: "Commencer →",
-        note: "Sans frais d’installation · Sans contrat à long terme",
-        trust: ["◐ SSL", "◑ Sauvegardes", "◎ CDN"],
+      eyebrow: "Tarifs",
+      title: "Tarifs",
+      strip: [
+        { note: 1, text: "Tous les prix sont en CAD, taxes en sus" },
+        { note: 2, text: "Durée initiale : 6 mois, puis au mois. Résiliation : préavis de 30 jours" },
+        { note: 3, text: "Facturé mensuellement, ou annuellement à l'avance (2 mois gratuits)" },
+        { note: 0, text: "Sans frais d'installation" },
+      ],
+    },
+    plans: {
+      launch: {
+        name: "Launch",
+        monthly: "C$89/mois",
+        annual: "(C$890/an)",
+        priceNote: 4,
+        badge: "",
+        desc: "Conçu pour les travailleurs autonomes qui ont surtout besoin d'une présence en ligne professionnelle et d'un moyen pour les clients de les joindre.",
+        inherits: "",
+        features: [
+          "Site web personnalisé d'une page",
+          "Design adapté aux mobiles",
+          "1 domaine personnalisé standard inclus",
+          "SSL",
+          "Hébergement",
+          "Maintenance",
+          "Sécurité",
+          "Formulaire de contact",
+          "Bouton d'appel direct",
+          "Section FAQ de base",
+          "Fondations SEO",
+          "Jusqu'à 1 heure de mises à jour de contenu de routine par mois",
+          "Soutien par courriel, réponse en 3 à 5 jours ouvrables",
+        ],
+      },
+      grow: {
+        name: "Grow",
+        monthly: "C$149/mois",
+        annual: "(C$1,490/an)",
+        priceNote: 9,
+        badge: "Le plus populaire",
+        desc: "Conçu pour les entreprises locales établies qui ont besoin d'un site web qui génère activement des prospects.",
+        inherits: "Tout ce qui est inclus dans Launch, plus :",
+        features: [
+          "Site web personnalisé de 3 à 5 pages",
+          "Formulaire de soumission / estimation",
+          "Téléversement de photos pour soumission",
+          "SEO sur page + configuration GBP",
+          "Configuration et optimisation du profil d'entreprise Google (une seule fois)",
+          "Widget d'avis Google",
+          "Barre fixe pour texter",
+          "FAQ étendue",
+          "Page d'administration avec tableau de bord de base",
+          "Jusqu'à 3 heures de mises à jour du site web par mois",
+          "Soutien prioritaire, réponse en 2 jours ouvrables",
+        ],
+      },
+      scale: {
+        name: "Scale",
+        monthly: "C$349/mois",
+        annual: "(C$3,490/an)",
+        priceNote: 12,
+        badge: "",
+        desc: "Conçu pour les entreprises en croissance qui veulent que leur site web fasse partie de leur système d'acquisition de clients.",
+        inherits: "Tout ce qui est inclus dans Grow, plus :",
+        features: [
+          "Jusqu'à 10 pages, incluant des pages par zone desservie",
+          "Structure prête pour le blogue",
+          "SEO sur page étendu + zones desservies",
+          "Réservation / planification en ligne",
+          "Moteur de génération d'avis (500 crédits SMS par mois inclus)",
+          "Rapport de croissance mensuel",
+          "Mises à jour de contenu de routine illimitées",
+          "Soutien prioritaire le jour même, réponse le jour ouvrable même (objectif)",
+        ],
+      },
+      noteAria: "Voir la note {n} dans les conditions",
+    },
+    bundles: {
+      eyebrow: "Packs",
+      title: "Packs",
+      lead: {
+        name: "Lead Pack",
+        price: "C$239/mois",
+        priceNote: 15,
+        includesLabel: "Inclus :",
+        includes: ["Gestion du SEO local", "Moteur de génération d'avis", "Assistant clavardage IA entraîné"],
+        individualLabel: "Valeur individuelle :",
+        individual: "C$159 + C$99 + C$99 = C$357/mois",
+        bundleLabel: "Forfait :",
+        bundlePrice: "C$239/mois",
+        availLabel: "Disponible sur :",
+        avail: "Launch, Grow",
+        availNote: 17,
+      },
+      visibility: {
+        name: "Visibility Pack",
+        price: "C$99/mois",
+        priceNote: 16,
+        includesLabel: "Inclus :",
+        includes: ["Moteur de génération d'avis", "Rapport de croissance mensuel"],
+        individualLabel: "Valeur individuelle :",
+        individual: "C$99 + C$29 = C$128/mois",
+        bundleLabel: "Forfait :",
+        bundlePrice: "C$99/mois",
+        availLabel: "Disponible sur :",
+        avail: "Launch, Grow",
+        availNote: 17,
+      },
+      prev: "Pack précédent",
+      next: "Pack suivant",
+      ofLabel: "sur",
+    },
+    popularStrip: {
+      label: "Option populaire :",
+      name: "Gestion du SEO local",
+      price: "C$159/mois",
+      detail: "Gestion continue du SEO local : option sur chaque forfait",
+      note: 14,
+    },
+    addons: {
+      eyebrow: "Options",
+      title: "Options",
+      popularTag: "Populaire",
+      items: {
+        localseo: { name: "SEO local / Gestion du profil d'entreprise Google", price: "C$159/mois", note: 18, short: "Pour les entreprises qui veulent une optimisation continue du référencement local plutôt qu'une simple configuration initiale." },
+        review: { name: "Moteur de génération d'avis", price: "C$99/mois", note: 19, short: "Automatise le processus d'obtention d'avis clients." },
+        aichat: { name: "Assistant clavardage IA entraîné", price: "C$99/mois", note: 20, short: "Un assistant IA entraîné spécifiquement autour de l'entreprise." },
+        booking: { name: "Réservation / Planification en ligne", price: "C$49/mois", note: 21, short: "Pour les entreprises qui prennent des rendez-vous." },
+        blog: { name: "Blogue et mises à jour", price: "C$34/mois", note: 22, short: "" },
+        bilingual: { name: "Bilingue EN/FR", price: "C$34/mois", note: 23, short: "" },
+        ecommerce: { name: "Commerce électronique simplifié / Liens de paiement", price: "C$59/mois", note: 24, short: "Pour des paiements en ligne simples sans boutique en ligne complète." },
+        email: { name: "Marketing par courriel", price: "C$29/mois", note: 0, short: "" },
+        report: { name: "Rapport de croissance mensuel", price: "C$29/mois", note: 11, short: "" },
+        extrapage: { name: "Page supplémentaire", price: "C$44 paiement unique", note: 25, short: "" },
+        priority: { name: "Soutien prioritaire + 1 appel stratégique par mois", price: "C$59/mois", note: 26, short: "" },
+        admin: { name: "Panneau d'administration avancé", price: "C$39/mois", note: 27, short: "" },
+        quotephoto: { name: "Téléversement de photos pour soumission (Launch seulement)", price: "C$9/mois", note: 28, short: "" },
       },
     },
     compare: {
-      title: "Ce que vous avez, et ce à quoi vous n’avez jamais à penser",
-      subtitle: "Tout ce qu’un site d’entreprise locale a vraiment besoin. Rien que vous n’utiliserez.",
-      includedLabel: "INCLUS DANS VOTRE 149 $",
-      included: [
-        {
-          title: "Design sur mesure 3 à 5 pages",
-          desc: "Accueil plus 2 à 4 pages (Services, À propos, Contact, etc.). Conçu autour de votre métier, pas un modèle générique.",
-        },
-        {
-          title: "Votre propre domaine",
-          desc: "Enregistré pour votre entreprise et à vous. On gère la configuration, le SSL et les renouvellements tant que vous êtes abonné. Redirection courriel incluse.",
-        },
-        {
-          title: "Hébergement, SSL, CDN",
-          desc: "Servi depuis un CDN mondial, donc le site charge rapidement pour vos clients partout au Canada.",
-        },
-        {
-          title: "Mobile, bases SEO, analytique",
-          desc: "Design mobile d’abord, balisage propre, plan de site et analytique. On peut aussi aider pour votre fiche d’entreprise Google. Des bases, pas de promesses de classement.",
-        },
-        {
-          title: "Formulaire de contact / demande de devis",
-          desc: "Les messages arrivent dans votre boîte avec protection anti-spam de base. Pas de widget tiers qui brise.",
-        },
-        {
-          title: "Sauvegardes et sécurité",
-          desc: "Sauvegardes, mises à jour et surveillance font partie du service. Si quelque chose brise, on le répare.",
-        },
-        {
-          title: "Petites mises à jour incluses",
-          desc: "Heures, photos, tarifs, promos : envoyez un courriel et on fait le changement. Pas de CMS à apprendre, pas de facturation à la pièce.",
-        },
-        {
-          title: "Soutien humain",
-          desc: "Vous parlez directement avec la personne qui fait le travail, par courriel, du lundi au vendredi (heure de l’Est).",
-        },
-      ],
-      notIncludedLabel: "PAS DANS LE FORFAIT · SUR DEVIS SI BESOIN",
-      notIncluded: [
-        {
-          title: "Pages ou langues supplémentaires",
-          desc: "Plus de pages ou une deuxième langue : possible, sur devis au cas par cas, avec un prix clair avant de commencer.",
-        },
-        {
-          title: "Boutique en ligne / systèmes de réservation",
-          desc: "Les boutiques et réservations complexes ne font pas partie du forfait de base. Si vous en avez besoin, on discute des options et on fait un devis séparé.",
-        },
-        {
-          title: "Identité de marque complète",
-          desc: "Un mot-symbole et une palette qui s’agencent à votre site sont inclus. Une identité complète (suite de logos, guide de marque) ne l’est pas.",
-        },
-        {
-          title: "Rédaction complète",
-          desc: "On révise et façonne les textes que vous envoyez. Rédiger tout votre contenu à partir de zéro est un service séparé, avec devis à l’avance.",
-        },
-        {
-          title: "Publicités / médias sociaux",
-          desc: "On ne gère pas de pubs. On se concentre sur les bases organiques : votre site et votre fiche d’entreprise Google.",
-        },
-      ],
-      calloutTitle: "La plupart des entreprises locales n’ont pas besoin des extras.",
-      calloutDesc:
-        "Le forfait est conçu pour électriciens, plombiers, paysagistes, restos et cliniques. Si le vôtre a besoin de plus, on va vous le dire d’entrée de jeu et vous faire un devis clair.",
-      calloutCta: "Demander un devis sur mesure →",
-      foot1: "VOTRE SITE, VOTRE DOMAINE · Si vous partez un jour, on aide avec la transition.",
-      foot2: "→ Pas de compte de constructeur à démêler, pas d’hébergement à migrer seul.",
+      eyebrow: "Comparaison",
+      title: "Comparer les forfaits",
+      legendIncluded: "Inclus",
+      legendDash: "Non compris dans ce forfait",
+      legendAddon: "Offert en option",
+      colFeature: "Fonctionnalité",
+      cellIncluded: "Inclus",
+      cellNotInTier: "Non compris dans ce forfait",
+      cellAddon: "Offert en option",
+      cellAddonShort: "Option",
+      compatTitle: "Compatibilité des options",
+      compatLegend: "I = inclus, A = option offerte, S/O = non offert",
+      compatRows: {
+        localseo: "Gestion du SEO local",
+        review: "Moteur de génération d'avis",
+        aichat: "Assistant clavardage IA",
+        booking: "Réservation en ligne",
+        blog: "Blogue et mises à jour",
+        bilingual: "Bilingue EN/FR",
+        ecommerce: "Commerce électronique simplifié",
+        email: "Marketing par courriel",
+        report: "Rapport de croissance mensuel",
+        extrapage: "Page supplémentaire",
+        priority: "Soutien prioritaire + appel stratégique",
+        admin: "Panneau d'administration avancé",
+        quotephoto: "Téléversement de photos pour soumission",
+        leadpack: "Lead Pack",
+        vispack: "Visibility Pack",
+      },
     },
-    timeline: {
-      eyebrow: "L’échéancier typique",
-      title: "De « on a besoin d’un site »<br /><span>à « c’est en ligne ».</span>",
-      desc: "Vous envoyez l’essentiel. On fait le travail. Une ronde de commentaires. Puis on lance et on entretient.",
-      steps: [
-        { title: "Jour 0 · Vous envoyez l’essentiel", desc: "Photos, services, zone, logo (si vous en avez un). Appel de 15 minutes ou formulaire de contact." },
-        { title: "Jour 2 · Aperçu privé", desc: "Une vraie URL sur votre téléphone. Cliquez partout. Dites-nous ce qui cloche." },
-        { title: "Jour 4 · Révisions", desc: "On peaufine la typo, les textes, les photos et les bases SEO en une ronde concentrée." },
-        { title: "Jour 5–7 · Lancement", desc: "Domaine, hébergement, SSL, analytique. On pèse sur le bouton et on vous envoie le message « c’est en ligne »." },
-      ],
-      note: "TYPIQUE, PAS GARANTI · LE COMPTE À REBOURS COMMENCE QUAND ON A VOTRE CONTENU, ET LA VITESSE DE VOS RETOURS FAIT BOUGER LA DATE.",
+    termsCta: {
+      title: "Conditions et détails",
+      label: "Lire les conditions et détails →",
     },
-    quote: {
-      invoiceTitle: "VOTRE FACTURE · CHAQUE MOIS",
-      plan: "Le forfait WEBAO",
-      allIn: "TOUT INCLUS",
-      lines: [
-        { label: "Design, domaine, hébergement, mises à jour, soutien", value: "149,00 $" },
-        { label: "Frais d’installation", value: "0,00 $" },
-        { label: "Suppléments hébergement et SSL", value: "0,00 $" },
-        { label: "Frais pour petites mises à jour", value: "0,00 $" },
-      ],
-      totalLabel: "Total",
-      totalValue: "149 $ + taxes",
-      note: "Facturé mensuellement. Tout ce qui dépasse le forfait est soumis à devis et approuvé par vous d’abord.",
-      eyebrow: "Toute la facture, chaque mois",
-      title: "Prévisible.<br />Plate (dans le bon sens).",
-      desc: "Pas de prix d’intro qui double ensuite, pas de surprises détaillées. Vous connaissez le prix avant de commencer, et il reste le même à moins que vos besoins changent et que vous approuviez un devis.",
-      checks: [
-        "→ Facturation mensuelle, sans contrat à long terme",
-        "→ Votre domaine appartient à votre entreprise",
-        "→ Si vous partez, on aide avec la transition",
-      ],
-      cta: "Commencer à 149 $/mois →",
+  },
+
+  terms: {
+    hero: {
+      title: "Conditions et détails",
     },
-    faq: {
-      title: "Questions fréquentes sur les tarifs",
-      items: [
-        {
-          q: "Et si j’ai besoin d’une 6ᵉ page plus tard ?",
-          a: "Dites-nous ce dont vous avez besoin et on vous donne un prix clair avant de faire le travail. Si vous voulez qu’on l’entretienne avec le reste, on l’intègre à votre forfait.",
-        },
-        {
-          q: "Vous chargez pour les photos ou les retouches de textes ?",
-          a: "Les petites mises à jour (changer une photo, corriger vos heures, ajouter un service) sont incluses. Les plus gros projets comme une réécriture complète ou des pages flambant neuves sont sur devis à l’avance, et c’est vous qui décidez.",
-        },
-        {
-          q: "Et les courriels (info@…) ?",
-          a: "On configure la redirection, donc info@votredomaine.ca arrive dans la boîte que vous utilisez déjà. C’est différent de l’hébergement complet de boîtes : si vous voulez des boîtes avec webmail et calendriers, ça vient d’un fournisseur comme Google ou Microsoft, payé directement à eux. On va vous aider à brancher ça.",
-        },
-        {
-          q: "Je peux payer à l’année ?",
-          a: "La facturation est mensuelle pour l’instant. Si l’annuel vous tient à cœur, mentionnez-le quand on se parle et on verra ce qu’on peut faire.",
-        },
-      ],
+    toc: {
+      title: "Sur cette page",
+      openLabel: "Aller à une section",
     },
-    ctaBand: {
-      eyebrow: "PRÊT QUAND VOUS L’ÊTES",
-      title: "Commencez à 149 $. <span>Tout inclus.</span>",
-      primary: "Démarrer mon site →",
-      secondary: "Voir les démos d’abord",
+    search: {
+      label: "Rechercher dans les conditions",
+      placeholder: "Rechercher… ( / )",
+      clear: "Effacer la recherche",
+      prev: "Résultat précédent",
+      next: "Résultat suivant",
+      noResults: "Aucun résultat. Essayez un autre mot.",
+      results: "{n} résultat",
+      resultsPlural: "{n} résultats",
+      announced: "{n} résultats trouvés",
+      announcedNone: "Aucun résultat trouvé",
     },
+    sections: {
+      billing: "Facturation et contrat",
+      plans: "Forfaits",
+      details: "Fonctionnalités et services",
+      bundles: "Packs",
+      addons: "Options",
+    },
+    noteLabel: "Note",
+    notes: {
+      "1": {
+        title: "Devise et taxes",
+        blocks: [
+          { text: "Tous les prix sont en dollars canadiens (CAD). La TPS/TVQ (14.975% au Québec) et les autres taxes applicables sont en sus." },
+        ],
+      },
+      "2": {
+        title: "Durée du contrat et résiliation",
+        blocks: [
+          { label: "Durée initiale", text: "6 mois." },
+          { label: "Après la durée initiale", text: "au mois." },
+          { label: "Résiliation", text: "préavis de 30 jours. Le préavis peut être donné pendant la durée initiale; la résiliation prend effet au plus tôt à la fin de la durée initiale." },
+          { label: "Forfaits prépayés annuels", text: "ont une durée initiale de 12 mois, puis se poursuivent au mois." },
+          { label: "Options", text: "suivent les mêmes conditions. Les options exigent un forfait de base actif et prennent fin avec le forfait de base." },
+          { label: "Page supplémentaire", text: "est un frais unique et n'est assujettie à aucune durée." },
+          { text: "Sans frais d'installation." },
+        ],
+      },
+      "3": {
+        title: "Options de facturation et prix annuel ou mensuel",
+        blocks: [
+          { text: "Facturé mensuellement, ou annuellement à l'avance avec 2 mois gratuits (prix annuel = 10 mois)." },
+          { label: "Comparaison sur 12 mois", text: "" },
+          { label: "Launch", text: "C$89/mois x 12 = C$1,068 facturé mensuellement, ou C$890 facturé annuellement (environ C$74.17/mois). L'option annuelle fait économiser C$178." },
+          { label: "Grow", text: "C$149/mois x 12 = C$1,788 facturé mensuellement, ou C$1,490 facturé annuellement (environ C$124.17/mois). L'option annuelle fait économiser C$298." },
+          { label: "Scale", text: "C$349/mois x 12 = C$4,188 facturé mensuellement, ou C$3,490 facturé annuellement (environ C$290.83/mois). L'option annuelle fait économiser C$698." },
+        ],
+      },
+      "4": {
+        title: "Launch",
+        blocks: [
+          { text: "Conçu pour les travailleurs autonomes qui ont surtout besoin d'une présence en ligne professionnelle et d'un moyen pour les clients de les joindre." },
+          { text: "Les soumissions du formulaire de contact arrivent par courriel." },
+          { label: "Positionnement", text: "Soyez en ligne et ayez l'air professionnel." },
+        ],
+      },
+      "5": {
+        title: "Niveaux de FAQ",
+        blocks: [
+          { label: "Section FAQ de base (Launch)", text: "une courte section FAQ sur la page." },
+          { label: "FAQ étendue (Grow et Scale)", text: "une section FAQ plus grande et organisée, avec plus de questions et de catégories que la FAQ de base." },
+        ],
+      },
+      "6": {
+        title: "Niveaux de SEO",
+        blocks: [
+          { label: "Fondations SEO (Launch)", text: "titre et méta-description uniques, balises Open Graph, plan du site, soumission d'indexation à Google et Bing, données structurées LocalBusiness, base de vitesse mobile." },
+          { label: "SEO sur page + configuration GBP (Grow)", text: "tout ce qui est dans Fondations, plus un texte ciblé par mots-clés pour votre service principal et votre ville sur chaque page, du maillage interne, et une configuration unique du profil d'entreprise Google (si inexistant) et son optimisation (catégories, services, heures, photos, description)." },
+          { label: "SEO sur page étendu + zones desservies (Scale)", text: "tout ce qui est dans Grow, appliqué jusqu'à 10 pages, avec des pages dédiées par zone desservie et de l'optimisation d'images / textes alt." },
+          { label: "Gestion du SEO local (option, tous les forfaits)", text: "travail mensuel continu : publications GBP, création et nettoyage de citations, surveillance des avis, suivi de la visibilité locale et ajustements." },
+          { text: "Ligne de démarcation : configuration unique (incluse dans Grow et Scale) contre travail mensuel continu (option)." },
+        ],
+      },
+      "7": {
+        title: "Mises à jour de routine et heures",
+        blocks: [
+          { text: "Le travail de routine comprend la modification des heures, des informations, de l'emplacement et des images, ainsi que le déplacement ou la modification de sections existantes." },
+          { text: "Le travail de routine ne comprend pas les refontes, les nouvelles fonctionnalités, le développement technique et les nouvelles pages. Les nouvelles pages sont facturées comme des pages supplémentaires (option 10)." },
+          { label: "Quantités incluses", text: "Launch jusqu'à 1 heure par mois, Grow jusqu'à 3 heures par mois, Scale mises à jour de routine illimitées, traitées dans l'ordre de réception. Une politique d'utilisation raisonnable s'applique." },
+          { text: "Le temps est comptabilisé et arrondi au quart d'heure le plus près. Les heures non utilisées ne sont pas reportées." },
+        ],
+      },
+      "8": {
+        title: "Délais de réponse du soutien",
+        blocks: [
+          { label: "Délais de réponse du soutien", text: "Launch 3 à 5 jours ouvrables, Grow 2 jours ouvrables, Scale le jour ouvrable même (objectif)." },
+          { text: "Le soutien prioritaire le jour même est le niveau de soutien de Scale." },
+        ],
+      },
+      "9": {
+        title: "Grow",
+        blocks: [
+          { text: "Conçu pour les entreprises locales établies qui ont besoin d'un site web qui génère activement des prospects." },
+          { label: "Positionnement", text: "Transformez votre site web en outil de génération de prospects." },
+          { text: "Cela reste l'offre webao principale et le point d'ancrage à C$149." },
+        ],
+      },
+      "10": {
+        title: "Configuration du profil d'entreprise Google",
+        blocks: [
+          { text: "Une seule fois : configuration (si inexistant) et optimisation (catégories, services, heures, photos, description)." },
+          { text: "La gestion continue est l'option Gestion du SEO local (option 1)." },
+        ],
+      },
+      "11": {
+        title: "Couches d'analyse",
+        blocks: [
+          {
+            listLabel: "Inclus :",
+            items: [
+              "Visites du site web",
+              "Sources de trafic",
+              "Soumissions de contact et de demandes de soumission",
+              "Appels et clics lorsque mesurables",
+              "Activité de réservation",
+              "Activité des avis",
+              "Changements d'un mois à l'autre",
+            ],
+          },
+          { label: "Tableau de bord de base (Grow, Scale)", text: "vue en direct de ce qui s'est passé : visites totales, soumissions de formulaires et de demandes de soumission (le cas échéant), clics d'appel et de texto, 30 derniers jours." },
+          { label: "Rapport de croissance mensuel (inclus dans Scale, option pour les autres)", text: "livré mensuellement, montre ce qui a changé : sources de trafic, changements d'un mois à l'autre, réservations, activité des avis." },
+          { label: "Panneau d'administration avancé (option)", text: "analyse détaillée en direct du pourquoi : taux de conversion par source et par page, vues par page, entonnoir de prospects, répartition par appareil et emplacement, analyses de performance, exports. Analyses agrégées." },
+        ],
+      },
+      "12": {
+        title: "Scale",
+        blocks: [
+          { text: "Conçu pour les entreprises en croissance qui veulent que leur site web fasse partie de leur système d'acquisition de clients." },
+          { label: "Positionnement", text: "Un site web géré et un système de génération de prospects pour les entreprises en croissance." },
+        ],
+      },
+      "13": {
+        title: "Conditions SMS du moteur de génération d'avis",
+        blocks: [
+          { label: "Crédits SMS", text: "500 crédits SMS par mois inclus. L'utilisation supplémentaire est facturée à C$0.05 par SMS, mensuellement." },
+          { text: "Les demandes par courriel commencent immédiatement. Les SMS sont activés une fois que le numéro d'envoi du client est vérifié auprès du transporteur." },
+        ],
+      },
+      "14": {
+        title: "Le SEO local en option",
+        blocks: [
+          { text: "La gestion continue du SEO local est offerte en option sur chaque forfait (option 1)." },
+        ],
+      },
+      "15": {
+        title: "Lead Pack",
+        blocks: [
+          { text: "Combine les trois services les plus axés sur la croissance : la gestion du SEO local, le moteur de génération d'avis et l'assistant clavardage IA entraîné." },
+          { text: "Une excellente vente additionnelle pour les clients Launch et Grow qui veulent que webao s'occupe activement de la génération de prospects." },
+        ],
+      },
+      "16": {
+        title: "Visibility Pack",
+        blocks: [
+          { text: "Pour les entreprises au budget serré." },
+          { text: "Un premier pas facile vers des services marketing récurrents." },
+        ],
+      },
+      "17": {
+        title: "Admissibilité aux forfaits groupés",
+        blocks: [
+          { text: "Les packs Lead et Visibility sont offerts sur Launch et Grow. Scale inclut déjà le moteur de génération d'avis et le rapport de croissance mensuel, donc les clients Scale ajoutent la gestion du SEO local et le clavardage IA individuellement." },
+        ],
+      },
+      "18": {
+        title: "SEO local / Gestion du profil d'entreprise Google",
+        blocks: [
+          {
+            listLabel: "Inclus :",
+            items: [
+              "Optimisation du profil d'entreprise Google",
+              "Publications GBP régulières (2 par mois)",
+              "Gestion des citations",
+              "Maintenance du SEO local",
+              "Amélioration de la visibilité locale",
+              "Surveillance des avis",
+            ],
+          },
+          { text: "Pour les entreprises qui veulent une optimisation continue du référencement local plutôt qu'une simple configuration initiale." },
+          { text: "Distinction importante : Grow inclut la configuration du GBP, tandis que cette option offre la gestion continue." },
+        ],
+      },
+      "19": {
+        title: "Moteur de génération d'avis",
+        blocks: [
+          {
+            listLabel: "Inclus :",
+            items: [
+              "Demandes d'avis automatisées après le travail",
+              "Demandes par SMS et par courriel",
+              "Flux de travail du lien d'avis",
+              "Widget d'avis sur le site",
+              "500 crédits SMS/mois inclus; utilisation supplémentaire facturée à C$0.05/SMS [13]",
+            ],
+          },
+          { text: "Automatise le processus d'obtention d'avis clients." },
+        ],
+      },
+      "20": {
+        title: "Assistant clavardage IA entraîné",
+        blocks: [
+          {
+            listLabel: "Inclus :",
+            items: [
+              "FAQ spécifiques à l'entreprise",
+              "Plus de 25 questions et réponses courantes",
+              "Services et informations de base sur l'entreprise",
+              "Qualification et capture de prospects",
+              "Intégration de réservation lorsque prise en charge",
+            ],
+          },
+          { text: "Un assistant IA entraîné spécifiquement autour de l'entreprise." },
+          { text: "Ceci est la version payante, entraînée et spécifique à l'entreprise. Grow et Scale incluent une FAQ étendue (voir 5)." },
+        ],
+      },
+      "21": {
+        title: "Réservation / Planification en ligne",
+        blocks: [
+          {
+            listLabel: "Inclus :",
+            items: ["Réservation en ligne", "Planification", "Gestion des disponibilités", "Intégration de réservation"],
+          },
+          { text: "Pour les entreprises qui prennent des rendez-vous." },
+        ],
+      },
+      "22": {
+        title: "Blogue et mises à jour",
+        blocks: [
+          {
+            listLabel: "Inclus :",
+            items: [
+              "Créez et publiez vos propres articles de blogue et mises à jour directement sur une page du site web",
+              "Optimisation de base sur la page",
+            ],
+          },
+          { text: "Sur Launch, la page du blogue compte pour 1 page supplémentaire (option 10)." },
+        ],
+      },
+      "23": {
+        title: "Bilingue EN/FR",
+        blocks: [
+          {
+            listLabel: "Inclus :",
+            items: [
+              "Version anglaise",
+              "Version française",
+              "Localisation du contenu du site web",
+              "Prise en charge de la langue et de la navigation",
+            ],
+          },
+          { label: "Chaque langue supplémentaire", text: "C$9/mois." },
+          { text: "Chaque version linguistique compte comme un ensemble de pages, pas comme des pages supplémentaires." },
+        ],
+      },
+      "24": {
+        title: "Commerce électronique simplifié / Liens de paiement",
+        blocks: [
+          {
+            listLabel: "Inclus :",
+            items: [
+              "Dépôts",
+              "Liens de paiement",
+              "Paiements de services",
+              "Codes de coupon",
+              "Transactions simples propulsées par Stripe",
+            ],
+          },
+          { text: "Pour des paiements en ligne simples sans boutique en ligne complète." },
+        ],
+      },
+      "25": {
+        title: "Page supplémentaire",
+        blocks: [
+          {
+            listLabel: "Exemples :",
+            items: ["Nouvelle page de service", "Nouvelle page par zone desservie", "FAQ", "Galerie", "Page à propos / équipe"],
+          },
+          { text: "Pour du contenu supplémentaire au-delà du nombre de pages du forfait. Frais uniques. Sur Scale, cela s'applique au-delà des 10 pages incluses." },
+        ],
+      },
+      "26": {
+        title: "Soutien prioritaire + 1 appel stratégique par mois",
+        blocks: [
+          {
+            listLabel: "Inclus :",
+            items: [
+              "Soutien plus rapide",
+              "Consultation stratégique planifiée",
+              "Recommandations pour le site web et la croissance",
+            ],
+          },
+          { text: "Un appel stratégique planifié par mois." },
+          { text: "Sur Scale, le soutien est déjà le soutien prioritaire le jour même, donc cela ajoute l'appel stratégique." },
+        ],
+      },
+      "27": {
+        title: "Panneau d'administration avancé",
+        blocks: [
+          {
+            listLabel: "Inclus :",
+            items: [
+              "Analyses plus approfondies",
+              "Taux de conversion par source et par page",
+              "Vues par page",
+              "Entonnoir de prospects",
+              "Répartition par appareil et emplacement",
+              "Analyses de performance",
+              "Exports de données",
+            ],
+          },
+          { text: "Exige Grow ou Scale (nécessite le tableau de bord de base). Les définitions sont à la note 11." },
+        ],
+      },
+      "28": {
+        title: "Téléversement de photos pour soumission",
+        blocks: [
+          {
+            listLabel: "Inclus :",
+            items: [
+              "Champ de téléversement de photos sur le formulaire de contact",
+              "Jusqu'à 5 photos par soumission",
+              "Photos livrées avec chaque soumission",
+              "Photos conservées pendant 12 mois",
+            ],
+          },
+          { text: "Permet aux clients de joindre des photos lorsqu'ils soumettent le formulaire de demande de soumission. Inclus comme fonctionnalité standard du formulaire de soumission sur Grow et Scale." },
+          { text: "Offert comme option à C$9/mois sur Launch seulement, où le téléversement est ajouté au formulaire de contact." },
+          { label: "Limites", text: "jusqu'à 5 photos par soumission, conservées pendant 12 mois." },
+        ],
+      },
+      "29": {
+        title: "Domaine",
+        blocks: [{ text: "1 domaine personnalisé standard est inclus. Le domaine reste enregistré au nom du client." }],
+      },
+    },
+    // Add-ons without a note number in the plan are rendered unnumbered,
+    // in plan order, at the end of their section.
+    unnumbered: [
+      {
+        section: "addons",
+        title: "Marketing par courriel",
+        blocks: [
+          {
+            listLabel: "Inclus :",
+            items: [
+              "Jusqu'à 5,000 envois par mois",
+              "Campagnes de base",
+              "Courriels promotionnels et clients",
+              "Fonctionnalité d'infolettre simple",
+            ],
+          },
+        ],
+      },
+    ],
   },
 
   contact: {
@@ -591,6 +1001,8 @@ const fr = {
   },
 
   admin: {
+    ariaAppLabel: "Admin WEBAO",
+    ariaTabsLabel: "Admin",
     meta: {
       title: "Admin · WEBAO",
       description: "Administration du site WEBAO : statistiques de trafic, formulaires reçus et réglages.",
