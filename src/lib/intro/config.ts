@@ -307,4 +307,3 @@ export const INTRO_CONFIG = {
   },
 } as const;
 
-export type IntroConfig = typeof INTRO_CONFIG;
