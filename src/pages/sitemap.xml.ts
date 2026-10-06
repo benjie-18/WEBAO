@@ -1,5 +1,10 @@
 import type { APIRoute } from "astro";
 import { localizedPaths, type Locale } from "../lib/i18n/config";
+import { demos } from "../lib/demos";
+
+// Hidden from the public catalog (matches DemosPage's visibleDemos) —
+// excluded from the sitemap too.
+const hiddenDemos = new Set(["boba-club"]);
 
 const pagesByLocale: Record<Locale, { key: keyof typeof localizedPaths.en; changefreq: string; priority: string }[]> = {
   en: [
@@ -8,6 +13,8 @@ const pagesByLocale: Record<Locale, { key: keyof typeof localizedPaths.en; chang
     { key: "contact", changefreq: "monthly", priority: "0.8" },
     { key: "demos", changefreq: "weekly", priority: "0.9" },
     { key: "start", changefreq: "monthly", priority: "0.9" },
+    { key: "terms", changefreq: "monthly", priority: "0.5" },
+    { key: "refunds", changefreq: "yearly", priority: "0.3" },
   ],
   fr: [
     { key: "home", changefreq: "weekly", priority: "1.0" },
@@ -15,6 +22,8 @@ const pagesByLocale: Record<Locale, { key: keyof typeof localizedPaths.en; chang
     { key: "contact", changefreq: "monthly", priority: "0.8" },
     { key: "demos", changefreq: "weekly", priority: "0.9" },
     { key: "start", changefreq: "monthly", priority: "0.9" },
+    { key: "terms", changefreq: "monthly", priority: "0.5" },
+    { key: "refunds", changefreq: "yearly", priority: "0.3" },
   ],
 };
 
@@ -25,12 +34,6 @@ const extraPages: { path: string; changefreq: string; priority: string; alternat
     changefreq: "monthly",
     priority: "0.3",
     alternates: [{ hreflang: "en", href: "https://webao.ca/sources" }],
-  },
-  {
-    path: "/refunds",
-    changefreq: "yearly",
-    priority: "0.3",
-    alternates: [{ hreflang: "en", href: "https://webao.ca/refunds" }],
   },
   {
     path: "/fr/sources",
@@ -77,6 +80,33 @@ export const GET: APIRoute = () => {
       changefreq: e.changefreq,
       priority: e.priority,
       alternates: e.alternates.map((a) => ({ ...a, href: slash(new URL(a.href).pathname) })),
+    });
+  }
+
+  // Demo detail pages (/demos/<id> + /fr/demos/<id>), one entry per visible demo.
+  for (const demo of demos) {
+    if (hiddenDemos.has(demo.id)) continue;
+    const enPath = `/demos/${demo.id}`;
+    const frPath = `/fr/demos/${demo.id}`;
+    urls.push({
+      loc: slash(enPath),
+      changefreq: "monthly",
+      priority: "0.7",
+      alternates: [
+        { hreflang: "en", href: slash(enPath) },
+        { hreflang: "fr", href: slash(frPath) },
+        { hreflang: "x-default", href: slash(enPath) },
+      ],
+    });
+    urls.push({
+      loc: slash(frPath),
+      changefreq: "monthly",
+      priority: "0.7",
+      alternates: [
+        { hreflang: "en", href: slash(enPath) },
+        { hreflang: "fr", href: slash(frPath) },
+        { hreflang: "x-default", href: slash(enPath) },
+      ],
     });
   }
 
