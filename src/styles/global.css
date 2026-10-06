@@ -1119,7 +1119,7 @@ html.theming *::after {
 /* Index note references: small superscript-style links to the terms page. */
 .noteref {
   display: inline-block;
-  font-size: 10px;
+  font-size: 5px;
   font-weight: 500;
   line-height: 1;
   vertical-align: super;
