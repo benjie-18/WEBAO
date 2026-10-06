@@ -91,9 +91,9 @@ export const bundles: BundleDef[] = [
 /** Add-on ids. The first five are the featured/popular group, in the exact
  *  order the brief requires; the rest follow plan order. */
 export const featuredAddonOrder = [
+  "localseo",
   "booking",
   "review",
-  "localseo",
   "ecommerce",
   "bilingual",
 ] as const;
