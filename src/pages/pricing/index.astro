@@ -13,29 +13,36 @@ const productSchema = JSON.stringify({
   name: "WEBAO Custom Website",
   description: t.meta.pricing.description,
   brand: { "@type": "Brand", name: "WEBAO" },
-  offers: {
-    "@type": "Offer",
-    url: "https://webao.ca/pricing",
-    priceCurrency: "CAD",
-    price: "149",
-    availability: "https://schema.org/InStock",
-  },
-});
-
-// FAQPage structured data for search snippets, built from the translated FAQ.
-const faqSchema = JSON.stringify({
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: t.pricing.faq.items.map((item) => ({
-    "@type": "Question",
-    name: item.q,
-    acceptedAnswer: { "@type": "Answer", text: item.a },
-  })),
+  offers: [
+    {
+      "@type": "Offer",
+      name: "Launch",
+      url: "https://webao.ca/pricing",
+      priceCurrency: "CAD",
+      price: "89",
+      availability: "https://schema.org/InStock",
+    },
+    {
+      "@type": "Offer",
+      name: "Grow",
+      url: "https://webao.ca/pricing",
+      priceCurrency: "CAD",
+      price: "149",
+      availability: "https://schema.org/InStock",
+    },
+    {
+      "@type": "Offer",
+      name: "Scale",
+      url: "https://webao.ca/pricing",
+      priceCurrency: "CAD",
+      price: "349",
+      availability: "https://schema.org/InStock",
+    },
+  ],
 });
 ---
 
 <BaseLayout title={t.meta.pricing.title} description={t.meta.pricing.description} locale={locale} pageKey="pricing">
   <script slot="head" type="application/ld+json" set:html={productSchema} />
-  <script slot="head" type="application/ld+json" set:html={faqSchema} />
   <PricingPage locale={locale} />
 </BaseLayout>
