@@ -1,0 +1,265 @@
+WEBAO PRICING PLAN (FINAL)
+All prices are in CAD, taxes extra [1]
+Initial term: 6 months, then month-to-month. Cancellation: 30 days' notice [2]
+Billed monthly, or annually in advance (2 months free) [3]
+No setup fee
+PLAN
+Launch: C$89/mo (C$890/yr) [4]
+Includes:
+Custom 1-page website
+Mobile-responsive design
+1 standard custom domain included [29]
+SSL
+Hosting
+Maintenance
+Security
+Contact form [4]
+Click-to-call
+Basic FAQ section [5]
+SEO Foundations [6]
+Up to 1 hour of routine content updates per month [7]
+Email support, 3 to 5 business day response [8]
+Grow: C$149/mo (C$1,490/yr). Most Popular [9]
+Everything in Launch, plus:
+3 to 5 page custom website
+Quote / estimate form
+Quote Photo Upload [28]
+SEO On-Page + GBP Setup [6]
+Google Business Profile setup and optimization (one-time) [10]
+Google Reviews widget
+Click-to-text sticky bar
+Extended FAQ [5]
+Admin page with basic dashboard [11]
+Up to 3 hours of routine website updates per month [7]
+Priority support, 2 business day response [8]
+Scale: C$349/mo (C$3,490/yr) [12]
+Everything in Grow, plus:
+Up to 10 pages, including service-area pages
+Blog-ready structure
+SEO Expanded On-Page + Service-Area [6]
+Online booking / scheduling
+Review Generation Engine (500 SMS credits per month included) [13]
+Monthly Growth Report [11]
+Unlimited routine content updates [7]
+Same-Day Priority Support, same business day response (target) [8]
+Popular add-on: Local SEO Management: C$159/mo
+Ongoing Local SEO Management: Add-on on every tier [14]
+BUNDLES
+Lead Pack: C$239/mo [15]
+Includes:
+Local SEO Management
+Review Generation Engine
+Trained AI Chat Assistant
+Individual value: C$159 + C$99 + C$99 = C$357/mo
+Bundle: C$239/mo
+Available on: Launch, Grow [17]
+Visibility Pack: C$99/mo [16]
+Includes:
+Review Generation Engine
+Monthly Growth Report
+Individual value: C$99 + C$29 = C$128/mo
+Bundle: C$99/mo
+Available on: Launch, Grow [17]
+ADD-ONS
+1.	Local SEO / Google Business Profile Management: C$159/mo [18]
+Includes:
+Google Business Profile optimization
+Regular GBP posts (2 per month)
+Citation management
+Local SEO maintenance
+Local visibility improvements
+Review monitoring
+2.	Review Generation Engine: C$99/mo [19]
+Includes:
+Automated post-job review requests
+SMS and email requests
+Review link workflow
+On-site review widget
+500 SMS credits/month included; additional usage billed at C$0.05/SMS [13]
+3.	Trained AI Chat Assistant: C$99/mo [20]
+Includes:
+Business-specific FAQs
+25+ common questions and answers
+Services and basic business information
+Lead qualification and capture
+Booking integration where supported
+4.	Online Booking / Scheduling: C$49/mo [21]
+Includes:
+Online booking
+Scheduling
+Availability management
+Booking integration
+5.	Blog & Updates: C$34/mo [22]
+Includes:
+Create and post your own blog posts and updates directly to a page on the website
+Basic on-page optimization
+6.	Bilingual EN/FR: C$34/mo [23]
+Includes:
+English version
+French version
+Localization of website content
+Language and navigation support
+Each additional language: C$9/mo [23]
+7.	E-commerce Lite / Payment Links: C$59/mo [24]
+Includes:
+Deposits
+Payment links
+Service payments
+Coupon codes
+Simple Stripe-powered transactions
+8.	Email Marketing: C$29/mo
+Includes:
+Up to 5,000 sends per month
+Basic campaigns
+Promotional and customer emails
+Simple newsletter functionality
+9.	Monthly Growth Report: C$29/mo [11]
+Includes:
+Website visits
+Traffic sources
+Contact and quote submissions
+Calls and clicks where measurable
+Booking activity
+Review activity
+Month-over-month changes
+10.	Extra Page: C$44 one-time [25]
+Examples:
+New service page
+New service-area page
+FAQ
+Gallery
+About / team page
+11.	Priority Support + 1 Strategy Call per month: C$59/mo [26]
+Includes:
+Faster support
+Scheduled strategy consultation
+Website and growth recommendations
+12.	Advanced Admin Panel: C$39/mo [27]
+Includes:
+Deeper analytics
+Conversion rates by source and page
+Views per page
+Lead funnel
+Device and location breakdown
+Performance insights
+Data exports
+13.	Quote Photo Upload (Launch only): C$9/mo [28]
+Includes:
+Photo upload field on the contact form
+Up to 5 photos per submission
+Photos delivered with each submission
+Photos stored for 12 months
+ADD-ON COMPATIBILITY
+I = included, A = add-on available, N/A = not available
+Local SEO Management: Launch A, Grow A, Scale A
+Review Generation Engine: Launch A, Grow A, Scale I
+Trained AI Chat: Launch A, Grow A, Scale A
+Online Booking: Launch A, Grow A, Scale I
+Blog & Updates: Launch A [22], Grow A, Scale A
+Bilingual EN/FR: Launch A, Grow A, Scale A
+E-commerce Lite: Launch A, Grow A, Scale A
+Email Marketing: Launch A, Grow A, Scale A
+Monthly Growth Report: Launch A, Grow A, Scale I
+Extra Page: Launch A, Grow A, Scale A [25]
+Priority Support + Strategy Call: Launch A, Grow A, Scale A [26]
+Advanced Admin Panel: Launch N/A, Grow A, Scale A [27]
+Quote Photo Upload: Launch A [28], Grow I, Scale I
+Lead Pack: Launch A, Grow A, Scale N/A [17]
+Visibility Pack: Launch A, Grow A, Scale N/A [17]
+TERMS AND DETAILS
+[1] Currency and taxes
+All prices are in Canadian dollars (CAD). GST/QST (14.975% in Quebec) and other applicable taxes are extra.
+[2] Contract term and cancellation
+Initial term: 6 months.
+After the initial term: month-to-month.
+Cancellation: 30 days' notice. Notice may be given during the initial term; cancellation takes effect no earlier than the end of the initial term.
+Annual prepay plans have a 12-month initial term, then continue month-to-month.
+Add-ons follow the same terms. Add-ons require an active base plan and end when the base plan ends.
+Extra Page is a one-time charge and is not subject to a term.
+No setup fee.
+[3] Billing options and annual vs monthly pricing
+Billed monthly, or annually in advance with 2 months free (annual price = 10 months).
+Comparison over 12 months:
+Launch: C$89/mo x 12 = C$1,068 billed monthly, or C$890 billed annually (about C$74.17/mo). Annual saves C$178.
+Grow: C$149/mo x 12 = C$1,788 billed monthly, or C$1,490 billed annually (about C$124.17/mo). Annual saves C$298.
+Scale: C$349/mo x 12 = C$4,188 billed monthly, or C$3,490 billed annually (about C$290.83/mo). Annual saves C$698.
+[4] Launch
+Designed for solo operators who mainly need a professional online presence and a way for customers to contact them.
+Contact form submissions arrive by email.
+Positioning: Get online and look professional.
+[5] FAQ levels
+Basic FAQ section (Launch): a short FAQ section on the page.
+Extended FAQ (Grow and Scale): a larger, organized FAQ section with more questions and categories than the Basic FAQ.
+[6] SEO levels
+SEO Foundations (Launch): unique title and meta description, Open Graph tags, sitemap, Google and Bing indexing submission, LocalBusiness structured data, mobile speed baseline.
+SEO On-Page + GBP Setup (Grow): everything in Foundations, plus keyword-targeted copy for your main service and city on each page, internal linking, and a one-time Google Business Profile setup (if not existing) and optimization (categories, services, hours, photos, description).
+SEO Expanded On-Page + Service-Area (Scale): everything in Grow, applied to up to 10 pages, with dedicated service-area pages and image / alt-text optimization.
+Local SEO Management (add-on, all tiers): ongoing monthly work: GBP posts, citation building and cleanup, review monitoring, local visibility tracking and adjustments.
+Dividing line: one-time setup (included in Grow and Scale) versus ongoing monthly work (add-on).
+[7] Routine updates and hours
+Routine work includes changing hours, information, location and images, and moving or editing existing sections.
+Routine work does not include redesigns, new features, technical development and new pages. New pages are billed as Extra Pages (add-on 10).
+Included amounts: Launch up to 1 hour per month, Grow up to 3 hours per month, Scale unlimited routine updates, handled in order received. Reasonable-use policy applies.
+Time is logged and rounded to the nearest 15 minutes. Unused hours do not roll over.
+[8] Support reply times
+Support reply times: Launch 3 to 5 business days, Grow 2 business days, Scale same business day (target).
+Same-Day Priority Support is the Scale support level.
+[9] Grow
+Designed for established local businesses that need a website to actively generate leads.
+Positioning: Turn your website into a lead-generation tool.
+This remains the core webao offer and the C$149 anchor.
+[10] Google Business Profile setup
+One-time: setup (if not existing) and optimization (categories, services, hours, photos, description).
+Ongoing management is the Local SEO Management add-on (add-on 1).
+[11] Analytics layers
+Basic dashboard (Grow, Scale): live view of what happened: total visits, form and quote submissions (if applicable), call and text clicks, last 30 days.
+Monthly Growth Report (included in Scale, add-on for others): delivered monthly, shows what changed: traffic sources, month-over-month changes, bookings, review activity.
+Advanced Admin Panel (add-on): live drill-down on why: conversion rates by source and page, views per page, lead funnel, device and location breakdown, performance insights, exports. Aggregate analytics.
+[12] Scale
+Designed for growing businesses that want their website to become part of their customer-acquisition system.
+Positioning: A managed website and lead-generation system for growing businesses.
+[13] Review Generation Engine SMS terms
+500 SMS credits per month included. Additional usage is billed at C$0.05 per SMS, monthly.
+Email requests start immediately. SMS goes live once the client's sending number is verified with the carrier.
+[14] Local SEO as an add-on
+Ongoing Local SEO Management is available as an add-on on every tier (add-on 1).
+Internal display rule, not for the price page: show it as "Add-on" on every tier, and do not write "not included" anywhere for Scale.
+[15] Lead Pack
+Combines the three strongest growth-focused services: Local SEO Management, Review Generation Engine and Trained AI Chat Assistant.
+A strong upsell for Launch and Grow customers who want webao to actively handle lead generation.
+[16] Visibility Pack
+For budget-conscious businesses.
+An easy first step into recurring marketing services.
+[17] Bundle eligibility
+Lead Pack and Visibility Pack are available on Launch and Grow. Scale already includes the Review Generation Engine and the Monthly Growth Report, so Scale clients add Local SEO Management and Trained AI Chat individually.
+[18] Local SEO / Google Business Profile Management
+For businesses that want ongoing local search optimization rather than just initial setup.
+Important distinction: Grow includes GBP setup, while this add-on provides ongoing management.
+[19] Review Generation Engine
+Automates the process of getting more customer reviews.
+[20] Trained AI Chat Assistant
+An AI assistant trained specifically around the business.
+This is the paid, trained, business-specific version. Grow and Scale include an Extended FAQ (see 5).
+[21] Online Booking / Scheduling
+For businesses that take appointments.
+[22] Blog & Updates
+On Launch, the blog page counts as 1 extra page (add-on 10).
+[23] Bilingual EN/FR
+Each additional language is C$9/mo.
+Each language version counts as one page set, not extra pages.
+[24] E-commerce Lite / Payment Links
+For simple online payments without a full online store.
+[25] Extra Page
+For additional content outside the plan's page allowance. One-time charge. On Scale it applies beyond the 10 included pages.
+[26] Priority Support + 1 Strategy Call per month
+One scheduled strategy call per month.
+On Scale, support is already Same-Day Priority Support, so this adds the strategy call.
+[27] Advanced Admin Panel
+Requires Grow or Scale (needs the basic dashboard). Definitions are in note 11.
+[28] Quote Photo Upload
+Lets customers attach photos when they submit the quote form. Included as a standard quote-form feature on Grow and Scale.
+Available as a C$9/mo add-on on Launch only, where the upload is added to the contact form.
+Limits: up to 5 photos per submission, stored for 12 months.
+[29] Domain
+1 standard custom domain is included. Domain remains registered to the client.
+
