@@ -105,7 +105,7 @@ const planData: Record<PlanId, (typeof tp)["launch"]> = {
 
   .plan-grid {
     display: grid;
-    grid-template-columns: 1fr 1.14fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     align-items: center;
     /* Overlap budget: the middle card pulls over its neighbors. */
     --overlap: 52px;
@@ -146,9 +146,9 @@ const planData: Record<PlanId, (typeof tp)["launch"]> = {
     position: relative;
     transition: transform 380ms var(--ease-out-expo);
   }
-  /* Middle card: a little larger, slightly higher, floating above. */
+  /* Middle card: same size as siblings, slightly higher, floating above. */
   .pcard-slot--grow .pcard-lift {
-    transform: translateY(-22px) scale(1.045);
+    transform: translateY(-22px);
     margin-inline: calc(var(--overlap) * -1);
   }
   /* Side cards rise in front of the middle card on hover / keyboard focus. */
@@ -332,7 +332,7 @@ const planData: Record<PlanId, (typeof tp)["launch"]> = {
       --overlap: 30px;
     }
     .pcard-slot--grow .pcard-lift {
-      transform: translateY(-14px) scale(1.03);
+      transform: translateY(-14px);
     }
     .pcard-slot--launch:hover .pcard-lift,
     .pcard-slot--launch:focus-within .pcard-lift,
