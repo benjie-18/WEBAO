@@ -363,6 +363,18 @@ export const demos: Demo[] = [
     pages: ["Home", "Projects", "Studio", "Services", "Contact"],
   },
   {
+    id: "nora",
+    name: "Nora Électrique",
+    category: "Trades",
+    city: "Laval",
+    tone: "Clean contemporary",
+    palette: "Ink / Paper / Vermillion",
+    accent: "#FF3B30",
+    description: "Emergency residential + commercial, 24h dispatch.",
+    trade: "electrical",
+    pages: ["Home", "Services", "About", "Service Area", "Contact"],
+  },
+  {
     id: "encre-brute",
     name: "Encre Brute",
     category: "Creative",
@@ -518,6 +530,7 @@ export const demoFamily: Record<string, StyleFamily> = {
   // Timeless: clean, professional, never looks dated
   "finition-r": "timeless",
   kanso: "timeless",
+  nora: "timeless",
   mira: "timeless",
   "toit-fils": "timeless",
   boise: "timeless",
