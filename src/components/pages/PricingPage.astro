@@ -1,5 +1,10 @@
 ---
 import { useTranslations, localizedPaths, type Locale } from "../../lib/i18n";
+import PlanCards from "../pricing/PlanCards.astro";
+import BundleCarousel from "../pricing/BundleCarousel.astro";
+import AddonList from "../pricing/AddonList.astro";
+import CompareTable from "../pricing/CompareTable.astro";
+import NoteRef from "../NoteRef.astro";
 
 interface Props {
   locale: Locale;
@@ -7,202 +12,125 @@ interface Props {
 const { locale } = Astro.props as Props;
 const t = useTranslations(locale);
 const paths = localizedPaths[locale];
+const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
 ---
 
-<!-- Header intro -->
-<section class="pricing-hero grain">
-  <div class="shell">
-    <div class="pricing-hero-grid">
-      <div data-reveal>
-        <div class="eyebrow">{t.pricing.hero.eyebrow}</div>
-        <h1 class="display" style="font-size: clamp(2.8rem, 6.5vw, 5.6rem); line-height:.88; margin-top:12px;" set:html={t.pricing.hero.title}></h1>
-        <p class="prose" style="margin-top:16px; max-width: 52ch;">
-          {t.pricing.hero.desc}
-        </p>
-        <div class="cluster" style="margin-top:18px;">
-          <a href={paths.start} class="btn btn--primary">{t.pricing.hero.cta}</a>
-          <span class="mono" style="font-size:11px; color: var(--muted);">{t.pricing.hero.emailNote}</span>
-        </div>
-      </div>
-      <div class="pricing-hero-card" data-reveal style="--d:120ms">
-        <div class="mono" style="font-size:10px; letter-spacing:.14em; opacity:.5;">{t.pricing.hero.card.label}</div>
-        <div style="display:flex; align-items: baseline; gap:8px; margin-top:12px;">
-          <span class="display" style="font-size: 3.8rem; line-height:.9;">{t.pricing.hero.card.price}</span>
-          <span class="mono" style="font-size:11px; line-height:1.3; opacity:.6;" set:html={t.pricing.hero.card.suffix}></span>
-        </div>
-        <div style="margin-top:10px; font-size:13px; color: var(--muted);">{t.pricing.hero.card.desc}</div>
-        <a href={paths.start} class="btn btn--dark" style="width:100%; margin-top:18px; justify-content:center;">{t.pricing.hero.card.cta}</a>
-        <div class="mono" style="margin-top:10px; font-size:11px; text-align:center; color: var(--muted);">{t.pricing.hero.card.note}</div>
-        <div class="trust-row">
-          {t.pricing.hero.card.trust.map(tr => <span>{tr}</span>)}
-        </div>
-      </div>
+<!-- Hero: page title + the plan's own billing lines -->
+<section class="pricing-hero-new grain">
+  <div class="shell pricing-hero-inner" data-reveal>
+    <h1 class="display pricing-title">{t.pricing.hero.title}</h1>
+    <ul class="billing-strip" aria-label={t.pricing.hero.title}>
+      {t.pricing.hero.strip.map((s) => (
+        <li>
+          <span>{s.text}</span>
+          {s.note > 0 && <NoteRef locale={locale} note={s.note} />}
+        </li>
+      ))}
+    </ul>
+    <div class="cluster pricing-hero-cta">
+      <a href={paths.start} class="btn btn--primary">{t.nav.startSite}</a>
     </div>
   </div>
 </section>
 
-<!-- Comparison -->
-<section class="section" style="padding-top: 28px;">
+<!-- Plan cards -->
+<section class="section plans-section" aria-labelledby="plans-h">
   <div class="shell">
-    <div class="compare" data-reveal>
-      <div class="compare-head">
-        <h2>{t.pricing.compare.title}</h2>
-        <p class="mono">{t.pricing.compare.subtitle}</p>
-      </div>
-
-      <div class="compare-grid">
-        <div class="compare-card compare-card--included">
-          <div class="compare-label mono">{t.pricing.compare.includedLabel}</div>
-          <ul role="list">
-            {t.pricing.compare.included.map(item => (
-              <li><span class="ic"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.2l3.2 3.2 5.8-6.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><strong>{item.title}</strong><span>{item.desc}</span></div></li>
-            ))}
-          </ul>
-        </div>
-
-        <div class="compare-card compare-card--muted">
-          <div class="compare-label mono">{t.pricing.compare.notIncludedLabel}</div>
-          <ul role="list">
-            {t.pricing.compare.notIncluded.map(item => (
-              <li><span class="ic ic--dash"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.6 4.6l6.8 6.8M11.4 4.6l-6.8 6.8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span><div><strong>{item.title}</strong><span>{item.desc}</span></div></li>
-            ))}
-          </ul>
-
-          <div class="callout">
-            <div style="font-weight:700; font-size:13px; letter-spacing:-0.02em;">{t.pricing.compare.calloutTitle}</div>
-            <p style="font-size:13px; line-height:1.6; color: var(--muted); margin-top:6px;">{t.pricing.compare.calloutDesc}</p>
-            <a href={paths.contact} style="display:inline-flex; margin-top:12px; font-weight:650; font-size:13px; color: var(--ink); text-decoration: underline; text-underline-offset:3px;">{t.pricing.compare.calloutCta}</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="compare-foot mono" data-reveal>
-        <span>{t.pricing.compare.foot1}</span>
-        <span style="opacity:.5;">{t.pricing.compare.foot2}</span>
-      </div>
-    </div>
+    <h2 id="plans-h" class="visually-hidden">{t.pricing.plansTitle}</h2>
+    <PlanCards locale={locale} />
   </div>
 </section>
 
-<!-- Process + timeline -->
-<section class="section section--dark grain" style="padding-block: clamp(40px,6vw,80px);">
-  <div class="shell">
-    <div class="timeline-grid" data-reveal>
-      <div>
-        <div class="eyebrow" style="color: rgba(248,245,239,.5);">{t.pricing.timeline.eyebrow}</div>
-        <h2 class="display" style="font-size: clamp(1.9rem, 4vw, 3.2rem); margin-top:10px; line-height:.92; color: var(--section-dark-text);" set:html={t.pricing.timeline.title}></h2>
-        <p style="margin-top:14px; color: rgba(248,245,239,.64); font-size:14px; line-height:1.6; max-width: 42ch;">{t.pricing.timeline.desc}</p>
-      </div>
-      <div>
-        <ol class="timeline" role="list">
-          {t.pricing.timeline.steps.map((s, i) => (
-            <li><span class="t-n"><span class="oglyph">{i+1}</span></span><div><strong>{s.title}</strong><span>{s.desc}</span></div></li>
-          ))}
-        </ol>
-        <p class="mono" style="margin-top:10px; font-size:11px; color: rgba(248,245,239,.5); line-height:1.6;">{t.pricing.timeline.note}</p>
-      </div>
-    </div>
-  </div>
-</section>
+<BundleCarousel locale={locale} />
 
-<!-- Billing breakdown -->
-<section class="section grain">
-  <div class="shell">
-    <div class="quote-card" data-reveal>
-      <div class="quote-visual" aria-hidden="true">
-        <div class="invoice">
-          <div class="mono" style="font-size:10px; opacity:.5;">{t.pricing.quote.invoiceTitle}</div>
-          <div style="margin-top:10px; display:flex; justify-content:space-between; align-items:baseline;">
-            <span style="font-weight:750; letter-spacing:-0.02em;">{t.pricing.quote.plan}</span>
-            <span class="mono" style="font-size:11px; background: var(--ink); color: var(--paper); padding:4px 8px; border-radius:99px;">{t.pricing.quote.allIn}</span>
-          </div>
-          <div style="margin-top:12px; height:1px; background: var(--line);"></div>
-          <div style="margin-top:12px; display:grid; gap:8px; font-size:13px;">
-            {t.pricing.quote.lines.map(l => (
-              <div style="display:flex; justify-content:space-between;"><span>{l.label}</span><span style="font-weight:650;">{l.value}</span></div>
-            ))}
-            <div style="display:flex; justify-content:space-between; font-weight:750; border-top:1px solid var(--line); padding-top:8px; margin-top:4px;"><span>{t.pricing.quote.totalLabel}</span><span>{t.pricing.quote.totalValue}</span></div>
-          </div>
-          <div style="margin-top:14px; background: var(--paper-2); border-radius:10px; padding:10px; font-size:12px; line-height:1.5; color: var(--muted);">{t.pricing.quote.note}</div>
-        </div>
-      </div>
-      <div class="quote-copy">
-        <div class="eyebrow">{t.pricing.quote.eyebrow}</div>
-        <h2 class="display" style="font-size: clamp(1.8rem, 3.5vw, 2.6rem); margin-top:10px; line-height:.92;" set:html={t.pricing.quote.title}></h2>
-        <p class="prose" style="margin-top:12px; font-size:14.5px;">{t.pricing.quote.desc}</p>
-        <ul class="check-list">
-          {t.pricing.quote.checks.map(c => <li>{c}</li>)}
-        </ul>
-        <a href={paths.start} class="btn btn--primary" style="margin-top:16px;">{t.pricing.quote.cta}</a>
-      </div>
-    </div>
-  </div>
-</section>
+<AddonList locale={locale} />
 
-<!-- FAQ mini -->
-<section class="section" style="padding-top: 0;">
-  <div class="shell">
-    <div class="faq-compact" data-reveal>
-      <h3 class="display" style="font-size:1.6rem; line-height:1;">{t.pricing.faq.title}</h3>
-      <div class="faq-mini-grid">
-        {t.pricing.faq.items.map((item, i) => (
-          <details open={i===0}><summary>{item.q}</summary><div><p>{item.a}</p></div></details>
-        ))}
-      </div>
-    </div>
-  </div>
-</section>
+<CompareTable locale={locale} />
 
-<!-- CTA -->
-<section class="cta-band grain" style="padding-block: 40px;">
-  <div class="shell" style="display:flex; flex-wrap:wrap; gap:16px; align-items:center; justify-content:space-between;">
+<!-- Terms -->
+<section class="terms-band grain" aria-labelledby="terms-h">
+  <div class="shell terms-band-inner" data-reveal>
     <div>
-      <div class="mono" style="color: rgba(248,245,239,.5); font-size:11px;">{t.pricing.ctaBand.eyebrow}</div>
-      <h2 class="display" style="font-size: clamp(1.8rem, 4vw, 2.8rem); margin-top:6px; color: var(--section-dark-text);" set:html={t.pricing.ctaBand.title}></h2>
+      <p class="eyebrow">{t.pricing.hero.eyebrow}</p>
+      <h2 id="terms-h" class="display terms-band-title">{t.pricing.termsCta.title}</h2>
     </div>
-    <div class="cluster">
-      <a href={paths.start} class="btn btn--on-dark">{t.pricing.ctaBand.primary}</a>
-      <a href={paths.demos} class="btn btn--ghost-on-dark">{t.pricing.ctaBand.secondary}</a>
-    </div>
+    <a href={termsPath} class="btn btn--on-dark btn--lg">{t.pricing.termsCta.label}</a>
   </div>
 </section>
 
 <style>
-  .pricing-hero { padding-block: clamp(32px, 6vw, 72px); background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%); border-bottom: 1px solid var(--line); }
-  .pricing-hero-grid { display:grid; grid-template-columns: 1.15fr .85fr; gap: clamp(24px, 4vw, 40px); align-items: start; }
-  .pricing-hero-card { background: var(--card-bg); border:1px solid var(--line); border-radius:20px; padding:20px; box-shadow: var(--shadow-md); position: sticky; top: calc(var(--header-h) + 16px); }
-  .trust-row { margin-top:16px; display:flex; gap:8px; flex-wrap:wrap; font-family: var(--font-mono); font-size:10px; letter-spacing:.06em; color: var(--muted); }
-  .trust-row span { background: var(--paper-2); border:1px solid var(--line); padding:6px 8px; border-radius:99px; }
-  .compare { display:grid; gap:18px; }
-  .compare-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); letter-spacing:-0.02em; font-weight:750; line-height:1.1; }
-  .compare-head p { margin-top:6px; font-size:12px; color: var(--muted); }
-  .compare-grid { display:grid; grid-template-columns: 1.15fr .85fr; gap:16px; align-items:start; }
-  .compare-card { background: var(--card-bg); border:1px solid var(--line); border-radius:18px; padding:18px; box-shadow: var(--shadow-sm); }
-  .compare-card--muted { background: var(--paper-2); }
-  .compare-label { font-size:10px; color: var(--muted); margin-bottom:10px; }
-  .compare-card ul { list-style:none; padding:0; display:grid; gap:14px; }
-  .compare-card li { display:grid; grid-template-columns: 28px 1fr; gap:10px; align-items:start; }
-  .ic { width:26px; height:26px; border-radius:99px; background: var(--ink); color: var(--paper); display:inline-flex; align-items:center; justify-content:center; line-height:1; font-size:12px; font-weight:700; flex:none; }
-  .ic svg { width:13px; height:13px; display:block; flex:none; }
-  .ic--dash { background: var(--paper-2); color: var(--ink); border:1px solid var(--line); }
-  .compare-card li strong { display:block; font-size:14px; letter-spacing:-0.02em; line-height:1.25; }
-  .compare-card li div span { display:block; font-size:13px; line-height:1.55; color: var(--muted); margin-top:2px; }
-  .callout { margin-top:18px; background: var(--card-bg); border:1px solid var(--line); border-radius:14px; padding:14px; }
-  .compare-foot { display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; padding:12px 14px; background: var(--section-dark-bg); color: rgba(248,245,239,.7); border-radius:12px; font-size:11px; }
-  .timeline-grid { display:grid; grid-template-columns: .9fr 1.1fr; gap: 24px; align-items:start; }
-  .timeline { list-style:none; padding:0; display:grid; gap:10px; }
-  .timeline li { display:grid; grid-template-columns: 44px 1fr; gap:14px; align-items:start; background: rgba(248,245,239,.06); border:1px solid var(--line-on-dark); border-radius:14px; padding:14px; }
-  .t-n { width:36px; height:36px; border-radius:10px; background: var(--paper-3); color: var(--ink); display:inline-flex; align-items:center; justify-content:center; line-height:1; font-weight:750; font-size:13px; flex:none; }
-  .timeline li strong { display:block; color: var(--section-dark-text); font-size:14px; letter-spacing:-0.01em; }
-  .timeline li div span { display:block; color: rgba(248,245,239,.6); font-size:13px; line-height:1.5; margin-top:2px; }
-  .quote-card { display:grid; grid-template-columns: .9fr 1.1fr; gap:24px; align-items:center; background: var(--card-bg); border:1px solid var(--line); border-radius:18px; padding:18px; box-shadow: var(--shadow-sm); }
-  .invoice { background: var(--paper-3); border:1px solid var(--line); border-radius:14px; padding:16px; }
-  .check-list { list-style:none; padding:0; margin-top:12px; display:grid; gap:6px; font-size:13px; color: var(--muted); }
-  .faq-compact { background: var(--paper-2); border:1px solid var(--line); border-radius:16px; padding:18px; }
-  .faq-mini-grid { margin-top:14px; display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
-  .faq-mini-grid details { background: var(--card-bg); border:1px solid var(--line); border-radius:12px; overflow:clip; }
-  .faq-mini-grid summary { padding:14px; font-weight:650; font-size:13.5px; cursor:pointer; list-style:none; }
-  .faq-mini-grid summary::-webkit-details-marker{ display:none; }
-  .faq-mini-grid details div { padding:0 14px 14px; font-size:13px; line-height:1.6; color: var(--muted); border-top:1px solid var(--line); margin-top:6px; padding-top:10px; }
-  @media (max-width: 900px) { .pricing-hero-grid, .compare-grid, .timeline-grid, .quote-card, .faq-mini-grid { grid-template-columns: 1fr; } .pricing-hero-card { position: static; } }
+  .pricing-hero-new {
+    padding-block: clamp(40px, 7vw, 88px) clamp(8px, 2vw, 16px);
+    background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
+    border-bottom: 1px solid var(--line);
+    text-align: center;
+  }
+  .pricing-hero-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .pricing-title {
+    font-size: clamp(2.6rem, 6vw, 5rem);
+    line-height: 0.95;
+    margin-top: 12px;
+    letter-spacing: -0.02em;
+  }
+  .billing-strip {
+    list-style: none;
+    padding: 0;
+    margin: 22px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 18px;
+    max-width: 72ch;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .billing-strip li {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 2px;
+  }
+  .billing-strip li + li::before {
+    content: "·";
+    margin-right: 18px;
+    color: var(--muted-2);
+  }
+  .pricing-hero-cta {
+    margin-top: 24px;
+    justify-content: center;
+  }
+
+  .plans-section {
+    padding-top: clamp(8px, 2vw, 16px);
+    overflow-x: clip;
+  }
+
+  .terms-band {
+    background: var(--section-dark-bg);
+    color: var(--section-dark-text);
+    padding-block: clamp(48px, 7vw, 88px);
+  }
+  .terms-band-inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .terms-band .eyebrow {
+    color: rgba(248, 245, 239, 0.5);
+  }
+  .terms-band-title {
+    font-size: clamp(2rem, 4.6vw, 3.4rem);
+    line-height: 0.95;
+    margin-top: 10px;
+  }
+  .btn--lg {
+    padding: 16px 30px;
+    font-size: 1.02rem;
+  }
+
 </style>
