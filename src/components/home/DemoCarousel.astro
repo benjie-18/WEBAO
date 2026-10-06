@@ -105,6 +105,11 @@ const total = String(demos.length).padStart(2, "0");
 
 <script>
   function initProof() {
+    // Hide nora card on mobile (JS fallback for CSS media query)
+    if (window.innerWidth <= 819) {
+      const nora = document.querySelector('[data-demo-id="nora"]') as HTMLElement;
+      if (nora) nora.style.display = 'none';
+    }
     const root = document.querySelector('[data-proof]') as HTMLElement;
     if (!root || (root as HTMLElement).dataset.init) return;
     (root as HTMLElement).dataset.init = "1";
