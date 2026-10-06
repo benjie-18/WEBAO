@@ -1,0 +1,12 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import TermsPage from "../../../components/pages/TermsPage.astro";
+import { useTranslations } from "../../../lib/i18n";
+
+const locale = "fr" as const;
+const t = useTranslations(locale);
+---
+
+<BaseLayout title={t.meta.terms.title} description={t.meta.terms.description} locale={locale} pageKey="terms">
+  <TermsPage locale={locale} />
+</BaseLayout>
