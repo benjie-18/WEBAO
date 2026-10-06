@@ -1,0 +1,539 @@
+---
+import { featuredAddonOrder, remainingAddonOrder } from "../../lib/pricing";
+import { useTranslations, type Locale } from "../../lib/i18n";
+import NoteRef from "../NoteRef.astro";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props as Props;
+const t = useTranslations(locale);
+const ta = t.pricing.addons;
+const items = ta.items;
+const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
+const noteAria = t.pricing.plans.noteAria;
+const strip = t.pricing.popularStrip;
+
+function pad(n: number) {
+  return String(n).padStart(2, "0");
+}
+---
+
+<section class="addon-section" aria-labelledby="addons-h" data-addon-section>
+  <div class="addon-bg" aria-hidden="true">
+    <div class="ablob ablob--a" data-ablob="0.08"></div>
+    <div class="ablob ablob--b" data-ablob="0.16"></div>
+    <div class="ablob ablob--c" data-ablob="0.05"></div>
+  </div>
+
+  <div class="shell addon-grid">
+    <div class="addon-head" data-addon-head>
+      <div data-reveal>
+        <p class="eyebrow">{ta.eyebrow}</p>
+        <h2 id="addons-h" class="display addon-title">{ta.title}</h2>
+        <div class="addon-rail" aria-hidden="true">
+          <div class="addon-rail-fill" data-addon-rail></div>
+        </div>
+        <a
+          class="addon-strip"
+          href={`${termsPath}#note-${strip.note}`}
+          aria-label={`${strip.name}, ${strip.price} — ${noteAria.replace("{n}", String(strip.note))}`}
+        >
+          <span class="addon-strip-tag" aria-hidden="true">{strip.label}</span>
+          <strong>{strip.name}</strong>
+          <span class="mono">{strip.price}</span>
+          <span class="addon-strip-detail">
+            {strip.detail}
+            <span class="noteref" aria-hidden="true">[{strip.note}]</span>
+          </span>
+          <span class="visually-hidden">{noteAria.replace("{n}", String(strip.note))}</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="addon-lists">
+      <ol class="addon-list" data-addon-list>
+        {featuredAddonOrder.map((id, i) => {
+          const it = items[id];
+          return (
+            <li class="addon-row addon-row--featured" data-addon-row style={`--i: ${i}`}>
+              <div class="addon-rule" aria-hidden="true"></div>
+              <div class="addon-reveal">
+                <div class="addon-reveal-inner">
+                  <span class="addon-num" aria-hidden="true">{pad(i + 1)}</span>
+                  <div class="addon-main">
+                    <h3 class="addon-name">
+                      {it.name}
+                      {it.note > 0 && <NoteRef locale={locale} note={it.note} />}
+                      <span class="addon-tag">{ta.popularTag}</span>
+                    </h3>
+                    {it.short !== "" && <p class="addon-short">{it.short}</p>}
+                  </div>
+                  <p class="addon-price">
+                    <span class="price-roll"><span class="price-roll-inner">{it.price}</span></span>
+                  </p>
+                </div>
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+
+      <ol class="addon-list addon-list--rest" data-addon-list>
+        {remainingAddonOrder.map((id, i) => {
+          const it = items[id];
+          return (
+            <li class="addon-row" data-addon-row style={`--i: ${i}`}>
+              <div class="addon-rule" aria-hidden="true"></div>
+              <div class="addon-reveal">
+                <div class="addon-reveal-inner">
+                  <span class="addon-num addon-num--sm mono" aria-hidden="true">{pad(featuredAddonOrder.length + 1 + i)}</span>
+                  <div class="addon-main">
+                    <h3 class="addon-name addon-name--sm">
+                      {it.name}
+                      {it.note > 0 && <NoteRef locale={locale} note={it.note} />}
+                    </h3>
+                    {it.short !== "" && <p class="addon-short">{it.short}</p>}
+                  </div>
+                  <p class="addon-price addon-price--sm">
+                    <span class="price-roll"><span class="price-roll-inner">{it.price}</span></span>
+                  </p>
+                </div>
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+    </div>
+  </div>
+</section>
+
+<noscript><style>
+  .addon-reveal { clip-path: none !important; }
+  .addon-reveal-inner { opacity: 1 !important; transform: none !important; }
+  .addon-rule { transform: none !important; }
+  .price-roll-inner { transform: none !important; }
+</style></noscript>
+<style>
+  .addon-section {
+    position: relative;
+    padding-block: clamp(48px, 8vw, 110px);
+    overflow: clip;
+  }
+  .addon-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .ablob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.35;
+    animation: ablob-drift 18s ease-in-out infinite alternate;
+  }
+  .ablob--a {
+    width: 40vmax; height: 40vmax;
+    left: -10%; top: 4%;
+    background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+  }
+  .ablob--b {
+    width: 34vmax; height: 34vmax;
+    right: -8%; top: 40%;
+    background: radial-gradient(circle, var(--plan-launch-glow) 0%, transparent 70%);
+    animation-duration: 24s;
+  }
+  .ablob--c {
+    width: 28vmax; height: 28vmax;
+    left: 24%; bottom: -6%;
+    background: radial-gradient(circle, var(--plan-scale-glow) 0%, transparent 70%);
+    animation-duration: 30s;
+  }
+  @keyframes ablob-drift {
+    from { transform: translate3d(-5%, -4%, 0); }
+    to { transform: translate3d(5%, 6%, 0); }
+  }
+
+  .addon-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(240px, 330px) 1fr;
+    gap: clamp(24px, 4vw, 56px);
+    align-items: start;
+  }
+  .addon-head {
+    position: sticky;
+    top: calc(var(--header-h) + 20px);
+  }
+  .addon-title {
+    font-size: clamp(2.2rem, 4.6vw, 3.6rem);
+    line-height: 0.95;
+    margin-top: 10px;
+  }
+  .addon-rail {
+    margin-top: 22px;
+    width: 100%;
+    max-width: 220px;
+    height: 2px;
+    background: var(--line);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .addon-rail-fill {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-mid));
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  .addon-strip {
+    display: block;
+    margin-top: 26px;
+    padding: 16px;
+    border-radius: 16px;
+    border: 1px solid var(--line-strong);
+    background: var(--card-bg);
+    box-shadow: var(--shadow-sm);
+    text-decoration: none;
+    transition: transform 0.3s var(--ease-out-expo), box-shadow 0.3s var(--ease-out-expo);
+  }
+  .addon-strip:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+  }
+  .addon-strip:focus-visible {
+    outline: 2px solid var(--focus-outline);
+    outline-offset: 2px;
+  }
+  .addon-strip-tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-soft-text);
+    background: var(--accent-soft);
+    border-radius: 999px;
+    padding: 4px 10px;
+    margin-bottom: 8px;
+  }
+  .addon-strip strong {
+    display: block;
+    font-size: 1.02rem;
+    letter-spacing: -0.01em;
+  }
+  .addon-strip .mono {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.85rem;
+    color: var(--accent-text);
+    font-weight: 600;
+  }
+  .addon-strip-detail {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .addon-lists {
+    min-width: 0;
+    display: grid;
+    gap: clamp(28px, 4vw, 48px);
+  }
+  .addon-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+  }
+
+  .addon-row {
+    position: relative;
+    border-radius: 18px;
+    transition: transform 0.32s var(--ease-out-expo);
+  }
+  /* Cursor-following spotlight */
+  .addon-row::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      260px circle at var(--mx, 50%) var(--my, 50%),
+      var(--accent-glow),
+      transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .addon-row:hover::before {
+    opacity: 1;
+  }
+
+  .addon-rule {
+    height: 1px;
+    background: var(--line-strong);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.9s var(--ease-out-expo);
+    transition-delay: calc(var(--i, 0) * 60ms);
+  }
+  .addon-row.is-visible .addon-rule {
+    transform: scaleX(1);
+  }
+
+  .addon-reveal {
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path 0.85s var(--ease-out-expo);
+    transition-delay: calc(var(--i, 0) * 70ms + 80ms);
+  }
+  /* -2% overshoot: avoids a 1px seam where the clip finishes. */
+  .addon-row.is-visible .addon-reveal {
+    clip-path: inset(0 0 -2% 0);
+  }
+  .addon-reveal-inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: clamp(14px, 2.4vw, 26px);
+    align-items: baseline;
+    padding: 22px 14px;
+    opacity: 0;
+    transform: translateY(26px);
+    transition:
+      opacity 0.7s var(--ease-out),
+      transform 0.7s var(--ease-out-expo);
+    transition-delay: calc(var(--i, 0) * 70ms + 140ms);
+  }
+  .addon-row.is-visible .addon-reveal-inner {
+    opacity: 1;
+    transform: none;
+  }
+
+  .addon-num {
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 5vw, 4.2rem);
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--line-strong);
+    user-select: none;
+  }
+  .addon-num--sm {
+    -webkit-text-stroke: 0;
+    color: var(--muted-2);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    padding-top: 4px;
+  }
+  .addon-name {
+    font-size: clamp(1.15rem, 2.2vw, 1.6rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  .addon-name--sm {
+    font-size: clamp(1rem, 1.8vw, 1.2rem);
+    font-weight: 650;
+  }
+  .addon-tag {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-soft-text);
+    background: var(--accent-soft);
+    border-radius: 999px;
+    padding: 4px 10px;
+    white-space: nowrap;
+  }
+  .addon-short {
+    margin-top: 6px;
+    font-size: 0.92rem;
+    color: var(--muted);
+    line-height: 1.55;
+    max-width: 52ch;
+  }
+  .addon-price {
+    font-weight: 750;
+    letter-spacing: -0.02em;
+    font-size: clamp(1.25rem, 2.4vw, 1.7rem);
+    white-space: nowrap;
+    color: var(--ink);
+  }
+  .addon-price--sm {
+    font-size: clamp(1.05rem, 2vw, 1.3rem);
+  }
+
+  /* Price numbers roll in */
+  .price-roll {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    padding-bottom: 0.08em;
+    margin-bottom: -0.08em;
+  }
+  .price-roll-inner {
+    display: inline-block;
+    transform: translateY(110%);
+    transition: transform 0.8s var(--ease-out-expo);
+    transition-delay: calc(var(--i, 0) * 70ms + 260ms);
+  }
+  .addon-row.is-visible .price-roll-inner {
+    transform: none;
+  }
+
+
+  @media (max-width: 900px) {
+    .addon-grid {
+      grid-template-columns: 1fr;
+    }
+    .addon-head {
+      position: static;
+    }
+    .addon-rail {
+      max-width: none;
+    }
+    .addon-reveal-inner {
+      grid-template-columns: auto 1fr;
+    }
+    .addon-price {
+      grid-column: 2;
+      justify-self: start;
+      margin-top: 2px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .addon-reveal { clip-path: none; transition: none; }
+    .addon-reveal-inner { opacity: 1; transform: none; transition: none; }
+    .addon-rule { transform: none; transition: none; }
+    .price-roll-inner { transform: none; transition: none; }
+    .addon-row { transition: none; }
+    .addon-row::before { display: none; }
+    .ablob { animation: none; }
+  }
+</style>
+
+<script data-astro-rerun>
+  function initAddonList() {
+    var section = document.querySelector("[data-addon-section]");
+    if (!section || section.dataset.webaoBound) return;
+    section.dataset.webaoBound = "1";
+    var rows = Array.prototype.slice.call(section.querySelectorAll("[data-addon-row]"));
+    var rail = section.querySelector("[data-addon-rail]");
+    var blobs = Array.prototype.slice.call(section.querySelectorAll("[data-ablob]"));
+    var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var coarse = window.matchMedia("(pointer: coarse), (hover: none)").matches;
+
+    // Entrance reveals, staggered per row.
+    if ("IntersectionObserver" in window && !reduced) {
+      var io = new IntersectionObserver(
+        function (entries) {
+          for (var i = 0; i < entries.length; i++) {
+            var e = entries[i];
+            if (e.isIntersecting) {
+              e.target.classList.add("is-visible");
+              io.unobserve(e.target);
+            }
+          }
+        },
+        // Row counts as visible at 12% in view; the 8% bottom margin fires
+        // the reveal slightly before the row is fully on screen.
+        { threshold: 0.12, rootMargin: "0px 0px 8% 0px" }
+      );
+      rows.forEach(function (r) { io.observe(r); });
+    } else {
+      rows.forEach(function (r) { r.classList.add("is-visible"); });
+    }
+
+    if (reduced) return;
+
+    // Scroll progress rail + blob parallax, rAF-throttled.
+    var ticking = false;
+    function update() {
+      ticking = false;
+      var r = section.getBoundingClientRect();
+      var vh = window.innerHeight;
+      // 0 when the section's top edge reaches the viewport bottom,
+      // 1 when its bottom edge passes the viewport top.
+      var p = (vh - r.top) / (r.height + vh);
+      p = p < 0 ? 0 : p > 1 ? 1 : p;
+      if (rail) rail.style.transform = "scaleX(" + p.toFixed(4) + ")";
+      for (var i = 0; i < blobs.length; i++) {
+        var drift = parseFloat(blobs[i].getAttribute("data-blob") || "0.1");
+        blobs[i].style.translate = "0 " + ((p - 0.5) * drift * 1200).toFixed(1) + "px";
+      }
+    }
+    function onScroll() {
+      if (!section.isConnected) {
+        window.removeEventListener("scroll", onScroll);
+        return;
+      }
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    update();
+
+    // Cursor spotlight + subtle tilt, desktop only.
+    if (!coarse) {
+      var lists = section.querySelectorAll("[data-addon-list]");
+      var raf = 0;
+      var pending = null;
+      function applySpot() {
+        raf = 0;
+        if (!pending) return;
+        var row = pending.row;
+        var rect = pending.rect;
+        row.style.setProperty("--mx", pending.x + "px");
+        row.style.setProperty("--my", pending.y + "px");
+        // Subtle magnetic tilt toward the cursor (max 3deg/4deg by design).
+        var rx = (pending.y / rect.height - 0.5) * -3;
+        var ry = (pending.x / rect.width - 0.5) * 4;
+        row.style.transform =
+          "perspective(900px) rotateX(" + rx.toFixed(2) + "deg) rotateY(" + ry.toFixed(2) + "deg)";
+        pending = null;
+      }
+      lists.forEach(function (list) {
+        list.addEventListener("mousemove", function (e) {
+          var row = e.target.closest("[data-addon-row]");
+          if (!row) return;
+          var rect = row.getBoundingClientRect();
+          pending = {
+            row: row,
+            rect: rect,
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top,
+          };
+          if (!raf) raf = requestAnimationFrame(applySpot);
+        });
+        // Capture phase: mouseleave doesn't bubble, so a delegated listener
+        // on the list would never see rows' mouseleave without it.
+        list.addEventListener(
+          "mouseleave",
+          function (e) {
+            var row = e.target.closest("[data-addon-row]");
+            if (row) row.style.transform = "";
+          },
+          true
+        );
+      });
+    }
+  }
+  initAddonList();
+  if (!window.__webaoAddonsPL) {
+    window.__webaoAddonsPL = true;
+    document.addEventListener("astro:page-load", initAddonList);
+  }
+</script>
