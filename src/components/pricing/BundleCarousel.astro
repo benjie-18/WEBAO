@@ -15,7 +15,6 @@ const names = bundles.map((bd) => tb[bd.id].name);
 
 <section class="bundle-section" aria-labelledby="bundles-h" data-bundle-section>
   <div class="shell bundle-intro" data-reveal>
-    <p class="eyebrow">{tb.eyebrow}</p>
     <h2 id="bundles-h" class="display bundle-title">{tb.title}</h2>
   </div>
 
@@ -110,10 +109,11 @@ const names = bundles.map((bd) => tb[bd.id].name);
     margin-top: 10px;
   }
 
-  /* Tall scroll container: ~one viewport per bundle plus a lead-in. */
+  /* Tall scroll container: ~one viewport per bundle plus a lead-in,
+     plus trailing breathing room after the last card settles. */
   .bundle-scroll {
-    height: calc(var(--bn, 2) * 100vh + 100vh);
-    height: calc(var(--bn, 2) * 100svh + 100svh);
+    height: calc(var(--bn, 2) * 100vh + 160vh);
+    height: calc(var(--bn, 2) * 100svh + 160svh);
     position: relative;
   }
   .bundle-stage {
@@ -143,19 +143,19 @@ const names = bundles.map((bd) => tb[bd.id].name);
   .bblob--a {
     width: 44vmax; height: 44vmax;
     left: -8%; top: 6%;
-    background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+    background: radial-gradient(circle, var(--bblob-a) 0%, transparent 70%);
   }
   .bblob--b {
     width: 36vmax; height: 36vmax;
     right: -6%; top: 34%;
-    background: radial-gradient(circle, var(--plan-scale-glow) 0%, transparent 70%);
+    background: radial-gradient(circle, var(--bblob-b) 0%, transparent 70%);
     animation-duration: 21s;
     animation-delay: -6s;
   }
   .bblob--c {
     width: 30vmax; height: 30vmax;
     left: 30%; bottom: -4%;
-    background: radial-gradient(circle, var(--plan-launch-glow) 0%, transparent 70%);
+    background: radial-gradient(circle, var(--bblob-c) 0%, transparent 70%);
     animation-duration: 26s;
     animation-delay: -12s;
   }
@@ -182,7 +182,7 @@ const names = bundles.map((bd) => tb[bd.id].name);
     position: absolute;
     top: 44%;
     left: 50%;
-    width: min(400px, 84vw);
+    width: min(480px, 84vw);
     translate: -50% -50%;
     transform-style: preserve-3d;
     /* Short viewports (landscape phones): shrink cards to fit instead of
