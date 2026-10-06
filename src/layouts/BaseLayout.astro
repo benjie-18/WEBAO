@@ -26,7 +26,7 @@ interface Props {
 const {
   title: titleProp,
   description: descProp,
-  ogImage = "/light-icon.jpg",
+  ogImage = "/og-image.jpg",
   noIndex = false,
   headerVariant = "light",
   locale: localeProp,
@@ -76,6 +76,7 @@ const crumbLabels: Record<string, string> = {
   demos: t.nav.demos,
   contact: t.nav.contact,
   start: locale === "fr" ? "Commencer" : "Start",
+  terms: locale === "fr" ? "Conditions" : "Terms",
 };
 const crumbName = pageKey ? crumbLabels[pageKey] : undefined;
 const breadcrumbSchema = crumbName
@@ -325,6 +326,7 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
     {breadcrumbSchema && <script is:inline type="application/ld+json" set:html={breadcrumbSchema} />}
 
     <slot name="head" />
+    <noscript><style>[data-reveal]{opacity:1 !important;transform:none !important;}</style></noscript>
   </head>
   <body>
     <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress-bar" data-progress></div></div>
