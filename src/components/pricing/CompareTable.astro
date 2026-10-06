@@ -156,6 +156,9 @@ const compatRows = compatibility.map((c) => ({
 <style>
   .compare-section {
     padding-block: clamp(48px, 8vw, 110px);
+    /* Containment boundary: nothing in this section may ever widen the
+       page on mobile (prevents the iOS "zoomed out" layout-viewport bug). */
+    overflow-x: clip;
   }
   .compare-title {
     font-size: clamp(2.2rem, 5vw, 4rem);
@@ -187,6 +190,7 @@ const compatRows = compatibility.map((c) => ({
 
   .table-scroll {
     margin-top: 24px;
+    max-width: 100%;
     overflow-x: auto;
     border: 1px solid var(--line);
     border-radius: 20px;
