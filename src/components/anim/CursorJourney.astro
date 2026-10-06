@@ -204,7 +204,7 @@ const t = useTranslations(locale);
       let labels = [
         { t: 'Pricing', s: '→ $149/mo · all-in', bg: '#F8F5EF', color: '#0A0F1C' },
         { t: 'Contact', s: '→ contact@webao.ca', bg: '#0A0F1C', color: '#F8F5EF' },
-        { t: 'Demos',   s: '→ 12 art directions', bg: '#F8F5EF', color: '#0A0F1C' },
+        { t: 'Demos',   s: '→ 41 demos', bg: '#F8F5EF', color: '#0A0F1C' },
       ];
       try {
         const raw = journey.getAttribute('data-labels');
@@ -295,9 +295,9 @@ const t = useTranslations(locale);
         }
       }
 
-      let manualTimer: number | null = null;
       function lerp(a: number, b: number, t: number) { return a + (b - a) * t; }
       function loop() {
+        if (!grid.isConnected) return;
         cx = lerp(cx, mx, 0.14);
         cy = lerp(cy, my, 0.14);
         if (isManual && journey!.classList.contains('is-active')) {
@@ -330,8 +330,7 @@ const t = useTranslations(locale);
           pathProgress!.style.opacity = '0';
           if (hint) hint.style.opacity = '0';
         }
-        if (manualTimer) clearTimeout(manualTimer);
-        manualTimer = window.setTimeout(() => {}, 2000);
+
       });
       grid.addEventListener('mouseleave', () => {
         if (isManual) {
