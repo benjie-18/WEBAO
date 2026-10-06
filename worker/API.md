@@ -43,13 +43,24 @@ Validation: `name` required; `pricing` requires a valid `email`; `contact`
 requires `email` or `message`. Extra fields are kept (string values, capped).
 → `{ "ok": true, "id": "<ts>:<rand>" }` (400 with an error message otherwise).
 
+## Checkout (public)
+
+### `POST /api/checkout/session`
+Body: `{ email?: string, name?: string, business?: string, locale?: "fr" }`
+Creates a Stripe Embedded Checkout session (subscription mode).
+Guards: same-origin (`Origin`/`Referer` must match the site), 10 req/min per IP,
+`email` validated when provided.
+→ `{ "ok": true, "clientSecret": "<stripe_client_secret>" }`.
+→ `{ "ok": false, "error": "Checkout not configured" }` (503) when
+`STRIPE_SECRET_KEY` / `STRIPE_PRICE_ID` secrets are unset.
+
 ## Admin (Bearer token)
 
 Login: `POST /api/admin/login` body `{ password }` → `{ "ok": true, "token": "<64-hex>" }`.
 Token is 256-bit, stored server-side with a 7-day TTL. Pass it as
 `Authorization: Bearer <token>`. Unknown/expired tokens → `401`.
 Login is throttled: 10 attempts/min per IP.
-Default password is `32560` (SHA-256 seeded into KV on first use; change it in the panel).
+Default password is set on first deploy (see DEPLOY.md); change it in the panel immediately.
 
 ### `GET /api/admin/stats?range=day|week|month|year&page=<path|all>`
 →
