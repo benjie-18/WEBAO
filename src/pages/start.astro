@@ -1,12 +1,12 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { STRIPE_PUBLISHABLE_KEY } from "../lib/config";
 
 const locale = "en" as const;
 const title = "Start your site · WEBAO";
 const description = "Start your WEBAO website: tell us who you are, then complete your $149/month subscription.";
 
 // Publishable key is public; safe to embed in frontend code.
-const STRIPE_PUBLISHABLE_KEY = "pk_live_51UMzZYE57vVzxI418WAmnlUuIXMLMWtNxjYa6WeWauaSmAhF3xfwaFfdP4D4kJUG2k1nieWrIGSYVMDcy2WYIJ2T00TPmrTePT";
 ---
 
 <BaseLayout title={title} description={description} locale={locale}>
