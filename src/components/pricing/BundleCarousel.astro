@@ -1,0 +1,647 @@
+---
+import { bundles } from "../../lib/pricing";
+import BundleCard from "./BundleCard.astro";
+import { useTranslations, type Locale } from "../../lib/i18n";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props as Props;
+const t = useTranslations(locale);
+const tb = t.pricing.bundles;
+const n = bundles.length;
+const names = bundles.map((bd) => tb[bd.id].name);
+---
+
+<section class="bundle-section" aria-labelledby="bundles-h" data-bundle-section>
+  <div class="shell bundle-intro" data-reveal>
+    <p class="eyebrow">{tb.eyebrow}</p>
+    <h2 id="bundles-h" class="display bundle-title">{tb.title}</h2>
+  </div>
+
+  <!-- Scroll-driven 3D carousel -->
+  <div class="bundle-scroll" data-bundle-scroll style={`--bn: ${n}`}>
+    <div class="bundle-stage" data-bundle-stage>
+      <div class="bundle-bg" aria-hidden="true">
+        <div class="bblob bblob--a" data-blob="0.10"></div>
+        <div class="bblob bblob--b" data-blob="0.20"></div>
+        <div class="bblob bblob--c" data-blob="0.05"></div>
+      </div>
+
+      <div class="bundle-viewport">
+        <div class="bundle-ring" data-ring>
+          {bundles.map((bd, i) => (
+            <article
+              class="bcard"
+              data-card={i}
+              data-active={i === 0 ? "1" : "0"}
+              role="group"
+              aria-roledescription={locale === "fr" ? "diapositive" : "slide"}
+              aria-label={`${names[i]} · ${i + 1} / ${n}`}
+            >
+              <div class="bcard-shadow" aria-hidden="true"></div>
+              <div class="bcard-tilt">
+                <BundleCard locale={locale} bundleId={bd.id} spatial />
+              </div>
+              <div class="bcard-sheen" aria-hidden="true"></div>
+            </article>
+          ))}
+        </div>
+      </div>
+
+      <div class="bundle-ui">
+        <div class="bp-steps" role="group" aria-label={tb.title}>
+          {bundles.map((bd, i) => (
+            <button
+              type="button"
+              class:list={["bp-step", i === 0 && "is-active"]}
+              data-bp-step={i}
+              aria-current={i === 0 ? "true" : "false"}
+            >
+              <span class="bp-dot" aria-hidden="true"></span>
+              <span class="bp-label">{names[i]}</span>
+            </button>
+          ))}
+        </div>
+        <div class="bp-rail" aria-hidden="true">
+          <div class="bp-fill" data-bp-fill></div>
+        </div>
+        <div class="bp-nav">
+          <button type="button" class="bp-btn" data-bp-prev aria-label={tb.prev}>
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <span class="bp-count mono" data-bp-count data-of={tb.ofLabel}>1 {tb.ofLabel} {n}</span>
+          <button type="button" class="bp-btn" data-bp-next aria-label={tb.next}>
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Static fallback: reduced motion or no JavaScript -->
+  <div class="bundle-static" aria-label={tb.title}>
+    <div class="shell bundle-static-grid">
+      {bundles.map((bd) => (
+        <BundleCard locale={locale} bundleId={bd.id} />
+      ))}
+    </div>
+  </div>
+  <noscript>
+    <style>
+      [data-bundle-scroll] { display: none !important; }
+      .bundle-static { display: block !important; }
+    </style>
+  </noscript>
+</section>
+
+<style>
+  .bundle-section {
+    position: relative;
+    padding-block: clamp(48px, 8vw, 110px) 0;
+  }
+  .bundle-intro {
+    text-align: center;
+    margin-bottom: clamp(8px, 2vw, 20px);
+  }
+  .bundle-title {
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    line-height: 0.95;
+    margin-top: 10px;
+  }
+
+  /* Tall scroll container: ~one viewport per bundle plus a lead-in. */
+  .bundle-scroll {
+    height: calc(var(--bn, 2) * 100vh + 100vh);
+    height: calc(var(--bn, 2) * 100svh + 100svh);
+    position: relative;
+  }
+  .bundle-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    overflow: clip;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Blurred background layers drifting at different scroll speeds. */
+  .bundle-bg {
+    position: absolute;
+    inset: -10%;
+    pointer-events: none;
+  }
+  .bblob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.5;
+    animation: bblob-drift 16s ease-in-out infinite alternate;
+  }
+  .bblob--a {
+    width: 44vmax; height: 44vmax;
+    left: -8%; top: 6%;
+    background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+  }
+  .bblob--b {
+    width: 36vmax; height: 36vmax;
+    right: -6%; top: 34%;
+    background: radial-gradient(circle, var(--plan-scale-glow) 0%, transparent 70%);
+    animation-duration: 21s;
+    animation-delay: -6s;
+  }
+  .bblob--c {
+    width: 30vmax; height: 30vmax;
+    left: 30%; bottom: -4%;
+    background: radial-gradient(circle, var(--plan-launch-glow) 0%, transparent 70%);
+    animation-duration: 26s;
+    animation-delay: -12s;
+  }
+  @keyframes bblob-drift {
+    from { transform: translate3d(-4%, -3%, 0) scale(1); }
+    to { transform: translate3d(4%, 5%, 0) scale(1.08); }
+  }
+
+  .bundle-viewport {
+    position: absolute;
+    inset: 0;
+    perspective: 1250px;
+    perspective-origin: 50% 42%;
+  }
+  .bundle-ring {
+    position: absolute;
+    inset: 0;
+  }
+  .bundle-ring.is-scrolling .bcard {
+    will-change: transform;
+  }
+
+  .bcard {
+    position: absolute;
+    top: 44%;
+    left: 50%;
+    width: min(400px, 84vw);
+    translate: -50% -50%;
+    transform-style: preserve-3d;
+    /* Short viewports (landscape phones): shrink cards to fit instead of
+       clipping them. `scale` composes with the JS-driven transform. */
+    scale: min(1, calc((100svh - 100px) / 560px));
+  }
+
+  /* Soft contact shadow floating behind/below each card in 3D space. */
+  .bcard-shadow {
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    bottom: -42px;
+    height: 56px;
+    background: radial-gradient(50% 50% at 50% 50%, rgba(0, 0, 0, 0.55), transparent 70%);
+    filter: blur(12px);
+    transform: translateZ(-80px);
+    opacity: var(--sh, 1);
+    pointer-events: none;
+  }
+
+  /* Very slight idle drift — transform only. */
+  .bcard-tilt {
+    transform-style: preserve-3d;
+    animation: bcard-drift 7s ease-in-out infinite;
+  }
+  .bcard:nth-child(2) .bcard-tilt {
+    animation-delay: -3.5s;
+  }
+  @keyframes bcard-drift {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-9px); }
+  }
+
+  /* Sheen: a lighting gradient that shifts with the card's angle. */
+  .bcard-sheen {
+    position: absolute;
+    inset: 0;
+    border-radius: 26px;
+    pointer-events: none;
+    transform: translateZ(64px);
+    background: linear-gradient(
+      105deg,
+      transparent calc(28% + var(--sheen, 0) * 32%),
+      rgba(255, 255, 255, 0.16) calc(50% + var(--sheen, 0) * 32%),
+      transparent calc(72% + var(--sheen, 0) * 32%)
+    );
+    opacity: 0.85;
+  }
+
+  /* Progress UI */
+  .bundle-ui {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: max(22px, env(safe-area-inset-bottom, 0px));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding-inline: var(--content-pad);
+    z-index: 5;
+  }
+  .bp-steps {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .bp-step {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: color-mix(in srgb, var(--paper) 82%, transparent);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.25s var(--ease-out), border-color 0.25s var(--ease-out), transform 0.25s var(--ease-out);
+  }
+  .bp-step:hover {
+    color: var(--ink);
+    transform: translateY(-1px);
+  }
+  .bp-step:focus-visible {
+    outline: 2px solid var(--focus-outline);
+    outline-offset: 2px;
+  }
+  .bp-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--muted-2);
+    transition: background 0.25s, transform 0.25s var(--ease-out-expo);
+  }
+  .bp-step.is-active {
+    color: var(--ink);
+    border-color: var(--line-strong);
+  }
+  .bp-step.is-active .bp-dot {
+    background: var(--accent);
+    transform: scale(1.35);
+  }
+  .bp-rail {
+    width: min(320px, 60vw);
+    height: 2px;
+    background: var(--line);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .bp-fill {
+    height: 100%;
+    width: 100%;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  .bp-nav {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .bp-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: color-mix(in srgb, var(--paper) 82%, transparent);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    color: var(--ink);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: transform 0.25s var(--ease-out-expo), background 0.2s;
+  }
+  .bp-btn:hover {
+    transform: scale(1.08);
+    background: var(--paper-3);
+  }
+  .bp-btn:focus-visible {
+    outline: 2px solid var(--focus-outline);
+    outline-offset: 2px;
+  }
+  .bp-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+  .bp-count {
+    font-size: 0.78rem;
+    color: var(--muted);
+    min-width: 64px;
+    text-align: center;
+  }
+
+  /* Static fallback */
+  .bundle-static {
+    display: none;
+    padding-block: 24px 64px;
+  }
+  .bundle-static-grid {
+    display: grid;
+    gap: 20px;
+    justify-items: center;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bundle-scroll {
+      display: none;
+    }
+    .bundle-static {
+      display: block;
+    }
+    .bcard-tilt,
+    .bblob {
+      animation: none;
+    }
+  }
+
+  @media (max-width: 819px) {
+    .bundle-viewport {
+      perspective: 1000px;
+    }
+    .bcard {
+      width: min(340px, 86vw);
+      top: 42%;
+    }
+    .bcard-shadow {
+      bottom: -30px;
+      height: 40px;
+    }
+    .bblob {
+      filter: blur(60px);
+      opacity: 0.4;
+    }
+    .bblob--c {
+      display: none;
+    }
+    .bundle-ui {
+      gap: 10px;
+      bottom: max(14px, env(safe-area-inset-bottom, 0px));
+    }
+    .bp-step {
+      padding: 7px 11px;
+      font-size: 0.76rem;
+    }
+  }
+</style>
+
+<script data-astro-rerun>
+  function initBundleCarousel() {
+    var section = document.querySelector("[data-bundle-section]");
+    if (!section || section.dataset.webaoBound) return;
+    section.dataset.webaoBound = "1";
+    var scroll = section.querySelector("[data-bundle-scroll]");
+    var stage = section.querySelector("[data-bundle-stage]");
+    var ring = section.querySelector("[data-ring]");
+    var fill = section.querySelector("[data-bp-fill]");
+    var count = section.querySelector("[data-bp-count]");
+    var ui = section.querySelector(".bundle-ui");
+    var cards = Array.prototype.slice.call(section.querySelectorAll("[data-card]"));
+    var steps = Array.prototype.slice.call(section.querySelectorAll("[data-bp-step]"));
+    var prev = section.querySelector("[data-bp-prev]");
+    var next = section.querySelector("[data-bp-next]");
+    var blobs = Array.prototype.slice.call(section.querySelectorAll("[data-blob]"));
+    if (!scroll || cards.length === 0) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    var cardCount = cards.length;
+    var degPerCard = 360 / cardCount; // angular spacing between adjacent cards
+    var segCount = Math.max(cardCount - 1, 1); // scroll segments between first/last card
+    var current = 0; // eased scroll progress (what the ring shows)
+    var target = 0; // raw scroll progress (where the ring is heading)
+    var ticking = false;
+    var snapTimer = 0;
+    var snapBackup = 0;
+    var snapRetries = 0;
+    // Per-card cached discrete state: avoids redundant DOM writes per frame.
+    var cardState = cards.map(function () { return { filter: null, active: null }; });
+    var lastIdx = -1;
+    var snapping = false;
+    var snapY0 = 0;
+    var snapY = 0;
+    var snapDir = 0;
+    var ofLabel = (count && count.getAttribute("data-of")) || "of";
+
+    function clamp01(v) {
+      return v < 0 ? 0 : v > 1 ? 1 : v;
+    }
+    function progress() {
+      var r = scroll.getBoundingClientRect();
+      var total = scroll.offsetHeight - window.innerHeight;
+      if (total <= 0) return 0;
+      return clamp01(-r.top / total);
+    }
+    function segIndex(p) {
+      return Math.max(0, Math.min(cardCount - 1, Math.round(p * segCount)));
+    }
+    function radius() {
+      var compact = window.innerWidth < 820;
+      return compact
+        ? Math.min(300, window.innerWidth * 0.36)
+        : Math.min(560, window.innerWidth * 0.4);
+    }
+
+    function render() {
+      var rot = -current * segCount * degPerCard;
+      var R = radius();
+      for (var i = 0; i < cardCount; i++) {
+        var card = cards[i];
+        // Signed angle of this card relative to the viewer, wrapped to [-180, 180].
+        var angle = (i * degPerCard + rot) % 360;
+        if (angle > 180) angle -= 360;
+        if (angle < -180) angle += 360;
+        var angleAbs = Math.abs(angle);
+        var angleRad = (angle * Math.PI) / 180;
+        // Cards shrink slightly as they swing away, for depth.
+        var cardScale = 1 - Math.min(angleAbs / 180, 1) * 0.3;
+        card.style.transform =
+          "rotateY(" + angle.toFixed(2) + "deg) translateZ(" + R.toFixed(1) + "px) scale(" + cardScale.toFixed(3) + ")";
+        // Clamped positive: a negative z-index would paint the card behind
+        // the stage background instead of behind the front card.
+        card.style.zIndex = String(Math.max(1, 100 - Math.round(angleAbs)));
+        // Fade with angle, floored so the back card stays faintly visible.
+        card.style.opacity = (angleAbs >= 100 ? 0.1 : 1 - (angleAbs / 100) * 0.88).toFixed(3);
+        var filterStr = angleAbs > 28 && angleAbs < 150 ? "blur(" + (Math.min((angleAbs - 28) / 70, 1) * 6).toFixed(2) + "px)" : "";
+        if (cardState[i].filter !== filterStr) {
+          cardState[i].filter = filterStr;
+          card.style.filter = filterStr;
+        }
+        card.style.setProperty("--sheen", Math.sin(angleRad).toFixed(3));
+        card.style.setProperty("--sh", (1 - Math.min(angleAbs / 120, 1)).toFixed(3));
+        // The card nearest the viewer is "active". On an exact tie (mid-rotation),
+        // the segment index breaks it so focus never lands on two cards at once.
+        var active = angleAbs < degPerCard / 2 || (angleAbs === degPerCard / 2 && i === segIndex(current));
+        if (cardState[i].active !== active) {
+          cardState[i].active = active;
+          card.setAttribute("data-active", active ? "1" : "0");
+          try {
+            card.inert = !active;
+          } catch (e) {}
+        }
+      }
+      if (fill) fill.style.transform = "scaleX(" + current.toFixed(4) + ")";
+      var idx = segIndex(current);
+      if (idx !== lastIdx) {
+        lastIdx = idx;
+        for (var j = 0; j < steps.length; j++) {
+          var on = j === idx;
+          steps[j].classList.toggle("is-active", on);
+          if (on) steps[j].setAttribute("aria-current", "true");
+          else steps[j].removeAttribute("aria-current");
+        }
+        if (count) count.textContent = idx + 1 + " " + ofLabel + " " + cardCount;
+      }
+      for (var k = 0; k < blobs.length; k++) {
+        var sp = parseFloat(blobs[k].getAttribute("data-blob") || "0.1");
+        blobs[k].style.translate = "0 " + (current * sp * 900).toFixed(1) + "px";
+      }
+    }
+
+    function tick() {
+      current += (target - current) * 0.14;
+      if (Math.abs(target - current) < 0.0004) current = target;
+      render();
+      if (current !== target) {
+        requestAnimationFrame(tick);
+      } else {
+        ticking = false;
+        if (ring) ring.classList.remove("is-scrolling");
+      }
+    }
+
+    function onScroll() {
+      if (!section.isConnected) {
+        window.removeEventListener("scroll", onScroll);
+        return;
+      }
+      target = progress();
+      if (ring) ring.classList.add("is-scrolling");
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(tick);
+      }
+      // If the user is dragging against an in-flight snap, abort the snap
+      // instead of fighting them: stop the smooth scroll where they are.
+      if (snapping) {
+        var yNow = window.scrollY;
+        if ((yNow - snapY0) * snapDir < -6) {
+          snapping = false;
+          if (snapTimer) clearTimeout(snapTimer);
+          try { window.scrollTo({ top: yNow, behavior: "auto" }); } catch (e) {}
+          return;
+        }
+        if (Math.abs(yNow - snapY) < 2) snapping = false;
+      }
+      if (snapTimer) clearTimeout(snapTimer);
+      snapRetries = 0;
+      var armSnap = function () {
+        snapTimer = setTimeout(function () {
+          // Only snap once the eased rotation has settled, so the correction
+          // is tiny and never fights an in-progress gesture. Re-arm a few
+          // times instead of silently dropping the snap.
+          if (Math.abs(current - target) > 0.002) {
+            if (snapRetries < 3) { snapRetries++; armSnap(); }
+            return;
+          }
+          var p = progress();
+          var nearest = Math.round(p * segCount) / segCount;
+          var d = Math.abs(p - nearest);
+          if (d > 0.0008 && d < 0.035) {
+            var top = scroll.getBoundingClientRect().top + window.scrollY;
+            var total = scroll.offsetHeight - window.innerHeight;
+            snapY0 = window.scrollY;
+            snapY = top + nearest * total;
+            snapDir = snapY >= snapY0 ? 1 : -1;
+            snapping = true;
+            try {
+              window.scrollTo({ top: snapY, behavior: "smooth" });
+            } catch (e) { snapping = false; }
+            // Backup: if scroll events stop arriving (e.g. the smooth scroll
+            // was interrupted), don't leave the snap-override guard armed.
+            if (snapBackup) clearTimeout(snapBackup);
+            snapBackup = setTimeout(function () { snapping = false; }, 800);
+          }
+        }, 170);
+      };
+      armSnap();
+    }
+
+    function goTo(i) {
+      i = Math.max(0, Math.min(n - 1, i));
+      var top = scroll.getBoundingClientRect().top + window.scrollY;
+      var total = scroll.offsetHeight - window.innerHeight;
+      try {
+        window.scrollTo({ top: top + (i / segCount) * total, behavior: "smooth" });
+      } catch (e) {
+        window.scrollTo(0, top + (i / segCount) * total);
+      }
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    function onResize() {
+      if (!section.isConnected) {
+        window.removeEventListener("resize", onResize);
+        return;
+      }
+      target = progress();
+      current = target;
+      render();
+    }
+    window.addEventListener("resize", onResize);
+
+    if (prev) prev.addEventListener("click", function () { goTo(segIndex(target) - 1); });
+    if (next) next.addEventListener("click", function () { goTo(segIndex(target) + 1); });
+    steps.forEach(function (st, i) {
+      st.addEventListener("click", function () { goTo(i); });
+    });
+
+    // Arrow keys navigate when focus is inside the carousel controls.
+    if (ui) {
+      ui.addEventListener("keydown", function (e) {
+        var k = e.key;
+        if (k !== "ArrowRight" && k !== "ArrowLeft" && k !== "ArrowDown" && k !== "ArrowUp") return;
+        e.preventDefault();
+        var dir = k === "ArrowRight" || k === "ArrowDown" ? 1 : -1;
+        goTo(segIndex(target) + dir);
+      });
+    }
+
+    // Touch swipe (horizontal) on the stage navigates; vertical scroll
+    // still drives the carousel naturally.
+    if (stage) {
+      var tx = 0, ty = 0;
+      stage.addEventListener("touchstart", function (e) {
+        var t = e.touches[0];
+        tx = t.clientX; ty = t.clientY;
+      }, { passive: true });
+      stage.addEventListener("touchend", function (e) {
+        var t = e.changedTouches[0];
+        var dx = t.clientX - tx, dy = t.clientY - ty;
+        if (Math.abs(dx) > 64 && Math.abs(dx) > Math.abs(dy) * 1.4) {
+          goTo(segIndex(target) + (dx < 0 ? 1 : -1));
+        }
+      }, { passive: true });
+    }
+
+    target = progress();
+    current = target;
+    render();
+  }
+  initBundleCarousel();
+  if (!window.__webaoCarouselPL) {
+    window.__webaoCarouselPL = true;
+    document.addEventListener("astro:page-load", initBundleCarousel);
+  }
+</script>
