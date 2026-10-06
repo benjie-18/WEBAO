@@ -8,5 +8,10 @@ const t = useTranslations(locale);
 ---
 
 <BaseLayout title={t.meta.demos.title} description={t.meta.demos.description} locale={locale} pageKey="demos">
+  <Fragment slot="head">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Baloo+2:wght@700&family=Fraunces:ital,wght@1,600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet" />
+  </Fragment>
   <DemosPage locale={locale} />
 </BaseLayout>
