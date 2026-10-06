@@ -21,7 +21,7 @@ const paths = localizedPaths[locale];
 
         <div class="contact-cards">
           <a href="mailto:contact@webao.ca" class="c-card">
-            <span class="c-icon">✉</span>
+            <span class="c-icon" aria-hidden="true">✉</span>
             <span>
               <strong>{t.contact.hero.email}</strong>
               <span class="mono">{t.contact.hero.emailNote}</span>
@@ -29,7 +29,7 @@ const paths = localizedPaths[locale];
             <span aria-hidden="true">→</span>
           </a>
           <div class="c-card">
-            <span class="c-icon">📍</span>
+            <span class="c-icon" aria-hidden="true">📍</span>
             <span>
               <strong>{t.contact.hero.location}</strong>
               <span class="mono">{t.contact.hero.locationNote}</span>
@@ -215,12 +215,10 @@ const paths = localizedPaths[locale];
   .form { background: var(--card-bg); border:1px solid var(--line); border-radius:18px; padding:18px; box-shadow: var(--shadow-md); display:grid; gap:14px; }
   .form-head h2 { font-size: 1.35rem; letter-spacing:-0.02em; font-weight:750; line-height:1; }
   .form-head p { margin-top:4px; font-size:11px; color: var(--muted); }
-  .field-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
   label { display:grid; gap:6px; font-size:13px; font-weight:600; letter-spacing:-0.01em; color: var(--ink-3); }
   input, select, textarea { width:100%; padding:10px 12px; border:1px solid var(--line-strong); border-radius:10px; background: var(--paper-3); font-size:14px; font-weight:500; color: var(--ink); transition: border-color .2s, box-shadow .2s; }
   textarea { resize: vertical; min-height: 72px; }
   input:focus, select:focus, textarea:focus { outline:none; border-color: var(--ink); box-shadow: 0 0 0 3px var(--focus-ring); }
-  .optional { font-weight:500; color: var(--muted); text-transform:none; letter-spacing:0; font-size:11px; }
   .form-meta { display:grid; gap:8px; font-size:11px; color: var(--muted); line-height:1.5; }
   .check-row { display:flex; gap:8px; align-items:center; font-size:12.5px; color: var(--ink-3); font-weight:500; cursor:pointer; }
   .check-row input { width:16px; height:16px; accent-color: var(--ink); }
@@ -231,5 +229,5 @@ const paths = localizedPaths[locale];
   .info-card h3 { font-size:14.5px; letter-spacing:-0.02em; font-weight:750; }
   .info-card p { margin-top:8px; font-size:13px; color: var(--muted); line-height:1.5; }
   .info-card ul { list-style:none; padding:0; margin-top:10px; display:grid; gap:6px; font-size:13px; line-height:1.5; color: var(--ink-3); }
-  @media (max-width: 900px) { .contact-grid, .field-grid, .info-grid { grid-template-columns: 1fr; } .contact-copy { position: static; } }
+  @media (max-width: 900px) { .contact-grid, .info-grid { grid-template-columns: 1fr; } .contact-copy { position: static; } }
 </style>
