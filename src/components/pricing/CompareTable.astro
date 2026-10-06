@@ -122,7 +122,7 @@ const compatRows = compatibility.map((c) => ({
             </td>
           </tr>
           {compatRows.map((row) => (
-            <tr>
+            <tr class="compat-row">
               <th scope="row" class="row-head">
                 {row.name}
                 {row.note > 0 && <NoteRef locale={locale} note={row.note} />}
@@ -131,8 +131,7 @@ const compatRows = compatibility.map((c) => ({
                 <td class:list={[pid === "grow" && "col-grow"]}>
                   {row[pid] === "I" && (
                     <span class="cell-check">
-                      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.2l3.2 3.2 5.8-6.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                      <span class="visually-hidden">{tc.cellIncluded}</span>
+                      <span>{tc.cellIncluded}</span>
                     </span>
                   )}
                   {row[pid] === "N" && (
@@ -280,6 +279,15 @@ const compatRows = compatibility.map((c) => ({
   .cell-check svg {
     width: 13px;
     height: 13px;
+  }
+  /* Compat table: "Included" text instead of checkmark icon. */
+  .compat-row .cell-check {
+    width: auto;
+    height: auto;
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 0.78rem;
+    font-weight: 600;
   }
   .cell-dash {
     color: var(--muted-2);
