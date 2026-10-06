@@ -444,7 +444,7 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
       </div>
     </footer>
 
-    {pageKey !== "start" && (
+    {pageKey !== "start" && pageKey !== "pricing" && (
       <div class="sticky-cta" data-sticky-cta role="region" aria-label={t.nav.stickyCta}>
         <span class="sticky-cta-text">
           <strong>{t.nav.stickyCtaPrice}</strong>
