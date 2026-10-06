@@ -1,12 +1,12 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { STRIPE_PUBLISHABLE_KEY } from "../../lib/config";
 
 const locale = "fr" as const;
 const title = "Démarrer mon site · WEBAO";
 const description = "Démarrez votre site WEBAO : dites-nous qui vous êtes, puis finalisez votre abonnement de 149 $/mois.";
 
 // Clé publique Stripe; sûre à intégrer dans le code frontend.
-const STRIPE_PUBLISHABLE_KEY = "pk_live_51UMzZYE57vVzxI418WAmnlUuIXMLMWtNxjYa6WeWauaSmAhF3xfwaFfdP4D4kJUG2k1nieWrIGSYVMDcy2WYIJ2T00TPmrTePT";
 ---
 
 <BaseLayout title={title} description={description} locale={locale}>
@@ -43,7 +43,7 @@ const STRIPE_PUBLISHABLE_KEY = "pk_live_51UMzZYE57vVzxI418WAmnlUuIXMLMWtNxjYa6We
           </div>
         </div>
         <div class="mono" style="margin-top:12px; font-size:10.5px; text-align:center; color: var(--muted);">
-          🔒 Chiffré et sécurisé · Propulsé par Stripe · <a href="/fr/refunds" style="color: var(--accent-text);">Politique de remboursement</a>
+          🔒 Chiffré et sécurisé · Propulsé par Stripe · <a href="/fr/remboursements" style="color: var(--accent-text);">Politique de remboursement</a>
         </div>
       </div>
 
