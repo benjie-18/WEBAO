@@ -59,7 +59,7 @@ const processId = locale === "fr" ? "processus" : "process";
         <!-- Main preview -->
         <div class="preview-main">
           <div class="preview-media">
-            <svg viewBox="0 0 640 420" role="img" aria-label="Preview collage" class="preview-art">
+            <svg viewBox="0 0 640 420" aria-hidden="true" class="preview-art">
               <defs>
                 <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="0%" stop-color="#0A0F1C"/><stop offset="100%" stop-color="#1E2A3A"/>
@@ -717,7 +717,19 @@ const processId = locale === "fr" ? "processus" : "process";
 </style>
 
 <script>
+  // Disposers for the current page instance. Astro's client-side navigation
+  // re-runs initHomePage on every page-load while window-level listeners and
+  // observers from the previous instance survive — dispose them first.
+  let homeCleanups: Array<() => void> = [];
+  function onHomeDispose(fn: () => void) { homeCleanups.push(fn); }
+  function disposeHome() {
+    for (const fn of homeCleanups) { try { fn(); } catch {} }
+    homeCleanups = [];
+  }
+  document.addEventListener('astro:before-swap', disposeHome);
+
   function initHomePage() {
+    disposeHome();
     const hero = document.getElementById('hero');
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isCoarse = window.matchMedia('(pointer: coarse), (hover: none)').matches;
@@ -726,15 +738,22 @@ const processId = locale === "fr" ? "processus" : "process";
       const a = hero.querySelector('[data-parallax="a"]') as HTMLElement | null;
       const b = hero.querySelector('[data-parallax="b"]') as HTMLElement | null;
       let raf = 0, tx = 0, ty = 0, cx = 0, cy = 0;
-      hero.addEventListener('mousemove', (e: MouseEvent) => {
+      const onMove = (e: MouseEvent) => {
         const r = hero.getBoundingClientRect();
         tx = ((e.clientX - r.left) / r.width - 0.5) * 2;
         ty = ((e.clientY - r.top) / r.height - 0.5) * 2;
         if (!raf) raf = requestAnimationFrame(tick);
-      });
-      hero.addEventListener('mouseleave', () => {
+      };
+      const onLeave = () => {
         tx = 0; ty = 0;
         if (!raf) raf = requestAnimationFrame(tick);
+      };
+      hero.addEventListener('mousemove', onMove);
+      hero.addEventListener('mouseleave', onLeave);
+      onHomeDispose(() => {
+        hero.removeEventListener('mousemove', onMove);
+        hero.removeEventListener('mouseleave', onLeave);
+        if (raf) cancelAnimationFrame(raf);
       });
       function tick() {
         raf = 0;
@@ -791,6 +810,7 @@ const processId = locale === "fr" ? "processus" : "process";
         triggers.add(el.closest('.section') ?? el);
       });
       triggers.forEach((t) => fio.observe(t));
+      onHomeDispose(() => fio.disconnect());
     }
   }
 
@@ -857,6 +877,10 @@ const processId = locale === "fr" ? "processus" : "process";
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
+    onHomeDispose(() => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    });
     // If the viewport crosses the narrow breakpoint mid-session, fall back
     // to the static stack rather than a half-driven scrub.
     narrow.addEventListener('change', (e) => {
@@ -916,13 +940,16 @@ const processId = locale === "fr" ? "processus" : "process";
           const original = title.innerHTML;
           splitWords(title, lang);
           let rt = 0;
-          window.addEventListener('resize', () => {
+          const onResize = () => {
             window.clearTimeout(rt);
             rt = window.setTimeout(() => {
+              if (!hero.isConnected) return;
               title.innerHTML = original;
               splitWords(title, lang);
             }, 250);
-          });
+          };
+          window.addEventListener('resize', onResize);
+          onHomeDispose(() => window.removeEventListener('resize', onResize));
         }
       }
 
