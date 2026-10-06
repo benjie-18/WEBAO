@@ -555,21 +555,24 @@ const processId = locale === "fr" ? "processus" : "process";
   /* Narrow viewports: vertical journey, no pinning */
   @media (max-width: 860px) {
     .pin-wrap { height: auto; }
-    .pin-stage { position: static; height: auto; display: block; padding-block: 8px 24px; }
-    .journey-track { height: auto; margin-block: 0; padding-left: 34px; }
+    .pin-stage { position: static; height: auto; display: block; padding-block: 8px 24px; overflow: visible; }
+    .journey-track { position: relative; height: auto; margin-block: 0; padding-left: 0; }
     .journey-line, .crack-fill { display: none; }
-    .journey-track::before {
-      content: ""; position: absolute; left: 11px; top: 8px; bottom: 8px; width: 2px;
-      background: linear-gradient(180deg, var(--journey-accent), var(--journey-accent) 60%, rgba(248,245,239,.14));
-      border-radius: 2px;
+    .journey-track::before { display: none; }
+    .journey-ends { margin-bottom: 24px; }
+    .stations { position: static; display: grid; gap: 20px; }
+    .station { position: relative; left: auto; top: auto; width: auto; display: grid; gap: 12px; }
+    .station-node {
+      position: static; transform: none; left: auto; top: auto;
+      width: 44px; height: 44px; font-size: 1.05rem;
+      background: var(--journey-accent); color: #fff; border-color: var(--journey-accent);
     }
-    .stations { position: static; display: grid; gap: 26px; }
-    .station { position: relative; left: auto; top: auto; width: auto; }
-    .station-node { left: -22px; top: 0; transform: translate(-50%, 0); width: 44px; height: 44px; font-size: 1.05rem; background: var(--journey-accent); color: #fff; border-color: var(--journey-accent); }
     .station-card, .station.is-active .station-card,
     .station[data-station="0"] .station-card, .station[data-station="2"] .station-card {
-      position: static; width: auto; opacity: 1; transform: none; pointer-events: auto;
+      position: static; width: auto; max-width: 100%; opacity: 1; transform: none; pointer-events: auto;
     }
+    .station-card .station-body h3 { font-size: 1.15rem; }
+    .station-card .station-body p { font-size: 0.95rem; }
   }
 
   /* Reduced motion: vertical stack, everything visible, no pin/scrub */
@@ -672,7 +675,7 @@ const processId = locale === "fr" ? "processus" : "process";
   .faq-list summary { list-style:none; cursor:pointer; padding:18px 4px; font-weight:650; letter-spacing:-0.02em; font-size:15px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
   .faq-list summary::-webkit-details-marker{ display:none; }
   .faq-list summary::after { content:"+"; width:24px; height:24px; border-radius:99px; border:1px solid var(--line); display:grid; place-items:center; font-weight:500; flex:none; font-size:12px; }
-  .faq-list details[open] summary::after { content:"\\2212"; background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .faq-list details[open] summary::after { content:"\2212"; background: var(--ink); color: var(--paper); border-color: var(--ink); }
   .faq-list details div { padding: 0 4px 20px; color: var(--muted); font-size:14px; line-height:1.6; }
   /* Hairline crack between FAQ items: the fracture motif as divider. */
   .fracture-divider { height: 8px; margin-block: 2px; background: var(--line-strong); opacity: .75; clip-path: polygon(0 42%, 9% 60%, 20% 34%, 33% 64%, 46% 38%, 59% 62%, 72% 36%, 84% 60%, 100% 42%, 100% 58%, 84% 74%, 72% 50%, 59% 76%, 46% 52%, 33% 78%, 20% 48%, 9% 74%, 0 56%); }
