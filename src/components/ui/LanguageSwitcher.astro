@@ -152,32 +152,34 @@ const isFr = locale === "fr";
 </style>
 
 <script>
-  // Persist language choice
+  // Persist language choice (all instances: header + mobile drawer)
   function initLangSwitcher() {
-    const switcher = document.querySelector('.lang-switcher');
-    if (!switcher) return;
-    const links = switcher.querySelectorAll<HTMLAnchorElement>('[data-lang]');
-    links.forEach(a => {
-      a.addEventListener('click', () => {
-        try {
-          localStorage.setItem('webao.locale', a.dataset.lang || 'en');
-        } catch {}
+    document.querySelectorAll('.lang-switcher').forEach((switcher) => {
+      const el = switcher as HTMLElement;
+      if (el.dataset.langBound === '1') return;
+      el.dataset.langBound = '1';
+      el.querySelectorAll<HTMLAnchorElement>('[data-lang]').forEach((a) => {
+        a.addEventListener('click', () => {
+          try {
+            localStorage.setItem('webao.locale', a.dataset.lang || 'en');
+          } catch {}
+        });
       });
     });
 
-    // Optional: on first visit, respect stored preference
+    // First-visit browser-language default: if the visitor never chose a
+    // language, their browser prefers French, and they landed on the EN home
+    // page, send them to /fr/ (once per session; manual choice always wins).
     try {
-      const stored = localStorage.getItem('webao.locale');
+      if (localStorage.getItem('webao.locale')) return;
+      if (sessionStorage.getItem('webao.autoRedirect')) return;
       const path = window.location.pathname;
-      const isHomeEn = path === '/' || path === '';
-      if (stored === 'fr' && isHomeEn) {
-        // only auto-redirect once per session to avoid loop
-        const key = 'webao.autoRedirect';
-        if (!sessionStorage.getItem(key)) {
-          sessionStorage.setItem(key, '1');
-          // don't auto-redirect aggressively, just hint - we skip auto to avoid SEO issues
-        }
-      }
+      if (path !== '/' && path !== '') return;
+      const langs = window.navigator.languages || [window.navigator.language || ''];
+      const prefersFr = langs.some((l) => l.toLowerCase().startsWith('fr'));
+      if (!prefersFr) return;
+      sessionStorage.setItem('webao.autoRedirect', '1');
+      window.location.replace('/fr/');
     } catch {}
   }
   document.addEventListener('astro:page-load', initLangSwitcher);
