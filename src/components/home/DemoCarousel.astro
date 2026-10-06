@@ -59,7 +59,7 @@ const total = String(demos.length).padStart(2, "0");
 
       <div class="proof-track" data-proof-track>
         {demos.map((d, i) => (
-          <article class="proof-panel" data-proof-panel>
+          <article class="proof-panel" data-proof-panel data-demo-id={d.id}>
             {i > 0 && <span class="proof-fracture" aria-hidden="true"></span>}
             <a href={`${paths.demos}/${d.id}`} class="proof-shot" aria-label={`${d.name}, ${d.tone}`}>
               <img
@@ -114,7 +114,7 @@ const total = String(demos.length).padStart(2, "0");
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduced) return; // CSS renders the vertical stack; no auto-scroll, nothing to drive.
 
-    const AUTOPLAY_MS = 4000;
+    const AUTOPLAY_MS = 2000;
 
     // ---------- progress + counter ----------
     let paintQueued = false;
@@ -135,8 +135,9 @@ const total = String(demos.length).padStart(2, "0");
 
     function panelLeft(i: number) {
       const clamped = Math.min(n - 1, Math.max(0, i));
-      const padL = parseFloat(getComputedStyle(track).paddingLeft || "0") || 0;
-      return panels[clamped].offsetLeft - padL;
+      const panel = panels[clamped];
+      // Center the panel in the visible track area.
+      return panel.offsetLeft - (track.clientWidth - panel.offsetWidth) / 2;
     }
     function scrollToPanel(i: number, behavior: ScrollBehavior = "smooth") {
       track.scrollTo({ left: panelLeft(i), behavior });
@@ -293,20 +294,31 @@ const total = String(demos.length).padStart(2, "0");
 
   .proof-track {
     --proof-gap: clamp(24px, 3vw, 44px);
+    --proof-card-w: min(560px, 78vw);
     display: flex;
     gap: var(--proof-gap);
     overflow-x: auto;
     overscroll-behavior-x: contain;
-    scroll-snap-type: x proximity;
-    padding: 6px clamp(20px, 6vw, 88px) 30px;
+    scroll-snap-type: x mandatory;
+    /* Center the active card: side padding = (viewport - card) / 2,
+       so half of neighbors peek on the edges. */
+    padding: 6px max(clamp(20px, 6vw, 88px), calc(50% - var(--proof-card-w) / 2)) 30px;
     scrollbar-width: thin;
+    /* Fade on the sides */
+    mask-image: linear-gradient(90deg, transparent 0, black 10%, black 90%, transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, black 10%, black 90%, transparent 100%);
   }
   .proof-panel {
     position: relative;
     flex: 0 0 auto;
-    width: min(620px, 84vw);
-    scroll-snap-align: start;
+    width: var(--proof-card-w);
+    scroll-snap-align: center;
     min-width: 0;
+  }
+  /* Hide the nora card (no preview image) on mobile: users scroll
+     from hero straight to the carousel. */
+  @media (max-width: 819px) {
+    .proof-panel[data-demo-id="nora"] { display: none; }
   }
   .proof-shot {
     display: block; border-radius: var(--r-lg, 18px); overflow: clip;
