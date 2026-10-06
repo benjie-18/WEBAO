@@ -519,32 +519,13 @@ export const demos: Demo[] = [
   },
 ];
 
-export const demoCategories = [
-  "All",
-  "Trades",
-  "Restaurant",
-  "Automotive",
-  "Health",
-  "Creative",
-  "Retail",
-  "Wellness",
-  "Hospitality",
-  "Landscaping",
-  "Technology",
-  "Fashion",
-  "Music",
-  "Finance",
-  "Gaming",
-  "Design",
-  "Beauty",
-] as const;
+
 
 // Style families: broad, plain-language groups for the style filter.
 // Each visible demo belongs to exactly one family.
 export type StyleFamily = "timeless" | "elegant" | "bold" | "playful" | "soft";
 
 export const styleFamilies: StyleFamily[] = ["timeless", "elegant", "bold", "playful", "soft"];
-
 export const demoFamily: Record<string, StyleFamily> = {
   // Timeless: clean, professional, never looks dated
   "finition-r": "timeless",
@@ -600,15 +581,6 @@ export function getDemoFamily(id: string): StyleFamily {
   return demoFamily[id] ?? "timeless";
 }
 
-export function searchDemos(query: string, category: string = "All") {
-  const q = query.trim().toLowerCase();
-  return demos.filter((d) => {
-    const matchCat = category === "All" || d.category === category;
-    const hay = `${d.name} ${d.category} ${d.city} ${d.tone} ${d.palette} ${d.description}`.toLowerCase();
-    const matchQ = !q || hay.includes(q);
-    return matchCat && matchQ;
-  });
-}
 
 // Trade filters for the catalog: only trades with at least one demo get a chip.
 // Enables trade-specific landing views like /demos?trade=plumbing.
