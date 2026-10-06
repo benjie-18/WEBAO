@@ -317,6 +317,10 @@ button, input, textarea, select { font: inherit; }
   --plan-scale-bg-dim: #3B2663;
   --plan-scale-glow: rgba(150, 100, 255, .45);
   --plan-scale-line: rgba(251, 246, 236, .22);
+  /* Bundle carousel background blobs: warm in light mode. */
+  --bblob-a: rgba(255, 59, 48, .5);
+  --bblob-b: rgba(255, 193, 7, .5);
+  --bblob-c: rgba(255, 122, 61, .5);
   /* Bundle cards: deep floating panels, tuned per theme. */
   --bundle-bg: #0D1424;
   --bundle-bg-2: #16203A;
@@ -460,6 +464,10 @@ button, input, textarea, select { font: inherit; }
   --plan-scale-bg-dim: #332058;
   --plan-scale-glow: rgba(160, 110, 255, .5);
   --plan-scale-line: rgba(248, 245, 239, .2);
+  /* Bundle carousel background blobs: cool in dark mode. */
+  --bblob-a: rgba(120, 170, 255, .5);
+  --bblob-b: rgba(52, 211, 153, .5);
+  --bblob-c: rgba(180, 130, 255, .5);
   --bundle-bg: #0A0F1E;
   --bundle-bg-2: #141C36;
   --bundle-text: #F8F5EF;
@@ -1103,17 +1111,21 @@ html.theming *::after {
 /* Index note references: small superscript-style links to the terms page. */
 .noteref {
   display: inline-block;
-  font-size: .66em;
-  font-weight: 600;
+  font-size: .55em;
+  font-weight: 500;
   line-height: 1;
   vertical-align: super;
   letter-spacing: .02em;
   color: inherit;
+  opacity: .65;
   text-decoration: none;
   padding: .1em .15em;
   margin-inline-start: .1em;
   border-radius: 4px;
-  transition: background .18s var(--ease-out);
+  transition: background .18s var(--ease-out), opacity .18s var(--ease-out);
+}
+.noteref:hover {
+  opacity: 1;
 }
 .noteref:hover { text-decoration: underline; text-underline-offset: 2px; }
 .noteref:focus-visible {
