@@ -226,10 +226,10 @@ const IMG = {
           var rad = a * Math.PI / 180, major = (a % 30 === 0);
           var r1 = major ? 114 : 120, r2 = 130;
           var line = document.createElementNS(NS, 'line');
-          line.setAttribute('x1', 160 + r1 * Math.sin(rad));
-          line.setAttribute('y1', 160 - r1 * Math.cos(rad));
-          line.setAttribute('x2', 160 + r2 * Math.sin(rad));
-          line.setAttribute('y2', 160 - r2 * Math.cos(rad));
+          line.setAttribute('x1', String(160 + r1 * Math.sin(rad)));
+          line.setAttribute('y1', String(160 - r1 * Math.cos(rad)));
+          line.setAttribute('x2', String(160 + r2 * Math.sin(rad)));
+          line.setAttribute('y2', String(160 - r2 * Math.cos(rad)));
           line.setAttribute('class', major ? 'dg-tick-major' : 'dg-tick');
           ticksG.appendChild(line);
         }
@@ -258,8 +258,9 @@ const IMG = {
         });
       });
       if (!reduced && indoorEl) {
+        var indoorElSafe = indoorEl;
         setInterval(function () {
-          indoorEl.textContent = (setpoint + (Math.random() - 0.5) * 0.4).toFixed(1);
+          indoorElSafe.textContent = (setpoint + (Math.random() - 0.5) * 0.4).toFixed(1);
         }, 3000);
       }
       render();
