@@ -26,8 +26,9 @@ export const DEFAULT_SETTINGS: Settings = {
 };
 
 /**
- * SHA-256 hex of the default admin password ("32560").
+ * SHA-256 hex of the default admin password.
  * Seeded lazily into KV on first use so a fresh namespace works out of the box.
+ * The default password is documented in DEPLOY.md (change it immediately).
  */
 export const DEFAULT_PASSWORD_HASH =
   "26cc435143c4926972d65ef8b6c331961613270cf4801a2ede45048e8d9a0012";
