@@ -64,7 +64,7 @@ Webao.ca is the website that clients may be redirected to for their inquiries.
 It must be impressive and feature packed. Clients should be able to contact the owner to send assets, questions, etc. 
 The landing page should be impressive, with animations and great style. 
 
-For more information on the artistic direction and components of the main site, visit artistc-direction.md
+For more information on the artistic direction and components of the main site, visit artistic-direction.md
 
 ## Development
 
