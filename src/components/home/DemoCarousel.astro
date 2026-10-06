@@ -9,7 +9,7 @@ const t = useTranslations(locale);
 const paths = localizedPaths[locale];
 
 // Same catalog order as /demos, minus hidden duplicates
-const hidden = new Set(["boba-club"]);
+const hidden = new Set(["boba-club", "nora"]);
 const demos = getDemos(locale)
   .filter((d) => !hidden.has(d.id))
   .sort((a, b) => (a.id === "studio-reve" ? -1 : b.id === "studio-reve" ? 1 : 0));
