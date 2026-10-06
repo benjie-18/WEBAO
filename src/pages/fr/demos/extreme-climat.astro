@@ -1,0 +1,399 @@
+---
+import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+
+// Demo microsite: Extrême Climat · fictional HVAC, Lévis QC.
+// Cinematic hot/cold duality: split-screen ice vs flame, full-bleed photography,
+// giant condensed type — "WE OWN BOTH EXTREMES". Cinema, not a dashboard.
+const IMG = {
+  ice: "https://images.unsplash.com/photo-1418985991508-e47386d96a71?q=80&w=1600&auto=format&fit=crop",
+  fire: "https://images.unsplash.com/photo-1477763858572-cda7deaa9bc5?q=80&w=1600&auto=format&fit=crop",
+  ice2: "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1400&auto=format&fit=crop",
+  fire2: "https://images.unsplash.com/photo-1523861751938-121b5323b48b?q=80&w=1400&auto=format&fit=crop",
+  tech: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=1200&auto=format&fit=crop",
+};
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Extrême Climat · On maîtrise les deux extrêmes · CVAC à Lévis · (418) 555-0119</title>
+  <meta name="description" content="Extrême Climat : CVAC à Lévis conçu pour les deux extrêmes. Thermopompes pour climats froids jusqu’à −30°, fournaises, climatisation et service d’urgence 24/7. On maîtrise les deux extrêmes." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body class="xc">
+
+  <header class="xc-top">
+    <p class="xc-logo">EXTRÊME <span>CLIMAT</span></p>
+    <a class="xc-top-call" href="tel:+14185550119">(418) 555-0119</a>
+  </header>
+
+  <main>
+    <!-- HERO: the split screen -->
+    <section class="xc-hero" aria-label="On maîtrise les deux extrêmes">
+      <div class="xc-half xc-ice">
+        <img src={IMG.ice} alt="Paysage de montagne pris dans la glace à trente degrés sous zéro" fetchpriority="high" />
+        <p class="xc-deg" aria-hidden="true">−30°</p>
+      </div>
+      <div class="xc-half xc-fire">
+        <img src={IMG.fire} alt="Flammes d’un feu de joie contre la nuit" fetchpriority="high" />
+        <p class="xc-deg" aria-hidden="true">+35°</p>
+      </div>
+      <div class="xc-title">
+        <p class="xc-kicker">CVAC · Lévis, QC</p>
+        <h1>ON MAÎTRISE<br />LES DEUX<br />EXTRÊMES</h1>
+        <div class="xc-hero-cta">
+          <a class="xc-btn" href="#contact">Obtenir une soumission</a>
+          <a class="xc-btn xc-btn-ghost" href="tel:+14185550119">(418) 555-0119</a>
+        </div>
+      </div>
+      <p class="xc-scroll" aria-hidden="true">DÉFILEZ</p>
+    </section>
+
+    <!-- STRIP: the premise -->
+    <section class="xc-strip">
+      <p>Lévis passe de blizzards à <strong class="xc-ice-t">−30°</strong> à des canicules à <strong class="xc-fire-t">+35°</strong>. On installe des systèmes qui ne bronchent devant aucun des deux — et on répond au téléphone quand le vôtre flanche.</p>
+    </section>
+
+    <!-- DUO: heat vs cold services -->
+    <section class="xc-duo" id="services" aria-label="Services de chauffage et de climatisation">
+      <article class="xc-side xc-heat">
+        <img src={IMG.fire2} alt="Braises rougeoyantes dans un feu" loading="lazy" />
+        <div class="xc-side-in">
+          <p class="xc-side-k">CHAUFFAGE</p>
+          <h2>L’hiver, c’est<br />notre terrain.</h2>
+          <ul>
+            <li>Thermopompes pour climats froids <span>jusqu’à −30°</span></li>
+            <li>Fournaises haute efficacité <span>installées en un jour</span></li>
+            <li>Chaufferettes de garage et d’atelier</li>
+            <li>Systèmes de chauffage d’appoint <span>pour les pires nuits</span></li>
+          </ul>
+          <p class="xc-side-price">Fournaises dès 3 800 $ · thermopompes dès 4 900 $</p>
+        </div>
+      </article>
+      <article class="xc-side xc-cool">
+        <img src={IMG.ice2} alt="Sommets enneigés sous un ciel de nuit" loading="lazy" />
+        <div class="xc-side-in">
+          <p class="xc-side-k">CLIMATISATION</p>
+          <h2>L’été n’a<br />aucune chance.</h2>
+          <ul>
+            <li>Climatisation centrale <span>équilibrée pièce par pièce</span></li>
+            <li>Mini-splits <span>silencieuses à l’extrême</span></li>
+            <li>Ventilation et déshumidification</li>
+            <li>Service prioritaire en canicule</li>
+          </ul>
+          <p class="xc-side-price">Climatisation dès 3 400 $ · mini-splits dès 2 900 $</p>
+        </div>
+      </article>
+    </section>
+
+    <!-- PROOF: numbers + voices -->
+    <section class="xc-proof" aria-label="Preuves">
+      <div class="xc-stats">
+        <div><strong>18</strong><span>ans dans les extrêmes</span></div>
+        <div><strong>3 100</strong><span>systèmes installés</span></div>
+        <div><strong>−30°</strong><span>homologuées pour climats froids</span></div>
+        <div><strong>24/7</strong><span>ligne d’urgence</span></div>
+      </div>
+      <div class="xc-quotes">
+        <blockquote>
+          <p>« La fournaise a lâché à −27°. On avait de la chaleur avant minuit. Je ne sais pas ce qu’on peut demander de plus à une compagnie. »</p>
+          <footer>— Daniel P., Lévis</footer>
+        </blockquote>
+        <blockquote>
+          <p>« La thermopompe a roulé tout droit pendant la vague de froid de février dernier. Notre vieux système aurait abandonné à −20°. »</p>
+          <footer>— Isabelle M., Saint-Romuald</footer>
+        </blockquote>
+        <blockquote>
+          <p>« Deux canicules, zéro tracas. En haut, il fait enfin la même température que dans le reste de la maison. »</p>
+          <footer>— François L., Charny</footer>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- ABOUT: born in a Lévis winter -->
+    <section class="xc-about">
+      <img src={IMG.tech} alt="Un technicien d’Extrême Climat au travail" loading="lazy" />
+      <div class="xc-about-in">
+        <p class="xc-kicker">L’entreprise</p>
+        <h2>NÉ D’UN<br />HIVER À LÉVIS.</h2>
+        <p>Extrême Climat a vu le jour en 2008, quand le fondateur Steve Bergeron a passé une nuit de janvier à dégeler des tuyaux sur la rive-sud et s’est dit que Lévis méritait de meilleurs équipements. Dix-huit ans plus tard, la flotte est plus grosse, mais la règle n’a pas changé : on installe ce à quoi on ferait confiance chez nous à −30°.</p>
+        <ul>
+          <li>Licencié · RBQ 0000-0000-00 (fictif)</li>
+          <li>Lévis · Bellechasse · Lotbinière · Québec</li>
+          <li>Garantie de 10 ans sur les pièces à l’installation</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- EMERGENCY: the furnace band -->
+    <section class="xc-emergency" aria-label="Service d’urgence">
+      <img src={IMG.fire} alt="" aria-hidden="true" loading="lazy" />
+      <div class="xc-emergency-in">
+        <p class="xc-kicker">Urgence 24/7</p>
+        <h2>FOURNAISE EN PANNE<br />À −25°?</h2>
+        <p>N’attendez pas au matin. Le tech de garde répond maintenant.</p>
+        <a class="xc-bignum" href="tel:+14185550119">(418) 555-0119</a>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="xc-contact" id="contact" aria-label="Nous joindre">
+      <div class="xc-contact-in">
+        <div>
+          <p class="xc-kicker">Obtenir une soumission</p>
+          <h2>PRÊTS POUR<br />TOUTES LES SAISONS.</h2>
+          <p>Soumissions gratuites à domicile à Lévis et dans les environs. On mesure, on calcule, on met ça par écrit.</p>
+          <p class="xc-contact-facts">123, rue Fictive, Lévis QC<br />info@extreme-climat-demo.ca<br />Lun–ven 7 h à 17 h · urgences 24/7</p>
+        </div>
+        <form class="xc-form" id="xc-form" novalidate>
+          <label>Nom<input type="text" name="name" required placeholder="Jean Tremblay" autocomplete="name" /></label>
+          <label>Téléphone<input type="tel" name="phone" required placeholder="(418) 555-0000" autocomplete="tel" /></label>
+          <label>Besoin
+            <select name="need">
+              <option>Chauffage — nouveau système</option>
+              <option>Climatisation — nouveau système</option>
+              <option>Remplacement / mise à niveau</option>
+              <option>Réparation — c’est urgent</option>
+              <option>Entretien</option>
+            </select>
+          </label>
+          <label>Détails<textarea name="details" rows="3" placeholder="Fournaise de 20 ans, maison de 1 800 pi²…"></textarea></label>
+          <button class="xc-btn" type="submit">Demander ma soumission</button>
+          <p class="xc-form-note" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="xc-foot">
+    <p><strong>EXTRÊME CLIMAT</strong> · Lévis QC · © 2026<br />Entreprise fictive de démonstration — une vitrine de design WEBAO.</p>
+  </footer>
+
+  <EscapeHatch locale="fr" />
+
+  <script>
+    (function () {
+      var form = document.getElementById('xc-form');
+      form?.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var note = form?.querySelector('.xc-form-note');
+        if (note) note.textContent = 'REÇU. On vous appellera d\u2019ici une heure ouvrable pour planifier votre visite de soumission.';
+        if (form instanceof HTMLFormElement) form.reset();
+      });
+    })();
+  </script>
+
+  <style>
+    .xc {
+      --xc-bg: #0A0A0B;
+      --xc-bg-2: #111113;
+      --xc-paper: #F5F2EA;
+      --xc-ink: #0E0E10;
+      --xc-ice: #8FD8FF;
+      --xc-ice-deep: #0E2A4A;
+      --xc-fire: #FF7A3C;
+      --xc-fire-deep: #2A0F08;
+      --xc-cond: "Anton", "Arial Narrow", sans-serif;
+      --xc-sans: "Archivo", system-ui, sans-serif;
+      margin: 0;
+      background: var(--xc-bg);
+      color: var(--xc-paper);
+      font-family: var(--xc-sans);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: clip;
+    }
+    .xc *, .xc *::before, .xc *::after { box-sizing: border-box; }
+    .xc img { display: block; max-width: 100%; }
+    .xc a { color: inherit; }
+
+    .xc-top {
+      position: absolute; top: 0; left: 0; right: 0; z-index: 20;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px clamp(20px, 4vw, 48px);
+    }
+    .xc-logo { margin: 0; font-family: var(--xc-cond); font-size: 22px; letter-spacing: 0.08em; color: #fff; }
+    .xc-logo span { color: var(--xc-fire); }
+    .xc-top-call {
+      font-weight: 700; font-size: 15px; text-decoration: none; color: #fff;
+      border: 2px solid rgba(255,255,255,0.7); padding: 10px 20px; border-radius: 999px;
+      background: rgba(0,0,0,0.35); backdrop-filter: blur(6px);
+    }
+    .xc-top-call:hover { background: #fff; color: var(--xc-ink); border-color: #fff; }
+
+    /* HERO: split screen */
+    .xc-hero { position: relative; display: grid; grid-template-columns: 1fr 1fr; min-height: 100svh; }
+    .xc-half { position: relative; overflow: clip; min-height: 100svh; }
+    .xc-half img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .xc-ice img { filter: saturate(0.85) brightness(0.75); }
+    .xc-ice::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(14,42,74,0.55), rgba(14,42,74,0.15) 45%, rgba(14,42,74,0.6));
+    }
+    .xc-fire img { filter: saturate(1.1) brightness(0.62) contrast(1.05); }
+    .xc-fire::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(42,15,8,0.6), rgba(42,15,8,0.15) 45%, rgba(42,15,8,0.65));
+    }
+    .xc-deg {
+      position: absolute; bottom: 4vh; margin: 0; z-index: 2;
+      font-family: var(--xc-cond); font-size: clamp(3rem, 7vw, 6rem); color: #fff; opacity: 0.9;
+      letter-spacing: 0.02em;
+    }
+    .xc-ice .xc-deg { left: clamp(20px, 4vw, 48px); }
+    .xc-fire .xc-deg { right: clamp(20px, 4vw, 48px); }
+    .xc-title {
+      position: absolute; inset: 0; z-index: 3;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 0 20px; pointer-events: none;
+    }
+    .xc-title .xc-hero-cta { pointer-events: auto; }
+    .xc-kicker {
+      margin: 0 0 18px; font-size: 13px; font-weight: 700;
+      letter-spacing: 0.34em; text-transform: uppercase; color: #fff; opacity: 0.85;
+    }
+    .xc-title h1 {
+      margin: 0 0 34px; font-family: var(--xc-cond); font-weight: 400;
+      font-size: clamp(3.8rem, 11.5vw, 10.5rem); line-height: 0.94; letter-spacing: 0.015em;
+      color: #fff; text-shadow: 0 6px 60px rgba(0,0,0,0.55);
+    }
+    .xc-hero-cta { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
+    .xc-btn {
+      display: inline-block; text-decoration: none; font-weight: 700; font-size: 15.5px;
+      letter-spacing: 0.04em; background: #fff; color: var(--xc-ink);
+      padding: 17px 34px; border-radius: 999px; border: 0; cursor: pointer;
+      font-family: var(--xc-sans); transition: transform 0.15s ease;
+    }
+    .xc-btn:hover { transform: translateY(-2px); }
+    .xc-btn-ghost { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.75); }
+    .xc-btn-ghost:hover { background: rgba(255,255,255,0.14); transform: translateY(-2px); }
+    .xc-scroll {
+      position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%); z-index: 3; margin: 0;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.4em; color: #fff; opacity: 0.7;
+    }
+
+    /* premise strip */
+    .xc-strip { background: var(--xc-ink); border-top: 1px solid rgba(255,255,255,0.12); border-bottom: 1px solid rgba(255,255,255,0.12); }
+    .xc-strip p {
+      max-width: 1000px; margin: 0 auto; padding: clamp(40px, 7vh, 72px) clamp(20px, 5vw, 48px);
+      font-size: clamp(1.3rem, 2.8vw, 2rem); line-height: 1.5; font-weight: 500; text-align: center;
+    }
+    .xc-ice-t { color: var(--xc-ice); }
+    .xc-fire-t { color: var(--xc-fire); }
+
+    /* duo: two full-bleed service halves */
+    .xc-duo { display: grid; grid-template-columns: 1fr 1fr; }
+    .xc-side { position: relative; overflow: clip; min-height: 92vh; display: flex; align-items: flex-end; }
+    .xc-side img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .xc-heat img { filter: brightness(0.5) saturate(1.15); }
+    .xc-cool img { filter: brightness(0.55) saturate(0.9); }
+    .xc-heat::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(42,15,8,0.25), rgba(42,15,8,0.88)); }
+    .xc-cool::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(14,42,74,0.25), rgba(14,42,74,0.88)); }
+    .xc-side-in { position: relative; z-index: 2; padding: clamp(32px, 5vw, 64px); width: 100%; }
+    .xc-side-k { margin: 0 0 14px; font-size: 13px; font-weight: 700; letter-spacing: 0.34em; }
+    .xc-heat .xc-side-k { color: var(--xc-fire); }
+    .xc-cool .xc-side-k { color: var(--xc-ice); }
+    .xc-side h2 {
+      margin: 0 0 26px; font-family: var(--xc-cond); font-weight: 400;
+      font-size: clamp(2.6rem, 5.4vw, 4.6rem); line-height: 0.98; color: #fff; letter-spacing: 0.01em;
+    }
+    .xc-side ul { list-style: none; margin: 0 0 26px; padding: 0; display: grid; gap: 12px; }
+    .xc-side li { font-size: 16.5px; font-weight: 500; color: rgba(255,255,255,0.92); padding-left: 26px; position: relative; }
+    .xc-heat li::before { content: "◆"; position: absolute; left: 0; color: var(--xc-fire); font-size: 12px; top: 5px; }
+    .xc-cool li::before { content: "◆"; position: absolute; left: 0; color: var(--xc-ice); font-size: 12px; top: 5px; }
+    .xc-side li span { opacity: 0.65; font-weight: 400; }
+    .xc-side-price { margin: 0; font-size: 14px; font-weight: 700; letter-spacing: 0.08em; color: #fff; }
+
+    /* proof */
+    .xc-proof { background: var(--xc-bg-2); padding: clamp(56px, 10vh, 120px) clamp(20px, 5vw, 64px); }
+    .xc-stats {
+      max-width: 1240px; margin: 0 auto 64px; display: grid; grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid rgba(255,255,255,0.14); border-bottom: 1px solid rgba(255,255,255,0.14);
+    }
+    .xc-stats div { padding: 34px 20px; text-align: center; border-left: 1px solid rgba(255,255,255,0.14); display: grid; gap: 8px; }
+    .xc-stats div:first-child { border-left: 0; }
+    .xc-stats strong { font-family: var(--xc-cond); font-weight: 400; font-size: clamp(2.6rem, 5vw, 4.4rem); }
+    .xc-stats div:nth-child(odd) strong { color: var(--xc-fire); }
+    .xc-stats div:nth-child(even) strong { color: var(--xc-ice); }
+    .xc-stats span { font-size: 12.5px; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.6; }
+    .xc-quotes { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    .xc-quotes blockquote { margin: 0; border-left: 3px solid var(--xc-fire); padding: 6px 0 6px 24px; display: grid; gap: 16px; align-content: start; }
+    .xc-quotes blockquote:nth-child(2) { border-color: var(--xc-ice); }
+    .xc-quotes p { margin: 0; font-size: 19px; line-height: 1.55; font-weight: 500; }
+    .xc-quotes footer { font-size: 13.5px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.6; }
+
+    /* about */
+    .xc-about { display: grid; grid-template-columns: 1fr 1fr; align-items: stretch; }
+    .xc-about img { width: 100%; height: 100%; min-height: 480px; object-fit: cover; filter: brightness(0.72) saturate(0.85); }
+    .xc-about-in { padding: clamp(48px, 8vh, 100px) clamp(24px, 5vw, 72px); display: flex; flex-direction: column; justify-content: center; }
+    .xc-about-in .xc-kicker { color: var(--xc-fire); opacity: 1; }
+    .xc-about h2 { margin: 0 0 24px; font-family: var(--xc-cond); font-weight: 400; font-size: clamp(2.8rem, 5.6vw, 5rem); line-height: 0.96; }
+    .xc-about p { font-size: 16.5px; line-height: 1.75; opacity: 0.78; max-width: 52ch; margin: 0 0 26px; }
+    .xc-about ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-size: 14.5px; font-weight: 600; letter-spacing: 0.04em; }
+    .xc-about li::before { content: "— "; color: var(--xc-fire); }
+
+    /* emergency band */
+    .xc-emergency { position: relative; overflow: clip; text-align: center; }
+    .xc-emergency img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.4) saturate(1.2); }
+    .xc-emergency::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(42,15,8,0.72), rgba(10,10,11,0.82)); }
+    .xc-emergency-in { position: relative; z-index: 2; padding: clamp(72px, 14vh, 150px) 24px; }
+    .xc-emergency .xc-kicker { color: var(--xc-fire); opacity: 1; }
+    .xc-emergency h2 { margin: 0 0 18px; font-family: var(--xc-cond); font-weight: 400; font-size: clamp(3.4rem, 10vw, 8.6rem); line-height: 0.94; color: #fff; }
+    .xc-emergency p { margin: 0 0 30px; font-size: 17px; opacity: 0.85; }
+    .xc-bignum {
+      display: inline-block; font-family: var(--xc-cond); font-weight: 400; text-decoration: none;
+      font-size: clamp(2.8rem, 8vw, 6.4rem); letter-spacing: 0.02em; color: #fff;
+      border-bottom: 5px solid var(--xc-fire); padding-bottom: 8px;
+    }
+    .xc-bignum:hover { color: var(--xc-fire); }
+
+    /* contact */
+    .xc-contact { background: var(--xc-bg-2); border-top: 1px solid rgba(255,255,255,0.12); }
+    .xc-contact-in {
+      max-width: 1240px; margin: 0 auto; padding: clamp(56px, 10vh, 120px) clamp(20px, 5vw, 64px);
+      display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 90px); align-items: start;
+    }
+    .xc-contact .xc-kicker { color: var(--xc-ice); opacity: 1; }
+    .xc-contact h2 { margin: 0 0 22px; font-family: var(--xc-cond); font-weight: 400; font-size: clamp(2.8rem, 5.6vw, 5rem); line-height: 0.96; }
+    .xc-contact p { font-size: 16.5px; line-height: 1.7; opacity: 0.75; max-width: 44ch; margin: 0 0 24px; }
+    .xc-contact-facts { font-size: 14.5px; line-height: 2; opacity: 0.6; margin: 0; }
+    .xc-form { display: grid; gap: 16px; background: var(--xc-bg); border: 1px solid rgba(255,255,255,0.14); padding: clamp(26px, 3vw, 40px); }
+    .xc-form label { display: grid; gap: 8px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0.65; }
+    .xc-form input, .xc-form select, .xc-form textarea {
+      font-family: var(--xc-sans); font-size: 15.5px; letter-spacing: 0; text-transform: none;
+      background: var(--xc-bg-2); border: 1px solid rgba(255,255,255,0.16); color: var(--xc-paper);
+      padding: 14px 16px; width: 100%;
+    }
+    .xc-form input:focus, .xc-form select:focus, .xc-form textarea:focus { outline: 2px solid var(--xc-fire); outline-offset: 1px; }
+    .xc-form .xc-btn { justify-self: start; }
+    .xc-form-note { margin: 0; font-size: 14.5px; font-weight: 700; color: var(--xc-fire); }
+    .xc-form-note:empty { display: none; }
+
+    .xc-foot { text-align: center; padding: 40px 20px; font-size: 13px; letter-spacing: 0.08em; line-height: 2; opacity: 0.55; border-top: 1px solid rgba(255,255,255,0.12); }
+    .xc-foot p { margin: 0; }
+    .xc-foot strong { font-family: var(--xc-cond); letter-spacing: 0.12em; font-weight: 400; }
+
+    @media (max-width: 900px) {
+      .xc-hero { grid-template-columns: 1fr; }
+      .xc-half { min-height: 52svh; }
+      .xc-duo { grid-template-columns: 1fr; }
+      .xc-side { min-height: 78vh; }
+      .xc-stats { grid-template-columns: 1fr 1fr; }
+      .xc-stats div:nth-child(3) { border-left: 0; }
+      .xc-stats div { border-top: 1px solid rgba(255,255,255,0.14); }
+      .xc-stats div:nth-child(-n+2) { border-top: 0; }
+      .xc-quotes { grid-template-columns: 1fr; }
+      .xc-about { grid-template-columns: 1fr; }
+      .xc-about img { min-height: 300px; max-height: 420px; }
+      .xc-contact-in { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .xc-btn { transition: none; }
+    }
+  </style>
+</body>
+</html>
