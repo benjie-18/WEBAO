@@ -20,14 +20,11 @@
 export const clamp = (v: number, min: number, max: number) => (v < min ? min : v > max ? max : v);
 export const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 export const smoothstep = (t: number) => t * t * (3 - 2 * t);
-export const mapRange = (v: number, a: number, b: number, c: number, d: number) =>
-  b === a ? c : c + ((v - a) / (b - a)) * (d - c);
 
 /** Frame-rate independent smoothing factor: 1 - e^(-rate·dt). */
 export const smoothing = (rate: number, dt: number) => 1 - Math.exp(-rate * Math.max(dt, 0));
 
 /** Shortest signed delta between two angles, in degrees. */
-export const angleDelta = (from: number, to: number) => ((((to - from) % 360) + 540) % 360) - 180;
 
 export const damp = (current: number, target: number, lambda: number, dt: number) =>
   lerp(current, target, smoothing(lambda, dt));
