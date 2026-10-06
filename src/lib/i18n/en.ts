@@ -21,9 +21,9 @@ const en = {
         "Tell us about your business and we’ll reply with two demo directions and an honest timeline. Email contact@webao.ca or send the form.",
     },
     demos: {
-      title: "Website Design Examples · 30 Demos for Local Businesses | WEBAO",
+      title: "Website Design Examples · 41 Demos for Local Businesses | WEBAO",
       description:
-        "Browse 30 art-directed design directions for fictional local businesses. Search by trade, tone, or city. Each demo is a different design, not the same template in 30 colors.",
+        "Browse 41 art-directed design directions for fictional local businesses. Search by trade, tone, or city. Each demo is a different design, not the same template in 41 colors.",
     },
     notfound: {
       title: "Page not found · WEBAO",
@@ -116,7 +116,7 @@ const en = {
         included: "Included every month",
         sendEmail: "Just send an email",
         captionLeft: "DEMO 01 · ELECTRICIAN",
-        captionRight: "One of 30 design directions →",
+        captionRight: "One of 41 design directions →",
       },
     },
     marquee: "Électriciens <i></i> Plombiers <i></i> Couvreurs <i></i> Paysagistes <i></i> Restaurants <i></i> Cliniques",
@@ -190,7 +190,7 @@ const en = {
       },
       demos: {
         top: "03 · DEMOS",
-        title: "30 design directions,<br />all fictional.",
+        title: "41 design directions,<br />all fictional.",
         desc: "Search the catalog by trade or style. Each demo is an art-directed concept, so you can see the range before you choose.",
         cta: "Browse demo catalog",
         mini: ["Filterable", "·", "Searchable", "·", "41 styles"],
@@ -975,7 +975,7 @@ const en = {
     labels: [
       { t: "Pricing", s: "→ $149/mo · all-in" },
       { t: "Contact", s: "→ contact@webao.ca" },
-      { t: "Demos", s: "→ 30 art directions" },
+      { t: "Demos", s: "→ 41 art directions" },
     ],
   },
 
