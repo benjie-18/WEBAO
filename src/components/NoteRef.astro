@@ -1,0 +1,18 @@
+---
+import { useTranslations, type Locale } from "../lib/i18n";
+
+interface Props {
+  locale: Locale;
+  /** Index number linking to the matching note on the terms page. */
+  note: number;
+}
+
+const { locale, note } = Astro.props as Props;
+const t = useTranslations(locale);
+const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
+const label = t.pricing.plans.noteAria.replace("{n}", String(note));
+---
+
+<a class="noteref" href={`${termsPath}#note-${note}`} aria-label={label}>
+  [{note}]
+</a>
