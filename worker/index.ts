@@ -17,7 +17,7 @@ async function routeApi(req: Request, env: Env): Promise<Response> {
   if (p === "/api/track/click" && req.method === "POST") return handleClick(req, env);
   if (p === "/api/track/heartbeat" && req.method === "POST") return handleHeartbeat(req, env);
   if (p === "/api/forms/submit" && req.method === "POST") return handleFormSubmit(req, env);
-  if (p === "/api/checkout/session" && req.method === "POST") return handleCheckoutSession(req, env as unknown as { STRIPE_SECRET_KEY?: string; STRIPE_PRICE_ID?: string });
+  if (p === "/api/checkout/session" && req.method === "POST") return handleCheckoutSession(req, env);
   if (p.startsWith("/api/admin/")) return handleAdmin(req, env, url);
 
   return json({ ok: false, error: "Not found" }, 404);
