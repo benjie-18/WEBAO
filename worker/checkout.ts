@@ -3,14 +3,20 @@
 // Body: { email?: string, name?: string, business?: string }
 // Returns: { ok: true, clientSecret } or { ok: false, error }
 
-import { json } from "./util";
+import { json, err, originAllowed, clientIp } from "./util";
+import { throttle } from "./auth";
 
 type Env = {
   STRIPE_SECRET_KEY?: string;
   STRIPE_PRICE_ID?: string;
+  WEBAO_KV?: KVNamespace;
 };
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
 export async function handleCheckoutSession(req: Request, env: Env): Promise<Response> {
+  if (!originAllowed(req, true)) return err("Forbidden origin", 403);
+
   const secretKey = env.STRIPE_SECRET_KEY;
   const priceId = env.STRIPE_PRICE_ID;
 
@@ -18,11 +24,23 @@ export async function handleCheckoutSession(req: Request, env: Env): Promise<Res
     return json({ ok: false, error: "Checkout not configured" }, 503);
   }
 
+  // Rate-limit session creation per IP (abuse would clutter the Stripe dashboard).
+  if (env.WEBAO_KV) {
+    const ip = clientIp(req);
+    if (!(await throttle(env.WEBAO_KV, "checkout", ip, 10))) {
+      return err("Too many requests", 429);
+    }
+  }
+
   let body: { email?: string; name?: string; business?: string } = {};
   try {
     body = await req.json();
   } catch {
     // empty body is fine
+  }
+
+  if (body.email && !EMAIL_RE.test(body.email.trim())) {
+    return err("Invalid email");
   }
 
   const url = new URL(req.url);
