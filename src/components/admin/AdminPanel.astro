@@ -51,7 +51,7 @@ const a = t.admin;
   </section>
 
   <!-- ── App shell (revealed after login) ── -->
-  <section class="admin-app" data-view="app" hidden aria-label="WEBAO admin">
+  <section class="admin-app" data-view="app" hidden aria-label={t.admin.ariaAppLabel}>
     <header class="admin-topbar">
       <div class="admin-brand">
         <img src="/light-icon.jpg" alt="WEBAO" class="admin-logo admin-logo--light" width="30" height="30" />
@@ -61,7 +61,7 @@ const a = t.admin;
       <button type="button" class="admin-ghost-btn" data-logout>{a.logout}</button>
     </header>
 
-    <div class="admin-tabs" role="tablist" aria-label="Admin">
+    <div class="admin-tabs" role="tablist" aria-label={t.admin.ariaTabsLabel}>
       <button
         type="button" role="tab" id="admin-tab-stats" aria-controls="admin-panel-stats"
         aria-selected="true" data-tab="stats" class="admin-tab is-active"
@@ -156,11 +156,11 @@ const a = t.admin;
           </label>
           <label class="admin-field">
             <span>{a.config.new}</span>
-            <input type="password" name="next" required minlength="5" autocomplete="new-password" data-pw-next />
+            <input type="password" name="next" required minlength="12" autocomplete="new-password" data-pw-next />
           </label>
           <label class="admin-field">
             <span>{a.config.confirm}</span>
-            <input type="password" name="confirm" required minlength="5" autocomplete="new-password" data-pw-confirm />
+            <input type="password" name="confirm" required minlength="12" autocomplete="new-password" data-pw-confirm />
           </label>
           <button type="submit" class="btn btn--primary admin-submit">{a.config.change}</button>
         </form>
