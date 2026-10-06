@@ -1,0 +1,406 @@
+---
+import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+// Demo microsite: Toitures Zénith · fictional roofer, Blainville QC.
+// Concept: aerial cartography — drone survey, contour lines, copper on slate.
+const phone = "(450) 555-0184";
+---
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>Toitures Zénith — Couvreurs à Blainville | Relevé par drone</title>
+  <meta name="description" content="Toitures Zénith, couvreurs à Blainville. Chaque toiture est d'abord cartographiée par drone : relevé précis, diagnostic documenté, réfection durable." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --zt-slate: #23282e;
+      --zt-slate-soft: #333a42;
+      --zt-slate-mute: #4a525b;
+      --zt-copper: #b87333;
+      --zt-copper-bright: #d08d4a;
+      --zt-paper: #f4f1ea;
+      --zt-ink: #23282e;
+      --zt-muted: #6b7280;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; background: var(--zt-paper); color: var(--zt-ink);
+      font-family: "Spectral", Georgia, serif; font-size: 17px; line-height: 1.65;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; }
+    .zt-wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+    .zt-mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+
+    /* ---- nav ---- */
+    .zt-nav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(35, 40, 46, .96); color: var(--zt-paper);
+      border-bottom: 2px solid var(--zt-copper);
+    }
+    .zt-nav-in { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 24px; max-width: 1120px; margin: 0 auto; }
+    .zt-brand { font-family: "IBM Plex Mono", monospace; font-size: 12px; letter-spacing: .22em; text-transform: uppercase; text-decoration: none; color: var(--zt-paper); }
+    .zt-brand b { color: var(--zt-copper-bright); font-weight: 600; }
+    .zt-links { display: flex; gap: 22px; font-family: "IBM Plex Mono", monospace; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+    .zt-links a { text-decoration: none; opacity: .85; }
+    .zt-links a:hover { opacity: 1; color: var(--zt-copper-bright); }
+    .zt-nav-cta {
+      font-family: "IBM Plex Mono", monospace; font-size: 12px; font-weight: 600; letter-spacing: .08em;
+      background: var(--zt-copper); color: #fff; text-decoration: none; padding: 10px 18px; border-radius: 3px;
+    }
+    .zt-nav-cta:hover { background: var(--zt-copper-bright); }
+
+    /* ---- hero ---- */
+    .zt-hero { position: relative; background: var(--zt-slate); color: var(--zt-paper); overflow: hidden; }
+    .zt-hero-contours { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .5; }
+    .zt-hero-in { position: relative; z-index: 1; padding: 84px 24px 72px; max-width: 1120px; margin: 0 auto; }
+    .zt-kicker {
+      font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .28em; text-transform: uppercase;
+      color: var(--zt-copper-bright); margin: 0 0 18px;
+    }
+    .zt-h1 { font-size: clamp(2.6rem, 6vw, 4.6rem); line-height: 1.05; font-weight: 500; margin: 0 0 20px; max-width: 16ch; }
+    .zt-h1 em { font-style: italic; color: var(--zt-copper-bright); }
+    .zt-lede { font-size: 1.15rem; max-width: 52ch; opacity: .88; margin: 0 0 32px; }
+    .zt-hero-ctas { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 48px; }
+    .zt-btn {
+      display: inline-block; text-decoration: none; font-family: "IBM Plex Mono", monospace; font-size: 13px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+      padding: 15px 28px; border-radius: 3px;
+    }
+    .zt-btn-solid { background: var(--zt-copper); color: #fff; }
+    .zt-btn-solid:hover { background: var(--zt-copper-bright); }
+    .zt-btn-ghost { border: 1px solid rgba(244, 241, 234, .4); color: var(--zt-paper); }
+    .zt-btn-ghost:hover { border-color: var(--zt-copper-bright); color: var(--zt-copper-bright); }
+    .zt-survey-frame {
+      position: relative; border: 1px solid rgba(208, 141, 74, .55); border-radius: 4px; overflow: hidden;
+      max-width: 880px;
+    }
+    .zt-survey-frame img { width: 100%; height: clamp(220px, 40vw, 420px); object-fit: cover; filter: saturate(.85); }
+    .zt-frame-tag {
+      position: absolute; font-family: "IBM Plex Mono", monospace; font-size: 10px; letter-spacing: .18em;
+      background: rgba(35, 40, 46, .85); color: var(--zt-copper-bright); padding: 7px 12px;
+    }
+    .zt-frame-tag.zt-tl { top: 12px; left: 12px; }
+    .zt-frame-tag.zt-br { bottom: 12px; right: 12px; }
+    .zt-frame-cross { position: absolute; top: 50%; left: 50%; width: 34px; height: 34px; transform: translate(-50%, -50%); opacity: .9; }
+
+    /* ---- stat strip ---- */
+    .zt-strip { background: var(--zt-slate-soft); color: var(--zt-paper); border-top: 1px solid var(--zt-slate-mute); }
+    .zt-strip-in { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; padding: 26px 24px; max-width: 1120px; margin: 0 auto; }
+    .zt-stat { font-family: "IBM Plex Mono", monospace; }
+    .zt-stat strong { display: block; font-size: 1.7rem; font-weight: 600; color: var(--zt-copper-bright); }
+    .zt-stat span { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; opacity: .75; }
+
+    /* ---- sections ---- */
+    .zt-section { padding: 84px 0; }
+    .zt-section-dark { background: var(--zt-slate); color: var(--zt-paper); }
+    .zt-h2 { font-size: clamp(1.9rem, 3.6vw, 2.8rem); font-weight: 500; line-height: 1.15; margin: 0 0 16px; }
+    .zt-h2 em { font-style: italic; color: var(--zt-copper); }
+    .zt-section-dark .zt-h2 em { color: var(--zt-copper-bright); }
+    .zt-sub { max-width: 60ch; color: var(--zt-muted); margin: 0 0 44px; }
+    .zt-section-dark .zt-sub { color: rgba(244, 241, 234, .72); }
+
+    /* ---- method ---- */
+    .zt-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; list-style: none; margin: 0; padding: 0; }
+    .zt-step {
+      border: 1px solid #ddd6c8; border-top: 3px solid var(--zt-copper); background: #fff;
+      padding: 26px 22px; border-radius: 3px;
+    }
+    .zt-step-num { font-family: "IBM Plex Mono", monospace; font-size: 12px; font-weight: 600; letter-spacing: .2em; color: var(--zt-copper); }
+    .zt-step h3 { font-size: 1.25rem; font-weight: 600; margin: 12px 0 10px; }
+    .zt-step p { font-size: .95rem; color: var(--zt-muted); margin: 0; }
+
+    /* ---- materials ---- */
+    .zt-mats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .zt-mat {
+      position: relative; overflow: hidden; border-radius: 4px; color: var(--zt-paper);
+      background: var(--zt-slate-soft); padding: 34px 30px; min-height: 240px;
+      display: flex; flex-direction: column; justify-content: flex-end;
+    }
+    .zt-mat::before {
+      content: ""; position: absolute; inset: 0; opacity: .16;
+      background: repeating-linear-gradient(115deg, transparent 0 14px, var(--zt-copper-bright) 14px 15px);
+    }
+    .zt-mat h3 { position: relative; font-size: 1.5rem; font-weight: 600; margin: 0 0 8px; }
+    .zt-mat p { position: relative; margin: 0; font-size: .95rem; opacity: .85; max-width: 40ch; }
+    .zt-mat-tag { position: relative; align-self: flex-start; font-family: "IBM Plex Mono", monospace; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--zt-copper-bright); border: 1px solid var(--zt-copper); padding: 6px 12px; border-radius: 20px; margin-bottom: auto; }
+
+    /* ---- projects ---- */
+    .zt-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .zt-card { background: #fff; border: 1px solid #ddd6c8; border-radius: 4px; overflow: hidden; }
+    .zt-card img { width: 100%; height: 200px; object-fit: cover; }
+    .zt-card-body { padding: 22px; }
+    .zt-card-coords { font-family: "IBM Plex Mono", monospace; font-size: 10px; letter-spacing: .16em; color: var(--zt-copper); text-transform: uppercase; }
+    .zt-card h3 { font-size: 1.3rem; font-weight: 600; margin: 8px 0 8px; }
+    .zt-card p { font-size: .93rem; color: var(--zt-muted); margin: 0; }
+
+    /* ---- about ---- */
+    .zt-about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+    .zt-about-grid img { border-radius: 4px; border: 1px solid #ddd6c8; }
+    .zt-about p { color: var(--zt-muted); }
+    .zt-about p strong { color: var(--zt-ink); }
+    .zt-sig { font-style: italic; font-size: 1.2rem; color: var(--zt-copper); margin-top: 20px; }
+
+    /* ---- contact ---- */
+    .zt-contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+    .zt-phone-big {
+      display: block; font-family: "IBM Plex Mono", monospace; font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 600;
+      color: var(--zt-paper); text-decoration: none; margin: 18px 0 12px;
+    }
+    .zt-phone-big:hover { color: var(--zt-copper-bright); }
+    .zt-form { background: rgba(244, 241, 234, .04); border: 1px solid var(--zt-slate-mute); border-radius: 4px; padding: 30px; }
+    .zt-field { margin-bottom: 18px; }
+    .zt-field label { display: block; font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--zt-copper-bright); margin-bottom: 8px; }
+    .zt-field input, .zt-field textarea, .zt-field select {
+      width: 100%; background: var(--zt-slate); border: 1px solid var(--zt-slate-mute); color: var(--zt-paper);
+      font-family: "Spectral", serif; font-size: 1rem; padding: 12px 14px; border-radius: 3px;
+    }
+    .zt-field input:focus, .zt-field textarea:focus, .zt-field select:focus { outline: 2px solid var(--zt-copper-bright); border-color: var(--zt-copper-bright); }
+    .zt-note { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: rgba(244, 241, 234, .55); margin-top: 14px; }
+
+    /* ---- footer ---- */
+    .zt-footer { background: #1a1e23; color: rgba(244, 241, 234, .65); font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .1em; }
+    .zt-footer-in { display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; padding: 26px 24px; max-width: 1120px; margin: 0 auto; }
+
+    @media (max-width: 900px) {
+      .zt-links { display: none; }
+      .zt-strip-in { grid-template-columns: repeat(2, 1fr); }
+      .zt-steps { grid-template-columns: 1fr 1fr; }
+      .zt-mats { grid-template-columns: 1fr; }
+      .zt-cards { grid-template-columns: 1fr; }
+      .zt-about-grid, .zt-contact-grid { grid-template-columns: 1fr; gap: 32px; }
+      .zt-section { padding: 60px 0; }
+    }
+    @media (max-width: 560px) {
+      .zt-steps { grid-template-columns: 1fr; }
+      .zt-nav-cta { padding: 8px 12px; font-size: 11px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="zt-nav">
+    <div class="zt-nav-in">
+      <a class="zt-brand" href="#zt-top">Toitures <b>Zénith</b></a>
+      <nav class="zt-links" aria-label="Navigation principale">
+        <a href="#zt-methode">Méthode</a>
+        <a href="#zt-materiaux">Matériaux</a>
+        <a href="#zt-realisations">Réalisations</a>
+        <a href="#zt-atelier">L'atelier</a>
+      </nav>
+      <a class="zt-nav-cta" href={"tel:" + phone.replace(/[^0-9]/g, "")}>{phone}</a>
+    </div>
+  </header>
+
+  <main id="zt-top">
+    <section class="zt-hero" aria-labelledby="zt-h1">
+      <svg class="zt-hero-contours" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+        <g fill="none" stroke="#d08d4a" stroke-width="1" opacity="0.35">
+          <ellipse cx="900" cy="140" rx="60" ry="40" />
+          <ellipse cx="900" cy="140" rx="110" ry="75" />
+          <ellipse cx="900" cy="140" rx="165" ry="112" />
+          <ellipse cx="900" cy="140" rx="225" ry="152" />
+          <ellipse cx="900" cy="140" rx="290" ry="196" />
+          <ellipse cx="250" cy="460" rx="70" ry="48" />
+          <ellipse cx="250" cy="460" rx="130" ry="90" />
+          <ellipse cx="250" cy="460" rx="195" ry="135" />
+          <ellipse cx="250" cy="460" rx="265" ry="182" />
+        </g>
+        <g stroke="#d08d4a" stroke-width="1" opacity="0.25">
+          <line x1="0" y1="300" x2="1200" y2="300" stroke-dasharray="6 8" />
+          <line x1="600" y1="0" x2="600" y2="600" stroke-dasharray="6 8" />
+        </g>
+      </svg>
+      <div class="zt-hero-in">
+        <p class="zt-kicker">Relevé par drone · Blainville, QC · 45.6733° N, 73.8712° O</p>
+        <h1 class="zt-h1" id="zt-h1">Votre toit, <em>cartographié</em> au centimètre près.</h1>
+        <p class="zt-lede">Avant chaque réfection, nous survolons votre toiture par drone et produisons un relevé topographique complet : pentes, faîtages, solins, zones d'usure. Un diagnostic documenté, pas une estimation au doigt mouillé.</p>
+        <div class="zt-hero-ctas">
+          <a class="zt-btn zt-btn-solid" href="#zt-contact">Demander un relevé</a>
+          <a class="zt-btn zt-btn-ghost" href="#zt-methode">Voir la méthode</a>
+        </div>
+        <figure class="zt-survey-frame" style="margin:0">
+          <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1600&q=80&auto=format&fit=crop" alt="Vue aérienne d'un quartier résidentiel survolé par drone pour un relevé de toiture" loading="lazy" />
+          <span class="zt-frame-tag zt-tl">SURVOL Nº 2481 · ALT 60 M</span>
+          <span class="zt-frame-tag zt-br">45.6733° N · 73.8712° O</span>
+          <svg class="zt-frame-cross" viewBox="0 0 34 34" aria-hidden="true" focusable="false">
+            <g stroke="#d08d4a" stroke-width="2">
+              <line x1="17" y1="0" x2="17" y2="12" /><line x1="17" y1="22" x2="17" y2="34" />
+              <line x1="0" y1="17" x2="12" y2="17" /><line x1="22" y1="17" x2="34" y2="17" />
+            </g>
+          </svg>
+        </figure>
+      </div>
+    </section>
+
+    <div class="zt-strip" role="region" aria-label="Chiffres clés">
+      <div class="zt-strip-in">
+        <div class="zt-stat"><strong>1 240+</strong><span>Toitures cartographiées</span></div>
+        <div class="zt-stat"><strong>± 2 cm</strong><span>Précision du relevé</span></div>
+        <div class="zt-stat"><strong>18 ans</strong><span>De métier à Blainville</span></div>
+        <div class="zt-stat"><strong>10 ans</strong><span>Garantie main-d'œuvre</span></div>
+      </div>
+    </div>
+
+    <section class="zt-section" id="zt-methode" aria-labelledby="zt-methode-t">
+      <div class="zt-wrap">
+        <h2 class="zt-h2" id="zt-methode-t">La méthode de <em>relevé</em></h2>
+        <p class="zt-sub">Quatre étapes, du ciel jusqu'au dernier bardeau. Chaque intervention commence par une carte, et se termine par une toiture dont on connaît chaque recoin.</p>
+        <ol class="zt-steps">
+          <li class="zt-step">
+            <span class="zt-step-num">01</span>
+            <h3>Survol drone</h3>
+            <p>Un pilote certifié survole votre propriété à 60 mètres d'altitude et capture plusieurs centaines de clichés haute résolution.</p>
+          </li>
+          <li class="zt-step">
+            <span class="zt-step-num">02</span>
+            <h3>Modélisation 3D</h3>
+            <p>Les images sont assemblées en un modèle photogrammétrique : pentes exactes, surfaces, faîtages et noues, au centimètre près.</p>
+          </li>
+          <li class="zt-step">
+            <span class="zt-step-num">03</span>
+            <h3>Diagnostic documenté</h3>
+            <p>Vous recevez un rapport illustré : zones d'usure, solins à surveiller, infiltrations potentielles — avec photos annotées.</p>
+          </li>
+          <li class="zt-step">
+            <span class="zt-step-num">04</span>
+            <h3>Intervention précise</h3>
+            <p>La réfection est planifiée sur la carte, pas sur un coin de table. Moins de surprises, un échéancier tenu, un prix ferme.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="zt-section zt-section-dark" id="zt-materiaux" aria-labelledby="zt-mat-t">
+      <div class="zt-wrap">
+        <h2 class="zt-h2" id="zt-mat-t">Des matériaux <em>choisis</em> pour durer</h2>
+        <p class="zt-sub">Nous posons ce que nous poserions sur nos propres maisons. Quatre systèmes, chacun maîtrisé à fond.</p>
+        <div class="zt-mats">
+          <article class="zt-mat">
+            <span class="zt-mat-tag">Signature</span>
+            <h3>Cuivre et tôle à joint debout</h3>
+            <p>Le sommet de la toiture métallique : 50 ans et plus, une patine qui embellit avec le temps. Idéal pour les accents et les toitures complètes haut de gamme.</p>
+          </article>
+          <article class="zt-mat">
+            <span class="zt-mat-tag">Classique</span>
+            <h3>Bardeaux architecturaux</h3>
+            <p>Le choix éprouvé des maisons de Blainville : double épaisseur, garantie 30 ans du manufacturier, une dizaine de teintes d'ardoise.</p>
+          </article>
+          <article class="zt-mat">
+            <span class="zt-mat-tag">Toits plats</span>
+            <h3>Membrane élastomère</h3>
+            <p>Soudée au chalumeau en deux couches pour les toits plats et à faible pente. Étanchéité totale, entretien minimal.</p>
+          </article>
+          <article class="zt-mat">
+            <span class="zt-mat-tag">Patrimoine</span>
+            <h3>Ardoise naturelle</h3>
+            <p>Pour les maisons de caractère : ardoise véritable posée selon les règles de l'art, une toiture qui traverse les générations.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="zt-section" id="zt-realisations" aria-labelledby="zt-real-t">
+      <div class="zt-wrap">
+        <h2 class="zt-h2" id="zt-real-t">Réalisations <em>récentes</em></h2>
+        <p class="zt-sub">Trois chantiers récents, trois cartes, trois toitures neuves. Chaque projet est livré avec son relevé final.</p>
+        <div class="zt-cards">
+          <article class="zt-card">
+            <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=900&q=80&auto=format&fit=crop" alt="Maison unifamiliale avec toiture en bardeaux neufs à Blainville" loading="lazy" />
+            <div class="zt-card-body">
+              <span class="zt-card-coords">45.6812° N · 73.8790° O</span>
+              <h3>Rue des Cèdres</h3>
+              <p>Réfection complète en bardeaux architecturaux, 2 400 pi². Relevé drone en 40 minutes, chantier bouclé en 3 jours.</p>
+            </div>
+          </article>
+          <article class="zt-card">
+            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=900&q=80&auto=format&fit=crop" alt="Maison contemporaine avec toiture métallique à joint debout" loading="lazy" />
+            <div class="zt-card-body">
+              <span class="zt-card-coords">45.6698° N · 73.8654° O</span>
+              <h3>Boulevard du Curé-Labelle</h3>
+              <p>Tôle à joint debout cuivrée sur résidence contemporaine. Zéro vis apparentes, faîtage ventilé sur mesure.</p>
+            </div>
+          </article>
+          <article class="zt-card">
+            <img src="https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=900&q=80&auto=format&fit=crop" alt="Chalet avec toiture refaite près d'un lac dans les Laurentides" loading="lazy" />
+            <div class="zt-card-body">
+              <span class="zt-card-coords">45.7021° N · 73.9012° O</span>
+              <h3>Chemin du Lac</h3>
+              <p>Réfection après infiltration : membrane élastomère sur toit plat, solins de cheminée refaits en cuivre.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="zt-section" id="zt-atelier" aria-labelledby="zt-atelier-t" style="padding-top:0">
+      <div class="zt-wrap">
+        <div class="zt-about zt-about-grid">
+          <img src="https://images.unsplash.com/photo-1574359411659-15573a27fd0c?w=900&q=80&auto=format&fit=crop" alt="Couvreur au travail sur une toiture en pente" loading="lazy" />
+          <div>
+            <h2 class="zt-h2" id="zt-atelier-t">L'atelier <em>Zénith</em></h2>
+            <p>Fondée à Blainville il y a 18 ans, <strong>Toitures Zénith</strong> est née d'une conviction simple : on ne répare bien que ce que l'on connaît parfaitement. C'est pourquoi chaque mandat commence dans les airs.</p>
+            <p>Notre équipe de <strong>14 couvreurs certifiés</strong> et nos deux pilotes de drone desservent Blainville, Sainte-Thérèse, Mirabel et toute la Rive-Nord. Licence RBQ en règle, assurance responsabilité de 2 M$, et une garantie de 10 ans sur la main-d'œuvre — écrite noir sur blanc.</p>
+            <p class="zt-sig">— Marc-André Zénith, fondateur</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="zt-section zt-section-dark" id="zt-contact" aria-labelledby="zt-contact-t">
+      <div class="zt-wrap">
+        <h2 class="zt-h2" id="zt-contact-t">Demandez votre <em>relevé gratuit</em></h2>
+        <p class="zt-sub">Le survol et le diagnostic sont offerts, sans obligation. Appelez-nous ou laissez vos coordonnées : on vous rappelle en moins de 24 heures ouvrables.</p>
+        <div class="zt-contact-grid">
+          <div>
+            <p class="zt-mono" style="font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--zt-copper-bright); margin:0 0 6px;">Téléphone direct</p>
+            <a class="zt-phone-big" href={"tel:" + phone.replace(/[^0-9]/g, "")}>{phone}</a>
+            <p class="zt-mono" style="font-size:12px; color:rgba(244,241,234,.65); line-height:2;">
+              Lun–Ven · 7 h 30 à 17 h<br />
+              1250, boul. Michèle-Bohec, Blainville QC<br />
+              Urgences infiltration : 7 j / 7
+            </p>
+          </div>
+          <form class="zt-form" action="#" method="post" onsubmit="return false;" aria-label="Formulaire de demande de relevé">
+            <div class="zt-field">
+              <label for="zt-nom">Nom complet</label>
+              <input id="zt-nom" name="nom" type="text" autocomplete="name" required />
+            </div>
+            <div class="zt-field">
+              <label for="zt-tel">Téléphone</label>
+              <input id="zt-tel" name="telephone" type="tel" autocomplete="tel" placeholder="(450) 555-0000" required />
+            </div>
+            <div class="zt-field">
+              <label for="zt-besoin">Votre besoin</label>
+              <select id="zt-besoin" name="besoin">
+                <option>Relevé par drone gratuit</option>
+                <option>Réfection complète</option>
+                <option>Réparation / infiltration</option>
+                <option>Toiture métallique ou cuivre</option>
+                <option>Autre question</option>
+              </select>
+            </div>
+            <div class="zt-field">
+              <label for="zt-msg">Détails (optionnel)</label>
+              <textarea id="zt-msg" name="message" rows="4" placeholder="Âge approximatif de la toiture, type de revêtement actuel…"></textarea>
+            </div>
+            <button class="zt-btn zt-btn-solid" type="submit" style="border:none; cursor:pointer; width:100%;">Envoyer la demande</button>
+            <p class="zt-note">Site de démonstration fictif — aucune donnée n'est transmise.</p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="zt-footer">
+    <div class="zt-footer-in">
+      <span>© 2026 TOITURES ZÉNITH · ENTREPRISE FICTIVE DE DÉMONSTRATION</span>
+      <span>BLAINVILLE QC · {phone} · RBQ : 0000-0000-00 (FICTIF)</span>
+    </div>
+  </footer>
+  <EscapeHatch />
+</body>
+</html>

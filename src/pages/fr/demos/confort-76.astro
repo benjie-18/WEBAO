@@ -1,0 +1,364 @@
+---
+import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+
+// Demo microsite: Confort 76 · fictional HVAC contractor, Drummondville QC.
+// Rebuilt as a 1970s APPLIANCE MAGAZINE AD. Harvest gold, avocado green,
+// walnut wood-grain, starburst badges, coupon CTA. The page IS the ad:
+// masthead, starburst hero, product blurbs, letters to the editor,
+// clip-this-coupon booking slip. Standalone art direction, not connected
+// to the WEBAO theme system.
+const IMG = {
+  hero: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=1600&auto=format&fit=crop",
+  tech: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1200&auto=format&fit=crop",
+  home: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=1200&auto=format&fit=crop",
+};
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Confort 76 · La fournaise de confiance de votre père! · (819) 555-0138 · CVAC à Drummondville</title>
+  <meta name="description" content="Confort 76 : chauffage et climatisation de confiance à Drummondville depuis 1976. Fournaises, thermopompes, mise au point de climatiseurs. Soumissions gratuites. Découpez le coupon pour 76 $ de rabais!" />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Shrikhand&family=Bungee&family=Karla:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
+</head>
+<body class="cf7">
+
+  <div class="cf7-desk">
+    <div class="cf7-page">
+
+      <!-- MASTHEAD: the magazine ad header -->
+      <div class="cf7-wood" aria-hidden="true"></div>
+      <header class="cf7-masthead">
+        <p class="cf7-kicker">★ Tel qu’annoncé dans Le Journal de Drummondville ★ Depuis 1976 ★</p>
+        <div class="cf7-brandrow">
+          <p class="cf7-brand">Confort <span>76</span></p>
+          <p class="cf7-brandsub">Chauffage · Climatisation · Drummondville, QC</p>
+        </div>
+      </header>
+
+      <!-- HERO: the big ad splash -->
+      <section class="cf7-hero">
+        <div class="cf7-sunburst" aria-hidden="true"></div>
+        <div class="cf7-hero-in">
+          <p class="cf7-eyebrow">Nouveau pour l’hiver 2026!</p>
+          <h1 class="cf7-h1">La fournaise<br />de confiance<br />de votre père!</h1>
+          <p class="cf7-dek">Cinquante ans de sous-sols douillets et de juillets frais. Fournaises, thermopompes et climatisation — bien installé, prix honnête, garanti par écrit.</p>
+          <div class="cf7-badges">
+            <div class="cf7-burst"><span>Nouveau!<br />Thermo-<br />pompes</span></div>
+            <div class="cf7-burst cf7-burst-green"><span>Soumissions<br />gra-<br />tuites</span></div>
+            <a class="cf7-phone" href="tel:+18195550176">(819) 555-0138</a>
+          </div>
+        </div>
+        <figure class="cf7-herofig">
+          <img src={IMG.hero} alt="Un salon chaud et confortable chauffé par Confort 76" loading="eager" />
+          <figcaption>Vrai confort. 1976 simulé.</figcaption>
+        </figure>
+      </section>
+
+      <!-- TICKER: ad-strip promises -->
+      <div class="cf7-ticker" aria-hidden="true">
+        <span>Installation la même semaine ★</span><span>Garantie 5 ans pièces et main-d’œuvre ★</span><span>On répond à notre propre téléphone ★</span><span>Installation la même semaine ★</span><span>Garantie 5 ans pièces et main-d’œuvre ★</span><span>On répond à notre propre téléphone ★</span>
+      </div>
+
+      <!-- PRODUCT BLURBS: services as ad copy -->
+      <section class="cf7-offers" aria-label="Nos offres">
+        <h2 class="cf7-h2">Les <em>meilleures</em> offres de la saison</h2>
+        <div class="cf7-grid">
+          <article class="cf7-card">
+            <p class="cf7-card-k">Chauffage</p>
+            <h3>Fournaises haute efficacité</h3>
+            <p>Au gaz ou électriques, silencieuses, jusqu’à 97 % d’efficacité. Dimensionnées pour VOTRE maison — jamais celle qu’on avait sur le camion.</p>
+            <p class="cf7-price">dès <strong>3 499 $</strong> <s>3 899 $</s></p>
+          </article>
+          <article class="cf7-card">
+            <p class="cf7-card-k">Climatisation</p>
+            <h3>Climatisation centrale et thermopompes</h3>
+            <p>Une machine, quatre saisons. Chauffe à −25 °C, rafraîchit comme un charme en juillet. Rabais d’Hydro? On s’occupe de la paperasse.</p>
+            <p class="cf7-price">dès <strong>4 299 $</strong> <s>4 799 $</s></p>
+          </article>
+          <article class="cf7-card">
+            <p class="cf7-card-k">Plan d’entretien</p>
+            <h3>La mise au point à 76 $</h3>
+            <p>Notre fameuse inspection en 21 points. Filtres, serpentins, brûleurs, thermostat — réglé comme un piano, chaque automne.</p>
+            <p class="cf7-price"><strong>76 $</strong> <s>129 $</s></p>
+          </article>
+          <article class="cf7-card">
+            <p class="cf7-card-k">24/7</p>
+            <h3>Urgences sans chauffage</h3>
+            <p>La fournaise a lâché à 2 h du matin en janvier? Un tech de Confort — pas un centre d’appels — répond et se déplace.</p>
+            <p class="cf7-price"><strong>0 $</strong> de frais supplémentaires</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- LETTERS TO THE EDITOR: testimonials -->
+      <section class="cf7-letters" aria-label="Lettres des clients">
+        <h2 class="cf7-h2">Courrier des lecteurs</h2>
+        <div class="cf7-letters-grid">
+          <blockquote>
+            <p>« Cher Confort 76 — Notre facture d’Hydro de janvier a baissé de 94 $ après la nouvelle thermopompe. Mon père avait raison à votre sujet. »</p>
+            <footer>— Ginette R., Drummondville</footer>
+          </blockquote>
+          <blockquote>
+            <p>« Le tech est arrivé en pleine tempête de neige, a réparé la fournaise ET a pelleté mes marches. Qui fait encore ça aujourd’hui? »</p>
+            <footer>— Marcel T., Saint-Germain-de-Grantham</footer>
+          </blockquote>
+          <blockquote>
+            <p>« Trois soumissions, zéro pression, une installation parfaite. La maison n’a jamais été aussi confortable. »</p>
+            <footer>— Amina &amp; Youssef B., Drummondville</footer>
+          </blockquote>
+        </div>
+        <figure class="cf7-proof">
+          <img src={IMG.tech} alt="Un technicien de Confort 76 au travail" loading="lazy" />
+          <img src={IMG.home} alt="Une maison de Drummondville gardée confortable par Confort 76" loading="lazy" />
+        </figure>
+      </section>
+
+      <!-- THE STORY: about, ad-style -->
+      <section class="cf7-story">
+        <h2 class="cf7-h2">Une affaire de famille depuis ’76</h2>
+        <p>Henri Lachance a fondé Confort 76 avec une boîte à outils, un pick-up ’74 et une promesse : <strong>traiter chaque maison comme celle de votre mère.</strong> Ses enfants ont pris la relève — même promesse, meilleures fournaises. Plus de 9 800 maisons chauffées et climatisées partout au Centre-du-Québec, 4,9 étoiles, et un mur de cartes de remerciement qu’on refuse de décrocher.</p>
+      </section>
+
+      <!-- COUPON: the booking slip -->
+      <section class="cf7-couponwrap" aria-label="Coupon et réservation">
+        <div class="cf7-coupon">
+          <p class="cf7-scissors" aria-hidden="true">✂ - - - - - - - - - - - - - - - - - - - - - - - -</p>
+          <p class="cf7-coupon-k">Découpez ce coupon!</p>
+          <p class="cf7-coupon-big">76 $ DE RABAIS</p>
+          <p class="cf7-coupon-sub">sur toute nouvelle installation de fournaise ou de thermopompe.<br />Présentez cette annonce. Une par foyer. N’expire jamais — on est de la vieille école.</p>
+          <form class="cf7-form" id="cf7-form" novalidate>
+            <label>Nom<input type="text" name="name" required placeholder="Jean Tremblay" autocomplete="name" /></label>
+            <label>Téléphone<input type="tel" name="phone" required placeholder="(819) 555-0000" autocomplete="tel" /></label>
+            <label>Ça m’intéresse :
+              <select name="interest">
+                <option>Nouvelle fournaise</option>
+                <option>Thermopompe</option>
+                <option>Climatisation</option>
+                <option>La mise au point à 76 $</option>
+                <option>Réparation d’urgence</option>
+              </select>
+            </label>
+            <button type="submit">Échanger mon coupon de 76 $</button>
+          </form>
+          <p class="cf7-form-note" role="status" aria-live="polite"></p>
+          <p class="cf7-coupon-fine">Ou appelez comme en 1976 : <a href="tel:+18195550176">(819) 555-0138</a></p>
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <footer class="cf7-foot">
+        <p class="cf7-foot-brand">Confort 76 · 123, rue Fictive, Drummondville QC</p>
+        <p>Lun–ven 7 h 30–17 h 30 · sam 8 h–12 h · urgences sans chauffage 24/7<br />Licence RBQ 0000-0000-00 (fictif) · © 2026 Confort 76</p>
+      </footer>
+      <div class="cf7-wood" aria-hidden="true"></div>
+
+    </div>
+  </div>
+
+  <EscapeHatch locale="fr" />
+
+  <script>
+    (function () {
+      var form = document.getElementById('cf7-form');
+      form?.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var note = form?.querySelector('.cf7-form-note');
+        if (note) note.textContent = 'Coupon découpé! On vous appellera d\u2019ici un jour ouvrable pour planifier votre soumission gratuite.';
+        if (form instanceof HTMLFormElement) form.reset();
+      });
+    })();
+  </script>
+
+  <style>
+    .cf7 {
+      --cf7-gold: #d9a441;
+      --cf7-gold-deep: #b9832c;
+      --cf7-avo: #7a8450;
+      --cf7-avo-deep: #5c6539;
+      --cf7-walnut: #4a2e1b;
+      --cf7-walnut-deep: #2e1c10;
+      --cf7-cream: #f7efdc;
+      --cf7-paper: #fdf8ec;
+      --cf7-rust: #b4552d;
+      --cf7-disp: "Shrikhand", "Cooper Black", serif;
+      --cf7-bang: "Bungee", "Arial Black", sans-serif;
+      --cf7-body: "Karla", Verdana, sans-serif;
+      margin: 0;
+      background: var(--cf7-walnut-deep);
+      color: var(--cf7-walnut);
+      font-family: var(--cf7-body);
+      -webkit-font-smoothing: antialiased;
+    }
+    .cf7 *, .cf7 *::before, .cf7 *::after { box-sizing: border-box; }
+    .cf7 img { display: block; max-width: 100%; }
+    .cf7 a { color: inherit; }
+
+    .cf7-desk { padding: clamp(16px, 4vw, 44px) clamp(10px, 3vw, 28px) clamp(36px, 6vw, 72px); display: flex; justify-content: center; }
+    .cf7-page {
+      width: min(980px, 100%);
+      background: var(--cf7-cream);
+      border: 6px solid var(--cf7-walnut);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.55);
+      overflow: hidden;
+    }
+
+    /* walnut wood-grain bands */
+    .cf7-wood {
+      height: 34px;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0.25), transparent 40%, transparent 60%, rgba(0,0,0,0.3)),
+        repeating-linear-gradient(94deg, #5d3a20 0 12px, #4a2e1b 12px 22px, #66452a 22px 34px, #503218 34px 44px);
+    }
+
+    /* masthead */
+    .cf7-masthead { background: var(--cf7-paper); border-bottom: 4px solid var(--cf7-walnut); padding: 18px clamp(18px, 4vw, 40px) 22px; text-align: center; }
+    .cf7-kicker { margin: 0 0 10px; font-size: 12px; font-weight: 800; letter-spacing: 0.28em; text-transform: uppercase; color: var(--cf7-avo-deep); }
+    .cf7-brand { font-family: var(--cf7-disp); font-size: clamp(2.6rem, 8vw, 4.6rem); margin: 0; color: var(--cf7-walnut); line-height: 1; }
+    .cf7-brand span { color: var(--cf7-rust); }
+    .cf7-brandsub { margin: 8px 0 0; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; font-size: 13px; color: var(--cf7-gold-deep); }
+
+    /* hero splash */
+    .cf7-hero { position: relative; overflow: hidden; background: var(--cf7-gold); }
+    .cf7-sunburst {
+      position: absolute; inset: -40%;
+      background: repeating-conic-gradient(from 0deg at 50% 50%, rgba(255,255,255,0.16) 0 8deg, transparent 8deg 16deg);
+      animation: cf7-spin 60s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes cf7-spin { to { transform: rotate(360deg); } }
+    .cf7-hero-in { position: relative; padding: clamp(36px, 6vw, 64px) clamp(20px, 5vw, 52px) 8px; text-align: center; }
+    .cf7-eyebrow {
+      display: inline-block; margin: 0 0 18px; font-family: var(--cf7-bang); font-size: 14px; letter-spacing: 0.08em;
+      background: var(--cf7-avo); color: var(--cf7-paper); padding: 10px 22px; border-radius: 999px;
+      border: 3px solid var(--cf7-walnut); transform: rotate(-2deg);
+    }
+    .cf7-h1 {
+      font-family: var(--cf7-disp); font-weight: 400; color: var(--cf7-walnut);
+      font-size: clamp(2.8rem, 9vw, 5.6rem); line-height: 1.02; margin: 0 0 18px;
+      text-shadow: 3px 3px 0 rgba(247,239,220,0.65);
+    }
+    .cf7-dek { max-width: 58ch; margin: 0 auto 8px; font-size: 17px; line-height: 1.7; font-weight: 600; }
+    .cf7-badges { position: relative; display: flex; align-items: center; justify-content: center; gap: clamp(14px, 4vw, 40px); flex-wrap: wrap; margin: 26px 0 8px; min-height: 150px; }
+    .cf7-burst { position: relative; width: 132px; height: 132px; display: grid; place-items: center; transform: rotate(-8deg); }
+    .cf7-burst::before, .cf7-burst::after {
+      content: ""; position: absolute; inset: 8px; background: var(--cf7-rust); border: 3px solid var(--cf7-walnut);
+    }
+    .cf7-burst::after { transform: rotate(45deg); }
+    .cf7-burst span {
+      position: relative; z-index: 1; font-family: var(--cf7-bang); font-size: 15px; line-height: 1.25;
+      color: var(--cf7-paper); text-align: center;
+    }
+    .cf7-burst-green { transform: rotate(7deg); }
+    .cf7-burst-green::before, .cf7-burst-green::after { background: var(--cf7-avo); }
+    .cf7-phone {
+      font-family: var(--cf7-bang); font-size: clamp(1.4rem, 4.5vw, 2.2rem); text-decoration: none;
+      background: var(--cf7-paper); color: var(--cf7-walnut); border: 4px solid var(--cf7-walnut);
+      border-radius: 18px; padding: 16px 28px; box-shadow: 6px 6px 0 var(--cf7-walnut);
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+    .cf7-phone:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 var(--cf7-walnut); }
+    .cf7-herofig { position: relative; margin: 26px clamp(20px, 5vw, 52px) 0; border: 5px solid var(--cf7-walnut); border-radius: 26px; overflow: hidden; transform: rotate(-0.6deg); background: var(--cf7-paper); }
+    .cf7-herofig img { width: 100%; height: clamp(240px, 40vw, 380px); object-fit: cover; filter: sepia(0.45) saturate(1.05) contrast(1.02); }
+    .cf7-herofig figcaption { padding: 10px; font-size: 12.5px; font-style: italic; font-weight: 600; text-align: center; color: var(--cf7-walnut); }
+
+    /* ticker strip */
+    .cf7-ticker {
+      background: var(--cf7-avo); color: var(--cf7-paper); border-top: 4px solid var(--cf7-walnut); border-bottom: 4px solid var(--cf7-walnut);
+      display: flex; gap: 0; overflow: hidden; white-space: nowrap; padding: 12px 0;
+      font-family: var(--cf7-bang); font-size: 14px; letter-spacing: 0.06em;
+    }
+    .cf7-ticker span { padding: 0 26px; }
+
+    /* offers */
+    .cf7-offers { padding: clamp(44px, 7vh, 76px) clamp(20px, 5vw, 52px); background: var(--cf7-cream); }
+    .cf7-h2 { font-family: var(--cf7-disp); font-weight: 400; font-size: clamp(1.8rem, 5vw, 2.8rem); margin: 0 0 28px; text-align: center; color: var(--cf7-walnut); }
+    .cf7-h2 em { font-style: normal; color: var(--cf7-rust); }
+    .cf7-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .cf7-card {
+      background: var(--cf7-paper); border: 4px solid var(--cf7-walnut); border-radius: 20px;
+      padding: 26px 24px; box-shadow: 6px 6px 0 rgba(74,46,27,0.18);
+    }
+    .cf7-card:nth-child(odd) { transform: rotate(-0.5deg); }
+    .cf7-card:nth-child(even) { transform: rotate(0.5deg); }
+    .cf7-card-k { margin: 0 0 10px; display: inline-block; font-family: var(--cf7-bang); font-size: 12px; letter-spacing: 0.08em; background: var(--cf7-gold); border: 2px solid var(--cf7-walnut); border-radius: 999px; padding: 5px 14px; }
+    .cf7-card h3 { font-family: var(--cf7-disp); font-weight: 400; font-size: 1.45rem; margin: 0 0 10px; }
+    .cf7-card p { margin: 0 0 14px; font-size: 15px; line-height: 1.65; }
+    .cf7-price { font-size: 15px; font-weight: 700; }
+    .cf7-price strong { font-family: var(--cf7-bang); font-size: 1.5rem; color: var(--cf7-rust); }
+    .cf7-price s { color: rgba(74,46,27,0.5); font-weight: 600; }
+
+    /* letters */
+    .cf7-letters { background: var(--cf7-paper); border-top: 4px solid var(--cf7-walnut); border-bottom: 4px solid var(--cf7-walnut); padding: clamp(44px, 7vh, 76px) clamp(20px, 5vw, 52px); }
+    .cf7-letters-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
+    .cf7-letters blockquote {
+      margin: 0; background: var(--cf7-cream); border: 3px dashed var(--cf7-avo-deep); border-radius: 14px;
+      padding: 22px 20px; font-size: 14.5px; line-height: 1.7;
+    }
+    .cf7-letters blockquote:nth-child(2) { transform: rotate(0.6deg); }
+    .cf7-letters blockquote:nth-child(1) { transform: rotate(-0.6deg); }
+    .cf7-letters blockquote p { margin: 0 0 12px; font-style: italic; }
+    .cf7-letters blockquote footer { font-weight: 800; font-size: 13px; color: var(--cf7-avo-deep); }
+    .cf7-proof { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 0; }
+    .cf7-proof img { width: 100%; height: 220px; object-fit: cover; border: 4px solid var(--cf7-walnut); border-radius: 16px; filter: sepia(0.5) saturate(1.05); }
+
+    /* story */
+    .cf7-story { padding: clamp(44px, 7vh, 76px) clamp(20px, 5vw, 52px); text-align: center; background: var(--cf7-cream); }
+    .cf7-story p { max-width: 62ch; margin: 0 auto; font-size: 17px; line-height: 1.8; }
+    .cf7-story strong { color: var(--cf7-rust); }
+
+    /* coupon */
+    .cf7-couponwrap { padding: 0 clamp(20px, 5vw, 52px) clamp(44px, 7vh, 76px); background: var(--cf7-cream); }
+    .cf7-coupon {
+      background: var(--cf7-paper); border: 4px dashed var(--cf7-rust); border-radius: 8px;
+      padding: clamp(26px, 4vw, 44px); text-align: center; transform: rotate(0.4deg);
+      box-shadow: 8px 8px 0 rgba(74,46,27,0.15);
+    }
+    .cf7-scissors { margin: 0 0 6px; letter-spacing: 0.1em; color: var(--cf7-avo-deep); font-size: 14px; }
+    .cf7-coupon-k { font-family: var(--cf7-bang); font-size: 15px; letter-spacing: 0.1em; color: var(--cf7-avo-deep); margin: 0 0 6px; }
+    .cf7-coupon-big { font-family: var(--cf7-disp); font-size: clamp(3rem, 10vw, 5.4rem); color: var(--cf7-rust); margin: 0; line-height: 1; text-shadow: 3px 3px 0 rgba(217,164,65,0.5); }
+    .cf7-coupon-sub { font-size: 15px; line-height: 1.7; font-weight: 600; margin: 12px 0 24px; }
+    .cf7-form { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; max-width: 760px; margin: 0 auto 6px; text-align: left; }
+    .cf7-form label { display: grid; gap: 8px; font-size: 11.5px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--cf7-walnut); }
+    .cf7-form input, .cf7-form select {
+      font-family: var(--cf7-body); font-size: 15.5px; font-weight: 600; color: var(--cf7-walnut);
+      padding: 13px 14px; border: 3px solid var(--cf7-walnut); border-radius: 12px; background: var(--cf7-cream); width: 100%;
+    }
+    .cf7-form input:focus, .cf7-form select:focus { outline: 3px solid var(--cf7-gold-deep); outline-offset: 1px; }
+    .cf7-form button {
+      grid-column: 1 / -1; font-family: var(--cf7-bang); font-size: 17px; letter-spacing: 0.04em;
+      background: var(--cf7-rust); color: var(--cf7-paper); border: 3px solid var(--cf7-walnut); border-radius: 14px;
+      padding: 17px; cursor: pointer; box-shadow: 5px 5px 0 var(--cf7-walnut);
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+    .cf7-form button:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 var(--cf7-walnut); }
+    .cf7-form-note { font-weight: 800; color: var(--cf7-avo-deep); min-height: 1.6em; margin: 12px 0 0; }
+    .cf7-form-note:empty { display: none; }
+    .cf7-coupon-fine { font-size: 14px; font-weight: 700; margin: 14px 0 0; }
+    .cf7-coupon-fine a { color: var(--cf7-rust); }
+
+    /* footer */
+    .cf7-foot { background: var(--cf7-avo-deep); color: var(--cf7-paper); text-align: center; padding: 30px 20px; }
+    .cf7-foot-brand { font-family: var(--cf7-disp); font-size: 1.3rem; margin: 0 0 10px; }
+    .cf7-foot p:last-child { margin: 0; font-size: 13px; line-height: 1.9; opacity: 0.9; }
+
+    @media (max-width: 720px) {
+      .cf7-grid, .cf7-letters-grid, .cf7-proof { grid-template-columns: 1fr; }
+      .cf7-form { grid-template-columns: 1fr; }
+      .cf7-badges { min-height: 0; }
+      .cf7-burst { width: 108px; height: 108px; }
+      .cf7-burst span { font-size: 13px; }
+      .cf7-page { border-width: 4px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .cf7-sunburst { animation: none; }
+      .cf7-phone, .cf7-form button { transition: none; }
+    }
+  </style>
+</body>
+</html>

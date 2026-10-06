@@ -1,0 +1,360 @@
+---
+// Demo microsite: Toitures Tempête · fictional storm-response roofer, Repentigny QC.
+// Concept: storm-chaser emergency response. All business info fictional.
+import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+---
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>Toitures Tempête — Couvreurs d'intervention tempête · Repentigny</title>
+  <meta name="description" content="Quand le ciel tombe, on est déjà là. Bâchage d'urgence, arrêt de fuite et réparation de toitures 24/7 à Repentigny et dans Lanaudière." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --tp-bg: #0b0d12;
+      --tp-card: #171b25;
+      --tp-violet: #8b5cf6;
+      --tp-violet-bright: #a78bfa;
+      --tp-violet-deep: #5b34c4;
+      --tp-ink: #eef0f6;
+      --tp-mute: #9aa3b5;
+      --tp-disp: "Archivo Black", "Arial Black", sans-serif;
+      --tp-body: "Inter", system-ui, sans-serif;
+      --tp-mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+    .tp-root { margin: 0; background: var(--tp-bg); color: var(--tp-ink); font-family: var(--tp-body); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+    .tp-root * { box-sizing: border-box; }
+    .tp-wrap { max-width: 1120px; margin: 0 auto; padding: 0 22px; }
+
+    /* Alert bar */
+    .tp-alert { background: var(--tp-violet-deep); border-bottom: 1px solid var(--tp-violet); overflow: hidden; }
+    .tp-alert-in { max-width: 1120px; margin: 0 auto; padding: 9px 22px; display: flex; gap: 12px; align-items: center; justify-content: center; font-family: var(--tp-mono); font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #fff; text-align: center; }
+    .tp-alert-dot { width: 9px; height: 9px; border-radius: 50%; background: #fff; flex: none; animation: tp-blink 1.1s steps(2) infinite; }
+    @keyframes tp-blink { 50% { opacity: .25; } }
+    .tp-alert a { color: #fff; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
+
+    /* Nav */
+    .tp-nav { position: sticky; top: 0; z-index: 20; background: rgba(11,13,18,.88); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(139,92,246,.28); }
+    .tp-nav-in { max-width: 1120px; margin: 0 auto; padding: 14px 22px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .tp-brand { margin: 0; font-family: var(--tp-disp); font-weight: 400; font-size: 17px; letter-spacing: .06em; color: var(--tp-ink); text-transform: uppercase; }
+    .tp-brand span { color: var(--tp-violet-bright); }
+    .tp-links { display: flex; gap: 22px; }
+    .tp-links a { color: var(--tp-mute); text-decoration: none; font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+    .tp-links a:hover { color: var(--tp-violet-bright); }
+    .tp-nav-cta { font-family: var(--tp-mono); font-size: 13px; font-weight: 700; color: #0b0d12; background: var(--tp-violet-bright); padding: 10px 18px; border-radius: 8px; text-decoration: none; white-space: nowrap; }
+    .tp-nav-cta:hover { background: #fff; }
+
+    /* Hero */
+    .tp-hero { position: relative; overflow: hidden; border-bottom: 1px solid rgba(139,92,246,.3); }
+    .tp-hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .5; }
+    .tp-hero-veil { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,13,18,.55) 0%, rgba(11,13,18,.35) 45%, var(--tp-bg) 100%); }
+    .tp-hero-in { position: relative; max-width: 1120px; margin: 0 auto; padding: 96px 22px 84px; }
+    .tp-kicker { font-family: var(--tp-mono); font-size: 12px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: var(--tp-violet-bright); margin: 0 0 18px; display: flex; align-items: center; gap: 10px; }
+    .tp-kicker::before { content: ""; width: 26px; height: 2px; background: var(--tp-violet-bright); display: inline-block; }
+    .tp-h1 { font-family: var(--tp-disp); font-weight: 400; font-size: clamp(2.9rem, 9vw, 5.6rem); line-height: .98; margin: 0 0 22px; text-transform: uppercase; text-shadow: 0 0 34px rgba(139,92,246,.55); }
+    .tp-h1 em { font-style: normal; color: var(--tp-violet-bright); }
+    .tp-lede { font-size: clamp(1.02rem, 2.4vw, 1.25rem); color: var(--tp-mute); max-width: 620px; margin: 0 0 30px; }
+    .tp-lede strong { color: var(--tp-ink); }
+    .tp-hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; }
+    .tp-btn { display: inline-block; font-weight: 800; font-size: 15px; letter-spacing: .04em; padding: 16px 30px; border-radius: 10px; text-decoration: none; }
+    .tp-btn-hot { background: var(--tp-violet); color: #fff; box-shadow: 0 8px 30px rgba(139,92,246,.45); }
+    .tp-btn-hot:hover { background: var(--tp-violet-bright); color: #0b0d12; }
+    .tp-btn-ghost { border: 1px solid rgba(238,240,246,.35); color: var(--tp-ink); }
+    .tp-btn-ghost:hover { border-color: var(--tp-violet-bright); color: var(--tp-violet-bright); }
+    .tp-hero-note { margin-top: 26px; font-family: var(--tp-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--tp-mute); }
+
+    /* Stats */
+    .tp-stats { border-bottom: 1px solid rgba(139,92,246,.25); background: #0e1119; }
+    .tp-stats-in { max-width: 1120px; margin: 0 auto; padding: 34px 22px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .tp-stat { text-align: center; }
+    .tp-stat b { display: block; font-family: var(--tp-disp); font-size: clamp(1.9rem, 4vw, 2.7rem); color: var(--tp-violet-bright); margin-bottom: 6px; }
+    .tp-stat span { font-family: var(--tp-mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--tp-mute); }
+
+    /* Sections */
+    .tp-sec { padding: 84px 0; }
+    .tp-sec-head { margin-bottom: 44px; }
+    .tp-eyebrow { font-family: var(--tp-mono); font-size: 12px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--tp-violet-bright); margin: 0 0 14px; }
+    .tp-h2 { font-family: var(--tp-disp); font-weight: 400; font-size: clamp(2rem, 5.5vw, 3.2rem); line-height: 1.02; margin: 0 0 16px; text-transform: uppercase; }
+    .tp-sub { color: var(--tp-mute); max-width: 640px; margin: 0; font-size: 1.05rem; }
+
+    /* Protocol timeline */
+    .tp-proto { position: relative; margin-top: 8px; }
+    .tp-step { display: grid; grid-template-columns: 64px 1fr; gap: 22px; padding: 26px 0; border-bottom: 1px solid rgba(154,163,181,.18); }
+    .tp-step:last-child { border-bottom: 0; }
+    .tp-num { width: 64px; height: 64px; border-radius: 50%; border: 2px solid var(--tp-violet); display: grid; place-items: center; font-family: var(--tp-disp); font-size: 20px; color: var(--tp-violet-bright); background: rgba(139,92,246,.08); flex: none; }
+    .tp-step h3 { margin: 0 0 8px; font-size: 1.3rem; font-weight: 800; }
+    .tp-step h3 small { display: block; font-family: var(--tp-mono); font-size: 11px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--tp-violet-bright); margin-bottom: 6px; }
+    .tp-step p { margin: 0; color: var(--tp-mute); max-width: 640px; }
+
+    /* Services */
+    .tp-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .tp-card { background: var(--tp-card); border: 1px solid rgba(139,92,246,.28); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; }
+    .tp-card img { width: 100%; height: 190px; object-fit: cover; display: block; filter: saturate(.85); }
+    .tp-card-body { padding: 24px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+    .tp-tag { align-self: flex-start; font-family: var(--tp-mono); font-size: 10px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: #0b0d12; background: var(--tp-violet-bright); padding: 5px 10px; border-radius: 6px; }
+    .tp-card h3 { margin: 0; font-size: 1.25rem; font-weight: 800; }
+    .tp-card p { margin: 0; color: var(--tp-mute); font-size: .96rem; flex: 1; }
+    .tp-price { font-family: var(--tp-mono); font-size: 13px; color: var(--tp-violet-bright); font-weight: 700; }
+
+    /* Proof */
+    .tp-proof { background: #0e1119; border-top: 1px solid rgba(139,92,246,.25); border-bottom: 1px solid rgba(139,92,246,.25); }
+    .tp-quotes { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .tp-quote { background: var(--tp-card); border-left: 4px solid var(--tp-violet); border-radius: 0 14px 14px 0; padding: 28px; }
+    .tp-quote p { margin: 0 0 14px; font-size: 1.05rem; font-style: italic; color: var(--tp-ink); }
+    .tp-quote cite { font-style: normal; font-family: var(--tp-mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--tp-mute); }
+
+    /* About */
+    .tp-about { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+    .tp-about img { width: 100%; height: 380px; object-fit: cover; border-radius: 16px; border: 1px solid rgba(139,92,246,.3); }
+    .tp-about p { color: var(--tp-mute); margin: 0 0 16px; }
+    .tp-about p strong { color: var(--tp-ink); }
+    .tp-list { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 10px; }
+    .tp-list li { font-family: var(--tp-mono); font-size: 13px; color: var(--tp-ink); display: flex; gap: 10px; align-items: center; }
+    .tp-list li::before { content: "▸"; color: var(--tp-violet-bright); font-weight: 700; }
+
+    /* Contact */
+    .tp-contact { background: linear-gradient(160deg, #141021 0%, var(--tp-bg) 70%); border-top: 1px solid rgba(139,92,246,.3); }
+    .tp-contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+    .tp-phone { display: block; font-family: var(--tp-disp); font-size: clamp(2rem, 5vw, 3rem); color: var(--tp-violet-bright); text-decoration: none; margin: 14px 0 8px; text-shadow: 0 0 26px rgba(139,92,246,.5); }
+    .tp-phone:hover { color: #fff; }
+    .tp-hours { font-family: var(--tp-mono); font-size: 13px; color: var(--tp-mute); letter-spacing: .06em; }
+    .tp-form { background: var(--tp-card); border: 1px solid rgba(139,92,246,.3); border-radius: 16px; padding: 30px; display: grid; gap: 14px; }
+    .tp-form label { font-family: var(--tp-mono); font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--tp-mute); display: grid; gap: 8px; }
+    .tp-form input, .tp-form select, .tp-form textarea { font-family: var(--tp-body); font-size: 15px; color: var(--tp-ink); background: #0b0d12; border: 1px solid rgba(154,163,181,.35); border-radius: 10px; padding: 12px 14px; width: 100%; }
+    .tp-form input:focus, .tp-form select:focus, .tp-form textarea:focus { outline: 2px solid var(--tp-violet); border-color: var(--tp-violet); }
+    .tp-submit { font-family: var(--tp-disp); font-size: 16px; letter-spacing: .04em; text-transform: uppercase; color: #fff; background: var(--tp-violet); border: 0; border-radius: 10px; padding: 16px; cursor: pointer; }
+    .tp-submit:hover { background: var(--tp-violet-bright); color: #0b0d12; }
+    .tp-fine { font-size: 12px; color: var(--tp-mute); margin: 0; }
+
+    /* Footer */
+    .tp-foot { border-top: 1px solid rgba(139,92,246,.25); padding: 34px 0; }
+    .tp-foot-in { max-width: 1120px; margin: 0 auto; padding: 0 22px; display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap; font-family: var(--tp-mono); font-size: 12px; letter-spacing: .08em; color: var(--tp-mute); }
+    .tp-foot strong { color: var(--tp-ink); }
+
+    @media (max-width: 860px) {
+      .tp-links { display: none; }
+      .tp-stats-in { grid-template-columns: repeat(2, 1fr); gap: 26px; }
+      .tp-cards { grid-template-columns: 1fr; }
+      .tp-quotes { grid-template-columns: 1fr; }
+      .tp-about { grid-template-columns: 1fr; }
+      .tp-about img { height: 260px; }
+      .tp-contact-grid { grid-template-columns: 1fr; }
+      .tp-hero-in { padding: 70px 22px 60px; }
+      .tp-sec { padding: 60px 0; }
+    }
+  </style>
+</head>
+<body class="tp-root">
+  <div class="tp-alert" role="alert">
+    <div class="tp-alert-in">
+      <span class="tp-alert-dot" aria-hidden="true"></span>
+      <span>Urgence tempête en cours dans Lanaudière — équipes sur le terrain</span>
+      <a href="tel:+14505550173">Appeler maintenant</a>
+    </div>
+  </div>
+
+  <nav class="tp-nav" aria-label="Navigation principale">
+    <div class="tp-nav-in">
+      <p class="tp-brand">Toitures <span>Tempête</span></p>
+      <div class="tp-links">
+        <a href="#tp-protocole">Protocole</a>
+        <a href="#tp-services">Urgences</a>
+        <a href="#tp-preuves">Preuves</a>
+        <a href="#tp-equipe">Équipe</a>
+      </div>
+      <a class="tp-nav-cta" href="tel:+14505550173">(450) 555-0173</a>
+    </div>
+  </nav>
+
+  <header class="tp-hero">
+    <img class="tp-hero-bg" src="https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?auto=format&fit=crop&w=1600&q=80" alt="Éclair fendant un ciel d'orage au-dessus de Repentigny" aria-hidden="true" />
+    <div class="tp-hero-veil" aria-hidden="true"></div>
+    <div class="tp-hero-in">
+      <p class="tp-kicker">Intervention tempête 24/7 · Repentigny</p>
+      <h1 class="tp-h1">Quand le ciel tombe, <em>on est déjà là.</em></h1>
+      <p class="tp-lede">Toitures Tempête traque les orages comme les chasseurs de tempêtes traquent les éclairs. <strong>Bâchage d'urgence, arrêt de fuite et sécurisation</strong> — jour, nuit, verglas ou grêle.</p>
+      <div class="tp-hero-ctas">
+        <a class="tp-btn tp-btn-hot" href="tel:+14505550173">Urgence : (450) 555-0173</a>
+        <a class="tp-btn tp-btn-ghost" href="#tp-services">Voir les interventions</a>
+      </div>
+      <p class="tp-hero-note">Temps de réponse moyen constaté : 47 minutes · Lanaudière</p>
+    </div>
+  </header>
+
+  <section class="tp-stats" aria-label="Chiffres clés">
+    <div class="tp-stats-in">
+      <div class="tp-stat"><b>47 min</b><span>Réponse moyenne</span></div>
+      <div class="tp-stat"><b>1 900+</b><span>Tempêtes couvertes</span></div>
+      <div class="tp-stat"><b>3 400</b><span>Bâches déployées</span></div>
+      <div class="tp-stat"><b>24/7</b><span>Ligne d'urgence</span></div>
+    </div>
+  </section>
+
+  <section class="tp-sec" id="tp-protocole">
+    <div class="tp-wrap">
+      <div class="tp-sec-head">
+        <p class="tp-eyebrow">Protocole Tempête</p>
+        <h2 class="tp-h2">De l'alerte au toit sec</h2>
+        <p class="tp-sub">Notre méthode en quatre temps, rodée sur des centaines d'orages. Pas d'improvisation : une procédure, des équipes, des résultats.</p>
+      </div>
+      <div class="tp-proto">
+        <div class="tp-step">
+          <div class="tp-num" aria-hidden="true">1</div>
+          <div>
+            <h3><small>Radar · 0 min</small>Détection</h3>
+            <p>On surveille les cellules orageuses en temps réel. Quand un front violent vise Repentigny, nos équipes passent en état d'alerte avant même le premier appel.</p>
+          </div>
+        </div>
+        <div class="tp-step">
+          <div class="tp-num" aria-hidden="true">2</div>
+          <div>
+            <h3><small>Dispatch · 15 min</small>Mobilisation</h3>
+            <p>Votre appel déclenche l'envoi de l'unité la plus proche. Camion chargé, bâches, échelles et matériel de sécurisation : on roule pendant que l'orage passe.</p>
+          </div>
+        </div>
+        <div class="tp-step">
+          <div class="tp-num" aria-hidden="true">3</div>
+          <div>
+            <h3><small>Terrain · 47 min</small>Bâchage</h3>
+            <p>Arrivée sur place, évaluation éclair, bâchage étanche de la zone touchée. L'eau s'arrête là. Vos biens, votre grenier, votre tranquillité : protégés.</p>
+          </div>
+        </div>
+        <div class="tp-step">
+          <div class="tp-num" aria-hidden="true">4</div>
+          <div>
+            <h3><small>Suivi · 72 h</small>Réparation</h3>
+            <p>Devis de réparation permanente sous 72 heures, photos à l'appui pour votre assureur. On ne repart pas tant que le toit n'est pas à l'épreuve du prochain orage.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tp-sec" id="tp-services" style="padding-top:0;">
+    <div class="tp-wrap">
+      <div class="tp-sec-head">
+        <p class="tp-eyebrow">Interventions d'urgence</p>
+        <h2 class="tp-h2">Ce qu'on fait sous la pluie</h2>
+        <p class="tp-sub">Trois missions, une seule promesse : arrêter les dégâts tout de suite, réparer pour de bon ensuite.</p>
+      </div>
+      <div class="tp-cards">
+        <article class="tp-card">
+          <img src="https://images.unsplash.com/photo-1461511669078-d46bf351cd6e?auto=format&fit=crop&w=800&q=80" alt="Nuages d'orage menaçants avec éclairs" loading="lazy" />
+          <div class="tp-card-body">
+            <span class="tp-tag">Mission 01</span>
+            <h3>Bâchage d'urgence</h3>
+            <p>Bardeaux arrachés, faîtage éventré? On recouvre la brèche d'une bâche armée fixée mécaniquement, étanche au vent et à la pluie battante.</p>
+            <span class="tp-price">À partir de 349 $ · posé sur place</span>
+          </div>
+        </article>
+        <article class="tp-card">
+          <img src="https://images.unsplash.com/photo-1527482797697-8795b05a13fe?auto=format&fit=crop&w=800&q=80" alt="Éclair frappant pendant un orage violent" loading="lazy" />
+          <div class="tp-card-body">
+            <span class="tp-tag">Mission 02</span>
+            <h3>Arrêt de fuite express</h3>
+            <p>L'eau coule dans le salon? Colmatage intérieur et extérieur, détournement des écoulements, séchage : on stoppe l'infiltration à la source.</p>
+            <span class="tp-price">À partir de 249 $ · jour et nuit</span>
+          </div>
+        </article>
+        <article class="tp-card">
+          <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80" alt="Maison résidentielle après le passage d'une tempête" loading="lazy" />
+          <div class="tp-card-body">
+            <span class="tp-tag">Mission 03</span>
+            <h3>Sécurisation post-tempête</h3>
+            <p>Branches, débris, solins tordus : on dégage, on stabilise et on documente tout pour votre réclamation d'assurance.</p>
+            <span class="tp-price">Devis gratuit · photos incluses</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="tp-sec tp-proof" id="tp-preuves">
+    <div class="tp-wrap">
+      <div class="tp-sec-head">
+        <p class="tp-eyebrow">Preuves de terrain</p>
+        <h2 class="tp-h2">Ils nous ont appelés sous l'orage</h2>
+      </div>
+      <div class="tp-quotes">
+        <blockquote class="tp-quote">
+          <p>« Grêle un samedi soir, eau dans la chambre des enfants à 23 h. À minuit moins quart, la bâche était posée. Je n'y croyais plus. »</p>
+          <cite>— Sylvie R., Repentigny · juillet 2025</cite>
+        </blockquote>
+        <blockquote class="tp-quote">
+          <p>« L'assureur a tout accepté du premier coup grâce à leur dossier photo. Réparation faite la semaine suivante, toit impeccable. »</p>
+          <cite>— Marc-André T., L'Assomption · août 2025</cite>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <section class="tp-sec" id="tp-equipe">
+    <div class="tp-wrap tp-about">
+      <div>
+        <p class="tp-eyebrow">L'équipe</p>
+        <h2 class="tp-h2">Des couvreurs qui aiment le mauvais temps</h2>
+        <p>Fondée à Repentigny après la tempête de verglas qui a laissé <strong>des centaines de toits éventrés</strong>, Toitures Tempête est née d'un constat simple : quand l'orage frappe, les couvreurs ordinaires dorment.</p>
+        <p>Nous, on veille. Anciens pompiers, couvreurs certifiés, dispatchers de nuit : <strong>une équipe bâtie pour l'urgence</strong>, pas pour les beaux jours.</p>
+        <ul class="tp-list">
+          <li>Couvreurs certifiés RBQ · fictif</li>
+          <li>Camions équipés 24/7, été comme hiver</li>
+          <li>Dossier photo assurance à chaque intervention</li>
+          <li>Repentigny, L'Assomption, Terrebonne et environs</li>
+        </ul>
+      </div>
+      <img src="https://images.unsplash.com/photo-1461511669078-d46bf351cd6e?auto=format&fit=crop&w=900&q=80" alt="Ciel d'orage dramatique au-dessus des toits de Lanaudière" loading="lazy" />
+    </div>
+  </section>
+
+  <section class="tp-sec tp-contact" id="tp-contact">
+    <div class="tp-wrap">
+      <div class="tp-sec-head">
+        <p class="tp-eyebrow">Ligne d'urgence</p>
+        <h2 class="tp-h2">Le toit fuit? Appelez.</h2>
+        <p class="tp-sub">Pas de formulaire interminable en pleine tempête : un appel suffit. Le formulaire ci-dessous sert pour les suivis et les devis hors urgence.</p>
+      </div>
+      <div class="tp-contact-grid">
+        <div>
+          <a class="tp-phone" href="tel:+14505550173">(450) 555-0173</a>
+          <p class="tp-hours">24/7 · 365 jours · Repentigny QC<br />Réponse moyenne constatée : 47 minutes</p>
+        </div>
+        <form class="tp-form" action="#" method="post" onsubmit="return false;" aria-label="Formulaire de contact (fictif)">
+          <label>Nom
+            <input type="text" name="tp-nom" placeholder="Votre nom" autocomplete="name" />
+          </label>
+          <label>Téléphone
+            <input type="tel" name="tp-tel" placeholder="(450) 555-0000" autocomplete="tel" />
+          </label>
+          <label>Type de demande
+            <select name="tp-type">
+              <option>Devis hors urgence</option>
+              <option>Suivi après bâchage</option>
+              <option>Inspection post-tempête</option>
+              <option>Autre</option>
+            </select>
+          </label>
+          <label>Message
+            <textarea name="tp-msg" rows="4" placeholder="Décrivez les dégâts…"></textarea>
+          </label>
+          <button class="tp-submit" type="submit">Envoyer la demande</button>
+          <p class="tp-fine">Formulaire de démonstration — aucune donnée n'est transmise. En cas d'urgence réelle, appelez le (450) 555-0173.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer class="tp-foot">
+    <div class="tp-foot-in">
+      <span><strong>Toitures Tempête</strong> · Repentigny, QC · Entreprise fictive de démonstration</span>
+      <span>(450) 555-0173 · 24/7</span>
+    </div>
+  </footer>
+
+  <EscapeHatch />
+</body>
+</html>
