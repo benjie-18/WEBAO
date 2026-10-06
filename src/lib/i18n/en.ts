@@ -6,9 +6,14 @@ const en = {
         "Custom websites for businesses across Canada, for $149 CAD a month. Design, domain, hosting, updates, and support included. See the demo catalog.",
     },
     pricing: {
-      title: "Website Pricing · $149 CAD/month, Everything Included | WEBAO",
+      title: "Website Pricing · Plans from C$89/mo | WEBAO",
       description:
-        "One plan that includes everything: a custom 3 to 5 page site, domain, hosting, SEO basics, analytics, updates, and support. No setup fee, no long-term contract.",
+        "Three plans for local business websites: Launch C$89/mo, Grow C$149/mo, Scale C$349/mo. Design, domain, hosting, SEO, updates and support included. No setup fee.",
+    },
+    terms: {
+      title: "Terms & Details · WEBAO Pricing Notes",
+      description:
+        "The full terms behind WEBAO pricing: billing, contract, plan details, bundles and add-ons. Notes numbered to match the pricing page.",
     },
     contact: {
       title: "Contact WEBAO · Start Your Custom Website",
@@ -64,6 +69,7 @@ const en = {
   },
 
   intro: {
+    ariaLabel: "WEBAO introduction",
     captionBrand: "WEBAO",
     captionLeft: "WEBAO · WEBAO.CA",
     captionRight: "STUDIO · MONTRÉAL",
@@ -114,6 +120,15 @@ const en = {
       },
     },
     marquee: "Électriciens <i></i> Plombiers <i></i> Couvreurs <i></i> Paysagistes <i></i> Restaurants <i></i> Cliniques",
+    proof: {
+      eyebrow: "The catalog in motion",
+      heading: "Forty-one directions. Zero templates.",
+      sub: "Every frame is the real homepage of a demo site. Let it roll, click to explore.",
+      browse: "Browse all 41 demos →",
+      prev: "Previous",
+      next: "Next",
+      imgAlt: "{name} homepage",
+    },
     process: {
       eyebrow: "How it works · Three steps, and no meetings that should have been emails",
       title: "From idea to <span>live</span>, usually in about a week.",
@@ -241,6 +256,26 @@ const en = {
           q: "How fast is “fast”?",
           a: "Fast enough that nobody waits. The sites are static (no heavy CMS or page builder), images are optimized, and everything is served from a global CDN, so pages load quickly even on older phones. We check every page on real devices before launch, and we don’t quote speed numbers we can’t stand behind.",
         },
+        {
+          q: "How long until my site is online?",
+          a: "Most sites launch in 2 to 3 weeks from the day you send us your photos, logo, and basic info — simple one-pagers can go faster. We give you an honest timeline before you pay anything, and if we’re ever running behind, you’ll be the first to know.",
+        },
+        {
+          q: "What’s actually included in the $149/mo?",
+          a: "Everything a small-business site needs: a custom 3-to-5-page site, your domain, hosting, SSL, mobile-friendly design, a contact or quote form, basic SEO, stats, security and maintenance — plus small content updates whenever you need them. No setup fee, no per-change billing.",
+        },
+        {
+          q: "Will my site show up on Google?",
+          a: "Yes — that’s the point. Every site ships with the SEO basics done properly: clean titles and descriptions, a sitemap, fast load times, and mobile-friendly pages. We also help set up your Google Business Profile, which is how most local customers find trades. Nobody can promise position #1, and be wary of anyone who does.",
+        },
+        {
+          q: "Can I pause or change things later?",
+          a: "Yes. It’s month-to-month, so you can pause or cancel anytime. Need an extra page or a new feature down the road? We’ll give you a clear quote before doing any work — nothing gets added to your bill without your approval.",
+        },
+        {
+          q: "Do you only build sites for trades?",
+          a: "Trades are our home turf — electricians, plumbers, HVAC, landscapers — but we build sites for any local service business: restaurants, clinics, garages, cleaning services, and more. If you serve customers in person, we can probably help. Just ask.",
+        },
       ],
     },
     finalCta: {
@@ -259,148 +294,547 @@ const en = {
   },
 
   pricing: {
+    plansTitle: "Plans",
     hero: {
-      eyebrow: "Pricing · One plan, nothing to decode",
-      title: "One plan.<br /><span>Everything</span> included.",
-      desc: "We kept it simple on purpose. Most businesses need the same thing: a credible, findable site that stays up to date. One plan covers that for $149 a month, with no setup fee.",
-      cta: "Start your site →",
-      emailNote: "Questions first? Email contact@webao.ca",
-      card: {
-        label: "THE WEBAO PLAN",
-        price: "$149",
-        suffix: "CAD / month<br />+ applicable taxes",
-        desc: "For most trades, shops, restaurants, and local services. 3–5 pages, designed around your business.",
-        cta: "Get started →",
-        note: "No setup fee · No long-term contract",
-        trust: ["◐ SSL", "◑ Backups", "◎ CDN"],
+      eyebrow: "Pricing",
+      title: "Pricing",
+      strip: [
+        { note: 1, text: "All prices are in CAD, taxes extra" },
+        { note: 2, text: "Initial term: 6 months, then month-to-month. Cancellation: 30 days' notice" },
+        { note: 3, text: "Billed monthly, or annually in advance (2 months free)" },
+        { text: "No setup fee", note: 0 },
+      ],
+    },
+    plans: {
+      launch: {
+        name: "Launch",
+        monthly: "C$89/mo",
+        annual: "(C$890/yr)",
+        priceNote: 4,
+        badge: "",
+        desc: "Designed for solo operators who mainly need a professional online presence and a way for customers to contact them.",
+        inherits: "",
+        features: [
+          "Custom 1-page website",
+          "Mobile-responsive design",
+          "1 standard custom domain included",
+          "SSL",
+          "Hosting",
+          "Maintenance",
+          "Security",
+          "Contact form",
+          "Click-to-call",
+          "Basic FAQ section",
+          "SEO Foundations",
+          "Up to 1 hour of routine content updates per month",
+          "Email support, 3 to 5 business day response",
+        ],
+      },
+      grow: {
+        name: "Grow",
+        monthly: "C$149/mo",
+        annual: "(C$1,490/yr)",
+        priceNote: 9,
+        badge: "Most Popular",
+        desc: "Designed for established local businesses that need a website to actively generate leads.",
+        inherits: "Everything in Launch, plus:",
+        features: [
+          "3 to 5 page custom website",
+          "Quote / estimate form",
+          "Quote Photo Upload",
+          "SEO On-Page + GBP Setup",
+          "Google Business Profile setup and optimization (one-time)",
+          "Google Reviews widget",
+          "Click-to-text sticky bar",
+          "Extended FAQ",
+          "Admin page with basic dashboard",
+          "Up to 3 hours of routine website updates per month",
+          "Priority support, 2 business day response",
+        ],
+      },
+      scale: {
+        name: "Scale",
+        monthly: "C$349/mo",
+        annual: "(C$3,490/yr)",
+        priceNote: 12,
+        badge: "",
+        desc: "Designed for growing businesses that want their website to become part of their customer-acquisition system.",
+        inherits: "Everything in Grow, plus:",
+        features: [
+          "Up to 10 pages, including service-area pages",
+          "Blog-ready structure",
+          "SEO Expanded On-Page + Service-Area",
+          "Online booking / scheduling",
+          "Review Generation Engine (500 SMS credits per month included)",
+          "Monthly Growth Report",
+          "Unlimited routine content updates",
+          "Same-Day Priority Support, same business day response (target)",
+        ],
+      },
+      noteAria: "See note {n} in the terms",
+    },
+    bundles: {
+      eyebrow: "Bundles",
+      title: "Bundles",
+      lead: {
+        name: "Lead Pack",
+        price: "C$239/mo",
+        priceNote: 15,
+        includesLabel: "Includes:",
+        includes: ["Local SEO Management", "Review Generation Engine", "Trained AI Chat Assistant"],
+        individualLabel: "Individual value:",
+        individual: "C$159 + C$99 + C$99 = C$357/mo",
+        bundleLabel: "Bundle:",
+        bundlePrice: "C$239/mo",
+        availLabel: "Available on:",
+        avail: "Launch, Grow",
+        availNote: 17,
+      },
+      visibility: {
+        name: "Visibility Pack",
+        price: "C$99/mo",
+        priceNote: 16,
+        includesLabel: "Includes:",
+        includes: ["Review Generation Engine", "Monthly Growth Report"],
+        individualLabel: "Individual value:",
+        individual: "C$99 + C$29 = C$128/mo",
+        bundleLabel: "Bundle:",
+        bundlePrice: "C$99/mo",
+        availLabel: "Available on:",
+        avail: "Launch, Grow",
+        availNote: 17,
+      },
+      prev: "Previous bundle",
+      next: "Next bundle",
+      ofLabel: "of",
+    },
+    popularStrip: {
+      label: "Popular add-on:",
+      name: "Local SEO Management",
+      price: "C$159/mo",
+      detail: "Ongoing Local SEO Management: Add-on on every tier",
+      note: 14,
+    },
+    addons: {
+      eyebrow: "Add-ons",
+      title: "Add-ons",
+      popularTag: "Popular",
+      items: {
+        localseo: { name: "Local SEO / Google Business Profile Management", price: "C$159/mo", note: 18, short: "For businesses that want ongoing local search optimization rather than just initial setup." },
+        review: { name: "Review Generation Engine", price: "C$99/mo", note: 19, short: "Automates the process of getting more customer reviews." },
+        aichat: { name: "Trained AI Chat Assistant", price: "C$99/mo", note: 20, short: "An AI assistant trained specifically around the business." },
+        booking: { name: "Online Booking / Scheduling", price: "C$49/mo", note: 21, short: "For businesses that take appointments." },
+        blog: { name: "Blog & Updates", price: "C$34/mo", note: 22, short: "" },
+        bilingual: { name: "Bilingual EN/FR", price: "C$34/mo", note: 23, short: "" },
+        ecommerce: { name: "E-commerce Lite / Payment Links", price: "C$59/mo", note: 24, short: "For simple online payments without a full online store." },
+        email: { name: "Email Marketing", price: "C$29/mo", note: 0, short: "" },
+        report: { name: "Monthly Growth Report", price: "C$29/mo", note: 11, short: "" },
+        extrapage: { name: "Extra Page", price: "C$44 one-time", note: 25, short: "" },
+        priority: { name: "Priority Support + 1 Strategy Call per month", price: "C$59/mo", note: 26, short: "" },
+        admin: { name: "Advanced Admin Panel", price: "C$39/mo", note: 27, short: "" },
+        quotephoto: { name: "Quote Photo Upload (Launch only)", price: "C$9/mo", note: 28, short: "" },
       },
     },
     compare: {
-      title: "What you get, and what you never have to think about",
-      subtitle: "Everything a local business site actually needs. Nothing you won’t use.",
-      includedLabel: "INCLUDED IN YOUR $149",
-      included: [
-        {
-          title: "Custom 3–5 page design",
-          desc: "Home plus 2–4 pages (Services, About, Contact, and so on). Designed around your trade, not a template.",
-        },
-        {
-          title: "Your own domain",
-          desc: "Registered for your business and yours to keep. We handle configuration, SSL, and renewals while you’re subscribed. Email forwarding included.",
-        },
-        {
-          title: "Hosting, SSL, CDN",
-          desc: "Served from a global CDN, so the site loads quickly for customers anywhere in Canada.",
-        },
-        {
-          title: "Mobile, SEO basics, analytics",
-          desc: "Mobile-first design, clean markup, sitemap, and analytics. We can also help set up your Google Business Profile. Fundamentals, not ranking promises.",
-        },
-        {
-          title: "Contact / quote form",
-          desc: "Messages arrive in your inbox with basic spam protection. No third-party widget that breaks.",
-        },
-        {
-          title: "Backups & security",
-          desc: "Backups, updates, and monitoring are part of the service. If something breaks, we fix it.",
-        },
-        {
-          title: "Small updates included",
-          desc: "Hours, photos, prices, promos: send an email and we make the change. No CMS to learn, no per-change billing.",
-        },
-        {
-          title: "Human support",
-          desc: "You talk directly with the person doing the work, by email, Monday to Friday (Eastern Time).",
-        },
-      ],
-      notIncludedLabel: "NOT IN THE PLAN · QUOTED IF YOU NEED IT",
-      notIncluded: [
-        {
-          title: "Extra pages or languages",
-          desc: "More pages or a second language: possible, quoted case by case, with a clear price before any work starts.",
-        },
-        {
-          title: "E-commerce / booking systems",
-          desc: "Online stores and complex booking aren’t part of the base plan. If you need one, we’ll talk options and quote it separately.",
-        },
-        {
-          title: "Full brand identity",
-          desc: "A wordmark and color palette that fit your site are included. A complete identity (logo suite, brand guidelines) is not.",
-        },
-        {
-          title: "Copywriting from scratch",
-          desc: "We edit and shape the text you send. Writing all of your copy from scratch is a separate service, quoted upfront.",
-        },
-        {
-          title: "Ads / social media",
-          desc: "We don’t run or sell ads. We focus on the organic fundamentals: your site and your Google Business Profile.",
-        },
-      ],
-      calloutTitle: "Most local businesses don’t need the extras.",
-      calloutDesc:
-        "The plan is built for electricians, plumbers, landscapers, restaurants, and clinics. If yours needs more, we’ll say so upfront and quote it clearly.",
-      calloutCta: "Ask for a tailored quote →",
-      foot1: "YOUR SITE, YOUR DOMAIN · If you ever leave, we help with the handoff.",
-      foot2: "→ No page-builder account to untangle, no hosting you have to migrate alone.",
+      eyebrow: "Comparison",
+      title: "Compare plans",
+      legendIncluded: "Included",
+      legendDash: "Not in this tier",
+      legendAddon: "Available as an add-on",
+      colFeature: "Feature",
+      cellIncluded: "Included",
+      cellNotInTier: "Not in this tier",
+      cellAddon: "Available as an add-on",
+      cellAddonShort: "Add-on",
+      compatTitle: "Add-on compatibility",
+      compatLegend: "I = included, A = add-on available, N/A = not available",
+      compatRows: {
+        localseo: "Local SEO Management",
+        review: "Review Generation Engine",
+        aichat: "Trained AI Chat",
+        booking: "Online Booking",
+        blog: "Blog & Updates",
+        bilingual: "Bilingual EN/FR",
+        ecommerce: "E-commerce Lite",
+        email: "Email Marketing",
+        report: "Monthly Growth Report",
+        extrapage: "Extra Page",
+        priority: "Priority Support + Strategy Call",
+        admin: "Advanced Admin Panel",
+        quotephoto: "Quote Photo Upload",
+        leadpack: "Lead Pack",
+        vispack: "Visibility Pack",
+      },
     },
-    timeline: {
-      eyebrow: "The typical timeline",
-      title: "From “we need a site”<br /><span>to “it’s live”.</span>",
-      desc: "You send the basics. We do the work. One round of feedback. Then we launch and keep it maintained.",
-      steps: [
-        { title: "Day 0 · You send the basics", desc: "Photos, services, area, logo (if you have one). A 15-minute call or the contact form." },
-        { title: "Day 2 · Private preview", desc: "A real URL on your phone. Click everything. Tell us what feels off." },
-        { title: "Day 4 · Revisions", desc: "We polish typography, copy, photos, and SEO basics in one focused round." },
-        { title: "Day 5–7 · Launch", desc: "Domain, hosting, SSL, analytics. We flip the switch and send you the “it’s live” message." },
-      ],
-      note: "TYPICAL, NOT GUARANTEED · THE CLOCK STARTS WHEN WE HAVE YOUR CONTENT, AND FEEDBACK SPEED MOVES THE DATE.",
+    termsCta: {
+      title: "Terms and details",
+      label: "Read the terms and details →",
     },
-    quote: {
-      invoiceTitle: "YOUR BILL · EVERY MONTH",
-      plan: "The WEBAO plan",
-      allIn: "ALL-IN",
-      lines: [
-        { label: "Design, domain, hosting, updates, support", value: "$149.00" },
-        { label: "Setup fee", value: "$0.00" },
-        { label: "Hosting & SSL add-ons", value: "$0.00" },
-        { label: "Small update charges", value: "$0.00" },
-      ],
-      totalLabel: "Total",
-      totalValue: "$149 + taxes",
-      note: "Billed monthly. Anything beyond the plan is quoted and approved by you first.",
-      eyebrow: "The whole bill, every month",
-      title: "Predictable.<br />Boring (in a good way).",
-      desc: "No intro pricing that doubles later, no itemized surprises. You know the price before we start, and it stays that price unless your needs change and you approve a quote.",
-      checks: ["→ Monthly billing, no long-term contract", "→ Your domain belongs to your business", "→ If you leave, we help with the handoff"],
-      cta: "Start at $149/mo →",
+  },
+
+  terms: {
+    hero: {
+      title: "Terms and details",
     },
-    faq: {
-      title: "Common questions about pricing",
-      items: [
-        {
-          q: "What if I need a 6th page later?",
-          a: "Tell us what you need and we’ll give you a clear price before doing the work. If you want it maintained with everything else, we’ll fold it into your plan.",
-        },
-        {
-          q: "Do you charge for photos or copy tweaks?",
-          a: "Small updates (swap a photo, fix your hours, add a service) are included. Bigger projects like a full copy rewrite or brand-new pages are quoted upfront, and you decide.",
-        },
-        {
-          q: "What about email (info@…)?",
-          a: "We set up forwarding, so info@yourdomain.ca arrives in the inbox you already use. That’s different from full mailbox hosting: if you want mailboxes with webmail and calendars, that comes from an email provider like Google or Microsoft, paid to them directly. We’ll help connect it.",
-        },
-        {
-          q: "Can I pay yearly?",
-          a: "Billing is monthly for now. If annual billing matters to you, mention it when we talk and we’ll see what we can do.",
-        },
-      ],
+    toc: {
+      title: "On this page",
+      openLabel: "Jump to a section",
     },
-    ctaBand: {
-      eyebrow: "READY WHEN YOU ARE",
-      title: "Start at $149. <span>Everything included.</span>",
-      primary: "Start your site →",
-      secondary: "See demos first",
+    search: {
+      label: "Search the terms",
+      placeholder: "Search terms… ( / )",
+      clear: "Clear search",
+      prev: "Previous match",
+      next: "Next match",
+      noResults: "No matches. Try another word.",
+      results: "{n} match",
+      resultsPlural: "{n} matches",
+      announced: "{n} matches found",
+      announcedNone: "No matches found",
     },
+    sections: {
+      billing: "Billing & contract",
+      plans: "Plans",
+      details: "Features & services",
+      bundles: "Bundles",
+      addons: "Add-ons",
+    },
+    noteLabel: "Note",
+    notes: {
+      "1": {
+        title: "Currency and taxes",
+        blocks: [
+          { text: "All prices are in Canadian dollars (CAD). GST/QST (14.975% in Quebec) and other applicable taxes are extra." },
+        ],
+      },
+      "2": {
+        title: "Contract term and cancellation",
+        blocks: [
+          { label: "Initial term", text: "6 months." },
+          { label: "After the initial term", text: "month-to-month." },
+          { label: "Cancellation", text: "30 days' notice. Notice may be given during the initial term; cancellation takes effect no earlier than the end of the initial term." },
+          { label: "Annual prepay plans", text: "have a 12-month initial term, then continue month-to-month." },
+          { label: "Add-ons", text: "follow the same terms. Add-ons require an active base plan and end when the base plan ends." },
+          { label: "Extra Page", text: "is a one-time charge and is not subject to a term." },
+          { text: "No setup fee." },
+        ],
+      },
+      "3": {
+        title: "Billing options and annual vs monthly pricing",
+        blocks: [
+          { text: "Billed monthly, or annually in advance with 2 months free (annual price = 10 months)." },
+          { label: "Comparison over 12 months", text: "" },
+          { label: "Launch", text: "C$89/mo x 12 = C$1,068 billed monthly, or C$890 billed annually (about C$74.17/mo). Annual saves C$178." },
+          { label: "Grow", text: "C$149/mo x 12 = C$1,788 billed monthly, or C$1,490 billed annually (about C$124.17/mo). Annual saves C$298." },
+          { label: "Scale", text: "C$349/mo x 12 = C$4,188 billed monthly, or C$3,490 billed annually (about C$290.83/mo). Annual saves C$698." },
+        ],
+      },
+      "4": {
+        title: "Launch",
+        blocks: [
+          { text: "Designed for solo operators who mainly need a professional online presence and a way for customers to contact them." },
+          { text: "Contact form submissions arrive by email." },
+          { label: "Positioning", text: "Get online and look professional." },
+        ],
+      },
+      "5": {
+        title: "FAQ levels",
+        blocks: [
+          { label: "Basic FAQ section (Launch)", text: "a short FAQ section on the page." },
+          { label: "Extended FAQ (Grow and Scale)", text: "a larger, organized FAQ section with more questions and categories than the Basic FAQ." },
+        ],
+      },
+      "6": {
+        title: "SEO levels",
+        blocks: [
+          { label: "SEO Foundations (Launch)", text: "unique title and meta description, Open Graph tags, sitemap, Google and Bing indexing submission, LocalBusiness structured data, mobile speed baseline." },
+          { label: "SEO On-Page + GBP Setup (Grow)", text: "everything in Foundations, plus keyword-targeted copy for your main service and city on each page, internal linking, and a one-time Google Business Profile setup (if not existing) and optimization (categories, services, hours, photos, description)." },
+          { label: "SEO Expanded On-Page + Service-Area (Scale)", text: "everything in Grow, applied to up to 10 pages, with dedicated service-area pages and image / alt-text optimization." },
+          { label: "Local SEO Management (add-on, all tiers)", text: "ongoing monthly work: GBP posts, citation building and cleanup, review monitoring, local visibility tracking and adjustments." },
+          { text: "Dividing line: one-time setup (included in Grow and Scale) versus ongoing monthly work (add-on)." },
+        ],
+      },
+      "7": {
+        title: "Routine updates and hours",
+        blocks: [
+          { text: "Routine work includes changing hours, information, location and images, and moving or editing existing sections." },
+          { text: "Routine work does not include redesigns, new features, technical development and new pages. New pages are billed as Extra Pages (add-on 10)." },
+          { label: "Included amounts", text: "Launch up to 1 hour per month, Grow up to 3 hours per month, Scale unlimited routine updates, handled in order received. Reasonable-use policy applies." },
+          { text: "Time is logged and rounded to the nearest 15 minutes. Unused hours do not roll over." },
+        ],
+      },
+      "8": {
+        title: "Support reply times",
+        blocks: [
+          { label: "Support reply times", text: "Launch 3 to 5 business days, Grow 2 business days, Scale same business day (target)." },
+          { text: "Same-Day Priority Support is the Scale support level." },
+        ],
+      },
+      "9": {
+        title: "Grow",
+        blocks: [
+          { text: "Designed for established local businesses that need a website to actively generate leads." },
+          { label: "Positioning", text: "Turn your website into a lead-generation tool." },
+          { text: "This remains the core webao offer and the C$149 anchor." },
+        ],
+      },
+      "10": {
+        title: "Google Business Profile setup",
+        blocks: [
+          { text: "One-time: setup (if not existing) and optimization (categories, services, hours, photos, description)." },
+          { text: "Ongoing management is the Local SEO Management add-on (add-on 1)." },
+        ],
+      },
+      "11": {
+        title: "Analytics layers",
+        blocks: [
+          {
+            listLabel: "Includes:",
+            items: [
+              "Website visits",
+              "Traffic sources",
+              "Contact and quote submissions",
+              "Calls and clicks where measurable",
+              "Booking activity",
+              "Review activity",
+              "Month-over-month changes",
+            ],
+          },
+          { label: "Basic dashboard (Grow, Scale)", text: "live view of what happened: total visits, form and quote submissions (if applicable), call and text clicks, last 30 days." },
+          { label: "Monthly Growth Report (included in Scale, add-on for others)", text: "delivered monthly, shows what changed: traffic sources, month-over-month changes, bookings, review activity." },
+          { label: "Advanced Admin Panel (add-on)", text: "live drill-down on why: conversion rates by source and page, views per page, lead funnel, device and location breakdown, performance insights, exports. Aggregate analytics." },
+        ],
+      },
+      "12": {
+        title: "Scale",
+        blocks: [
+          { text: "Designed for growing businesses that want their website to become part of their customer-acquisition system." },
+          { label: "Positioning", text: "A managed website and lead-generation system for growing businesses." },
+        ],
+      },
+      "13": {
+        title: "Review Generation Engine SMS terms",
+        blocks: [
+          { label: "SMS credits", text: "500 SMS credits per month included. Additional usage is billed at C$0.05 per SMS, monthly." },
+          { text: "Email requests start immediately. SMS goes live once the client's sending number is verified with the carrier." },
+        ],
+      },
+      "14": {
+        title: "Local SEO as an add-on",
+        blocks: [
+          { text: "Ongoing Local SEO Management is available as an add-on on every tier (add-on 1)." },
+        ],
+      },
+      "15": {
+        title: "Lead Pack",
+        blocks: [
+          { text: "Combines the three strongest growth-focused services: Local SEO Management, Review Generation Engine and Trained AI Chat Assistant." },
+          { text: "A strong upsell for Launch and Grow customers who want webao to actively handle lead generation." },
+        ],
+      },
+      "16": {
+        title: "Visibility Pack",
+        blocks: [
+          { text: "For budget-conscious businesses." },
+          { text: "An easy first step into recurring marketing services." },
+        ],
+      },
+      "17": {
+        title: "Bundle eligibility",
+        blocks: [
+          { text: "Lead Pack and Visibility Pack are available on Launch and Grow. Scale already includes the Review Generation Engine and the Monthly Growth Report, so Scale clients add Local SEO Management and Trained AI Chat individually." },
+        ],
+      },
+      "18": {
+        title: "Local SEO / Google Business Profile Management",
+        blocks: [
+          {
+            listLabel: "Includes:",
+            items: [
+              "Google Business Profile optimization",
+              "Regular GBP posts (2 per month)",
+              "Citation management",
+              "Local SEO maintenance",
+              "Local visibility improvements",
+              "Review monitoring",
+            ],
+          },
+          { text: "For businesses that want ongoing local search optimization rather than just initial setup." },
+          { text: "Important distinction: Grow includes GBP setup, while this add-on provides ongoing management." },
+        ],
+      },
+      "19": {
+        title: "Review Generation Engine",
+        blocks: [
+          {
+            listLabel: "Includes:",
+            items: [
+              "Automated post-job review requests",
+              "SMS and email requests",
+              "Review link workflow",
+              "On-site review widget",
+              "500 SMS credits/month included; additional usage billed at C$0.05/SMS [13]",
+            ],
+          },
+          { text: "Automates the process of getting more customer reviews." },
+        ],
+      },
+      "20": {
+        title: "Trained AI Chat Assistant",
+        blocks: [
+          {
+            listLabel: "Includes:",
+            items: [
+              "Business-specific FAQs",
+              "25+ common questions and answers",
+              "Services and basic business information",
+              "Lead qualification and capture",
+              "Booking integration where supported",
+            ],
+          },
+          { text: "An AI assistant trained specifically around the business." },
+          { text: "This is the paid, trained, business-specific version. Grow and Scale include an Extended FAQ (see 5)." },
+        ],
+      },
+      "21": {
+        title: "Online Booking / Scheduling",
+        blocks: [
+          {
+            listLabel: "Includes:",
+            items: ["Online booking", "Scheduling", "Availability management", "Booking integration"],
+          },
+          { text: "For businesses that take appointments." },
+        ],
+      },
+      "22": {
+        title: "Blog & Updates",
+        blocks: [
+          {
+            listLabel: "Includes:",
+            items: [
+              "Create and post your own blog posts and updates directly to a page on the website",
+              "Basic on-page optimization",
+            ],
+          },
+          { text: "On Launch, the blog page counts as 1 extra page (add-on 10)." },
+        ],
+      },
+      "23": {
+        title: "Bilingual EN/FR",
+        blocks: [
+          {
+            listLabel: "Includes:",
+            items: [
+              "English version",
+              "French version",
+              "Localization of website content",
+              "Language and navigation support",
+            ],
+          },
+          { label: "Each additional language", text: "C$9/mo." },
+          { text: "Each language version counts as one page set, not extra pages." },
+        ],
+      },
+      "24": {
+        title: "E-commerce Lite / Payment Links",
+        blocks: [
+          {
+            listLabel: "Includes:",
+            items: [
+              "Deposits",
+              "Payment links",
+              "Service payments",
+              "Coupon codes",
+              "Simple Stripe-powered transactions",
+            ],
+          },
+          { text: "For simple online payments without a full online store." },
+        ],
+      },
+      "25": {
+        title: "Extra Page",
+        blocks: [
+          {
+            listLabel: "Examples:",
+            items: ["New service page", "New service-area page", "FAQ", "Gallery", "About / team page"],
+          },
+          { text: "For additional content outside the plan's page allowance. One-time charge. On Scale it applies beyond the 10 included pages." },
+        ],
+      },
+      "26": {
+        title: "Priority Support + 1 Strategy Call per month",
+        blocks: [
+          {
+            listLabel: "Includes:",
+            items: [
+              "Faster support",
+              "Scheduled strategy consultation",
+              "Website and growth recommendations",
+            ],
+          },
+          { text: "One scheduled strategy call per month." },
+          { text: "On Scale, support is already Same-Day Priority Support, so this adds the strategy call." },
+        ],
+      },
+      "27": {
+        title: "Advanced Admin Panel",
+        blocks: [
+          {
+            listLabel: "Includes:",
+            items: [
+              "Deeper analytics",
+              "Conversion rates by source and page",
+              "Views per page",
+              "Lead funnel",
+              "Device and location breakdown",
+              "Performance insights",
+              "Data exports",
+            ],
+          },
+          { text: "Requires Grow or Scale (needs the basic dashboard). Definitions are in note 11." },
+        ],
+      },
+      "28": {
+        title: "Quote Photo Upload",
+        blocks: [
+          {
+            listLabel: "Includes:",
+            items: [
+              "Photo upload field on the contact form",
+              "Up to 5 photos per submission",
+              "Photos delivered with each submission",
+              "Photos stored for 12 months",
+            ],
+          },
+          { text: "Lets customers attach photos when they submit the quote form. Included as a standard quote-form feature on Grow and Scale." },
+          { text: "Available as a C$9/mo add-on on Launch only, where the upload is added to the contact form." },
+          { label: "Limits", text: "up to 5 photos per submission, stored for 12 months." },
+        ],
+      },
+      "29": {
+        title: "Domain",
+        blocks: [{ text: "1 standard custom domain is included. Domain remains registered to the client." }],
+      },
+    },
+    // Add-ons without a note number in the plan are rendered unnumbered,
+    // in plan order, at the end of their section.
+    unnumbered: [
+      {
+        section: "addons",
+        title: "Email Marketing",
+        blocks: [
+          {
+            listLabel: "Includes:",
+            items: [
+              "Up to 5,000 sends per month",
+              "Basic campaigns",
+              "Promotional and customer emails",
+              "Simple newsletter functionality",
+            ],
+          },
+        ],
+      },
+    ],
   },
 
   contact: {
@@ -561,6 +995,8 @@ const en = {
   },
 
   admin: {
+    ariaAppLabel: "WEBAO admin",
+    ariaTabsLabel: "Admin",
     meta: {
       title: "Admin · WEBAO",
       description: "WEBAO site administration: traffic statistics, form submissions, and settings.",
