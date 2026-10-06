@@ -182,7 +182,7 @@ const names = bundles.map((bd) => tb[bd.id].name);
     position: absolute;
     top: 44%;
     left: 50%;
-    width: min(480px, 84vw);
+    width: min(560px, 88vw);
     translate: -50% -50%;
     transform-style: preserve-3d;
     /* Short viewports (landscape phones): shrink cards to fit instead of
@@ -441,7 +441,9 @@ const names = bundles.map((bd) => tb[bd.id].name);
       var r = scroll.getBoundingClientRect();
       var total = scroll.offsetHeight - window.innerHeight;
       if (total <= 0) return 0;
-      return clamp01(-r.top / total);
+      // Reach full progress at 70% of scroll distance, leaving 30% as
+      // trailing breathing room after the last card settles into view.
+      return clamp01((-r.top / total) / 0.7);
     }
     function segIndex(p) {
       return Math.max(0, Math.min(cardCount - 1, Math.round(p * segCount)));
@@ -449,8 +451,8 @@ const names = bundles.map((bd) => tb[bd.id].name);
     function radius() {
       var compact = window.innerWidth < 820;
       return compact
-        ? Math.min(300, window.innerWidth * 0.36)
-        : Math.min(560, window.innerWidth * 0.4);
+        ? Math.min(171, window.innerWidth * 0.206)
+        : Math.min(320, window.innerWidth * 0.229);
     }
 
     function render() {
