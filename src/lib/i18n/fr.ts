@@ -24,9 +24,9 @@ const fr = {
         "Parlez-nous de votre entreprise et on vous répond avec deux directions de démo et un échéancier honnête. Écrivez à contact@webao.ca ou utilisez le formulaire.",
     },
     demos: {
-      title: "Exemples de sites web · 30 démos pour entreprises locales | WEBAO",
+      title: "Exemples de sites web · 41 démos pour entreprises locales | WEBAO",
       description:
-        "Parcourez 30 directions de design pour des entreprises locales fictives. Filtrez par métier, ton ou ville. Chaque démo est un design différent, pas le même modèle en 30 couleurs.",
+        "Parcourez 41 directions de design pour des entreprises locales fictives. Filtrez par métier, ton ou ville. Chaque démo est un design différent, pas le même modèle en 41 couleurs.",
     },
     notfound: {
       title: "Page introuvable · WEBAO",
@@ -119,7 +119,7 @@ const fr = {
         included: "Inclus chaque mois",
         sendEmail: "Il suffit d’envoyer un courriel",
         captionLeft: "DÉMO 01 · ÉLECTRICIEN",
-        captionRight: "Une de 30 directions de design →",
+        captionRight: "Une de 41 directions de design →",
       },
     },
     marquee: "Électriciens <i></i> Plombiers <i></i> Couvreurs <i></i> Paysagistes <i></i> Restaurants <i></i> Cliniques",
@@ -193,7 +193,7 @@ const fr = {
       },
       demos: {
         top: "03 · DÉMOS",
-        title: "30 directions de design,<br />toutes fictives.",
+        title: "41 directions de design,<br />toutes fictives.",
         desc: "Parcourez le catalogue par métier : électricien, restaurant, clinique. Chaque démo est un concept à direction artistique pour une entreprise fictive, pour voir l’étendue avant de choisir.",
         cta: "Parcourir le catalogue de démos",
         mini: ["Filtrable", "·", "Recherchable", "·", "41 styles"],
@@ -981,7 +981,7 @@ const fr = {
     labels: [
       { t: "Tarifs", s: "→ 149 $/mois · tout inclus" },
       { t: "Contact", s: "→ contact@webao.ca" },
-      { t: "Démos", s: "→ 30 directions artistiques" },
+      { t: "Démos", s: "→ 41 directions artistiques" },
     ],
   },
 
