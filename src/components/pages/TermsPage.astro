@@ -1,0 +1,877 @@
+---
+import { termSections } from "../../lib/pricing";
+import { useTranslations, type Locale } from "../../lib/i18n";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props as Props;
+const t = useTranslations(locale);
+const terms = t.terms;
+
+// Accent-insensitive normalization for search: "etape" matches "étape".
+// NOTE: norm/esc/foldPattern exist twice in this file — here (frontmatter,
+// build time, to precompute data-search-norm) and in the <script> below
+// (runtime, for live matching/highlighting). They are intentionally duplicated:
+// the frontmatter runs in Node at build, the script runs in the browser, and
+// they must stay byte-identical so build-time and runtime matching agree.
+function norm(s: string) {
+  return s
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
+
+interface PreparedNote {
+  n: number;
+  title: string;
+  blocks: any[];
+  searchText: string;
+  searchNorm: string;
+}
+
+function blockText(b: any): string {
+  if ("listLabel" in b) return b.listLabel + " " + b.items.join(" ");
+  if ("label" in b) return b.label + " " + (b.text || "");
+  return b.text || "";
+}
+
+// `unnumbered` is optional in the i18n type (only Email Marketing uses it —
+// the plan defines no note number for that add-on), hence the cast.
+const unnumbered = ((terms as any).unnumbered || []) as { section: string; title: string; blocks: any[] }[];
+const unnumberedBySection: Record<string, typeof unnumbered> = {};
+for (const entry of unnumbered) {
+  const arr = unnumberedBySection[entry.section] || (unnumberedBySection[entry.section] = []);
+  const full = entry.title + " " + entry.blocks.map(blockText).join(" ");
+  arr.push({ ...entry, searchNorm: norm(full) } as any);
+}
+
+const sections = termSections.map((section) => {
+  const notes: PreparedNote[] = section.notes.map((n) => {
+    const note = (terms.notes as Record<string, any>)[String(n)];
+    const full = note.title + " " + note.blocks.map(blockText).join(" ");
+    return { n, title: note.title, blocks: note.blocks, searchText: full, searchNorm: norm(full) };
+  });
+  return {
+    id: section.id,
+    title: (terms.sections as Record<string, string>)[section.id],
+    notes,
+  };
+});
+
+const search = terms.search;
+---
+
+<div class="terms-hero grain">
+  <div class="shell terms-hero-inner" data-reveal>
+    <h1 class="display terms-title">{terms.hero.title}</h1>
+  </div>
+</div>
+
+<!-- Search -->
+<div class="search-bar" data-search-bar>
+  <div class="shell search-bar-inner">
+    <div class="search-field">
+      <svg viewBox="0 0 16 16" aria-hidden="true" class="search-icon">
+        <circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M10.5 10.5 14 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      <label class="visually-hidden" for="terms-search">{search.label}</label>
+      <input
+        id="terms-search"
+        type="search"
+        autocomplete="off"
+        placeholder={search.placeholder}
+        data-search-input
+        aria-describedby="terms-search-status"
+      />
+      <button type="button" class="search-clear" data-search-clear aria-label={search.clear} hidden>
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.6 4.6l6.8 6.8M11.4 4.6l-6.8 6.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="search-meta">
+      <span class="search-count mono" data-search-count aria-hidden="true"></span>
+      <button type="button" class="search-nav" data-search-prev aria-label={search.prev} disabled>
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button type="button" class="search-nav" data-search-next aria-label={search.next} disabled>
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+    <p class="visually-hidden" role="status" aria-live="polite" id="terms-search-status" data-search-status></p>
+  </div>
+</div>
+
+<div class="shell terms-layout">
+  <!-- Desktop sticky TOC -->
+  <nav class="toc" aria-label={terms.toc.title} data-toc>
+    <p class="toc-title">{terms.toc.title}</p>
+    <ol>
+      {sections.map((section) => (
+        <li><a href={`#sec-${section.id}`} data-toc-link={section.id}>{section.title}</a></li>
+      ))}
+    </ol>
+  </nav>
+
+  <div class="terms-main">
+    <!-- Mobile compact TOC -->
+    <details class="toc-compact" data-toc-compact>
+      <summary>{terms.toc.openLabel}</summary>
+      <nav aria-label={terms.toc.title}>
+        <ol>
+          {sections.map((section) => (
+            <li><a href={`#sec-${section.id}`}>{section.title}</a></li>
+          ))}
+        </ol>
+      </nav>
+    </details>
+
+    <div class="terms-empty" data-search-empty hidden>
+      <p>{search.noResults}</p>
+    </div>
+
+    {sections.map((section) => (
+      <section class="term-section" id={`sec-${section.id}`} aria-labelledby={`sec-${section.id}-h`} data-term-section={section.id}>
+        <h2 class="term-section-title" id={`sec-${section.id}-h`}>{section.title}</h2>
+        {section.notes.map((note) => (
+          <article
+            class="term-note"
+            id={`note-${note.n}`}
+            data-note={note.n}
+            data-search-norm={note.searchNorm}
+            aria-labelledby={`note-${note.n}-h`}
+          >
+            <header class="tn-head">
+              <span class="tn-num" aria-hidden="true">{note.n}</span>
+              <h3 id={`note-${note.n}-h`}>
+                <span class="visually-hidden">{terms.noteLabel} {note.n}: </span>
+                <span data-search-text={note.title}>{note.title}</span>
+              </h3>
+            </header>
+            <div class="tn-body">
+              {note.blocks.map((b: any) => {
+                if ("listLabel" in b) {
+                  return (
+                    <div class="tn-list">
+                      <p class="tn-list-label" data-search-text={b.listLabel}>{b.listLabel}</p>
+                      <ul>
+                        {b.items.map((it: string) => (
+                          <li data-search-text={it}>{it}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  );
+                }
+                if ("label" in b) {
+                  return (
+                    <p class="tn-def" data-label={b.label} data-value={b.text}>
+                      <strong>{b.label}{b.text !== "" ? ":" : ""}</strong>
+                      {b.text !== "" ? " " : ""}
+                      <span>{b.text}</span>
+                    </p>
+                  );
+                }
+                return <p class="tn-text" data-search-text={b.text}>{b.text}</p>;
+              })}
+            </div>
+          </article>
+        ))}
+        {(unnumberedBySection[section.id] || []).map((entry: any) => (
+          <article
+            class="term-note term-note--unnumbered"
+            id="note-email-marketing"
+            data-note="u"
+            data-search-norm={entry.searchNorm}
+            aria-labelledby={`unnumbered-${section.id}-h`}
+          >
+            <header class="tn-head">
+              <h3 id={`unnumbered-${section.id}-h`}>
+                <span data-search-text={entry.title}>{entry.title}</span>
+              </h3>
+            </header>
+            <div class="tn-body">
+              {entry.blocks.map((b: any) => {
+                if ("listLabel" in b) {
+                  return (
+                    <div class="tn-list">
+                      <p class="tn-list-label" data-search-text={b.listLabel}>{b.listLabel}</p>
+                      <ul>
+                        {b.items.map((it: string) => (
+                          <li data-search-text={it}>{it}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  );
+                }
+                if ("label" in b) {
+                  return (
+                    <p class="tn-def" data-label={b.label} data-value={b.text}>
+                      <strong>{b.label}{b.text !== "" ? ":" : ""}</strong>
+                      {b.text !== "" ? " " : ""}
+                      <span>{b.text}</span>
+                    </p>
+                  );
+                }
+                return <p class="tn-text" data-search-text={b.text}>{b.text}</p>;
+              })}
+            </div>
+          </article>
+        ))}
+      </section>
+    ))}
+  </div>
+</div>
+
+<style>
+  .terms-hero {
+    padding-block: clamp(40px, 7vw, 88px) clamp(24px, 4vw, 48px);
+    background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
+    border-bottom: 1px solid var(--line);
+  }
+  .terms-hero-inner {
+    max-width: 68ch;
+  }
+  .terms-title {
+    font-size: clamp(2.4rem, 5.4vw, 4.4rem);
+    line-height: 0.95;
+    margin-top: 12px;
+    letter-spacing: -0.02em;
+  }
+  /* Sticky search bar */
+  .search-bar {
+    position: sticky;
+    top: var(--header-h);
+    z-index: 30;
+    background: color-mix(in srgb, var(--paper) 92%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+    padding-block: 12px;
+  }
+  .search-bar-inner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 68ch;
+  }
+  .search-field {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+  .search-icon {
+    position: absolute;
+    left: 14px;
+    width: 16px;
+    height: 16px;
+    color: var(--muted);
+    pointer-events: none;
+  }
+  .search-field input {
+    width: 100%;
+    padding: 12px 40px 12px 40px;
+    border-radius: 999px;
+    border: 1px solid var(--line-strong);
+    background: var(--card-bg);
+    color: var(--ink);
+    font-size: 0.95rem;
+  }
+  .search-field input:focus {
+    outline: 2px solid var(--focus-outline);
+    outline-offset: 1px;
+    border-color: var(--accent);
+  }
+  .search-field input::placeholder {
+    color: var(--muted-2);
+  }
+  .search-clear {
+    position: absolute;
+    right: 8px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+  }
+  .search-clear:hover {
+    background: var(--paper-2);
+    color: var(--ink);
+  }
+  .search-clear svg {
+    width: 14px;
+    height: 14px;
+  }
+  .search-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: none;
+  }
+  .search-count {
+    font-size: 0.78rem;
+    color: var(--muted);
+    min-width: 72px;
+    text-align: right;
+  }
+  .search-nav {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: var(--card-bg);
+    color: var(--ink);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+  }
+  .search-nav:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+  .search-nav:not(:disabled):hover {
+    background: var(--paper-2);
+  }
+  .search-nav:focus-visible {
+    outline: 2px solid var(--focus-outline);
+    outline-offset: 2px;
+  }
+  .search-nav svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .terms-layout {
+    display: grid;
+    grid-template-columns: 230px minmax(0, 1fr);
+    gap: clamp(24px, 4vw, 56px);
+    padding-block: clamp(28px, 4vw, 48px) clamp(48px, 7vw, 96px);
+    align-items: start;
+  }
+
+  /* Desktop TOC */
+  .toc {
+    position: sticky;
+    top: calc(var(--header-h) + 76px);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--card-bg);
+    padding: 18px;
+  }
+  .toc-title {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .toc ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 2px;
+  }
+  .toc a {
+    display: block;
+    padding: 8px 10px;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    font-weight: 550;
+    color: var(--muted);
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+  .toc a:hover {
+    background: var(--paper-2);
+    color: var(--ink);
+  }
+  .toc a.is-active {
+    background: var(--accent-soft);
+    color: var(--accent-soft-text);
+  }
+  .toc a:focus-visible {
+    outline: 2px solid var(--focus-outline);
+    outline-offset: 1px;
+  }
+
+  /* Mobile compact TOC */
+  .toc-compact {
+    display: none;
+    margin-bottom: 20px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--card-bg);
+    overflow: clip;
+  }
+  .toc-compact summary {
+    padding: 14px 16px;
+    font-weight: 650;
+    font-size: 0.92rem;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .toc-compact summary::-webkit-details-marker {
+    display: none;
+  }
+  .toc-compact summary::after {
+    content: "▾";
+    color: var(--muted);
+  }
+  .toc-compact[open] summary::after {
+    content: "▴";
+  }
+  .toc-compact nav {
+    border-top: 1px solid var(--line);
+    padding: 8px;
+  }
+  .toc-compact ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .toc-compact a {
+    display: block;
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+  .toc-compact a:hover {
+    background: var(--paper-2);
+    color: var(--ink);
+  }
+
+  .terms-main {
+    min-width: 0;
+    max-width: 68ch;
+  }
+
+  .terms-empty {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--muted);
+    border: 1px dashed var(--line-strong);
+    border-radius: 16px;
+    margin-bottom: 24px;
+  }
+
+  .term-section {
+    scroll-margin-top: calc(var(--header-h) + 76px);
+    margin-bottom: clamp(36px, 5vw, 64px);
+  }
+  .term-section:last-child {
+    margin-bottom: 0;
+  }
+  .term-section-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.7rem, 3.4vw, 2.4rem);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--line-strong);
+    margin-bottom: 8px;
+  }
+
+  .term-note {
+    scroll-margin-top: calc(var(--header-h) + 76px);
+    padding-block: 22px;
+    border-bottom: 1px solid var(--line);
+    font-size: 1.0625rem; /* ~17px */
+    line-height: 1.65;
+  }
+  .term-note:last-child {
+    border-bottom: 0;
+  }
+  /* Brief highlight when arriving via a #note-N anchor. */
+  .term-note:target {
+    animation: note-flash 2.4s ease-out;
+    border-radius: 12px;
+  }
+  @keyframes note-flash {
+    0% {
+      background: var(--accent-soft);
+      box-shadow: 0 0 0 12px var(--accent-soft);
+    }
+    100% {
+      background: transparent;
+      box-shadow: 0 0 0 12px transparent;
+    }
+  }
+
+  .tn-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 10px;
+  }
+  .tn-num {
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--accent-soft-text);
+    background: var(--accent-soft);
+    border-radius: 8px;
+    padding: 3px 9px;
+    transform: translateY(-2px);
+  }
+  .tn-head h3 {
+    font-size: 1.18rem;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+  }
+  .tn-body {
+    display: grid;
+    gap: 10px;
+    color: var(--ink-3);
+  }
+  [data-theme="dark"] .tn-body {
+    color: var(--ink-2);
+  }
+  .tn-def strong {
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .tn-list-label {
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .tn-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 6px;
+  }
+  .tn-list li {
+    position: relative;
+    padding-left: 20px;
+  }
+  .tn-list li::before {
+    content: "–";
+    position: absolute;
+    left: 2px;
+    color: var(--muted-2);
+  }
+
+  mark {
+    background: var(--accent-soft);
+    color: inherit;
+    border-radius: 3px;
+    padding: 0 1px;
+  }
+  mark.mark-current {
+    background: #7A1F1A;
+    color: #fff;
+  }
+  [data-theme="dark"] mark.mark-current {
+    background: var(--accent);
+  }
+
+
+  @media (max-width: 900px) {
+    .terms-layout {
+      grid-template-columns: 1fr;
+    }
+    .toc {
+      display: none;
+    }
+    .toc-compact {
+      display: block;
+    }
+    .search-count {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .term-note:target {
+      animation: none;
+      background: var(--accent-soft);
+    }
+  }
+</style>
+
+<script data-astro-rerun>
+  function initTermsPage() {
+    var bar = document.querySelector("[data-search-bar]");
+    if (!bar || bar.dataset.webaoBound) return;
+    bar.dataset.webaoBound = "1";
+    var input = bar.querySelector("[data-search-input]");
+    var clearBtn = bar.querySelector("[data-search-clear]");
+    var countEl = bar.querySelector("[data-search-count]");
+    var prevBtn = bar.querySelector("[data-search-prev]");
+    var nextBtn = bar.querySelector("[data-search-next]");
+    var statusEl = bar.querySelector("[data-search-status]");
+    var emptyEl = document.querySelector("[data-search-empty]");
+    var notes = Array.prototype.slice.call(document.querySelectorAll("[data-note]"));
+    var tocLinks = Array.prototype.slice.call(document.querySelectorAll("[data-toc-link]"));
+    var msgCount = document.querySelector("[data-search-msg-count]");
+    var msgCountPl = document.querySelector("[data-search-msg-count-pl]");
+    var msgAnnounced = document.querySelector("[data-search-msg-announced]");
+    var msgNone = document.querySelector("[data-search-msg-none]");
+    if (!input || !clearBtn || !prevBtn || !nextBtn) return;
+
+    var ACCENTS = {
+      a: "aàáâãäå", e: "eèéêë", i: "iìíîï", o: "oòóôõö",
+      u: "uùúûü", c: "cç", n: "nñ", y: "yÿ",
+    };
+    function foldPattern(token) {
+      return token
+        .split("")
+        .map(function (ch) {
+          var lower = ch.toLowerCase();
+          for (var k in ACCENTS) {
+            if (ACCENTS[k].indexOf(lower) !== -1)
+              return "[" + ACCENTS[k] + ACCENTS[k].toUpperCase() + "]";
+          }
+          return ch.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        })
+        .join("");
+    }
+    function norm(s) {
+      return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    }
+    function esc(s) {
+      return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+    function fmt(template, n) {
+      return template.replace("{n}", String(n));
+    }
+    function parseQuery(q) {
+      var tokens = [];
+      var stripped = q.replace(/"([^"]+)"/g, function (_, p) {
+        if (p.trim()) tokens.push(p.trim());
+        return " ";
+      });
+      stripped.split(/\s+/).forEach(function (w) {
+        if (w) tokens.push(w);
+      });
+      return tokens;
+    }
+
+    // Restore every highlightable element to its original text.
+    function clearNote(note) {
+      var defs = note.querySelectorAll(".tn-def");
+      for (var i = 0; i < defs.length; i++) {
+        var strong = defs[i].querySelector("strong");
+        var span = defs[i].querySelector("span");
+        if (strong) strong.textContent = defs[i].getAttribute("data-label") || "";
+        if (span) span.textContent = defs[i].getAttribute("data-value") || "";
+        // re-add the colon separator when there is a value
+        if (strong && span && span.textContent) {
+          if (strong.textContent.charAt(strong.textContent.length - 1) !== ":")
+            strong.textContent = strong.textContent + ":";
+        }
+      }
+      var texts = note.querySelectorAll("[data-search-text]");
+      for (var j = 0; j < texts.length; j++) {
+        texts[j].textContent = texts[j].getAttribute("data-search-text") || "";
+      }
+    }
+
+    function highlightHtml(text, regexes) {
+      var html = esc(text);
+      for (var i = 0; i < regexes.length; i++) {
+        html = html.replace(regexes[i], "<mark>$1</mark>");
+      }
+      return html;
+    }
+
+    function highlightNote(note, regexes) {
+      var defs = note.querySelectorAll(".tn-def");
+      for (var i = 0; i < defs.length; i++) {
+        var label = defs[i].getAttribute("data-label") || "";
+        var value = defs[i].getAttribute("data-value") || "";
+        var strong = defs[i].querySelector("strong");
+        var span = defs[i].querySelector("span");
+        if (strong) strong.innerHTML = highlightHtml(value ? label + ":" : label, regexes);
+        if (span) span.innerHTML = highlightHtml(value, regexes);
+      }
+      var texts = note.querySelectorAll("[data-search-text]");
+      for (var j = 0; j < texts.length; j++) {
+        texts[j].innerHTML = highlightHtml(texts[j].getAttribute("data-search-text") || "", regexes);
+      }
+    }
+
+    var marks = [];
+    var markIndex = -1;
+    var statusTimer = 0;
+
+    function updateNav() {
+      var has = marks.length > 0;
+      prevBtn.disabled = !has;
+      nextBtn.disabled = !has;
+    }
+    function announce(msg) {
+      if (statusTimer) clearTimeout(statusTimer);
+      // Brief delay so rapid typing doesn't spam the screen-reader live region.
+      statusTimer = setTimeout(function () {
+        statusEl.textContent = msg;
+      }, 350);
+    }
+    function setCurrent(i) {
+      for (var j = 0; j < marks.length; j++) {
+        marks[j].classList.toggle("mark-current", j === i);
+      }
+      markIndex = i;
+      if (marks[i]) {
+        var smooth = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        try {
+          marks[i].scrollIntoView({ block: "center", behavior: smooth ? "smooth" : "auto" });
+        } catch (e) {
+          marks[i].scrollIntoView();
+        }
+      }
+      updateNav();
+    }
+
+    function runSearch() {
+      var q = input.value.trim();
+      marks = [];
+      markIndex = -1;
+      for (var r = 0; r < notes.length; r++) {
+        clearNote(notes[r]);
+        notes[r].hidden = false;
+      }
+      var tokens = parseQuery(q);
+      if (tokens.length === 0) {
+        countEl.textContent = "";
+        clearBtn.hidden = true;
+        emptyEl.hidden = true;
+        updateNav();
+        announce("");
+        return;
+      }
+      clearBtn.hidden = false;
+      var normTokens = tokens.map(norm).filter(function (t) { return t.length > 0; });
+      // Highlight against escaped HTML: build the pattern from esc(token) so
+      // `&` matches `&amp;` as a unit instead of corrupting entities. One
+      // combined regex (longest first) so tokens can't match inside <mark>s.
+      var byLen = tokens.slice().sort(function (a, b) { return b.length - a.length; });
+      var pattern = byLen.map(function (tk) { return foldPattern(esc(tk)); }).join("|");
+      var regexes = [new RegExp("(" + pattern + ")", "gi")];
+
+      var matched = 0;
+      for (var i = 0; i < notes.length; i++) {
+        var hay = notes[i].getAttribute("data-search-norm") || "";
+        var ok = true;
+        for (var k = 0; k < normTokens.length; k++) {
+          if (hay.indexOf(normTokens[k]) === -1) { ok = false; break; }
+        }
+        if (!ok) {
+          notes[i].hidden = true;
+          continue;
+        }
+        matched++;
+        highlightNote(notes[i], regexes);
+      }
+
+      marks = Array.prototype.slice.call(
+        document.querySelectorAll('.term-note:not([hidden]) mark')
+      );
+      var total = marks.length;
+      if (total === 0) {
+        countEl.textContent = "";
+      } else {
+        var ctpl = total === 1 ? msgCount.textContent : msgCountPl.textContent;
+        countEl.textContent = fmt(ctpl, total);
+      }
+      emptyEl.hidden = matched !== 0;
+      if (total > 0) setCurrent(0);
+      else updateNav();
+      announce(total === 0 ? msgNone.textContent : fmt(msgAnnounced.textContent, total));
+    }
+
+    var inputTimer = 0;
+    input.addEventListener("input", function (e) {
+      if (e.isComposing) return;
+      if (inputTimer) clearTimeout(inputTimer);
+      // Debounce: wait for a typing pause before filtering 29 notes.
+      inputTimer = setTimeout(runSearch, 120);
+    });
+    clearBtn.addEventListener("click", function () {
+      input.value = "";
+      runSearch();
+      input.focus();
+    });
+    prevBtn.addEventListener("click", function () {
+      if (marks.length) setCurrent((markIndex - 1 + marks.length) % marks.length);
+    });
+    nextBtn.addEventListener("click", function () {
+      if (marks.length) setCurrent((markIndex + 1) % marks.length);
+    });
+
+    // Keyboard shortcuts: "/" focuses search (when not typing), Escape clears it.
+    if (!window.__webaoTermsKeys) {
+      window.__webaoTermsKeys = true;
+      document.addEventListener("keydown", function (e) {
+        var tag = (e.target && e.target.tagName) || "";
+        var typing =
+          tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" ||
+          (e.target && e.target.isContentEditable);
+        if (e.key === "/" && !typing && !e.metaKey && !e.ctrlKey && !e.altKey) {
+          e.preventDefault();
+          input.focus();
+        } else if (e.key === "Escape" && document.activeElement === input) {
+          if (input.value) {
+            input.value = "";
+            runSearch();
+          }
+          input.blur();
+        }
+      });
+    }
+
+    if ("IntersectionObserver" in window && tocLinks.length) {
+      var sio = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) {
+              var id = e.target.getAttribute("data-term-section");
+              tocLinks.forEach(function (a) {
+                a.classList.toggle("is-active", a.getAttribute("data-toc-link") === id);
+              });
+            }
+          });
+        },
+        // Mark the TOC entry whose section owns the viewport's middle band.
+        { rootMargin: "-30% 0px -60% 0px" }
+      );
+      document.querySelectorAll("[data-term-section]").forEach(function (el) {
+        sio.observe(el);
+      });
+    }
+
+    var compact = document.querySelector("[data-toc-compact]");
+    if (compact) {
+      compact.querySelectorAll("a").forEach(function (a) {
+        a.addEventListener("click", function () {
+          compact.removeAttribute("open");
+        });
+      });
+    }
+  }
+  initTermsPage();
+  if (!window.__webaoTermsPL) {
+    window.__webaoTermsPL = true;
+    document.addEventListener("astro:page-load", initTermsPage);
+  }
+</script>
+
+<!-- Localized templates for the JS (kept out of the visible UI) -->
+<span hidden data-search-msg-count>{search.results}</span>
+<span hidden data-search-msg-count-pl>{search.resultsPlural}</span>
+<span hidden data-search-msg-announced>{search.announced}</span>
+<span hidden data-search-msg-none>{search.announcedNone}</span>
