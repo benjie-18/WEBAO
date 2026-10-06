@@ -1,0 +1,206 @@
+---
+import type { BundleId } from "../../lib/pricing";
+import { useTranslations, type Locale } from "../../lib/i18n";
+import NoteRef from "../NoteRef.astro";
+
+interface Props {
+  locale: Locale;
+  bundleId: BundleId;
+  /** Enable 3D parallax layer groups (used inside the scroll carousel). */
+  spatial?: boolean;
+}
+
+const { locale, bundleId, spatial = false } = Astro.props as Props;
+const t = useTranslations(locale);
+const b = t.pricing.bundles[bundleId];
+---
+
+<div class:list={["bundle-card", spatial && "bundle-card--spatial"]}>
+  <div class="bc-group bc-group--head">
+  <p class="bc-kicker">{t.pricing.bundles.eyebrow}</p>
+  <h3 class="bc-name">{b.name}</h3>
+  <p class="bc-price">
+    {b.price}
+    <NoteRef locale={locale} note={b.priceNote} />
+  </p>
+  </div>
+
+  <div class="bc-group bc-group--list">
+  <p class="bc-label">{b.includesLabel}</p>
+  <ul class="bc-includes">
+    {b.includes.map((inc) => (
+      <li>
+        <svg viewBox="0 0 16 16" aria-hidden="true" class="bc-check">
+          <path
+            d="M3.5 8.2l3.2 3.2 5.8-6.8"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <span>{inc}</span>
+      </li>
+    ))}
+  </ul>
+  </div>
+
+  <div class="bc-group bc-group--meta">
+  <dl class="bc-meta">
+    <div class="bc-row">
+      <dt>{b.individualLabel}</dt>
+      <dd>{b.individual}</dd>
+    </div>
+    <div class="bc-row bc-row--total">
+      <dt>{b.bundleLabel}</dt>
+      <dd>
+        {b.bundlePrice}
+      </dd>
+    </div>
+    <div class="bc-row">
+      <dt>{b.availLabel}</dt>
+      <dd>
+        {b.avail}
+        <NoteRef locale={locale} note={b.availNote} />
+      </dd>
+    </div>
+  </dl>
+  </div>
+</div>
+
+<style>
+  .bundle-card {
+    --bc-bg: var(--bundle-bg);
+    --bc-text: var(--bundle-text);
+    --bc-soft: var(--bundle-soft);
+    --bc-line: var(--bundle-line);
+    background: linear-gradient(165deg, var(--bundle-bg-2) 0%, var(--bc-bg) 60%);
+    color: var(--bc-text);
+    border: 1px solid var(--bc-line);
+    border-radius: 26px;
+    padding: clamp(22px, 3vw, 32px);
+    box-shadow: var(--shadow-lg);
+    width: 100%;
+    max-width: 400px;
+  }
+  .bundle-card .noteref {
+    color: var(--bc-text);
+  }
+  .bc-price .noteref {
+    font-size: 0.95rem;
+  }
+  /* 3D parallax layers: title floats closest, meta deepest. Only meaningful
+     inside a preserve-3d context (the scroll carousel). */
+  .bundle-card--spatial {
+    transform-style: preserve-3d;
+  }
+  .bundle-card--spatial .bc-group--head {
+    transform: translateZ(48px);
+  }
+  .bundle-card--spatial .bc-group--list {
+    transform: translateZ(26px);
+  }
+  .bundle-card--spatial .bc-group--meta {
+    transform: translateZ(12px);
+  }
+  @media (max-width: 819px) {
+    .bundle-card--spatial .bc-group--head,
+    .bundle-card--spatial .bc-group--list,
+    .bundle-card--spatial .bc-group--meta {
+      transform: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bundle-card--spatial .bc-group {
+      transform: none;
+    }
+  }
+  .bc-kicker {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--bc-soft);
+  }
+  .bc-name {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    margin-top: 6px;
+    line-height: 1;
+  }
+  .bc-price {
+    margin-top: 10px;
+    font-size: clamp(2rem, 3.4vw, 2.7rem);
+    font-weight: 750;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .bc-label {
+    margin-top: 18px;
+    font-size: 0.78rem;
+    font-weight: 650;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--bc-soft);
+  }
+  .bc-includes {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0;
+    display: grid;
+    gap: 9px;
+    font-size: 0.94rem;
+  }
+  .bc-includes li {
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    gap: 10px;
+    align-items: start;
+  }
+  .bc-check {
+    width: 18px;
+    height: 18px;
+    margin-top: 1px;
+    color: var(--bc-text);
+    opacity: 0.85;
+    flex: none;
+  }
+  .bc-meta {
+    margin: 18px 0 0;
+    padding: 0;
+    border-top: 1px solid var(--bc-line);
+  }
+  .bc-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--bc-line);
+    font-size: 0.88rem;
+  }
+  .bc-row:last-child {
+    border-bottom: 0;
+  }
+  .bc-row dt {
+    color: var(--bc-soft);
+  }
+  .bc-row dd {
+    margin: 0;
+    font-weight: 650;
+    text-align: right;
+  }
+  .bc-row--total {
+    font-size: 1.02rem;
+  }
+  .bc-row--total dd {
+    color: var(--bc-text);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--bc-line);
+    padding: 4px 12px;
+    border-radius: 999px;
+  }
+</style>
