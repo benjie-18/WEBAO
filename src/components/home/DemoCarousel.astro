@@ -1,24 +1,24 @@
 ---
-import { getDemos, localizedPaths, type Locale } from "../../lib/i18n";
+import { getDemos, localizedPaths, useTranslations, type Locale } from "../../lib/i18n";
 
 interface Props {
   locale: Locale;
 }
 const { locale } = Astro.props as Props;
+const t = useTranslations(locale);
 const paths = localizedPaths[locale];
 
 // Same catalog order as /demos, minus hidden duplicates
 const hidden = new Set(["boba-club"]);
 const demos = getDemos(locale).filter((d) => !hidden.has(d.id));
 
-const heading = locale === "fr" ? "Trente directions. Zéro modèle." : "Thirty directions. Zero templates.";
-const sub = locale === "fr"
-  ? "Chaque vignette est la page d’accueil réelle d’un site démo. Laissez défiler, cliquez pour explorer."
-  : "Every frame is the real homepage of a demo site. Let it roll, click to explore.";
-const eyebrow = locale === "fr" ? "Le catalogue en mouvement" : "The catalog in motion";
-const browse = locale === "fr" ? "Parcourir les 30 démos →" : "Browse all 30 demos →";
-const prevLabel = locale === "fr" ? "Précédent" : "Previous";
-const nextLabel = locale === "fr" ? "Suivant" : "Next";
+const heading = t.home.proof.heading;
+const sub = t.home.proof.sub;
+const eyebrow = t.home.proof.eyebrow;
+const browse = t.home.proof.browse;
+const prevLabel = t.home.proof.prev;
+const nextLabel = t.home.proof.next;
+const imgAlt = (name: string) => t.home.proof.imgAlt.replace("{name}", name);
 const total = String(demos.length).padStart(2, "0");
 ---
 
@@ -64,7 +64,7 @@ const total = String(demos.length).padStart(2, "0");
             <a href={`${paths.demos}/${d.id}`} class="proof-shot" aria-label={`${d.name}, ${d.tone}`}>
               <img
                 src={`/carousel/${d.id}.jpg`}
-                alt={`${d.name} homepage`}
+                alt={imgAlt(d.name)}
                 loading={i < 2 ? "eager" : "lazy"}
                 fetchpriority={i === 0 ? "high" : undefined}
                 width="1280"
@@ -159,6 +159,7 @@ const total = String(demos.length).padStart(2, "0");
       stop();
       if (hoverPause || focusPause || dragPause || !inView) return;
       timer = window.setInterval(() => {
+        if (!root.isConnected) { stop(); return; }
         const at = currentIndex() + 1;
         // Wrap to the start instantly rather than rewinding through 30 panels.
         if (at >= n) scrollToPanel(0, "auto");
@@ -252,6 +253,13 @@ const total = String(demos.length).padStart(2, "0");
 
     track.addEventListener("scroll", queuePaint, { passive: true });
     window.addEventListener("resize", queuePaint, { passive: true });
+    // Clean up across Astro client-side navigations: the old interval and
+    // resize listener must not keep firing on detached nodes.
+    document.addEventListener("astro:before-swap", function cleanup() {
+      stop();
+      window.removeEventListener("resize", queuePaint);
+      document.removeEventListener("astro:before-swap", cleanup);
+    });
     paint();
     start();
   }
