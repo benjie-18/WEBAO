@@ -1,0 +1,283 @@
+---
+import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+
+// Demo microsite: Voltige Électrique · fictional electrician, Trois-Rivières QC.
+// Concept: HIGH-VOLTAGE INDUSTRIAL. Near-black charcoal, hazard yellow with
+// diagonal warning stripes, condensed uppercase grotesque, giant numerals,
+// spec tables (panels, amperage, voltages), a safety certification wall with
+// stencil license plates, warning-tape dividers.
+const IMG = {
+  hero: "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?q=80&w=1600&auto=format&fit=crop",
+  crew: "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?q=80&w=1200&auto=format&fit=crop",
+};
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Voltige Électrique · Électricien d'urgence 24/7 · (819) 555-0177 · Trois-Rivières</title>
+  <meta name="description" content="Voltige Électrique : électricien de calibre industriel à Trois-Rivières. Mise à niveau de panneaux jusqu'à 400 A, dépannage, bornes de recharge, câblage commercial. Licencié, assuré, RBQ. Répartition 24/7." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Archivo+Narrow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body class="vg">
+
+  <div class="vg-tape" aria-hidden="true"></div>
+
+  <!-- HEADER -->
+  <header class="vg-bar">
+    <p class="vg-brand">⚡ VOLTIGE<span>ÉLECTRIQUE · TROIS-RIVIÈRES</span></p>
+    <nav class="vg-nav" aria-label="Sections">
+      <a href="#vg-specs">FICHES</a>
+      <a href="#vg-wall">CERTIFICATIONS</a>
+      <a href="#vg-reports">RAPPORTS DE TRAVAIL</a>
+      <a href="#vg-crew">ÉQUIPE</a>
+    </nav>
+    <a class="vg-dispatch" href="tel:+18195550177">RÉPARTITION 24/7</a>
+  </header>
+
+  <!-- HERO -->
+  <section class="vg-hero" aria-label="Introduction">
+    <div class="vg-hero-grid">
+      <div>
+        <p class="vg-tag">ENTREPRENEUR HAUTE TENSION LICENCIÉ · DEPUIS 2009</p>
+        <h1 class="vg-h1">COURANT<br />RÉTABLI.<br /><span>POINT.</span></h1>
+        <p class="vg-lede">Panne à 2 h du matin? Panneau qui fume? Voltige envoie un camion licencié partout en Mauricie, jour et nuit — et on ne part pas tant que chaque disjoncteur ne tient pas.</p>
+        <a class="vg-num" href="tel:+18195550177">(819) 555-0177</a>
+        <p class="vg-promise"><span class="vg-live" aria-hidden="true"></span>CAMIONS SUR LA ROUTE MAINTENANT · RÉPONSE MOYENNE 47 MIN</p>
+      </div>
+      <figure class="vg-hero-fig">
+        <img src={IMG.hero} alt="Électricien câblant un panneau de disjoncteurs" />
+        <figcaption>REMPLACEMENT DE PANNEAU · 200 A · RUE DES FORGES</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <div class="vg-tape" aria-hidden="true"></div>
+
+  <!-- GIANT STATS -->
+  <section class="vg-stats" aria-label="Chiffres clés">
+    <div class="vg-stat"><strong>17</strong><span>ANS<br />DE MÉTIER</span></div>
+    <div class="vg-stat"><strong>400A</strong><span>SERVICE MAX<br />DE PANNEAU</span></div>
+    <div class="vg-stat"><strong>1,900+</strong><span>TRAVAUX<br />TERMINÉS</span></div>
+    <div class="vg-stat"><strong>47<span class="vg-stat-sm">MIN</span></strong><span>RÉPONSE MOY.<br />D'URGENCE</span></div>
+  </section>
+
+  <div class="vg-tape" aria-hidden="true"></div>
+
+  <!-- SPEC TABLES -->
+  <section class="vg-sect" id="vg-specs" aria-label="Spécifications des services">
+    <p class="vg-tag">DONNÉES TECHNIQUES · RÉV 2026-B</p>
+    <h2 class="vg-h2">FICHES TECHNIQUES</h2>
+    <div class="vg-tables">
+      <div>
+        <h3 class="vg-h3">RÉSIDENTIEL</h3>
+        <table class="vg-table">
+          <tbody>
+            <tr><th scope="row">Mise à niveau de panneau</th><td>100 → 200 A · 1 jour</td></tr>
+            <tr><th scope="row">Dépannage</th><td>120/240 V · balayage thermique</td></tr>
+            <tr><th scope="row">Borne de recharge</th><td>40–80 A · circuit 240 V</td></tr>
+            <tr><th scope="row">Raccordement de génératrice</th><td>Transfer switch · CSA</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h3 class="vg-h3">COMMERCIAL / INDUSTRIEL</h3>
+        <table class="vg-table">
+          <tbody>
+            <tr><th scope="row">Mise à niveau de service</th><td>Jusqu'à 400 A · 600 V</td></tr>
+            <tr><th scope="row">Câblage triphasé</th><td>208 / 347 / 600 V</td></tr>
+            <tr><th scope="row">Modernisation d'éclairage</th><td>DEL · détecteurs de présence</td></tr>
+            <tr><th scope="row">Entretien préventif</th><td>Annuel · rapport IR</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <p class="vg-note">TOUS TRAVAUX PERMIS ET INSPECTÉS · DEVIS ÉCRIT AVANT QU'ON COUPE UN FIL</p>
+  </section>
+
+  <div class="vg-tape" aria-hidden="true"></div>
+
+  <!-- CERTIFICATION WALL -->
+  <section class="vg-sect" id="vg-wall" aria-label="Certifications">
+    <p class="vg-tag">MUR DES CERTIFICATIONS DE SÉCURITÉ</p>
+    <h2 class="vg-h2">AUTORISÉ<br />HAUTE TENSION</h2>
+    <div class="vg-plates">
+      <div class="vg-plate"><strong>RBQ</strong><span>Entrepreneur licencié<br />5699-2077-01</span></div>
+      <div class="vg-plate"><strong>$2M</strong><span>Assurance responsabilité<br />Certificat sur demande</span></div>
+      <div class="vg-plate"><strong>CMEQ</strong><span>Maître électricien<br />sur chaque chantier</span></div>
+      <div class="vg-plate"><strong>ASP</strong><span>Santé-sécurité<br />équipe certifiée</span></div>
+    </div>
+  </section>
+
+  <div class="vg-tape" aria-hidden="true"></div>
+
+  <!-- JOB REPORTS -->
+  <section class="vg-sect" id="vg-reports" aria-label="Rapports de travail">
+    <p class="vg-tag">RAPPORTS DE TERRAIN · VÉRIFIÉS</p>
+    <h2 class="vg-h2">RAPPORTS DE TRAVAIL</h2>
+    <div class="vg-reports">
+      <article class="vg-report">
+        <p class="vg-report-id">TRAVAIL N° V-2281 · MISE À NIVEAU DE PANNEAU 200 A · CAP-DE-LA-MADELEINE</p>
+        <p class="vg-report-body">"Coupure à 8 h, panneau remplacé et inspecté à 16 h. Le débranchement d'Hydro, le permis, tout était pris en charge. Les lumières étaient allumées pour le souper."</p>
+        <p class="vg-report-meta">SIGNALÉ PAR D. LAFLEUR · STATUT : <strong>TERMINÉ ✓</strong></p>
+      </article>
+      <article class="vg-report">
+        <p class="vg-report-id">TRAVAIL N° V-2304 · APPEL D'URGENCE 01:40 · TROIS-RIVIÈRES-OUEST</p>
+        <p class="vg-report-body">"Panneau de disjoncteurs qui faisait des arcs à 1 h du matin. Ils ont répondu à la deuxième sonnerie, sont arrivés en 35 minutes, ont sécurisé les lieux et sont revenus à l'aube pour finir."</p>
+        <p class="vg-report-meta">SIGNALÉ PAR K. BOUCHARD · STATUT : <strong>TERMINÉ ✓</strong></p>
+      </article>
+      <article class="vg-report">
+        <p class="vg-report-id">TRAVAIL N° V-2319 · MISE À NIVEAU 600 V D'ENTREPÔT · PARC INDUSTRIEL</p>
+        <p class="vg-report-body">"Ils ont recâblé notre plancher d'atelier pendant un long week-end, donc zéro heure de production perdue. Communication de contremaître du début à la fin."</p>
+        <p class="vg-report-meta">SIGNALÉ PAR ATELIER G. · STATUT : <strong>TERMINÉ ✓</strong></p>
+      </article>
+    </div>
+  </section>
+
+  <div class="vg-tape" aria-hidden="true"></div>
+
+  <!-- CREW -->
+  <section class="vg-sect" id="vg-crew" aria-label="À propos de l'équipe">
+    <div class="vg-crew-in">
+      <div>
+        <p class="vg-tag">DOSSIER DU PERSONNEL</p>
+        <h2 class="vg-h2">L'ÉQUIPE</h2>
+        <p class="vg-body">Voltige a été fondée en 2009 par Maxime Voltige, un monteur de lignes d'Hydro devenu maître électricien, tanné de voir les propriétaires recevoir des réponses vagues. Quatorze électriciens licenciés travaillent maintenant à partir de l'atelier de Trois-Rivières — chaque camion est équipé pour les panneaux, chaque tech est formé à la caméra thermique.</p>
+        <ul class="vg-crew-list">
+          <li><strong>14</strong> électriciens licenciés</li>
+          <li><strong>6</strong> camions, partout en Mauricie</li>
+          <li><strong>0</strong> centres d'appels — c'est un tech qui répond</li>
+        </ul>
+      </div>
+      <figure class="vg-crew-fig">
+        <img src={IMG.crew} alt="Lignes à haute tension sur un ciel au crépuscule" />
+        <figcaption>TRAVAUX SUR LE RÉSEAU · CORRIDOR MAURICIE</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="vg-foot" aria-label="Contact">
+    <div class="vg-tape" aria-hidden="true"></div>
+    <p class="vg-tag">LIGNE D'URGENCE · RÉPONDUE PAR UN TECH, PAS UN ROBOT</p>
+    <h2 class="vg-h2">TUEZ LE NOIR.</h2>
+    <a class="vg-foot-num" href="tel:+18195550177">(819) 555-0177</a>
+    <p class="vg-foot-sub">RÉPARTITION 24/7 · TROIS-RIVIÈRES &amp; LA MAURICIE<br />SI ÇA FAIT DES ÉTINCELLES, ÇA SENT OU ÇA S'ÉTEINT — APPELEZ D'ABORD, POSEZ DES QUESTIONS APRÈS.</p>
+    <p class="vg-foot-fine">© 2026 VOLTIGE ÉLECTRIQUE · SITE DÉMO FICTIF POUR VITRINE DE DESIGN · PAS UNE VRAIE ENTREPRISE</p>
+    <div class="vg-tape" aria-hidden="true"></div>
+  </footer>
+
+  <style>
+    .vg { margin: 0; background: #141414; color: #F5F2EA; font-family: "Archivo Narrow", system-ui, sans-serif; }
+    .vg * { box-sizing: border-box; }
+    .vg img { display: block; max-width: 100%; }
+    .vg a { color: inherit; }
+
+    .vg-tape { height: 16px; background: repeating-linear-gradient(-45deg, #FFD400 0 26px, #141414 26px 52px); }
+
+    .vg-bar {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      padding: 16px clamp(18px, 4vw, 40px); background: #0C0C0C;
+      position: sticky; top: 0; z-index: 10; border-bottom: 2px solid #FFD400;
+    }
+    .vg-brand { margin: 0; font-family: "Oswald", sans-serif; font-weight: 700; font-size: 26px; letter-spacing: .04em; color: #FFD400; }
+    .vg-brand span { display: block; font-family: "IBM Plex Mono", monospace; font-weight: 400; font-size: 10.5px; letter-spacing: .26em; color: #F5F2EA; margin-top: 2px; }
+    .vg-nav { display: flex; gap: 26px; }
+    .vg-nav a { text-decoration: none; font-family: "Oswald", sans-serif; font-weight: 500; font-size: 15px; letter-spacing: .14em; }
+    .vg-nav a:hover { color: #FFD400; }
+    .vg-dispatch {
+      font-family: "Oswald", sans-serif; font-weight: 700; font-size: 16px; letter-spacing: .1em; text-decoration: none;
+      background: #FFD400; color: #141414; padding: 12px 24px;
+    }
+    .vg-dispatch:hover { background: #F5F2EA; }
+
+    .vg-hero { padding: clamp(56px, 10vh, 120px) clamp(18px, 5vw, 64px); background: #141414; }
+    .vg-hero-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(24px, 4vw, 56px); max-width: 1240px; margin: 0 auto; align-items: center; }
+    .vg-tag { font-family: "IBM Plex Mono", monospace; font-size: 12px; letter-spacing: .24em; color: #FFD400; margin: 0 0 16px; }
+    .vg-h1 { font-family: "Oswald", sans-serif; font-weight: 700; font-size: clamp(3.6rem, 10vw, 7.4rem); line-height: .92; margin: 0 0 22px; letter-spacing: .01em; }
+    .vg-h1 span { color: #FFD400; }
+    .vg-lede { font-size: 18.5px; line-height: 1.6; max-width: 44ch; margin: 0 0 30px; color: rgba(245,242,234,.88); }
+    .vg-num {
+      display: inline-block; font-family: "Oswald", sans-serif; font-weight: 700; text-decoration: none;
+      font-size: clamp(2.6rem, 7vw, 4.8rem); letter-spacing: .02em; color: #141414; background: #FFD400; padding: 10px 30px; margin-bottom: 20px;
+    }
+    .vg-num:hover { background: #F5F2EA; }
+    .vg-promise { display: flex; align-items: center; gap: 10px; font-family: "IBM Plex Mono", monospace; font-size: 12.5px; letter-spacing: .14em; margin: 0; }
+    .vg-live { width: 11px; height: 11px; background: #FFD400; flex: none; animation: vg-blink 1.4s steps(2) infinite; }
+    @keyframes vg-blink { 50% { opacity: .25; } }
+    .vg-hero-fig { margin: 0; border: 2px solid #3a3a3a; }
+    .vg-hero-fig img { width: 100%; height: 420px; object-fit: cover; filter: grayscale(.35) contrast(1.1); }
+    .vg-hero-fig figcaption, .vg-crew-fig figcaption { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .16em; padding: 10px 12px; background: #0C0C0C; color: #FFD400; }
+
+    .vg-stats { display: grid; grid-template-columns: repeat(4, 1fr); background: #FFD400; color: #141414; }
+    .vg-stat { padding: 34px 20px; text-align: center; border-right: 3px solid #141414; }
+    .vg-stat:last-child { border-right: 0; }
+    .vg-stat strong { display: block; font-family: "Oswald", sans-serif; font-weight: 700; font-size: clamp(2.6rem, 5.5vw, 4.4rem); line-height: 1; }
+    .vg-stat-sm { font-size: .42em; vertical-align: baseline; }
+    .vg-stat span { display: block; font-family: "IBM Plex Mono", monospace; font-size: 11.5px; letter-spacing: .18em; margin-top: 8px; font-weight: 600; }
+
+    .vg-sect { padding: clamp(56px, 10vh, 104px) clamp(18px, 5vw, 64px); max-width: 1180px; margin: 0 auto; }
+    .vg-h2 { font-family: "Oswald", sans-serif; font-weight: 700; font-size: clamp(2.6rem, 7vw, 4.6rem); line-height: .95; margin: 0 0 36px; letter-spacing: .01em; }
+    .vg-tables { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+    .vg-h3 { font-family: "Oswald", sans-serif; font-weight: 600; font-size: 20px; letter-spacing: .12em; color: #FFD400; margin: 0 0 4px; border-bottom: 3px solid #FFD400; padding-bottom: 10px; }
+    .vg-table { width: 100%; border-collapse: collapse; }
+    .vg-table th, .vg-table td { text-align: left; padding: 15px 6px; border-bottom: 1px solid #3a3a3a; vertical-align: top; }
+    .vg-table th { font-family: "Oswald", sans-serif; font-weight: 600; font-size: 17px; letter-spacing: .04em; width: 42%; }
+    .vg-table td { font-family: "IBM Plex Mono", monospace; font-size: 14px; color: rgba(245,242,234,.8); }
+    .vg-note { font-family: "IBM Plex Mono", monospace; font-size: 12px; letter-spacing: .16em; color: #FFD400; margin: 30px 0 0; }
+
+    .vg-plates { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .vg-plate {
+      border: 3px solid #FFD400; padding: 30px 18px; text-align: center; background: #0C0C0C;
+      font-family: "Oswald", sans-serif;
+    }
+    .vg-plate strong { display: block; font-size: 44px; font-weight: 700; color: #FFD400; letter-spacing: .04em; margin-bottom: 10px; }
+    .vg-plate span { font-family: "IBM Plex Mono", monospace; font-size: 12px; letter-spacing: .1em; line-height: 1.7; color: rgba(245,242,234,.85); }
+
+    .vg-reports { display: grid; gap: 20px; }
+    .vg-report { background: #0C0C0C; border-left: 8px solid #FFD400; padding: 26px clamp(20px, 3vw, 36px); }
+    .vg-report-id { font-family: "IBM Plex Mono", monospace; font-size: 12.5px; letter-spacing: .14em; color: #FFD400; margin: 0 0 12px; font-weight: 600; }
+    .vg-report-body { font-size: 19px; line-height: 1.55; margin: 0 0 12px; max-width: 68ch; }
+    .vg-report-meta { font-family: "IBM Plex Mono", monospace; font-size: 12px; letter-spacing: .1em; margin: 0; color: rgba(245,242,234,.7); }
+    .vg-report-meta strong { color: #FFD400; }
+
+    .vg-crew-in { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(24px, 4vw, 56px); align-items: center; }
+    .vg-body { font-size: 18px; line-height: 1.65; color: rgba(245,242,234,.88); max-width: 52ch; margin: 0 0 26px; }
+    .vg-crew-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+    .vg-crew-list li { font-family: "IBM Plex Mono", monospace; font-size: 14px; letter-spacing: .06em; border: 1px solid #3a3a3a; padding: 14px 18px; }
+    .vg-crew-list strong { color: #FFD400; font-size: 20px; margin-right: 12px; }
+    .vg-crew-fig { margin: 0; border: 2px solid #3a3a3a; }
+    .vg-crew-fig img { width: 100%; height: 360px; object-fit: cover; filter: grayscale(.5) contrast(1.1); }
+
+    .vg-foot { text-align: center; padding: clamp(64px, 10vh, 110px) 20px 0; background: #0C0C0C; }
+    .vg-foot .vg-h2 { color: #FFD400; margin-bottom: 26px; }
+    .vg-foot-num {
+      display: inline-block; font-family: "Oswald", sans-serif; font-weight: 700; text-decoration: none;
+      font-size: clamp(2.8rem, 9vw, 5.4rem); color: #141414; background: #FFD400; padding: 12px 40px; margin-bottom: 24px;
+    }
+    .vg-foot-num:hover { background: #F5F2EA; }
+    .vg-foot-sub { font-family: "IBM Plex Mono", monospace; font-size: 13px; letter-spacing: .14em; line-height: 2; margin: 0 0 34px; color: rgba(245,242,234,.8); }
+    .vg-foot-fine { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .1em; color: rgba(245,242,234,.45); margin: 0; padding-bottom: 34px; }
+    .vg-foot .vg-tape:last-child { margin-top: 0; }
+
+    @media (max-width: 900px) {
+      .vg-hero-grid, .vg-crew-in, .vg-tables { grid-template-columns: 1fr; }
+      .vg-stats { grid-template-columns: repeat(2, 1fr); }
+      .vg-stat:nth-child(2) { border-right: 0; }
+      .vg-stat { border-bottom: 3px solid #141414; }
+      .vg-plates { grid-template-columns: repeat(2, 1fr); }
+      .vg-nav { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .vg-live { animation: none; }
+    }
+  </style>
+
+  <EscapeHatch locale="fr" />
+</body>
+</html>

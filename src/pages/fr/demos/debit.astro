@@ -1,0 +1,344 @@
+---
+import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+
+// Demo microsite: Débit Plomberie · fictional plumber, Brossard QC.
+// Concept: ENGINEERING BLUEPRINT. The site is a drainage schematic — deep
+// blueprint blue, white technical line-art SVG pipes and valves, monospace
+// data readouts, spec-sheet service tables, a drainage-atlas SVG diagram,
+// testimonials as engineering test logs with PASS results.
+const IMG = {
+  hero: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?q=80&w=1600&auto=format&fit=crop",
+  about: "https://images.unsplash.com/photo-1504148455328-c376907d081c?q=80&w=1200&auto=format&fit=crop",
+};
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Débit Plomberie · Plomberie d'ingénierie à Brossard · (450) 555-0167</title>
+  <meta name="description" content="Débit Plomberie : plombier d'ingénierie à Brossard. Isolement de fuites, inspection caméra des drains, chauffe-eau, plomberie brute. Prix en fiche technique, preuves en journal d'essais." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body class="db">
+
+  <!-- TITLE BLOCK / NAV -->
+  <header class="db-bar">
+    <p class="db-brand">DÉBIT<span class="db-brand-sub">PLOMBERIE · BROSSARD QC</span></p>
+    <nav class="db-nav" aria-label="Sections">
+      <a href="#db-services">Services</a>
+      <a href="#db-atlas">Atlas de drainage</a>
+      <a href="#db-tests">Journaux d'essais</a>
+      <a href="#db-firm">La firme</a>
+    </nav>
+    <a class="db-cta" href="tel:+14505550167">(450) 555-0167</a>
+  </header>
+
+  <!-- HERO: the schematic -->
+  <section class="db-hero" aria-label="Introduction">
+    <div class="db-hero-in">
+      <p class="db-kicker">PLAN N° DB-2026-041 · ÉCHELLE 1:50 · FEUILLE 01/01</p>
+      <h1 class="db-h1">PLOMBERIE<br />D'INGÉNIERIE.</h1>
+      <p class="db-lede">Chaque tuyau de votre propriété, cartographié avant le premier tour de clé. Débit conçoit le drainage comme du génie civil — parce qu'une maison, c'est du petit génie civil.</p>
+      <ul class="db-readouts" aria-label="Données du système en direct">
+        <li><span>DÉBIT</span><strong>12.4 L/min</strong></li>
+        <li><span>PRESSION</span><strong>420 kPa</strong></li>
+        <li><span>COLLECTEUR</span><strong>Ø 110 mm PVC</strong></li>
+        <li><span>PENTE</span><strong>2.0 %</strong></li>
+      </ul>
+      <div class="db-hero-actions">
+        <a class="db-btn" href="tel:+14505550167">OUVRIR UN BILLET DE SERVICE</a>
+        <a class="db-btn db-btn-ghost" href="#db-atlas">VOIR L'ATLAS DE DRAINAGE</a>
+      </div>
+    </div>
+    <figure class="db-hero-fig">
+      <img src={IMG.hero} alt="Plombier travaillant sous un évier, outils disposés sur une grille de mesure" />
+      <figcaption>FIG. 1 — VÉRIFICATION SUR LE TERRAIN, UNITÉ 4B, BROSSARD</figcaption>
+      <svg class="db-hero-svg" viewBox="0 0 400 200" aria-hidden="true">
+        <g stroke="#ffffff" stroke-width="3" fill="none" opacity="0.95">
+          <path d="M20 150 H140 Q160 150 160 130 V70 Q160 50 180 50 H300" />
+          <path d="M300 50 V110 Q300 130 320 130 H380" />
+          <circle cx="160" cy="100" r="12" />
+          <path d="M151 91 L169 109 M169 91 L151 109" />
+          <circle cx="240" cy="50" r="12" />
+          <path d="M231 41 L249 59 M249 41 L231 59" />
+        </g>
+        <g font-family="IBM Plex Mono, monospace" font-size="12" fill="#ffffff" opacity="0.9">
+          <text x="120" y="144">Ø 110mm PVC</text>
+          <text x="196" y="46">ÉVENT</text>
+          <text x="20" y="30">DÉBIT →</text>
+        </g>
+        <g stroke="#7dd7ff" stroke-width="1" aria-hidden="true">
+          <line x1="20" y1="175" x2="140" y2="175" />
+          <line x1="20" y1="170" x2="20" y2="180" /><line x1="140" y1="170" x2="140" y2="180" />
+        </g>
+        <text x="80" y="190" font-family="IBM Plex Mono, monospace" font-size="11" fill="#7dd7ff">1200 mm</text>
+      </svg>
+    </figure>
+  </section>
+
+  <!-- SERVICES: spec sheet -->
+  <section class="db-sect" id="db-services" aria-label="Services">
+    <div class="db-sect-head">
+      <p class="db-kicker">FICHE TECHNIQUE · RÉV C</p>
+      <h2 class="db-h2">SERVICES</h2>
+      <p class="db-sect-sub">Des postes chiffrés, comme un bordereau de quantités. Aucun poste provisionnel, aucune surprise.</p>
+    </div>
+    <div class="db-table-wrap">
+      <table class="db-table">
+        <thead>
+          <tr><th scope="col">Code</th><th scope="col">Désignation</th><th scope="col">Spécifications</th><th scope="col">Délai</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>P-01</td><td>Isolement d'urgence d'une fuite</td><td>Ø 15–110 mm · répartition 24/7</td><td>Le jour même</td></tr>
+          <tr><td>P-02</td><td>Débouchage de drain + caméra</td><td>Robot 1080p · enregistrement complet</td><td>24 h</td></tr>
+          <tr><td>P-03</td><td>Installation de chauffe-eau</td><td>40/60 gal · 4500 W · CSA</td><td>48 h</td></tr>
+          <tr><td>P-04</td><td>Plomberie brute, construction neuve</td><td>Chiffré à partir des plans</td><td>Sur devis</td></tr>
+          <tr><td>P-05</td><td>Clapet antiretour + puisard</td><td>CSA B64 · protection contre les refoulements</td><td>1 semaine</td></tr>
+          <tr><td>P-06</td><td>Remplacement d'appareils</td><td>Appareils du client acceptés</td><td>48 h</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- DRAINAGE ATLAS -->
+  <section class="db-sect db-atlas" id="db-atlas" aria-label="Atlas de drainage">
+    <div class="db-sect-head">
+      <p class="db-kicker">PLANCHE 07 · DRAINAGE RÉSIDENTIEL TYPE</p>
+      <h2 class="db-h2">ATLAS DE DRAINAGE</h2>
+      <p class="db-sect-sub">Le plan à partir duquel on travaille à chaque appel. Le vôtre est dessiné gratuitement avec tout service P-02.</p>
+    </div>
+    <svg class="db-atlas-svg" viewBox="0 0 640 420" role="img" aria-label="Plan schématique de drainage d'une maison type">
+      <defs>
+        <marker id="db-arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+          <path d="M0,0 L8,4 L0,8" fill="none" stroke="#7dd7ff" stroke-width="1.5" />
+        </marker>
+      </defs>
+      <rect x="60" y="60" width="520" height="300" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.9" />
+      <line x1="300" y1="60" x2="300" y2="360" stroke="#ffffff" stroke-width="1" opacity="0.4" />
+      <line x1="60" y1="220" x2="580" y2="220" stroke="#ffffff" stroke-width="1" opacity="0.4" />
+      <g stroke="#ffffff" stroke-width="4" fill="none">
+        <path d="M110 320 V250 Q110 240 120 240 H260" />
+        <path d="M260 240 V160 Q260 150 270 150 H420" />
+        <path d="M420 150 V110 Q420 100 430 100 H530" />
+        <path d="M530 100 V60" />
+      </g>
+      <g stroke="#7dd7ff" stroke-width="2" fill="none">
+        <path d="M260 240 V320" />
+      </g>
+      <g fill="#0d2f8c" stroke="#ffffff" stroke-width="2">
+        <circle cx="260" cy="240" r="10" />
+        <circle cx="420" cy="150" r="10" />
+        <rect x="522" y="252" width="16" height="16" />
+      </g>
+      <g font-family="IBM Plex Mono, monospace" font-size="13" fill="#ffffff">
+        <text x="80" y="345">CUISINE</text>
+        <text x="330" y="345">SALLE DE BAIN</text>
+        <text x="330" y="130">BUANDERIE</text>
+        <text x="455" y="345">REGARD</text>
+        <text x="288" y="232">SIPHON Ø 50</text>
+        <text x="448" y="142">SIPHON Ø 40</text>
+      </g>
+      <g font-family="IBM Plex Mono, monospace" font-size="12" fill="#7dd7ff">
+        <text x="545" y="48">ÉVENT ↑ TOIT</text>
+      </g>
+      <g stroke="#7dd7ff" stroke-width="1">
+        <line x1="60" y1="392" x2="580" y2="392" marker-end="url(#db-arr)" marker-start="url(#db-arr)" />
+      </g>
+      <text x="320" y="410" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="#7dd7ff">5200 mm</text>
+      <g stroke="#7dd7ff" stroke-width="1">
+        <line x1="612" y1="60" x2="612" y2="360" marker-end="url(#db-arr)" marker-start="url(#db-arr)" />
+      </g>
+      <text x="628" y="215" font-family="IBM Plex Mono, monospace" font-size="12" fill="#7dd7ff" transform="rotate(90 628 215)">3000 mm</text>
+    </svg>
+    <p class="db-atlas-note">NORD ↑ · TOUTES DIMENSIONS EN MM · NE PAS MESURER SUR LE PLAN</p>
+  </section>
+
+  <!-- TEST LOGS -->
+  <section class="db-sect" id="db-tests" aria-label="Journaux d'essais">
+    <div class="db-sect-head">
+      <p class="db-kicker">DOSSIER QUALITÉ · T3 2026</p>
+      <h2 class="db-h2">JOURNAUX D'ESSAIS</h2>
+      <p class="db-sect-sub">Chaque travail se termine par un essai signé. Voici ce que les clients ont approuvé ce trimestre.</p>
+    </div>
+    <div class="db-logs">
+      <article class="db-log">
+        <p class="db-log-id">ESSAI 04 <span>· INSPECTION CAMÉRA · RUE MILAN</span></p>
+        <p class="db-log-body">"Ils ont trouvé l'intrusion de racines à 14 mètres, m'ont montré les images, ont dégagé le tout et prouvé que la conduite coulait librement avant de partir."</p>
+        <p class="db-log-meta">CLIENT : M. TREMBLAY · SIGNÉ LE 2026-09-18 · <strong class="db-pass">RÉSULTAT : RÉUSSI</strong></p>
+      </article>
+      <article class="db-log">
+        <p class="db-log-id">ESSAI 07 <span>· ESSAI HYDROSTATIQUE DE DRAIN · RUE NAPLES</span></p>
+        <p class="db-log-body">"Deux plombiers, des couvre-chaussures et une courbe de pression imprimée remise à la fin. Personne n'avait jamais documenté un drain pour moi avant."</p>
+        <p class="db-log-meta">CLIENT : S. ROY · SIGNÉ LE 2026-09-02 · <strong class="db-pass">RÉSULTAT : RÉUSSI</strong></p>
+      </article>
+      <article class="db-log">
+        <p class="db-log-id">ESSAI 11 <span>· VÉRIFICATION DE PRESSION DES APPAREILS · BOUL. TASCHEREAU</span></p>
+        <p class="db-log-body">"Chauffe-eau remplacé en une matinée. Ils ont laissé le reçu d'élimination de l'ancien réservoir et la carte de garantie du nouveau dans un dossier."</p>
+        <p class="db-log-meta">CLIENT : L. BERGERON · SIGNÉ LE 2026-08-21 · <strong class="db-pass">RÉSULTAT : RÉUSSI</strong></p>
+      </article>
+    </div>
+  </section>
+
+  <!-- THE FIRM -->
+  <section class="db-sect db-firm" id="db-firm" aria-label="À propos de la firme">
+    <div class="db-firm-in">
+      <div>
+        <p class="db-kicker">NOTES GÉNÉRALES</p>
+        <h2 class="db-h2">LA FIRME</h2>
+        <p>Débit Plomberie est une entreprise de deux équipes à Brossard dirigée par Philippe Débit, maître plombier licencié RBQ. On garde une table à dessin au bureau et une caméra dans chaque camion. Si on ne peut pas le mesurer, on ne le vend pas.</p>
+        <ul class="db-firm-list">
+          <li><span>LICENCE</span><strong>RBQ 5688-4412-01</strong></li>
+          <li><span>ÉQUIPES</span><strong>2 CAMIONS · BASÉS À BROSSARD</strong></li>
+          <li><span>ZONE</span><strong>RIVE-SUD · RAYON DE 30 KM</strong></li>
+          <li><span>GARANTIE</span><strong>5 ANS DE MAIN-D'ŒUVRE, PAR ÉCRIT</strong></li>
+        </ul>
+      </div>
+      <figure class="db-firm-fig">
+        <img src={IMG.about} alt="Outils de plomberie rangés sur un établi" />
+        <figcaption>FIG. 2 — MAGASIN D'OUTILS, INVENTAIRE T3</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- CONTACT / FOOTER -->
+  <footer class="db-foot" aria-label="Contact">
+    <p class="db-kicker">ÉMIS POUR CONSTRUCTION</p>
+    <h2 class="db-h2">OUVREZ VOTRE<br />BILLET DE SERVICE</h2>
+    <a class="db-foot-num" href="tel:+14505550167">(450) 555-0167</a>
+    <p class="db-foot-sub">Ligne d'urgence 24/7 · Brossard et la Rive-Sud<br />Écrivez-le sur le plan. On apportera le plan.</p>
+    <p class="db-foot-fine">© 2026 Débit Plomberie · Site démo fictif pour vitrine de design · Pas une vraie entreprise</p>
+  </footer>
+
+  <style>
+    .db { margin: 0; background: #0d2f8c; color: #fff; font-family: "Space Grotesk", system-ui, sans-serif; }
+    .db * { box-sizing: border-box; }
+    .db img { display: block; max-width: 100%; }
+    .db a { color: inherit; }
+
+    .db-bar {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      padding: 14px clamp(18px, 4vw, 40px); border-bottom: 1px solid rgba(255,255,255,.35);
+      background: rgba(13,47,140,.92); position: sticky; top: 0; z-index: 10;
+    }
+    .db-brand { margin: 0; font-weight: 700; font-size: 22px; letter-spacing: .06em; }
+    .db-brand-sub { display: block; font-family: "IBM Plex Mono", monospace; font-weight: 400; font-size: 10.5px; letter-spacing: .22em; opacity: .75; margin-top: 2px; }
+    .db-nav { display: flex; gap: 22px; font-family: "IBM Plex Mono", monospace; font-size: 12.5px; letter-spacing: .12em; }
+    .db-nav a { text-decoration: none; opacity: .85; border-bottom: 1px solid transparent; }
+    .db-nav a:hover { border-color: #7dd7ff; opacity: 1; }
+    .db-cta {
+      font-family: "IBM Plex Mono", monospace; font-weight: 700; font-size: 14px;
+      border: 2px solid #fff; padding: 10px 18px; text-decoration: none; letter-spacing: .06em;
+    }
+    .db-cta:hover { background: #fff; color: #0d2f8c; }
+
+    .db-hero {
+      display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(24px, 4vw, 56px);
+      padding: clamp(48px, 9vh, 110px) clamp(18px, 5vw, 64px);
+      background-image:
+        linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,.13) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.13) 1px, transparent 1px);
+      background-size: 24px 24px, 24px 24px, 120px 120px, 120px 120px;
+      border-bottom: 1px solid rgba(255,255,255,.35); align-items: center;
+    }
+    .db-kicker { font-family: "IBM Plex Mono", monospace; font-size: 12px; letter-spacing: .24em; color: #7dd7ff; margin: 0 0 14px; }
+    .db-h1 { font-size: clamp(3rem, 9vw, 6.4rem); line-height: .94; margin: 0 0 20px; letter-spacing: -.01em; }
+    .db-lede { font-size: 17.5px; line-height: 1.65; max-width: 46ch; margin: 0 0 28px; opacity: .92; }
+    .db-readouts {
+      list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+      background: rgba(255,255,255,.35); border: 1px solid rgba(255,255,255,.35); padding: 0; margin: 0 0 30px; max-width: 560px;
+    }
+    .db-readouts li { background: #0d2f8c; padding: 12px 14px; }
+    .db-readouts span { display: block; font-family: "IBM Plex Mono", monospace; font-size: 10.5px; letter-spacing: .2em; opacity: .7; margin-bottom: 5px; }
+    .db-readouts strong { font-family: "IBM Plex Mono", monospace; font-size: 15.5px; font-weight: 600; color: #7dd7ff; }
+    .db-hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .db-btn {
+      font-family: "IBM Plex Mono", monospace; font-weight: 700; font-size: 13.5px; letter-spacing: .08em;
+      background: #fff; color: #0d2f8c; padding: 16px 26px; text-decoration: none;
+    }
+    .db-btn:hover { background: #7dd7ff; }
+    .db-btn-ghost { background: transparent; color: #fff; border: 2px solid #fff; padding: 14px 24px; }
+    .db-btn-ghost:hover { background: rgba(255,255,255,.12); }
+    .db-hero-fig { margin: 0; border: 1px solid rgba(255,255,255,.5); background: rgba(255,255,255,.05); padding: 10px; }
+    .db-hero-fig img { width: 100%; height: 300px; object-fit: cover; filter: saturate(.7) contrast(1.05); }
+    .db-hero-fig figcaption, .db-firm-fig figcaption {
+      font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .14em; opacity: .75; padding: 10px 4px 2px;
+    }
+    .db-hero-svg { width: 100%; height: auto; margin-top: 6px; }
+
+    .db-sect { padding: clamp(52px, 9vh, 100px) clamp(18px, 5vw, 64px); max-width: 1180px; margin: 0 auto; }
+    .db-sect-head { margin-bottom: 34px; }
+    .db-h2 { font-size: clamp(2.2rem, 6vw, 4rem); margin: 0 0 10px; letter-spacing: -.01em; line-height: 1; }
+    .db-sect-sub { font-size: 16.5px; opacity: .85; max-width: 58ch; margin: 0; line-height: 1.65; }
+
+    .db-table-wrap { border: 1px solid rgba(255,255,255,.5); overflow-x: auto; }
+    .db-table { width: 100%; border-collapse: collapse; font-family: "IBM Plex Mono", monospace; font-size: 14px; min-width: 640px; }
+    .db-table th {
+      text-align: left; font-size: 11.5px; letter-spacing: .22em; font-weight: 600; color: #7dd7ff;
+      padding: 14px 18px; border-bottom: 2px solid #fff; background: rgba(255,255,255,.06);
+    }
+    .db-table td { padding: 16px 18px; border-bottom: 1px solid rgba(255,255,255,.22); vertical-align: top; }
+    .db-table tbody tr:hover { background: rgba(255,255,255,.06); }
+    .db-table td:first-child { font-weight: 700; color: #7dd7ff; white-space: nowrap; }
+
+    .db-atlas { border-top: 1px solid rgba(255,255,255,.35); border-bottom: 1px solid rgba(255,255,255,.35); background: rgba(255,255,255,.03); max-width: none; }
+    .db-atlas .db-sect-head { max-width: 1180px; margin-left: auto; margin-right: auto; }
+    .db-atlas-svg { display: block; max-width: 900px; margin: 0 auto; width: 100%; height: auto; }
+    .db-atlas-note { text-align: center; font-family: "IBM Plex Mono", monospace; font-size: 11.5px; letter-spacing: .2em; opacity: .7; margin: 18px 0 0; }
+
+    .db-logs { display: grid; gap: 18px; }
+    .db-log { border: 1px solid rgba(255,255,255,.5); padding: 24px clamp(18px, 3vw, 32px); background: rgba(255,255,255,.04); }
+    .db-log-id { font-family: "IBM Plex Mono", monospace; font-size: 13px; letter-spacing: .14em; color: #7dd7ff; margin: 0 0 12px; font-weight: 600; }
+    .db-log-id span { color: #fff; opacity: .7; font-weight: 400; }
+    .db-log-body { font-size: 17px; line-height: 1.65; margin: 0 0 14px; max-width: 70ch; }
+    .db-log-meta { font-family: "IBM Plex Mono", monospace; font-size: 12px; letter-spacing: .08em; opacity: .8; margin: 0; }
+    .db-pass { color: #7dd7ff; border: 1px solid #7dd7ff; padding: 2px 10px; }
+
+    .db-firm { border-top: 1px solid rgba(255,255,255,.35); }
+    .db-firm-in { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(24px, 4vw, 56px); align-items: center; }
+    .db-firm p { font-size: 17px; line-height: 1.7; opacity: .92; max-width: 52ch; }
+    .db-firm-list { list-style: none; padding: 0; margin: 28px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(255,255,255,.35); border: 1px solid rgba(255,255,255,.35); }
+    .db-firm-list li { background: #0d2f8c; padding: 14px 16px; }
+    .db-firm-list span { display: block; font-family: "IBM Plex Mono", monospace; font-size: 10.5px; letter-spacing: .2em; opacity: .65; margin-bottom: 5px; }
+    .db-firm-list strong { font-family: "IBM Plex Mono", monospace; font-size: 14.5px; font-weight: 600; }
+    .db-firm-fig { margin: 0; border: 1px solid rgba(255,255,255,.5); padding: 10px; background: rgba(255,255,255,.05); }
+    .db-firm-fig img { width: 100%; height: 340px; object-fit: cover; filter: saturate(.7) contrast(1.05); }
+
+    .db-foot {
+      text-align: center; padding: clamp(60px, 10vh, 110px) 20px clamp(40px, 6vh, 60px);
+      border-top: 1px solid rgba(255,255,255,.35);
+      background-image:
+        linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    .db-foot .db-h2 { margin-bottom: 24px; }
+    .db-foot-num {
+      display: inline-block; font-family: "IBM Plex Mono", monospace; font-weight: 700;
+      font-size: clamp(2.4rem, 8vw, 4.6rem); letter-spacing: .02em; text-decoration: none;
+      border: 3px solid #fff; padding: 14px 34px; margin-bottom: 22px;
+    }
+    .db-foot-num:hover { background: #fff; color: #0d2f8c; }
+    .db-foot-sub { font-size: 16.5px; line-height: 1.7; opacity: .85; margin: 0 0 30px; }
+    .db-foot-fine { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; letter-spacing: .1em; opacity: .55; margin: 0; }
+
+    @media (max-width: 900px) {
+      .db-hero, .db-firm-in { grid-template-columns: 1fr; }
+      .db-nav { display: none; }
+      .db-readouts { grid-template-columns: repeat(2, 1fr); }
+      .db-firm-list { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .db * { transition: none !important; animation: none !important; }
+    }
+  </style>
+
+  <EscapeHatch locale="fr" />
+</body>
+</html>
