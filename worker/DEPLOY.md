@@ -6,7 +6,7 @@ to run once, with the user's approval (they create Cloudflare resources).
 ## 1. Create the KV namespace
 
 ```bash
-cd ~/workspace/webao-darkmode/webao
+cd ~/workspace/WEBAO
 npx wrangler kv:namespace create WEBAO_KV
 ```
 
@@ -30,8 +30,9 @@ Replace the placeholder in the `kv_namespaces` block:
 ```
 
 > The admin password hash (`config:auth`) is seeded automatically on first login —
-> no manual step needed. The default password is `32560`; change it immediately
-> in the admin panel (Config tab) after the first login.
+> no manual step needed. Use the default password from your deploy notes (never
+> commit it to the repo); change it immediately in the admin panel (Config tab)
+> after the first login. If the default was ever exposed, rotate it now.
 
 ## 3. Build the site and deploy
 
@@ -55,7 +56,7 @@ curl -s -X POST https://webao.ca/api/track/pageview \
 # login (expect {"ok":true,"token":"..."}) — then CHANGE the password
 curl -s -X POST https://webao.ca/api/admin/login \
   -H 'Content-Type: application/json' -H 'Origin: https://webao.ca' \
-  -d '{"password":"32560"}'
+  -d '{"password":"<default-from-deploy-log>"}'
 
 # stats (expect 200 with labels/views/visitors arrays)
 curl -s 'https://webao.ca/api/admin/stats?range=week' \
