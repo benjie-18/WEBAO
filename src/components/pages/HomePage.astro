@@ -483,6 +483,25 @@ const processId = locale === "fr" ? "processus" : "process";
     .station-visual, .mini-card { max-width: 100%; overflow-x: clip; }
     .station-card .station-body h3 { font-size: 1.15rem; }
     .station-card .station-body p { font-size: 0.95rem; }
+    .stations {
+      position: static !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 32px !important;
+    }
+    .station {
+      position: static !important;
+      left: auto !important;
+      top: auto !important;
+      width: 100% !important;
+      transform: none !important;
+      margin: 0 !important;
+    }
+    .station-card {
+      transform: none !important;
+      margin: 0 !important;
+      left: auto !important;
+    }
   }
 
   /* Reduced motion: vertical stack, everything visible, no pin/scrub */
