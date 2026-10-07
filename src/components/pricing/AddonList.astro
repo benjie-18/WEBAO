@@ -2,6 +2,7 @@
 import { featuredAddonOrder, remainingAddonOrder } from "../../lib/pricing";
 import { useTranslations, type Locale } from "../../lib/i18n";
 import NoteRef from "../NoteRef.astro";
+import CartButton from "./CartButton.astro";
 
 interface Props {
   locale: Locale;
@@ -17,6 +18,22 @@ const strip = t.pricing.popularStrip;
 function pad(n: number) {
   return String(n).padStart(2, "0");
 }
+
+const addonPriceCents: Record<string, { cents: number; interval: "month" | "one-time" }> = {
+  localseo: { cents: 15999, interval: "month" },
+  booking: { cents: 4999, interval: "month" },
+  review: { cents: 9999, interval: "month" },
+  ecommerce: { cents: 5999, interval: "month" },
+  bilingual: { cents: 3499, interval: "month" },
+  aichat: { cents: 9999, interval: "month" },
+  blog: { cents: 3499, interval: "month" },
+  email: { cents: 2999, interval: "month" },
+  report: { cents: 2999, interval: "month" },
+  extrapage: { cents: 4499, interval: "one-time" },
+  priority: { cents: 5999, interval: "month" },
+  admin: { cents: 3999, interval: "month" },
+  quotephoto: { cents: 999, interval: "month" },
+};
 ---
 
 <section class="addon-section" aria-labelledby="addons-h" data-addon-section>
@@ -72,6 +89,13 @@ function pad(n: number) {
                   <p class="addon-price">
                     <span class="price-roll"><span class="price-roll-inner">{it.price}</span></span>
                   </p>
+                  <CartButton
+                    product={id}
+                    name={it.name}
+                    priceCents={addonPriceCents[id].cents}
+                    interval={addonPriceCents[id].interval}
+                    type="addon"
+                  />
                 </div>
               </div>
             </li>
@@ -98,6 +122,13 @@ function pad(n: number) {
                   <p class="addon-price addon-price--sm">
                     <span class="price-roll"><span class="price-roll-inner">{it.price}</span></span>
                   </p>
+                  <CartButton
+                    product={id}
+                    name={it.name}
+                    priceCents={addonPriceCents[id].cents}
+                    interval={addonPriceCents[id].interval}
+                    type="addon"
+                  />
                 </div>
               </div>
             </li>
