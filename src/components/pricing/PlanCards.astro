@@ -2,6 +2,7 @@
 import { plans, type PlanId } from "../../lib/pricing";
 import { useTranslations, type Locale } from "../../lib/i18n";
 import NoteRef from "../NoteRef.astro";
+import CartButton from "./CartButton.astro";
 
 interface Props {
   locale: Locale;
@@ -14,6 +15,13 @@ const planData: Record<PlanId, (typeof tp)["launch"]> = {
   launch: tp.launch,
   grow: tp.grow,
   scale: tp.scale,
+};
+
+// Price in cents for cart (monthly)
+const planPriceCents: Record<PlanId, number> = {
+  launch: 8999,
+  grow: 14999,
+  scale: 34999,
 };
 
 ---
@@ -43,7 +51,16 @@ const planData: Record<PlanId, (typeof tp)["launch"]> = {
                   {p.badge !== "" && (
                     <span class="pcard-badge">{p.badge}</span>
                   )}
-                  <h3 class="pcard-name">{p.name}</h3>
+                  <div class="pcard-name-row">
+                    <h3 class="pcard-name">{p.name}</h3>
+                    <CartButton
+                      product={def.id}
+                      name={p.name}
+                      priceCents={planPriceCents[def.id]}
+                      interval="month"
+                      type="plan"
+                    />
+                  </div>
                   <p class="pcard-price">
                     {p.monthly}
                     {p.priceNote > 0 && <NoteRef locale={locale} note={p.priceNote} />}
@@ -265,6 +282,12 @@ const planData: Record<PlanId, (typeof tp)["launch"]> = {
     padding: 6px 12px;
     border-radius: 999px;
     margin-bottom: 14px;
+  }
+  .pcard-name-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
   }
   .pcard-name {
     font-family: var(--font-display);
