@@ -2,6 +2,7 @@
 import type { BundleId } from "../../lib/pricing";
 import { useTranslations, type Locale } from "../../lib/i18n";
 import NoteRef from "../NoteRef.astro";
+import CartButton from "./CartButton.astro";
 
 interface Props {
   locale: Locale;
@@ -13,12 +14,26 @@ interface Props {
 const { locale, bundleId, spatial = false } = Astro.props as Props;
 const t = useTranslations(locale);
 const b = t.pricing.bundles[bundleId];
+
+const bundlePriceCents: Record<BundleId, number> = {
+  lead: 23999,
+  visibility: 9999,
+};
 ---
 
 <div class:list={["bundle-card", spatial && "bundle-card--spatial"]}>
   <div class="bc-group bc-group--head">
   <p class="bc-kicker">{t.pricing.bundles.eyebrow}</p>
-  <h3 class="bc-name">{b.name}</h3>
+  <div class="bc-name-row">
+    <h3 class="bc-name">{b.name}</h3>
+    <CartButton
+      product={bundleId === "lead" ? "lead-pack" : "visibility-pack"}
+      name={b.name}
+      priceCents={bundlePriceCents[bundleId]}
+      interval="month"
+      type="bundle"
+    />
+  </div>
   <p class="bc-price">
     {b.price}
     <NoteRef locale={locale} note={b.priceNote} />
