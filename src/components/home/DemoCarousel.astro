@@ -116,7 +116,23 @@ const total = String(demos.length).padStart(2, "0");
     (root as HTMLElement).dataset.init = "1";
     const pin = root.querySelector('[data-proof-pin]') as HTMLElement;
     const track = root.querySelector('[data-proof-track]') as HTMLElement;
-    const panels = Array.from(track.querySelectorAll('[data-proof-panel]')) as HTMLElement[];
+    let panels = Array.from(track.querySelectorAll('[data-proof-panel]')) as HTMLElement[];
+    // Infinite loop visual: clone last panel to front so the end peeks on the left
+    const lastClone = panels[panels.length - 1].cloneNode(true) as HTMLElement;
+    lastClone.setAttribute('data-clone', 'true');
+    lastClone.setAttribute('aria-hidden', 'true');
+    track.prepend(lastClone);
+    // Re-query to include the clone
+    panels = Array.from(track.querySelectorAll('[data-proof-panel]')) as HTMLElement[];
+    // Start at first real panel (visual index 1, after the prepended clone)
+    // Use requestAnimationFrame to ensure layout is ready
+    requestAnimationFrame(() => {
+      const firstReal = panels[1];
+      if (firstReal) {
+        const left = firstReal.offsetLeft - (track.clientWidth - firstReal.offsetWidth) / 2;
+        track.scrollTo({ left, behavior: "auto" });
+      }
+    });
     const prev = root.querySelector('[data-proof-prev]') as HTMLButtonElement;
     const next = root.querySelector('[data-proof-next]') as HTMLButtonElement;
     const fill = root.querySelector('[data-proof-fill]') as HTMLElement;
@@ -137,7 +153,10 @@ const total = String(demos.length).padStart(2, "0");
       const p = Math.min(1, Math.max(0, track.scrollLeft / max));
       fill.style.transform = `scaleX(${p})`;
       const idx = Math.min(n - 1, Math.round(p * (n - 1)));
-      countNum.textContent = String(idx + 1).padStart(2, "0");
+      // Map visual index to real index (visual 0 is clone of last, so real = visual - 1)
+      const realN = n - 1; // excluding the prepended clone
+      const realIdx = idx === 0 ? realN - 1 : idx - 1;
+      countNum.textContent = String(realIdx + 1).padStart(2, "0");
       for (let i = 0; i < n; i++) panels[i].classList.toggle("is-active", i === idx);
     }
     function queuePaint() {
