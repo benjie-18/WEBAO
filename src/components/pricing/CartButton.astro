@@ -8,7 +8,14 @@
  * - priceCents: price in cents
  * - interval: "month" | "year" | "one-time"
  * - type: "plan" | "bundle" | "addon"
- * - billing: which billing option this button represents ("monthly" | "yearly")
+ * - yearlyPriceCents: annual price in cents, when the product can be billed
+ *   yearly. The button then follows the pricing page's billing term toggle
+ *   (data-price-year); without it the button always adds the base interval
+ *   (one-time add-ons, or products with no annual price).
+ *
+ * The active key/price shown here is the monthly (base) variant; the client
+ * cart layer (`src/lib/cart-ui.ts`) re-derives both from `data-*` at click
+ * time and keeps `data-key` in sync for debugging.
  */
 interface Props {
   product: string;
@@ -16,10 +23,12 @@ interface Props {
   priceCents: number;
   interval: "month" | "year" | "one-time";
   type: "plan" | "bundle" | "addon";
+  yearlyPriceCents?: number;
 }
 
-const { product, name, priceCents, interval, type } = Astro.props as Props;
+const { product, name, priceCents, interval, type, yearlyPriceCents } = Astro.props as Props;
 const key = `${product}-${interval}`;
+const hasYearly = typeof yearlyPriceCents === "number" && Number.isFinite(yearlyPriceCents);
 ---
 
 <button
@@ -32,8 +41,10 @@ const key = `${product}-${interval}`;
   data-price-cents={priceCents}
   data-interval={interval}
   data-type={type}
+  data-price-year={hasYearly ? String(yearlyPriceCents) : undefined}
   aria-label={`Add ${name} to cart`}
   title={`Add ${name} to cart`}
+  aria-pressed="false"
 >
   <svg class="cart-btn-icon cart-btn-icon--cart" viewBox="0 0 24 24" fill="none" aria-hidden="true">
     <g clip-path="url(#cart-clip)">

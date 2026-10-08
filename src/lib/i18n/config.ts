@@ -2,7 +2,7 @@ export const locales = ["en", "fr"] as const;
 export type Locale = typeof locales[number];
 export const defaultLocale: Locale = "en";
 
-export type PageKey = "home" | "pricing" | "contact" | "demos" | "notfound" | "start" | "terms" | "refunds";
+export type PageKey = "home" | "pricing" | "contact" | "demos" | "notfound" | "start" | "terms" | "refunds" | "sources";
 
 export const localizedPaths: Record<Locale, Record<PageKey, string>> = {
   en: {
@@ -14,6 +14,7 @@ export const localizedPaths: Record<Locale, Record<PageKey, string>> = {
     start: "/start",
     terms: "/terms",
     refunds: "/refunds",
+    sources: "/sources",
   },
   fr: {
     home: "/fr",
@@ -24,6 +25,7 @@ export const localizedPaths: Record<Locale, Record<PageKey, string>> = {
     start: "/fr/commencer",
     terms: "/fr/conditions",
     refunds: "/fr/remboursements",
+    sources: "/fr/sources",
   },
 };
 
@@ -56,7 +58,19 @@ export function getPageKeyFromPath(pathname: string): { locale: Locale; pageKey:
 }
 
 export function getLocaleFromUrl(url: URL | string): Locale {
-  const pathname = typeof url === "string" ? url : url.pathname;
+  // Accept a URL object, a pathname ("/fr/tarifs") or a full URL string
+  // ("https://webao.ca/fr/tarifs") — the string form used to be treated as a
+  // pathname, so a full URL silently answered "en".
+  let pathname: string;
+  if (typeof url === "string") {
+    try {
+      pathname = new URL(url, "https://webao.ca").pathname;
+    } catch {
+      pathname = url;
+    }
+  } else {
+    pathname = url.pathname;
+  }
   const { locale } = getPageKeyFromPath(pathname);
   return locale;
 }

@@ -7,11 +7,12 @@ const description = "Votre abonnement WEBAO est actif. Nous vous contacterons so
 ---
 
 <BaseLayout title={title} description={description} locale={locale} noIndex>
-  <section class="section">
+  <section class="section" data-cart-clear>
     <div class="shell" style="max-width: 640px; text-align:center;">
       <div class="eyebrow" style="justify-content:center;">Paiement confirmé</div>
       <h1 class="display" style="font-size: clamp(2rem, 5vw, 3.2rem); line-height:.92; margin-top:12px;">Bienvenue.</h1>
-      <p class="prose" style="margin-top:14px; max-width: 48ch; margin-inline:auto;">
+      <div id="order-summary" hidden style="margin-top:14px; text-align:left;"></div>
+      <p class="prose" id="success-copy" style="margin-top:14px; max-width: 48ch; margin-inline:auto;">
         Votre abonnement de 149 $/mois est actif. Nous vous contacterons dans
         un délai d'un jour ouvrable pour démarrer la création de votre site.
       </p>
@@ -22,3 +23,74 @@ const description = "Votre abonnement WEBAO est actif. Nous vous contacterons so
     </div>
   </section>
 </BaseLayout>
+
+<script is:inline>
+  // S'exécute pendant l'analyse du document — avant que l'init du panier de
+  // la mise en page ne vide le panier sur cette page (`data-cart-clear`) —
+  // pour que la confirmation affiche ce qui a réellement été acheté. Le flux
+  // panier peut totaliser n'importe quel montant : la phrase fixe « 149 $/mois
+  // » ne reste que pour le flux historique /start, qui n'a pas de panier.
+  (function () {
+    try {
+      var raw = localStorage.getItem('webao_cart_v1');
+      var items = raw ? JSON.parse(raw) : [];
+      if (!Array.isArray(items) || items.length === 0) return;
+      // La présentation monétaire vient du tiroir localisé de la mise en page
+      // (« C$89.99 » en anglais, « 89,99 $" » en français) : un seul script
+      // sert les deux langues.
+      var drawer = document.querySelector('[data-cart-drawer]');
+      var data = (drawer && drawer.dataset) || {};
+      // ?? not ||: the French prefix is an empty string by design.
+      var prefix = data.moneyPrefix ?? 'C$';
+      var suffix = data.moneySuffix ?? '';
+      var decimal = data.moneyDecimal ?? '.';
+      function money(cents) {
+        var parts = (Math.round(Number(cents) || 0) / 100).toFixed(2).split('.');
+        var grouped = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, decimal === '.' ? ',' : ' ');
+        return prefix + grouped + decimal + parts[1] + suffix;
+      }
+      function intervalSuffix(interval) {
+        if (interval === 'year') return data.suffixYear ?? '/an';
+        if (interval === 'month') return data.suffixMonth ?? '/mois';
+        return data.suffixOneTime ?? ' unique';
+      }
+      function esc(s) {
+        return String(s)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+      var total = 0;
+      var rows = items
+        .map(function (item) {
+          var price = Number(item.priceCents) || 0;
+          total += price;
+          return (
+            '<div style="display:flex; justify-content:space-between; align-items:baseline; gap:12px; padding:8px 0; border-bottom:1px solid var(--line);">' +
+            '<span style="font-weight:600;">' + esc(item.name || item.key || '') + '</span>' +
+            '<span class="mono" style="white-space:nowrap;">' + esc(money(price) + intervalSuffix(item.interval)) + '</span>' +
+            '</div>'
+          );
+        })
+        .join('');
+      var el = document.getElementById('order-summary');
+      if (!el) return;
+      el.hidden = false;
+      el.innerHTML =
+        '<div style="border:1px solid var(--line); border-radius:12px; padding:16px; background:var(--card-bg); max-width:520px; margin-inline:auto;">' +
+        '<p class="mono" style="font-size:10px; letter-spacing:.14em; opacity:.5; margin-bottom:12px;">VOTRE SÉLECTION</p>' +
+        rows +
+        '<div style="display:flex; justify-content:space-between; align-items:baseline; gap:12px; padding-top:12px; font-size:1.1rem;">' +
+        '<strong>Total</strong>' +
+        '<strong class="mono">' + esc(money(total)) + '</strong>' +
+        '</div>' +
+        '</div>';
+      var copy = document.getElementById('success-copy');
+      if (copy) {
+        copy.textContent =
+          'Votre paiement est confirmé. Nous vous contacterons dans un délai d\'un jour ouvrable pour démarrer la création de votre site.';
+      }
+    } catch (e) {}
+  })();
+</script>

@@ -733,3 +733,72 @@ After implementing:
 1. Push all 7 modified files to `main` branch
 2. Deploy worker: `cd worker && wrangler deploy` (for multi-item checkout backend)
 3. Verify on live site
+
+---
+
+## Implementation notes
+
+Implemented from this guide. What changed relative to the plan, and why:
+
+### 1. Yearly billing (the plan's Stripe map already had year prices)
+
+Every recurring product now has an annual price **and** a way to buy it: a
+Monthly/Yearly toggle on the pricing page (`t.cart.billing*`, styled in
+`PricingPage.astro`). `CartButton` takes an extra optional `yearlyPriceCents`
+and renders `data-price-year`, which the client layer uses when the toggle is on
+yearly. Prices live in `src/lib/cart-catalog.ts`.
+
+**Stripe constraint found while implementing:** *“Checkout does not support
+multiple prices with different billing intervals”*. A single session can mix
+recurring and one-time prices, but **not** monthly and yearly ones. Therefore:
+
+- the cart keeps a single term; switching the toggle re-prices the items already
+  in it (`convertItemsToBilling`),
+- `worker/checkout.ts` rejects a mixed cart with 400 instead of letting Stripe
+  return an opaque error,
+- a one-time-only cart is created with `mode=payment` (subscription mode
+  requires at least one recurring item), and `subscription_data[description]`
+  is only sent for subscriptions (`payment_intent_data[description]`
+  otherwise — the old code would have errored on a payment session).
+
+### 2. Key spelling
+
+The cart produces `extrapage-one-time`; the guide's `PRICE_MAP` used
+`extrapage-onetime`. Both resolve now (`normalizeKey`), and
+`tests/cart.test.ts` asserts that every catalog key has a Stripe price and every
+Stripe price has a catalog entry, so the two can't drift apart silently.
+
+### 3. Unknown keys are rejected, not skipped
+
+`if (!pid) continue` would charge the customer less than the cart showed. An
+unknown key now returns 400 listing it, and the checkout page displays the
+message.
+
+### 4. Client layer rewritten into `src/lib/cart-ui.ts`
+
+Same behaviour (drawer, morphing buttons, count badge, one plan at a time) plus:
+
+- strings from `t.cart` via `data-*` attributes instead of hard-coded English,
+  so `/fr` is French and money renders as `890,99 $`,
+- listeners delegated from `document` and a render pass on `astro:page-load`:
+  the old inline script bound on `DOMContentLoaded` only, so the cart stopped
+  working after a ClientRouter navigation,
+- cross-tab `storage` sync, `aria-disabled` on the checkout link when the cart is
+  empty, and a test suite (jsdom) for the whole flow.
+
+### 5. Checkout page
+
+Renders the selection from `webao_cart_v1`, posts `items: [{ key }]`, and does
+**not** open a session when the cart is empty (the plan's fallback would have
+shown “No items in cart” next to a $149 payment form). The session is created
+with `expand[]=line_items`; the summary is then re-rendered from Stripe's
+amounts, so the page shows what will actually be charged. `/checkout/success`
+empties the cart.
+
+### 6. Still to confirm against Stripe (not verifiable from this repo)
+
+- The amounts behind the yearly/one-time price IDs: the cart displays ten months
+  for add-ons and bundles and C$890.99 / C$1,490.99 / C$3,490.99 for plans. If
+  Stripe was configured differently, the checkout summary (rendered from
+  Stripe) will show the real amount — adjust `cart-catalog.ts` to match.
+- Deploy the Worker for the multi-item backend: `cd worker && wrangler deploy`.

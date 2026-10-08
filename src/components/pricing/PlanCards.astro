@@ -1,6 +1,7 @@
 ---
 import { plans, type PlanId } from "../../lib/pricing";
 import { useTranslations, type Locale } from "../../lib/i18n";
+import { priceCentsFor } from "../../lib/cart-catalog";
 import NoteRef from "../NoteRef.astro";
 import CartButton from "./CartButton.astro";
 
@@ -17,12 +18,9 @@ const planData: Record<PlanId, (typeof tp)["launch"]> = {
   scale: tp.scale,
 };
 
-// Price in cents for cart (monthly)
-const planPriceCents: Record<PlanId, number> = {
-  launch: 8999,
-  grow: 14999,
-  scale: 34999,
-};
+// Prices in cents for the cart, from the shared catalog: monthly, or annually
+// in advance (2 months free). One source of truth with `worker/checkout.ts`.
+const planCents = (id: PlanId, interval: "month" | "year"): number => priceCentsFor(id, interval) ?? 0;
 
 ---
 
@@ -56,7 +54,8 @@ const planPriceCents: Record<PlanId, number> = {
                     <CartButton
                       product={def.id}
                       name={p.name}
-                      priceCents={planPriceCents[def.id]}
+                      priceCents={planCents(def.id, "month")}
+                      yearlyPriceCents={planCents(def.id, "year")}
                       interval="month"
                       type="plan"
                     />

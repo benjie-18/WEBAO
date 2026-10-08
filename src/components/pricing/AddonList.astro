@@ -1,6 +1,7 @@
 ---
 import { featuredAddonOrder, remainingAddonOrder } from "../../lib/pricing";
 import { useTranslations, type Locale } from "../../lib/i18n";
+import { baseInterval, cartProducts } from "../../lib/cart-catalog";
 import NoteRef from "../NoteRef.astro";
 import CartButton from "./CartButton.astro";
 
@@ -19,21 +20,22 @@ function pad(n: number) {
   return String(n).padStart(2, "0");
 }
 
-const addonPriceCents: Record<string, { cents: number; interval: "month" | "one-time" }> = {
-  localseo: { cents: 15999, interval: "month" },
-  booking: { cents: 4999, interval: "month" },
-  review: { cents: 9999, interval: "month" },
-  ecommerce: { cents: 5999, interval: "month" },
-  bilingual: { cents: 3499, interval: "month" },
-  aichat: { cents: 9999, interval: "month" },
-  blog: { cents: 3499, interval: "month" },
-  email: { cents: 2999, interval: "month" },
-  report: { cents: 2999, interval: "month" },
-  extrapage: { cents: 4499, interval: "one-time" },
-  priority: { cents: 5999, interval: "month" },
-  admin: { cents: 3999, interval: "month" },
-  quotephoto: { cents: 999, interval: "month" },
-};
+// Prices come from the shared cart catalog (also used by the checkout page
+// and validated against the Stripe price map in `worker/checkout.ts`).
+const addonPriceCents: Record<string, { cents: number; interval: "month" | "one-time"; yearCents?: number }> =
+  Object.fromEntries(
+    [...featuredAddonOrder, ...remainingAddonOrder].map((id) => {
+      const product = cartProducts[id];
+      return [
+        id,
+        {
+          cents: product.oneTimeCents ?? product.monthCents ?? 0,
+          interval: baseInterval(product),
+          yearCents: product.yearCents,
+        },
+      ];
+    }),
+  );
 ---
 
 <section class="addon-section" aria-labelledby="addons-h" data-addon-section>
@@ -93,6 +95,7 @@ const addonPriceCents: Record<string, { cents: number; interval: "month" | "one-
                     product={id}
                     name={it.name}
                     priceCents={addonPriceCents[id].cents}
+                    yearlyPriceCents={addonPriceCents[id].yearCents}
                     interval={addonPriceCents[id].interval}
                     type="addon"
                   />
@@ -126,6 +129,7 @@ const addonPriceCents: Record<string, { cents: number; interval: "month" | "one-
                     product={id}
                     name={it.name}
                     priceCents={addonPriceCents[id].cents}
+                    yearlyPriceCents={addonPriceCents[id].yearCents}
                     interval={addonPriceCents[id].interval}
                     type="addon"
                   />

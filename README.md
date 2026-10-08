@@ -66,6 +66,35 @@ The landing page should be impressive, with animations and great style.
 
 For more information on the artistic direction and components of the main site, visit artistic-direction.md
 
+## SEO
+
+All SEO lives in `<head>` — no visible content depends on it, so the page
+experience is identical with or without it. The invariants, all pinned by
+tests (`tests/demo-seo.test.ts`, `tests/sitemap.test.ts`,
+`tests/i18n.test.ts`, `tests/content.test.ts` and the built-HTML sweep in
+`tests/cloudflare.integration.ts`):
+
+- Every page has a unique, localized `<title>` and meta description, a
+  canonical URL (directory-style, trailing slash — matching the 307 targets),
+  and `en` / `fr` / `x-default` hreflang alternates.
+- Indexed pages emit `index, follow, max-image-preview:large, max-snippet:-1,
+  max-video-preview:-1`; utility pages (`/admin`, `/checkout`, `/404`) and the
+  hidden demo (`boba-club`) are `noindex, nofollow` and disallowed in
+  `robots.txt`.
+- Open Graph (with image dimensions + alt) and Twitter `summary_large_image`
+  cards on every page; demo pages use their own lead image as `og:image`.
+- JSON-LD: `Organization` + `WebSite` everywhere, `BreadcrumbList` on subpages,
+  `FAQPage` on the home page, `Product`/`Offer` on pricing, `ItemList` on the
+  demo catalog, and `WebPage` + breadcrumb on every demo microsite.
+- `sitemap.xml` lists all 98 public URLs with hreflang alternates and image
+  entries (the Google image-sitemap namespace) for the demo lead images.
+- Demo microsites are standalone HTML documents (no `BaseLayout`); their head
+  block is rendered by `src/components/demos/DemoSeo.astro` from the helpers
+  in `src/lib/demo-seo.ts`. Hero images get `fetchpriority="high"`, the rest
+  `loading="lazy"` + `decoding="async"`.
+- Checkout/start pages preconnect to `js.stripe.com`, `api.stripe.com` and
+  `checkout.stripe.com` so the payment UI mounts sooner.
+
 ## Development
 
 ```bash
@@ -143,6 +172,63 @@ then closes the last gap with its own eased approach.
   exactly as they did before the intro existed.
 - Inspect/tune live: `__wiDebug.state()`, `__wiDebug.config`,
   `__wiDebug.forceTimeScale(0.4)` (slow motion), `__wiDebug.skipToInvite()`.
+
+## Cart and checkout
+
+The pricing page feeds a client-side cart; `/checkout` turns it into one Stripe
+Embedded Checkout session.
+
+- `src/lib/cart-catalog.ts` — every purchasable product with its prices in cents
+  (monthly, annual, one-time). Single source of truth for the pricing
+  components, the checkout display and the tests.
+- `src/lib/cart.ts` — cart item shape, localStorage helpers (`webao_cart_v1`) and
+  key format ``${product}-${interval}``.
+- `src/lib/cart-ui.ts` — the drawer, the add-to-cart buttons and the billing
+  term toggle. Listeners are delegated from `document` and the UI re-renders on
+  `astro:page-load`, so the cart survives ClientRouter navigations and tab
+  switches. All strings are read from the drawer's localized `data-*`
+  attributes, so English and French share one implementation.
+- `worker/checkout.ts` — `PRICE_MAP` (cart key → Stripe Price ID) and session
+  creation. Deploy the Worker for cart checkout to work:
+  `cd worker && wrangler deploy` (or `npm run cf:deploy`).
+
+Billing rules the code enforces (both come from Stripe, not from taste):
+
+- **One billing term per checkout.** Stripe Checkout cannot mix monthly and
+  yearly recurring prices in one session, so the pricing page carries a
+  Monthly/Yearly toggle, switching the term re-prices whatever is already in the
+  cart, and the API rejects mixed carts with a 400.
+- **Mixed carts are fine otherwise.** Recurring items and one-time ones (Extra
+  Page) share a `mode=subscription` session; a one-time-only cart uses
+  `mode=payment`. Carts without items (the `/start` form) keep using
+  `STRIPE_PRICE_ID`.
+- Yearly add-ons and bundles are priced at ten months (“2 months free”). Plans
+  use the annual figures published on the pricing page (C$890.99 / C$1,490.99 /
+  C$3,490.99). Stripe is the source of truth at payment time: the session is
+  created with `expand[]=line_items` and the checkout page re-renders the
+  summary from those amounts, so a drifted price shows up as the real charge
+  instead of a stale label.
+
+`npm test` runs the unit suite (`tests/*.test.ts`, ~140 tests):
+
+- **Worker API** — `worker-util` (origin gate, UA parsing, path sanitising,
+  JSON limits, KV batching), `worker-auth` (password hashing, throttling, KV
+  tokens, the HMAC fallback used when KV writes are down), `worker-track`
+  (sessions, pageview counters, click/heartbeat caps and coalescing,
+  tracking opt-out), `worker-forms` (validation, field sanitising, the
+  1000-entry index cap), `worker-admin` (login, stats aggregation, form
+  moderation, config and password change), `worker-routes` (subdomain
+  redirect, `/api` dispatch, KV image fallback, 503/500 mapping).
+- **Site content** — `cart`, `cart-ui` (drawer flow in jsdom), `checkout`
+  (Stripe parameters), `i18n` (en/fr parity, placeholders, locale routing),
+  `content` (demo catalog, pricing structure, note cross-references, image
+  provenance), `sitemap` (sitemap + robots.txt), `intro-engine` (the landing
+  page animation math) and `images`.
+
+`npm run test:integration` builds the site and then checks the real Workerd
+worker: static pages, KV-only images, the cart hooks, tracking, form
+submissions, the closed admin API, robots.txt/sitemap.xml, footnote anchors
+and the built checkout page driven through jsdom.
 
 ## Deployment: Cloudflare Workers (static assets)
 

@@ -1,6 +1,7 @@
 ---
 import type { BundleId } from "../../lib/pricing";
 import { useTranslations, type Locale } from "../../lib/i18n";
+import { priceCentsFor } from "../../lib/cart-catalog";
 import NoteRef from "../NoteRef.astro";
 import CartButton from "./CartButton.astro";
 
@@ -15,10 +16,11 @@ const { locale, bundleId, spatial = false } = Astro.props as Props;
 const t = useTranslations(locale);
 const b = t.pricing.bundles[bundleId];
 
-const bundlePriceCents: Record<BundleId, number> = {
-  lead: 23999,
-  visibility: 9999,
-};
+// Cart keys/labels differ from the bundle ids: the pricing plan sells
+// "Lead Pack" and "Visibility Pack" (see the shared cart catalog).
+const bundleProduct = (id: BundleId): string => (id === "lead" ? "lead-pack" : "visibility-pack");
+const bundleCents = (id: BundleId, interval: "month" | "year"): number =>
+  priceCentsFor(bundleProduct(id), interval) ?? 0;
 ---
 
 <div class:list={["bundle-card", spatial && "bundle-card--spatial"]}>
@@ -27,9 +29,10 @@ const bundlePriceCents: Record<BundleId, number> = {
   <div class="bc-name-row">
     <h3 class="bc-name">{b.name}</h3>
     <CartButton
-      product={bundleId === "lead" ? "lead-pack" : "visibility-pack"}
+      product={bundleProduct(bundleId)}
       name={b.name}
-      priceCents={bundlePriceCents[bundleId]}
+      priceCents={bundleCents(bundleId, "month")}
+      yearlyPriceCents={bundleCents(bundleId, "year")}
       interval="month"
       type="bundle"
     />

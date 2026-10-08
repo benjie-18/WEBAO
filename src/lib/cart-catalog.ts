@@ -1,0 +1,152 @@
+/**
+ * WEBAO cart catalog — every purchasable product, its type and its price in
+ * cents for each billing interval.
+ *
+ * This is the single source of truth used by:
+ * - the pricing components (`PlanCards`, `BundleCard`, `AddonList`) to render
+ *   the "add to cart" buttons,
+ * - the cart drawer / checkout page to display and re-price items,
+ * - `tests/cart.test.ts`, which checks that `worker/checkout.ts` still maps
+ *   every key this catalog can produce to a Stripe Price ID.
+ *
+ * Rules taken from "WEBAO PRICING PLAN (FINAL).txt":
+ * - recurring products are billed monthly, or annually in advance
+ *   (2 months free → the annual price is 10 months),
+ * - the Extra Page add-on is one-time.
+ *
+ * Plans use the annual figures already shown on the pricing page
+ * (`t.pricing.plans.*.annual`), which the plan publishes as C$890 / C$1,490 /
+ * C$3,490 (displayed with the site's .99 endings).
+ */
+
+import { cartKey, type CartInterval } from "./cart";
+
+/** Billing term for recurring products. One-time products ignore it. */
+export type Billing = "month" | "year";
+
+export interface CartProduct {
+  /** Product key; cart keys are `${product}-${interval}`. */
+  product: string;
+  /** Grouping used by the cart (one plan at a time, add-ons, bundles). */
+  type: "plan" | "bundle" | "addon";
+  /** Monthly price in cents, for recurring products. */
+  monthCents?: number;
+  /** Annual price in cents (charged once a year), for recurring products. */
+  yearCents?: number;
+  /** One-time price in cents, for one-time products. */
+  oneTimeCents?: number;
+}
+
+/** Annual price = 10 monthly payments ("2 months free", plan note [3]). */
+const TEN_MONTHS = 10;
+
+const catalog = {
+  /* ── Plans ───────────────────────────────────────────────────────────── */
+  launch: { product: "launch", type: "plan", monthCents: 8999, yearCents: 89099 },
+  grow: { product: "grow", type: "plan", monthCents: 14999, yearCents: 149099 },
+  scale: { product: "scale", type: "plan", monthCents: 34999, yearCents: 349099 },
+
+  /* ── Bundles ─────────────────────────────────────────────────────────── */
+  "lead-pack": { product: "lead-pack", type: "bundle", monthCents: 23999, yearCents: 23999 * TEN_MONTHS },
+  "visibility-pack": {
+    product: "visibility-pack",
+    type: "bundle",
+    monthCents: 9999,
+    yearCents: 9999 * TEN_MONTHS,
+  },
+
+  /* ── Add-ons (featured group first, then the rest) ───────────────────── */
+  localseo: { product: "localseo", type: "addon", monthCents: 15999, yearCents: 15999 * TEN_MONTHS },
+  booking: { product: "booking", type: "addon", monthCents: 4999, yearCents: 4999 * TEN_MONTHS },
+  review: { product: "review", type: "addon", monthCents: 9999, yearCents: 9999 * TEN_MONTHS },
+  ecommerce: { product: "ecommerce", type: "addon", monthCents: 5999, yearCents: 5999 * TEN_MONTHS },
+  bilingual: { product: "bilingual", type: "addon", monthCents: 3499, yearCents: 3499 * TEN_MONTHS },
+  aichat: { product: "aichat", type: "addon", monthCents: 9999, yearCents: 9999 * TEN_MONTHS },
+  blog: { product: "blog", type: "addon", monthCents: 3499, yearCents: 3499 * TEN_MONTHS },
+  email: { product: "email", type: "addon", monthCents: 2999, yearCents: 2999 * TEN_MONTHS },
+  report: { product: "report", type: "addon", monthCents: 2999, yearCents: 2999 * TEN_MONTHS },
+  extrapage: { product: "extrapage", type: "addon", oneTimeCents: 4499 },
+  priority: { product: "priority", type: "addon", monthCents: 5999, yearCents: 5999 * TEN_MONTHS },
+  admin: { product: "admin", type: "addon", monthCents: 3999, yearCents: 3999 * TEN_MONTHS },
+  quotephoto: { product: "quotephoto", type: "addon", monthCents: 999, yearCents: 999 * TEN_MONTHS },
+} satisfies Record<string, CartProduct>;
+
+/** Catalog keyed by product id (matches `t.pricing` ids and `pricing.ts`). */
+export const cartProducts: Record<string, CartProduct> = catalog;
+
+export type CartProductId = keyof typeof catalog;
+
+/** True when the product can be billed on the given term. */
+export function supportsBilling(product: CartProduct, billing: Billing): boolean {
+  return billing === "year" ? typeof product.yearCents === "number" : typeof product.monthCents === "number";
+}
+
+/** Base (non-yearly) interval for a product, as rendered on the pricing page. */
+export function baseInterval(product: CartProduct): "month" | "one-time" {
+  return product.oneTimeCents !== undefined && product.monthCents === undefined ? "one-time" : "month";
+}
+
+/**
+ * Interval a product is purchased on given the active billing term. One-time
+ * products stay one-time; recurring products follow the term.
+ */
+export function intervalFor(productId: string, billing: Billing): CartInterval {
+  const product = cartProducts[productId];
+  if (!product) return billing; // unknown product: still produce a valid key
+  if (baseInterval(product) === "one-time") return "one-time";
+  return billing;
+}
+
+/** Price in cents for a product on an interval, or undefined if unavailable. */
+export function priceCentsFor(productId: string, interval: CartInterval): number | undefined {
+  const product = cartProducts[productId];
+  if (!product) return undefined;
+  if (interval === "one-time") return product.oneTimeCents;
+  if (interval === "year") return product.yearCents;
+  return product.monthCents;
+}
+
+/** Price in cents for a product on a billing term (one-time stays one-time). */
+export function priceCentsForBilling(productId: string, billing: Billing): number | undefined {
+  return priceCentsFor(productId, intervalFor(productId, billing));
+}
+
+/**
+ * Every `{product}-{interval}` key this catalog can put in a cart. Used by the
+ * parity test against the Stripe price map.
+ */
+export function cartCatalogKeys(): string[] {
+  const keys: string[] = [];
+  for (const product of Object.values(cartProducts)) {
+    if (product.monthCents !== undefined) keys.push(cartKey(product.product, "month"));
+    if (product.yearCents !== undefined) keys.push(cartKey(product.product, "year"));
+    if (product.oneTimeCents !== undefined) keys.push(cartKey(product.product, "one-time"));
+  }
+  return keys;
+}
+
+/**
+ * Re-price recurring items onto `billing`.
+ *
+ * Stripe Checkout refuses to mix monthly and yearly recurring prices in one
+ * session ("Checkout does not support multiple prices with different billing
+ * intervals"), so a cart always carries a single term. Switching the term
+ * converts whatever is already in the cart instead of breaking checkout.
+ */
+export function convertItemsToBilling<T extends { product: string; key: string; interval: CartInterval; priceCents: number }>(
+  items: T[],
+  billing: Billing,
+): T[] {
+  return items.map((item) => {
+    if (item.interval === "one-time") return item;
+    const interval = intervalFor(item.product, billing);
+    const priceCents = priceCentsFor(item.product, interval);
+    if (interval === item.interval && (priceCents === undefined || priceCents === item.priceCents)) return item;
+    return {
+      ...item,
+      key: cartKey(item.product, interval),
+      interval,
+      priceCents: priceCents ?? item.priceCents,
+    };
+  });
+}

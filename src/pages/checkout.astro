@@ -1,8 +1,10 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { STRIPE_PUBLISHABLE_KEY } from "../lib/config";
+import { useTranslations } from "../lib/i18n";
 
 const locale = "en" as const;
+const t = useTranslations(locale);
 const title = "Checkout · WEBAO";
 const description = "Complete your WEBAO subscription: $149 CAD/month, no setup fee, cancel anytime.";
 
@@ -10,6 +12,14 @@ const description = "Complete your WEBAO subscription: $149 CAD/month, no setup 
 ---
 
 <BaseLayout title={title} description={description} locale={locale} noIndex={true}>
+  <Fragment slot="head">
+    <!-- Stripe.js + the embedded-checkout iframe: preconnect so the payment
+         UI mounts sooner (the checkout page is the conversion step). -->
+    <link rel="preconnect" href="https://js.stripe.com" />
+    <link rel="preconnect" href="https://api.stripe.com" />
+    <link rel="preconnect" href="https://checkout.stripe.com" />
+  </Fragment>
+
   <section class="section">
     <div class="shell" style="max-width: 920px;">
       <div class="eyebrow">Checkout</div>
@@ -20,8 +30,11 @@ const description = "Complete your WEBAO subscription: $149 CAD/month, no setup 
 
       <div style="margin-top: 32px; max-width: 640px;">
         <div class="checkout-card checkout-card--pay">
-          <div class="mono" style="font-size:10px; letter-spacing:.14em; opacity:.5; margin-bottom:12px;">SECURE PAYMENT · $149 CAD/MONTH</div>
+          <div class="mono" style="font-size:10px; letter-spacing:.14em; opacity:.5; margin-bottom:12px;">SECURE PAYMENT</div>
           <div id="checkout-customer" class="mono" style="margin-bottom:16px; font-size:12px; line-height:1.7; color: var(--muted);"></div>
+          <div id="checkout-items" style="margin-bottom:24px;">
+            <!-- Cart items injected by JS -->
+          </div>
           <div id="stripe-checkout">
             <div class="mono" style="padding:40px 20px; text-align:center; color: var(--muted); font-size:12.5px;" id="checkout-loading">
               Loading secure payment form…
@@ -41,10 +54,69 @@ const description = "Complete your WEBAO subscription: $149 CAD/month, no setup 
 </BaseLayout>
 
 <script src="https://js.stripe.com/v3/"></script>
-<script define:vars={{ pk: STRIPE_PUBLISHABLE_KEY }}>
+<script define:vars={{ pk: STRIPE_PUBLISHABLE_KEY, labels: t.cart }}>
   (function() {
-    const mountEl = document.getElementById('stripe-checkout');
     const loadingEl = document.getElementById('checkout-loading');
+    const itemsEl = document.getElementById('checkout-items');
+
+    // ── Cart ───────────────────────────────────────────────────────────────
+    // The cart is written by src/lib/cart-ui.ts (key "webao_cart_v1").
+    let cartItems = [];
+    try {
+      const raw = localStorage.getItem('webao_cart_v1');
+      const parsed = raw ? JSON.parse(raw) : [];
+      cartItems = Array.isArray(parsed) ? parsed : [];
+    } catch (e) { cartItems = []; }
+
+    const money = (cents) => {
+      const [whole, frac] = (cents / 100).toFixed(2).split('.');
+      const grouped = whole.replace(/\B(?=(\d{3})+(?!\d))/g, labels.moneyDecimal === ',' ? '\u00a0' : ',');
+      return labels.moneyPrefix + grouped + labels.moneyDecimal + frac + labels.moneySuffix;
+    };
+    const suffix = (interval) =>
+      interval === 'year' ? labels.suffixYear
+      : interval === 'month' ? labels.suffixMonth
+      : labels.suffixOneTime;
+    const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+    // Renders the selection summary from `rows` ({ name, priceCents, interval }).
+    function renderItems(rows, note) {
+      if (!itemsEl) return;
+      if (!rows.length) {
+        itemsEl.innerHTML =
+          '<p class="mono" style="color:var(--muted); text-align:center; padding:20px;">' +
+          esc(labels.checkoutEmpty) +
+          ' <a href="/pricing" style="color:var(--accent-text);">' +
+          esc(labels.checkoutEmptyCta) +
+          '</a></p>';
+        return;
+      }
+      const total = rows.reduce((sum, i) => sum + i.priceCents, 0);
+      itemsEl.innerHTML =
+        '<div style="border:1px solid var(--line); border-radius:12px; padding:16px; background:var(--card-bg);">' +
+        '<p class="mono" style="font-size:10px; letter-spacing:.14em; opacity:.5; margin-bottom:12px;">' +
+        esc(labels.checkoutTitle) +
+        '</p>' +
+        rows
+          .map(
+            (i) =>
+              '<div style="display:flex; justify-content:space-between; align-items:baseline; gap:12px; padding:8px 0; border-bottom:1px solid var(--line);">' +
+              '<span style="font-weight:600;">' + esc(i.name) + '</span>' +
+              '<span class="mono" style="white-space:nowrap;">' + esc(money(i.priceCents) + suffix(i.interval)) + '</span>' +
+              '</div>',
+          )
+          .join('') +
+        '<div style="display:flex; justify-content:space-between; align-items:baseline; gap:12px; padding-top:12px; font-size:1.1rem;">' +
+        '<strong>' + esc(labels.total) + '</strong>' +
+        '<strong class="mono">' + esc(money(total)) + '</strong>' +
+        '</div>' +
+        (note
+          ? '<p class="mono" style="margin:10px 0 0; font-size:11px; color:var(--muted);">' + esc(note) + '</p>'
+          : '') +
+        '</div>';
+    }
+
+    renderItems(cartItems);
 
     // Show customer details from the contact form
     try {
@@ -53,15 +125,25 @@ const description = "Complete your WEBAO subscription: $149 CAD/month, no setup 
       if (raw && custEl) {
         const d = JSON.parse(raw);
         const lines = [];
-        if (d.business) lines.push('<strong style="color:var(--ink)">' + d.business + '</strong>');
-        if (d.name) lines.push(d.name);
-        if (d.email) lines.push(d.email);
+        if (d.business) lines.push('<strong style="color:var(--ink)">' + esc(d.business) + '</strong>');
+        if (d.name) lines.push(esc(d.name));
+        if (d.email) lines.push(esc(d.email));
         if (custEl && lines.length) custEl.innerHTML = lines.join('<br/>');
       }
     } catch (e) {}
 
     function fail(msg) {
       if (loadingEl) loadingEl.textContent = msg || 'Payment could not be loaded. Please contact us at contact@webao.ca.';
+    }
+
+    // Nothing to pay for: never open an empty Stripe session.
+    if (cartItems.length === 0) {
+      if (loadingEl) {
+        loadingEl.innerHTML =
+          esc(labels.checkoutEmpty) +
+          ' <a href="/pricing" style="color:var(--accent-text);">' + esc(labels.checkoutEmptyCta) + '</a>';
+      }
+      return;
     }
 
     if (!window.Stripe) { fail('Stripe could not be loaded. Check your connection and refresh.'); return; }
@@ -79,7 +161,12 @@ const description = "Complete your WEBAO subscription: $149 CAD/month, no setup 
     fetch('/api/checkout/session', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: customer.email || '', name: customer.name || '', business: customer.business || '' }),
+      body: JSON.stringify({
+        email: customer.email || '',
+        name: customer.name || '',
+        business: customer.business || '',
+        items: cartItems.map(i => ({ key: i.key }))
+      }),
     })
       .then((r) => r.json())
       .then(async (data) => {
@@ -87,11 +174,23 @@ const description = "Complete your WEBAO subscription: $149 CAD/month, no setup 
           fail(data.error || 'Could not start checkout. Please try again or contact us.');
           return;
         }
+        // Stripe is the source of truth for what will be charged: when the API
+        // returns the session's line items, show those amounts instead of the
+        // locally stored ones (they can differ if a price changed in Stripe).
+        if (Array.isArray(data.lineItems) && data.lineItems.length > 0) {
+          renderItems(
+            data.lineItems.map((li) => ({
+              name: li.description || li.key || '',
+              priceCents: typeof li.amount === 'number' ? li.amount : 0,
+              interval: li.interval || 'one-time',
+            })),
+          );
+        }
         const stripe = window.Stripe(pk);
         const checkout = await stripe.initEmbeddedCheckout({ clientSecret: data.clientSecret });
-        const mountEl = document.getElementById('stripe-checkout');
-        if (mountEl) mountEl.innerHTML = '';
-        checkout.mount(mountEl || '#stripe-checkout');
+        const el = document.getElementById('stripe-checkout');
+        if (el) el.innerHTML = '';
+        checkout.mount(el || '#stripe-checkout');
       })
       .catch(() => fail());
 

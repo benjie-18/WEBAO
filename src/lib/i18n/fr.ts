@@ -460,6 +460,38 @@ const fr = {
     },
   },
 
+  // Panier, sélecteur de facturation et récapitulatif de paiement.
+  // Les chaînes sont lues par la couche client depuis les attributs data-*
+  // du tiroir (voir src/lib/cart-ui.ts) : un seul balisage sert les deux langues.
+  cart: {
+    open: "Ouvrir le panier",
+    title: "Votre panier",
+    close: "Fermer le panier",
+    emptyTitle: "Votre panier est vide.",
+    emptyHint: "Ajoutez des éléments depuis la page des tarifs.",
+    total: "Total",
+    checkout: "Paiement",
+    note: "Les taxes sont calculées au paiement.",
+    add: "Ajouter {name} au panier",
+    remove: "Retirer {name} du panier",
+    suffixMonth: "/mois",
+    suffixYear: "/an",
+    suffixOneTime: " unique",
+    moneyPrefix: "",
+    moneySuffix: "\u00a0$",
+    moneyDecimal: ",",
+    billingLegend: "Mode de facturation",
+    billingMonthly: "Mensuel",
+    billingYearly: "Annuel",
+    billingYearlyNote: "2 mois gratuits",
+    billingHint: "L'annuel est facturé une fois par année, deux mois gratuits.",
+    checkoutTitle: "VOTRE SÉLECTION",
+    checkoutEmpty: "Panier vide.",
+    checkoutEmptyCta: "Voir les tarifs →",
+    checkoutMixed:
+      "Les éléments mensuels et annuels ne peuvent pas être payés ensemble. Choisissez un seul mode de facturation dans votre panier.",
+  },
+
   terms: {
     hero: {
       title: "Conditions et détails",

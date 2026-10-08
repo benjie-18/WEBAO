@@ -36,7 +36,7 @@ export async function handleAdmin(req: Request, env: Env, url: URL): Promise<Res
 
   // --- Public: login (heavily throttled) ---
   if (path === "/api/admin/login" && req.method === "POST") {
-    if (!originAllowed(req, true)) return err("Forbidden origin", 403);
+    if (!originAllowed(req, true, env)) return err("Forbidden origin", 403);
     if (!(await throttle(kv, "login", clientIp(req), 10))) return err("Too many attempts", 429);
     let body: { password?: unknown };
     try {
@@ -54,9 +54,9 @@ export async function handleAdmin(req: Request, env: Env, url: URL): Promise<Res
   if (authed) return authed;
 
   // Defense in depth: state-changing admin calls must be same-origin.
-  if (req.method !== "GET" && !originAllowed(req, true)) return err("Forbidden origin", 403);
+  if (req.method !== "GET" && !originAllowed(req, true, env)) return err("Forbidden origin", 403);
   // GETs: Bearer is the auth; only enforce origin when headers are present.
-  if (req.method === "GET" && !originAllowed(req, false)) return err("Forbidden origin", 403);
+  if (req.method === "GET" && !originAllowed(req, false, env)) return err("Forbidden origin", 403);
 
   if (path === "/api/admin/stats" && req.method === "GET") return handleStats(kv, url);
   if (path === "/api/admin/forms" && req.method === "GET") return handleFormsList(kv, url);
@@ -116,8 +116,16 @@ async function handleStats(kv: KVNamespace, url: URL): Promise<Response> {
     const counts = await batch(keys, 50, async (k) => {
       const encPath = k.slice(`views:${day}:`.length);
       if (encPath === "__all") return { path: "__all", n: 0 };
+      // A malformed escape in a stored key must not take the whole stats
+      // endpoint down; fall back to the raw key segment.
+      let path = encPath;
+      try {
+        path = decodeURIComponent(encPath);
+      } catch {
+        /* keep the raw segment */
+      }
       const v = await kv.get(k);
-      return { path: decodeURIComponent(encPath), n: v ? parseInt(v, 10) || 0 : 0 };
+      return { path, n: v ? parseInt(v, 10) || 0 : 0 };
     });
     return { day, counts: counts.filter((c) => c.path !== "__all") };
   });
