@@ -9,9 +9,9 @@ const fr = {
         "Des sites web sur mesure pour les entreprises partout au Canada, à 149 $ CAD par mois. Design, domaine, hébergement, mises à jour et soutien inclus. Parcourez le catalogue de démos.",
     },
     pricing: {
-      title: "Tarifs site web · Forfaits dès C$89/mois | WEBAO",
+      title: "Tarifs site web · Forfaits dès C$89.99/mois | WEBAO",
       description:
-        "Trois forfaits pour sites web d'entreprises locales : Launch C$89/mois, Grow C$149/mois, Scale C$349/mois. Design, domaine, hébergement, SEO, mises à jour et soutien inclus. Sans frais d'installation.",
+        "Trois forfaits pour sites web d'entreprises locales : Launch C$89.99/mois, Grow C$149.99/mois, Scale C$349.99/mois. Design, domaine, hébergement, SEO, mises à jour et soutien inclus. Sans frais d'installation.",
     },
     terms: {
       title: "Conditions et détails · Notes tarifaires WEBAO",
@@ -460,38 +460,6 @@ const fr = {
     },
   },
 
-  // Panier, sélecteur de facturation et récapitulatif de paiement.
-  // Les chaînes sont lues par la couche client depuis les attributs data-*
-  // du tiroir (voir src/lib/cart-ui.ts) : un seul balisage sert les deux langues.
-  cart: {
-    open: "Ouvrir le panier",
-    title: "Votre panier",
-    close: "Fermer le panier",
-    emptyTitle: "Votre panier est vide.",
-    emptyHint: "Ajoutez des éléments depuis la page des tarifs.",
-    total: "Total",
-    checkout: "Paiement",
-    note: "Les taxes sont calculées au paiement.",
-    add: "Ajouter {name} au panier",
-    remove: "Retirer {name} du panier",
-    suffixMonth: "/mois",
-    suffixYear: "/an",
-    suffixOneTime: " unique",
-    moneyPrefix: "",
-    moneySuffix: "\u00a0$",
-    moneyDecimal: ",",
-    billingLegend: "Mode de facturation",
-    billingMonthly: "Mensuel",
-    billingYearly: "Annuel",
-    billingYearlyNote: "2 mois gratuits",
-    billingHint: "L'annuel est facturé une fois par année, deux mois gratuits.",
-    checkoutTitle: "VOTRE SÉLECTION",
-    checkoutEmpty: "Panier vide.",
-    checkoutEmptyCta: "Voir les tarifs →",
-    checkoutMixed:
-      "Les éléments mensuels et annuels ne peuvent pas être payés ensemble. Choisissez un seul mode de facturation dans votre panier.",
-  },
-
   terms: {
     hero: {
       title: "Conditions et détails",
@@ -544,7 +512,7 @@ const fr = {
         blocks: [
           { text: "Facturé mensuellement, ou annuellement à l'avance avec 2 mois gratuits (prix annuel = 10 mois)." },
           { label: "Comparaison sur 12 mois", text: "" },
-          { label: "Launch", text: "C$89/mois x 12 = C$1,068 facturé mensuellement, ou C$890 facturé annuellement (environ C$74.17/mois). L'option annuelle fait économiser C$178." },
+          { label: "Launch", text: "C$89.99/mois x 12 = C$1,079.88 facturé mensuellement, ou C$890.99 facturé annuellement (environ C$74.25/mois). L'option annuelle fait économiser C$188.89." },
           { label: "Grow", text: "C$149/mois x 12 = C$1,788 facturé mensuellement, ou C$1,490 facturé annuellement (environ C$124.17/mois). L'option annuelle fait économiser C$298." },
           { label: "Scale", text: "C$349/mois x 12 = C$4,188 facturé mensuellement, ou C$3,490 facturé annuellement (environ C$290.83/mois). L'option annuelle fait économiser C$698." },
         ],
