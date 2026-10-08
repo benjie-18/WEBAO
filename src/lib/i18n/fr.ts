@@ -460,6 +460,40 @@ const fr = {
     },
   },
 
+  // Tiroir du panier, bascule de fréquence de facturation et récapitulatif de
+  // la caisse. Les chaînes sont lues par la couche client du panier depuis les
+  // attributs data-* du tiroir (voir src/lib/cart-ui.ts) : un seul balisage
+  // sert les deux langues.
+  cart: {
+    open: "Ouvrir le panier",
+    title: "Votre panier",
+    close: "Fermer le panier",
+    emptyTitle: "Votre panier est vide.",
+    emptyHint: "Ajoutez des articles depuis la page des tarifs.",
+    total: "Total",
+    checkout: "Payer",
+    note: "Taxes calculées à la caisse.",
+    add: "Ajouter {name} au panier",
+    remove: "Retirer {name} du panier",
+    suffixMonth: "/mois",
+    suffixYear: "/an",
+    suffixOneTime: " unique",
+    moneyPrefix: "",
+    moneySuffix: "\u00a0$",
+    moneyDecimal: ",",
+    billingLegend: "Fréquence de facturation",
+    billingMonthly: "Mensuelle",
+    billingYearly: "Annuelle",
+    billingYearlyNote: "2 mois gratuits",
+    billingHint:
+      "La facturation annuelle est payée une fois par an, deux mois gratuits.",
+    checkoutTitle: "VOTRE SÉLECTION",
+    checkoutEmpty: "Aucun article dans le panier.",
+    checkoutEmptyCta: "Voir les tarifs →",
+    checkoutMixed:
+      "Les articles mensuels et annuels ne peuvent pas être payés ensemble. Choisissez une seule fréquence de facturation dans votre panier.",
+  },
+
   terms: {
     hero: {
       title: "Conditions et détails",
