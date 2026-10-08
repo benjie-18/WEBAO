@@ -6,15 +6,15 @@ const title = "Paiement confirmé · WEBAO";
 const description = "Votre abonnement WEBAO est actif. Nous vous contacterons sous peu pour démarrer votre site.";
 ---
 
-<BaseLayout title={title} description={description} locale={locale} noIndex>
+<BaseLayout title={title} description={description} locale={locale} noIndex stickyCta={false}>
   <section class="section" data-cart-clear>
     <div class="shell" style="max-width: 640px; text-align:center;">
       <div class="eyebrow" style="justify-content:center;">Paiement confirmé</div>
       <h1 class="display" style="font-size: clamp(2rem, 5vw, 3.2rem); line-height:.92; margin-top:12px;">Bienvenue.</h1>
       <div id="order-summary" hidden style="margin-top:14px; text-align:left;"></div>
       <p class="prose" id="success-copy" style="margin-top:14px; max-width: 48ch; margin-inline:auto;">
-        Votre abonnement de 149 $/mois est actif. Nous vous contacterons dans
-        un délai d'un jour ouvrable pour démarrer la création de votre site.
+        Votre abonnement est actif. Nous vous contacterons dans un délai d'un
+        jour ouvrable pour démarrer la création de votre site.
       </p>
       <div style="margin-top:28px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
         <a href="/fr/demos" class="btn btn--primary">Voir les styles démo</a>
@@ -27,9 +27,10 @@ const description = "Votre abonnement WEBAO est actif. Nous vous contacterons so
 <script is:inline>
   // S'exécute pendant l'analyse du document — avant que l'init du panier de
   // la mise en page ne vide le panier sur cette page (`data-cart-clear`) —
-  // pour que la confirmation affiche ce qui a réellement été acheté. Le flux
-  // panier peut totaliser n'importe quel montant : la phrase fixe « 149 $/mois
-  // » ne reste que pour le flux historique /start, qui n'a pas de panier.
+  // pour que la confirmation affiche ce qui a réellement été acheté. Tous les
+  // parcours passent désormais par le panier ; la phrase générique du balisage
+  // ne sert qu'à une visite sans panier (URL ouverte directement, stockage
+  // indisponible).
   (function () {
     try {
       var raw = localStorage.getItem('webao_cart_v1');

@@ -21,6 +21,8 @@ interface Props {
   headerVariant?: "light" | "dark";
   locale?: Locale;
   pageKey?: PageKey;
+  /** Mobile "Start →" bar. Off on the pages that are the funnel itself. */
+  stickyCta?: boolean;
 }
 
 const {
@@ -31,6 +33,7 @@ const {
   headerVariant = "light",
   locale: localeProp,
   pageKey: pageKeyProp,
+  stickyCta: stickyCtaProp = true,
 } = Astro.props as Props;
 
 const url = Astro.url;
@@ -108,6 +111,10 @@ const navLinks = {
 // Localized process anchor
 const processAnchor = locale === "fr" ? "#processus" : "#process";
 const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
+
+// The sticky bar sells the funnel; never show it on the funnel's own pages
+// (pricing, the start/details step, the payment step).
+const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "pricing";
 ---
 
 <!doctype html>
@@ -351,7 +358,7 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
 
           <ThemeToggle locale={locale} />
 
-          <button type="button" class="header-cart-btn" data-cart-open aria-label="Open cart">
+          <button type="button" class="header-cart-btn" data-cart-open aria-label={t.cart.open}>
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" class="header-cart-icon">
               <g clip-path="url(#header-cart-clip)">
                 <path d="M5.33331 6H19.8672C20.4687 6 20.9341 6.52718 20.8595 7.12403L20.1095 13.124C20.0469 13.6245 19.6215 14 19.1172 14H16.5555H9.44442H7.99998" stroke="currentColor" stroke-linejoin="round" stroke-width="1.8"/>
@@ -461,7 +468,7 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
       </div>
     </footer>
 
-    {pageKey !== "start" && pageKey !== "pricing" && (
+    {showStickyCta && (
       <div class="sticky-cta" data-sticky-cta role="region" aria-label={t.nav.stickyCta}>
         <span class="sticky-cta-text">
           <strong>{t.nav.stickyCtaPrice}</strong>
@@ -703,29 +710,57 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
     </script>
 
 
-    <!-- Cart drawer -->
+    <!-- Cart drawer. Rendered empty here; src/lib/cart-ui.ts owns the
+         contents. Every string the client layer needs travels as a data-*
+         attribute so English and French share one implementation. The
+         checkout link leads to the details step (/start), which hands over to
+         /checkout for payment. -->
     <div class="cart-overlay" data-cart-overlay hidden></div>
-    <aside class="cart-drawer" data-cart-drawer aria-label="Shopping cart" hidden>
+    <aside
+      class="cart-drawer"
+      data-cart-drawer
+      aria-label={t.cart.title}
+      hidden
+      data-label-open={t.cart.open}
+      data-label-add={t.cart.add}
+      data-label-remove={t.cart.remove}
+      data-empty-title={t.cart.emptyTitle}
+      data-empty-hint={t.cart.emptyHint}
+      data-suffix-month={t.cart.suffixMonth}
+      data-suffix-year={t.cart.suffixYear}
+      data-suffix-one-time={t.cart.suffixOneTime}
+      data-money-prefix={t.cart.moneyPrefix}
+      data-money-suffix={t.cart.moneySuffix}
+      data-money-decimal={t.cart.moneyDecimal}
+    >
       <div class="cart-drawer-header">
-        <h2 class="cart-drawer-title">Your cart</h2>
-        <button type="button" class="cart-drawer-close" data-cart-close aria-label="Close cart">
+        <h2 class="cart-drawer-title">{t.cart.title}</h2>
+        <button type="button" class="cart-drawer-close" data-cart-close aria-label={t.cart.close}>
           <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
           </svg>
         </button>
       </div>
       <div class="cart-drawer-items" data-cart-items>
-        <!-- Items injected by JS -->
+        <div class="cart-drawer-empty">{t.cart.emptyTitle}<br/>{t.cart.emptyHint}</div>
       </div>
       <div class="cart-drawer-footer">
         <div class="cart-drawer-total">
-          <span>Total</span>
-          <strong data-cart-total>C$0.00</strong>
+          <span>{t.cart.total}</span>
+          <strong data-cart-total>{t.cart.moneyPrefix}0{t.cart.moneyDecimal}00{t.cart.moneySuffix}</strong>
         </div>
-        <a href="/checkout" class="btn btn--primary cart-drawer-checkout" data-cart-checkout>
-          Checkout
+        <a
+          href={navLinks.start}
+          class="btn btn--primary cart-drawer-checkout is-disabled"
+          data-cart-checkout
+          aria-disabled="true"
+          tabindex="-1"
+          data-track="cta"
+          data-track-label={t.cart.checkout}
+        >
+          {t.cart.checkout}
         </a>
-        <p class="cart-drawer-note">Taxes calculated at checkout.</p>
+        <p class="cart-drawer-note">{t.cart.note}</p>
       </div>
     </aside>
 
@@ -910,6 +945,12 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
         width: 100%;
         justify-content: center;
       }
+      /* Empty cart: the link stays visible but inert (cart-ui also cancels
+         the click and sets aria-disabled). */
+      .cart-drawer-checkout.is-disabled {
+        opacity: 0.5;
+        pointer-events: none;
+      }
       .cart-drawer-note {
         text-align: center;
         font-size: 0.8rem;
@@ -918,195 +959,12 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
       }
     </style>
     <script>
-      // WEBAO Cart — client-side cart management
-      (function() {
-        const STORAGE_KEY = "webao_cart_v1";
-
-        function getCart() {
-          try {
-            const raw = localStorage.getItem(STORAGE_KEY);
-            if (!raw) return [];
-            const items = JSON.parse(raw);
-            return Array.isArray(items) ? items : [];
-          } catch { return []; }
-        }
-
-        function saveCart(items: any[]) {
-          try { localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); } catch {}
-          window.dispatchEvent(new CustomEvent("webao:cart-change", { detail: { items } }));
-        }
-
-        function formatCAD(cents: number) {
-          return "C$" + (cents / 100).toFixed(2);
-        }
-
-        function formatInterval(interval: string) {
-          if (interval === "month") return "/mo";
-          if (interval === "year") return "/yr";
-          return " one-time";
-        }
-
-        // Update all cart buttons to reflect cart state
-        function syncButtons() {
-          const cart = getCart();
-          const keys = new Set(cart.map(i => i.key));
-          document.querySelectorAll("[data-cart-btn]").forEach(btn => {
-            const key = btn.getAttribute("data-key");
-            const isAdded = keys.has(key);
-            btn.classList.toggle("is-added", isAdded);
-            btn.setAttribute("aria-label", isAdded ? "Remove from cart" : "Add to cart");
-            btn.setAttribute("title", isAdded ? "Remove from cart" : "Add to cart");
-          });
-        }
-
-        // Update header cart count badge
-        function updateCount() {
-          const count = getCart().length;
-          const badge = document.querySelector("[data-cart-count]") as HTMLElement;
-          if (badge) {
-            badge.textContent = String(count);
-            badge.hidden = count === 0;
-          }
-        }
-
-        // Render cart drawer items
-        function renderDrawer() {
-          const container = document.querySelector("[data-cart-items]");
-          const totalEl = document.querySelector("[data-cart-total]");
-          const checkoutBtn = document.querySelector("[data-cart-checkout]") as HTMLElement;
-          if (!container) return;
-
-          const cart = getCart();
-          
-          if (cart.length === 0) {
-            container.innerHTML = '<div class="cart-drawer-empty">Your cart is empty.<br/>Add items from the pricing page.</div>';
-          } else {
-            container.innerHTML = cart.map(item => `
-              <div class="cart-item" data-cart-item="${item.key}">
-                <div class="cart-item-info">
-                  <p class="cart-item-name">${escapeHtml(item.name)}</p>
-                  <p class="cart-item-meta">${formatCAD(item.priceCents)}${formatInterval(item.interval)}</p>
-                </div>
-                <button type="button" class="cart-item-remove" data-remove-key="${item.key}" aria-label="Remove ${escapeHtml(item.name)}">
-                  <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                    <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-                  </svg>
-                </button>
-              </div>
-            `).join("");
-          }
-
-          const total = cart.reduce((sum, i) => sum + i.priceCents, 0);
-          if (totalEl) totalEl.textContent = formatCAD(total);
-          if (checkoutBtn) {
-            checkoutBtn.style.opacity = cart.length === 0 ? "0.5" : "1";
-            checkoutBtn.style.pointerEvents = cart.length === 0 ? "none" : "auto";
-          }
-
-          // Attach remove handlers
-          container.querySelectorAll("[data-remove-key]").forEach(btn => {
-            btn.addEventListener("click", () => {
-              const key = btn.getAttribute("data-remove-key");
-              const updated = getCart().filter(i => i.key !== key);
-              saveCart(updated);
-            });
-          });
-        }
-
-        function escapeHtml(s: string) {
-          const div = document.createElement("div");
-          div.textContent = s;
-          return div.innerHTML;
-        }
-
-        // Drawer open/close
-        function openDrawer() {
-          const drawer = document.querySelector("[data-cart-drawer]") as HTMLElement;
-          const overlay = document.querySelector("[data-cart-overlay]") as HTMLElement;
-          if (drawer) { drawer.hidden = false; requestAnimationFrame(() => drawer.classList.add("is-open")); }
-          if (overlay) { overlay.hidden = false; requestAnimationFrame(() => overlay.classList.add("is-open")); }
-          document.body.style.overflow = "hidden";
-          renderDrawer();
-        }
-
-        function closeDrawer() {
-          const drawer = document.querySelector("[data-cart-drawer]") as HTMLElement;
-          const overlay = document.querySelector("[data-cart-overlay]") as HTMLElement;
-          if (drawer) drawer.classList.remove("is-open");
-          if (overlay) overlay.classList.remove("is-open");
-          document.body.style.overflow = "";
-          setTimeout(() => {
-            if (drawer) drawer.hidden = true;
-            if (overlay) overlay.hidden = true;
-          }, 350);
-        }
-
-        // Initialize
-        function init() {
-          // Cart button clicks (pricing page)
-          document.querySelectorAll("[data-cart-btn]").forEach(btn => {
-            btn.addEventListener("click", () => {
-              const key = btn.getAttribute("data-key");
-              const cart = getCart();
-              
-              if (cart.some(i => i.key === key)) {
-                // Remove
-                saveCart(cart.filter(i => i.key !== key));
-              } else {
-                // Add (for plans, replace existing plan)
-                const item = {
-                  key,
-                  product: btn.getAttribute("data-product"),
-                  name: btn.getAttribute("data-name"),
-                  priceCents: parseInt(btn.getAttribute("data-price-cents") || "0", 10),
-                  interval: btn.getAttribute("data-interval"),
-                  type: btn.getAttribute("data-type"),
-                };
-                let updated = cart.filter(i => i.key !== key);
-                if (item.type === "plan") {
-                  updated = updated.filter(i => i.type !== "plan");
-                }
-                updated.push(item);
-                saveCart(updated);
-              }
-            });
-          });
-
-          // Header cart open
-          const openBtn = document.querySelector("[data-cart-open]");
-          if (openBtn) openBtn.addEventListener("click", openDrawer);
-
-          // Drawer close
-          const closeBtn = document.querySelector("[data-cart-close]");
-          if (closeBtn) closeBtn.addEventListener("click", closeDrawer);
-          
-          const overlay = document.querySelector("[data-cart-overlay]") as HTMLElement;
-          if (overlay) overlay.addEventListener("click", closeDrawer);
-
-          // Escape key closes drawer
-          document.addEventListener("keydown", (e) => {
-            if (e.key === "Escape") closeDrawer();
-          });
-
-          // Sync on cart changes
-          window.addEventListener("webao:cart-change", () => {
-            syncButtons();
-            updateCount();
-            renderDrawer();
-          });
-
-          // Initial sync
-          syncButtons();
-          updateCount();
-        }
-
-        if (document.readyState === "loading") {
-          document.addEventListener("DOMContentLoaded", init);
-        } else {
-          init();
-        }
-      })();
+      // Cart: buttons, badge, billing toggle and drawer. One module for every
+      // page — listeners are delegated from `document` and the UI re-renders
+      // on astro:page-load, so the cart keeps working across ClientRouter
+      // navigations (module scripts only run once per window).
+      import { initCart } from "../lib/cart-ui";
+      initCart();
     </script>
-
   </body>
 </html>

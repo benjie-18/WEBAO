@@ -802,3 +802,45 @@ empties the cart.
   Stripe was configured differently, the checkout summary (rendered from
   Stripe) will show the real amount — adjust `cart-catalog.ts` to match.
 - Deploy the Worker for the multi-item backend: `cd worker && wrangler deploy`.
+
+### 7. Follow-up fixes (dark-mode icons, yearly toggle, /start vs /checkout)
+
+Three defects found on the live site after the above shipped, and what was
+actually wrong:
+
+- **Cart icons stayed dark in dark mode.** `CartButton.astro` styled the icon
+  with `[data-theme="dark"] .cart-btn { color: #fff }` inside a scoped
+  `<style>`. Astro scopes *every* selector in the rule, so it compiled to
+  `[data-astro-cid-…][data-theme=dark] .cart-btn[…]` — and `<html>`, which
+  carries `data-theme`, never gets the component's cid. The rule was dead. The
+  button now uses `color: var(--ink)` like the header icon; the theme tokens do
+  the switching.
+- **Yearly toggle did nothing.** `src/lib/cart-ui.ts` (section 4 above) was
+  never imported: `BaseLayout` still shipped the guide's original inline script
+  (7d), which knows nothing about `[data-billing-opt]`, is English-only and
+  binds on `DOMContentLoaded`. The inline script is gone; the layout imports
+  `initCart()` and the drawer carries the `t.cart` strings as `data-*`
+  attributes. The toggle styles moved from `PricingPage.astro`'s scoped CSS to
+  `global.css` because `/start` now renders the same toggle. The success page's
+  `data-cart-clear` hook also works now (it was handled by cart-ui only).
+- **`/start` and `/checkout` were two competing checkouts.** `/start` posted a
+  fixed C$149/month session (`STRIPE_PRICE_ID`) that ignored the cart and
+  notified the owner with `form: "start"`, which the Worker rejects (400);
+  `/checkout` priced the cart but had no customer details, loaded Stripe.js as a
+  deferred module while checking `window.Stripe` synchronously (so it failed on
+  a fresh load), never unmounted the embedded checkout (Stripe allows one per
+  page, so going back and forth broke it), and the French page didn't send
+  `locale: "fr"` (English success URL). Resolution: one funnel —
+  `/start` = details step (`StartPage.astro` + `src/lib/start-ui.ts`),
+  `/checkout` = payment step (`CheckoutPage.astro`). Details are passed in
+  `sessionStorage` (`webao-checkout`); `/checkout` refuses to open a session
+  without them (back to `/start`) or without a cart (link to pricing).
+  Stripe.js is loaded on demand, the checkout is unmounted on
+  `astro:before-swap`, and cart changes while paying rebuild the session. The
+  drawer's checkout button now goes to `/start`; the sticky "Start →" bar is
+  hidden on both steps. The success page no longer claims "$149/month" when it
+  has no cart to show.
+
+Tests: `tests/start-ui.test.ts` (jsdom) covers the details step; the
+integration suite drives the built `/start` and `/checkout` pages, including the
+no-details and empty-cart guards.
