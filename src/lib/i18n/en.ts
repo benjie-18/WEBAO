@@ -6,9 +6,9 @@ const en = {
         "Custom websites for businesses across Canada, for $149 CAD a month. Design, domain, hosting, updates, and support included. See the demo catalog.",
     },
     pricing: {
-      title: "Website Pricing · Plans from C$89/mo | WEBAO",
+      title: "Website Pricing · Plans from C$89.99/mo | WEBAO",
       description:
-        "Three plans for local business websites: Launch C$89/mo, Grow C$149/mo, Scale C$349/mo. Design, domain, hosting, SEO, updates and support included. No setup fee.",
+        "Three plans for local business websites: Launch C$89.99/mo, Grow C$149.99/mo, Scale C$349.99/mo. Design, domain, hosting, SEO, updates and support included. No setup fee.",
     },
     terms: {
       title: "Terms & Details · WEBAO Pricing Notes",
@@ -540,9 +540,9 @@ const en = {
         blocks: [
           { text: "Billed monthly, or annually in advance with 2 months free (annual price = 10 months)." },
           { label: "Comparison over 12 months", text: "" },
-          { label: "Launch", text: "C$89/mo x 12 = C$1,068 billed monthly, or C$890 billed annually (about C$74.17/mo). Annual saves C$178." },
-          { label: "Grow", text: "C$149/mo x 12 = C$1,788 billed monthly, or C$1,490 billed annually (about C$124.17/mo). Annual saves C$298." },
-          { label: "Scale", text: "C$349/mo x 12 = C$4,188 billed monthly, or C$3,490 billed annually (about C$290.83/mo). Annual saves C$698." },
+          { label: "Launch", text: "C$89.99/mo x 12 = C$1,079.88 billed monthly, or C$890.99 billed annually (about C$74.25/mo). Annual saves C$188.89." },
+          { label: "Grow", text: "C$149.99/mo x 12 = C$1,799.88 billed monthly, or C$1,490.99 billed annually (about C$124.25/mo). Annual saves C$308.89." },
+          { label: "Scale", text: "C$349.99/mo x 12 = C$4,199.88 billed monthly, or C$3,490.99 billed annually (about C$290.92/mo). Annual saves C$708.89." },
         ],
       },
       "4": {
