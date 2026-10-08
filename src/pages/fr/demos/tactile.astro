@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
 
 // Site de démonstration : Tactile, marque fictive de domotique, Portland.
 // Direction artistique autonome. Neumorphisme intégral. Non relié au système de thème WEBAO.
@@ -24,9 +25,9 @@ const ROOMS = [
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tactile : la maison intelligente qui a du tact</title>
-  <meta name="description" content="Tactile fabrique des commandes domotiques que l'on sent. Hubs au toucher doux, interrupteurs généreux et automatisation paisible pour chaque pièce." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="tactile" locale="fr" title="Tactile : la maison intelligente qui a du tact" description="Tactile fabrique des commandes domotiques que l'on sent. Hubs au toucher doux, interrupteurs généreux et automatisation paisible pour chaque pièce." ogImage="https://webao.ca/demos/tactile/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
@@ -68,7 +69,7 @@ const ROOMS = [
           <!-- visualisation de la pièce -->
           <div class="tx-stage">
             <div class="tx-img-frame">
-              <img id="tx-room-img" src={ROOMS[0].img} alt={ROOMS[0].alt} loading="eager" fetchpriority="high" />
+              <img id="tx-room-img" src={ROOMS[0].img} alt={ROOMS[0].alt} loading="eager" fetchpriority="high" decoding="async" />
               <div class="tx-stage-meta">
                 <p id="tx-room-label"><strong>{ROOMS[0].label}</strong> · {ROOMS[0].devices} · <span id="tx-room-temp">{ROOMS[0].temp}</span>°</p>
                 <p id="tx-room-scene">{ROOMS[0].scene}</p>
@@ -146,7 +147,7 @@ const ROOMS = [
       <div class="tx-film" role="list" aria-label="Transformations de pièces">
         {ROOMS.map((r) => (
           <figure class="tx-frame" role="listitem">
-            <img src={r.img} alt={r.alt} loading="lazy" />
+            <img src={r.img} alt={r.alt} loading="lazy" decoding="async" />
             <figcaption><strong>{r.label}</strong><span>{r.devices} · entièrement tactile</span></figcaption>
           </figure>
         ))}

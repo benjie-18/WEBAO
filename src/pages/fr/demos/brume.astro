@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
 
 // Démo : Brume Parfums · maison de parfum fictive, Grasse.
 // Reconstruite comme un VOYAGE OLFACTIF : un récit linéaire à travers l'aube,
@@ -20,9 +21,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Brume · Une journée en quatre parfums</title>
-  <meta name="description" content="Brume Parfums : suivez une journée de l'aube à la nuit à travers quatre parfums. Maison de parfum fictive." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="brume" locale="fr" title="Brume · Une journée en quatre parfums" description="Brume Parfums : suivez une journée de l'aube à la nuit à travers quatre parfums. Maison de parfum fictive." ogImage="https://webao.ca/og-image.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -59,7 +60,7 @@ const IMG = {
 
     <!-- CHAPTER 1: DAWN -->
     <section class="brm-chapter brm-dawn" id="aube" data-chapter="aube" aria-labelledby="t-aube">
-      <div class="brm-chapter-bg"><img src={IMG.aube} alt="Première lumière sur un champ brumeux à l'aube" loading="eager" /></div>
+      <div class="brm-chapter-bg"><img src={IMG.aube} alt="Première lumière sur un champ brumeux à l'aube" loading="eager" decoding="async" /></div>
       <div class="brm-chapter-in">
         <p class="brm-time">05:47 · Chapitre un</p>
         <h2 class="brm-name" id="t-aube">Aube</h2>
@@ -75,7 +76,7 @@ const IMG = {
 
     <!-- CHAPTER 2: DAY -->
     <section class="brm-chapter brm-day" id="voile" data-chapter="voile" aria-labelledby="t-voile">
-      <div class="brm-chapter-bg"><img src={IMG.voile} alt="Douce lumière du jour sur des collines brumeuses" loading="lazy" /></div>
+      <div class="brm-chapter-bg"><img src={IMG.voile} alt="Douce lumière du jour sur des collines brumeuses" loading="lazy" decoding="async" /></div>
       <div class="brm-chapter-in">
         <p class="brm-time">12:30 · Chapitre deux</p>
         <h2 class="brm-name" id="t-voile">Voile</h2>
@@ -91,7 +92,7 @@ const IMG = {
 
     <!-- CHAPTER 3: DUSK -->
     <section class="brm-chapter brm-dusk" id="heure" data-chapter="heure" aria-labelledby="t-heure">
-      <div class="brm-chapter-bg"><img src={IMG.heure} alt="Montagnes au crépuscule sous un ciel violet" loading="lazy" /></div>
+      <div class="brm-chapter-bg"><img src={IMG.heure} alt="Montagnes au crépuscule sous un ciel violet" loading="lazy" decoding="async" /></div>
       <div class="brm-chapter-in">
         <p class="brm-time">19:05 · Chapitre trois</p>
         <h2 class="brm-name" id="t-heure">L'Heure Bleue</h2>
@@ -107,7 +108,7 @@ const IMG = {
 
     <!-- CHAPTER 4: NIGHT -->
     <section class="brm-chapter brm-night" id="nuit" data-chapter="nuit" aria-labelledby="t-nuit">
-      <div class="brm-chapter-bg"><img src={IMG.nuit} alt="Ciel nocturne au-dessus d'une eau sombre" loading="lazy" /></div>
+      <div class="brm-chapter-bg"><img src={IMG.nuit} alt="Ciel nocturne au-dessus d'une eau sombre" loading="lazy" decoding="async" /></div>
       <div class="brm-chapter-in">
         <p class="brm-time">23:41 · Chapitre quatre</p>
         <h2 class="brm-name" id="t-nuit">Nuit</h2>
@@ -124,7 +125,7 @@ const IMG = {
     <!-- EPILOGUE: discovery set + atelier -->
     <section class="brm-epilogue" id="discovery" aria-labelledby="discovery-title">
       <div class="brm-epi-in">
-        <figure class="brm-epi-img"><img src={IMG.flowers} alt="Fleurs blanches dans la douce lumière du matin" loading="lazy" /></figure>
+        <figure class="brm-epi-img"><img src={IMG.flowers} alt="Fleurs blanches dans la douce lumière du matin" loading="lazy" decoding="async" /></figure>
         <div>
           <h2 class="brm-epi-title" id="discovery-title">Le coffret découverte</h2>
           <p class="brm-epi-sub">Les quatre chapitres, 4 × 2 ml. <strong>$45</strong>, crédités sur l'achat d'un flacon.</p>

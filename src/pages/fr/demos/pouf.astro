@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
 
 // Démo : Pouf Studio, studio fictif de design de personnages 3D et jouets, Montréal.
 // Direction artistique autonome : claymorphism. Pastel, gonflé, moelleux. Non liée au système de thème WEBAO.
@@ -23,9 +24,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pouf Studio : le labo tout mou | Personnages 3D et jouets</title>
-  <meta name="description" content="Bienvenue au labo tout mou de Pouf Studio. Pincez les blobs, rencontrez les jouets, lisez le journal de labo. Personnages 3D et jouets tout mous de Montréal." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="pouf" locale="fr" title="Pouf Studio : le labo tout mou | Personnages 3D et jouets" description="Bienvenue au labo tout mou de Pouf Studio. Pincez les blobs, rencontrez les jouets, lisez le journal de labo. Personnages 3D et jouets tout mous de Montréal." ogImage="https://webao.ca/demos/pouf/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -85,22 +86,22 @@ const IMG = {
       </div>
       <div class="pf-field">
         <button class="pf-spec pf-tint-peach pf-sp1" type="button" aria-expanded="false">
-          <span class="pf-spec-img"><img src={IMG.boba} alt="Boba Blob, figurine en vinyle pastel toute douce" loading="lazy" /></span>
+          <span class="pf-spec-img"><img src={IMG.boba} alt="Boba Blob, figurine en vinyle pastel toute douce" loading="lazy" decoding="async" /></span>
           <span class="pf-spec-name">Boba Blob</span>
           <span class="pf-spec-file">Vinyle · 12 cm. Figurine pour une marque de thé aux perles. Épuisée en 9 minutes. On est encore un peu fiers.</span>
         </button>
         <button class="pf-spec pf-tint-lav pf-sp2" type="button" aria-expanded="false">
-          <span class="pf-spec-img"><img src={IMG.pup} alt="Cloud Pup, personnage en peluche pastel" loading="lazy" /></span>
+          <span class="pf-spec-img"><img src={IMG.pup} alt="Cloud Pup, personnage en peluche pastel" loading="lazy" decoding="async" /></span>
           <span class="pf-spec-name">Cloud Pup</span>
           <span class="pf-spec-file">Peluche · 30 cm. Mascotte pour une appli de sommeil. Testée par 40 tout-petits et un corgi très sérieux.</span>
         </button>
         <button class="pf-spec pf-tint-mint pf-sp3" type="button" aria-expanded="false">
-          <span class="pf-spec-img"><img src={IMG.bot} alt="Mochi Bot, robot jouet joufflu" loading="lazy" /></span>
+          <span class="pf-spec-img"><img src={IMG.bot} alt="Mochi Bot, robot jouet joufflu" loading="lazy" decoding="async" /></span>
           <span class="pf-spec-name">Mochi Bot</span>
           <span class="pf-spec-file">Résine · 15 cm. Robot design pour un lancement de jeu. Note de mollesse : 9,4 sur 10. Bip boup.</span>
         </button>
         <button class="pf-spec pf-tint-sky pf-sp4" type="button" aria-expanded="false">
-          <span class="pf-spec-img"><img src={IMG.cat} alt="Pudding Cat, jouet chat en forme de pouding tout mou" loading="lazy" /></span>
+          <span class="pf-spec-img"><img src={IMG.cat} alt="Pudding Cat, jouet chat en forme de pouding tout mou" loading="lazy" decoding="async" /></span>
           <span class="pf-spec-name">Pudding Cat</span>
           <span class="pf-spec-file">Sofubi · 10 cm. Copain de bureau pour une fintech qui voulait se sentir moins fintech. Mission accomplie.</span>
         </button>
@@ -130,11 +131,11 @@ const IMG = {
           </li>
         </ol>
         <div class="pf-lab">
-          <img src={IMG.lab} alt="Ourson en peluche tout mou, sujet de test au studio" loading="lazy" />
+          <img src={IMG.lab} alt="Ourson en peluche tout mou, sujet de test au studio" loading="lazy" decoding="async" />
           <div>
             <h3>Dans le labo</h3>
             <p>Notre studio du Mile End abrite deux imprimantes 3D, une cabine de peinture qui sent vaguement la vanille et une étagère de plus de 200 blobs de référence. Venez visiter. Apportez des collations.</p>
-            <img class="pf-lab-small" src={IMG.extra} alt="Pinceaux et peinture vive au studio" loading="lazy" />
+            <img class="pf-lab-small" src={IMG.extra} alt="Pinceaux et peinture vive au studio" loading="lazy" decoding="async" />
           </div>
         </div>
         <div class="pf-facts">

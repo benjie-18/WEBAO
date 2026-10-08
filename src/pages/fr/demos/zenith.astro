@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
 // Demo microsite: Toitures Zénith · fictional roofer, Blainville QC.
 // Concept: aerial cartography — drone survey, contour lines, copper on slate.
 const phone = "(450) 555-0184";
@@ -9,9 +10,9 @@ const phone = "(450) 555-0184";
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="noindex" />
-  <title>Toitures Zénith — Couvreurs à Blainville | Relevé par drone</title>
-  <meta name="description" content="Toitures Zénith, couvreurs à Blainville. Chaque toiture est d'abord cartographiée par drone : relevé précis, diagnostic documenté, réfection durable." />
+
+  <DemoSeo demoId="zenith" locale="fr" title="Toitures Zénith — Couvreurs à Blainville | Relevé par drone" description="Toitures Zénith, couvreurs à Blainville. Chaque toiture est d'abord cartographiée par drone : relevé précis, diagnostic documenté, réfection durable." ogImage="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1600&q=80&auto=format&fit=crop" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -223,7 +224,7 @@ const phone = "(450) 555-0184";
           <a class="zt-btn zt-btn-ghost" href="#zt-methode">Voir la méthode</a>
         </div>
         <figure class="zt-survey-frame" style="margin:0">
-          <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1600&q=80&auto=format&fit=crop" alt="Vue aérienne d'un quartier résidentiel survolé par drone pour un relevé de toiture" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1600&q=80&auto=format&fit=crop" alt="Vue aérienne d'un quartier résidentiel survolé par drone pour un relevé de toiture" loading="lazy" decoding="async" />
           <span class="zt-frame-tag zt-tl">SURVOL Nº 2481 · ALT 60 M</span>
           <span class="zt-frame-tag zt-br">45.6733° N · 73.8712° O</span>
           <svg class="zt-frame-cross" viewBox="0 0 34 34" aria-hidden="true" focusable="false">
@@ -309,7 +310,7 @@ const phone = "(450) 555-0184";
         <p class="zt-sub">Trois chantiers récents, trois cartes, trois toitures neuves. Chaque projet est livré avec son relevé final.</p>
         <div class="zt-cards">
           <article class="zt-card">
-            <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=900&q=80&auto=format&fit=crop" alt="Maison unifamiliale avec toiture en bardeaux neufs à Blainville" loading="lazy" />
+            <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=900&q=80&auto=format&fit=crop" alt="Maison unifamiliale avec toiture en bardeaux neufs à Blainville" loading="lazy" decoding="async" />
             <div class="zt-card-body">
               <span class="zt-card-coords">45.6812° N · 73.8790° O</span>
               <h3>Rue des Cèdres</h3>
@@ -317,7 +318,7 @@ const phone = "(450) 555-0184";
             </div>
           </article>
           <article class="zt-card">
-            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=900&q=80&auto=format&fit=crop" alt="Maison contemporaine avec toiture métallique à joint debout" loading="lazy" />
+            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=900&q=80&auto=format&fit=crop" alt="Maison contemporaine avec toiture métallique à joint debout" loading="lazy" decoding="async" />
             <div class="zt-card-body">
               <span class="zt-card-coords">45.6698° N · 73.8654° O</span>
               <h3>Boulevard du Curé-Labelle</h3>
@@ -325,7 +326,7 @@ const phone = "(450) 555-0184";
             </div>
           </article>
           <article class="zt-card">
-            <img src="https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=900&q=80&auto=format&fit=crop" alt="Chalet avec toiture refaite près d'un lac dans les Laurentides" loading="lazy" />
+            <img src="https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=900&q=80&auto=format&fit=crop" alt="Chalet avec toiture refaite près d'un lac dans les Laurentides" loading="lazy" decoding="async" />
             <div class="zt-card-body">
               <span class="zt-card-coords">45.7021° N · 73.9012° O</span>
               <h3>Chemin du Lac</h3>
@@ -339,7 +340,7 @@ const phone = "(450) 555-0184";
     <section class="zt-section" id="zt-atelier" aria-labelledby="zt-atelier-t" style="padding-top:0">
       <div class="zt-wrap">
         <div class="zt-about zt-about-grid">
-          <img src="https://images.unsplash.com/photo-1574359411659-15573a27fd0c?w=900&q=80&auto=format&fit=crop" alt="Couvreur au travail sur une toiture en pente" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1574359411659-15573a27fd0c?w=900&q=80&auto=format&fit=crop" alt="Couvreur au travail sur une toiture en pente" loading="lazy" decoding="async" />
           <div>
             <h2 class="zt-h2" id="zt-atelier-t">L'atelier <em>Zénith</em></h2>
             <p>Fondée à Blainville il y a 18 ans, <strong>Toitures Zénith</strong> est née d'une conviction simple : on ne répare bien que ce que l'on connaît parfaitement. C'est pourquoi chaque mandat commence dans les airs.</p>

@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Pouf Studio, fictional 3D character & toy design studio, Montréal.
 // Standalone art direction: claymorphism. Pastel, puffy, squishy. Not connected to the WEBAO theme system.
@@ -22,9 +23,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pouf Studio: The Soft Lab | Squishy 3D Characters &amp; Designer Toys</title>
-  <meta name="description" content="Welcome to the Pouf Studio soft lab. Poke the blobs, meet the toys, read the lab log. Squishy 3D characters and designer toys from Montréal." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="pouf" locale="en" title="Pouf Studio: The Soft Lab | Squishy 3D Characters & Designer Toys" description="Welcome to the Pouf Studio soft lab. Poke the blobs, meet the toys, read the lab log. Squishy 3D characters and designer toys from Montréal." ogImage="https://webao.ca/demos/pouf/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -84,22 +85,22 @@ const IMG = {
       </div>
       <div class="pf-field">
         <button class="pf-spec pf-tint-peach pf-sp1" type="button" aria-expanded="false">
-          <span class="pf-spec-img"><img src={IMG.boba} alt="Boba Blob, a soft pastel vinyl figure" loading="lazy" /></span>
+          <span class="pf-spec-img"><img src={IMG.boba} alt="Boba Blob, a soft pastel vinyl figure" loading="lazy" decoding="async" /></span>
           <span class="pf-spec-name">Boba Blob</span>
           <span class="pf-spec-file">Vinyl · 12 cm. Figure for a bubble tea brand. Sold out in 9 minutes. We are still a little smug about it.</span>
         </button>
         <button class="pf-spec pf-tint-lav pf-sp2" type="button" aria-expanded="false">
-          <span class="pf-spec-img"><img src={IMG.pup} alt="Cloud Pup, a pastel plush character" loading="lazy" /></span>
+          <span class="pf-spec-img"><img src={IMG.pup} alt="Cloud Pup, a pastel plush character" loading="lazy" decoding="async" /></span>
           <span class="pf-spec-name">Cloud Pup</span>
           <span class="pf-spec-file">Plush · 30 cm. Mascot for a sleep app. Tested by 40 toddlers and one very serious corgi.</span>
         </button>
         <button class="pf-spec pf-tint-mint pf-sp3" type="button" aria-expanded="false">
-          <span class="pf-spec-img"><img src={IMG.bot} alt="Mochi Bot, a chunky designer robot toy" loading="lazy" /></span>
+          <span class="pf-spec-img"><img src={IMG.bot} alt="Mochi Bot, a chunky designer robot toy" loading="lazy" decoding="async" /></span>
           <span class="pf-spec-name">Mochi Bot</span>
           <span class="pf-spec-file">Resin · 15 cm. Designer robot for a game launch. Squish rating: 9.4 out of 10. Beep boop.</span>
         </button>
         <button class="pf-spec pf-tint-sky pf-sp4" type="button" aria-expanded="false">
-          <span class="pf-spec-img"><img src={IMG.cat} alt="Pudding Cat, a soft pudding-shaped cat toy" loading="lazy" /></span>
+          <span class="pf-spec-img"><img src={IMG.cat} alt="Pudding Cat, a soft pudding-shaped cat toy" loading="lazy" decoding="async" /></span>
           <span class="pf-spec-name">Pudding Cat</span>
           <span class="pf-spec-file">Sofubi · 10 cm. Desk buddy for a fintech that wanted to feel less fintech. Mission accomplished.</span>
         </button>
@@ -129,11 +130,11 @@ const IMG = {
           </li>
         </ol>
         <div class="pf-lab">
-          <img src={IMG.lab} alt="Soft plush bear, a squish-test subject in the studio" loading="lazy" />
+          <img src={IMG.lab} alt="Soft plush bear, a squish-test subject in the studio" loading="lazy" decoding="async" />
           <div>
             <h3>Inside the squish lab</h3>
             <p>Our Mile End studio houses two 3D printers, a paint booth that smells faintly of vanilla, and a shelf of 200+ reference blobs. Come visit. Bring snacks.</p>
-            <img class="pf-lab-small" src={IMG.extra} alt="Paint brushes and vibrant paint in the studio" loading="lazy" />
+            <img class="pf-lab-small" src={IMG.extra} alt="Paint brushes and vibrant paint in the studio" loading="lazy" decoding="async" />
           </div>
         </div>
         <div class="pf-facts">

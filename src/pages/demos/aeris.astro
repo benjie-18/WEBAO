@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
 
 // Demo microsite: AERIS, fictional clean-tech company, Québec City.
 // Standalone art direction. Frutiger Aero: glossy aqua, aurora gradients,
@@ -62,9 +63,9 @@ const IMPACT = [
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aeris One: the home energy pod · AERIS</title>
-  <meta name="description" content="Meet Aeris One: solar glass, a thinking chip, and storm-proof storage in one glowing pod. From $8,900 installed. Free energy scan." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="aeris" locale="en" title="Aeris One: the home energy pod · AERIS" description="Meet Aeris One: solar glass, a thinking chip, and storm-proof storage in one glowing pod. From $8,900 installed. Free energy scan." ogImage="https://webao.ca/demos/aeris/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
@@ -84,7 +85,7 @@ const IMPACT = [
   <main id="top">
     <!-- PRODUCT HERO -->
     <section class="fa-hero" id="one" aria-label="Aeris One">
-      <div class="fa-hero-bg" aria-hidden="true"><img src={IMG.hero} alt="" loading="eager" fetchpriority="high" /></div>
+      <div class="fa-hero-bg" aria-hidden="true"><img src={IMG.hero} alt="" loading="eager" fetchpriority="high" decoding="async" /></div>
       <div class="fa-wrap fa-hero-in">
         <p class="fa-new">New</p>
         <h1 class="fa-h1">Aeris One</h1>
@@ -115,7 +116,7 @@ const IMPACT = [
       </div>
       {FEATURES.map((f, i) => (
         <div class={"fa-feat" + (i % 2 === 1 ? " fa-feat-flip" : "")}>
-          <div class="fa-feat-media"><img src={f.img} alt={f.alt} loading="lazy" /></div>
+          <div class="fa-feat-media"><img src={f.img} alt={f.alt} loading="lazy" decoding="async" /></div>
           <div class="fa-feat-copy">
             <p class="fa-feat-kick">{f.kick}</p>
             <h3>{f.title}</h3>
@@ -143,7 +144,7 @@ const IMPACT = [
 
     <!-- IMPACT -->
     <section class="fa-impact" aria-label="Impact">
-      <div class="fa-impact-bg" aria-hidden="true"><img src={IMG.leaves} alt="" loading="lazy" /></div>
+      <div class="fa-impact-bg" aria-hidden="true"><img src={IMG.leaves} alt="" loading="lazy" decoding="async" /></div>
       <div class="fa-wrap fa-impact-in">
         <h2 class="fa-h2 fa-h2-light">12,000 homes.<br />One smarter grid.</h2>
         <p class="fa-impact-sub">Every Aeris home reports back (anonymously) so the whole grid gets smarter. Here is what the fleet did last year.</p>

@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
 
 // Démo : Plomberie Leduc, plombier fictif, Longueuil QC.
 // Reconstruite URGENCE D'ABORD. Tout le haut de page est l'appel d'urgence :
@@ -19,9 +20,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Plomberie Leduc · Tuyau éclaté? (450) 555-0134 · Plombier à Longueuil</title>
-  <meta name="description" content="Plomberie Leduc : le plombier familial de Longueuil depuis 1987. Tuyau éclaté, plus d'eau chaude, drain bouché? On répond en 20 minutes, 24/7." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="leduc" locale="fr" title="Plomberie Leduc · Tuyau éclaté? (450) 555-0134 · Plombier à Longueuil" description="Plomberie Leduc : le plombier familial de Longueuil depuis 1987. Tuyau éclaté, plus d'eau chaude, drain bouché? On répond en 20 minutes, 24/7." ogImage="https://webao.ca/demos/leduc/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&display=swap" rel="stylesheet" />
@@ -58,20 +59,20 @@ const IMG = {
         <div><dt>Robinets extérieurs et gaz <span>si l'eau ou le gaz y passe</span></dt><dd>devis</dd></div>
       </dl>
       <figure class="em-tools">
-        <img src={IMG.tools} alt="Une vieille clé à tuyau gardée depuis des années de service" loading="lazy" />
-        <img src={IMG.wrench} alt="La clé d'origine du fondateur" loading="lazy" />
+        <img src={IMG.tools} alt="Une vieille clé à tuyau gardée depuis des années de service" loading="lazy" decoding="async" />
+        <img src={IMG.wrench} alt="La clé d'origine du fondateur" loading="lazy" decoding="async" />
       </figure>
     </section>
 
     <!-- UN PARAGRAPHE. C'est la section à propos. -->
     <section class="em-about">
       <div class="em-about-in">
-        <img src={IMG.portrait} alt="Réal Leduc, fondateur, en uniforme" loading="lazy" />
+        <img src={IMG.portrait} alt="Réal Leduc, fondateur, en uniforme" loading="lazy" decoding="async" />
         <div>
           <h2 class="em-h2">Trois générations, un badge.</h2>
           <p>Réal Leduc a commencé en 1987 avec une camionnette usagée et une règle qu'il répète encore : laissez chaque maison plus propre qu'à votre arrivée. Son fils Marc s'est joint en 2004; sa petite-fille Léa, compagnon agréée depuis 2021, tient la ligne 24/7 aujourd'hui. Plus de 12 400 maisons, note moyenne de 4,9, garantie de 5 ans sur la main-d'œuvre, par écrit.</p>
         </div>
-        <img class="em-about-job" src={IMG.hero} alt="Un plombier Leduc répare un évier" loading="lazy" />
+        <img class="em-about-job" src={IMG.hero} alt="Un plombier Leduc répare un évier" loading="lazy" decoding="async" fetchpriority="high" />
       </div>
     </section>
 

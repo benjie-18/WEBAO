@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Clinique Sora, fictional physiotherapy and wellness clinic, Brossard QC.
 // Rebuilt as an APPOINTMENT BOOK: schedule-first. Day tabs, time slots, practitioner roster,
@@ -27,9 +28,9 @@ const SLOTS: Record<string, { t: string; taken?: boolean }[]> = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Clinique Sora : Physiothérapie et bien-être à Brossard</title>
-  <meta name="description" content="Clinique Sora : clinique de physiothérapie et bien-être à Brossard. Physio, massothérapie, réadaptation posturale. Réservez votre évaluation en ligne en moins d'une minute." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="sora" locale="fr" title="Clinique Sora : Physiothérapie et bien-être à Brossard" description="Clinique Sora : clinique de physiothérapie et bien-être à Brossard. Physio, massothérapie, réadaptation posturale. Réservez votre évaluation en ligne en moins d'une minute." ogImage="https://webao.ca/demos/sora/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
@@ -86,17 +87,17 @@ const SLOTS: Record<string, { t: string; taken?: boolean }[]> = {
         <h2 class="sr-h2">Qui vous recevra.</h2>
         <ul class="sr-roster-list">
           <li>
-            <img src={IMG.team1} alt="Dre Amélie Roy, physiothérapeute" loading="lazy" />
+            <img src={IMG.team1} alt="Dre Amélie Roy, physiothérapeute" loading="lazy" decoding="async" />
             <div><h3>Dre Amélie Roy, pht</h3><p>Physiothérapie · Fondatrice. Douze ans à soigner dos, genoux et guerriers du week-end.</p></div>
             <span class="sr-next">Prochain : lun. 11:00</span>
           </li>
           <li>
-            <img src={IMG.team2} alt="Jean-Philippe Côté, massothérapeute" loading="lazy" />
+            <img src={IMG.team2} alt="Jean-Philippe Côté, massothérapeute" loading="lazy" decoding="async" />
             <div><h3>Jean-Philippe Côté</h3><p>Massothérapie. Deep tissue et massage sportif avec une touche douce.</p></div>
             <span class="sr-next">Prochain : mar. 15:00</span>
           </li>
           <li>
-            <img src={IMG.team3} alt="Sara Nguyen, kinésiologue" loading="lazy" />
+            <img src={IMG.team3} alt="Sara Nguyen, kinésiologue" loading="lazy" decoding="async" />
             <div><h3>Sara Nguyen, kin.</h3><p>Kinésiologie · Réadaptation. Programmes maison et retours au sport.</p></div>
             <span class="sr-next">Prochain : mer. 9:00</span>
           </li>
@@ -118,7 +119,7 @@ const SLOTS: Record<string, { t: string; taken?: boolean }[]> = {
           <li><div><h3>Réadaptation vestibulaire</h3><p>Étourdissements et vertiges traités par repositionnement précis et travail d'équilibre.</p></div><span>45 min · 95 $</span></li>
         </ul>
         <figure class="sr-menu-media">
-          <img src={IMG.physio} alt="Une physiothérapeute guidant le mouvement de l'épaule d'une patiente" loading="lazy" />
+          <img src={IMG.physio} alt="Une physiothérapeute guidant le mouvement de l'épaule d'une patiente" loading="lazy" decoding="async" />
         </figure>
       </div>
     </section>
@@ -131,7 +132,7 @@ const SLOTS: Record<string, { t: string; taken?: boolean }[]> = {
         <p><strong>On évalue à fond.</strong> Dépistage du mouvement et tests manuels pour trouver la vraie cause, pas juste le symptôme.</p>
         <p><strong>On soigne et on enseigne.</strong> Thérapie manuelle à la clinique, exercices simples à la maison, et un plan avec une ligne d'arrivée.</p>
         <figure class="sr-how-media">
-          <img src={IMG.massage} alt="Une séance de massothérapie paisible dans une douce lumière" loading="lazy" />
+          <img src={IMG.massage} alt="Une séance de massothérapie paisible dans une douce lumière" loading="lazy" decoding="async" />
         </figure>
       </div>
     </section>

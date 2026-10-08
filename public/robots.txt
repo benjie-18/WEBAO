@@ -1,5 +1,18 @@
 User-agent: *
 Allow: /
+
+# Utility and transactional pages: noindex on the page itself; keep crawlers
+# out to save crawl budget.
 Disallow: /api/
+Disallow: /admin
+Disallow: /fr/admin
+Disallow: /checkout
+Disallow: /fr/checkout
+Disallow: /404
+Disallow: /fr/404
+
+# Hidden demo: excluded from the catalog and the sitemap, kept out of the index.
+Disallow: /demos/boba-club
+Disallow: /fr/demos/boba-club
 
 Sitemap: https://webao.ca/sitemap.xml

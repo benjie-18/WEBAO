@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Toit & Fils, fictional roofing company, Québec City QC.
 // Rebuilt as a PROJECT LOGBOOK: chronological journal entries, no hero.
@@ -19,9 +20,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Toit &amp; Fils : Couvreurs à Québec depuis 1962</title>
-  <meta name="description" content="Toit & Fils : couvreurs à Québec depuis 1962. Trois générations de couvreurs. Bardeaux d'asphalte, toiture métallique, toits plats. Garantie de 25 ans sur la main-d'oeuvre." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="toit-fils" locale="fr" title="Toit & Fils : Couvreurs à Québec depuis 1962" description="Toit & Fils : couvreurs à Québec depuis 1962. Trois générations de couvreurs. Bardeaux d'asphalte, toiture métallique, toits plats. Garantie de 25 ans sur la main-d'oeuvre." ogImage="https://webao.ca/demos/toit-fils/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;600;700;800&display=swap" rel="stylesheet" />
@@ -54,7 +55,7 @@ const IMG = {
           <div class="tf-entry-date"><span>2026</span><span>Juin</span></div>
           <div class="tf-entry-body">
             <p class="tf-entry-addr">Montcalm <i>·</i> bardeaux d'asphalte</p>
-            <figure><img src={IMG.hero} alt="Couvreur posant des bardeaux sur un toit résidentiel" loading="eager" fetchpriority="high" /></figure>
+            <figure><img src={IMG.hero} alt="Couvreur posant des bardeaux sur un toit résidentiel" loading="eager" fetchpriority="high" decoding="async" /></figure>
             <p class="tf-entry-note">En cours. L'arrachage a révélé deux couches de vieux bardeaux et une sous-couche bien fatiguée. L'équipe d'Antoine en est au troisième jour; Henri a déjà trouvé un détail de solin à refaire.</p>
           </div>
         </article>
@@ -63,7 +64,7 @@ const IMG = {
           <div class="tf-entry-date"><span>2025</span><span>Sept</span></div>
           <div class="tf-entry-body">
             <p class="tf-entry-addr">Sainte-Foy <i>·</i> bardeaux d'asphalte</p>
-            <figure><img src={IMG.house} alt="Une maison classique de Québec avec un nouveau toit de bardeaux foncés" loading="lazy" /></figure>
+            <figure><img src={IMG.house} alt="Une maison classique de Québec avec un nouveau toit de bardeaux foncés" loading="lazy" decoding="async" /></figure>
             <p class="tf-entry-note">Arrachage complet, six clous par bardeau, membrane à l'avant-toit partout. La propriétaire a demandé si on pouvait sauver le vieux solin de cuivre. On a pu, et on l'a fait.</p>
           </div>
         </article>
@@ -72,7 +73,7 @@ const IMG = {
           <div class="tf-entry-date"><span>2024</span><span>Août</span></div>
           <div class="tf-entry-body">
             <p class="tf-entry-addr">Cap-Rouge <i>·</i> métal à baguettes</p>
-            <figure><img src={IMG.home} alt="Une maison de banlieue avec toit métallique à baguettes" loading="lazy" /></figure>
+            <figure><img src={IMG.home} alt="Une maison de banlieue avec toit métallique à baguettes" loading="lazy" decoding="async" /></figure>
             <p class="tf-entry-note">Acier à baguettes, un toit de 50 ans sur une maison qui le verra passer. Les voisins se sont arrêtés pour regarder la sertisseuse travailler. Ça arrive.</p>
           </div>
         </article>
@@ -81,7 +82,7 @@ const IMG = {
           <div class="tf-entry-date"><span>2024</span><span>Mai</span></div>
           <div class="tf-entry-body">
             <p class="tf-entry-addr">Limoilou <i>·</i> membrane élastomère</p>
-            <figure><img src={IMG.suburb} alt="Une rangée de maisons avec membrane élastomère neuve" loading="lazy" /></figure>
+            <figure><img src={IMG.suburb} alt="Une rangée de maisons avec membrane élastomère neuve" loading="lazy" decoding="async" /></figure>
             <p class="tf-entry-note">Toit plat sur un plex, joints soudés, des drains qui drainent vraiment. La locataire du troisième nous a envoyé une photo de la première grosse pluie : sec comme un os.</p>
           </div>
         </article>
@@ -90,7 +91,7 @@ const IMG = {
           <div class="tf-entry-date"><span>1962</span><span>—</span></div>
           <div class="tf-entry-body">
             <p class="tf-entry-addr">Limoilou <i>·</i> là où tout a commencé</p>
-            <figure><img src={IMG.craft} alt="Couvreur posant des tuiles sur un toit résidentiel" loading="lazy" /></figure>
+            <figure><img src={IMG.craft} alt="Couvreur posant des tuiles sur un toit résidentiel" loading="lazy" decoding="async" /></figure>
             <p class="tf-entry-note">Henri, 19 ans, clouant des bardeaux avec l'équipe de son oncle. Le patron de clouage n'a pas changé depuis. Henri, 83 ans, inspecte encore un toit sur dix. Il trouve des choses.</p>
           </div>
         </article>

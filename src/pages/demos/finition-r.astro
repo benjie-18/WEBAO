@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Finition R, fictional renovation contractor, Montréal.
 // Standalone art direction. Swiss International typographic. Not connected to the WEBAO theme system.
@@ -22,9 +23,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Finition R: Before / After | Renovation Contractor, Montréal</title>
-  <meta name="description" content="Finition R: Montréal renovation contractor. Every project shown the honest way, before then after. Kitchens, bathrooms, full interiors. Fixed quotes, licensed RBQ." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="finition-r" locale="en" title="Finition R: Before / After | Renovation Contractor, Montréal" description="Finition R: Montréal renovation contractor. Every project shown the honest way, before then after. Kitchens, bathrooms, full interiors. Fixed quotes, licensed RBQ." ogImage="https://webao.ca/demos/finition-r/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -61,8 +62,8 @@ const IMG = {
       </div>
       <div class="fnr-open-slider">
         <div class="ba" data-ba>
-          <img class="ba-after" src={IMG.hero} alt="Completed modern home exterior by Finition R, project 047 in Rosemont" loading="eager" fetchpriority="high" />
-          <img class="ba-before" src={IMG.hero} alt="" aria-hidden="true" />
+          <img class="ba-after" src={IMG.hero} alt="Completed modern home exterior by Finition R, project 047 in Rosemont" loading="eager" fetchpriority="high" decoding="async" />
+          <img class="ba-before" src={IMG.hero} alt="" aria-hidden="true" decoding="async" fetchpriority="high" loading="eager" />
           <span class="ba-divider" aria-hidden="true"></span>
           <span class="ba-tag ba-tag-before">Before</span>
           <span class="ba-tag ba-tag-after">After</span>
@@ -89,8 +90,8 @@ const IMG = {
             </div>
           </div>
           <div class="ba ba-sm" data-ba>
-            <img class="ba-after" src={IMG.kitchen} alt="Renovated kitchen with island by Finition R" loading="lazy" />
-            <img class="ba-before" src={IMG.kitchen} alt="" aria-hidden="true" />
+            <img class="ba-after" src={IMG.kitchen} alt="Renovated kitchen with island by Finition R" loading="lazy" decoding="async" />
+            <img class="ba-before" src={IMG.kitchen} alt="" aria-hidden="true" decoding="async" loading="lazy" />
             <span class="ba-divider" aria-hidden="true"></span>
             <span class="ba-tag ba-tag-before">Before</span>
             <span class="ba-tag ba-tag-after">After</span>
@@ -113,8 +114,8 @@ const IMG = {
             </div>
           </div>
           <div class="ba ba-sm" data-ba>
-            <img class="ba-after" src={IMG.bathroom} alt="Renovated bathroom with walk-in shower by Finition R" loading="lazy" />
-            <img class="ba-before" src={IMG.bathroom} alt="" aria-hidden="true" />
+            <img class="ba-after" src={IMG.bathroom} alt="Renovated bathroom with walk-in shower by Finition R" loading="lazy" decoding="async" />
+            <img class="ba-before" src={IMG.bathroom} alt="" aria-hidden="true" decoding="async" loading="lazy" />
             <span class="ba-divider" aria-hidden="true"></span>
             <span class="ba-tag ba-tag-before">Before</span>
             <span class="ba-tag ba-tag-after">After</span>
@@ -137,8 +138,8 @@ const IMG = {
             </div>
           </div>
           <div class="ba ba-sm" data-ba>
-            <img class="ba-after" src={IMG.living} alt="Renovated open living room by Finition R" loading="lazy" />
-            <img class="ba-before" src={IMG.living} alt="" aria-hidden="true" />
+            <img class="ba-after" src={IMG.living} alt="Renovated open living room by Finition R" loading="lazy" decoding="async" />
+            <img class="ba-before" src={IMG.living} alt="" aria-hidden="true" decoding="async" loading="lazy" />
             <span class="ba-divider" aria-hidden="true"></span>
             <span class="ba-tag ba-tag-before">Before</span>
             <span class="ba-tag ba-tag-after">After</span>
@@ -161,8 +162,8 @@ const IMG = {
             </div>
           </div>
           <div class="ba ba-sm" data-ba>
-            <img class="ba-after" src={IMG.interior} alt="Open living space with custom wood millwork wall by Finition R" loading="lazy" />
-            <img class="ba-before" src={IMG.interior} alt="" aria-hidden="true" />
+            <img class="ba-after" src={IMG.interior} alt="Open living space with custom wood millwork wall by Finition R" loading="lazy" decoding="async" />
+            <img class="ba-before" src={IMG.interior} alt="" aria-hidden="true" decoding="async" loading="lazy" />
             <span class="ba-divider" aria-hidden="true"></span>
             <span class="ba-tag ba-tag-before">Before</span>
             <span class="ba-tag ba-tag-after">After</span>
@@ -200,7 +201,7 @@ const IMG = {
           </table>
         </div>
         <figure class="fnr-detail">
-          <img src={IMG.detail} alt="Close-up of precise finish carpentry detail by Finition R" loading="lazy" />
+          <img src={IMG.detail} alt="Close-up of precise finish carpentry detail by Finition R" loading="lazy" decoding="async" />
           <figcaption>The difference is in the last millimeter.</figcaption>
         </figure>
         <p class="fnr-note">Every project starts with a fixed written quote. The number we sign is the number you pay.</p>
@@ -221,7 +222,7 @@ const IMG = {
           <li><span>04</span><h3>Walkthrough</h3><p>We go room by room with a checklist. Anything not perfect gets fixed before final payment, in writing.</p></li>
         </ol>
         <figure class="fnr-site">
-          <img src={IMG.site} alt="Finition R crew at work on a renovation site" loading="lazy" />
+          <img src={IMG.site} alt="Finition R crew at work on a renovation site" loading="lazy" decoding="async" />
           <figcaption><span class="fnr-chip">SITE 048</span> In progress, Verdun · dust barriers up, coffee flowing</figcaption>
         </figure>
       </div>

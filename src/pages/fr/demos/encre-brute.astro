@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Encre Brute, fictional tattoo studio, Montréal QC.
 // Rebuilt as a FLASH WALL: the homepage IS the flash sheet. Pick a design, claim it.
@@ -17,9 +18,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Encre Brute : Studio de tatouage à Montréal</title>
-  <meta name="description" content="Encre Brute : studio de tatouage brut à Montréal. Lignes fines, blackwork, recouvrements et flash. Quatre artistes résidents. Sans rendez-vous bienvenus." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="encre-brute" locale="fr" title="Encre Brute : Studio de tatouage à Montréal" description="Encre Brute : studio de tatouage brut à Montréal. Lignes fines, blackwork, recouvrements et flash. Quatre artistes résidents. Sans rendez-vous bienvenus." ogImage="https://webao.ca/demos/encre-brute/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet" />
@@ -142,23 +143,23 @@ const IMG = {
         <h2 class="eb-h2">RÉSIDENTS.</h2>
         <div class="eb-resident-list">
           <article class="eb-resident">
-            <img src={IMG.a1} alt="Marc L., tatoueur blackwork" loading="lazy" />
+            <img src={IMG.a1} alt="Marc L., tatoueur blackwork" loading="lazy" decoding="async" />
             <div><h3>MARC L.</h3><p>BLACKWORK / GÉOMÉTRIQUE</p><p class="eb-avail">Réservation : nov. 2026</p></div>
             <span class="eb-status eb-status-open">OUVERT</span>
           </article>
           <article class="eb-resident">
-            <img src={IMG.a2} alt="Léa R., tatoueuse lignes fines" loading="lazy" />
+            <img src={IMG.a2} alt="Léa R., tatoueuse lignes fines" loading="lazy" decoding="async" />
             <div><h3>LÉA R.</h3><p>LIGNES FINES / BOTANIQUE</p><p class="eb-avail">Réservation : oct. 2026</p></div>
             <span class="eb-status eb-status-low">2 PLACES</span>
           </article>
           <article class="eb-resident">
-            <img src={IMG.a3} alt="Jo P., tatoueur néo-traditionnel" loading="lazy" />
+            <img src={IMG.a3} alt="Jo P., tatoueur néo-traditionnel" loading="lazy" decoding="async" />
             <div><h3>JO P.</h3><p>NÉO-TRADITIONNEL / COULEUR</p><p class="eb-avail">Réservation : déc. 2026</p></div>
             <span class="eb-status eb-status-wait">LISTE D'ATTENTE</span>
           </article>
         </div>
         <figure class="eb-shop">
-          <img src={IMG.hero} alt="Artiste tatoueuse au travail dans le studio Encre Brute" loading="lazy" />
+          <img src={IMG.hero} alt="Artiste tatoueuse au travail dans le studio Encre Brute" loading="lazy" decoding="async" fetchpriority="high" />
           <figcaption>Le studio : quatre stations, une machine à café, zéro question sur ton signe astrologique.</figcaption>
         </figure>
       </div>

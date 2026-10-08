@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Brume Parfums · fictional fragrance house, Grasse.
 // Rebuilt as a SCENT JOURNEY: a linear narrative through dawn, day, dusk
@@ -19,9 +20,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Brume · A day in four scents</title>
-  <meta name="description" content="Brume Parfums: follow one day from dawn to night through four fragrances. Fictional fragrance house." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="brume" locale="en" title="Brume · A day in four scents" description="Brume Parfums: follow one day from dawn to night through four fragrances. Fictional fragrance house." ogImage="https://webao.ca/og-image.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -58,7 +59,7 @@ const IMG = {
 
     <!-- CHAPTER 1: DAWN -->
     <section class="brm-chapter brm-dawn" id="aube" data-chapter="aube" aria-labelledby="t-aube">
-      <div class="brm-chapter-bg"><img src={IMG.aube} alt="First light over a misty field at dawn" loading="eager" /></div>
+      <div class="brm-chapter-bg"><img src={IMG.aube} alt="First light over a misty field at dawn" loading="eager" decoding="async" /></div>
       <div class="brm-chapter-in">
         <p class="brm-time">05:47 · Chapter one</p>
         <h2 class="brm-name" id="t-aube">Aube</h2>
@@ -74,7 +75,7 @@ const IMG = {
 
     <!-- CHAPTER 2: DAY -->
     <section class="brm-chapter brm-day" id="voile" data-chapter="voile" aria-labelledby="t-voile">
-      <div class="brm-chapter-bg"><img src={IMG.voile} alt="Soft daylight over foggy hills" loading="lazy" /></div>
+      <div class="brm-chapter-bg"><img src={IMG.voile} alt="Soft daylight over foggy hills" loading="lazy" decoding="async" /></div>
       <div class="brm-chapter-in">
         <p class="brm-time">12:30 · Chapter two</p>
         <h2 class="brm-name" id="t-voile">Voile</h2>
@@ -90,7 +91,7 @@ const IMG = {
 
     <!-- CHAPTER 3: DUSK -->
     <section class="brm-chapter brm-dusk" id="heure" data-chapter="heure" aria-labelledby="t-heure">
-      <div class="brm-chapter-bg"><img src={IMG.heure} alt="Mountains at dusk under a violet sky" loading="lazy" /></div>
+      <div class="brm-chapter-bg"><img src={IMG.heure} alt="Mountains at dusk under a violet sky" loading="lazy" decoding="async" /></div>
       <div class="brm-chapter-in">
         <p class="brm-time">19:05 · Chapter three</p>
         <h2 class="brm-name" id="t-heure">L'Heure Bleue</h2>
@@ -106,7 +107,7 @@ const IMG = {
 
     <!-- CHAPTER 4: NIGHT -->
     <section class="brm-chapter brm-night" id="nuit" data-chapter="nuit" aria-labelledby="t-nuit">
-      <div class="brm-chapter-bg"><img src={IMG.nuit} alt="Night sky over dark water" loading="lazy" /></div>
+      <div class="brm-chapter-bg"><img src={IMG.nuit} alt="Night sky over dark water" loading="lazy" decoding="async" /></div>
       <div class="brm-chapter-in">
         <p class="brm-time">23:41 · Chapter four</p>
         <h2 class="brm-name" id="t-nuit">Nuit</h2>
@@ -123,7 +124,7 @@ const IMG = {
     <!-- EPILOGUE: discovery set + atelier -->
     <section class="brm-epilogue" id="discovery" aria-labelledby="discovery-title">
       <div class="brm-epi-in">
-        <figure class="brm-epi-img"><img src={IMG.flowers} alt="White flowers in soft morning light" loading="lazy" /></figure>
+        <figure class="brm-epi-img"><img src={IMG.flowers} alt="White flowers in soft morning light" loading="lazy" decoding="async" /></figure>
         <div>
           <h2 class="brm-epi-title" id="discovery-title">The discovery set</h2>
           <p class="brm-epi-sub">All four chapters, 4 × 2 ml. <strong>$45</strong>, credited toward any full bottle.</p>

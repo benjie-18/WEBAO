@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
 
 // Démo : Sahara & Sage, studio fictif d'objets bohèmes, Montréal.
 // Direction artistique autonome. Bohème : terracotta, sauge, sable, arches.
@@ -21,9 +22,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sahara &amp; Sage : visitez les pièces | Objets bohèmes</title>
-  <meta name="description" content="Sahara & Sage : objets bohèmes tissés, tournés et noués à la main. Visitez trois pièces décorées et touchez ce qui vous plaît. Textiles, céramiques, macramé." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="sahara-sage" locale="fr" title="Sahara & Sage : visitez les pièces | Objets bohèmes" description="Sahara & Sage : objets bohèmes tissés, tournés et noués à la main. Visitez trois pièces décorées et touchez ce qui vous plaît. Textiles, céramiques, macramé." ogImage="https://webao.ca/demos/sahara-sage/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" />
@@ -76,7 +77,7 @@ const IMG = {
         <p class="ss-copy">Rotin, textiles superposés et lumière d'après-midi. Trois objets habitent ici.</p>
       </div>
       <figure class="ss-scene" data-scene>
-        <img src={IMG.hero} alt="Salon bohème en rotin, textiles superposés, plantes et coussins terracotta" loading="eager" fetchpriority="high" />
+        <img src={IMG.hero} alt="Salon bohème en rotin, textiles superposés, plantes et coussins terracotta" loading="eager" fetchpriority="high" decoding="async" />
         <button class="ss-hot" style="--x: 28%; --y: 62%;" aria-expanded="false" aria-controls="ss-p1"><span aria-hidden="true">1</span><span class="ss-sr">Jeté Sahara, 129 $</span></button>
         <button class="ss-hot" style="--x: 68%; --y: 24%;" aria-expanded="false" aria-controls="ss-p2"><span aria-hidden="true">2</span><span class="ss-sr">Suspension Nœud Lune, 96 $</span></button>
         <button class="ss-hot" style="--x: 56%; --y: 78%;" aria-expanded="false" aria-controls="ss-p3"><span aria-hidden="true">3</span><span class="ss-sr">Ensemble de vases Dune, 84 $</span></button>
@@ -105,7 +106,7 @@ const IMG = {
         <p class="ss-copy">Du macramé au-dessus du lit, un jeté qui a vu cent matins lents. Deux objets habitent ici.</p>
       </div>
       <figure class="ss-scene" data-scene>
-        <img src={IMG.artisan} alt="Chambre bohème avec suspension en macramé et table de chevet en rotin" loading="lazy" />
+        <img src={IMG.artisan} alt="Chambre bohème avec suspension en macramé et table de chevet en rotin" loading="lazy" decoding="async" />
         <button class="ss-hot" style="--x: 64%; --y: 22%;" aria-expanded="false" aria-controls="ss-p4"><span aria-hidden="true">1</span><span class="ss-sr">Suspension Nœud Lune, 96 $</span></button>
         <button class="ss-hot" style="--x: 38%; --y: 66%;" aria-expanded="false" aria-controls="ss-p5"><span aria-hidden="true">2</span><span class="ss-sr">Jeté Sahara, 129 $</span></button>
       </figure>
@@ -129,7 +130,7 @@ const IMG = {
         <p class="ss-copy">Un sofa terracotta, une bonne lampe, zéro excuse. Deux objets habitent ici.</p>
       </div>
       <figure class="ss-scene" data-scene>
-        <img src={IMG.look1} alt="Sofa terracotta avec coussin rose et sac tissé" loading="lazy" />
+        <img src={IMG.look1} alt="Sofa terracotta avec coussin rose et sac tissé" loading="lazy" decoding="async" />
         <button class="ss-hot" style="--x: 34%; --y: 55%;" aria-expanded="false" aria-controls="ss-p6"><span aria-hidden="true">1</span><span class="ss-sr">Jeté Sahara, 129 $</span></button>
         <button class="ss-hot" style="--x: 70%; --y: 72%;" aria-expanded="false" aria-controls="ss-p7"><span aria-hidden="true">2</span><span class="ss-sr">Ensemble de vases Dune, 84 $</span></button>
       </figure>
@@ -149,7 +150,7 @@ const IMG = {
     <section class="ss-interlude">
       <div class="ss-wrap ss-inter-in">
         <figure class="ss-arch">
-          <img src={IMG.vase} alt="Mains d'artisan façonnant un vase en terracotta au tour" loading="lazy" />
+          <img src={IMG.vase} alt="Mains d'artisan façonnant un vase en terracotta au tour" loading="lazy" decoding="async" />
         </figure>
         <div>
           <p class="ss-caveat">nos gens</p>

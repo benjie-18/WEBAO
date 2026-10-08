@@ -55,9 +55,9 @@ function validSid(sid: unknown): sid is string {
 }
 
 /** Shared gate: same-origin + 120 req/min per IP. */
-async function gate(req: Request, kv: KVNamespace): Promise<Response | null> {
-  if (!originAllowed(req, true)) return err("Forbidden origin", 403);
-  if (!(await throttle(kv, "track", clientIp(req), 120))) return err("Rate limited", 429);
+async function gate(req: Request, env: Env): Promise<Response | null> {
+  if (!originAllowed(req, true, env)) return err("Forbidden origin", 403);
+  if (!(await throttle(env.WEBAO_KV, "track", clientIp(req), 120))) return err("Rate limited", 429);
   return null;
 }
 
@@ -73,7 +73,7 @@ interface PageviewBody {
 /** POST /api/track/pageview — create/touch a session, count the view. */
 export async function handlePageview(req: Request, env: Env): Promise<Response> {
   const kv = env.WEBAO_KV;
-  const denied = await gate(req, kv);
+  const denied = await gate(req, env);
   if (denied) return denied;
 
   let body: PageviewBody;
@@ -141,7 +141,7 @@ interface ClickBody {
 /** POST /api/track/click — append a click event to the session. */
 export async function handleClick(req: Request, env: Env): Promise<Response> {
   const kv = env.WEBAO_KV;
-  const denied = await gate(req, kv);
+  const denied = await gate(req, env);
   if (denied) return denied;
 
   let body: ClickBody;
@@ -182,7 +182,7 @@ interface HeartbeatBody {
 /** POST /api/track/heartbeat — record time spent on the current page. */
 export async function handleHeartbeat(req: Request, env: Env): Promise<Response> {
   const kv = env.WEBAO_KV;
-  const denied = await gate(req, kv);
+  const denied = await gate(req, env);
   if (denied) return denied;
 
   let body: HeartbeatBody;

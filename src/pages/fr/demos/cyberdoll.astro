@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
 
 // Demo microsite: CYBERDOLL, fictional Y2K fashion label, Los Angeles.
 // Rebuilt as a LOOKBOOK ZINE: editorial spreads, sticker prices, tear-out order form.
@@ -21,9 +22,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CYBERDOLL : la mode Y2K, de retour pour toujours</title>
-  <meta name="description" content="CYBERDOLL : marque fictive de mode Y2K. Cargos pailletés, hauts papillon, chrome partout. Nouveautés chaque vendredi." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="cyberdoll" locale="fr" title="CYBERDOLL : la mode Y2K, de retour pour toujours" description="CYBERDOLL : marque fictive de mode Y2K. Cargos pailletés, hauts papillon, chrome partout. Nouveautés chaque vendredi." ogImage="https://webao.ca/demos/cyberdoll/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -42,7 +43,7 @@ const IMG = {
       <h1 class="cd-h1 cd-chrome">CYBER<br />DOLL</h1>
       <p class="cd-cover-tag">La mode Y2K pour le nouveau millénaire, deuxième partie.</p>
       <figure class="cd-cover-photo">
-        <img src={IMG.hero} alt="Look éditorial futuriste chromé" loading="eager" fetchpriority="high" />
+        <img src={IMG.hero} alt="Look éditorial futuriste chromé" loading="eager" fetchpriority="high" decoding="async" />
         <span class="cd-sticker cd-sticker-a" aria-hidden="true">NOUVEAU !!</span>
         <span class="cd-sticker cd-sticker-b" aria-hidden="true">DE RETOUR<br />POUR<br />TOUJOURS</span>
       </figure>
@@ -53,7 +54,7 @@ const IMG = {
     <!-- DOUBLE PAGE 1 : CARGOS -->
     <article class="cd-spread" id="spread-1">
       <figure class="cd-spread-photo">
-        <img src={IMG.cargo} alt="Mannequin en pantalon cargo olive" loading="lazy" />
+        <img src={IMG.cargo} alt="Mannequin en pantalon cargo olive" loading="lazy" decoding="async" />
         <span class="cd-price" aria-hidden="true">89 $</span>
         <span class="cd-sticker cd-sticker-c" aria-hidden="true">NOUVEAU !!</span>
       </figure>
@@ -68,7 +69,7 @@ const IMG = {
     <!-- DOUBLE PAGE 2 : ENSEMBLE Y3K -->
     <article class="cd-spread cd-spread-flip" id="spread-2">
       <figure class="cd-spread-photo">
-        <img src={IMG.tee} alt="Mannequins en tenues métalliques Y3K sous des lettres chromées" loading="lazy" />
+        <img src={IMG.tee} alt="Mannequins en tenues métalliques Y3K sous des lettres chromées" loading="lazy" decoding="async" />
         <span class="cd-price" aria-hidden="true">45 $</span>
         <span class="cd-sticker cd-sticker-d" aria-hidden="true">NOUVEAU !!</span>
       </figure>
@@ -83,7 +84,7 @@ const IMG = {
     <!-- DOUBLE PAGE 3 : DOUDOUNE -->
     <article class="cd-spread" id="spread-3">
       <figure class="cd-spread-photo">
-        <img src={IMG.puffa} alt="Mannequin en doudoune argentée" loading="lazy" />
+        <img src={IMG.puffa} alt="Mannequin en doudoune argentée" loading="lazy" decoding="async" />
         <span class="cd-price" aria-hidden="true">149 $</span>
         <span class="cd-sticker cd-sticker-e" aria-hidden="true">CANON !!</span>
       </figure>
@@ -98,7 +99,7 @@ const IMG = {
     <!-- DOUBLE PAGE 4 : BASKETS -->
     <article class="cd-spread cd-spread-flip" id="spread-4">
       <figure class="cd-spread-photo">
-        <img src={IMG.sneakers} alt="Baskets à plateforme étoilées" loading="lazy" />
+        <img src={IMG.sneakers} alt="Baskets à plateforme étoilées" loading="lazy" decoding="async" />
         <span class="cd-price" aria-hidden="true">120 $</span>
       </figure>
       <div class="cd-spread-copy">
@@ -129,15 +130,15 @@ const IMG = {
         <h2 class="cd-h2">Repérées<br />chez la Dollfam</h2>
         <div class="cd-look-grid">
           <figure class="cd-polaroid">
-            <img src={IMG.look1} alt="Flatlay Y2K rose avec sweat en velours, mini-jupe en jean et appareil photo" loading="lazy" />
+            <img src={IMG.look1} alt="Flatlay Y2K rose avec sweat en velours, mini-jupe en jean et appareil photo" loading="lazy" decoding="async" />
             <figcaption>fit check nº 042 : diva du centre-ville</figcaption>
           </figure>
           <figure class="cd-polaroid cd-polaroid-tilt">
-            <img src={IMG.look2} alt="Flatlay Y2K rose et blanc avec téléphone à clapet strassé et sac baguette" loading="lazy" />
+            <img src={IMG.look2} alt="Flatlay Y2K rose et blanc avec téléphone à clapet strassé et sac baguette" loading="lazy" decoding="async" />
             <figcaption>fit check nº 043 : couture de centre d'achat</figcaption>
           </figure>
           <figure class="cd-polaroid">
-            <img src={IMG.hero} alt="Look éditorial futuriste chromé" loading="lazy" />
+            <img src={IMG.hero} alt="Look éditorial futuriste chromé" loading="lazy" decoding="async" fetchpriority="high" />
             <figcaption>fit check nº 044 : personnage principal</figcaption>
           </figure>
         </div>

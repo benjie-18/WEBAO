@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Kanso, fictional Japanese tea house, Montréal QC.
 // Rebuilt as CEREMONY: one idea per screen, vast whitespace, a vertical meditative rhythm.
@@ -17,9 +18,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kanso : Maison de thé japonaise à Montréal</title>
-  <meta name="description" content="Kanso : une maison de thé japonaise paisible à Montréal. Matcha de cérémonie, gyokuro et wagashi de saison. Douze places, une salle, sans hâte." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="kanso" locale="fr" title="Kanso : Maison de thé japonaise à Montréal" description="Kanso : une maison de thé japonaise paisible à Montréal. Matcha de cérémonie, gyokuro et wagashi de saison. Douze places, une salle, sans hâte." ogImage="https://webao.ca/demos/kanso/01.jpg" />
+
+
 </head>
 <body class="ks">
 
@@ -41,7 +42,7 @@ const IMG = {
 
     <!-- II. LA SALLE -->
     <figure class="ks-screen ks-media">
-      <img src={IMG.hero} alt="Un salon de thé japonais serein avec tatamis, table basse et service à thé" loading="eager" fetchpriority="high" />
+      <img src={IMG.hero} alt="Un salon de thé japonais serein avec tatamis, table basse et service à thé" loading="eager" fetchpriority="high" decoding="async" />
     </figure>
 
     <!-- III. LA SIMPLICITÉ -->
@@ -57,7 +58,7 @@ const IMG = {
 
     <!-- V. LE VERSEMENT -->
     <figure class="ks-screen ks-media">
-      <img src={IMG.philo} alt="Une théière en céramique et une tasse de thé chaud sur un plateau en bois" loading="lazy" />
+      <img src={IMG.philo} alt="Une théière en céramique et une tasse de thé chaud sur un plateau en bois" loading="lazy" decoding="async" />
     </figure>
 
     <!-- VI. LE TEMPS -->
@@ -82,7 +83,7 @@ const IMG = {
 
     <!-- VIII. LE FOUET -->
     <figure class="ks-screen ks-media">
-      <img src={IMG.visit} alt="Une main fouettant le matcha avec un chasen en bambou dans un bol en céramique" loading="lazy" />
+      <img src={IMG.visit} alt="Une main fouettant le matcha avec un chasen en bambou dans un bol en céramique" loading="lazy" decoding="async" />
     </figure>
 
     <!-- IX. ÉCRIRE À L'AVANCE -->

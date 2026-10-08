@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
 
 // Site de démonstration : Studio Forma, studio fictif d'architecture intérieure, Montréal QC.
 // Direction artistique autonome. Non relié au système de thème WEBAO.
@@ -26,9 +27,9 @@ const SHEETS = [
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Studio Forma : architecture intérieure à Montréal</title>
-  <meta name="description" content="Studio Forma est un studio d'architecture intérieure à Montréal. Résidentiel, commercial et études de matériaux, dessinés avec rigueur depuis 2009." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="forma" locale="fr" title="Studio Forma : architecture intérieure à Montréal" description="Studio Forma est un studio d'architecture intérieure à Montréal. Résidentiel, commercial et études de matériaux, dessinés avec rigueur depuis 2009." ogImage="https://webao.ca/demos/forma/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
@@ -66,7 +67,7 @@ const SHEETS = [
             <span class="fm-plan-spec">{s.spec}</span>
           </div>
           <figure class="fm-plan-fig">
-            <img src={s.img} alt={s.alt} loading="lazy" />
+            <img src={s.img} alt={s.alt} loading="lazy" decoding="async" />
             <span class="fm-dim fm-dim-h" aria-hidden="true">{s.dim}</span>
           </figure>
           <div class="fm-plan-body">
@@ -79,7 +80,7 @@ const SHEETS = [
 
     <!-- DÉTAIL : dessin pleine page -->
     <figure class="fm-detail">
-      <img src={IMG.detail} alt="Détail architectural en béton avec lumière naturelle dramatique" loading="lazy" />
+      <img src={IMG.detail} alt="Détail architectural en béton avec lumière naturelle dramatique" loading="lazy" decoding="async" />
       <figcaption>détail · Résidence Atelier · plâtre, pierre adoucie, 1:5</figcaption>
     </figure>
 
@@ -101,7 +102,7 @@ const SHEETS = [
     <section class="fm-office" id="office" aria-label="Le bureau">
       <div class="fm-office-grid">
         <figure class="fm-office-fig">
-          <img src={IMG.studio} alt="L'équipe de Studio Forma au travail dans l'atelier de Montréal" loading="lazy" />
+          <img src={IMG.studio} alt="L'équipe de Studio Forma au travail dans l'atelier de Montréal" loading="lazy" decoding="async" />
           <figcaption>photo de chantier · l'atelier, Mile End</figcaption>
         </figure>
         <div>

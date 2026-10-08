@@ -37,7 +37,12 @@ export const DEFAULT_PASSWORD_HASH =
 export async function getPasswordHash(kv: KVNamespace): Promise<string> {
   const rec = await getJson<{ passwordHash?: string }>(kv, AUTH_KEY);
   if (rec?.passwordHash) return rec.passwordHash;
-  await putJson(kv, AUTH_KEY, { passwordHash: DEFAULT_PASSWORD_HASH });
+  try {
+    await putJson(kv, AUTH_KEY, { passwordHash: DEFAULT_PASSWORD_HASH });
+  } catch {
+    // Seeding is best-effort: a fresh namespace during a KV write outage must
+    // still verify against the default hash so the fallback token path works.
+  }
   return DEFAULT_PASSWORD_HASH;
 }
 

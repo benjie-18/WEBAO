@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
 
 // Demo microsite: CYBERDOLL, fictional Y2K fashion label, Los Angeles.
 // Rebuilt as a LOOKBOOK ZINE: editorial spreads, sticker prices, tear-out order form.
@@ -21,9 +22,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CYBERDOLL: Y2K Fashion, Back 4Ever</title>
-  <meta name="description" content="CYBERDOLL: fictional Y2K fashion label. Glitter cargos, butterfly tops, chrome everything. New drops every Friday." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="cyberdoll" locale="en" title="CYBERDOLL: Y2K Fashion, Back 4Ever" description="CYBERDOLL: fictional Y2K fashion label. Glitter cargos, butterfly tops, chrome everything. New drops every Friday." ogImage="https://webao.ca/demos/cyberdoll/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -42,7 +43,7 @@ const IMG = {
       <h1 class="cd-h1 cd-chrome">CYBER<br />DOLL</h1>
       <p class="cd-cover-tag">Y2K fashion for the new millennium, part two.</p>
       <figure class="cd-cover-photo">
-        <img src={IMG.hero} alt="Chrome futuristic editorial look" loading="eager" fetchpriority="high" />
+        <img src={IMG.hero} alt="Chrome futuristic editorial look" loading="eager" fetchpriority="high" decoding="async" />
         <span class="cd-sticker cd-sticker-a" aria-hidden="true">NEW!!</span>
         <span class="cd-sticker cd-sticker-b" aria-hidden="true">BACK<br />4EVER</span>
       </figure>
@@ -53,7 +54,7 @@ const IMG = {
     <!-- SPREAD 1: CARGOS -->
     <article class="cd-spread" id="spread-1">
       <figure class="cd-spread-photo">
-        <img src={IMG.cargo} alt="Model wearing olive cargo pants" loading="lazy" />
+        <img src={IMG.cargo} alt="Model wearing olive cargo pants" loading="lazy" decoding="async" />
         <span class="cd-price" aria-hidden="true">$89</span>
         <span class="cd-sticker cd-sticker-c" aria-hidden="true">NEW!!</span>
       </figure>
@@ -68,7 +69,7 @@ const IMG = {
     <!-- SPREAD 2: Y3K SET -->
     <article class="cd-spread cd-spread-flip" id="spread-2">
       <figure class="cd-spread-photo">
-        <img src={IMG.tee} alt="Models in metallic Y3K outfits under chrome balloon letters" loading="lazy" />
+        <img src={IMG.tee} alt="Models in metallic Y3K outfits under chrome balloon letters" loading="lazy" decoding="async" />
         <span class="cd-price" aria-hidden="true">$45</span>
         <span class="cd-sticker cd-sticker-d" aria-hidden="true">NEW!!</span>
       </figure>
@@ -83,7 +84,7 @@ const IMG = {
     <!-- SPREAD 3: PUFFA -->
     <article class="cd-spread" id="spread-3">
       <figure class="cd-spread-photo">
-        <img src={IMG.puffa} alt="Model wearing a silver puffer jacket" loading="lazy" />
+        <img src={IMG.puffa} alt="Model wearing a silver puffer jacket" loading="lazy" decoding="async" />
         <span class="cd-price" aria-hidden="true">$149</span>
         <span class="cd-sticker cd-sticker-e" aria-hidden="true">HOT!!</span>
       </figure>
@@ -98,7 +99,7 @@ const IMG = {
     <!-- SPREAD 4: SNEAKERS -->
     <article class="cd-spread cd-spread-flip" id="spread-4">
       <figure class="cd-spread-photo">
-        <img src={IMG.sneakers} alt="Star platform sneakers" loading="lazy" />
+        <img src={IMG.sneakers} alt="Star platform sneakers" loading="lazy" decoding="async" />
         <span class="cd-price" aria-hidden="true">$120</span>
       </figure>
       <div class="cd-spread-copy">
@@ -129,15 +130,15 @@ const IMG = {
         <h2 class="cd-h2">Spotted on<br />Dollfam</h2>
         <div class="cd-look-grid">
           <figure class="cd-polaroid">
-            <img src={IMG.look1} alt="Pink Y2K flatlay with velour hoodie, denim mini skirt and digicam" loading="lazy" />
+            <img src={IMG.look1} alt="Pink Y2K flatlay with velour hoodie, denim mini skirt and digicam" loading="lazy" decoding="async" />
             <figcaption>fit check #042: downtown diva</figcaption>
           </figure>
           <figure class="cd-polaroid cd-polaroid-tilt">
-            <img src={IMG.look2} alt="Pink and white Y2K flatlay with bedazzled flip phone and baguette bag" loading="lazy" />
+            <img src={IMG.look2} alt="Pink and white Y2K flatlay with bedazzled flip phone and baguette bag" loading="lazy" decoding="async" />
             <figcaption>fit check #043: mall rat couture</figcaption>
           </figure>
           <figure class="cd-polaroid">
-            <img src={IMG.hero} alt="Chrome futuristic editorial look" loading="lazy" />
+            <img src={IMG.hero} alt="Chrome futuristic editorial look" loading="lazy" decoding="async" fetchpriority="high" />
             <figcaption>fit check #044: main character</figcaption>
           </figure>
         </div>

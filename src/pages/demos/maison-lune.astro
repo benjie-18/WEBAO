@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Maison Lune, fictional lakeside inn, Magog.
 // Standalone art direction. Night blues, moon silver. Not connected to the WEBAO theme system.
@@ -77,9 +78,9 @@ const ENTRIES = [
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Maison Lune: a lakeside inn journal · Magog</title>
-  <meta name="description" content="The Cabin Journal of Maison Lune: dated notes from a four-room inn on Lake Memphremagog. Read the entries, then write your own." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="maison-lune" locale="en" title="Maison Lune: a lakeside inn journal · Magog" description="The Cabin Journal of Maison Lune: dated notes from a four-room inn on Lake Memphremagog. Read the entries, then write your own." ogImage="https://webao.ca/demos/maison-lune/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -123,13 +124,13 @@ const ENTRIES = [
             <div class="ml-entry-body">
               {e.body.map((p) => (<p>{p}</p>))}
               <figure class="ml-entry-photo">
-                <img src={e.photo} alt={e.photoAlt} loading="lazy" />
+                <img src={e.photo} alt={e.photoAlt} loading="lazy" decoding="async" />
                 <figcaption>{e.caption}</figcaption>
               </figure>
             </div>
             <aside class="ml-margin" aria-label={"Notes for the entry of " + e.date}>
               <figure class="ml-roomfig">
-                <img src={e.roomImg} alt={e.roomAlt} loading="lazy" />
+                <img src={e.roomImg} alt={e.roomAlt} loading="lazy" decoding="async" />
                 <figcaption><strong>Stayed in: {e.room}</strong><span>{e.roomLine}</span></figcaption>
               </figure>
               <dl class="ml-notes">

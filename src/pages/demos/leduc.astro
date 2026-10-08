@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Plomberie Leduc, fictional plumber, Longueuil QC.
 // Rebuilt EMERGENCY-FIRST. The entire above-fold is the emergency call to
@@ -19,9 +20,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Plomberie Leduc · Burst pipe? (450) 555-0134 · Longueuil plumber</title>
-  <meta name="description" content="Plomberie Leduc: Longueuil's family plumber since 1987. Burst pipe, no hot water, blocked drain? We answer in 20 minutes, 24/7." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="leduc" locale="en" title="Plomberie Leduc · Burst pipe? (450) 555-0134 · Longueuil plumber" description="Plomberie Leduc: Longueuil's family plumber since 1987. Burst pipe, no hot water, blocked drain? We answer in 20 minutes, 24/7." ogImage="https://webao.ca/demos/leduc/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&display=swap" rel="stylesheet" />
@@ -58,20 +59,20 @@ const IMG = {
         <div><dt>Outdoor faucets &amp; gas lines <span>if water or gas runs through it</span></dt><dd>quoted</dd></div>
       </dl>
       <figure class="em-tools">
-        <img src={IMG.tools} alt="A vintage pipe wrench kept from years of service" loading="lazy" />
-        <img src={IMG.wrench} alt="The founder's original adjustable wrench" loading="lazy" />
+        <img src={IMG.tools} alt="A vintage pipe wrench kept from years of service" loading="lazy" decoding="async" />
+        <img src={IMG.wrench} alt="The founder's original adjustable wrench" loading="lazy" decoding="async" />
       </figure>
     </section>
 
     <!-- ONE PARAGRAPH. That's the about section. -->
     <section class="em-about">
       <div class="em-about-in">
-        <img src={IMG.portrait} alt="Réal Leduc, founder, in uniform" loading="lazy" />
+        <img src={IMG.portrait} alt="Réal Leduc, founder, in uniform" loading="lazy" decoding="async" />
         <div>
           <h2 class="em-h2">Three generations, one badge.</h2>
           <p>Réal Leduc started in 1987 with a used van and a rule he still repeats: leave every home cleaner than you found it. His son Marc joined in 2004; his granddaughter Léa, a licensed journeyman since 2021, runs the 24/7 line today. 12,400+ homes, 4.9 average rating, 5-year workmanship warranty in writing.</p>
         </div>
-        <img class="em-about-job" src={IMG.hero} alt="A Leduc plumber repairing a sink" loading="lazy" />
+        <img class="em-about-job" src={IMG.hero} alt="A Leduc plumber repairing a sink" loading="lazy" decoding="async" fetchpriority="high" />
       </div>
     </section>
 

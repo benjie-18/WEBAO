@@ -37,7 +37,7 @@ interface SubmitBody {
 
 /** POST /api/forms/submit — validate and store a form submission. */
 export async function handleFormSubmit(req: Request, env: Env): Promise<Response> {
-  if (!originAllowed(req, true)) return err("Forbidden origin", 403);
+  if (!originAllowed(req, true, env)) return err("Forbidden origin", 403);
   const kv = env.WEBAO_KV;
 
   let body: SubmitBody;

@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Bec Fin Plomberie · fictional plumber, Sherbrooke QC.
 // Concept: 1950s PASTEL BATHROOM SHOWROOM. Mint, blush pink and cream with
@@ -19,9 +20,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bec Fin Plomberie · Studio de salle de bain pastel à Sherbrooke · (819) 555-0142</title>
-  <meta name="description" content="Bec Fin Plomberie : studio joyeux de design et de plomberie de salle de bain à Sherbrooke. Rénovations, appareils, réparations — avec garantie de satisfaction et promesse de nettoyage impeccable." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="bec-fin" locale="fr" title="Bec Fin Plomberie · Studio de salle de bain pastel à Sherbrooke · (819) 555-0142" description="Bec Fin Plomberie : studio joyeux de design et de plomberie de salle de bain à Sherbrooke. Rénovations, appareils, réparations — avec garantie de satisfaction et promesse de nettoyage impeccable." ogImage="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=1600&auto=format&fit=crop" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Fredoka:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -52,7 +53,7 @@ const IMG = {
       </div>
     </div>
     <figure class="bf-hero-fig">
-      <img src={IMG.hero} alt="Salle de bain pastel lumineuse avec miroir rond et murs menthe" />
+      <img src={IMG.hero} alt="Salle de bain pastel lumineuse avec miroir rond et murs menthe" decoding="async" fetchpriority="high" loading="eager" />
       <span class="bf-burst" aria-hidden="true">WOW!</span>
     </figure>
   </section>
@@ -66,15 +67,15 @@ const IMG = {
     </div>
     <div class="bf-cards">
       <figure class="bf-card bf-card-mint">
-        <img src={IMG.g1} alt="Salle de bain carrelée menthe avec baignoire de style vintage" />
+        <img src={IMG.g1} alt="Salle de bain carrelée menthe avec baignoire de style vintage" decoding="async" loading="lazy" />
         <figcaption><strong>Menthe fraîche</strong><span>Rue Wellington · réno complète</span></figcaption>
       </figure>
       <figure class="bf-card bf-card-blush">
-        <img src={IMG.g2} alt="Salle de bain rose avec meuble-lavabo blanc" />
+        <img src={IMG.g2} alt="Salle de bain rose avec meuble-lavabo blanc" decoding="async" loading="lazy" />
         <figcaption><strong>L'heure du blush</strong><span>Rue King Ouest · rafraîchissement des appareils</span></figcaption>
       </figure>
       <figure class="bf-card bf-card-cream">
-        <img src={IMG.g3} alt="Salle de bain crème avec carrelage de sol à motifs" />
+        <img src={IMG.g3} alt="Salle de bain crème avec carrelage de sol à motifs" decoding="async" loading="lazy" />
         <figcaption><strong>Le rêve crème</strong><span>Secteur Lennoxville · salle de bain d'invités</span></figcaption>
       </figure>
     </div>

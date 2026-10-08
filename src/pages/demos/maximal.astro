@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
 
 // Demo microsite: MAXIMAL, fictional maximalist creative collective, Montréal.
 // Standalone art direction. Loud, clashing, "more is more". Not connected to the WEBAO theme system.
@@ -21,9 +22,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MAXIMAL: More Is More | Maximalist Creative Collective, Montréal</title>
-  <meta name="description" content="MAXIMAL is a fictional maximalist creative collective in Montréal. Branding, web, motion, murals, packaging, and everything at once. Tastefully too much." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="maximal" locale="en" title="MAXIMAL: More Is More | Maximalist Creative Collective, Montréal" description="MAXIMAL is a fictional maximalist creative collective in Montréal. Branding, web, motion, murals, packaging, and everything at once. Tastefully too much." ogImage="https://webao.ca/demos/maximal/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Playfair+Display:ital,wght@1,500;1,700;1,900&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
@@ -62,8 +63,8 @@ const IMG = {
           <a class="mx-btn mx-btn-pink" href="#tickets">Pick your chaos tier</a>
           <button class="mx-btn mx-btn-lime" id="mx-louder" type="button">Make it louder <span id="mx-count" aria-hidden="true">(0)</span></button>
         </div>
-        <figure class="mx-pol mx-pol-a"><img src={IMG.heroA} alt="Maximalist living room, green walls, blue velvet sofa, gallery wall" loading="eager" fetchpriority="high" /><figcaption>mood: LOUD</figcaption></figure>
-        <figure class="mx-pol mx-pol-b"><img src={IMG.heroB} alt="Pink and green maximalist salon with layered patterns" loading="lazy" /><figcaption>mood: LOUDER</figcaption></figure>
+        <figure class="mx-pol mx-pol-a"><img src={IMG.heroA} alt="Maximalist living room, green walls, blue velvet sofa, gallery wall" loading="eager" fetchpriority="high" decoding="async" /><figcaption>mood: LOUD</figcaption></figure>
+        <figure class="mx-pol mx-pol-b"><img src={IMG.heroB} alt="Pink and green maximalist salon with layered patterns" loading="lazy" decoding="async" fetchpriority="high" /><figcaption>mood: LOUDER</figcaption></figure>
         <div class="mx-burst mx-burst-a" aria-hidden="true"><span>WOW!</span></div>
         <div class="mx-burst mx-burst-b" aria-hidden="true"><span>100%<br />EXTRA</span></div>
         <p class="mx-sticker mx-st-a" aria-hidden="true">NO BEIGE ALLOWED</p>
@@ -117,21 +118,21 @@ const IMG = {
       </div>
       <div class="mx-spread">
         <figure class="mx-scrap-item mx-s1">
-          <img src={IMG.work1} alt="Colorful abstract paint artwork for Acid Bloom brand identity" loading="lazy" />
+          <img src={IMG.work1} alt="Colorful abstract paint artwork for Acid Bloom brand identity" loading="lazy" decoding="async" />
           <figcaption><strong>Acid Bloom</strong><span>Brand identity · client cried (happy)</span></figcaption>
           <span class="mx-mini-burst" aria-hidden="true">HOT</span>
         </figure>
         <figure class="mx-scrap-item mx-s2">
-          <img src={IMG.work2} alt="Eclectic gallery wall interior for Chrome Dreams" loading="lazy" />
+          <img src={IMG.work2} alt="Eclectic gallery wall interior for Chrome Dreams" loading="lazy" decoding="async" />
           <figcaption><strong>Chrome Dreams</strong><span>Website · 47 animations, 0 regrets</span></figcaption>
           <span class="mx-tape" aria-hidden="true"></span>
         </figure>
         <figure class="mx-scrap-item mx-s3">
-          <img src={IMG.work3} alt="Colorful maximalist living room for Neon District" loading="lazy" />
+          <img src={IMG.work3} alt="Colorful maximalist living room for Neon District" loading="lazy" decoding="async" />
           <figcaption><strong>Neon District</strong><span>Mural · visible from space (allegedly)</span></figcaption>
         </figure>
         <figure class="mx-scrap-item mx-s4">
-          <img src={IMG.work4} alt="Bright paint splash artwork for Paint Fight packaging" loading="lazy" />
+          <img src={IMG.work4} alt="Bright paint splash artwork for Paint Fight packaging" loading="lazy" decoding="async" />
           <figcaption><strong>Paint Fight</strong><span>Packaging · went viral-ish</span></figcaption>
           <span class="mx-mini-burst" aria-hidden="true">WOW</span>
         </figure>

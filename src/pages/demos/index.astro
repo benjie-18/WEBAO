@@ -2,12 +2,31 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import DemosPage from "../../components/pages/DemosPage.astro";
 import { useTranslations } from "../../lib/i18n";
+import { demos } from "../../lib/demos";
+import { HIDDEN_DEMOS } from "../../lib/demo-seo";
 
 const locale = "en" as const;
 const t = useTranslations(locale);
+
+// ItemList structured data: presents the catalog to search engines as a list
+// of portfolio pieces (rich-result eligible), matching the visible catalog.
+const visibleDemos = demos.filter((demo) => !HIDDEN_DEMOS.has(demo.id));
+const itemListSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: t.meta.demos.title,
+  numberOfItems: visibleDemos.length,
+  itemListElement: visibleDemos.map((demo, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: demo.name,
+    url: `https://webao.ca/demos/${demo.id}/`,
+  })),
+});
 ---
 
 <BaseLayout title={t.meta.demos.title} description={t.meta.demos.description} locale={locale} pageKey="demos">
+  <script slot="head" type="application/ld+json" set:html={itemListSchema} />
   <Fragment slot="head">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

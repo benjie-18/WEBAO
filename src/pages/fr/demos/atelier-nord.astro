@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
 
 // Démo : Atelier Nord · studio automobile haut de gamme, Brossard QC.
 // Reconstruit comme un JOURNAL DE BAIE : pas de hero. La page ouvre sur le
@@ -19,9 +20,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Atelier Nord · Journal de baie · Brossard</title>
-  <meta name="description" content="Journal de baie d'Atelier Nord : de vrais bons de travail, des prix honnêtes et un garage que vous pouvez lire avant de réserver. Brossard, QC." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="atelier-nord" locale="fr" title="Atelier Nord · Journal de baie · Brossard" description="Journal de baie d'Atelier Nord : de vrais bons de travail, des prix honnêtes et un garage que vous pouvez lire avant de réserver. Brossard, QC." ogImage="https://webao.ca/demos/atelier-nord/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -66,11 +67,11 @@ const IMG = {
         <p class="an-ticket-note">Décontamination complète de la peinture, polissage machine en deux étapes, documentation photo panneau par panneau, puis une céramique 5 ans. Le propriétaire l'a récupérée samedi et s'est arrêté deux fois sur le chemin du retour pour la regarder. Ça arrive souvent.</p>
         <figure class="an-beforeafter">
           <div class="an-ba">
-            <img src={IMG.garage} alt="La 911 à son arrivée, peinture terne sous les néons de l'atelier" loading="eager" />
+            <img src={IMG.garage} alt="La 911 à son arrivée, peinture terne sous les néons de l'atelier" loading="eager" decoding="async" />
             <figcaption class="an-mono">Avant · à la réception</figcaption>
           </div>
           <div class="an-ba">
-            <img src={IMG.hero} alt="La 911 après le polissage, peinture profonde et réfléchissante" loading="eager" />
+            <img src={IMG.hero} alt="La 911 après le polissage, peinture profonde et réfléchissante" loading="eager" decoding="async" fetchpriority="high" />
             <figcaption class="an-mono">Après · 34,5 heures plus tard</figcaption>
           </div>
         </figure>
@@ -90,25 +91,25 @@ const IMG = {
         </div>
         <a class="an-row" role="row" href="#order">
           <span class="an-mono an-date">2 oct.</span><span class="an-mono an-wo">#2480</span>
-          <span class="an-veh"><img src={IMG.engine} alt="" loading="lazy" />Audi RS6 Avant</span>
+          <span class="an-veh"><img src={IMG.engine} alt="" loading="lazy" decoding="async" />Audi RS6 Avant</span>
           <span class="an-work">Diagnostic complet, ratés intermittents. Bobines 2 et 5 remplacées, essai routier concluant.</span>
           <span class="an-mono an-tech">J.R.</span><span class="an-mono an-total">$1,240</span>
         </a>
         <a class="an-row" role="row" href="#order">
           <span class="an-mono an-date">1er oct.</span><span class="an-mono an-wo">#2479</span>
-          <span class="an-veh"><img src={IMG.garage} alt="" loading="lazy" />BMW M4 Competition</span>
+          <span class="an-veh"><img src={IMG.garage} alt="" loading="lazy" decoding="async" />BMW M4 Competition</span>
           <span class="an-work">Inspection préachat, 140 points. Deux raccords de peinture détectés, l'acheteur est reparti informé.</span>
           <span class="an-mono an-tech">M.L.</span><span class="an-mono an-total">$380</span>
         </a>
         <a class="an-row" role="row" href="#order">
           <span class="an-mono an-date">30 sept.</span><span class="an-mono an-wo">#2478</span>
-          <span class="an-veh"><img src={IMG.detail} alt="" loading="lazy" />Mercedes-AMG GT</span>
+          <span class="an-veh"><img src={IMG.detail} alt="" loading="lazy" decoding="async" />Mercedes-AMG GT</span>
           <span class="an-work">Remise à neuf de l'intérieur, décontamination et scellant. Volant en Alcantara ramené à la vie.</span>
           <span class="an-mono an-tech">J.R.</span><span class="an-mono an-total">$1,650</span>
         </a>
         <a class="an-row" role="row" href="#order">
           <span class="an-mono an-date">27 sept.</span><span class="an-mono an-wo">#2477</span>
-          <span class="an-veh"><img src={IMG.hero} alt="" loading="lazy" />Tesla Model 3</span>
+          <span class="an-veh"><img src={IMG.hero} alt="" loading="lazy" decoding="async" fetchpriority="high" />Tesla Model 3</span>
           <span class="an-work">Alignement performance, service des freins, filtre d'habitacle. Entrée et sortie le même jour.</span>
           <span class="an-mono an-tech">M.L.</span><span class="an-mono an-total">$520</span>
         </a>

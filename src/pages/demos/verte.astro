@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Verte · zero-waste grocery, Montréal QC.
 // Rebuilt as a MARKET STALL: the header IS the weekly harvest board,
@@ -21,9 +22,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Verte · Zero-waste grocery · Montréal</title>
-  <meta name="description" content="Verte: a zero-waste market stall on King Ouest. This week's harvest, bulk goods, bring your own jars." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="verte" locale="en" title="Verte · Zero-waste grocery · Montréal" description="Verte: a zero-waste market stall on King Ouest. This week's harvest, bulk goods, bring your own jars." ogImage="https://webao.ca/demos/verte/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Caveat:wght@600;700&family=Karla:wght@400;500;700&display=swap" rel="stylesheet" />
@@ -71,31 +72,31 @@ const IMG = {
         </div>
         <div class="vt-grid">
           <article class="vt-item vt-item-tall">
-            <img src={IMG.tomatoes} alt="Heirloom tomatoes in wooden crates" loading="lazy" />
+            <img src={IMG.tomatoes} alt="Heirloom tomatoes in wooden crates" loading="lazy" decoding="async" />
             <div class="vt-tag"><span class="vt-tag-name">Heirloom tomatoes</span><span class="vt-tag-price">$4.90 / kg</span></div>
           </article>
           <article class="vt-item">
-            <img src={IMG.bread} alt="Sourdough loaves on a bakery shelf" loading="lazy" />
+            <img src={IMG.bread} alt="Sourdough loaves on a bakery shelf" loading="lazy" decoding="async" />
             <div class="vt-tag"><span class="vt-tag-name">Sourdough, baked Fri</span><span class="vt-tag-price">$7.50</span></div>
           </article>
           <article class="vt-item">
-            <img src={IMG.greens} alt="Fresh leafy greens" loading="lazy" />
+            <img src={IMG.greens} alt="Fresh leafy greens" loading="lazy" decoding="async" />
             <div class="vt-tag"><span class="vt-tag-name">Rainbow chard</span><span class="vt-tag-price">$3.20 / bunch</span></div>
           </article>
           <article class="vt-item vt-item-wide">
-            <img src={IMG.hero} alt="Market produce laid out on the stall" loading="lazy" />
+            <img src={IMG.hero} alt="Market produce laid out on the stall" loading="lazy" decoding="async" fetchpriority="high" />
             <div class="vt-tag"><span class="vt-tag-name">The morning haul</span><span class="vt-tag-price">by weight</span></div>
           </article>
           <article class="vt-item">
-            <img src={IMG.fruit} alt="Seasonal fruit" loading="lazy" />
+            <img src={IMG.fruit} alt="Seasonal fruit" loading="lazy" decoding="async" />
             <div class="vt-tag"><span class="vt-tag-name">Macintosh apples</span><span class="vt-tag-price">$3.80 / kg</span></div>
           </article>
           <article class="vt-item vt-item-tall">
-            <img src={IMG.salad} alt="Fresh salad greens" loading="lazy" />
+            <img src={IMG.salad} alt="Fresh salad greens" loading="lazy" decoding="async" />
             <div class="vt-tag"><span class="vt-tag-name">Salad mix, cut today</span><span class="vt-tag-price">$5.40 / bag</span></div>
           </article>
           <article class="vt-item vt-item-wide">
-            <img src={IMG.prep} alt="Vegetables being prepped in the back kitchen" loading="lazy" />
+            <img src={IMG.prep} alt="Vegetables being prepped in the back kitchen" loading="lazy" decoding="async" />
             <div class="vt-tag"><span class="vt-tag-name">Soup of the day, jarred</span><span class="vt-tag-price">$8.00 / jar</span></div>
           </article>
         </div>

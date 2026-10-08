@@ -41,20 +41,42 @@ export function clientCity(req: Request): string | undefined {
   return cf?.city || undefined;
 }
 
+/** Extra hosts allowed to call the API, from the ALLOWED_ORIGINS binding. */
+export interface OriginEnv {
+  /** Comma-separated hostnames; `*.example.com` matches any subdomain. */
+  ALLOWED_ORIGINS?: string;
+}
+
+function extraAllowedHosts(env?: OriginEnv): string[] {
+  return (env?.ALLOWED_ORIGINS || "")
+    .split(",")
+    .map((host) => host.trim().toLowerCase())
+    .filter(Boolean);
+}
+
+function hostMatches(host: string, pattern: string): boolean {
+  if (pattern.startsWith("*.")) return host.endsWith(pattern.slice(1));
+  return host === pattern;
+}
+
 /**
  * Same-origin gate for the JSON API.
  * When requireOrigin is true, at least one of Origin/Referer must be present
  * and match an allowed host. When false, missing headers are tolerated
  * (used for Bearer-authed GETs, where the token itself is the auth).
+ *
+ * `ALLOWED_ORIGINS` adds hosts for local/preview environments (set it in
+ * `.dev.vars`; unset in production).
  */
-export function originAllowed(req: Request, requireOrigin: boolean): boolean {
+export function originAllowed(req: Request, requireOrigin: boolean, env?: OriginEnv): boolean {
   const origin = req.headers.get("Origin");
   const referer = req.headers.get("Referer");
   const candidate = origin || referer;
   if (!candidate) return !requireOrigin;
   try {
     const host = new URL(candidate).hostname.toLowerCase();
-    return ALLOWED_HOSTS.has(host);
+    if (ALLOWED_HOSTS.has(host)) return true;
+    return extraAllowedHosts(env).some((pattern) => hostMatches(host, pattern));
   } catch {
     return false;
   }

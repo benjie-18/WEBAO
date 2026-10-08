@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Pixelforge Games, fictional indie game studio, Montreal.
 // Rebuilt as an ARCADE CABINET. The page is a game-select screen: it opens on
@@ -21,9 +22,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pixelforge Games · Insert coin</title>
-  <meta name="description" content="Pixelforge Games: fictional indie studio in Montreal. 14 tiny games, 2 million players, zero polygons harmed. Insert coin." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="pixelforge" locale="en" title="Pixelforge Games · Insert coin" description="Pixelforge Games: fictional indie studio in Montreal. 14 tiny games, 2 million players, zero polygons harmed. Insert coin." ogImage="https://webao.ca/demos/pixelforge/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet" />
@@ -34,7 +35,7 @@ const IMG = {
 
   <!-- ATTRACT MODE -->
   <header class="ac-attract" id="top">
-    <div class="ac-attract-bg" aria-hidden="true"><img src={IMG.hero} alt="" loading="eager" fetchpriority="high" /></div>
+    <div class="ac-attract-bg" aria-hidden="true"><img src={IMG.hero} alt="" loading="eager" fetchpriority="high" decoding="async" /></div>
     <div class="ac-attract-in">
       <svg class="ac-invader" viewBox="0 0 11 8" shape-rendering="crispEdges" aria-hidden="true">
         <rect x="2" y="0" width="1" height="1"/><rect x="8" y="0" width="1" height="1"/>
@@ -67,7 +68,7 @@ const IMG = {
       <h2 class="ac-h">Select your game</h2>
 
       <article class="ac-marquee">
-        <div class="ac-marquee-art"><img src={IMG.game1} alt="Duskfall Valley marquee art: pixel sunset over mountains and lake" loading="lazy" /></div>
+        <div class="ac-marquee-art"><img src={IMG.game1} alt="Duskfall Valley marquee art: pixel sunset over mountains and lake" loading="lazy" decoding="async" /></div>
         <div class="ac-marquee-in">
           <p class="ac-mq-k">Cabinet 01 · exploration · solo</p>
           <h3>Duskfall Valley</h3>
@@ -77,7 +78,7 @@ const IMG = {
       </article>
 
       <article class="ac-marquee">
-        <div class="ac-marquee-art"><img src={IMG.game2} alt="Dungeon Delver marquee art: pixel dungeon crawler battle" loading="lazy" /></div>
+        <div class="ac-marquee-art"><img src={IMG.game2} alt="Dungeon Delver marquee art: pixel dungeon crawler battle" loading="lazy" decoding="async" /></div>
         <div class="ac-marquee-in">
           <p class="ac-mq-k">Cabinet 02 · roguelike · solo</p>
           <h3>Dungeon Delver</h3>
@@ -87,7 +88,7 @@ const IMG = {
       </article>
 
       <article class="ac-marquee">
-        <div class="ac-marquee-art"><img src={IMG.game3} alt="Meadow Tactics marquee art: top-down pixel RPG battle" loading="lazy" /></div>
+        <div class="ac-marquee-art"><img src={IMG.game3} alt="Meadow Tactics marquee art: top-down pixel RPG battle" loading="lazy" decoding="async" /></div>
         <div class="ac-marquee-in">
           <p class="ac-mq-k">Cabinet 03 · tactical RPG · 1-4 players</p>
           <h3>Meadow Tactics</h3>
@@ -97,7 +98,7 @@ const IMG = {
       </article>
 
       <article class="ac-marquee">
-        <div class="ac-marquee-art"><img src={IMG.game4} alt="Blade Pixel marquee art: pixel swordsman sprite" loading="lazy" /></div>
+        <div class="ac-marquee-art"><img src={IMG.game4} alt="Blade Pixel marquee art: pixel swordsman sprite" loading="lazy" decoding="async" /></div>
         <div class="ac-marquee-in">
           <p class="ac-mq-k">Cabinet 04 · action · co-op</p>
           <h3>Blade Pixel</h3>
@@ -145,7 +146,7 @@ const IMG = {
         </li>
         <li>
           <p class="ac-ver">v2.3.7 <span>2026-08-30</span></p>
-          <figure><img src={IMG.studio} alt="The Pixelforge team playtesting a build" loading="lazy" /></figure>
+          <figure><img src={IMG.studio} alt="The Pixelforge team playtesting a build" loading="lazy" decoding="async" /></figure>
           <p>60 players, 12 pizzas, one broken controller (RIP). The new tactics build survived contact with real humans. Barely.</p>
         </li>
       </ol>

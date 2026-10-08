@@ -27,6 +27,25 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
         </li>
       ))}
     </ul>
+    <!--
+      Billing term for the cart. Every recurring product is sold monthly, or
+      annually in advance (2 months free); Stripe cannot bill both terms in one
+      checkout session, so the cart keeps a single term and switching re-prices
+      whatever is already in it (see src/lib/cart-ui.ts).
+    -->
+    <div class="billing-toggle-wrap">
+      <div class="billing-toggle" role="group" aria-label={t.cart.billingLegend} data-billing-toggle>
+        <button type="button" class="billing-opt is-active" data-billing-opt="month" aria-pressed="true">
+          {t.cart.billingMonthly}
+        </button>
+        <button type="button" class="billing-opt" data-billing-opt="year" aria-pressed="false">
+          {t.cart.billingYearly}
+          <span class="billing-opt-note">{t.cart.billingYearlyNote}</span>
+        </button>
+      </div>
+      <p class="billing-toggle-hint mono">{t.cart.billingHint}</p>
+    </div>
+
     <div class="cluster pricing-hero-cta">
       <a href={paths.start} class="btn btn--primary">{t.nav.startSite}</a>
     </div>
@@ -101,6 +120,63 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
   .pricing-hero-cta {
     margin-top: 24px;
     justify-content: center;
+  }
+
+  .billing-toggle-wrap {
+    margin-top: 26px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .billing-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--card-bg);
+  }
+  .billing-opt {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    padding: 9px 18px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .billing-opt:hover {
+    color: var(--ink);
+  }
+  .billing-opt.is-active {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .billing-opt-note {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+  .billing-toggle-hint {
+    font-size: 10.5px;
+    color: var(--muted);
+    margin: 0;
+  }
+  @media (max-width: 480px) {
+    .billing-opt {
+      padding: 9px 12px;
+      font-size: 0.82rem;
+    }
   }
 
   .plans-section {

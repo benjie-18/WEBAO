@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { localizedPaths, type Locale } from "../lib/i18n/config";
 import { demos } from "../lib/demos";
+import { localHeroFor } from "../lib/demo-seo";
 
 // Hidden from the public catalog (matches DemosPage's visibleDemos) —
 // excluded from the sitemap too.
@@ -33,7 +34,13 @@ const extraPages: { path: string; changefreq: string; priority: string; alternat
     path: "/sources",
     changefreq: "monthly",
     priority: "0.3",
-    alternates: [{ hreflang: "en", href: "https://webao.ca/sources" }],
+    // Mirror the /fr/sources entry: both sides declare the en/fr pair so the
+    // alternates are discoverable from either language.
+    alternates: [
+      { hreflang: "en", href: "https://webao.ca/sources" },
+      { hreflang: "fr", href: "https://webao.ca/fr/sources" },
+      { hreflang: "x-default", href: "https://webao.ca/sources" },
+    ],
   },
   {
     path: "/fr/sources",
@@ -47,13 +54,23 @@ const extraPages: { path: string; changefreq: string; priority: string; alternat
   },
 ];
 
+// Demo names contain characters like "&" that must be escaped in XML text.
+const escapeXml = (value: string): string =>
+  value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+
 export const GET: APIRoute = () => {
   const site = "https://webao.ca";
   const lastmod = new Date().toISOString().slice(0, 10);
   // Directory-style URLs carry a trailing slash on this site; the sitemap
   // must list the final (post-redirect) URLs.
   const slash = (path: string) => (path === "/" ? `${site}/` : `${site}${path.replace(/\/$/, "")}/`);
-  const urls: { loc: string; changefreq: string; priority: string; alternates: { hreflang: string; href: string }[] }[] = [];
+  const urls: {
+    loc: string;
+    changefreq: string;
+    priority: string;
+    alternates: { hreflang: string; href: string }[];
+    images?: { loc: string; title: string }[];
+  }[] = [];
 
   for (const locale of ["en", "fr"] as Locale[]) {
     for (const p of pagesByLocale[locale]) {
@@ -88,6 +105,9 @@ export const GET: APIRoute = () => {
     if (hiddenDemos.has(demo.id)) continue;
     const enPath = `/demos/${demo.id}`;
     const frPath = `/fr/demos/${demo.id}`;
+    // Image sitemap entry: the demo's lead image, for image search results.
+    const hero = localHeroFor(demo.id);
+    const images = hero ? [{ loc: hero, title: demo.name }] : undefined;
     urls.push({
       loc: slash(enPath),
       changefreq: "monthly",
@@ -97,6 +117,7 @@ export const GET: APIRoute = () => {
         { hreflang: "fr", href: slash(frPath) },
         { hreflang: "x-default", href: slash(enPath) },
       ],
+      images,
     });
     urls.push({
       loc: slash(frPath),
@@ -107,6 +128,7 @@ export const GET: APIRoute = () => {
         { hreflang: "fr", href: slash(frPath) },
         { hreflang: "x-default", href: slash(enPath) },
       ],
+      images,
     });
   }
 
@@ -119,12 +141,13 @@ export const GET: APIRoute = () => {
   });
 
   const body = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 ${deduped
   .map(
     (u) => `  <url>
     <loc>${u.loc}</loc>
 ${u.alternates.map((a) => `    <xhtml:link rel="alternate" hreflang="${a.hreflang}" href="${a.href}" />`).join("\n")}
+${(u.images ?? []).map((img) => `    <image:image><image:loc>${escapeXml(img.loc)}</image:loc><image:title>${escapeXml(img.title)}</image:title></image:image>`).join("\n")}
     <lastmod>${lastmod}</lastmod>
     <changefreq>${u.changefreq}</changefreq>
     <priority>${u.priority}</priority>

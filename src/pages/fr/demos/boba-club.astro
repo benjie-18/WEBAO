@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
 
 // Démo : Boba Club, salon de thé aux perles fictif, Québec.
 // Direction artistique autonome. Brillance Y2K chromée. Hors du système de thème WEBAO.
@@ -18,9 +19,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Boba Club : Thé aux perles à Québec</title>
-  <meta name="description" content="Boba Club : le salon de thé aux perles le plus joyeux de Québec. Nuage de taro, cassonade brûlée, matcha pailleté. Deux adresses, des perles sans fin." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="boba-club" locale="fr" title="Boba Club : Thé aux perles à Québec" description="Boba Club : le salon de thé aux perles le plus joyeux de Québec. Nuage de taro, cassonade brûlée, matcha pailleté. Deux adresses, des perles sans fin." ogImage="https://images.unsplash.com/photo-1558857563-b371033873b8?q=80&w=1200&auto=format&fit=crop" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&display=swap" rel="stylesheet" />
@@ -68,7 +69,7 @@ const IMG = {
       </div>
       <figure class="bc-hero-media">
         <div class="bc-arch">
-          <img src={IMG.hero} alt="Gobelet de thé aux perles glacé avec paille large" loading="eager" fetchpriority="high" />
+          <img src={IMG.hero} alt="Gobelet de thé aux perles glacé avec paille large" loading="eager" fetchpriority="high" decoding="async" />
         </div>
         <span class="bc-sticker bc-sticker-1" aria-hidden="true">100 %<br />MOELLEUX</span>
         <span class="bc-sticker bc-sticker-2" aria-hidden="true">nouveau !<br />✦ garniture<br />pailletée</span>
@@ -83,7 +84,7 @@ const IMG = {
         <p class="bc-sub">Toutes les boissons sont servies glacées avec perles incluses. Échange tes perles contre du boba éclatant, de la gelée ou du pouding, toujours gratis.</p>
         <div class="bc-menu">
           <article class="bc-card bc-card-pink">
-            <img src={IMG.m1} alt="Thé aux perles au taro avec mousse crémeuse" loading="lazy" />
+            <img src={IMG.m1} alt="Thé aux perles au taro avec mousse crémeuse" loading="lazy" decoding="async" />
             <div class="bc-card-in">
               <h3>Nuage de taro</h3>
               <p>Taro rôti fouetté dans du lait, coiffé d'une mousse salée.</p>
@@ -91,7 +92,7 @@ const IMG = {
             </div>
           </article>
           <article class="bc-card bc-card-blue">
-            <img src={IMG.m2} alt="Thé au lait à la cassonade avec rayures tigrées" loading="lazy" />
+            <img src={IMG.m2} alt="Thé au lait à la cassonade avec rayures tigrées" loading="lazy" decoding="async" />
             <div class="bc-card-in">
               <h3>Cassonade brûlée</h3>
               <p>Perles à la cassonade façon tigrée, dessus caramélisé, lait frais bien froid.</p>
@@ -99,7 +100,7 @@ const IMG = {
             </div>
           </article>
           <article class="bc-card bc-card-green">
-            <img src={IMG.m3} alt="Matcha glacé pailleté avec perles" loading="lazy" />
+            <img src={IMG.m3} alt="Matcha glacé pailleté avec perles" loading="lazy" decoding="async" />
             <div class="bc-card-in">
               <h3>Matcha pailleté</h3>
               <p>Matcha de cérémonie fouetté à la commande, lait d'avoine, brillant comestible.</p>
@@ -107,7 +108,7 @@ const IMG = {
             </div>
           </article>
           <article class="bc-card bc-card-lav">
-            <img src={IMG.m4} alt="Thé glacé à la fraise avec perles" loading="lazy" />
+            <img src={IMG.m4} alt="Thé glacé à la fraise avec perles" loading="lazy" decoding="async" />
             <div class="bc-card-in">
               <h3>Fraises statiques</h3>
               <p>Vraies fraises écrasées sur thé vert au jasmin, perles pétillantes en prime.</p>
@@ -167,11 +168,11 @@ const IMG = {
         <h2 class="bc-h2">Sirop, photo, on recommence</h2>
       </div>
       <div class="bc-strip">
-        <figure><img src={IMG.m2} alt="Gros plan d'une boisson à la cassonade tourbillonnante" loading="lazy" /><figcaption>@boba.club</figcaption></figure>
-        <figure><img src={IMG.m1} alt="Thé aux perles au taro devant un mur pastel" loading="lazy" /><figcaption>@boba.club</figcaption></figure>
-        <figure><img src={IMG.g1} alt="Boisson façon dessert avec garniture fouettée" loading="lazy" /><figcaption>@boba.club</figcaption></figure>
-        <figure><img src={IMG.m4} alt="Boisson rose à la fraise avec paille large" loading="lazy" /><figcaption>@boba.club</figcaption></figure>
-        <figure><img src={IMG.m3} alt="Boisson verte au matcha avec glace" loading="lazy" /><figcaption>@boba.club</figcaption></figure>
+        <figure><img src={IMG.m2} alt="Gros plan d'une boisson à la cassonade tourbillonnante" loading="lazy" decoding="async" /><figcaption>@boba.club</figcaption></figure>
+        <figure><img src={IMG.m1} alt="Thé aux perles au taro devant un mur pastel" loading="lazy" decoding="async" /><figcaption>@boba.club</figcaption></figure>
+        <figure><img src={IMG.g1} alt="Boisson façon dessert avec garniture fouettée" loading="lazy" decoding="async" /><figcaption>@boba.club</figcaption></figure>
+        <figure><img src={IMG.m4} alt="Boisson rose à la fraise avec paille large" loading="lazy" decoding="async" /><figcaption>@boba.club</figcaption></figure>
+        <figure><img src={IMG.m3} alt="Boisson verte au matcha avec glace" loading="lazy" decoding="async" /><figcaption>@boba.club</figcaption></figure>
       </div>
     </section>
 

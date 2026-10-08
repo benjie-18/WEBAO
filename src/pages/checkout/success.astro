@@ -7,11 +7,12 @@ const description = "Your WEBAO subscription is active. We'll be in touch shortl
 ---
 
 <BaseLayout title={title} description={description} locale={locale} noIndex>
-  <section class="section">
+  <section class="section" data-cart-clear>
     <div class="shell" style="max-width: 640px; text-align:center;">
       <div class="eyebrow" style="justify-content:center;">Payment confirmed</div>
       <h1 class="display" style="font-size: clamp(2rem, 5vw, 3.2rem); line-height:.92; margin-top:12px;">You're in.</h1>
-      <p class="prose" style="margin-top:14px; max-width: 48ch; margin-inline:auto;">
+      <div id="order-summary" hidden style="margin-top:14px; text-align:left;"></div>
+      <p class="prose" id="success-copy" style="margin-top:14px; max-width: 48ch; margin-inline:auto;">
         Your $149/month subscription is active. We'll reach out within one
         business day to kick off your site build. Welcome to WEBAO.
       </p>
@@ -22,3 +23,73 @@ const description = "Your WEBAO subscription is active. We'll be in touch shortl
     </div>
   </section>
 </BaseLayout>
+
+<script is:inline>
+  // Runs while the document parses — before the layout's cart init empties
+  // the cart on this page (`data-cart-clear`) — so the confirmation can show
+  // what was actually purchased. The cart flow can total anything, so the
+  // fixed "$149/month" sentence only stays for the legacy /start flow, which
+  // has no cart.
+  (function () {
+    try {
+      var raw = localStorage.getItem('webao_cart_v1');
+      var items = raw ? JSON.parse(raw) : [];
+      if (!Array.isArray(items) || items.length === 0) return;
+      // Money/suffix presentation comes from the layout's localized drawer
+      // (English "C$89.99", French "89,99 $"), so one script serves both.
+      var drawer = document.querySelector('[data-cart-drawer]');
+      var data = (drawer && drawer.dataset) || {};
+      // ?? not ||: the French prefix is an empty string by design.
+      var prefix = data.moneyPrefix ?? 'C$';
+      var suffix = data.moneySuffix ?? '';
+      var decimal = data.moneyDecimal ?? '.';
+      function money(cents) {
+        var parts = (Math.round(Number(cents) || 0) / 100).toFixed(2).split('.');
+        var grouped = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, decimal === '.' ? ',' : ' ');
+        return prefix + grouped + decimal + parts[1] + suffix;
+      }
+      function intervalSuffix(interval) {
+        if (interval === 'year') return data.suffixYear ?? '/yr';
+        if (interval === 'month') return data.suffixMonth ?? '/mo';
+        return data.suffixOneTime ?? ' one-time';
+      }
+      function esc(s) {
+        return String(s)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+      var total = 0;
+      var rows = items
+        .map(function (item) {
+          var price = Number(item.priceCents) || 0;
+          total += price;
+          return (
+            '<div style="display:flex; justify-content:space-between; align-items:baseline; gap:12px; padding:8px 0; border-bottom:1px solid var(--line);">' +
+            '<span style="font-weight:600;">' + esc(item.name || item.key || '') + '</span>' +
+            '<span class="mono" style="white-space:nowrap;">' + esc(money(price) + intervalSuffix(item.interval)) + '</span>' +
+            '</div>'
+          );
+        })
+        .join('');
+      var el = document.getElementById('order-summary');
+      if (!el) return;
+      el.hidden = false;
+      el.innerHTML =
+        '<div style="border:1px solid var(--line); border-radius:12px; padding:16px; background:var(--card-bg); max-width:520px; margin-inline:auto;">' +
+        '<p class="mono" style="font-size:10px; letter-spacing:.14em; opacity:.5; margin-bottom:12px;">YOUR SELECTION</p>' +
+        rows +
+        '<div style="display:flex; justify-content:space-between; align-items:baseline; gap:12px; padding-top:12px; font-size:1.1rem;">' +
+        '<strong>Total</strong>' +
+        '<strong class="mono">' + esc(money(total)) + '</strong>' +
+        '</div>' +
+        '</div>';
+      var copy = document.getElementById('success-copy');
+      if (copy) {
+        copy.textContent =
+          "Your payment is confirmed. We'll reach out within one business day to kick off your site build. Welcome to WEBAO.";
+      }
+    } catch (e) {}
+  })();
+</script>

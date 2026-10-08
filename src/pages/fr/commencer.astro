@@ -9,7 +9,15 @@ const description = "Démarrez votre site WEBAO : dites-nous qui vous êtes, pui
 // Clé publique Stripe; sûre à intégrer dans le code frontend.
 ---
 
-<BaseLayout title={title} description={description} locale={locale}>
+<BaseLayout title={title} description={description} locale={locale} pageKey="start">
+  <Fragment slot="head">
+    <!-- Stripe.js + the embedded-checkout iframe: preconnect so the payment
+         UI mounts sooner (the checkout page is the conversion step). -->
+    <link rel="preconnect" href="https://js.stripe.com" />
+    <link rel="preconnect" href="https://api.stripe.com" />
+    <link rel="preconnect" href="https://checkout.stripe.com" />
+  </Fragment>
+
   <section class="section">
     <div class="shell" style="max-width: 640px;">
       <div class="eyebrow">Démarrer mon site</div>

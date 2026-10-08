@@ -46,13 +46,35 @@ requires `email` or `message`. Extra fields are kept (string values, capped).
 ## Checkout (public)
 
 ### `POST /api/checkout/session`
-Body: `{ email?: string, name?: string, business?: string, locale?: "fr" }`
-Creates a Stripe Embedded Checkout session (subscription mode).
-Guards: same-origin (`Origin`/`Referer` must match the site), 10 req/min per IP,
-`email` validated when provided.
-→ `{ "ok": true, "clientSecret": "<stripe_client_secret>" }`.
-→ `{ "ok": false, "error": "Checkout not configured" }` (503) when
-`STRIPE_SECRET_KEY` / `STRIPE_PRICE_ID` secrets are unset.
+Body: `{ email?: string, name?: string, business?: string, locale?: "fr", items?: [{ key }] }`
+Creates a Stripe Embedded Checkout session from the cart.
+
+`items` carries one cart key per selected product, `${product}-${interval}` with
+`interval = month | year | one-time` (e.g. `launch-year`, `localseo-month`,
+`extrapage-one-time`; `-onetime` is accepted as an alias). The catalog of keys
+and prices lives in `src/lib/cart-catalog.ts`; the Stripe Price IDs live in
+`PRICE_MAP` in `worker/checkout.ts`, and `tests/cart.test.ts` keeps the two in
+sync. Requests without `items` (the `/start` form) fall back to
+`STRIPE_PRICE_ID` — the legacy single-price flow.
+
+Session shape: `mode=subscription` as soon as one recurring item is present
+(mixed recurring + one-time carts are supported by Stripe), `mode=payment` when
+the cart is one-time only, and `expand[]=line_items` so the response reports the
+amounts that will actually be charged.
+
+Guards/limits: same-origin (`Origin`/`Referer` must match the site), 10 req/min
+per IP, `email` validated when provided, duplicated keys collapsed, max 20
+recurring + 20 one-time line items, and **one billing interval per session** —
+monthly and yearly items are rejected with 400 rather than letting Stripe fail
+(“Checkout does not support multiple prices with different billing intervals”).
+Unknown keys are rejected too, so a stale cart can never be charged less than it
+showed.
+
+→ `{ "ok": true, "clientSecret": "<stripe_client_secret>", "mode": "subscription", "lineItems": [{ "description": "Launch", "amount": 89099, "currency": "cad", "interval": "year" }] }`.
+→ `{ "ok": false, "error": "…" }` (400 invalid cart / mixed intervals, 403 origin,
+429 rate-limited, 502 Stripe error, 503 configuration). `Checkout not configured`
+(503) is returned when `STRIPE_SECRET_KEY` is unset, or when the legacy flow runs
+without `STRIPE_PRICE_ID`.
 
 ## Admin (Bearer token)
 

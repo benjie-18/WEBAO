@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Kanso, fictional Japanese tea house, Montréal QC.
 // Rebuilt as CEREMONY: one idea per screen, vast whitespace, a vertical meditative rhythm.
@@ -17,9 +18,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kanso: Japanese Tea House in Montréal</title>
-  <meta name="description" content="Kanso: a quiet Japanese tea house in Montréal. Ceremonial matcha, gyokuro, and seasonal wagashi. Twelve seats, one room, no rush." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="kanso" locale="en" title="Kanso: Japanese Tea House in Montréal" description="Kanso: a quiet Japanese tea house in Montréal. Ceremonial matcha, gyokuro, and seasonal wagashi. Twelve seats, one room, no rush." ogImage="https://webao.ca/demos/kanso/01.jpg" />
+
+
 </head>
 <body class="ks">
 
@@ -41,7 +42,7 @@ const IMG = {
 
     <!-- II. THE ROOM -->
     <figure class="ks-screen ks-media">
-      <img src={IMG.hero} alt="A serene Japanese tea room with tatami mats, a low table and a tea set" loading="eager" fetchpriority="high" />
+      <img src={IMG.hero} alt="A serene Japanese tea room with tatami mats, a low table and a tea set" loading="eager" fetchpriority="high" decoding="async" />
     </figure>
 
     <!-- III. SIMPLICITY -->
@@ -57,7 +58,7 @@ const IMG = {
 
     <!-- V. THE POUR -->
     <figure class="ks-screen ks-media">
-      <img src={IMG.philo} alt="A ceramic teapot and a cup of hot tea resting on a wooden tray" loading="lazy" />
+      <img src={IMG.philo} alt="A ceramic teapot and a cup of hot tea resting on a wooden tray" loading="lazy" decoding="async" />
     </figure>
 
     <!-- VI. TIME -->
@@ -82,7 +83,7 @@ const IMG = {
 
     <!-- VIII. THE WHISK -->
     <figure class="ks-screen ks-media">
-      <img src={IMG.visit} alt="A hand whisking matcha with a bamboo chasen in a ceramic bowl" loading="lazy" />
+      <img src={IMG.visit} alt="A hand whisking matcha with a bamboo chasen in a ceramic bowl" loading="lazy" decoding="async" />
     </figure>
 
     <!-- IX. WRITE AHEAD -->

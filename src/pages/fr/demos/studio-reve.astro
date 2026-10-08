@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
 
 // Site de démonstration : Studio Rêve, agence fictive d'expériences de marque surréalistes, Montréal.
 // Direction artistique autonome : nuit de rêve surréaliste. Non relié au système de thème WEBAO.
@@ -19,9 +20,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Studio Rêve : expériences de marque surréalistes à Montréal</title>
-  <meta name="description" content="Studio Rêve met en scène des expériences de marque impossibles à Montréal. Événements, installations et lancements qui ressemblent à un rêve." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="studio-reve" locale="fr" title="Studio Rêve : expériences de marque surréalistes à Montréal" description="Studio Rêve met en scène des expériences de marque impossibles à Montréal. Événements, installations et lancements qui ressemblent à un rêve." ogImage="https://webao.ca/demos/studio-reve/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -49,7 +50,7 @@ const IMG = {
       <p class="rv-whisper rv-f1">vous vous endormez<span>.</span></p>
 
       <figure class="rv-frag rv-f2" data-depth="0.05">
-        <img src={IMG.sky} alt="Un ciel nocturne fendu d'une lumière impossible" loading="eager" fetchpriority="high" />
+        <img src={IMG.sky} alt="Un ciel nocturne fendu d'une lumière impossible" loading="eager" fetchpriority="high" decoding="async" />
         <figcaption>rêve nº 1 · le ciel, dézippé</figcaption>
       </figure>
 
@@ -58,7 +59,7 @@ const IMG = {
       <p class="rv-whisper rv-f4">Studio Rêve met en scène des événements, des installations et des lancements qui ignorent la physique et la logique<span>.</span> Votre marque, dont on se souvient comme d'un beau rêve étrange<span>.</span></p>
 
       <figure class="rv-frag rv-f5" data-depth="0.11">
-        <img src={IMG.nebula} alt="Escalier en spirale impossible montant à travers des nuages d'orage" loading="lazy" />
+        <img src={IMG.nebula} alt="Escalier en spirale impossible montant à travers des nuages d'orage" loading="lazy" decoding="async" />
         <figcaption>pour Maison Céleste · <strong>La galerie qui se noie.</strong> Les invités traversaient un couloir d'orbes parfumées flottantes pendant que les murs respiraient la lumière d'une nébuleuse. Personne n'a acheté de parfum. Tout le monde s'en souvient.</figcaption>
       </figure>
 
@@ -67,14 +68,14 @@ const IMG = {
       </blockquote>
 
       <figure class="rv-frag rv-f7" data-depth="0.08">
-        <img src={IMG.clouds} alt="Escalier de pierre ancien se dissolvant dans la brume" loading="lazy" />
+        <img src={IMG.clouds} alt="Escalier de pierre ancien se dissolvant dans la brume" loading="lazy" decoding="async" />
         <figcaption>pour Orage Audio · <strong>Le ciel d'en bas.</strong> Une salle d'écoute où le plafond était un orage et le plancher du verre. Trois cents invités se sont allongés pour écouter un album. Aucun n'a regardé son téléphone.</figcaption>
       </figure>
 
       <p class="rv-whisper rv-f8">plus profond<span>.</span> continuez à tomber<span>.</span></p>
 
       <figure class="rv-frag rv-f9" data-depth="0.13">
-        <img src={IMG.mountains} alt="Escalier de bois flottant parmi les nuages" loading="lazy" />
+        <img src={IMG.mountains} alt="Escalier de bois flottant parmi les nuages" loading="lazy" decoding="async" />
         <figcaption>pour Nordalpine · <strong>Sommet à minuit.</strong> Nous avons reconstruit un sommet de montagne dans un entrepôt, étoiles comprises. Les visiteurs ont gravi le sommet en tenue de soirée et bu du chocolat chaud à 2 800 mètres imaginaires.</figcaption>
       </figure>
 
@@ -95,7 +96,7 @@ const IMG = {
 
     <!-- le réveil : la commande -->
     <section class="rv-wake" id="wake" aria-label="Commander un rêve">
-      <div class="rv-stars-bg" aria-hidden="true"><img src={IMG.stars} alt="" loading="lazy" /></div>
+      <div class="rv-stars-bg" aria-hidden="true"><img src={IMG.stars} alt="" loading="lazy" decoding="async" /></div>
       <div class="rv-wake-in">
         <h2 class="rv-h2">Racontez-nous votre idée la plus <em>étrange</em></h2>
         <p class="rv-copy">Plus c'est bizarre, mieux c'est. Nous lisons chaque brief à voix haute à minuit, car c'est à cette heure-là que les bonnes décisions se prennent. Réponse promise d'ici deux levers de soleil.</p>

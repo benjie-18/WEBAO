@@ -457,6 +457,37 @@ const en = {
     },
   },
 
+  // Cart drawer, billing term toggle and checkout summary.
+  // Strings are read by the client cart layer from the drawer's data-*
+  // attributes (see src/lib/cart-ui.ts) so one markup serves both locales.
+  cart: {
+    open: "Open cart",
+    title: "Your cart",
+    close: "Close cart",
+    emptyTitle: "Your cart is empty.",
+    emptyHint: "Add items from the pricing page.",
+    total: "Total",
+    checkout: "Checkout",
+    note: "Taxes calculated at checkout.",
+    add: "Add {name} to cart",
+    remove: "Remove {name} from cart",
+    suffixMonth: "/mo",
+    suffixYear: "/yr",
+    suffixOneTime: " one-time",
+    moneyPrefix: "C$",
+    moneySuffix: "",
+    moneyDecimal: ".",
+    billingLegend: "Billing term",
+    billingMonthly: "Monthly",
+    billingYearly: "Yearly",
+    billingYearlyNote: "2 months free",
+    billingHint: "Yearly is billed once a year, two months free.",
+    checkoutTitle: "YOUR SELECTION",
+    checkoutEmpty: "No items in cart.",
+    checkoutEmptyCta: "Browse pricing →",
+    checkoutMixed: "Monthly and yearly items can't be paid together. Pick one billing term in your cart.",
+  },
+
   terms: {
     hero: {
       title: "Terms and details",
