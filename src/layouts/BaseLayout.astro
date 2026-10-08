@@ -55,12 +55,6 @@ const canonical = Astro.url ? new URL(Astro.url.pathname, Astro.site).toString()
 const siteBase = (Astro.site?.toString() ?? "https://webao.ca").replace(/\/$/, "");
 // og:image must be an absolute URL for social crawlers.
 const ogImageAbs = ogImage.startsWith("http") ? ogImage : `${siteBase}${ogImage}`;
-// Intrinsic size of public/og-image.jpg (701x292). Social crawlers need the
-// dimensions up front, otherwise they delay rendering the card until the
-// image has downloaded.
-const OG_IMAGE_WIDTH = 701;
-const OG_IMAGE_HEIGHT = 292;
-const OG_IMAGE_TYPE = "image/jpeg";
 const alternates = getAlternateUrls(url.pathname, siteBase);
 
 // For hreflang, ensure both locales exist
@@ -83,8 +77,6 @@ const crumbLabels: Record<string, string> = {
   contact: t.nav.contact,
   start: locale === "fr" ? "Commencer" : "Start",
   terms: locale === "fr" ? "Conditions" : "Terms",
-  // "Sources" is spelled the same in both languages.
-  sources: "Sources",
 };
 const crumbName = pageKey ? crumbLabels[pageKey] : undefined;
 const breadcrumbSchema = crumbName
@@ -130,11 +122,7 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
     <link rel="alternate" hreflang="en" href={enHref} />
     <link rel="alternate" hreflang="fr" href={frHref} />
     <link rel="alternate" hreflang="x-default" href={alternates.en} />
-    {noIndex ? (
-      <meta name="robots" content="noindex, nofollow" />
-    ) : (
-      <meta name="robots" content="index, follow, max-image-preview:large" />
-    )}
+    {noIndex && <meta name="robots" content="noindex, nofollow" />}
     <meta name="theme-color" content="#F8F5EF" />
     <meta name="color-scheme" content="light dark" />
 
@@ -285,16 +273,12 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImageAbs} />
     <meta property="og:image:alt" content={metaTitle} />
-    <meta property="og:image:width" content={String(OG_IMAGE_WIDTH)} />
-    <meta property="og:image:height" content={String(OG_IMAGE_HEIGHT)} />
-    <meta property="og:image:type" content={OG_IMAGE_TYPE} />
     <meta property="og:locale" content={locale === "fr" ? "fr_CA" : "en_CA"} />
     <meta property="og:locale:alternate" content={locale === "fr" ? "en_CA" : "fr_CA"} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={metaTitle} />
     <meta name="twitter:description" content={metaDesc} />
     <meta name="twitter:image" content={ogImageAbs} />
-    <meta name="twitter:image:alt" content={metaTitle} />
 
     <!-- Fonts: Instrument Serif + Inter + IBM Plex Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -305,10 +289,10 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
     />
 
     <!-- Favicon: theme-aware icons (new logo) -->
-    <link rel="icon" href="/light-logo.jpg" media="(prefers-color-scheme: light)" type="image/jpeg" />
-    <link rel="icon" href="/dark-logo.jpg" media="(prefers-color-scheme: dark)" type="image/jpeg" />
-    <link rel="icon" href="/dark-logo.jpg" type="image/jpeg" />
-    <link rel="apple-touch-icon" href="/light-logo.jpg" />
+    <link rel="icon" href="/light-icon.jpg" media="(prefers-color-scheme: light)" type="image/jpeg" />
+    <link rel="icon" href="/dark-icon.jpg" media="(prefers-color-scheme: dark)" type="image/jpeg" />
+    <link rel="icon" href="/dark-icon.jpg" type="image/jpeg" />
+    <link rel="apple-touch-icon" href="/light-icon.jpg" />
 
     <!-- Global styles -->
     <style is:global>
@@ -367,7 +351,7 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
 
           <ThemeToggle locale={locale} />
 
-          <button type="button" class="header-cart-btn" data-cart-open aria-label={t.cart.open}>
+          <button type="button" class="header-cart-btn" data-cart-open aria-label="Open cart">
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" class="header-cart-icon">
               <g clip-path="url(#header-cart-clip)">
                 <path d="M5.33331 6H19.8672C20.4687 6 20.9341 6.52718 20.8595 7.12403L20.1095 13.124C20.0469 13.6245 19.6215 14 19.1172 14H16.5555H9.44442H7.99998" stroke="currentColor" stroke-linejoin="round" stroke-width="1.8"/>
@@ -721,26 +705,10 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
 
     <!-- Cart drawer -->
     <div class="cart-overlay" data-cart-overlay hidden></div>
-    <aside
-      class="cart-drawer"
-      data-cart-drawer
-      aria-label={t.cart.title}
-      data-money-prefix={t.cart.moneyPrefix}
-      data-money-suffix={t.cart.moneySuffix}
-      data-money-decimal={t.cart.moneyDecimal}
-      data-suffix-month={t.cart.suffixMonth}
-      data-suffix-year={t.cart.suffixYear}
-      data-suffix-one-time={t.cart.suffixOneTime}
-      data-label-add={t.cart.add}
-      data-label-remove={t.cart.remove}
-      data-label-open={t.cart.open}
-      data-empty-title={t.cart.emptyTitle}
-      data-empty-hint={t.cart.emptyHint}
-      hidden
-    >
+    <aside class="cart-drawer" data-cart-drawer aria-label="Shopping cart" hidden>
       <div class="cart-drawer-header">
-        <h2 class="cart-drawer-title">{t.cart.title}</h2>
-        <button type="button" class="cart-drawer-close" data-cart-close aria-label={t.cart.close}>
+        <h2 class="cart-drawer-title">Your cart</h2>
+        <button type="button" class="cart-drawer-close" data-cart-close aria-label="Close cart">
           <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
           </svg>
@@ -751,13 +719,13 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
       </div>
       <div class="cart-drawer-footer">
         <div class="cart-drawer-total">
-          <span>{t.cart.total}</span>
-          <strong data-cart-total>{`${t.cart.moneyPrefix}0${t.cart.moneyDecimal}00${t.cart.moneySuffix}`}</strong>
+          <span>Total</span>
+          <strong data-cart-total>C$0.00</strong>
         </div>
-        <a href={locale === "fr" ? "/fr/checkout" : "/checkout"} class="btn btn--primary cart-drawer-checkout" data-cart-checkout>
-          {t.cart.checkout}
+        <a href="/checkout" class="btn btn--primary cart-drawer-checkout" data-cart-checkout>
+          Checkout
         </a>
-        <p class="cart-drawer-note">{t.cart.note}</p>
+        <p class="cart-drawer-note">Taxes calculated at checkout.</p>
       </div>
     </aside>
 
@@ -968,50 +936,26 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
           window.dispatchEvent(new CustomEvent("webao:cart-change", { detail: { items } }));
         }
 
-        // Money and interval presentation is locale-driven: the drawer carries
-        // them as data-* attributes (see src/lib/cart-ui.ts) so one script
-        // serves both languages — "C$89.99/mo" and "89,99 $/mois".
-        function cartData(): DOMStringMap {
-          const drawer = document.querySelector("[data-cart-drawer]") as HTMLElement | null;
-          return drawer?.dataset ?? {};
-        }
-
         function formatCAD(cents: number) {
-          const data = cartData();
-          const prefix = data.moneyPrefix ?? "C$";
-          const suffix = data.moneySuffix ?? "";
-          const decimal = data.moneyDecimal || ".";
-          const parts = (Math.round(cents) / 100).toFixed(2).split(".");
-          // English groups thousands with a comma ("1,035.97"); French uses a
-          // no-break space ("1 035,97").
-          const grouped = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, decimal === "." ? "," : "\u00a0");
-          return prefix + grouped + decimal + parts[1] + suffix;
+          return "C$" + (cents / 100).toFixed(2);
         }
 
         function formatInterval(interval: string) {
-          const data = cartData();
-          if (interval === "month") return data.suffixMonth ?? "/mo";
-          if (interval === "year") return data.suffixYear ?? "/yr";
-          return data.suffixOneTime ?? " one-time";
+          if (interval === "month") return "/mo";
+          if (interval === "year") return "/yr";
+          return " one-time";
         }
 
         // Update all cart buttons to reflect cart state
         function syncButtons() {
           const cart = getCart();
           const keys = new Set(cart.map(i => i.key));
-          const data = cartData();
-          const addLabel = data.labelAdd ?? "Add {name} to cart";
-          const removeLabel = data.labelRemove ?? "Remove {name} from cart";
           document.querySelectorAll("[data-cart-btn]").forEach(btn => {
             const key = btn.getAttribute("data-key");
             const isAdded = keys.has(key);
-            const name = btn.getAttribute("data-name") || btn.getAttribute("data-product") || "";
-            const label = isAdded
-              ? removeLabel.replace("{name}", name)
-              : addLabel.replace("{name}", name);
             btn.classList.toggle("is-added", isAdded);
-            btn.setAttribute("aria-label", label);
-            btn.setAttribute("title", label);
+            btn.setAttribute("aria-label", isAdded ? "Remove from cart" : "Add to cart");
+            btn.setAttribute("title", isAdded ? "Remove from cart" : "Add to cart");
           });
         }
 
@@ -1035,10 +979,7 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
           const cart = getCart();
           
           if (cart.length === 0) {
-            const data = cartData();
-            const emptyTitle = data.emptyTitle ?? "Your cart is empty.";
-            const emptyHint = data.emptyHint ?? "Add items from the pricing page.";
-            container.innerHTML = `<div class="cart-drawer-empty">${escapeHtml(emptyTitle)}<br/>${escapeHtml(emptyHint)}</div>`;
+            container.innerHTML = '<div class="cart-drawer-empty">Your cart is empty.<br/>Add items from the pricing page.</div>';
           } else {
             container.innerHTML = cart.map(item => `
               <div class="cart-item" data-cart-item="${item.key}">
