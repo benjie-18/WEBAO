@@ -931,16 +931,16 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
           } catch { return []; }
         }
 
-        function saveCart(items) {
+        function saveCart(items: any[]) {
           try { localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); } catch {}
           window.dispatchEvent(new CustomEvent("webao:cart-change", { detail: { items } }));
         }
 
-        function formatCAD(cents) {
+        function formatCAD(cents: number) {
           return "C$" + (cents / 100).toFixed(2);
         }
 
-        function formatInterval(interval) {
+        function formatInterval(interval: string) {
           if (interval === "month") return "/mo";
           if (interval === "year") return "/yr";
           return " one-time";
@@ -1013,7 +1013,7 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
           });
         }
 
-        function escapeHtml(s) {
+        function escapeHtml(s: string) {
           const div = document.createElement("div");
           div.textContent = s;
           return div.innerHTML;
@@ -1058,7 +1058,7 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
                   key,
                   product: btn.getAttribute("data-product"),
                   name: btn.getAttribute("data-name"),
-                  priceCents: parseInt(btn.getAttribute("data-price-cents"), 10),
+                  priceCents: parseInt(btn.getAttribute("data-price-cents") || "0", 10),
                   interval: btn.getAttribute("data-interval"),
                   type: btn.getAttribute("data-type"),
                 };
