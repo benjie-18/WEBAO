@@ -17,9 +17,6 @@ interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
-  /** Intrinsic size of ogImage, advertised to social platforms. */
-  ogImageWidth?: number;
-  ogImageHeight?: number;
   noIndex?: boolean;
   headerVariant?: "light" | "dark";
   locale?: Locale;
@@ -30,8 +27,6 @@ const {
   title: titleProp,
   description: descProp,
   ogImage = "/og-image.jpg",
-  ogImageWidth = 701,
-  ogImageHeight = 292,
   noIndex = false,
   headerVariant = "light",
   locale: localeProp,
@@ -62,9 +57,6 @@ const siteBase = (Astro.site?.toString() ?? "https://webao.ca").replace(/\/$/, "
 const ogImageAbs = ogImage.startsWith("http") ? ogImage : `${siteBase}${ogImage}`;
 const alternates = getAlternateUrls(url.pathname, siteBase);
 
-// Checkout lives outside the `localizedPaths` map (there is no nav entry for it).
-const checkoutPath = locale === "fr" ? "/fr/checkout" : "/checkout";
-
 // For hreflang, ensure both locales exist
 const enHref = alternates.en;
 const frHref = alternates.fr;
@@ -85,8 +77,6 @@ const crumbLabels: Record<string, string> = {
   contact: t.nav.contact,
   start: locale === "fr" ? "Commencer" : "Start",
   terms: locale === "fr" ? "Conditions" : "Terms",
-  refunds: locale === "fr" ? "Remboursements" : "Refunds",
-  sources: "Sources",
 };
 const crumbName = pageKey ? crumbLabels[pageKey] : undefined;
 const breadcrumbSchema = crumbName
@@ -132,15 +122,7 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
     <link rel="alternate" hreflang="en" href={enHref} />
     <link rel="alternate" hreflang="fr" href={frHref} />
     <link rel="alternate" hreflang="x-default" href={alternates.en} />
-    <!-- Indexed pages opt in to the richest SERP treatment Google allows;
-         utility pages (admin, checkout, 404) stay noindex. -->
-    {
-      noIndex ? (
-        <meta name="robots" content="noindex, nofollow" />
-      ) : (
-        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-      )
-    }
+    {noIndex && <meta name="robots" content="noindex, nofollow" />}
     <meta name="theme-color" content="#F8F5EF" />
     <meta name="color-scheme" content="light dark" />
 
@@ -290,9 +272,6 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
     <meta property="og:description" content={metaDesc} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImageAbs} />
-    <meta property="og:image:width" content={String(ogImageWidth)} />
-    <meta property="og:image:height" content={String(ogImageHeight)} />
-    <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:alt" content={metaTitle} />
     <meta property="og:locale" content={locale === "fr" ? "fr_CA" : "en_CA"} />
     <meta property="og:locale:alternate" content={locale === "fr" ? "en_CA" : "fr_CA"} />
@@ -300,7 +279,6 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
     <meta name="twitter:title" content={metaTitle} />
     <meta name="twitter:description" content={metaDesc} />
     <meta name="twitter:image" content={ogImageAbs} />
-    <meta name="twitter:image:alt" content={metaTitle} />
 
     <!-- Fonts: Instrument Serif + Inter + IBM Plex Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -373,7 +351,7 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
 
           <ThemeToggle locale={locale} />
 
-          <button type="button" class="header-cart-btn" data-cart-open aria-label={t.cart.open}>
+          <button type="button" class="header-cart-btn" data-cart-open aria-label="Open cart">
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" class="header-cart-icon">
               <g clip-path="url(#header-cart-clip)">
                 <path d="M5.33331 6H19.8672C20.4687 6 20.9341 6.52718 20.8595 7.12403L20.1095 13.124C20.0469 13.6245 19.6215 14 19.1172 14H16.5555H9.44442H7.99998" stroke="currentColor" stroke-linejoin="round" stroke-width="1.8"/>
@@ -443,7 +421,7 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
         <div class="footer-grid">
           <div class="footer-brand">
             <a href={navLinks.home} class="brand" style="color: var(--section-dark-text);" aria-label={t.nav.homeAria}>
-              <img src="/dark-logo.jpg" alt="WEBAO" class="brand-logo" width="120" height="40" loading="lazy" decoding="async" />
+              <img src="/dark-logo.jpg" alt="WEBAO" class="brand-logo" width="120" height="40" />
             </a>
             <p>{t.footer.tagline}</p>
             <div class="cluster" style="margin-top: 20px;">
@@ -725,55 +703,29 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
     </script>
 
 
-    <!--
-      Cart drawer. Every user-facing string is localized here and handed to
-      `src/lib/cart-ui.ts` through data-* attributes, so the same client code
-      renders both locales. Items are (re)rendered on load by that module; the
-      markup below is the no-JS state.
-    -->
+    <!-- Cart drawer -->
     <div class="cart-overlay" data-cart-overlay hidden></div>
-    <aside
-      class="cart-drawer"
-      data-cart-drawer
-      aria-label={t.cart.title}
-      data-label-open={t.cart.open}
-      data-label-add={t.cart.add}
-      data-label-remove={t.cart.remove}
-      data-empty-title={t.cart.emptyTitle}
-      data-empty-hint={t.cart.emptyHint}
-      data-suffix-month={t.cart.suffixMonth}
-      data-suffix-year={t.cart.suffixYear}
-      data-suffix-one-time={t.cart.suffixOneTime}
-      data-money-prefix={t.cart.moneyPrefix}
-      data-money-suffix={t.cart.moneySuffix}
-      data-money-decimal={t.cart.moneyDecimal}
-      hidden
-    >
+    <aside class="cart-drawer" data-cart-drawer aria-label="Shopping cart" hidden>
       <div class="cart-drawer-header">
-        <h2 class="cart-drawer-title">{t.cart.title}</h2>
-        <button type="button" class="cart-drawer-close" data-cart-close aria-label={t.cart.close}>
+        <h2 class="cart-drawer-title">Your cart</h2>
+        <button type="button" class="cart-drawer-close" data-cart-close aria-label="Close cart">
           <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
           </svg>
         </button>
       </div>
       <div class="cart-drawer-items" data-cart-items>
-        <div class="cart-drawer-empty">{t.cart.emptyTitle}<br />{t.cart.emptyHint}</div>
+        <!-- Items injected by JS -->
       </div>
       <div class="cart-drawer-footer">
         <div class="cart-drawer-total">
-          <span>{t.cart.total}</span>
-          <strong data-cart-total>{`${t.cart.moneyPrefix}0${t.cart.moneyDecimal}00${t.cart.moneySuffix}`}</strong>
+          <span>Total</span>
+          <strong data-cart-total>C$0.00</strong>
         </div>
-        <a
-          href={checkoutPath}
-          class="btn btn--primary cart-drawer-checkout"
-          data-cart-checkout
-          aria-disabled="true"
-        >
-          {t.cart.checkout}
+        <a href="/checkout" class="btn btn--primary cart-drawer-checkout" data-cart-checkout>
+          Checkout
         </a>
-        <p class="cart-drawer-note">{t.cart.note}</p>
+        <p class="cart-drawer-note">Taxes calculated at checkout.</p>
       </div>
     </aside>
 
@@ -794,6 +746,11 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
       }
       [data-theme="dark"] .header-cart-btn {
         color: #fff;
+      }
+      [data-theme="dark"] .header-cart-btn .header-cart-icon *,
+      [data-theme="dark"] .header-cart-btn .header-cart-icon path,
+      [data-theme="dark"] .header-cart-btn .header-cart-icon circle {
+        stroke: #ffffff;
       }
       .header-cart-btn:hover {
         border-color: var(--accent);
@@ -953,26 +910,202 @@ const homeProcessLink = `${localizedPaths[locale].home}${processAnchor}`;
         width: 100%;
         justify-content: center;
       }
-      .cart-drawer-checkout.is-disabled {
-        opacity: 0.5;
-        pointer-events: none;
-      }
       .cart-drawer-note {
         text-align: center;
         font-size: 0.8rem;
         color: var(--muted);
         margin: 12px 0 0;
       }
-
     </style>
     <script>
-      // WEBAO Cart — the drawer, the "add to cart" buttons and the billing
-      // term toggle are all driven by src/lib/cart-ui.ts. Listeners there are
-      // delegated from `document` and the UI re-renders on `astro:page-load`,
-      // so the cart keeps working across ClientRouter navigations.
-      import { initCart } from "../lib/cart-ui";
+      // WEBAO Cart — client-side cart management
+      (function() {
+        const STORAGE_KEY = "webao_cart_v1";
 
-      initCart();
+        function getCart() {
+          try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return [];
+            const items = JSON.parse(raw);
+            return Array.isArray(items) ? items : [];
+          } catch { return []; }
+        }
+
+        function saveCart(items) {
+          try { localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); } catch {}
+          window.dispatchEvent(new CustomEvent("webao:cart-change", { detail: { items } }));
+        }
+
+        function formatCAD(cents) {
+          return "C$" + (cents / 100).toFixed(2);
+        }
+
+        function formatInterval(interval) {
+          if (interval === "month") return "/mo";
+          if (interval === "year") return "/yr";
+          return " one-time";
+        }
+
+        // Update all cart buttons to reflect cart state
+        function syncButtons() {
+          const cart = getCart();
+          const keys = new Set(cart.map(i => i.key));
+          document.querySelectorAll("[data-cart-btn]").forEach(btn => {
+            const key = btn.getAttribute("data-key");
+            const isAdded = keys.has(key);
+            btn.classList.toggle("is-added", isAdded);
+            btn.setAttribute("aria-label", isAdded ? "Remove from cart" : "Add to cart");
+            btn.setAttribute("title", isAdded ? "Remove from cart" : "Add to cart");
+          });
+        }
+
+        // Update header cart count badge
+        function updateCount() {
+          const count = getCart().length;
+          const badge = document.querySelector("[data-cart-count]") as HTMLElement;
+          if (badge) {
+            badge.textContent = String(count);
+            badge.hidden = count === 0;
+          }
+        }
+
+        // Render cart drawer items
+        function renderDrawer() {
+          const container = document.querySelector("[data-cart-items]");
+          const totalEl = document.querySelector("[data-cart-total]");
+          const checkoutBtn = document.querySelector("[data-cart-checkout]") as HTMLElement;
+          if (!container) return;
+
+          const cart = getCart();
+          
+          if (cart.length === 0) {
+            container.innerHTML = '<div class="cart-drawer-empty">Your cart is empty.<br/>Add items from the pricing page.</div>';
+          } else {
+            container.innerHTML = cart.map(item => `
+              <div class="cart-item" data-cart-item="${item.key}">
+                <div class="cart-item-info">
+                  <p class="cart-item-name">${escapeHtml(item.name)}</p>
+                  <p class="cart-item-meta">${formatCAD(item.priceCents)}${formatInterval(item.interval)}</p>
+                </div>
+                <button type="button" class="cart-item-remove" data-remove-key="${item.key}" aria-label="Remove ${escapeHtml(item.name)}">
+                  <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                </button>
+              </div>
+            `).join("");
+          }
+
+          const total = cart.reduce((sum, i) => sum + i.priceCents, 0);
+          if (totalEl) totalEl.textContent = formatCAD(total);
+          if (checkoutBtn) {
+            checkoutBtn.style.opacity = cart.length === 0 ? "0.5" : "1";
+            checkoutBtn.style.pointerEvents = cart.length === 0 ? "none" : "auto";
+          }
+
+          // Attach remove handlers
+          container.querySelectorAll("[data-remove-key]").forEach(btn => {
+            btn.addEventListener("click", () => {
+              const key = btn.getAttribute("data-remove-key");
+              const updated = getCart().filter(i => i.key !== key);
+              saveCart(updated);
+            });
+          });
+        }
+
+        function escapeHtml(s) {
+          const div = document.createElement("div");
+          div.textContent = s;
+          return div.innerHTML;
+        }
+
+        // Drawer open/close
+        function openDrawer() {
+          const drawer = document.querySelector("[data-cart-drawer]") as HTMLElement;
+          const overlay = document.querySelector("[data-cart-overlay]") as HTMLElement;
+          if (drawer) { drawer.hidden = false; requestAnimationFrame(() => drawer.classList.add("is-open")); }
+          if (overlay) { overlay.hidden = false; requestAnimationFrame(() => overlay.classList.add("is-open")); }
+          document.body.style.overflow = "hidden";
+          renderDrawer();
+        }
+
+        function closeDrawer() {
+          const drawer = document.querySelector("[data-cart-drawer]") as HTMLElement;
+          const overlay = document.querySelector("[data-cart-overlay]") as HTMLElement;
+          if (drawer) drawer.classList.remove("is-open");
+          if (overlay) overlay.classList.remove("is-open");
+          document.body.style.overflow = "";
+          setTimeout(() => {
+            if (drawer) drawer.hidden = true;
+            if (overlay) overlay.hidden = true;
+          }, 350);
+        }
+
+        // Initialize
+        function init() {
+          // Cart button clicks (pricing page)
+          document.querySelectorAll("[data-cart-btn]").forEach(btn => {
+            btn.addEventListener("click", () => {
+              const key = btn.getAttribute("data-key");
+              const cart = getCart();
+              
+              if (cart.some(i => i.key === key)) {
+                // Remove
+                saveCart(cart.filter(i => i.key !== key));
+              } else {
+                // Add (for plans, replace existing plan)
+                const item = {
+                  key,
+                  product: btn.getAttribute("data-product"),
+                  name: btn.getAttribute("data-name"),
+                  priceCents: parseInt(btn.getAttribute("data-price-cents"), 10),
+                  interval: btn.getAttribute("data-interval"),
+                  type: btn.getAttribute("data-type"),
+                };
+                let updated = cart.filter(i => i.key !== key);
+                if (item.type === "plan") {
+                  updated = updated.filter(i => i.type !== "plan");
+                }
+                updated.push(item);
+                saveCart(updated);
+              }
+            });
+          });
+
+          // Header cart open
+          const openBtn = document.querySelector("[data-cart-open]");
+          if (openBtn) openBtn.addEventListener("click", openDrawer);
+
+          // Drawer close
+          const closeBtn = document.querySelector("[data-cart-close]");
+          if (closeBtn) closeBtn.addEventListener("click", closeDrawer);
+          
+          const overlay = document.querySelector("[data-cart-overlay]") as HTMLElement;
+          if (overlay) overlay.addEventListener("click", closeDrawer);
+
+          // Escape key closes drawer
+          document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") closeDrawer();
+          });
+
+          // Sync on cart changes
+          window.addEventListener("webao:cart-change", () => {
+            syncButtons();
+            updateCount();
+            renderDrawer();
+          });
+
+          // Initial sync
+          syncButtons();
+          updateCount();
+        }
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", init);
+        } else {
+          init();
+        }
+      })();
     </script>
 
   </body>
