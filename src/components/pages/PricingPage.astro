@@ -122,62 +122,8 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
     justify-content: center;
   }
 
-  .billing-toggle-wrap {
-    margin-top: 26px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-  }
-  .billing-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 4px;
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    background: var(--card-bg);
-  }
-  .billing-opt {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 6px;
-    padding: 9px 18px;
-    border: 0;
-    border-radius: 999px;
-    background: transparent;
-    color: var(--muted);
-    font: inherit;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease;
-  }
-  .billing-opt:hover {
-    color: var(--ink);
-  }
-  .billing-opt.is-active {
-    background: var(--ink);
-    color: var(--paper);
-  }
-  .billing-opt-note {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    opacity: 0.7;
-  }
-  .billing-toggle-hint {
-    font-size: 10.5px;
-    color: var(--muted);
-    margin: 0;
-  }
-  @media (max-width: 480px) {
-    .billing-opt {
-      padding: 9px 12px;
-      font-size: 0.82rem;
-    }
-  }
+  /* .billing-toggle-wrap / .billing-toggle / .billing-opt live in global.css:
+     the same control is rendered on the start page. */
 
   .plans-section {
     padding-top: clamp(8px, 2vw, 16px);

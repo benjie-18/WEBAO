@@ -65,6 +65,10 @@ const hasYearly = typeof yearlyPriceCents === "number" && Number.isFinite(yearly
 </button>
 
 <style>
+  /* Theme tokens, not a `[data-theme="dark"]` override: Astro scopes every
+     compound of a selector to this component, and <html> (where the theme
+     attribute lives) is never part of this component's template, so such an
+     override can never match. `--ink` already flips with the theme. */
   .cart-btn {
     display: inline-flex;
     align-items: center;
@@ -74,13 +78,10 @@ const hasYearly = typeof yearlyPriceCents === "number" && Number.isFinite(yearly
     border-radius: 50%;
     border: 1px solid var(--line);
     background: var(--card-bg);
-    color: #000;
+    color: var(--ink);
     cursor: pointer;
     transition: all 0.25s ease;
     flex-shrink: 0;
-  }
-  [data-theme="dark"] .cart-btn {
-    color: #fff;
   }
   .cart-btn:hover {
     border-color: var(--accent);

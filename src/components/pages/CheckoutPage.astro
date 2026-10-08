@@ -1,0 +1,359 @@
+---
+/**
+ * CheckoutPage — step 2 of the purchase funnel: review and pay.
+ *
+ * Reads the cart written by the pricing page (`webao_cart_v1`) and the
+ * customer details written by the start page (`webao-checkout`), then turns
+ * them into one Stripe Embedded Checkout session via POST /api/checkout/session.
+ *
+ * Guards, in order:
+ * 1. empty cart → message + link to pricing, no Stripe session;
+ * 2. missing details → back to the start page (step 1);
+ * 3. otherwise create the session; the summary is re-rendered from Stripe's
+ *    priced line items, so what is shown is what is charged.
+ *
+ * The script stays inline (`define:vars`) on purpose: the integration suite
+ * runs the built page in jsdom, which does not execute module scripts.
+ */
+import { useTranslations, localizedPaths, type Locale } from "../../lib/i18n";
+import { STRIPE_PUBLISHABLE_KEY } from "../../lib/config";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props as Props;
+const t = useTranslations(locale);
+const paths = localizedPaths[locale];
+const copy = { ...t.checkout, ...t.cart };
+const routes = { start: paths.start, pricing: paths.pricing, locale };
+---
+
+<section class="section">
+  <div class="shell" style="max-width: 920px;">
+    <p class="mono checkout-step">{t.checkout.step}</p>
+    <div class="eyebrow">{t.checkout.eyebrow}</div>
+    <h1 class="display" style="font-size: clamp(2rem, 5vw, 3.2rem); line-height:.92; margin-top:12px;">{t.checkout.title}</h1>
+    <p class="prose" style="margin-top:12px; max-width: 52ch;">{t.checkout.intro}</p>
+
+    <div style="margin-top: 32px; max-width: 640px;">
+      <div class="checkout-card checkout-card--pay">
+        <div class="mono" style="font-size:10px; letter-spacing:.14em; opacity:.5; margin-bottom:12px;">{t.checkout.securePayment}</div>
+
+        <!-- Customer details from the start page (JS) -->
+        <div id="checkout-customer" class="checkout-customer mono" hidden>
+          <div class="checkout-customer-head">
+            <span class="checkout-customer-title">{t.checkout.details}</span>
+            <a href={paths.start} class="checkout-edit">{t.checkout.edit}</a>
+          </div>
+          <div data-checkout-customer-lines></div>
+        </div>
+
+        <div id="checkout-items" style="margin-bottom:24px;">
+          <!-- Cart items injected by JS -->
+        </div>
+        <div id="stripe-checkout">
+          <div class="mono" style="padding:40px 20px; text-align:center; color: var(--muted); font-size:12.5px;" id="checkout-loading">
+            {t.checkout.loading}
+          </div>
+        </div>
+        <div class="mono" style="margin-top:12px; font-size:10.5px; text-align:center; color: var(--muted);">
+          {t.checkout.secureLine} <a href={paths.refunds} style="color: var(--accent-text);">{t.checkout.refundPolicy}</a>
+        </div>
+      </div>
+    </div>
+
+    <p class="mono" style="margin-top:24px; font-size:11px; color: var(--muted); text-align:center;">
+      {t.checkout.questions} <a href={paths.contact} style="color: var(--ink);">{t.checkout.questionsCta}</a> {t.checkout.questionsAfter}
+    </p>
+  </div>
+</section>
+
+<script define:vars={{ pk: STRIPE_PUBLISHABLE_KEY, labels: copy, routes }}>
+  (function () {
+    const loadingEl = document.getElementById('checkout-loading');
+    const itemsEl = document.getElementById('checkout-items');
+    const customerEl = document.getElementById('checkout-customer');
+    const CART_KEY = 'webao_cart_v1';
+    const CUSTOMER_KEY = 'webao-checkout';
+    const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+    const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    const money = (cents) => {
+      const [whole, frac] = (Math.round(Number(cents) || 0) / 100).toFixed(2).split('.');
+      const grouped = whole.replace(/\B(?=(\d{3})+(?!\d))/g, labels.moneyDecimal === ',' ? '\u00a0' : ',');
+      return labels.moneyPrefix + grouped + labels.moneyDecimal + frac + labels.moneySuffix;
+    };
+    const suffix = (interval) =>
+      interval === 'year' ? labels.suffixYear : interval === 'month' ? labels.suffixMonth : labels.suffixOneTime;
+
+    // ── Cart (written by src/lib/cart-ui.ts) ────────────────────────────
+    let cartItems = [];
+    try {
+      const parsed = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+      cartItems = Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      cartItems = [];
+    }
+
+    // Renders the selection summary from `rows` ({ name, priceCents, interval }).
+    function renderItems(rows) {
+      if (!itemsEl) return;
+      if (!rows.length) {
+        itemsEl.innerHTML =
+          '<p class="mono" style="color:var(--muted); text-align:center; padding:20px;">' +
+          esc(labels.checkoutEmpty) +
+          ' <a href="' + esc(routes.pricing) + '" style="color:var(--accent-text);">' +
+          esc(labels.checkoutEmptyCta) +
+          '</a></p>';
+        return;
+      }
+      const total = rows.reduce((sum, i) => sum + i.priceCents, 0);
+      itemsEl.innerHTML =
+        '<div style="border:1px solid var(--line); border-radius:12px; padding:16px; background:var(--card-bg);">' +
+        '<p class="mono" style="font-size:10px; letter-spacing:.14em; opacity:.5; margin-bottom:12px;">' +
+        esc(labels.checkoutTitle) +
+        '</p>' +
+        rows
+          .map(
+            (i) =>
+              '<div style="display:flex; justify-content:space-between; align-items:baseline; gap:12px; padding:8px 0; border-bottom:1px solid var(--line);">' +
+              '<span style="font-weight:600;">' + esc(i.name) + '</span>' +
+              '<span class="mono" style="white-space:nowrap;">' + esc(money(i.priceCents) + suffix(i.interval)) + '</span>' +
+              '</div>',
+          )
+          .join('') +
+        '<div style="display:flex; justify-content:space-between; align-items:baseline; gap:12px; padding-top:12px; font-size:1.1rem;">' +
+        '<strong>' + esc(labels.total) + '</strong>' +
+        '<strong class="mono">' + esc(money(total)) + '</strong>' +
+        '</div>' +
+        '</div>';
+    }
+
+    function fail(msg) {
+      if (loadingEl) loadingEl.textContent = msg || labels.failed;
+    }
+
+    renderItems(cartItems);
+
+    // 1. Nothing to pay for: never open an empty Stripe session.
+    if (cartItems.length === 0) {
+      if (loadingEl) {
+        loadingEl.innerHTML =
+          esc(labels.checkoutEmpty) +
+          ' <a href="' + esc(routes.pricing) + '" style="color:var(--accent-text);">' + esc(labels.checkoutEmptyCta) + '</a>';
+      }
+      return;
+    }
+
+    // 2. Details come from the start page (step 1). Without them, go back.
+    let customer = null;
+    try {
+      const parsed = JSON.parse(sessionStorage.getItem(CUSTOMER_KEY) || 'null');
+      if (parsed && typeof parsed === 'object') {
+        customer = {
+          name: String(parsed.name || '').trim(),
+          email: String(parsed.email || '').trim(),
+          business: String(parsed.business || '').trim(),
+        };
+      }
+    } catch (e) {
+      customer = null;
+    }
+    if (!customer || !customer.name || !customer.business || !EMAIL_RE.test(customer.email)) {
+      if (loadingEl) {
+        loadingEl.innerHTML =
+          esc(labels.missingDetails) +
+          ' <a href="' + esc(routes.start) + '" style="color:var(--accent-text);">' + esc(labels.missingDetailsCta) + '</a>';
+      }
+      try { location.replace(routes.start); } catch (e) {}
+      return;
+    }
+
+    if (customerEl) {
+      const lines = customerEl.querySelector('[data-checkout-customer-lines]');
+      if (lines) {
+        lines.innerHTML =
+          '<strong style="color:var(--ink)">' + esc(customer.business) + '</strong><br/>' +
+          esc(customer.name) + '<br/>' + esc(customer.email);
+      }
+      customerEl.hidden = false;
+    }
+
+    if (!pk || pk.includes('YOUR_PUBLISHABLE_KEY_HERE')) {
+      fail(labels.notConfigured);
+      return;
+    }
+
+    // Stripe.js is loaded on demand: a plain script tag in the component
+    // would be turned into a deferred module by the bundler, so `window.Stripe`
+    // would not exist yet when this inline script runs.
+    function loadStripe() {
+      return new Promise((resolve, reject) => {
+        if (window.Stripe) return resolve(window.Stripe);
+        let tag = document.querySelector('script[data-stripe-js]');
+        if (!tag) {
+          tag = document.createElement('script');
+          tag.src = 'https://js.stripe.com/v3/';
+          tag.async = true;
+          tag.setAttribute('data-stripe-js', '1');
+          document.head.appendChild(tag);
+        }
+        tag.addEventListener('load', () => (window.Stripe ? resolve(window.Stripe) : reject(new Error('Stripe.js unavailable'))));
+        tag.addEventListener('error', () => reject(new Error('Stripe.js failed to load')));
+      });
+    }
+
+    // 3. One session for the whole cart.
+    let checkoutInstance = null;
+    let swapped = false;
+    const cleanup = () => {
+      swapped = true;
+      if (checkoutInstance) {
+        try { checkoutInstance.unmount(); } catch (e) {}
+        checkoutInstance = null;
+      }
+      window.removeEventListener('webao:cart-change', onCartChange);
+      window.removeEventListener('storage', onStorage);
+    };
+    // The session is priced from the cart at creation time: if the cart
+    // changes while this page is open (drawer, another tab), rebuild it.
+    const onCartChange = () => { if (!swapped && document.getElementById('checkout-items')) location.reload(); };
+    const onStorage = (e) => { if (e.key === null || e.key === CART_KEY) onCartChange(); };
+    window.addEventListener('webao:cart-change', onCartChange);
+    window.addEventListener('storage', onStorage);
+    // Stripe.js allows one embedded checkout at a time: release it before
+    // ClientRouter swaps the page.
+    document.addEventListener('astro:before-swap', cleanup, { once: true });
+
+    fetch('/api/checkout/session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: customer.email,
+        name: customer.name,
+        business: customer.business,
+        locale: routes.locale,
+        items: cartItems.map((i) => ({ key: i.key })),
+      }),
+    })
+      .then((r) => r.json())
+      .then(async (data) => {
+        if (swapped) return;
+        if (!data.ok || !data.clientSecret) {
+          fail(data.error || labels.couldNotStart);
+          return;
+        }
+        // Stripe is the source of truth for what will be charged: when the API
+        // returns the session's line items, show those amounts instead of the
+        // locally stored ones (they can differ if a price changed in Stripe).
+        if (Array.isArray(data.lineItems) && data.lineItems.length > 0) {
+          renderItems(
+            data.lineItems.map((li) => ({
+              name: li.description || li.key || '',
+              priceCents: typeof li.amount === 'number' ? li.amount : 0,
+              interval: li.interval || 'one-time',
+            })),
+          );
+        }
+        let Stripe;
+        try {
+          Stripe = await loadStripe();
+        } catch (e) {
+          fail(labels.stripeUnavailable);
+          return;
+        }
+        if (swapped) return;
+        const checkout = await Stripe(pk).initEmbeddedCheckout({ clientSecret: data.clientSecret });
+        const el = document.getElementById('stripe-checkout');
+        if (el) el.innerHTML = '';
+        checkoutInstance = checkout;
+        checkout.mount(el || '#stripe-checkout');
+      })
+      .catch(() => fail());
+
+    // Hide the custom cursor over the Stripe iframe: the iframe captures
+    // mouse events, so the custom cursor would freeze at the edge.
+    const payCard = document.querySelector('.checkout-card--pay');
+    if (payCard) {
+      payCard.addEventListener('mouseenter', () => document.documentElement.classList.add('cc-hidden-pay'));
+      payCard.addEventListener('mouseleave', () => document.documentElement.classList.remove('cc-hidden-pay'));
+    }
+  })();
+</script>
+
+<style>
+  .checkout-step {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 14px;
+  }
+  .checkout-card {
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 28px;
+    background: var(--card-bg);
+  }
+  .checkout-card--pay {
+    background: var(--paper-2);
+    border-color: var(--line-strong);
+  }
+  .checkout-customer {
+    margin-bottom: 16px;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--card-bg);
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+  .checkout-customer-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+  .checkout-customer-title {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+  .checkout-edit {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent-text);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  /* Stripe's embedded iframe inherits page background; keep the card readable */
+  #stripe-checkout {
+    min-height: 320px;
+    border-radius: 12px;
+    overflow: hidden;
+    width: 100%;
+    min-width: 0;
+  }
+  #stripe-checkout iframe {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+  :global(html.cc-hidden-pay .cc) {
+    display: none !important;
+  }
+  :global(html.cc-hidden-pay .checkout-card--pay),
+  :global(html.cc-hidden-pay .checkout-card--pay *) {
+    cursor: auto !important;
+  }
+  @media (max-width: 560px) {
+    .checkout-card {
+      padding: 16px;
+    }
+    #stripe-checkout {
+      border-radius: 8px;
+    }
+  }
+</style>

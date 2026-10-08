@@ -488,6 +488,69 @@ const en = {
     checkoutMixed: "Monthly and yearly items can't be paid together. Pick one billing term in your cart.",
   },
 
+  // The purchase funnel: /start collects the customer's details and confirms
+  // the selection (step 1), /checkout takes the payment (step 2). Both pages
+  // read the same cart as the pricing page.
+  start: {
+    metaTitle: "Start your site · WEBAO",
+    metaDescription:
+      "Start your WEBAO website: tell us who you are, confirm your plan, then pay securely. No setup fee, cancel with 30 days' notice.",
+    eyebrow: "Start your site",
+    title: "Let's build it.",
+    intro: "Tell us who you are and confirm your selection. Payment is the next step, on a secure Stripe form.",
+    step: "Step 1 of 2 · Your details",
+    form: {
+      name: "Your name",
+      namePlaceholder: "Your name",
+      email: "Email",
+      emailPlaceholder: "you@yourbusiness.ca",
+      business: "Business name",
+      businessPlaceholder: "Your business name",
+      errName: "Please enter your name.",
+      errEmail: "Please enter your email.",
+      errEmailFormat: "Enter a valid email like name@domain.com.",
+      errBusiness: "Please enter your business name.",
+      errSelection: "Choose a plan (or add an option on the pricing page) to continue.",
+      submit: "Continue to payment →",
+      hint: "We only use this to set up your site and send your receipt.",
+    },
+    selection: {
+      title: "Your selection",
+      change: "Change on the pricing page →",
+      planLegend: "Plan",
+      noneHint: "Add-ons only — for an existing WEBAO site.",
+      extrasTitle: "Add-ons & bundles",
+      remove: "Remove {name}",
+      defaultNote: "Grow is pre-selected as our most popular plan. Pick another, or add options on the pricing page.",
+    },
+    aside: "Just have a question?",
+    asideCta: "Contact us instead.",
+  },
+
+  checkout: {
+    metaTitle: "Checkout · WEBAO",
+    metaDescription: "Review your WEBAO order and pay securely with Stripe.",
+    eyebrow: "Checkout",
+    title: "Almost there",
+    intro: "Review your order, then pay securely below.",
+    step: "Step 2 of 2 · Secure payment",
+    details: "Your details",
+    edit: "Edit →",
+    missingDetails: "We need a few details before payment.",
+    missingDetailsCta: "Add your details →",
+    securePayment: "SECURE PAYMENT",
+    loading: "Loading secure payment form…",
+    stripeUnavailable: "Stripe could not be loaded. Check your connection and refresh.",
+    notConfigured: "Payment is not configured yet. Please contact us at contact@webao.ca to complete your subscription.",
+    failed: "Payment could not be loaded. Please contact us at contact@webao.ca.",
+    couldNotStart: "Could not start checkout. Please try again or contact us.",
+    secureLine: "🔒 Encrypted & secure · Powered by Stripe ·",
+    refundPolicy: "Refund policy",
+    questions: "Questions?",
+    questionsCta: "Contact us",
+    questionsAfter: "before paying.",
+  },
+
   terms: {
     hero: {
       title: "Terms and details",

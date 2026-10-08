@@ -175,8 +175,23 @@ then closes the last gap with its own eased approach.
 
 ## Cart and checkout
 
-The pricing page feeds a client-side cart; `/checkout` turns it into one Stripe
-Embedded Checkout session.
+The pricing page feeds a client-side cart; the purchase is a two-step funnel:
+
+1. `/start` (`/fr/commencer`) — **details.** Shows the selection (plan radios,
+   add-ons/bundles, billing term, total) next to the name/email/business form.
+   A visitor who arrives with an empty cart gets Grow pre-selected (the C$149
+   anchor the "Start →" CTAs advertise); one who arrives from the pricing page
+   keeps exactly their cart. Add-ons without a plan are allowed (existing
+   WEBAO site). Valid details are stored in `sessionStorage` (`webao-checkout`),
+   the owner is notified through `/api/forms/submit` (`form: "pricing"`), and
+   the visitor moves on.
+2. `/checkout` (`/fr/checkout`) — **payment.** The only page that creates a
+   Stripe session. It requires both a cart and stored details: an empty cart
+   shows a link to pricing, missing details send the visitor back to `/start`.
+   Stripe.js is loaded on demand, the embedded checkout is unmounted on
+   `astro:before-swap`, and a cart change while the page is open rebuilds the
+   session. The drawer's checkout button leads to `/start`; the mobile sticky
+   CTA is hidden on both steps (`stickyCta={false}` / `pageKey="start"`).
 
 - `src/lib/cart-catalog.ts` — every purchasable product with its prices in cents
   (monthly, annual, one-time). Single source of truth for the pricing
@@ -184,10 +199,15 @@ Embedded Checkout session.
 - `src/lib/cart.ts` — cart item shape, localStorage helpers (`webao_cart_v1`) and
   key format ``${product}-${interval}``.
 - `src/lib/cart-ui.ts` — the drawer, the add-to-cart buttons and the billing
-  term toggle. Listeners are delegated from `document` and the UI re-renders on
-  `astro:page-load`, so the cart survives ClientRouter navigations and tab
-  switches. All strings are read from the drawer's localized `data-*`
-  attributes, so English and French share one implementation.
+  term toggle, imported once by `BaseLayout` (`initCart()`). Listeners are
+  delegated from `document` and the UI re-renders on `astro:page-load`, so the
+  cart survives ClientRouter navigations and tab switches. All strings are read
+  from the drawer's localized `data-*` attributes, so English and French share
+  one implementation.
+- `src/lib/start-ui.ts` + `src/components/pages/StartPage.astro` — the details
+  step (selection card, validation, hand-off). `CheckoutPage.astro` is the
+  payment step; its script is inline so the integration suite can drive the
+  built page in jsdom.
 - `worker/checkout.ts` — `PRICE_MAP` (cart key → Stripe Price ID) and session
   creation. Deploy the Worker for cart checkout to work:
   `cd worker && wrangler deploy` (or `npm run cf:deploy`).
@@ -200,8 +220,9 @@ Billing rules the code enforces (both come from Stripe, not from taste):
   cart, and the API rejects mixed carts with a 400.
 - **Mixed carts are fine otherwise.** Recurring items and one-time ones (Extra
   Page) share a `mode=subscription` session; a one-time-only cart uses
-  `mode=payment`. Carts without items (the `/start` form) keep using
-  `STRIPE_PRICE_ID`.
+  `mode=payment`. The API still falls back to `STRIPE_PRICE_ID` for a request
+  without items, but the site never sends one: `/checkout` refuses to open a
+  session for an empty cart.
 - Yearly add-ons and bundles are priced at ten months (“2 months free”). Plans
   use the annual figures published on the pricing page (C$890.99 / C$1,490.99 /
   C$3,490.99). Stripe is the source of truth at payment time: the session is
@@ -219,7 +240,8 @@ Billing rules the code enforces (both come from Stripe, not from taste):
   1000-entry index cap), `worker-admin` (login, stats aggregation, form
   moderation, config and password change), `worker-routes` (subdomain
   redirect, `/api` dispatch, KV image fallback, 503/500 mapping).
-- **Site content** — `cart`, `cart-ui` (drawer flow in jsdom), `checkout`
+- **Site content** — `cart`, `cart-ui` (drawer flow in jsdom), `start-ui`
+  (details step: default plan, plan switch, validation, hand-off), `checkout`
   (Stripe parameters), `i18n` (en/fr parity, placeholders, locale routing),
   `content` (demo catalog, pricing structure, note cross-references, image
   provenance), `sitemap` (sitemap + robots.txt), `intro-engine` (the landing
@@ -228,7 +250,7 @@ Billing rules the code enforces (both come from Stripe, not from taste):
 `npm run test:integration` builds the site and then checks the real Workerd
 worker: static pages, KV-only images, the cart hooks, tracking, form
 submissions, the closed admin API, robots.txt/sitemap.xml, footnote anchors
-and the built checkout page driven through jsdom.
+and the built start and checkout pages driven through jsdom.
 
 ## Deployment: Cloudflare Workers (static assets)
 

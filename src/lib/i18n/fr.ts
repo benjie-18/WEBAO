@@ -471,7 +471,7 @@ const fr = {
     emptyTitle: "Votre panier est vide.",
     emptyHint: "Ajoutez des articles depuis la page des tarifs.",
     total: "Total",
-    checkout: "Payer",
+    checkout: "Passer à la caisse",
     note: "Taxes calculées à la caisse.",
     add: "Ajouter {name} au panier",
     remove: "Retirer {name} du panier",
@@ -492,6 +492,69 @@ const fr = {
     checkoutEmptyCta: "Voir les tarifs →",
     checkoutMixed:
       "Les articles mensuels et annuels ne peuvent pas être payés ensemble. Choisissez une seule fréquence de facturation dans votre panier.",
+  },
+
+  // Le parcours d'achat : /fr/commencer recueille les coordonnées et confirme
+  // la sélection (étape 1), /fr/checkout encaisse le paiement (étape 2). Les
+  // deux pages lisent le même panier que la page des tarifs.
+  start: {
+    metaTitle: "Démarrer mon site · WEBAO",
+    metaDescription:
+      "Démarrez votre site WEBAO : dites-nous qui vous êtes, confirmez votre forfait, puis payez en toute sécurité. Sans frais d'installation, annulation avec préavis de 30 jours.",
+    eyebrow: "Démarrer mon site",
+    title: "Allons-y.",
+    intro: "Dites-nous qui vous êtes et confirmez votre sélection. Le paiement vient ensuite, sur un formulaire Stripe sécurisé.",
+    step: "Étape 1 de 2 · Vos coordonnées",
+    form: {
+      name: "Votre nom",
+      namePlaceholder: "Votre nom",
+      email: "Courriel",
+      emailPlaceholder: "vous@votreentreprise.ca",
+      business: "Nom de l'entreprise",
+      businessPlaceholder: "Nom de votre entreprise",
+      errName: "Veuillez entrer votre nom.",
+      errEmail: "Veuillez entrer votre courriel.",
+      errEmailFormat: "Entrez un courriel valide, comme nom@domaine.com.",
+      errBusiness: "Veuillez entrer le nom de votre entreprise.",
+      errSelection: "Choisissez un forfait (ou ajoutez une option sur la page des tarifs) pour continuer.",
+      submit: "Continuer vers le paiement →",
+      hint: "Ces informations servent uniquement à créer votre site et à vous envoyer votre reçu.",
+    },
+    selection: {
+      title: "Votre sélection",
+      change: "Modifier sur la page des tarifs →",
+      planLegend: "Forfait",
+      noneHint: "Options seulement — pour un site WEBAO existant.",
+      extrasTitle: "Options et forfaits groupés",
+      remove: "Retirer {name}",
+      defaultNote: "Grow est présélectionné : c'est notre forfait le plus populaire. Choisissez-en un autre ou ajoutez des options sur la page des tarifs.",
+    },
+    aside: "Une simple question?",
+    asideCta: "Contactez-nous plutôt.",
+  },
+
+  checkout: {
+    metaTitle: "Paiement · WEBAO",
+    metaDescription: "Vérifiez votre commande WEBAO et payez en toute sécurité avec Stripe.",
+    eyebrow: "Paiement",
+    title: "Plus qu'une étape",
+    intro: "Vérifiez votre commande, puis payez en toute sécurité ci-dessous.",
+    step: "Étape 2 de 2 · Paiement sécurisé",
+    details: "Vos coordonnées",
+    edit: "Modifier →",
+    missingDetails: "Il nous faut quelques coordonnées avant le paiement.",
+    missingDetailsCta: "Ajouter mes coordonnées →",
+    securePayment: "PAIEMENT SÉCURISÉ",
+    loading: "Chargement du formulaire de paiement…",
+    stripeUnavailable: "Stripe n'a pas pu être chargé. Vérifiez votre connexion et actualisez la page.",
+    notConfigured: "Le paiement n'est pas encore configuré. Écrivez-nous à contact@webao.ca pour finaliser votre abonnement.",
+    failed: "Le paiement n'a pas pu être chargé. Écrivez-nous à contact@webao.ca.",
+    couldNotStart: "Impossible de démarrer le paiement. Réessayez ou contactez-nous.",
+    secureLine: "🔒 Chiffré et sécurisé · Propulsé par Stripe ·",
+    refundPolicy: "Politique de remboursement",
+    questions: "Des questions?",
+    questionsCta: "Contactez-nous",
+    questionsAfter: "avant de payer.",
   },
 
   terms: {

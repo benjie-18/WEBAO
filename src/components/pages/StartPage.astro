@@ -1,0 +1,430 @@
+---
+/**
+ * StartPage — step 1 of the purchase funnel ("Start your site").
+ *
+ * Collects the customer's details and confirms the selection, then hands over
+ * to the checkout page (step 2) which creates the Stripe session. There is no
+ * payment UI here on purpose: one page owns the money, so /start and
+ * /checkout can never disagree about what is being bought.
+ *
+ * The selection card is wired by `src/lib/start-ui.ts`:
+ * - it mirrors the shared cart (plan radios, add-ons/bundles, total),
+ * - an empty cart is seeded with `data-default-plan` (Grow, the C$149 anchor),
+ * - the billing toggle uses the pricing page's hooks (handled by cart-ui).
+ */
+import { plans } from "../../lib/pricing";
+import { useTranslations, localizedPaths, type Locale } from "../../lib/i18n";
+import { priceCentsFor } from "../../lib/cart-catalog";
+import { formatMoney } from "../../lib/cart-ui";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props as Props;
+const t = useTranslations(locale);
+const paths = localizedPaths[locale];
+const checkoutPath = locale === "fr" ? "/fr/checkout" : "/checkout";
+const fmt = { prefix: t.cart.moneyPrefix, suffix: t.cart.moneySuffix, decimal: t.cart.moneyDecimal };
+
+/** Server-rendered monthly prices; start-ui re-renders them for the active term. */
+const planRows = plans.map((def) => {
+  const p = t.pricing.plans[def.id];
+  const cents = priceCentsFor(def.id, "month") ?? 0;
+  return { id: def.id, name: p.name, badge: p.badge, price: `${formatMoney(cents, fmt)}${t.cart.suffixMonth}` };
+});
+---
+
+<section class="section start-section">
+  <div class="shell start-shell">
+    <header class="start-head" data-reveal>
+      <p class="mono start-step">{t.start.step}</p>
+      <div class="eyebrow">{t.start.eyebrow}</div>
+      <h1 class="display start-title">{t.start.title}</h1>
+      <p class="prose start-intro">{t.start.intro}</p>
+    </header>
+
+    <div
+      class="start-grid"
+      data-start
+      data-default-plan="grow"
+      data-label-remove={t.start.selection.remove}
+    >
+      <!-- Selection card (DOM-first so phones read "what am I buying" first) -->
+      <aside class="sel-card" aria-labelledby="sel-title" data-reveal style="--d:80ms">
+        <div class="sel-head">
+          <h2 id="sel-title" class="sel-title">{t.start.selection.title}</h2>
+          <a href={paths.pricing} class="sel-change mono">{t.start.selection.change}</a>
+        </div>
+
+        <div class="billing-toggle sel-billing" role="group" aria-label={t.cart.billingLegend} data-billing-toggle>
+          <button type="button" class="billing-opt is-active" data-billing-opt="month" aria-pressed="true">
+            {t.cart.billingMonthly}
+          </button>
+          <button type="button" class="billing-opt" data-billing-opt="year" aria-pressed="false">
+            {t.cart.billingYearly}
+            <span class="billing-opt-note">{t.cart.billingYearlyNote}</span>
+          </button>
+        </div>
+
+        <fieldset class="plan-picker">
+          <legend class="mono sel-legend">{t.start.selection.planLegend}</legend>
+          {planRows.map((row) => (
+            <label class="plan-opt">
+              <input type="radio" name="plan" value={row.id} data-name={row.name} />
+              <span class="plan-opt-body">
+                <span class="plan-opt-name">
+                  {row.name}
+                  {row.badge !== "" && <em class="plan-opt-badge mono">{row.badge}</em>}
+                </span>
+                <span class="plan-opt-price mono" data-plan-price>{row.price}</span>
+              </span>
+            </label>
+          ))}
+        </fieldset>
+        <p class="mono sel-hint" data-start-no-plan hidden>{t.start.selection.noneHint}</p>
+        <p class="mono sel-hint" data-start-default-note hidden>{t.start.selection.defaultNote}</p>
+
+        <div class="sel-extras" data-start-extras hidden>
+          <p class="mono sel-legend">{t.start.selection.extrasTitle}</p>
+          <ul class="sel-extras-list" data-start-extras-list></ul>
+        </div>
+
+        <div class="sel-total">
+          <span>{t.cart.total}</span>
+          <strong class="mono" data-start-total>{formatMoney(0, fmt)}</strong>
+        </div>
+        <p class="mono sel-note">{t.cart.note}</p>
+        <p class="field-error mono sel-error" data-start-selection-error hidden>{t.start.form.errSelection}</p>
+      </aside>
+
+      <!-- Details form -->
+      <form
+        id="start-form"
+        class="start-form"
+        data-start-form
+        novalidate
+        data-checkout-path={checkoutPath}
+        data-err-name={t.start.form.errName}
+        data-err-email={t.start.form.errEmail}
+        data-err-email-format={t.start.form.errEmailFormat}
+        data-err-business={t.start.form.errBusiness}
+        data-reveal
+      >
+        <label>{t.start.form.name}
+          <input name="name" placeholder={t.start.form.namePlaceholder} autocomplete="name" required />
+          <span class="field-error mono" data-error="name" hidden></span>
+        </label>
+        <label>{t.start.form.email}
+          <input name="email" type="email" placeholder={t.start.form.emailPlaceholder} autocomplete="email" required />
+          <span class="field-error mono" data-error="email" hidden></span>
+        </label>
+        <label>{t.start.form.business}
+          <input name="business" placeholder={t.start.form.businessPlaceholder} autocomplete="organization" required />
+          <span class="field-error mono" data-error="business" hidden></span>
+        </label>
+        <button type="submit" class="btn btn--primary start-submit" data-track="cta" data-track-label={t.start.form.submit}>
+          {t.start.form.submit}
+        </button>
+        <p class="mono start-hint">{t.start.form.hint}</p>
+      </form>
+    </div>
+
+    <p class="mono start-aside">
+      {t.start.aside} <a href={paths.contact} style="color: var(--ink);">{t.start.asideCta}</a>
+    </p>
+  </div>
+</section>
+
+<script>
+  import { initStart } from "../../lib/start-ui";
+  initStart();
+</script>
+
+<style>
+  .start-shell {
+    max-width: 980px;
+  }
+  .start-step {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 14px;
+  }
+  .start-title {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    line-height: 0.92;
+    margin-top: 12px;
+  }
+  .start-intro {
+    margin-top: 12px;
+    max-width: 56ch;
+  }
+
+  .start-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    grid-template-areas: "form selection";
+    gap: 24px;
+    align-items: start;
+    margin-top: 32px;
+  }
+  .sel-card {
+    grid-area: selection;
+    position: sticky;
+    top: 88px;
+    border: 1px solid var(--line-strong);
+    border-radius: 18px;
+    background: var(--paper-2);
+    padding: 22px;
+  }
+  .start-form {
+    grid-area: form;
+    display: grid;
+    gap: 14px;
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 24px;
+  }
+  @media (max-width: 760px) {
+    .start-grid {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: "selection" "form";
+    }
+    .sel-card {
+      position: static;
+    }
+  }
+
+  /* Selection card */
+  .sel-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .sel-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0;
+  }
+  .sel-change {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent-text);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .sel-billing {
+    margin-top: 16px;
+  }
+  .sel-legend {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0;
+    margin: 0 0 8px;
+  }
+  .plan-picker {
+    border: 0;
+    padding: 0;
+    margin: 18px 0 0;
+    display: grid;
+    gap: 8px;
+  }
+  .plan-opt {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--card-bg);
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .plan-opt:hover {
+    border-color: var(--line-strong);
+  }
+  .plan-opt:has(input:checked) {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  .plan-opt:has(input:focus-visible) {
+    outline: 2px solid var(--focus-outline, var(--accent));
+    outline-offset: 2px;
+  }
+  .plan-opt input {
+    accent-color: var(--accent);
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    flex: none;
+  }
+  .plan-opt-body {
+    flex: 1;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    min-width: 0;
+  }
+  .plan-opt-name {
+    font-weight: 600;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .plan-opt-badge {
+    font-style: normal;
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-text);
+  }
+  .plan-opt-price {
+    font-size: 12.5px;
+    white-space: nowrap;
+    color: var(--ink-3);
+  }
+  .sel-hint {
+    font-size: 11px;
+    color: var(--muted);
+    margin: 10px 0 0;
+    line-height: 1.5;
+  }
+  .sel-extras {
+    margin-top: 18px;
+  }
+  .sel-extras-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 6px;
+  }
+  .sel-extras-list :global(.sel-extra) {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--card-bg);
+    font-size: 0.92rem;
+  }
+  .sel-extras-list :global(.sel-extra-name) {
+    flex: 1;
+    min-width: 0;
+    font-weight: 600;
+  }
+  .sel-extras-list :global(.sel-extra-price) {
+    font-size: 12px;
+    white-space: nowrap;
+    color: var(--ink-3);
+  }
+  .sel-extras-list :global(.sel-extra-remove) {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .sel-extras-list :global(.sel-extra-remove:hover) {
+    color: var(--accent-text);
+    border-color: var(--accent-text);
+  }
+  .sel-extras-list :global(.sel-extra-remove svg) {
+    width: 12px;
+    height: 12px;
+  }
+  .sel-total {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line-strong);
+    font-size: 1.05rem;
+  }
+  .sel-total strong {
+    font-size: 1.3rem;
+  }
+  .sel-note {
+    font-size: 10.5px;
+    color: var(--muted);
+    margin: 8px 0 0;
+  }
+  .sel-error {
+    margin-top: 10px;
+  }
+
+  /* Form */
+  .start-form label {
+    display: grid;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-3);
+  }
+  .start-form input {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    background: var(--paper-3);
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .start-form input:focus {
+    outline: none;
+    border-color: var(--ink);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+  }
+  .start-form input.input-error {
+    border-color: #c0392b;
+  }
+  .field-error {
+    font-size: 11.5px;
+    color: #c0392b;
+    margin-top: 2px;
+  }
+  .start-submit {
+    width: 100%;
+    justify-content: center;
+    margin-top: 6px;
+  }
+  .start-submit:disabled {
+    opacity: 0.6;
+    cursor: progress;
+  }
+  .start-hint {
+    font-size: 11px;
+    color: var(--muted);
+    margin: 0;
+    text-align: center;
+  }
+  .start-aside {
+    margin-top: 24px;
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+  }
+  @media (max-width: 560px) {
+    .sel-card,
+    .start-form {
+      padding: 16px;
+    }
+  }
+</style>

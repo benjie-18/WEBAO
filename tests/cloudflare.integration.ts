@@ -194,8 +194,11 @@ test('built checkout page renders the cart and posts its keys', async () => {
   const requests: Array<{ url: string; body: string }> = [];
   const checkoutCalls = () => requests.filter((request) => request.url === '/api/checkout/session');
 
-  // Run the real inline checkout script against a given cart.
-  async function render(items: unknown[]) {
+  // Customer details written by the /start form (step 1 of the funnel).
+  const details = { business: '<img src=x onerror=alert(1)>', name: 'A & B', email: 'a@b.co' };
+
+  // Run the real inline checkout script against a given cart and details.
+  async function render(items: unknown[], customer: unknown = details) {
     requests.length = 0;
     const virtualConsole = new VirtualConsole();
     virtualConsole.on('jsdomError', (error: Error) => {
@@ -208,10 +211,7 @@ test('built checkout page renders the cart and posts its keys', async () => {
       beforeParse(window) {
         window.localStorage.setItem('webao_cart_v1', JSON.stringify(items));
         // Customer details from the /start form must never reach the DOM raw.
-        window.sessionStorage.setItem(
-          'webao-checkout',
-          JSON.stringify({ business: '<img src=x onerror=alert(1)>', name: 'A & B', email: 'a@b.co' }),
-        );
+        if (customer) window.sessionStorage.setItem('webao-checkout', JSON.stringify(customer));
         // JSdom lacks a few browser APIs the layout scripts touch.
         window.matchMedia = ((query: string) => ({
           matches: false,
@@ -269,13 +269,28 @@ test('built checkout page renders the cart and posts its keys', async () => {
     assert.ok(!customer?.innerHTML.includes('<img'), 'customer details are HTML-escaped');
     assert.ok(customer?.innerHTML.includes('&lt;img'), 'escaped markup is present');
     assert.equal(checkoutCalls().length, 1, 'exactly one checkout session is created');
-    assert.deepEqual(JSON.parse(checkoutCalls()[0].body).items, [
-      { key: 'launch-year' },
-      { key: 'review-month' },
-      { key: 'extrapage-one-time' },
-    ]);
+    const payload = JSON.parse(checkoutCalls()[0].body);
+    assert.deepEqual(payload.items, [{ key: 'launch-year' }, { key: 'review-month' }, { key: 'extrapage-one-time' }]);
+    assert.equal(payload.email, 'a@b.co', 'the Stripe session is created for the customer from /start');
+    assert.equal(payload.name, 'A & B');
+    assert.equal(payload.locale, 'en', 'the Worker picks the success page for this locale');
   } finally {
     dom?.window.close();
+  }
+
+  let detailsMissing: JSDOM | undefined;
+  try {
+    // Step 1 skipped (direct hit on /checkout): no session, back to /start.
+    detailsMissing = await render(cart, null);
+    const message = detailsMissing.window.document.getElementById('stripe-checkout')?.textContent ?? '';
+    assert.match(message, /details/i, 'explains that the details step is missing');
+    assert.ok(
+      detailsMissing.window.document.querySelector('#stripe-checkout a[href="/start"]'),
+      'links back to the start page when the redirect cannot run',
+    );
+    assert.equal(checkoutCalls().length, 0, 'no Stripe session without customer details');
+  } finally {
+    detailsMissing?.window.close();
   }
 
   try {
@@ -286,6 +301,73 @@ test('built checkout page renders the cart and posts its keys', async () => {
     assert.equal(checkoutCalls().length, 0, 'an empty cart never opens a Stripe session');
   } finally {
     empty?.window.close();
+  }
+});
+
+/**
+ * Step 1 of the funnel against the built markup: the start page's hooks
+ * (`data-start*`, plan radios, the form's data-* copy) must match what
+ * `src/lib/start-ui.ts` expects, in both languages. jsdom does not run module
+ * scripts, so the page's own modules are invoked on the built document.
+ */
+test('built start page seeds the cart and hands the details to checkout', async () => {
+  const [{ initCart }, { initStart }] = await Promise.all([import('../src/lib/cart-ui'), import('../src/lib/start-ui')]);
+  const pages = [
+    { path: 'start/index.html', url: 'https://webao.ca/start', checkout: '/checkout', money: /C\$149\.99\/mo/ },
+    { path: 'fr/commencer/index.html', url: 'https://webao.ca/fr/commencer', checkout: '/fr/checkout', money: /149,99\u00a0\$\/mois/ },
+  ];
+  for (const page of pages) {
+    const virtualConsole = new VirtualConsole();
+    virtualConsole.on('jsdomError', (error: Error) => {
+      if (!/Not implemented/.test(error.message)) throw error;
+    });
+    const dom = new JSDOM(readFileSync(`dist/client/${page.path}`, 'utf8'), { url: page.url, virtualConsole });
+    try {
+      const { window } = dom;
+      const doc = window.document;
+      const requests: string[] = [];
+      const navigations: string[] = [];
+      window.fetch = (async (_input: RequestInfo | URL, init?: RequestInit) => {
+        requests.push(String(init?.body ?? ''));
+        return new Response('{"ok":true}', { status: 200 });
+      }) as typeof fetch;
+      initCart(doc);
+      initStart(doc, { navigate: (href) => navigations.push(href) });
+
+      // An empty cart is seeded with Grow, mirrored by the plan radios and the layout's badge.
+      assert.deepEqual(JSON.parse(window.localStorage.getItem('webao_cart_v1') ?? '[]').map((i: { key: string }) => i.key), ['grow-month']);
+      const grow = doc.querySelector<HTMLInputElement>('input[name="plan"][value="grow"]');
+      assert.equal(grow?.checked, true, `${page.path}: Grow pre-selected`);
+      assert.match(grow?.closest('label')?.querySelector('[data-plan-price]')?.textContent ?? '', page.money);
+      assert.equal(doc.querySelector('[data-cart-count]')?.textContent, '1');
+      assert.equal(doc.querySelector<HTMLElement>('[data-start-default-note]')?.hidden, false);
+
+      // Empty form: localized field errors from the markup, no hand-off.
+      const form = doc.querySelector<HTMLFormElement>('form[data-start-form]')!;
+      form.dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
+      for (const field of ['name', 'email', 'business']) {
+        const error = form.querySelector<HTMLElement>(`[data-error="${field}"]`);
+        assert.equal(error?.hidden, false, `${page.path}: ${field} error shown`);
+        assert.ok((error?.textContent ?? '').length > 0, `${page.path}: ${field} error has copy`);
+      }
+      assert.equal(navigations.length, 0);
+
+      // Valid details: stored for /checkout, owner notified, visitor sent on.
+      (form.elements.namedItem('name') as HTMLInputElement).value = 'Ada Lovelace';
+      (form.elements.namedItem('email') as HTMLInputElement).value = 'ada@example.com';
+      (form.elements.namedItem('business') as HTMLInputElement).value = 'Analytical Engines';
+      form.dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
+      assert.deepEqual(JSON.parse(window.sessionStorage.getItem('webao-checkout') ?? 'null'), {
+        name: 'Ada Lovelace',
+        email: 'ada@example.com',
+        business: 'Analytical Engines',
+      });
+      assert.deepEqual(navigations, [page.checkout]);
+      assert.equal(requests.length, 1);
+      assert.equal(JSON.parse(requests[0]).form, 'pricing', 'the Worker only accepts pricing/contact forms');
+    } finally {
+      dom.window.close();
+    }
   }
 });
 
@@ -455,12 +537,15 @@ test('built success page shows the purchased selection', async () => {
     dom?.window.close();
   }
 
-  // Legacy /start flow: no cart → the fixed $149 copy stays, no summary.
+  // No cart (direct visit, storage unavailable): generic copy, no summary and
+  // no made-up amount — every flow goes through the cart now.
   dom = await render('checkout/success/index.html', []);
   try {
     const doc = dom.window.document;
     assert.equal(doc.getElementById('order-summary')?.hidden, true, 'no summary without a cart');
-    assert.match(doc.getElementById('success-copy')?.textContent ?? '', /\$149\/month/);
+    const copy = doc.getElementById('success-copy')?.textContent ?? '';
+    assert.match(copy, /Your subscription is active/);
+    assert.ok(!copy.includes('$149'), 'no hardcoded $149 without a cart');
   } finally {
     dom?.window.close();
   }
