@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
 
 // Démo : Pixelforge Games, studio fictif de jeux indépendants, Montréal.
 // Reconstruite comme une BORNE D'ARCADE. La page est un écran de sélection :
@@ -21,9 +22,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pixelforge Games · Insérez une pièce</title>
-  <meta name="description" content="Pixelforge Games : studio fictif de Montréal. 14 petits jeux, 2 millions de joueurs, zéro polygone blessé. Insérez une pièce." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="pixelforge" locale="fr" title="Pixelforge Games · Insérez une pièce" description="Pixelforge Games : studio fictif de Montréal. 14 petits jeux, 2 millions de joueurs, zéro polygone blessé. Insérez une pièce." ogImage="https://webao.ca/demos/pixelforge/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet" />
@@ -34,7 +35,7 @@ const IMG = {
 
   <!-- MODE DÉMO -->
   <header class="ac-attract" id="top">
-    <div class="ac-attract-bg" aria-hidden="true"><img src={IMG.hero} alt="" loading="eager" fetchpriority="high" /></div>
+    <div class="ac-attract-bg" aria-hidden="true"><img src={IMG.hero} alt="" loading="eager" fetchpriority="high" decoding="async" /></div>
     <div class="ac-attract-in">
       <svg class="ac-invader" viewBox="0 0 11 8" shape-rendering="crispEdges" aria-hidden="true">
         <rect x="2" y="0" width="1" height="1"/><rect x="8" y="0" width="1" height="1"/>
@@ -67,7 +68,7 @@ const IMG = {
       <h2 class="ac-h">Choisissez votre jeu</h2>
 
       <article class="ac-marquee">
-        <div class="ac-marquee-art"><img src={IMG.game1} alt="Bandeau de Duskfall Valley : coucher de soleil en pixels sur montagnes et lac" loading="lazy" /></div>
+        <div class="ac-marquee-art"><img src={IMG.game1} alt="Bandeau de Duskfall Valley : coucher de soleil en pixels sur montagnes et lac" loading="lazy" decoding="async" /></div>
         <div class="ac-marquee-in">
           <p class="ac-mq-k">Borne 01 · exploration · solo</p>
           <h3>Duskfall Valley</h3>
@@ -77,7 +78,7 @@ const IMG = {
       </article>
 
       <article class="ac-marquee">
-        <div class="ac-marquee-art"><img src={IMG.game2} alt="Bandeau de Dungeon Delver : combat de donjon en pixels" loading="lazy" /></div>
+        <div class="ac-marquee-art"><img src={IMG.game2} alt="Bandeau de Dungeon Delver : combat de donjon en pixels" loading="lazy" decoding="async" /></div>
         <div class="ac-marquee-in">
           <p class="ac-mq-k">Borne 02 · roguelike · solo</p>
           <h3>Dungeon Delver</h3>
@@ -87,7 +88,7 @@ const IMG = {
       </article>
 
       <article class="ac-marquee">
-        <div class="ac-marquee-art"><img src={IMG.game3} alt="Bandeau de Meadow Tactics : bataille RPG en pixels vue du dessus" loading="lazy" /></div>
+        <div class="ac-marquee-art"><img src={IMG.game3} alt="Bandeau de Meadow Tactics : bataille RPG en pixels vue du dessus" loading="lazy" decoding="async" /></div>
         <div class="ac-marquee-in">
           <p class="ac-mq-k">Borne 03 · RPG tactique · 1 à 4 joueurs</p>
           <h3>Meadow Tactics</h3>
@@ -97,7 +98,7 @@ const IMG = {
       </article>
 
       <article class="ac-marquee">
-        <div class="ac-marquee-art"><img src={IMG.game4} alt="Bandeau de Blade Pixel : sprite d'épéiste en pixels" loading="lazy" /></div>
+        <div class="ac-marquee-art"><img src={IMG.game4} alt="Bandeau de Blade Pixel : sprite d'épéiste en pixels" loading="lazy" decoding="async" /></div>
         <div class="ac-marquee-in">
           <p class="ac-mq-k">Borne 04 · action · coop</p>
           <h3>Blade Pixel</h3>
@@ -145,7 +146,7 @@ const IMG = {
         </li>
         <li>
           <p class="ac-ver">v2.3.7 <span>2026-08-30</span></p>
-          <figure><img src={IMG.studio} alt="L'équipe Pixelforge teste une version" loading="lazy" /></figure>
+          <figure><img src={IMG.studio} alt="L'équipe Pixelforge teste une version" loading="lazy" decoding="async" /></figure>
           <p>60 joueurs, 12 pizzas, une manette brisée (RIP). La nouvelle version tactique a survécu au contact d'humains réels. De justesse.</p>
         </li>
       </ol>

@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Extrême Climat · fictional HVAC, Lévis QC.
 // Cinematic hot/cold duality: split-screen ice vs flame, full-bleed photography,
@@ -18,9 +19,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Extrême Climat · On maîtrise les deux extrêmes · CVAC à Lévis · (418) 555-0119</title>
-  <meta name="description" content="Extrême Climat : CVAC à Lévis conçu pour les deux extrêmes. Thermopompes pour climats froids jusqu’à −30°, fournaises, climatisation et service d’urgence 24/7. On maîtrise les deux extrêmes." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="extreme-climat" locale="fr" title="Extrême Climat · On maîtrise les deux extrêmes · CVAC à Lévis · (418) 555-0119" description="Extrême Climat : CVAC à Lévis conçu pour les deux extrêmes. Thermopompes pour climats froids jusqu’à −30°, fournaises, climatisation et service d’urgence 24/7. On maîtrise les deux extrêmes." ogImage="https://webao.ca/og-image.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -36,11 +37,11 @@ const IMG = {
     <!-- HERO: the split screen -->
     <section class="xc-hero" aria-label="On maîtrise les deux extrêmes">
       <div class="xc-half xc-ice">
-        <img src={IMG.ice} alt="Paysage de montagne pris dans la glace à trente degrés sous zéro" fetchpriority="high" />
+        <img src={IMG.ice} alt="Paysage de montagne pris dans la glace à trente degrés sous zéro" fetchpriority="high" decoding="async" />
         <p class="xc-deg" aria-hidden="true">−30°</p>
       </div>
       <div class="xc-half xc-fire">
-        <img src={IMG.fire} alt="Flammes d’un feu de joie contre la nuit" fetchpriority="high" />
+        <img src={IMG.fire} alt="Flammes d’un feu de joie contre la nuit" fetchpriority="high" decoding="async" loading="lazy" />
         <p class="xc-deg" aria-hidden="true">+35°</p>
       </div>
       <div class="xc-title">
@@ -62,7 +63,7 @@ const IMG = {
     <!-- DUO: heat vs cold services -->
     <section class="xc-duo" id="services" aria-label="Services de chauffage et de climatisation">
       <article class="xc-side xc-heat">
-        <img src={IMG.fire2} alt="Braises rougeoyantes dans un feu" loading="lazy" />
+        <img src={IMG.fire2} alt="Braises rougeoyantes dans un feu" loading="lazy" decoding="async" />
         <div class="xc-side-in">
           <p class="xc-side-k">CHAUFFAGE</p>
           <h2>L’hiver, c’est<br />notre terrain.</h2>
@@ -76,7 +77,7 @@ const IMG = {
         </div>
       </article>
       <article class="xc-side xc-cool">
-        <img src={IMG.ice2} alt="Sommets enneigés sous un ciel de nuit" loading="lazy" />
+        <img src={IMG.ice2} alt="Sommets enneigés sous un ciel de nuit" loading="lazy" decoding="async" />
         <div class="xc-side-in">
           <p class="xc-side-k">CLIMATISATION</p>
           <h2>L’été n’a<br />aucune chance.</h2>
@@ -117,7 +118,7 @@ const IMG = {
 
     <!-- ABOUT: born in a Lévis winter -->
     <section class="xc-about">
-      <img src={IMG.tech} alt="Un technicien d’Extrême Climat au travail" loading="lazy" />
+      <img src={IMG.tech} alt="Un technicien d’Extrême Climat au travail" loading="lazy" decoding="async" />
       <div class="xc-about-in">
         <p class="xc-kicker">L’entreprise</p>
         <h2>NÉ D’UN<br />HIVER À LÉVIS.</h2>
@@ -132,7 +133,7 @@ const IMG = {
 
     <!-- EMERGENCY: the furnace band -->
     <section class="xc-emergency" aria-label="Service d’urgence">
-      <img src={IMG.fire} alt="" aria-hidden="true" loading="lazy" />
+      <img src={IMG.fire} alt="" aria-hidden="true" loading="lazy" decoding="async" />
       <div class="xc-emergency-in">
         <p class="xc-kicker">Urgence 24/7</p>
         <h2>FOURNAISE EN PANNE<br />À −25°?</h2>

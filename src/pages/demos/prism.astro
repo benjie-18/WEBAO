@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Prism · fictional banking app.
 // Rebuilt as the APP ITSELF: a PIN login gate lifts to reveal a working
@@ -20,9 +21,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Prism · Your money, in focus</title>
-  <meta name="description" content="Prism demo: sign in and explore a glassmorphic banking dashboard. Fictional product." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="prism" locale="en" title="Prism · Your money, in focus" description="Prism demo: sign in and explore a glassmorphic banking dashboard. Fictional product." ogImage="https://webao.ca/demos/prism/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -60,7 +61,7 @@ const IMG = {
         <button type="button" class="pr-navbtn" data-view="insights"><span class="pr-ico" aria-hidden="true">◔</span>Insights</button>
       </nav>
       <div class="pr-user">
-        <img src={IMG.ava1} alt="" />
+        <img src={IMG.ava1} alt="" decoding="async" />
         <div><p class="pr-user-name">Maya Chen</p><p class="pr-user-plan">Prism Plus</p></div>
       </div>
     </aside>
@@ -90,14 +91,14 @@ const IMG = {
           <div class="glass pr-panel">
             <div class="pr-panel-head"><h2>Recent activity</h2><button type="button" class="pr-link" data-goto="activity">See all</button></div>
             <ul class="pr-txns">
-              <li><img src={IMG.ava2} alt="" /><div><p>Marcus Webb</p><p class="pr-muted">Dinner split · yesterday</p></div><span class="pr-amt in">+$86.00</span></li>
-              <li><img src={IMG.ava3} alt="" /><div><p>Léa Tremblay</p><p class="pr-muted">Concert tickets · Oct 2</p></div><span class="pr-amt out">−$142.50</span></li>
-              <li><img src={IMG.ava1} alt="" /><div><p>Salary · Studio Nord</p><p class="pr-muted">Direct deposit · Oct 1</p></div><span class="pr-amt in">+$4,200.00</span></li>
+              <li><img src={IMG.ava2} alt="" decoding="async" loading="lazy" /><div><p>Marcus Webb</p><p class="pr-muted">Dinner split · yesterday</p></div><span class="pr-amt in">+$86.00</span></li>
+              <li><img src={IMG.ava3} alt="" decoding="async" loading="lazy" /><div><p>Léa Tremblay</p><p class="pr-muted">Concert tickets · Oct 2</p></div><span class="pr-amt out">−$142.50</span></li>
+              <li><img src={IMG.ava1} alt="" decoding="async" loading="lazy" /><div><p>Salary · Studio Nord</p><p class="pr-muted">Direct deposit · Oct 1</p></div><span class="pr-amt in">+$4,200.00</span></li>
             </ul>
           </div>
           <div class="glass pr-panel pr-shot">
             <div class="pr-panel-head"><h2>Spending rhythm</h2></div>
-            <img src={IMG.dashboard} alt="Prism spending dashboard preview" loading="lazy" />
+            <img src={IMG.dashboard} alt="Prism spending dashboard preview" loading="lazy" decoding="async" />
             <p class="pr-muted">Groceries down 18% since you set the alert. Nice.</p>
           </div>
         </div>
@@ -120,7 +121,7 @@ const IMG = {
           </div>
           <div class="glass pr-panel">
             <div class="pr-panel-head"><h2>Tap to pay</h2></div>
-            <img class="pr-payimg" src={IMG.pay} alt="Paying with Prism at a terminal" loading="lazy" />
+            <img class="pr-payimg" src={IMG.pay} alt="Paying with Prism at a terminal" loading="lazy" decoding="async" />
             <p class="pr-muted">Works with Apple Pay, Google Pay and the Prism band. Limits update in real time, right here.</p>
             <div class="pr-limits">
               <div><p class="pr-muted">Daily limit</p><p class="pr-strong">$2,500</p></div>
@@ -142,9 +143,9 @@ const IMG = {
             </div>
           </div>
           <ul class="pr-txns" id="txn-list">
-            <li data-type="in"><img src={IMG.ava1} alt="" /><div><p>Salary · Studio Nord</p><p class="pr-muted">Oct 1</p></div><span class="pr-amt in">+$4,200.00</span></li>
-            <li data-type="out"><img src={IMG.ava3} alt="" /><div><p>Léa Tremblay</p><p class="pr-muted">Concert tickets · Oct 2</p></div><span class="pr-amt out">−$142.50</span></li>
-            <li data-type="in"><img src={IMG.ava2} alt="" /><div><p>Marcus Webb</p><p class="pr-muted">Dinner split · Oct 2</p></div><span class="pr-amt in">+$86.00</span></li>
+            <li data-type="in"><img src={IMG.ava1} alt="" decoding="async" loading="lazy" /><div><p>Salary · Studio Nord</p><p class="pr-muted">Oct 1</p></div><span class="pr-amt in">+$4,200.00</span></li>
+            <li data-type="out"><img src={IMG.ava3} alt="" decoding="async" loading="lazy" /><div><p>Léa Tremblay</p><p class="pr-muted">Concert tickets · Oct 2</p></div><span class="pr-amt out">−$142.50</span></li>
+            <li data-type="in"><img src={IMG.ava2} alt="" decoding="async" loading="lazy" /><div><p>Marcus Webb</p><p class="pr-muted">Dinner split · Oct 2</p></div><span class="pr-amt in">+$86.00</span></li>
             <li data-type="out"><div class="pr-ava-fallback" aria-hidden="true">☕</div><div><p>Café Pista</p><p class="pr-muted">Oct 3</p></div><span class="pr-amt out">−$6.40</span></li>
             <li data-type="out"><div class="pr-ava-fallback" aria-hidden="true">◈</div><div><p>STM monthly pass</p><p class="pr-muted">Oct 3</p></div><span class="pr-amt out">−$97.00</span></li>
             <li data-type="in"><div class="pr-ava-fallback" aria-hidden="true">✦</div><div><p>Interest · savings vault</p><p class="pr-muted">Oct 4</p></div><span class="pr-amt in">+$12.18</span></li>
@@ -167,7 +168,7 @@ const IMG = {
           </div>
           <div class="glass pr-panel pr-shot">
             <div class="pr-panel-head"><h2>In your pocket</h2></div>
-            <img src={IMG.phone} alt="Prism app on a phone" loading="lazy" />
+            <img src={IMG.phone} alt="Prism app on a phone" loading="lazy" decoding="async" />
             <p class="pr-muted">Vaults round up every purchase. You are $214 from the Lisbon trip fund.</p>
             <a class="pr-cta" href="#app" data-goto="overview">Back to overview</a>
           </div>

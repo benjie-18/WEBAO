@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
 
 // Demo microsite: 21 Degrés · fictional HVAC, Terrebonne QC.
 // The site IS a thermostat: dark control-panel UI, giant SVG temperature dial
@@ -16,9 +17,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>21 Degrés · CVAC Terrebonne · (450) 555-0176 · Consigne 21.5°</title>
-  <meta name="description" content="21 Degrés : CVAC de précision à Terrebonne. Thermopompes pour climats froids, fournaises, climatisation et thermostats intelligents — installés et calibrés pour maintenir votre maison à exactement 21 degrés." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="21-degres" locale="fr" title="21 Degrés · CVAC Terrebonne · (450) 555-0176 · Consigne 21.5°" description="21 Degrés : CVAC de précision à Terrebonne. Thermopompes pour climats froids, fournaises, climatisation et thermostats intelligents — installés et calibrés pour maintenir votre maison à exactement 21 degrés." ogImage="https://webao.ca/og-image.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet" />
@@ -158,7 +159,7 @@ const IMG = {
 
     <!-- MODULE 05: field unit -->
     <section class="dg-unit" aria-label="Unité de terrain">
-      <img src={IMG.tech} alt="Un technicien de 21 Degrés calibrant un système sur place" loading="lazy" />
+      <img src={IMG.tech} alt="Un technicien de 21 Degrés calibrant un système sur place" loading="lazy" decoding="async" />
       <div>
         <p class="dg-mod-label"><span class="dg-led dg-led-blue" aria-hidden="true"></span>MODULE 05 · UNITÉ DE TERRAIN</p>
         <h2 class="dg-h2">Des techniciens avec <span>des tablettes, pas des planchettes.</span></h2>
@@ -170,7 +171,7 @@ const IMG = {
           <li><span>FONDÉE</span>2011 · entreprise familiale</li>
         </ul>
       </div>
-      <img class="dg-unit-plant" src={IMG.plant} alt="Unités CVAC commerciales sur toit desservies par 21 Degrés" loading="lazy" />
+      <img class="dg-unit-plant" src={IMG.plant} alt="Unités CVAC commerciales sur toit desservies par 21 Degrés" loading="lazy" decoding="async" />
     </section>
 
     <!-- MODULE 06: dispatch -->

@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
 // Demo microsite: Maison Doré · fictional luxury renovation atelier, Westmount QC.
 ---
 <!DOCTYPE html>
@@ -7,9 +8,9 @@ import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="noindex" />
-  <title>Maison Doré — Atelier de rénovation de luxe · Westmount</title>
-  <meta name="description" content="Maison Doré, atelier de rénovation haut de gamme à Westmount. Marbre, laiton, boiseries : des intérieurs d'exception depuis 1987. Entreprise fictive de démonstration." />
+
+  <DemoSeo demoId="maison-dore" locale="fr" title="Maison Doré — Atelier de rénovation de luxe · Westmount" description="Maison Doré, atelier de rénovation haut de gamme à Westmount. Marbre, laiton, boiseries : des intérieurs d'exception depuis 1987. Entreprise fictive de démonstration." ogImage="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -233,7 +234,7 @@ import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
         <div class="dor-grid">
           <a class="dor-card" href="#dor-contact">
             <span class="dor-card-num" aria-hidden="true"><span>I</span></span>
-            <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80" alt="Salon art déco avec lustre en laiton et mobilier élégant" loading="lazy" />
+            <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80" alt="Salon art déco avec lustre en laiton et mobilier élégant" loading="lazy" decoding="async" />
             <div class="dor-card-body">
               <p class="dor-card-tag">Westmount · Salon</p>
               <h3>Résidence S.</h3>
@@ -242,7 +243,7 @@ import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
           </a>
           <a class="dor-card" href="#dor-contact">
             <span class="dor-card-num" aria-hidden="true"><span>II</span></span>
-            <img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1200&q=80" alt="Cuisine de luxe avec îlot en marbre et armoires sombres" loading="lazy" />
+            <img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1200&q=80" alt="Cuisine de luxe avec îlot en marbre et armoires sombres" loading="lazy" decoding="async" />
             <div class="dor-card-body">
               <p class="dor-card-tag">Outremont · Cuisine</p>
               <h3>Villa C.</h3>
@@ -251,7 +252,7 @@ import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
           </a>
           <a class="dor-card" href="#dor-contact">
             <span class="dor-card-num" aria-hidden="true"><span>III</span></span>
-            <img src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1200&q=80" alt="Salle de bain en marbre avec baignoire îlot et détails dorés" loading="lazy" />
+            <img src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1200&q=80" alt="Salle de bain en marbre avec baignoire îlot et détails dorés" loading="lazy" decoding="async" />
             <div class="dor-card-body">
               <p class="dor-card-tag">Westmount · Bain</p>
               <h3>Appartement H.</h3>
@@ -260,7 +261,7 @@ import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
           </a>
           <a class="dor-card" href="#dor-contact">
             <span class="dor-card-num" aria-hidden="true"><span>IV</span></span>
-            <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80" alt="Bibliothèque aux boiseries sombres et fauteuils en velours émeraude" loading="lazy" />
+            <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80" alt="Bibliothèque aux boiseries sombres et fauteuils en velours émeraude" loading="lazy" decoding="async" />
             <div class="dor-card-body">
               <p class="dor-card-tag">Ville-Marie · Bibliothèque</p>
               <h3>Bibliothèque P.</h3>
@@ -331,7 +332,7 @@ import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
       <div class="dor-wrap">
         <div class="dor-about-grid">
           <div class="dor-about-img">
-            <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80" alt="Intérieur raffiné rénové par l'atelier, tons chauds et mobilier élégant" loading="lazy" />
+            <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80" alt="Intérieur raffiné rénové par l'atelier, tons chauds et mobilier élégant" loading="lazy" decoding="async" />
           </div>
           <div class="dor-about-copy">
             <p class="dor-kicker">L'atelier</p>

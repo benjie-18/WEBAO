@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
 
 // Demo microsite: VHS Dreams, fictional synthwave record label, Montréal.
 // Standalone art direction. Chrome, neon, tape hiss. Not connected to the WEBAO theme system.
@@ -54,9 +55,9 @@ const TOUR = [
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VHS Dreams : Midnight Frequencies Vol. 07 · Étiquette synthwave</title>
-  <meta name="description" content="VHS Dreams Vol. 07 : Midnight Frequencies. Une cassette synthwave de l'étiquette la plus synth de Montréal. Appuie sur lecture." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="vhs-dreams" locale="fr" title="VHS Dreams : Midnight Frequencies Vol. 07 · Étiquette synthwave" description="VHS Dreams Vol. 07 : Midnight Frequencies. Une cassette synthwave de l'étiquette la plus synth de Montréal. Appuie sur lecture." ogImage="https://webao.ca/demos/vhs-dreams/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Yellowtail&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
@@ -83,7 +84,7 @@ const TOUR = [
         <h1 class="vd-h1">Midnight <span class="vd-script">Frequencies</span> <span class="vd-vol">Vol. 07</span></h1>
         <div class="vd-jcard">
           <figure class="vd-cover">
-            <img src={IMG.hero} alt="Pochette de Midnight Frequencies : une virée nocturne baignée de néons" loading="eager" fetchpriority="high" />
+            <img src={IMG.hero} alt="Pochette de Midnight Frequencies : une virée nocturne baignée de néons" loading="eager" fetchpriority="high" decoding="async" />
             <figcaption>Pochette · illustration : la 401 à 2 h du matin</figcaption>
           </figure>
           <div class="vd-cassette" id="vd-cassette" aria-hidden="true">
@@ -113,7 +114,7 @@ const TOUR = [
               <button class="vd-play" aria-label={"Écouter " + t.title + " par " + t.artist}><span aria-hidden="true">▶</span></button>
               <span class="vd-tnum" aria-hidden="true">{String(t.n).padStart(2, "0")}</span>
               {t.img
-                ? <img class="vd-tart" src={t.img} alt={t.imgAlt} loading="lazy" />
+                ? <img class="vd-tart" src={t.img} alt={t.imgAlt} loading="lazy" decoding="async" />
                 : <span class="vd-tart vd-tart-blank" aria-hidden="true">{t.title.charAt(0)}</span>}
               <div class="vd-tmeta">
                 <h3>{t.title}</h3>
@@ -164,7 +165,7 @@ const TOUR = [
             </ul>
           </div>
           <figure class="vd-crew">
-            <img src={IMG.artist} alt="Un artiste VHS Dreams en studio, baigné de néons" loading="lazy" />
+            <img src={IMG.artist} alt="Un artiste VHS Dreams en studio, baigné de néons" loading="lazy" decoding="async" />
             <figcaption>L'équipe au Studio 1984</figcaption>
           </figure>
           <div class="vd-side-col">
@@ -224,7 +225,7 @@ const TOUR = [
 
     <!-- TOUR -->
     <section class="vd-tour" id="tour">
-      <div class="vd-tour-bg" aria-hidden="true"><img src={IMG.tour} alt="" loading="lazy" /></div>
+      <div class="vd-tour-bg" aria-hidden="true"><img src={IMG.tour} alt="" loading="lazy" decoding="async" /></div>
       <div class="vd-wrap vd-tour-in">
         <h2 class="vd-h2">Nuits néon <span class="vd-script">sur la route</span></h2>
         <ul class="vd-tourlist">

@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
 
 // Démo : Nora Électrique · électricienne fictive, Laval QC.
 // Reconstruite comme un BON DE TRAVAIL. La page est le bon : talon avec
@@ -18,9 +19,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nora Électrique · Bon de travail #T-1047 · Électricienne à Laval</title>
-  <meta name="description" content="Nora Électrique : électricienne agréée à Laval. Remplissez un bon de travail : panneaux, dépannage, bornes de recharge, urgence 24/7. Devis écrits." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="nora" locale="fr" title="Nora Électrique · Bon de travail #T-1047 · Électricienne à Laval" description="Nora Électrique : électricienne agréée à Laval. Remplissez un bon de travail : panneaux, dépannage, bornes de recharge, urgence 24/7. Devis écrits." ogImage="https://webao.ca/demos/nora/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800;900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -89,7 +90,7 @@ const IMG = {
         </div>
         <figure class="tk-attach">
           <span class="tk-clip" aria-hidden="true"></span>
-          <img src={IMG.panel} alt="Un panneau 200 A installé par Nora Électrique" loading="lazy" />
+          <img src={IMG.panel} alt="Un panneau 200 A installé par Nora Électrique" loading="lazy" decoding="async" />
           <figcaption>Photo jointe · E-02, Fabreville : passage au 200 A, une journée, du début à la fin.</figcaption>
         </figure>
         <p class="tk-fineprint">Les prix sont écrits avant qu'on touche un fil et ne bougent plus, sauf si le travail change, et là on demande d'abord. Garantie de 5 ans sur la main-d'œuvre.</p>
@@ -107,12 +108,12 @@ const IMG = {
           <li><span class="tk-code">T-1039</span><span>Repentigny · prises mortes dans la cuisine, DDFT remplacé · <em>Nora B.</em></span><span class="tk-tag tk-tag-done">fini 08 h 12</span></li>
         </ul>
         <div class="tk-id">
-          <img src={IMG.about} alt="Nora, maître électricienne" loading="lazy" />
+          <img src={IMG.about} alt="Nora, maître électricienne" loading="lazy" decoding="async" />
           <div>
             <p class="tk-id-name">Nora B. <span>· maître électricienne</span></p>
             <p class="tk-id-note">15 ans de métier. La personne qui répond au téléphone est celle qui se présente. Photo de chantier, ce matin :</p>
           </div>
-          <img class="tk-id-site" src={IMG.hero} alt="Nora au travail sur un chantier" loading="lazy" />
+          <img class="tk-id-site" src={IMG.hero} alt="Nora au travail sur un chantier" loading="lazy" decoding="async" fetchpriority="high" />
         </div>
         <p class="tk-fineprint">Deux camionnettes sur la route, une technicienne en attente. Urgence? Appelez le <a href="tel:+14505550134">(450) 555-0134</a> et passez devant.</p>
       </section>

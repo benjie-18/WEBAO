@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Lune Fitness, fictional crossfit gym, Trois-Rivières.
 // Standalone art direction. After-dark neon. Not connected to the WEBAO theme system.
@@ -91,9 +92,9 @@ const TIERS = [
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lune Fitness : CrossFit à Trois-Rivières</title>
-  <meta name="description" content="Lune Fitness : le box de CrossFit nocturne de Trois-Rivières. Cours dès 5 h 30, prépa Hyrox, gym libre jusqu'à minuit. Première semaine gratuite." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="lune" locale="fr" title="Lune Fitness : CrossFit à Trois-Rivières" description="Lune Fitness : le box de CrossFit nocturne de Trois-Rivières. Cours dès 5 h 30, prépa Hyrox, gym libre jusqu'à minuit. Première semaine gratuite." ogImage="https://webao.ca/demos/lune/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -132,7 +133,7 @@ const TIERS = [
     <!-- THE PROGRAM -->
     <section class="lf-week" id="week" aria-label="Programme d'entraînement de la semaine">
       <div class="lf-band" aria-hidden="true">
-        <img src={IMG.hero} alt="" loading="eager" fetchpriority="high" />
+        <img src={IMG.hero} alt="" loading="eager" fetchpriority="high" decoding="async" />
       </div>
       <div class="lf-wrap lf-band-in">
         <p class="lf-eyebrow">SAISON 04 · CYCLE DE FORCE DE 8 SEMAINES · TROIS-RIVIÈRES</p>
@@ -148,7 +149,7 @@ const TIERS = [
                 <h2 class="lf-h2">{d.name} <span class="lf-volt">/ {d.focus}</span></h2>
                 <p class="lf-panel-meta">Coach {d.coach} · {d.dur} · Les portes ouvrent 30 min avant</p>
               </div>
-              {d.img && <img class="lf-panel-img" src={d.img} alt={d.imgAlt} loading="lazy" />}
+              {d.img && <img class="lf-panel-img" src={d.img} alt={d.imgAlt} loading="lazy" decoding="async" />}
             </div>
             <table class="lf-ledger">
               <caption class="lf-sr">Séance du {d.name} : {d.focus}</caption>
@@ -183,7 +184,7 @@ const TIERS = [
           {COACHES.map((c, i) => (
             <li class="lf-roster-row">
               <span class="lf-roster-n" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
-              <img src={c.img} alt={c.alt} loading="lazy" />
+              <img src={c.img} alt={c.alt} loading="lazy" decoding="async" />
               <div>
                 <h3>{c.name}</h3>
                 <p class="lf-roster-role">{c.role}</p>
@@ -219,7 +220,7 @@ const TIERS = [
 
     <!-- TRIAL -->
     <section class="lf-trial" id="trial">
-      <div class="lf-trial-bg" aria-hidden="true"><img src={IMG.gym} alt="" loading="lazy" /></div>
+      <div class="lf-trial-bg" aria-hidden="true"><img src={IMG.gym} alt="" loading="lazy" decoding="async" /></div>
       <div class="lf-wrap lf-trial-in">
         <div>
           <h2 class="lf-h2 lf-h2-dark">TA PREMIÈRE SEMAINE<br />EST POUR NOUS</h2>

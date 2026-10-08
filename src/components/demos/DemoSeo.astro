@@ -1,0 +1,82 @@
+---
+// Full <head> SEO block for the standalone demo microsites. The demo pages
+// are self-contained HTML documents (no BaseLayout), so this component owns
+// title, description, robots, canonical, hreflang, Open Graph, Twitter cards
+// and JSON-LD for them. It renders head-only — nothing on the page changes.
+//
+// Indexing policy: every demo in the public catalog is indexable (they are
+// the portfolio, they are in the sitemap and linked from the catalog).
+// Hidden demos (boba-club) keep noindex so they stay out of search results.
+import {
+  demoAlternatesForLocale,
+  demoBreadcrumb,
+  isHiddenDemo,
+  SITE_URL,
+} from "../../lib/demo-seo";
+
+interface Props {
+  demoId: string;
+  locale: "en" | "fr";
+  title: string;
+  description: string;
+  /** Absolute URL of the demo's lead image, used for og:image/twitter:image. */
+  ogImage: string;
+}
+
+const { demoId, locale, title, description, ogImage } = Astro.props as Props;
+
+const alternates = demoAlternatesForLocale(demoId, locale);
+const crumbs = demoBreadcrumb(demoId, locale);
+const shouldIndex = !isHiddenDemo(demoId);
+
+const ogLocale = locale === "fr" ? "fr_CA" : "en_CA";
+const ogLocaleAlternate = locale === "fr" ? "en_CA" : "fr_CA";
+const inLanguage = locale === "fr" ? "fr-CA" : "en-CA";
+
+// WebPage + embedded BreadcrumbList: gives search engines the page's place in
+// the site (WEBAO > Demos > <demo>) for rich-result breadcrumbs.
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description,
+  url: alternates.canonical,
+  inLanguage,
+  isPartOf: { "@type": "WebSite", name: "WEBAO", url: SITE_URL },
+  breadcrumb: {
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: crumbs.home, item: crumbs.homeUrl },
+      { "@type": "ListItem", position: 2, name: crumbs.catalog, item: crumbs.catalogUrl },
+      { "@type": "ListItem", position: 3, name: crumbs.name, item: alternates.canonical },
+    ],
+  },
+};
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+{
+  shouldIndex ? (
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+  ) : (
+    <meta name="robots" content="noindex, nofollow" />
+  )
+}
+<link rel="canonical" href={alternates.canonical} />
+<link rel="alternate" hreflang="en" href={alternates.en} />
+<link rel="alternate" hreflang="fr" href={alternates.fr} />
+<link rel="alternate" hreflang="x-default" href={alternates.xDefault} />
+<meta property="og:site_name" content="WEBAO" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={alternates.canonical} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:locale" content={ogLocale} />
+<meta property="og:locale:alternate" content={ogLocaleAlternate} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+<script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />

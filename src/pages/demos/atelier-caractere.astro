@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Atelier Caractère, fictional high-end type foundry, Montréal.
 // Standalone art direction. Luxury typography: ivory, ink, gold, enormous serif.
@@ -20,9 +21,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Atelier Caractère: Specimen Nº 24 | Fine Type Foundry, Montréal</title>
-  <meta name="description" content="Specimen Nº 24 from Atelier Caractère, fictional Montréal type foundry. Try the type tester, browse four families, read the colophon. Drawn by hand since 2011." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="atelier-caractere" locale="en" title="Atelier Caractère: Specimen Nº 24 | Fine Type Foundry, Montréal" description="Specimen Nº 24 from Atelier Caractère, fictional Montréal type foundry. Try the type tester, browse four families, read the colophon. Drawn by hand since 2011." ogImage="https://webao.ca/demos/atelier-caractere/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
@@ -157,15 +158,15 @@ const IMG = {
         <h2 class="ac-h2">Our letters, <em>out in the world.</em></h2>
         <div class="ac-plate-grid">
           <figure class="ac-plate">
-            <img src={IMG.editorial} alt="Type specimen posters for Baskerville, Sabon and Univers" loading="lazy" />
+            <img src={IMG.editorial} alt="Type specimen posters for Baskerville, Sabon and Univers" loading="lazy" decoding="async" />
             <figcaption><span>Plate 1 · Editorial</span>Magazine « Marge », set in Caractère Texte</figcaption>
           </figure>
           <figure class="ac-plate">
-            <img src={IMG.stationery} alt="Decorative alphabet in varied display styles" loading="lazy" />
+            <img src={IMG.stationery} alt="Decorative alphabet in varied display styles" loading="lazy" decoding="async" />
             <figcaption><span>Plate 2 · Stationery</span>Correspondence suite, Caractère Italique</figcaption>
           </figure>
           <figure class="ac-plate">
-            <img src={IMG.publishing} alt="Bold geometric alphabet specimen, Caractere Display" loading="lazy" />
+            <img src={IMG.publishing} alt="Bold geometric alphabet specimen, Caractere Display" loading="lazy" decoding="async" />
             <figcaption><span>Plate 3 · Publishing</span>Book jackets, Caractère Display</figcaption>
           </figure>
         </div>
@@ -211,7 +212,7 @@ const IMG = {
     <section class="ac-colophon" id="colophon">
       <div class="ac-wrap ac-col-in">
         <figure class="ac-col-img">
-          <img src={IMG.foundry} alt="Colorful letterpress wood type poster on the proofing wall" loading="lazy" />
+          <img src={IMG.foundry} alt="Colorful letterpress wood type poster on the proofing wall" loading="lazy" decoding="async" />
           <figcaption>The proofing wall, rue de l'Imprimerie.</figcaption>
         </figure>
         <div>

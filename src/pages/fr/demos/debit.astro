@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Débit Plomberie · fictional plumber, Brossard QC.
 // Concept: ENGINEERING BLUEPRINT. The site is a drainage schematic — deep
@@ -17,9 +18,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Débit Plomberie · Plomberie d'ingénierie à Brossard · (450) 555-0167</title>
-  <meta name="description" content="Débit Plomberie : plombier d'ingénierie à Brossard. Isolement de fuites, inspection caméra des drains, chauffe-eau, plomberie brute. Prix en fiche technique, preuves en journal d'essais." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="debit" locale="fr" title="Débit Plomberie · Plomberie d'ingénierie à Brossard · (450) 555-0167" description="Débit Plomberie : plombier d'ingénierie à Brossard. Isolement de fuites, inspection caméra des drains, chauffe-eau, plomberie brute. Prix en fiche technique, preuves en journal d'essais." ogImage="https://images.unsplash.com/photo-1585704032915-c3400ca199e7?q=80&w=1600&auto=format&fit=crop" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -56,7 +57,7 @@ const IMG = {
       </div>
     </div>
     <figure class="db-hero-fig">
-      <img src={IMG.hero} alt="Plombier travaillant sous un évier, outils disposés sur une grille de mesure" />
+      <img src={IMG.hero} alt="Plombier travaillant sous un évier, outils disposés sur une grille de mesure" decoding="async" fetchpriority="high" loading="eager" />
       <figcaption>FIG. 1 — VÉRIFICATION SUR LE TERRAIN, UNITÉ 4B, BROSSARD</figcaption>
       <svg class="db-hero-svg" viewBox="0 0 400 200" aria-hidden="true">
         <g stroke="#ffffff" stroke-width="3" fill="none" opacity="0.95">
@@ -199,7 +200,7 @@ const IMG = {
         </ul>
       </div>
       <figure class="db-firm-fig">
-        <img src={IMG.about} alt="Outils de plomberie rangés sur un établi" />
+        <img src={IMG.about} alt="Outils de plomberie rangés sur un établi" decoding="async" loading="lazy" />
         <figcaption>FIG. 2 — MAGASIN D'OUTILS, INVENTAIRE T3</figcaption>
       </figure>
     </div>

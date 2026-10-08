@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Papier Ciseaux, fictional artisan stationery brand, Quebec City.
 // Standalone art direction: scrapbook collage. Not connected to the WEBAO theme system.
@@ -21,9 +22,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Papier Ciseaux: Slow Stationery for Fast Lives</title>
-  <meta name="description" content="Papier Ciseaux is a Quebec City stationery atelier. Hand-sewn journals, original washi tape, refillable pens, and weekend workshops." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="papier-ciseaux" locale="en" title="Papier Ciseaux: Slow Stationery for Fast Lives" description="Papier Ciseaux is a Quebec City stationery atelier. Hand-sewn journals, original washi tape, refillable pens, and weekend workshops." ogImage="https://webao.ca/demos/papier-ciseaux/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Karla:ital,wght@0,400;0,600;0,800;1,400&display=swap" rel="stylesheet" />
@@ -52,17 +53,17 @@ const IMG = {
       <p class="pc-lede">Hand-sewn journals, washi tape drawn in the atelier, pens that outlive trends. Made slowly in Quebec City since 2019.</p>
 
       <figure class="pc-photo pc-p1">
-        <img src={IMG.pen} alt="Open journal layered with vintage stickers, stamps and handwritten notes" loading="eager" fetchpriority="high" />
+        <img src={IMG.pen} alt="Open journal layered with vintage stickers, stamps and handwritten notes" loading="eager" fetchpriority="high" decoding="async" />
         <span class="pc-washi" aria-hidden="true"></span>
         <figcaption>today's desk</figcaption>
       </figure>
       <figure class="pc-photo pc-p2">
-        <img src={IMG.desk} alt="Travel journal spread with ticket stubs, stamps and washi tape rolls" loading="lazy" />
+        <img src={IMG.desk} alt="Travel journal spread with ticket stubs, stamps and washi tape rolls" loading="lazy" decoding="async" />
         <span class="pc-washi pc-washi-b" aria-hidden="true"></span>
         <figcaption>the travel journal</figcaption>
       </figure>
       <figure class="pc-photo pc-p3">
-        <img src={IMG.craft} alt="Floral vintage writing paper from the atelier collection" loading="lazy" />
+        <img src={IMG.craft} alt="Floral vintage writing paper from the atelier collection" loading="lazy" decoding="async" />
         <span class="pc-washi" aria-hidden="true"></span>
         <figcaption>from the paper shelves</figcaption>
       </figure>
@@ -80,7 +81,7 @@ const IMG = {
               <span class="pc-item"><strong>Journals &amp; notebooks</strong>: lay-flat sewn bindings, 160 fountain-pen-friendly pages, kraft, linen or marbled covers.</span>
               <span class="pc-price">from $24</span>
             </label>
-            <img src={IMG.journals} alt="Handmade journal with a map-paper cover, tied with ribbon" loading="lazy" />
+            <img src={IMG.journals} alt="Handmade journal with a map-paper cover, tied with ribbon" loading="lazy" decoding="async" />
           </li>
           <li>
             <label>
@@ -88,7 +89,7 @@ const IMG = {
               <span class="pc-item"><strong>Washi tape</strong>: twenty original patterns drawn in the atelier, printed in Kyoto on real rice paper.</span>
               <span class="pc-price">from $6</span>
             </label>
-            <img src={IMG.washi} alt="Rolls of colourful washi tape with scissors" loading="lazy" />
+            <img src={IMG.washi} alt="Rolls of colourful washi tape with scissors" loading="lazy" decoding="async" />
           </li>
           <li>
             <label>
@@ -96,7 +97,7 @@ const IMG = {
               <span class="pc-item"><strong>Pens &amp; pencils</strong>: refillable brass pens, cedar pencils and our beloved glass dip pen.</span>
               <span class="pc-price">from $18</span>
             </label>
-            <img src={IMG.pens} alt="A case full of colourful pens and pencils" loading="lazy" />
+            <img src={IMG.pens} alt="A case full of colourful pens and pencils" loading="lazy" decoding="async" />
           </li>
         </ul>
         <p class="pc-list-total" role="status" aria-live="polite">0 items ticked · <a href="#zine">send us the list</a></p>

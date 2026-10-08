@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
 
 // Démo : Verte · épicerie zéro déchet, Montréal QC.
 // Reconstruite comme un ÉTAL DE MARCHÉ : l'en-tête EST le tableau des
@@ -22,9 +23,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Verte · Épicerie zéro déchet · Montréal</title>
-  <meta name="description" content="Verte : un étal de marché zéro déchet sur King Ouest. La récolte de la semaine, des produits en vrac, apportez vos pots." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="verte" locale="fr" title="Verte · Épicerie zéro déchet · Montréal" description="Verte : un étal de marché zéro déchet sur King Ouest. La récolte de la semaine, des produits en vrac, apportez vos pots." ogImage="https://webao.ca/demos/verte/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Caveat:wght@600;700&family=Karla:wght@400;500;700&display=swap" rel="stylesheet" />
@@ -72,31 +73,31 @@ const IMG = {
         </div>
         <div class="vt-grid">
           <article class="vt-item vt-item-tall">
-            <img src={IMG.tomatoes} alt="Tomates anciennes dans des caisses de bois" loading="lazy" />
+            <img src={IMG.tomatoes} alt="Tomates anciennes dans des caisses de bois" loading="lazy" decoding="async" />
             <div class="vt-tag"><span class="vt-tag-name">Tomates anciennes</span><span class="vt-tag-price">4,90 $ / kg</span></div>
           </article>
           <article class="vt-item">
-            <img src={IMG.bread} alt="Pains au levain sur une étagère de boulangerie" loading="lazy" />
+            <img src={IMG.bread} alt="Pains au levain sur une étagère de boulangerie" loading="lazy" decoding="async" />
             <div class="vt-tag"><span class="vt-tag-name">Pain au levain du vendredi</span><span class="vt-tag-price">7,50 $</span></div>
           </article>
           <article class="vt-item">
-            <img src={IMG.greens} alt="Légumes-feuilles frais" loading="lazy" />
+            <img src={IMG.greens} alt="Légumes-feuilles frais" loading="lazy" decoding="async" />
             <div class="vt-tag"><span class="vt-tag-name">Bette à carde arc-en-ciel</span><span class="vt-tag-price">3,20 $ / botte</span></div>
           </article>
           <article class="vt-item vt-item-wide">
-            <img src={IMG.hero} alt="Produits du marché étalés sur le comptoir" loading="lazy" />
+            <img src={IMG.hero} alt="Produits du marché étalés sur le comptoir" loading="lazy" decoding="async" fetchpriority="high" />
             <div class="vt-tag"><span class="vt-tag-name">La récolte du matin</span><span class="vt-tag-price">au poids</span></div>
           </article>
           <article class="vt-item">
-            <img src={IMG.fruit} alt="Fruits de saison" loading="lazy" />
+            <img src={IMG.fruit} alt="Fruits de saison" loading="lazy" decoding="async" />
             <div class="vt-tag"><span class="vt-tag-name">Pommes McIntosh</span><span class="vt-tag-price">3,80 $ / kg</span></div>
           </article>
           <article class="vt-item vt-item-tall">
-            <img src={IMG.salad} alt="Salade verte fraîche" loading="lazy" />
+            <img src={IMG.salad} alt="Salade verte fraîche" loading="lazy" decoding="async" />
             <div class="vt-tag"><span class="vt-tag-name">Mesclun, coupé aujourd'hui</span><span class="vt-tag-price">5,40 $ / sac</span></div>
           </article>
           <article class="vt-item vt-item-wide">
-            <img src={IMG.prep} alt="Légumes préparés dans la cuisine à l'arrière" loading="lazy" />
+            <img src={IMG.prep} alt="Légumes préparés dans la cuisine à l'arrière" loading="lazy" decoding="async" />
             <div class="vt-tag"><span class="vt-tag-name">Soupe du jour, en pot</span><span class="vt-tag-price">8,00 $ / pot</span></div>
           </article>
         </div>

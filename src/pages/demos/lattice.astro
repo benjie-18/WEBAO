@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Lattice · fictional modular productivity app, Toronto.
 // Rebuilt as ONE GIANT BENTO GRID: no sections at all. Nav, headline,
@@ -19,9 +20,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lattice · Every tool. One grid.</title>
-  <meta name="description" content="Lattice demo: a modular productivity app presented as one giant bento grid. Fictional product." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="lattice" locale="en" title="Lattice · Every tool. One grid." description="Lattice demo: a modular productivity app presented as one giant bento grid. Fictional product." ogImage="https://webao.ca/demos/lattice/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -70,7 +71,7 @@ const IMG = {
 
     <!-- image cell: desk -->
     <figure class="bx-cell bx-imgcell">
-      <img src={IMG.desk} alt="A calm desk with a laptop running Lattice" loading="lazy" />
+      <img src={IMG.desk} alt="A calm desk with a laptop running Lattice" loading="lazy" decoding="async" />
     </figure>
 
     <!-- hours saved cell -->
@@ -99,7 +100,7 @@ const IMG = {
 
     <!-- image cell: planner, wide -->
     <figure class="bx-cell bx-imgcell bx-wide">
-      <img src={IMG.planner} alt="A planner page filled with a Lattice weekly layout" loading="lazy" />
+      <img src={IMG.planner} alt="A planner page filled with a Lattice weekly layout" loading="lazy" decoding="async" />
     </figure>
 
     <!-- modules: four small cells -->
@@ -167,7 +168,7 @@ const IMG = {
 
     <!-- image cell: team -->
     <figure class="bx-cell bx-imgcell">
-      <img src={IMG.team} alt="A product team around a table planning on a whiteboard" loading="lazy" />
+      <img src={IMG.team} alt="A product team around a table planning on a whiteboard" loading="lazy" decoding="async" />
     </figure>
 
     <!-- contact form cell -->
@@ -183,12 +184,12 @@ const IMG = {
 
     <!-- image cell: notes -->
     <figure class="bx-cell bx-imgcell">
-      <img src={IMG.notes} alt="Handwritten notes next to a Lattice board" loading="lazy" />
+      <img src={IMG.notes} alt="Handwritten notes next to a Lattice board" loading="lazy" decoding="async" />
     </figure>
 
     <!-- image cell: office, wide-ish -->
     <figure class="bx-cell bx-imgcell bx-wide2">
-      <img src={IMG.office} alt="A bright studio office with a shared work table" loading="lazy" />
+      <img src={IMG.office} alt="A bright studio office with a shared work table" loading="lazy" decoding="async" />
     </figure>
 
     <!-- footer cell -->

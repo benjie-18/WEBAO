@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Encre Brute, fictional tattoo studio, Montréal QC.
 // Rebuilt as a FLASH WALL: the homepage IS the flash sheet. Pick a design, claim it.
@@ -17,9 +18,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Encre Brute: Tattoo Studio in Montréal</title>
-  <meta name="description" content="Encre Brute: a raw tattoo studio in Montréal. Fine line, blackwork, cover-ups and flash. Four resident artists. Walk-ins welcome." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="encre-brute" locale="en" title="Encre Brute: Tattoo Studio in Montréal" description="Encre Brute: a raw tattoo studio in Montréal. Fine line, blackwork, cover-ups and flash. Four resident artists. Walk-ins welcome." ogImage="https://webao.ca/demos/encre-brute/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet" />
@@ -142,23 +143,23 @@ const IMG = {
         <h2 class="eb-h2">RESIDENTS.</h2>
         <div class="eb-resident-list">
           <article class="eb-resident">
-            <img src={IMG.a1} alt="Marc L., blackwork tattoo artist" loading="lazy" />
+            <img src={IMG.a1} alt="Marc L., blackwork tattoo artist" loading="lazy" decoding="async" />
             <div><h3>MARC L.</h3><p>BLACKWORK / GEOMETRIC</p><p class="eb-avail">Booking Nov 2026</p></div>
             <span class="eb-status eb-status-open">OPEN</span>
           </article>
           <article class="eb-resident">
-            <img src={IMG.a2} alt="Léa R., fine line tattoo artist" loading="lazy" />
+            <img src={IMG.a2} alt="Léa R., fine line tattoo artist" loading="lazy" decoding="async" />
             <div><h3>LÉA R.</h3><p>FINE LINE / BOTANICAL</p><p class="eb-avail">Booking Oct 2026</p></div>
             <span class="eb-status eb-status-low">2 SPOTS</span>
           </article>
           <article class="eb-resident">
-            <img src={IMG.a3} alt="Jo P., neo-traditional tattoo artist" loading="lazy" />
+            <img src={IMG.a3} alt="Jo P., neo-traditional tattoo artist" loading="lazy" decoding="async" />
             <div><h3>JO P.</h3><p>NEO-TRADITIONAL / COLOR</p><p class="eb-avail">Booking Dec 2026</p></div>
             <span class="eb-status eb-status-wait">WAITLIST</span>
           </article>
         </div>
         <figure class="eb-shop">
-          <img src={IMG.hero} alt="Tattoo artist at work in the Encre Brute studio" loading="lazy" />
+          <img src={IMG.hero} alt="Tattoo artist at work in the Encre Brute studio" loading="lazy" decoding="async" fetchpriority="high" />
           <figcaption>The shop: four stations, one coffee machine, zero small talk about your star sign.</figcaption>
         </figure>
       </div>

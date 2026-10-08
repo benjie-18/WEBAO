@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Hexline Systems, fictional neural interface security startup.
 // Rebuilt as a TERMINAL. No marketing hero: the page opens with a boot
@@ -19,9 +20,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>hexline://systems · neural interface security</title>
-  <meta name="description" content="Hexline Systems hardens neural interfaces and connected infrastructure. Type help to begin." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="hexline" locale="en" title="hexline://systems · neural interface security" description="Hexline Systems hardens neural interfaces and connected infrastructure. Type help to begin." ogImage="https://webao.ca/demos/hexline/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
@@ -79,7 +80,7 @@ const IMG = {
         <p class="tm-dim">· behavioral threat modeling · auto-isolation of hostile nodes · DDoS absorption to 2.4 Tbps</p>
         <figure class="tm-feed">
           <span class="tm-rec" aria-hidden="true"></span>
-          <img src={IMG.lock} alt="Surveillance feed: encrypted perimeter lock" loading="lazy" />
+          <img src={IMG.lock} alt="Surveillance feed: encrypted perimeter lock" loading="lazy" decoding="async" />
           <figcaption>feed 01 · perimeter node</figcaption>
         </figure>
         <br />
@@ -88,7 +89,7 @@ const IMG = {
         <p class="tm-dim">· post-quantum key exchange · signal integrity attestation · 4ms anomaly response</p>
         <figure class="tm-feed">
           <span class="tm-rec" aria-hidden="true"></span>
-          <img src={IMG.servers} alt="Surveillance feed: neural mesh servers" loading="lazy" />
+          <img src={IMG.servers} alt="Surveillance feed: neural mesh servers" loading="lazy" decoding="async" />
           <figcaption>feed 02 · mesh core</figcaption>
         </figure>
         <br />
@@ -97,7 +98,7 @@ const IMG = {
         <p class="tm-dim">· deception grid · attribution tracing · automated retaliation within legal bounds</p>
         <figure class="tm-feed">
           <span class="tm-rec" aria-hidden="true"></span>
-          <img src={IMG.ops} alt="Surveillance feed: security operations analyst" loading="lazy" />
+          <img src={IMG.ops} alt="Surveillance feed: security operations analyst" loading="lazy" decoding="async" />
           <figcaption>feed 03 · ops desk</figcaption>
         </figure>
         <br />
@@ -106,7 +107,7 @@ const IMG = {
         <p class="tm-dim">· hardware-bound identity keys · granular access policies</p>
         <figure class="tm-feed">
           <span class="tm-rec" aria-hidden="true"></span>
-          <img src={IMG.neon} alt="Surveillance feed: network visualization" loading="lazy" />
+          <img src={IMG.neon} alt="Surveillance feed: network visualization" loading="lazy" decoding="async" />
           <figcaption>feed 04 · identity graph</figcaption>
         </figure>
       </div>
@@ -125,7 +126,7 @@ const IMG = {
         <br />
         <figure class="tm-feed tm-feed-wide">
           <span class="tm-rec" aria-hidden="true"></span>
-          <img src={IMG.hero} alt="Surveillance feed: Hexline operations floor" loading="lazy" />
+          <img src={IMG.hero} alt="Surveillance feed: Hexline operations floor" loading="lazy" decoding="async" fetchpriority="high" />
           <figcaption>feed 00 · operations floor, Montréal</figcaption>
         </figure>
         <br />

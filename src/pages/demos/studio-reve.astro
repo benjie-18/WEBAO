@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Studio Reve, fictional surreal brand-experience agency, Montreal.
 // Standalone art direction: surrealist night dream. Not connected to the WEBAO theme system.
@@ -19,9 +20,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Studio Rêve: Surreal Brand Experiences in Montreal</title>
-  <meta name="description" content="Studio Rêve stages impossible brand experiences in Montreal. Pop-ups, installations and launches that feel like walking through a dream." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="studio-reve" locale="en" title="Studio Rêve: Surreal Brand Experiences in Montreal" description="Studio Rêve stages impossible brand experiences in Montreal. Pop-ups, installations and launches that feel like walking through a dream." ogImage="https://webao.ca/demos/studio-reve/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -49,7 +50,7 @@ const IMG = {
       <p class="rv-whisper rv-f1">you are falling asleep<span>.</span></p>
 
       <figure class="rv-frag rv-f2" data-depth="0.05">
-        <img src={IMG.sky} alt="A night sky split by impossible light" loading="eager" fetchpriority="high" />
+        <img src={IMG.sky} alt="A night sky split by impossible light" loading="eager" fetchpriority="high" decoding="async" />
         <figcaption>dream nº 1 · the sky, unzipped</figcaption>
       </figure>
 
@@ -58,7 +59,7 @@ const IMG = {
       <p class="rv-whisper rv-f4">Studio Rêve stages pop-ups, installations and launches that ignore physics and logic<span>.</span> Your brand, remembered like a beautiful strange dream<span>.</span></p>
 
       <figure class="rv-frag rv-f5" data-depth="0.11">
-        <img src={IMG.nebula} alt="Impossible spiral staircase rising through storm clouds" loading="lazy" />
+        <img src={IMG.nebula} alt="Impossible spiral staircase rising through storm clouds" loading="lazy" decoding="async" />
         <figcaption>for Maison Céleste · <strong>The Drowning Gallery.</strong> Guests walked through a corridor of floating scent orbs while the walls breathed nebula light. Nobody bought perfume. Everybody remembered it.</figcaption>
       </figure>
 
@@ -67,14 +68,14 @@ const IMG = {
       </blockquote>
 
       <figure class="rv-frag rv-f7" data-depth="0.08">
-        <img src={IMG.clouds} alt="Ancient stone stairway dissolving into mist" loading="lazy" />
+        <img src={IMG.clouds} alt="Ancient stone stairway dissolving into mist" loading="lazy" decoding="async" />
         <figcaption>for Orage Audio · <strong>The Sky Below.</strong> A listening room where the ceiling was a storm and the floor was glass. Three hundred guests lay down to hear an album. None of them checked their phones.</figcaption>
       </figure>
 
       <p class="rv-whisper rv-f8">deeper<span>.</span> keep falling<span>.</span></p>
 
       <figure class="rv-frag rv-f9" data-depth="0.13">
-        <img src={IMG.mountains} alt="Wooden stairway floating among the clouds" loading="lazy" />
+        <img src={IMG.mountains} alt="Wooden stairway floating among the clouds" loading="lazy" decoding="async" />
         <figcaption>for Nordalpine · <strong>Summit at Midnight.</strong> We rebuilt a mountaintop inside a warehouse, stars included. Visitors summited in evening wear and drank hot chocolate at 2,800 imaginary metres.</figcaption>
       </figure>
 
@@ -95,7 +96,7 @@ const IMG = {
 
     <!-- waking: the commission -->
     <section class="rv-wake" id="wake" aria-label="Commission a dream">
-      <div class="rv-stars-bg" aria-hidden="true"><img src={IMG.stars} alt="" loading="lazy" /></div>
+      <div class="rv-stars-bg" aria-hidden="true"><img src={IMG.stars} alt="" loading="lazy" decoding="async" /></div>
       <div class="rv-wake-in">
         <h2 class="rv-h2">Tell us your <em>strangest</em> idea</h2>
         <p class="rv-copy">The weirder the better. We read every brief out loud at midnight, which is when the good decisions happen. Expect a reply within two sunrises.</p>

@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
 
 // Site de démonstration : Papier Ciseaux, marque fictive de papeterie artisanale, Québec.
 // Direction artistique autonome : collage scrapbook. Non relié au système de thème WEBAO.
@@ -21,9 +22,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Papier Ciseaux : papeterie artisanale à Québec</title>
-  <meta name="description" content="Papier Ciseaux est un atelier de papeterie à Québec. Carnets cousus main, washi tape original, stylos rechargeables et ateliers de fin de semaine." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="papier-ciseaux" locale="fr" title="Papier Ciseaux : papeterie artisanale à Québec" description="Papier Ciseaux est un atelier de papeterie à Québec. Carnets cousus main, washi tape original, stylos rechargeables et ateliers de fin de semaine." ogImage="https://webao.ca/demos/papier-ciseaux/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Karla:ital,wght@0,400;0,600;0,800;1,400&display=swap" rel="stylesheet" />
@@ -52,17 +53,17 @@ const IMG = {
       <p class="pc-lede">Carnets cousus main, washi tape dessiné à l'atelier, stylos qui survivent aux modes. Fabriqué lentement à Québec depuis 2019.</p>
 
       <figure class="pc-photo pc-p1">
-        <img src={IMG.pen} alt="Carnet ouvert recouvert d'autocollants vintage, de tampons et de notes manuscrites" loading="eager" fetchpriority="high" />
+        <img src={IMG.pen} alt="Carnet ouvert recouvert d'autocollants vintage, de tampons et de notes manuscrites" loading="eager" fetchpriority="high" decoding="async" />
         <span class="pc-washi" aria-hidden="true"></span>
         <figcaption>le bureau d'aujourd'hui</figcaption>
       </figure>
       <figure class="pc-photo pc-p2">
-        <img src={IMG.desk} alt="Double page de carnet de voyage avec billets, tampons et rouleaux de washi tape" loading="lazy" />
+        <img src={IMG.desk} alt="Double page de carnet de voyage avec billets, tampons et rouleaux de washi tape" loading="lazy" decoding="async" />
         <span class="pc-washi pc-washi-b" aria-hidden="true"></span>
         <figcaption>le carnet de voyage</figcaption>
       </figure>
       <figure class="pc-photo pc-p3">
-        <img src={IMG.craft} alt="Papier à lettres vintage floral de la collection de l'atelier" loading="lazy" />
+        <img src={IMG.craft} alt="Papier à lettres vintage floral de la collection de l'atelier" loading="lazy" decoding="async" />
         <span class="pc-washi" aria-hidden="true"></span>
         <figcaption>des étagères à papier</figcaption>
       </figure>
@@ -80,7 +81,7 @@ const IMG = {
               <span class="pc-item"><strong>Carnets et cahiers</strong>: reliure cousue à plat, 160 pages de papier ami des stylos plume, couvertures en kraft, en lin ou en papier marbré.</span>
               <span class="pc-price">dès 24 $</span>
             </label>
-            <img src={IMG.journals} alt="Carnet fait main avec couverture en papier carte, attaché d'un ruban" loading="lazy" />
+            <img src={IMG.journals} alt="Carnet fait main avec couverture en papier carte, attaché d'un ruban" loading="lazy" decoding="async" />
           </li>
           <li>
             <label>
@@ -88,7 +89,7 @@ const IMG = {
               <span class="pc-item"><strong>Washi tape</strong>: vingt motifs originaux dessinés à l'atelier, imprimés à Kyoto sur vrai papier de riz.</span>
               <span class="pc-price">dès 6 $</span>
             </label>
-            <img src={IMG.washi} alt="Rouleaux de washi tape colorés avec des ciseaux" loading="lazy" />
+            <img src={IMG.washi} alt="Rouleaux de washi tape colorés avec des ciseaux" loading="lazy" decoding="async" />
           </li>
           <li>
             <label>
@@ -96,7 +97,7 @@ const IMG = {
               <span class="pc-item"><strong>Stylos et crayons</strong>: stylos rechargeables en laiton, crayons en cèdre et notre stylo plume en verre adoré.</span>
               <span class="pc-price">dès 12 $</span>
             </label>
-            <img src={IMG.pens} alt="Une trousse pleine de stylos et crayons colorés" loading="lazy" />
+            <img src={IMG.pens} alt="Une trousse pleine de stylos et crayons colorés" loading="lazy" decoding="async" />
           </li>
         </ul>
         <p class="pc-list-total" role="status" aria-live="polite">0 article coché · <a href="#zine">envoyez-nous la liste</a></p>

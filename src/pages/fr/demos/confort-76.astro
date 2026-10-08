@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Confort 76 · fictional HVAC contractor, Drummondville QC.
 // Rebuilt as a 1970s APPLIANCE MAGAZINE AD. Harvest gold, avocado green,
@@ -19,9 +20,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Confort 76 · La fournaise de confiance de votre père! · (819) 555-0138 · CVAC à Drummondville</title>
-  <meta name="description" content="Confort 76 : chauffage et climatisation de confiance à Drummondville depuis 1976. Fournaises, thermopompes, mise au point de climatiseurs. Soumissions gratuites. Découpez le coupon pour 76 $ de rabais!" />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="confort-76" locale="fr" title="Confort 76 · La fournaise de confiance de votre père! · (819) 555-0138 · CVAC à Drummondville" description="Confort 76 : chauffage et climatisation de confiance à Drummondville depuis 1976. Fournaises, thermopompes, mise au point de climatiseurs. Soumissions gratuites. Découpez le coupon pour 76 $ de rabais!" ogImage="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=1600&auto=format&fit=crop" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Shrikhand&family=Bungee&family=Karla:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
@@ -55,7 +56,7 @@ const IMG = {
           </div>
         </div>
         <figure class="cf7-herofig">
-          <img src={IMG.hero} alt="Un salon chaud et confortable chauffé par Confort 76" loading="eager" />
+          <img src={IMG.hero} alt="Un salon chaud et confortable chauffé par Confort 76" loading="eager" decoding="async" fetchpriority="high" />
           <figcaption>Vrai confort. 1976 simulé.</figcaption>
         </figure>
       </section>
@@ -114,8 +115,8 @@ const IMG = {
           </blockquote>
         </div>
         <figure class="cf7-proof">
-          <img src={IMG.tech} alt="Un technicien de Confort 76 au travail" loading="lazy" />
-          <img src={IMG.home} alt="Une maison de Drummondville gardée confortable par Confort 76" loading="lazy" />
+          <img src={IMG.tech} alt="Un technicien de Confort 76 au travail" loading="lazy" decoding="async" />
+          <img src={IMG.home} alt="Une maison de Drummondville gardée confortable par Confort 76" loading="lazy" decoding="async" />
         </figure>
       </section>
 

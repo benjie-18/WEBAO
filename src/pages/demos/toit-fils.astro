@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Toit & Fils, fictional roofing company, Québec City QC.
 // Rebuilt as a PROJECT LOGBOOK: chronological journal entries, no hero.
@@ -19,9 +20,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Toit &amp; Fils: Roofers in Québec City Since 1962</title>
-  <meta name="description" content="Toit & Fils: Québec City roofers since 1962. Three generations of roofers. Asphalt shingles, metal roofing, flat roofs. 25-year workmanship guarantee." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="toit-fils" locale="en" title="Toit & Fils: Roofers in Québec City Since 1962" description="Toit & Fils: Québec City roofers since 1962. Three generations of roofers. Asphalt shingles, metal roofing, flat roofs. 25-year workmanship guarantee." ogImage="https://webao.ca/demos/toit-fils/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;600;700;800&display=swap" rel="stylesheet" />
@@ -54,7 +55,7 @@ const IMG = {
           <div class="tf-entry-date"><span>2026</span><span>Jun</span></div>
           <div class="tf-entry-body">
             <p class="tf-entry-addr">Montcalm <i>·</i> architectural shingles</p>
-            <figure><img src={IMG.hero} alt="Roofer installing shingles on a residential roof" loading="eager" fetchpriority="high" /></figure>
+            <figure><img src={IMG.hero} alt="Roofer installing shingles on a residential roof" loading="eager" fetchpriority="high" decoding="async" /></figure>
             <p class="tf-entry-note">In progress. Tear-off revealed two layers of old shingles and one very tired underlayment. Antoine's crew is on day three; Henri already found a flashing detail he wants redone.</p>
           </div>
         </article>
@@ -63,7 +64,7 @@ const IMG = {
           <div class="tf-entry-date"><span>2025</span><span>Sep</span></div>
           <div class="tf-entry-body">
             <p class="tf-entry-addr">Sainte-Foy <i>·</i> architectural shingles</p>
-            <figure><img src={IMG.house} alt="A classic Québec home with a new dark shingle roof" loading="lazy" /></figure>
+            <figure><img src={IMG.house} alt="A classic Québec home with a new dark shingle roof" loading="lazy" decoding="async" /></figure>
             <p class="tf-entry-note">Full tear-off, six nails per shingle, ice-and-water shield at every eave. The homeowner asked if we could save the old copper flashing. We could, and did.</p>
           </div>
         </article>
@@ -72,7 +73,7 @@ const IMG = {
           <div class="tf-entry-date"><span>2024</span><span>Aug</span></div>
           <div class="tf-entry-body">
             <p class="tf-entry-addr">Cap-Rouge <i>·</i> standing seam metal</p>
-            <figure><img src={IMG.home} alt="A suburban house with standing seam metal roof" loading="lazy" /></figure>
+            <figure><img src={IMG.home} alt="A suburban house with standing seam metal roof" loading="lazy" decoding="async" /></figure>
             <p class="tf-entry-note">Standing seam steel, 50-year roof on a house that will see it through. The neighbours stopped to watch the seamer work. It happens.</p>
           </div>
         </article>
@@ -81,7 +82,7 @@ const IMG = {
           <div class="tf-entry-date"><span>2024</span><span>May</span></div>
           <div class="tf-entry-body">
             <p class="tf-entry-addr">Limoilou <i>·</i> elastomeric membrane</p>
-            <figure><img src={IMG.suburb} alt="A row of homes with fresh flat membrane roofing" loading="lazy" /></figure>
+            <figure><img src={IMG.suburb} alt="A row of homes with fresh flat membrane roofing" loading="lazy" decoding="async" /></figure>
             <p class="tf-entry-note">Flat roof on a plex, welded seams, drains that actually drain. The tenant on the third floor sent us a photo of the first heavy rain: dry as a bone.</p>
           </div>
         </article>
@@ -90,7 +91,7 @@ const IMG = {
           <div class="tf-entry-date"><span>1962</span><span>—</span></div>
           <div class="tf-entry-body">
             <p class="tf-entry-addr">Limoilou <i>·</i> where it started</p>
-            <figure><img src={IMG.craft} alt="Roofer laying clay tiles on a residential roof" loading="lazy" /></figure>
+            <figure><img src={IMG.craft} alt="Roofer laying clay tiles on a residential roof" loading="lazy" decoding="async" /></figure>
             <p class="tf-entry-note">Henri, 19, nailing shingles with his uncle's crew. The nailing pattern hasn't changed since. Henri, 83, still inspects every tenth roof. He finds things.</p>
           </div>
         </article>

@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Lueur Électrique · fictional lighting-design electricians, Gatineau QC.
 // Warm Scandinavian hygge: oat backgrounds, amber lamplight gradients, Fraunces serif.
@@ -17,9 +18,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lueur Électrique · Lighting designers · Electrician in Gatineau · (819) 555-0182</title>
-  <meta name="description" content="Lueur Électrique: Gatineau lighting designers and electricians. Layered lighting plans, dimming scenes, warm retrofits. We design light, not just wiring." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="lueur" locale="en" title="Lueur Électrique · Lighting designers · Electrician in Gatineau · (819) 555-0182" description="Lueur Électrique: Gatineau lighting designers and electricians. Layered lighting plans, dimming scenes, warm retrofits. We design light, not just wiring." ogImage="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1600&auto=format&fit=crop" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -56,7 +57,7 @@ const IMG = {
         </dl>
       </div>
       <figure class="lu-hero-fig">
-        <img src={IMG.hero} alt="A Gatineau living room layered with warm lamplight designed by Lueur" fetchpriority="high" />
+        <img src={IMG.hero} alt="A Gatineau living room layered with warm lamplight designed by Lueur" fetchpriority="high" decoding="async" loading="eager" />
         <figcaption class="lu-hero-card"><strong>Scene · “February evening”</strong><span>2700K · dimmed to 40%</span></figcaption>
       </figure>
     </section>
@@ -109,11 +110,11 @@ const IMG = {
       <h2 class="lu-h2">Evenings, <em>improved.</em></h2>
       <div class="lu-homes-grid">
         <figure class="lu-home">
-          <img src={IMG.living} alt="Warm layered lighting in a renovated Gatineau living room" loading="lazy" />
+          <img src={IMG.living} alt="Warm layered lighting in a renovated Gatineau living room" loading="lazy" decoding="async" />
           <figcaption><strong>Plateau · whole-home relight</strong><span>23 fixtures · 4 scenes · “It feels like a chalet now.”</span></figcaption>
         </figure>
         <figure class="lu-home">
-          <img src={IMG.evening} alt="A single warm lamp glowing in a darkened room" loading="lazy" />
+          <img src={IMG.evening} alt="A single warm lamp glowing in a darkened room" loading="lazy" decoding="async" />
           <figcaption><strong>Hull · reading corner</strong><span>One lamp, one dimmer, done right.</span></figcaption>
         </figure>
       </div>
@@ -135,7 +136,7 @@ const IMG = {
 
     <!-- STUDIO: about -->
     <section class="lu-studio" id="studio">
-      <img class="lu-studio-img" src={IMG.lamp} alt="A warm Edison bulb glowing against a dark background" loading="lazy" />
+      <img class="lu-studio-img" src={IMG.lamp} alt="A warm Edison bulb glowing against a dark background" loading="lazy" decoding="async" />
       <div class="lu-studio-in">
         <p class="lu-eyebrow">The studio</p>
         <h2 class="lu-h2">Electricians with a <em>designer's eye.</em></h2>

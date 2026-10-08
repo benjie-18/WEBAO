@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
 
 // Démo : Atelier Caractère, fonderie typographique fictive haut de gamme, Montréal.
 // Direction artistique autonome. Typographie de luxe : ivoire, encre, or, serif énorme.
@@ -20,9 +21,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Atelier Caractère : Spécimen Nº 24 | Fonderie typographique, Montréal</title>
-  <meta name="description" content="Spécimen Nº 24 de l'Atelier Caractère, fonderie typographique fictive de Montréal. Essayez le testeur, parcourez quatre familles, lisez le colophon. Dessiné à la main depuis 2011." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="atelier-caractere" locale="fr" title="Atelier Caractère : Spécimen Nº 24 | Fonderie typographique, Montréal" description="Spécimen Nº 24 de l'Atelier Caractère, fonderie typographique fictive de Montréal. Essayez le testeur, parcourez quatre familles, lisez le colophon. Dessiné à la main depuis 2011." ogImage="https://webao.ca/demos/atelier-caractere/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
@@ -157,15 +158,15 @@ const IMG = {
         <h2 class="ac-h2">Nos lettres, <em>dans le monde.</em></h2>
         <div class="ac-plate-grid">
           <figure class="ac-plate">
-            <img src={IMG.editorial} alt="Affiches de spécimens pour Baskerville, Sabon et Univers" loading="lazy" />
+            <img src={IMG.editorial} alt="Affiches de spécimens pour Baskerville, Sabon et Univers" loading="lazy" decoding="async" />
             <figcaption><span>Planche 1 · Éditorial</span>Magazine « Marge », composé en Caractère Texte</figcaption>
           </figure>
           <figure class="ac-plate">
-            <img src={IMG.stationery} alt="Alphabet décoratif en styles variés" loading="lazy" />
+            <img src={IMG.stationery} alt="Alphabet décoratif en styles variés" loading="lazy" decoding="async" />
             <figcaption><span>Planche 2 · Papeterie</span>Suite de correspondance, Caractère Italique</figcaption>
           </figure>
           <figure class="ac-plate">
-            <img src={IMG.publishing} alt="Spécimen d'alphabet géométrique gras, Caractère Display" loading="lazy" />
+            <img src={IMG.publishing} alt="Spécimen d'alphabet géométrique gras, Caractère Display" loading="lazy" decoding="async" />
             <figcaption><span>Planche 3 · Édition</span>Jaquettes de livres, Caractère Display</figcaption>
           </figure>
         </div>
@@ -211,7 +212,7 @@ const IMG = {
     <section class="ac-colophon" id="colophon">
       <div class="ac-wrap ac-col-in">
         <figure class="ac-col-img">
-          <img src={IMG.foundry} alt="Affiche en caractères de bois colorés sur le mur d'épreuves" loading="lazy" />
+          <img src={IMG.foundry} alt="Affiche en caractères de bois colorés sur le mur d'épreuves" loading="lazy" decoding="async" />
           <figcaption>Le mur d'épreuves, rue de l'Imprimerie.</figcaption>
         </figure>
         <div>

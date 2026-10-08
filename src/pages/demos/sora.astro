@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Clinique Sora, fictional physiotherapy and wellness clinic, Brossard QC.
 // Rebuilt as an APPOINTMENT BOOK: schedule-first. Day tabs, time slots, practitioner roster,
@@ -27,9 +28,9 @@ const SLOTS: Record<string, { t: string; taken?: boolean }[]> = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Clinique Sora: Physiotherapy and Wellness in Brossard</title>
-  <meta name="description" content="Clinique Sora: Brossard physiotherapy and wellness clinic. Physio, massage, postural rehab. Book your assessment online in under a minute." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="sora" locale="en" title="Clinique Sora: Physiotherapy and Wellness in Brossard" description="Clinique Sora: Brossard physiotherapy and wellness clinic. Physio, massage, postural rehab. Book your assessment online in under a minute." ogImage="https://webao.ca/demos/sora/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
@@ -86,17 +87,17 @@ const SLOTS: Record<string, { t: string; taken?: boolean }[]> = {
         <h2 class="sr-h2">Who will see you.</h2>
         <ul class="sr-roster-list">
           <li>
-            <img src={IMG.team1} alt="Dr. Amélie Roy, physiotherapist" loading="lazy" />
+            <img src={IMG.team1} alt="Dr. Amélie Roy, physiotherapist" loading="lazy" decoding="async" />
             <div><h3>Dr. Amélie Roy, PT</h3><p>Physiotherapy · Founder. Twelve years treating backs, knees, and weekend warriors.</p></div>
             <span class="sr-next">Next: Mon 11:00</span>
           </li>
           <li>
-            <img src={IMG.team2} alt="Jean-Philippe Côté, massage therapist" loading="lazy" />
+            <img src={IMG.team2} alt="Jean-Philippe Côté, massage therapist" loading="lazy" decoding="async" />
             <div><h3>Jean-Philippe Côté</h3><p>Massage therapy. Deep tissue and sports massage with a gentle touch.</p></div>
             <span class="sr-next">Next: Tue 15:00</span>
           </li>
           <li>
-            <img src={IMG.team3} alt="Sara Nguyen, kinesiologist" loading="lazy" />
+            <img src={IMG.team3} alt="Sara Nguyen, kinesiologist" loading="lazy" decoding="async" />
             <div><h3>Sara Nguyen, Kin.</h3><p>Kinesiology · Rehab. Home programs and return-to-sport plans.</p></div>
             <span class="sr-next">Next: Wed 9:00</span>
           </li>
@@ -118,7 +119,7 @@ const SLOTS: Record<string, { t: string; taken?: boolean }[]> = {
           <li><div><h3>Vestibular rehab</h3><p>Dizziness and vertigo treated with precise repositioning and balance work.</p></div><span>45 min · $95</span></li>
         </ul>
         <figure class="sr-menu-media">
-          <img src={IMG.physio} alt="A physiotherapist guiding a patient's shoulder movement" loading="lazy" />
+          <img src={IMG.physio} alt="A physiotherapist guiding a patient's shoulder movement" loading="lazy" decoding="async" />
         </figure>
       </div>
     </section>
@@ -131,7 +132,7 @@ const SLOTS: Record<string, { t: string; taken?: boolean }[]> = {
         <p><strong>We assess thoroughly.</strong> Movement screening and hands-on testing to find the real driver, not just the symptom.</p>
         <p><strong>We treat and teach.</strong> Manual therapy in the clinic, simple exercises at home, and a plan with a finish line.</p>
         <figure class="sr-how-media">
-          <img src={IMG.massage} alt="A calm massage therapy session in soft light" loading="lazy" />
+          <img src={IMG.massage} alt="A calm massage therapy session in soft light" loading="lazy" decoding="async" />
         </figure>
       </div>
     </section>

@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Boba Club, fictional bubble tea shop, Québec City.
 // Standalone art direction. Y2K chrome gloss. Not connected to the WEBAO theme system.
@@ -18,9 +19,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Boba Club: Bubble Tea in Québec City</title>
-  <meta name="description" content="Boba Club: the happiest bubble tea spot in Québec City. Taro clouds, brown sugar blaze, matcha glitter. Two locations, endless pearls." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="boba-club" locale="en" title="Boba Club: Bubble Tea in Québec City" description="Boba Club: the happiest bubble tea spot in Québec City. Taro clouds, brown sugar blaze, matcha glitter. Two locations, endless pearls." ogImage="https://images.unsplash.com/photo-1558857563-b371033873b8?q=80&w=1200&auto=format&fit=crop" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&display=swap" rel="stylesheet" />
@@ -68,7 +69,7 @@ const IMG = {
       </div>
       <figure class="bc-hero-media">
         <div class="bc-arch">
-          <img src={IMG.hero} alt="Iced bubble tea cup with pearls and a wide straw" loading="eager" fetchpriority="high" />
+          <img src={IMG.hero} alt="Iced bubble tea cup with pearls and a wide straw" loading="eager" fetchpriority="high" decoding="async" />
         </div>
         <span class="bc-sticker bc-sticker-1" aria-hidden="true">100%<br />CHEwy</span>
         <span class="bc-sticker bc-sticker-2" aria-hidden="true">new!<br />✦ glitter<br />topping</span>
@@ -83,7 +84,7 @@ const IMG = {
         <p class="bc-sub">All drinks come iced with pearls included. Swap pearls for popping boba, jelly, or pudding, always free.</p>
         <div class="bc-menu">
           <article class="bc-card bc-card-pink">
-            <img src={IMG.m1} alt="Taro cloud bubble tea with a creamy top" loading="lazy" />
+            <img src={IMG.m1} alt="Taro cloud bubble tea with a creamy top" loading="lazy" decoding="async" />
             <div class="bc-card-in">
               <h3>Taro Cloud</h3>
               <p>Roasted taro whipped into milk, crowned with salted cream foam.</p>
@@ -91,7 +92,7 @@ const IMG = {
             </div>
           </article>
           <article class="bc-card bc-card-blue">
-            <img src={IMG.m2} alt="Brown sugar blaze milk tea with tiger stripes" loading="lazy" />
+            <img src={IMG.m2} alt="Brown sugar blaze milk tea with tiger stripes" loading="lazy" decoding="async" />
             <div class="bc-card-in">
               <h3>Brown Sugar Blaze</h3>
               <p>Tiger-stripe brown sugar pearls, torched top, fresh cold milk.</p>
@@ -99,7 +100,7 @@ const IMG = {
             </div>
           </article>
           <article class="bc-card bc-card-green">
-            <img src={IMG.m3} alt="Matcha glitter iced latte with pearls" loading="lazy" />
+            <img src={IMG.m3} alt="Matcha glitter iced latte with pearls" loading="lazy" decoding="async" />
             <div class="bc-card-in">
               <h3>Matcha Glitter</h3>
               <p>Ceremonial-grade matcha whisked to order, oat milk, edible shimmer.</p>
@@ -107,7 +108,7 @@ const IMG = {
             </div>
           </article>
           <article class="bc-card bc-card-lav">
-            <img src={IMG.m4} alt="Strawberry static fruit tea with pearls" loading="lazy" />
+            <img src={IMG.m4} alt="Strawberry static fruit tea with pearls" loading="lazy" decoding="async" />
             <div class="bc-card-in">
               <h3>Strawberry Static</h3>
               <p>Real strawberries crushed over jasmine green tea, extra fizzy pearls.</p>
@@ -167,11 +168,11 @@ const IMG = {
         <h2 class="bc-h2">Sip, snap, repeat</h2>
       </div>
       <div class="bc-strip">
-        <figure><img src={IMG.m2} alt="Close-up of a swirled brown sugar boba drink" loading="lazy" /><figcaption>@boba.club</figcaption></figure>
-        <figure><img src={IMG.m1} alt="Taro bubble tea held up against a pastel wall" loading="lazy" /><figcaption>@boba.club</figcaption></figure>
-        <figure><img src={IMG.g1} alt="Dessert-style boba drink with whipped topping" loading="lazy" /><figcaption>@boba.club</figcaption></figure>
-        <figure><img src={IMG.m4} alt="Pink strawberry boba drink with a wide straw" loading="lazy" /><figcaption>@boba.club</figcaption></figure>
-        <figure><img src={IMG.m3} alt="Green matcha boba drink with ice" loading="lazy" /><figcaption>@boba.club</figcaption></figure>
+        <figure><img src={IMG.m2} alt="Close-up of a swirled brown sugar boba drink" loading="lazy" decoding="async" /><figcaption>@boba.club</figcaption></figure>
+        <figure><img src={IMG.m1} alt="Taro bubble tea held up against a pastel wall" loading="lazy" decoding="async" /><figcaption>@boba.club</figcaption></figure>
+        <figure><img src={IMG.g1} alt="Dessert-style boba drink with whipped topping" loading="lazy" decoding="async" /><figcaption>@boba.club</figcaption></figure>
+        <figure><img src={IMG.m4} alt="Pink strawberry boba drink with a wide straw" loading="lazy" decoding="async" /><figcaption>@boba.club</figcaption></figure>
+        <figure><img src={IMG.m3} alt="Green matcha boba drink with ice" loading="lazy" decoding="async" /><figcaption>@boba.club</figcaption></figure>
       </div>
     </section>
 

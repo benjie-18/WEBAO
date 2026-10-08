@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Atelier Nord · premium auto studio, Brossard QC.
 // Rebuilt as a GARAGE BAY LOG: no hero. The page opens on the latest
@@ -18,9 +19,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Atelier Nord · Bay log · Brossard</title>
-  <meta name="description" content="Atelier Nord bay log: real work orders, honest pricing and a shop you can read before you book. Brossard, QC." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="atelier-nord" locale="en" title="Atelier Nord · Bay log · Brossard" description="Atelier Nord bay log: real work orders, honest pricing and a shop you can read before you book. Brossard, QC." ogImage="https://webao.ca/demos/atelier-nord/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -65,11 +66,11 @@ const IMG = {
         <p class="an-ticket-note">Full paint decon, two-stage machine polish, panel-by-panel photo documentation, then a 5-year ceramic. Owner picked it up Saturday and stopped twice on the way home to look at it. That happens a lot.</p>
         <figure class="an-beforeafter">
           <div class="an-ba">
-            <img src={IMG.garage} alt="The 911 on arrival, paint dull under shop lights" loading="eager" />
+            <img src={IMG.garage} alt="The 911 on arrival, paint dull under shop lights" loading="eager" decoding="async" />
             <figcaption class="an-mono">Before · as dropped off</figcaption>
           </div>
           <div class="an-ba">
-            <img src={IMG.hero} alt="The 911 after polishing, paint deep and reflective" loading="eager" />
+            <img src={IMG.hero} alt="The 911 after polishing, paint deep and reflective" loading="eager" decoding="async" fetchpriority="high" />
             <figcaption class="an-mono">After · 34.5 hours later</figcaption>
           </div>
         </figure>
@@ -89,25 +90,25 @@ const IMG = {
         </div>
         <a class="an-row" role="row" href="#order">
           <span class="an-mono an-date">Oct 2</span><span class="an-mono an-wo">#2480</span>
-          <span class="an-veh"><img src={IMG.engine} alt="" loading="lazy" />Audi RS6 Avant</span>
+          <span class="an-veh"><img src={IMG.engine} alt="" loading="lazy" decoding="async" />Audi RS6 Avant</span>
           <span class="an-work">Full diagnostic, intermittent misfire. Coil packs 2 and 5 replaced, road test clean.</span>
           <span class="an-mono an-tech">J.R.</span><span class="an-mono an-total">$1,240</span>
         </a>
         <a class="an-row" role="row" href="#order">
           <span class="an-mono an-date">Oct 1</span><span class="an-mono an-wo">#2479</span>
-          <span class="an-veh"><img src={IMG.garage} alt="" loading="lazy" />BMW M4 Competition</span>
+          <span class="an-veh"><img src={IMG.garage} alt="" loading="lazy" decoding="async" />BMW M4 Competition</span>
           <span class="an-work">Pre-purchase inspection, 140 points. Two paint blends found, buyer walked away informed.</span>
           <span class="an-mono an-tech">M.L.</span><span class="an-mono an-total">$380</span>
         </a>
         <a class="an-row" role="row" href="#order">
           <span class="an-mono an-date">Sep 30</span><span class="an-mono an-wo">#2478</span>
-          <span class="an-veh"><img src={IMG.detail} alt="" loading="lazy" />Mercedes-AMG GT</span>
+          <span class="an-veh"><img src={IMG.detail} alt="" loading="lazy" decoding="async" />Mercedes-AMG GT</span>
           <span class="an-work">Interior reset plus paint decon and sealant. Alcantara wheel brought back from the dead.</span>
           <span class="an-mono an-tech">J.R.</span><span class="an-mono an-total">$1,650</span>
         </a>
         <a class="an-row" role="row" href="#order">
           <span class="an-mono an-date">Sep 27</span><span class="an-mono an-wo">#2477</span>
-          <span class="an-veh"><img src={IMG.hero} alt="" loading="lazy" />Tesla Model 3</span>
+          <span class="an-veh"><img src={IMG.hero} alt="" loading="lazy" decoding="async" fetchpriority="high" />Tesla Model 3</span>
           <span class="an-work">Performance alignment, brake service, cabin filter. In and out same day.</span>
           <span class="an-mono an-tech">M.L.</span><span class="an-mono an-total">$520</span>
         </a>

@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Mira Cantine · fictional wood-fired restaurant, Old Montreal.
 // Rebuilt MENU-FIRST. The menu is the homepage: it opens directly on tonight's
@@ -20,9 +21,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mira Cantine · Tonight's menu · Old Montreal</title>
-  <meta name="description" content="Mira Cantine: tonight's menu. Wood-fired small plates, natural wine, Old Montreal. Tuesday to Sunday. Reservations recommended." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="mira" locale="en" title="Mira Cantine · Tonight's menu · Old Montreal" description="Mira Cantine: tonight's menu. Wood-fired small plates, natural wine, Old Montreal. Tuesday to Sunday. Reservations recommended." ogImage="https://webao.ca/demos/mira/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -83,7 +84,7 @@ const IMG = {
         </aside>
 
         <figure class="mn-plate">
-          <img src={IMG.hero} alt="Tonight's plate at Mira Cantine" loading="eager" fetchpriority="high" />
+          <img src={IMG.hero} alt="Tonight's plate at Mira Cantine" loading="eager" fetchpriority="high" decoding="async" />
           <figcaption>Tonight's plate, most nights</figcaption>
         </figure>
       </div>
@@ -91,16 +92,16 @@ const IMG = {
 
     <!-- fire interlude -->
     <section class="mn-fire" aria-label="The wood oven">
-      <img src={IMG.fire} alt="" aria-hidden="true" loading="lazy" />
+      <img src={IMG.fire} alt="" aria-hidden="true" loading="lazy" decoding="async" />
       <p>One oven. Oak and maple. <em>Lit at noon, every day.</em></p>
     </section>
 
     <!-- the room: three small plates -->
     <section class="mn-room" id="room">
       <div class="mn-room-in">
-        <figure><img src={IMG.table} alt="A table spread of small plates" loading="lazy" /><figcaption>To share</figcaption></figure>
-        <figure><img src={IMG.dish} alt="A seasonal plate at Mira Cantine" loading="lazy" /><figcaption>From tonight's menu</figcaption></figure>
-        <figure><img src={IMG.oven} alt="Flames inside the wood oven" loading="lazy" /><figcaption>The oven, always lit</figcaption></figure>
+        <figure><img src={IMG.table} alt="A table spread of small plates" loading="lazy" decoding="async" /><figcaption>To share</figcaption></figure>
+        <figure><img src={IMG.dish} alt="A seasonal plate at Mira Cantine" loading="lazy" decoding="async" /><figcaption>From tonight's menu</figcaption></figure>
+        <figure><img src={IMG.oven} alt="Flames inside the wood oven" loading="lazy" decoding="async" /><figcaption>The oven, always lit</figcaption></figure>
       </div>
     </section>
 
@@ -108,7 +109,7 @@ const IMG = {
     <section class="mn-visit" id="visit">
       <div class="mn-visit-in">
         <div class="mn-hours">
-          <img src={IMG.interior} alt="The dining room at Mira Cantine, glowing amber" loading="lazy" />
+          <img src={IMG.interior} alt="The dining room at Mira Cantine, glowing amber" loading="lazy" decoding="async" />
           <h2>Hours &amp; address</h2>
           <dl>
             <div><dt>Tue to Thu</dt><dd>5:30pm – 10pm</dd></div>

@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Boisé Paysage, fictional landscaping atelier, Gatineau QC.
 // Standalone art direction. Deep forest greens, cream, elegant serif.
@@ -61,9 +62,9 @@ const SEASONS = [
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Boisé Paysage: a year in the garden · Gatineau</title>
-  <meta name="description" content="Boisé Paysage: a landscaping atelier in Gatineau, working season by season. Spring planting, summer tending, autumn put-to-bed, winter planning." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="boise" locale="en" title="Boisé Paysage: a year in the garden · Gatineau" description="Boisé Paysage: a landscaping atelier in Gatineau, working season by season. Spring planting, summer tending, autumn put-to-bed, winter planning." ogImage="https://webao.ca/demos/boise/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
@@ -106,7 +107,7 @@ const SEASONS = [
           </header>
           <div class="bs-season-grid">
             <figure class="bs-season-photo">
-              <img src={s.img} alt={s.imgAlt} loading="lazy" />
+              <img src={s.img} alt={s.imgAlt} loading="lazy" decoding="async" />
               <figcaption>{s.caption}</figcaption>
             </figure>
             <div class="bs-season-cols">
@@ -131,7 +132,7 @@ const SEASONS = [
 
     <!-- BEGIN -->
     <section class="bs-begin" id="begin">
-      <div class="bs-begin-bg" aria-hidden="true"><img src={IMG.hero} alt="" loading="lazy" /></div>
+      <div class="bs-begin-bg" aria-hidden="true"><img src={IMG.hero} alt="" loading="lazy" decoding="async" fetchpriority="high" /></div>
       <div class="bs-wrap bs-begin-in">
         <div class="bs-begin-copy">
           <p class="bs-kicker bs-kicker-light">Begin</p>
@@ -139,7 +140,7 @@ const SEASONS = [
           <p>Site visits are free within Gatineau, and we answer every message within two business days. Every project starts with a walk: we look at your light, your soil, your drainage, and the way you actually live outside.</p>
           <div class="bs-gardens">
             <figure>
-              <img src={IMG.yard} alt="The Fern Walk, a shade garden in Aylmer" loading="lazy" />
+              <img src={IMG.yard} alt="The Fern Walk, a shade garden in Aylmer" loading="lazy" decoding="async" />
               <figcaption>The Fern Walk · Aylmer</figcaption>
             </figure>
           </div>

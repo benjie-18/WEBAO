@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Voltige Électrique · fictional electrician, Trois-Rivières QC.
 // Concept: HIGH-VOLTAGE INDUSTRIAL. Near-black charcoal, hazard yellow with
@@ -17,9 +18,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Voltige Électrique · 24/7 emergency electrician · (819) 555-0177 · Trois-Rivières</title>
-  <meta name="description" content="Voltige Électrique: Trois-Rivières industrial-grade electrician. Panel upgrades to 400A, troubleshooting, EV chargers, commercial wiring. Licensed, insured, RBQ. 24/7 dispatch." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="voltige" locale="en" title="Voltige Électrique · 24/7 emergency electrician · (819) 555-0177 · Trois-Rivières" description="Voltige Électrique: Trois-Rivières industrial-grade electrician. Panel upgrades to 400A, troubleshooting, EV chargers, commercial wiring. Licensed, insured, RBQ. 24/7 dispatch." ogImage="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?q=80&w=1600&auto=format&fit=crop" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Archivo+Narrow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -51,7 +52,7 @@ const IMG = {
         <p class="vg-promise"><span class="vg-live" aria-hidden="true"></span>TRUCKS ON THE ROAD NOW · AVG. RESPONSE 47 MIN</p>
       </div>
       <figure class="vg-hero-fig">
-        <img src={IMG.hero} alt="Electrician wiring a breaker panel" />
+        <img src={IMG.hero} alt="Electrician wiring a breaker panel" decoding="async" fetchpriority="high" loading="eager" />
         <figcaption>PANEL SWAP · 200A · RUE DES FORGES</figcaption>
       </figure>
     </div>
@@ -155,7 +156,7 @@ const IMG = {
         </ul>
       </div>
       <figure class="vg-crew-fig">
-        <img src={IMG.crew} alt="High-voltage power lines against a dusk sky" />
+        <img src={IMG.crew} alt="High-voltage power lines against a dusk sky" decoding="async" loading="lazy" />
         <figcaption>GRID WORK · MAURICIE CORRIDOR</figcaption>
       </figure>
     </div>

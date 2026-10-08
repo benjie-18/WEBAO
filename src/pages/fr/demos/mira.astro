@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
 
 // Démo : Mira Cantine · cantine fictive au feu de bois, Vieux-Montréal.
 // Reconstruite MENU D'ABORD. Le menu est la page d'accueil : il s'ouvre
@@ -21,9 +22,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mira Cantine · Le menu du soir · Vieux-Montréal</title>
-  <meta name="description" content="Mira Cantine : le menu du soir. Petites assiettes au feu de bois, vins nature, Vieux-Montréal. Du mardi au dimanche. Réservations recommandées." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="mira" locale="fr" title="Mira Cantine · Le menu du soir · Vieux-Montréal" description="Mira Cantine : le menu du soir. Petites assiettes au feu de bois, vins nature, Vieux-Montréal. Du mardi au dimanche. Réservations recommandées." ogImage="https://webao.ca/demos/mira/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -84,7 +85,7 @@ const IMG = {
         </aside>
 
         <figure class="mn-plate">
-          <img src={IMG.hero} alt="L'assiette du soir chez Mira Cantine" loading="eager" fetchpriority="high" />
+          <img src={IMG.hero} alt="L'assiette du soir chez Mira Cantine" loading="eager" fetchpriority="high" decoding="async" />
           <figcaption>L'assiette du soir, la plupart des soirs</figcaption>
         </figure>
       </div>
@@ -92,16 +93,16 @@ const IMG = {
 
     <!-- interlude de feu -->
     <section class="mn-fire" aria-label="Le four à bois">
-      <img src={IMG.fire} alt="" aria-hidden="true" loading="lazy" />
+      <img src={IMG.fire} alt="" aria-hidden="true" loading="lazy" decoding="async" />
       <p>Un four. Chêne et érable. <em>Allumé à midi, chaque jour.</em></p>
     </section>
 
     <!-- la salle : trois petites images -->
     <section class="mn-room" id="room">
       <div class="mn-room-in">
-        <figure><img src={IMG.table} alt="Une table de petites assiettes à partager" loading="lazy" /><figcaption>À partager</figcaption></figure>
-        <figure><img src={IMG.dish} alt="Une assiette de saison chez Mira Cantine" loading="lazy" /><figcaption>Au menu ce soir</figcaption></figure>
-        <figure><img src={IMG.oven} alt="Les flammes dans le four à bois" loading="lazy" /><figcaption>Le four, toujours allumé</figcaption></figure>
+        <figure><img src={IMG.table} alt="Une table de petites assiettes à partager" loading="lazy" decoding="async" /><figcaption>À partager</figcaption></figure>
+        <figure><img src={IMG.dish} alt="Une assiette de saison chez Mira Cantine" loading="lazy" decoding="async" /><figcaption>Au menu ce soir</figcaption></figure>
+        <figure><img src={IMG.oven} alt="Les flammes dans le four à bois" loading="lazy" decoding="async" /><figcaption>Le four, toujours allumé</figcaption></figure>
       </div>
     </section>
 
@@ -109,7 +110,7 @@ const IMG = {
     <section class="mn-visit" id="visit">
       <div class="mn-visit-in">
         <div class="mn-hours">
-          <img src={IMG.interior} alt="La salle de Mira Cantine, couleur ambre" loading="lazy" />
+          <img src={IMG.interior} alt="La salle de Mira Cantine, couleur ambre" loading="lazy" decoding="async" />
           <h2>Heures et adresse</h2>
           <dl>
             <div><dt>Mar. au jeu.</dt><dd>17 h 30 – 22 h</dd></div>

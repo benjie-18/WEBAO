@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Bec Fin Plomberie · fictional plumber, Sherbrooke QC.
 // Concept: 1950s PASTEL BATHROOM SHOWROOM. Mint, blush pink and cream with
@@ -19,9 +20,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bec Fin Plomberie · Sherbrooke's pastel bathroom studio · (819) 555-0142</title>
-  <meta name="description" content="Bec Fin Plomberie: Sherbrooke's cheerful bathroom design-and-plumbing studio. Renovations, fixtures, repairs — with a satisfaction guarantee and a spotless clean-up promise." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="bec-fin" locale="en" title="Bec Fin Plomberie · Sherbrooke's pastel bathroom studio · (819) 555-0142" description="Bec Fin Plomberie: Sherbrooke's cheerful bathroom design-and-plumbing studio. Renovations, fixtures, repairs — with a satisfaction guarantee and a spotless clean-up promise." ogImage="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=1600&auto=format&fit=crop" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Fredoka:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -52,7 +53,7 @@ const IMG = {
       </div>
     </div>
     <figure class="bf-hero-fig">
-      <img src={IMG.hero} alt="Bright pastel bathroom with a round mirror and mint walls" />
+      <img src={IMG.hero} alt="Bright pastel bathroom with a round mirror and mint walls" decoding="async" fetchpriority="high" loading="eager" />
       <span class="bf-burst" aria-hidden="true">WOW!</span>
     </figure>
   </section>
@@ -66,15 +67,15 @@ const IMG = {
     </div>
     <div class="bf-cards">
       <figure class="bf-card bf-card-mint">
-        <img src={IMG.g1} alt="Mint-tiled bathroom with a vintage-style tub" />
+        <img src={IMG.g1} alt="Mint-tiled bathroom with a vintage-style tub" decoding="async" loading="lazy" />
         <figcaption><strong>The Mint Condition</strong><span>Rue Wellington · full remodel</span></figcaption>
       </figure>
       <figure class="bf-card bf-card-blush">
-        <img src={IMG.g2} alt="Blush pink bathroom with a white vanity" />
+        <img src={IMG.g2} alt="Blush pink bathroom with a white vanity" decoding="async" loading="lazy" />
         <figcaption><strong>The Blush Hour</strong><span>Rue King Ouest · fixture refresh</span></figcaption>
       </figure>
       <figure class="bf-card bf-card-cream">
-        <img src={IMG.g3} alt="Cream bathroom with patterned floor tiles" />
+        <img src={IMG.g3} alt="Cream bathroom with patterned floor tiles" decoding="async" loading="lazy" />
         <figcaption><strong>The Cream Dream</strong><span>Secteur Lennoxville · guest bath</span></figcaption>
       </figure>
     </div>

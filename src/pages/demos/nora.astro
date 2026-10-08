@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Nora Électrique · fictional electrician, Laval QC.
 // Rebuilt as a WORK-ORDER TICKET. The page is the ticket: stub header with
@@ -18,9 +19,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nora Électrique · Work order #T-1047 · Electrician in Laval</title>
-  <meta name="description" content="Nora Électrique: licensed electrician in Laval. File a work order: panel upgrades, troubleshooting, EV chargers, 24/7 emergency. Written quotes." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="nora" locale="en" title="Nora Électrique · Work order #T-1047 · Electrician in Laval" description="Nora Électrique: licensed electrician in Laval. File a work order: panel upgrades, troubleshooting, EV chargers, 24/7 emergency. Written quotes." ogImage="https://webao.ca/demos/nora/01.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800;900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -89,7 +90,7 @@ const IMG = {
         </div>
         <figure class="tk-attach">
           <span class="tk-clip" aria-hidden="true"></span>
-          <img src={IMG.panel} alt="A 200A panel installed by Nora Électrique" loading="lazy" />
+          <img src={IMG.panel} alt="A 200A panel installed by Nora Électrique" loading="lazy" decoding="async" />
           <figcaption>Photo attached · E-02, Fabreville: 100A to 200A, one day, start to finish.</figcaption>
         </figure>
         <p class="tk-fineprint">Prices are written before we touch a wire and do not move unless the job does, and then we ask first. 5-year warranty on labour.</p>
@@ -107,12 +108,12 @@ const IMG = {
           <li><span class="tk-code">T-1039</span><span>Repentigny · dead kitchen outlets, GFCI replaced · <em>Nora B.</em></span><span class="tk-tag tk-tag-done">done 08:12</span></li>
         </ul>
         <div class="tk-id">
-          <img src={IMG.about} alt="Nora, master electrician" loading="lazy" />
+          <img src={IMG.about} alt="Nora, master electrician" loading="lazy" decoding="async" />
           <div>
             <p class="tk-id-name">Nora B. <span>· master electrician</span></p>
             <p class="tk-id-note">15 years on the tools. The person who answers the phone is the person who shows up. On-site photo, this morning:</p>
           </div>
-          <img class="tk-id-site" src={IMG.hero} alt="Nora at work on a job site" loading="lazy" />
+          <img class="tk-id-site" src={IMG.hero} alt="Nora at work on a job site" loading="lazy" decoding="async" fetchpriority="high" />
         </div>
         <p class="tk-fineprint">Two vans out, one tech on standby. Emergency? Call <a href="tel:+14505550134">(450) 555-0134</a> and jump the queue.</p>
       </section>

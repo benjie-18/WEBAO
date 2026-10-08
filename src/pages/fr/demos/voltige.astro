@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Voltige Électrique · fictional electrician, Trois-Rivières QC.
 // Concept: HIGH-VOLTAGE INDUSTRIAL. Near-black charcoal, hazard yellow with
@@ -17,9 +18,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Voltige Électrique · Électricien d'urgence 24/7 · (819) 555-0177 · Trois-Rivières</title>
-  <meta name="description" content="Voltige Électrique : électricien de calibre industriel à Trois-Rivières. Mise à niveau de panneaux jusqu'à 400 A, dépannage, bornes de recharge, câblage commercial. Licencié, assuré, RBQ. Répartition 24/7." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="voltige" locale="fr" title="Voltige Électrique · Électricien d'urgence 24/7 · (819) 555-0177 · Trois-Rivières" description="Voltige Électrique : électricien de calibre industriel à Trois-Rivières. Mise à niveau de panneaux jusqu'à 400 A, dépannage, bornes de recharge, câblage commercial. Licencié, assuré, RBQ. Répartition 24/7." ogImage="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?q=80&w=1600&auto=format&fit=crop" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Archivo+Narrow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -51,7 +52,7 @@ const IMG = {
         <p class="vg-promise"><span class="vg-live" aria-hidden="true"></span>CAMIONS SUR LA ROUTE MAINTENANT · RÉPONSE MOYENNE 47 MIN</p>
       </div>
       <figure class="vg-hero-fig">
-        <img src={IMG.hero} alt="Électricien câblant un panneau de disjoncteurs" />
+        <img src={IMG.hero} alt="Électricien câblant un panneau de disjoncteurs" decoding="async" fetchpriority="high" loading="eager" />
         <figcaption>REMPLACEMENT DE PANNEAU · 200 A · RUE DES FORGES</figcaption>
       </figure>
     </div>
@@ -155,7 +156,7 @@ const IMG = {
         </ul>
       </div>
       <figure class="vg-crew-fig">
-        <img src={IMG.crew} alt="Lignes à haute tension sur un ciel au crépuscule" />
+        <img src={IMG.crew} alt="Lignes à haute tension sur un ciel au crépuscule" decoding="async" loading="lazy" />
         <figcaption>TRAVAUX SUR LE RÉSEAU · CORRIDOR MAURICIE</figcaption>
       </figure>
     </div>

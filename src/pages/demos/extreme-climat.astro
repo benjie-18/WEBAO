@@ -1,5 +1,6 @@
 ---
 import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
 
 // Demo microsite: Extrême Climat · fictional HVAC, Lévis QC.
 // Cinematic hot/cold duality: split-screen ice vs flame, full-bleed photography,
@@ -18,9 +19,9 @@ const IMG = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Extrême Climat · We own both extremes · HVAC in Lévis · (418) 555-0119</title>
-  <meta name="description" content="Extrême Climat: Lévis HVAC built for both extremes. Cold-climate heat pumps rated to −30°, furnaces, AC and 24/7 emergency service. We own both extremes." />
-  <meta name="robots" content="noindex" />
+  <DemoSeo demoId="extreme-climat" locale="en" title="Extrême Climat · We own both extremes · HVAC in Lévis · (418) 555-0119" description="Extrême Climat: Lévis HVAC built for both extremes. Cold-climate heat pumps rated to −30°, furnaces, AC and 24/7 emergency service. We own both extremes." ogImage="https://webao.ca/og-image.jpg" />
+
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -36,11 +37,11 @@ const IMG = {
     <!-- HERO: the split screen -->
     <section class="xc-hero" aria-label="We own both extremes">
       <div class="xc-half xc-ice">
-        <img src={IMG.ice} alt="Ice-locked mountain landscape at thirty below zero" fetchpriority="high" />
+        <img src={IMG.ice} alt="Ice-locked mountain landscape at thirty below zero" fetchpriority="high" decoding="async" />
         <p class="xc-deg" aria-hidden="true">−30°</p>
       </div>
       <div class="xc-half xc-fire">
-        <img src={IMG.fire} alt="Bonfire flames against the night" fetchpriority="high" />
+        <img src={IMG.fire} alt="Bonfire flames against the night" fetchpriority="high" decoding="async" loading="lazy" />
         <p class="xc-deg" aria-hidden="true">+35°</p>
       </div>
       <div class="xc-title">
@@ -62,7 +63,7 @@ const IMG = {
     <!-- DUO: heat vs cold services -->
     <section class="xc-duo" id="services" aria-label="Heating and cooling services">
       <article class="xc-side xc-heat">
-        <img src={IMG.fire2} alt="Embers glowing in a fire" loading="lazy" />
+        <img src={IMG.fire2} alt="Embers glowing in a fire" loading="lazy" decoding="async" />
         <div class="xc-side-in">
           <p class="xc-side-k">HEAT</p>
           <h2>Winter is<br />our home turf.</h2>
@@ -76,7 +77,7 @@ const IMG = {
         </div>
       </article>
       <article class="xc-side xc-cool">
-        <img src={IMG.ice2} alt="Snow-covered peaks under a night sky" loading="lazy" />
+        <img src={IMG.ice2} alt="Snow-covered peaks under a night sky" loading="lazy" decoding="async" />
         <div class="xc-side-in">
           <p class="xc-side-k">COLD</p>
           <h2>Summer doesn't<br />stand a chance.</h2>
@@ -117,7 +118,7 @@ const IMG = {
 
     <!-- ABOUT: born in a Lévis winter -->
     <section class="xc-about">
-      <img src={IMG.tech} alt="An Extrême Climat technician at work" loading="lazy" />
+      <img src={IMG.tech} alt="An Extrême Climat technician at work" loading="lazy" decoding="async" />
       <div class="xc-about-in">
         <p class="xc-kicker">The company</p>
         <h2>BORN IN A<br />LÉVIS WINTER.</h2>
@@ -132,7 +133,7 @@ const IMG = {
 
     <!-- EMERGENCY: the furnace band -->
     <section class="xc-emergency" aria-label="Emergency service">
-      <img src={IMG.fire} alt="" aria-hidden="true" loading="lazy" />
+      <img src={IMG.fire} alt="" aria-hidden="true" loading="lazy" decoding="async" />
       <div class="xc-emergency-in">
         <p class="xc-kicker">24/7 emergency</p>
         <h2>FURNACE DEAD<br />AT −25°?</h2>
