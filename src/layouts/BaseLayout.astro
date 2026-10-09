@@ -80,6 +80,8 @@ const crumbLabels: Record<string, string> = {
   contact: t.nav.contact,
   start: locale === "fr" ? "Commencer" : "Start",
   terms: locale === "fr" ? "Conditions" : "Terms",
+  sources: "Sources",
+  refunds: locale === "fr" ? "Remboursements" : "Refunds",
 };
 const crumbName = pageKey ? crumbLabels[pageKey] : undefined;
 const breadcrumbSchema = crumbName
@@ -129,7 +131,7 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
     <link rel="alternate" hreflang="en" href={enHref} />
     <link rel="alternate" hreflang="fr" href={frHref} />
     <link rel="alternate" hreflang="x-default" href={alternates.en} />
-    {noIndex && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="robots" content={noIndex ? "noindex, nofollow" : "index, follow, max-image-preview:large"} />
     <meta name="theme-color" content="#F8F5EF" />
     <meta name="color-scheme" content="light dark" />
 
@@ -279,6 +281,9 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
     <meta property="og:description" content={metaDesc} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImageAbs} />
+    <meta property="og:image:width" content="701" />
+    <meta property="og:image:height" content="292" />
+    <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:alt" content={metaTitle} />
     <meta property="og:locale" content={locale === "fr" ? "fr_CA" : "en_CA"} />
     <meta property="og:locale:alternate" content={locale === "fr" ? "en_CA" : "fr_CA"} />
@@ -286,6 +291,7 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
     <meta name="twitter:title" content={metaTitle} />
     <meta name="twitter:description" content={metaDesc} />
     <meta name="twitter:image" content={ogImageAbs} />
+    <meta name="twitter:image:alt" content={metaTitle} />
 
     <!-- Fonts: Instrument Serif + Inter + IBM Plex Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
