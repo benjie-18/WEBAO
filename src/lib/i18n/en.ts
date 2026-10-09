@@ -955,7 +955,7 @@ const en = {
         bullets: [
           "→ Two demo directions that fit your trade",
           "→ An honest timeline and what we need from you",
-          "→ The fixed price ($149/mo for most sites) or a tailored quote",
+          "→ The fixed price ($149.99/mo for most sites) or a tailored quote",
         ],
         note: "No sales script. Just the site, the price, and the work.",
       },
