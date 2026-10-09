@@ -283,6 +283,16 @@ export function renderDrawer(doc: Document): void {
     checkout.setAttribute("aria-disabled", empty ? "true" : "false");
     checkout.tabIndex = empty ? -1 : 0;
   }
+
+  // "Start your site" CTAs (header + mobile panel): with items in the cart
+  // they skip the pricing page and go straight to payment — /checkout itself
+  // detours to /start when no details are stored yet, so the funnel still
+  // collects them. With an empty cart they keep their pricing target.
+  const checkoutHref = doc.location?.pathname.startsWith("/fr/") ? "/fr/checkout" : "/checkout";
+  doc.querySelectorAll<HTMLAnchorElement>("[data-start-cta]").forEach((a) => {
+    if (!a.dataset.pricingHref) a.dataset.pricingHref = a.getAttribute("href") ?? "";
+    a.setAttribute("href", items.length > 0 ? checkoutHref : a.dataset.pricingHref);
+  });
 }
 
 /** Reflect the active billing term on the toggle. */
