@@ -298,6 +298,12 @@ const planCents = (id: PlanId, interval: "month" | "year"): number => priceCents
   .pcard-slot--launch .pcard-name { text-align: left; }
   .pcard-slot--grow .pcard-name { text-align: center; }
   .pcard-slot--scale .pcard-name { text-align: right; }
+  /* Desktop: the name must span the name row, otherwise the flex row shrinks
+     it to its text and the per-slot text-align above positions nothing.
+     (Mobile keeps its centered stacked layout, untouched.) */
+  @media (min-width: 820px) {
+    .pcard-name { flex: 1 1 auto; min-width: 0; }
+  }
   .pcard-price {
     margin-top: 14px;
     font-size: clamp(2.08rem, 3.68vw, 3.2rem);
