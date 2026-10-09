@@ -357,7 +357,7 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
             <a href={navLinks.demos}>{t.nav.demos}</a>
             <a href={navLinks.pricing}>{t.nav.pricing}</a>
             <a href={navLinks.contact}>{t.nav.contact}</a>
-            <a href={navLinks.pricing} class="cta" data-track="cta" data-track-label={t.nav.startSite}>{t.nav.startSite}</a>
+            <a href={navLinks.pricing} class="cta" data-track="cta" data-track-label={t.nav.startSite} data-start-cta>{t.nav.startSite}</a>
           </nav>
 
           <LanguageSwitcher locale={locale} currentPath={url.pathname} />
@@ -396,6 +396,7 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
         href={navLinks.pricing}
         data-track="cta"
         data-track-label={t.nav.startSite}
+        data-start-cta
         style="background: var(--ink); color: var(--paper); border-radius: 12px; padding-inline: 16px; margin-top: 12px; border-bottom:0;"
         >{t.nav.startSite}</a
       >
