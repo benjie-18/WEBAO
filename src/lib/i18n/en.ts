@@ -3,7 +3,7 @@ const en = {
     home: {
       title: "Custom Websites for Small Businesses in Canada | WEBAO",
       description:
-        "Custom websites for businesses across Canada, for $149 CAD a month. Design, domain, hosting, updates, and support included. See the demo catalog.",
+        "Custom websites for businesses across Canada, from $89.99 CAD a month. Design, domain, hosting, updates, and support included. See the demo catalog.",
     },
     pricing: {
       title: "Website Pricing · Plans from C$89.99/mo | WEBAO",
@@ -36,7 +36,7 @@ const en = {
     pricing: "Pricing",
     contact: "Contact",
     startSite: "Start your site →",
-    stickyCtaPrice: "$149/mo",
+    stickyCtaPrice: "$89.99/mo",
     stickyCta: "Start →",
     openMenu: "Open menu",
     homeAria: "WEBAO home",
@@ -82,7 +82,7 @@ const en = {
     enter: "◆ ENTER",
     tap: "◆ TAP",
     static: {
-      sub: "Custom websites for businesses · $149 CAD / month",
+      sub: "Custom websites for businesses · $89.99 CAD / month",
       button: "Enter site",
       live: "Intro (reduced motion). Press Enter to open the site.",
       liveTouch: "Intro: {action} to enter.",
@@ -102,7 +102,7 @@ const en = {
       leadRest: "We design, launch, host, and maintain it while you run your business.",
       ctaPrimary: "Start your site",
       ctaSecondary: "See demo sites",
-      priceNote: "$149 <span>CAD/month</span> · All-inclusive",
+      priceNote: "$89.99 <span>CAD/month</span> · All-inclusive",
       visual: {
         url: "studio-reve (demo)",
         live: "Fictional example site",
@@ -174,12 +174,12 @@ const en = {
       subtitle: "PICK A DOOR · EACH IS A DIFFERENT COMPOSITION, SAME STUDIO.",
       pricing: {
         top: "01 · PRICING",
-        price: "$149",
+        price: "$89.99",
         priceSuffix: "CAD / month<br />all-in",
-        title: "One price.<br />Everything in.",
-        desc: "Custom 3–5 pages, domain, hosting, SSL, SEO basics, analytics, and support. One plan that covers the whole thing.",
+        title: "Three plans.<br />Everything in.",
+        desc: "Custom website, domain, hosting, SSL, SEO basics, analytics, and support. Three plans — pick the one that fits.",
         cta: "See what's included",
-        mini: ["3–5 pages", "·", "Hosting", "·", "Updates included"],
+        mini: ["Custom site", "·", "Hosting", "·", "Updates included"],
       },
       contact: {
         top: "02 · CONTACT",
@@ -261,8 +261,8 @@ const en = {
           a: "Most sites launch in 2 to 3 weeks from the day you send us your photos, logo, and basic info — simple one-pagers can go faster. We give you an honest timeline before you pay anything, and if we’re ever running behind, you’ll be the first to know.",
         },
         {
-          q: "What’s actually included in the $149/mo?",
-          a: "Everything a small-business site needs: a custom 3-to-5-page site, your domain, hosting, SSL, mobile-friendly design, a contact or quote form, basic SEO, stats, security and maintenance — plus small content updates whenever you need them. No setup fee, no per-change billing.",
+          q: "What’s actually included in the $89.99/mo?",
+          a: "Everything a small-business site needs: a custom 1-page site, your domain, hosting, SSL, mobile-friendly design, a contact form, basic SEO, stats, security and maintenance — plus an hour of content updates each month. No setup fee, no per-change billing.",
         },
         {
           q: "Will my site show up on Google?",
@@ -282,7 +282,7 @@ const en = {
       eyebrow: "READY WHEN YOU ARE",
       title: "Ready for a website<br /><span>that just works?</span>",
       desc: "Send your trade, city, and a couple of photos. We’ll reply with two demo directions and an honest timeline for your site.",
-      ctaPrimary: "Start your site · $149/mo →",
+      ctaPrimary: "Start your site · $89.99/mo →",
       ctaSecondary: "Browse demos first",
       contact: "contact@webao.ca · Mon–Fri, 9–5 Eastern",
       preview: "PREVIEW · YOUR SITE",
@@ -1067,7 +1067,7 @@ const en = {
     hoverPeek: "→ hover to peek",
     hint: "✦ Guided tour: watch the cursor explore the studio doors",
     labels: [
-      { t: "Pricing", s: "→ $149/mo · all-in" },
+      { t: "Pricing", s: "→ $89.99/mo · all-in" },
       { t: "Contact", s: "→ contact@webao.ca" },
       { t: "Demos", s: "→ 41 art directions" },
     ],
