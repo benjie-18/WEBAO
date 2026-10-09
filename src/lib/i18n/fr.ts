@@ -610,8 +610,8 @@ const fr = {
           { text: "Facturé mensuellement, ou annuellement à l'avance avec 2 mois gratuits (prix annuel = 10 mois)." },
           { label: "Comparaison sur 12 mois", text: "" },
           { label: "Launch", text: "C$89.99/mois x 12 = C$1,079.88 facturé mensuellement, ou C$890.99 facturé annuellement (environ C$74.25/mois). L'option annuelle fait économiser C$188.89." },
-          { label: "Grow", text: "C$149/mois x 12 = C$1,788 facturé mensuellement, ou C$1,490 facturé annuellement (environ C$124.17/mois). L'option annuelle fait économiser C$298." },
-          { label: "Scale", text: "C$349/mois x 12 = C$4,188 facturé mensuellement, ou C$3,490 facturé annuellement (environ C$290.83/mois). L'option annuelle fait économiser C$698." },
+          { label: "Grow", text: "C$149.99/mois x 12 = C$1,799.88 facturé mensuellement, ou C$1,490.99 facturé annuellement (environ C$124.25/mois). L'option annuelle fait économiser C$308.89." },
+          { label: "Scale", text: "C$349.99/mois x 12 = C$4,199.88 facturé mensuellement, ou C$3,490.99 facturé annuellement (environ C$290.92/mois). L'option annuelle fait économiser C$708.89." },
         ],
       },
       "4": {
@@ -962,7 +962,7 @@ const fr = {
         bullets: [
           "→ Deux directions de démo qui collent à votre métier",
           "→ Un échéancier honnête et ce qu’on a besoin de vous",
-          "→ Le prix fixe (149 $/mois pour la plupart) ou un devis sur mesure",
+          "→ Le prix fixe (149.99 $/mois pour la plupart) ou un devis sur mesure",
         ],
         note: "Pas de script de vente. Juste le site, le prix et le travail.",
       },
