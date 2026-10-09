@@ -1076,6 +1076,8 @@ const promptKey = t.intro.prompt.key;
     const touch = coarse();
     const rng = mulberry(20260214);
     const isSmallPerf = Math.min(window.innerWidth, window.innerHeight) < 760;
+    /** Primary pointer is a finger (phones/tablets): no fine-pointer framing. */
+    const primaryCoarse = window.matchMedia("(pointer: coarse)").matches;
     const debrisScale = isSmallPerf ? 0.5 : 1;
     /** Screen shake is scaled down on small viewports: full amplitude reads as
         a glitch rather than an impact when the stage is 390px wide. */
@@ -1487,7 +1489,11 @@ const promptKey = t.intro.prompt.key;
       // horizontal shift exposes the stage's right edge and the vertical
       // shift pulls the barrier off the bottom. The impact point is already
       // well within view on a narrow screen, so keep the camera neutral there.
-      const camX = isSmallPerf ? 0 : vw * 0.5 - impactX;
+      // Touch-primary devices (tablets included) keep a neutral horizontal
+      // camera like small screens: the sideways pan reads as the view jumping
+      // at "click to enter", and the impact point is already in frame. Only
+      // fine-pointer (mouse) viewports get the horizontal reframe.
+      const camX = isSmallPerf || primaryCoarse ? 0 : vw * 0.5 - impactX;
       const camY = isSmallPerf ? 0 : vh * CFG.breach.camera.focusY - surfaceY;
       cameraShiftTo(camX, camY, CFG.breach.camera.shiftMs);
     }
