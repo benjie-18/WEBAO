@@ -6,7 +6,7 @@ const fr = {
     home: {
       title: "Sites web sur mesure pour PME au Canada | WEBAO",
       description:
-        "Des sites web sur mesure pour les entreprises partout au Canada, à 149 $ CAD par mois. Design, domaine, hébergement, mises à jour et soutien inclus. Parcourez le catalogue de démos.",
+        "Des sites web sur mesure pour les entreprises partout au Canada, à partir de 89,99 $ CAD par mois. Design, domaine, hébergement, mises à jour et soutien inclus. Parcourez le catalogue de démos.",
     },
     pricing: {
       title: "Tarifs site web · Forfaits dès C$89.99/mois | WEBAO",
@@ -39,7 +39,7 @@ const fr = {
     pricing: "Tarifs",
     contact: "Contact",
     startSite: "Démarrer mon site →",
-    stickyCtaPrice: "149 $/mois",
+    stickyCtaPrice: "89,99 $/mois",
     stickyCta: "Démarrer →",
     openMenu: "Ouvrir le menu",
     homeAria: "Accueil WEBAO",
@@ -85,7 +85,7 @@ const fr = {
     enter: "◆ ENTRER",
     tap: "◆ TOUCHER",
     static: {
-      sub: "Sites web sur mesure pour PME · 149 $ CAD / mois",
+      sub: "Sites web sur mesure pour PME · 89,99 $ CAD / mois",
       button: "Entrer sur le site",
       live: "Intro (mouvement réduit). Appuyez sur Entrée pour ouvrir le site.",
       liveTouch: "Intro : {action} pour entrer.",
@@ -105,7 +105,7 @@ const fr = {
       leadRest: "On conçoit, on lance, on héberge et on entretient pendant que vous gérez votre entreprise.",
       ctaPrimary: "Démarrer mon site",
       ctaSecondary: "Voir les démos",
-      priceNote: "149 $ <span>CAD/mois</span> · Tout inclus",
+      priceNote: "89,99 $ <span>CAD/mois</span> · Tout inclus",
       visual: {
         url: "studio-reve (démo)",
         live: "Exemple de site fictif",
@@ -177,12 +177,12 @@ const fr = {
       subtitle: "CHOISISSEZ UNE PORTE · CHAQUE COMPOSITION EST DIFFÉRENTE, MÊME STUDIO.",
       pricing: {
         top: "01 · TARIFS",
-        price: "149 $",
+        price: "89,99 $",
         priceSuffix: "CAD / mois<br />tout inclus",
-        title: "Un prix.<br />Tout est inclus.",
-        desc: "Site sur mesure de 3 à 5 pages, domaine, hébergement, SSL, bases SEO, analytique et soutien. Un seul forfait qui couvre tout.",
+        title: "Trois forfaits.<br />Tout est inclus.",
+        desc: "Site sur mesure, domaine, hébergement, SSL, bases SEO, analytique et soutien. Trois forfaits — choisissez celui qui vous convient.",
         cta: "Voir ce qui est inclus",
-        mini: ["3–5 pages", "·", "Hébergement", "·", "Mises à jour incluses"],
+        mini: ["Site sur mesure", "·", "Hébergement", "·", "Mises à jour incluses"],
       },
       contact: {
         top: "02 · CONTACT",
@@ -264,8 +264,8 @@ const fr = {
           a: "La plupart des sites sont lancés en 2 à 3 semaines à partir du jour où vous nous envoyez vos photos, votre logo et vos infos de base — les sites simples d’une page peuvent aller plus vite. On vous donne un échéancier honnête avant que vous payiez quoi que ce soit, et si on prend du retard, vous serez les premiers au courant.",
         },
         {
-          q: "Qu’est-ce qui est vraiment inclus dans le 149 $/mois ?",
-          a: "Tout ce dont un site de petite entreprise a besoin : un site sur mesure de 3 à 5 pages, votre domaine, l’hébergement, le SSL, un design adapté au mobile, un formulaire de contact ou de devis, le référencement de base, les statistiques, la sécurité et la maintenance — plus des petites mises à jour de contenu quand vous en avez besoin. Pas de frais d’installation, pas de facturation à la pièce.",
+          q: "Qu’est-ce qui est vraiment inclus dans le 89,99 $/mois ?",
+          a: "Tout ce dont un site de petite entreprise a besoin : un site sur mesure d’une page, votre domaine, l’hébergement, le SSL, un design adapté au mobile, un formulaire de contact, le référencement de base, les statistiques, la sécurité et la maintenance — plus une heure de mises à jour de contenu par mois. Pas de frais d’installation, pas de facturation à la pièce.",
         },
         {
           q: "Est-ce que mon site va apparaître sur Google ?",
@@ -285,7 +285,7 @@ const fr = {
       eyebrow: "PRÊT QUAND VOUS L’ÊTES",
       title: "Prêt pour un site<br /><span>qui marche tout simplement ?</span>",
       desc: "Envoyez votre métier, votre ville et quelques photos. On vous répond avec deux directions de démo et un échéancier honnête pour votre site.",
-      ctaPrimary: "Démarrer mon site · 149 $/mois →",
+      ctaPrimary: "Démarrer mon site · 89,99 $/mois →",
       ctaSecondary: "Parcourir les démos d’abord",
       contact: "contact@webao.ca · Lun–ven, 9 h à 17 h, heure de l’Est",
       preview: "APERÇU · VOTRE SITE",
@@ -1076,7 +1076,7 @@ const fr = {
     hoverPeek: "→ survolez pour un aperçu",
     hint: "✦ Visite guidée : regardez le curseur explorer les portes du studio",
     labels: [
-      { t: "Tarifs", s: "→ 149 $/mois · tout inclus" },
+      { t: "Tarifs", s: "→ 89,99 $/mois · tout inclus" },
       { t: "Contact", s: "→ contact@webao.ca" },
       { t: "Démos", s: "→ 41 directions artistiques" },
     ],
