@@ -6,7 +6,7 @@ const fr = {
     home: {
       title: "Sites web sur mesure pour PME au Canada | WEBAO",
       description:
-        "Des sites web sur mesure pour les entreprises partout au Canada, à partir de 89,99 $ CAD par mois. Design, domaine, hébergement, mises à jour et soutien inclus. Parcourez le catalogue de démos.",
+        "Des sites web sur mesure pour les entreprises partout au Canada, à partir de 89,99 $ CAD par mois. Design, domaine, hébergement, mises à jour et soutien inclus.",
     },
     pricing: {
       title: "Tarifs site web · Forfaits dès C$89.99/mois | WEBAO",
@@ -26,7 +26,7 @@ const fr = {
     support: {
       title: "Soutien aux clients · WEBAO",
       description:
-        "Déjà client WEBAO ? Rejoignez le soutien, demandez des modifications, ajoutez des fonctions et obtenez des réponses sur votre forfait et votre facturation. Écrivez à support@webao.ca ou utilisez le formulaire.",
+        "Pour les clients WEBAO : modifications, modules, facturation et soutien. Écrivez à support@webao.ca ou utilisez le formulaire.",
     },
     demos: {
       title: "Exemples de sites web · 41 démos pour entreprises locales | WEBAO",
@@ -57,7 +57,7 @@ const fr = {
 
   footer: {
     tagline:
-      "Des sites web sur mesure pour les entreprises partout au Canada. Un seul frais mensuel. On s’occupe du domaine, de l’hébergement, de la maintenance et du soutien pour que vous puissiez vous concentrer sur votre entreprise.",
+      "Des sites web sur mesure pour les entreprises partout au Canada. Un seul frais mensuel : domaine, hébergement, maintenance et soutien inclus.",
     location: "BASÉ À MONTRÉAL · AU SERVICE DES ENTREPRISES PARTOUT AU CANADA",
     studio: "Studio",
     demoCatalog: "Catalogue de démos",
@@ -106,9 +106,9 @@ const fr = {
       titleWork: "site web,",
       title2: "notre",
       title3: "mission",
-      lead: "Un site web professionnel sur mesure, sans les tracas qui viennent avec la création d'un site. Nous croyons que votre présence en ligne mérite autant d'importance que votre entreprise, c'est pourquoi un humain attentionné est derrière chaque site et chaque demande.",
-      leadStrong: "Un seul frais mensuel simple.",
-      leadRest: "On conçoit, on lance, on héberge et on entretient pendant que vous gérez votre entreprise.",
+      lead: "Un site web sur mesure pour votre entreprise, conçu et entretenu par une vraie personne.",
+      leadStrong: "Un seul frais mensuel.",
+      leadRest: "On conçoit, on lance, on héberge et on entretient. Vous gérez votre entreprise.",
       ctaPrimary: "Démarrer mon site",
       ctaSecondary: "Voir les démos",
       priceNote: "89,99 $ <span>CAD/mois</span> · Tout inclus",
@@ -144,7 +144,7 @@ const fr = {
       steps: [
         {
           title: "Vous envoyez l’essentiel",
-          desc: "Photos (téléphone c’est parfait), services, zone desservie et ce que vous voulez que vos clients fassent : appeler, réserver ou demander un devis. On s’occupe du reste et on pose les bonnes questions.",
+          desc: "Photos (téléphone c’est parfait), services, zone desservie et ce que vous voulez que vos clients fassent : appeler, réserver ou demander un devis. On s’occupe du reste.",
           bullets: ["→ Appel de 15 min ou formulaire", "→ On choisit 2 directions parmi nos démos"],
           visualInbox: "BOÎTE DE RÉCEPTION · CONTACT@WEBAO.CA",
           subject: "Objet :",
@@ -154,7 +154,7 @@ const fr = {
         },
         {
           title: "On conçoit et on construit",
-          desc: "Vous recevez un lien d’aperçu privé en quelques jours. Naviguez une vraie page d’accueil sur votre téléphone. Un tour de commentaires clairs, puis on peaufine.",
+          desc: "Vous recevez un lien d’aperçu privé en quelques jours. Parcourez-la sur votre téléphone. Un tour de commentaires clairs, puis on peaufine.",
           bullets: ["→ URL d’aperçu privé", "→ Une ronde de révisions"],
           preview: "APERÇU · ÉBAUCHE DE VOTRE SITE",
           approve: "Approuver →",
@@ -186,21 +186,21 @@ const fr = {
         price: "89,99 $",
         priceSuffix: "CAD / mois<br />tout inclus",
         title: "Trois forfaits.<br />Tout est inclus.",
-        desc: "Site sur mesure, domaine, hébergement, SSL, bases SEO, analytique et soutien. Trois forfaits — choisissez celui qui vous convient.",
+        desc: "Site sur mesure, domaine, hébergement, SSL, bases SEO, analytique et soutien.",
         cta: "Voir ce qui est inclus",
         mini: ["Site sur mesure", "·", "Hébergement", "·", "Mises à jour incluses"],
       },
       contact: {
         top: "02 · CONTACT",
         title: "Parlez-nous de<br />votre entreprise.",
-        desc: "Envoyez-nous votre métier, votre ville et quelques photos. Une vraie personne lit chaque message et répond habituellement en un jour ouvrable.",
+        desc: "Envoyez-nous votre métier, votre ville et quelques photos. On répond en un jour ouvrable.",
         pills: ["contact@webao.ca", "Montréal · Heure de l’Est"],
         cta: "Démarrer la conversation",
       },
       demos: {
         top: "03 · DÉMOS",
         title: "41 directions de design,<br />toutes fictives.",
-        desc: "Parcourez le catalogue par métier : électricien, restaurant, clinique. Chaque démo est un concept à direction artistique pour une entreprise fictive, pour voir l’étendue avant de choisir.",
+        desc: "Parcourez le catalogue par métier ou par style.",
         cta: "Parcourir le catalogue de démos",
         mini: ["Filtrable", "·", "Recherchable", "·", "41 styles"],
       },
@@ -267,23 +267,23 @@ const fr = {
         },
         {
           q: "En combien de temps mon site sera-t-il en ligne ?",
-          a: "La plupart des sites sont lancés en 2 à 3 semaines à partir du jour où vous nous envoyez vos photos, votre logo et vos infos de base — les sites simples d’une page peuvent aller plus vite. On vous donne un échéancier honnête avant que vous payiez quoi que ce soit, et si on prend du retard, vous serez les premiers au courant.",
+          a: "La plupart des sites sont lancés en 2 à 3 semaines à partir du jour où vous nous envoyez vos photos, votre logo et vos infos de base. Les sites simples d’une page peuvent aller plus vite. On vous donne un échéancier honnête avant que vous payiez quoi que ce soit, et si on prend du retard, vous serez les premiers au courant.",
         },
         {
           q: "Qu’est-ce qui est vraiment inclus dans le 89,99 $/mois ?",
-          a: "Tout ce dont un site de petite entreprise a besoin : un site sur mesure d’une page, votre domaine, l’hébergement, le SSL, un design adapté au mobile, un formulaire de contact, le référencement de base, les statistiques, la sécurité et la maintenance — plus une heure de mises à jour de contenu par mois. Pas de frais d’installation, pas de facturation à la pièce.",
+          a: "Tout ce dont un site de petite entreprise a besoin : un site sur mesure d’une page, votre domaine, l’hébergement, le SSL, un design adapté au mobile, un formulaire de contact, le référencement de base, les statistiques, la sécurité et la maintenance, plus une heure de mises à jour de contenu par mois. Pas de frais d’installation, pas de facturation à la pièce.",
         },
         {
           q: "Est-ce que mon site va apparaître sur Google ?",
-          a: "Oui — c’est le but. Chaque site est livré avec les bases du référencement : titres et descriptions soignés, plan du site, temps de chargement rapides et pages adaptées au mobile. On configure aussi votre fiche d’établissement Google, qui est la façon dont la plupart des clients locaux trouvent les artisans. Personne ne peut promettre la 1re position, et méfiez-vous de ceux qui le font.",
+          a: "Oui. C’est le but. Chaque site est livré avec les bases du référencement : titres et descriptions soignés, plan du site, temps de chargement rapides et pages adaptées au mobile. On configure aussi votre fiche d’établissement Google, qui est la façon dont la plupart des clients locaux trouvent les artisans. Personne ne peut promettre la 1re position, et méfiez-vous de ceux qui le font.",
         },
         {
           q: "Est-ce que je peux mettre en pause ou changer des choses plus tard ?",
-          a: "Oui. C’est du mois par mois, donc vous pouvez mettre en pause ou annuler en tout temps. Besoin d’une page supplémentaire ou d’une nouvelle fonction plus tard ? On vous fait un devis clair avant de faire le travail — rien n’est ajouté à votre facture sans votre approbation.",
+          a: "Oui. C’est du mois par mois, donc vous pouvez mettre en pause ou annuler en tout temps. Besoin d’une page supplémentaire ou d’une nouvelle fonction plus tard ? On vous fait un devis clair avant de faire le travail. Rien n’est ajouté à votre facture sans votre approbation.",
         },
         {
           q: "Vous faites seulement des sites pour les métiers ?",
-          a: "Les métiers sont notre terrain de jeu — électriciens, plombiers, chauffage-climatisation, paysagistes — mais on crée des sites pour toute entreprise de services locale : restaurants, cliniques, garages, entretien ménager et plus. Si vous servez des clients en personne, on peut probablement vous aider. Demandez-nous.",
+          a: "Les métiers sont notre terrain de jeu : électriciens, plombiers, chauffage-climatisation, paysagistes. Mais on crée des sites pour toute entreprise de services locale : restaurants, cliniques, garages, entretien ménager et plus. Si vous servez des clients en personne, on peut probablement vous aider. Demandez-nous.",
         },
       ],
     },
@@ -321,7 +321,7 @@ const fr = {
         annual: "(C$890.99/an)",
         priceNote: 4,
         badge: "",
-        desc: "Conçu pour les travailleurs autonomes qui ont surtout besoin d'une présence en ligne professionnelle et d'un moyen pour les clients de les joindre.",
+        desc: "Pour les travailleurs autonomes qui doivent avoir l’air professionnels en ligne et être faciles à joindre.",
         inherits: "",
         features: [
           "Site web personnalisé d'une page",
@@ -338,7 +338,7 @@ const fr = {
         annual: "(C$1,490.99/an)",
         priceNote: 9,
         badge: "Le plus populaire",
-        desc: "Conçu pour les entreprises locales établies qui ont besoin d'un site web qui génère activement des prospects.",
+        desc: "Pour les entreprises locales établies qui ont besoin que leur site attire des clients.",
         inherits: "Tout ce qui est inclus dans Launch, plus :",
         features: [
           "Site web personnalisé de 3 à 5 pages",
@@ -355,7 +355,7 @@ const fr = {
         annual: "(C$3,490.99/an)",
         priceNote: 12,
         badge: "",
-        desc: "Conçu pour les entreprises en croissance qui veulent que leur site web fasse partie de leur système d'acquisition de clients.",
+        desc: "Pour les entreprises en croissance qui veulent que leur site vende davantage.",
         inherits: "Tout ce qui est inclus dans Grow, plus :",
         features: [
           "Jusqu'à 10 pages, zones desservies incluses",
@@ -415,13 +415,13 @@ const fr = {
       title: "Options",
       popularTag: "Populaire",
       items: {
-        localseo: { name: "SEO local / Gestion du profil d'entreprise Google", price: "C$159.99/mois", note: 18, short: "Pour les entreprises qui veulent une optimisation continue du référencement local plutôt qu'une simple configuration initiale." },
-        review: { name: "Moteur de génération d'avis", price: "C$99.99/mois", note: 19, short: "Automatise le processus d'obtention d'avis clients." },
-        aichat: { name: "Assistant clavardage IA entraîné", price: "C$99.99/mois", note: 20, short: "Un assistant IA entraîné spécifiquement autour de l'entreprise." },
-        booking: { name: "Réservation / Planification en ligne", price: "C$49.99/mois", note: 21, short: "Pour les entreprises qui prennent des rendez-vous." },
+        localseo: { name: "SEO local / Gestion du profil d'entreprise Google", price: "C$159.99/mois", note: 18, short: "Un travail de référencement local continu, au-delà de la configuration initiale." },
+        review: { name: "Moteur de génération d'avis", price: "C$99.99/mois", note: 19, short: "Des demandes d’avis automatiques après chaque travail." },
+        aichat: { name: "Assistant clavardage IA entraîné", price: "C$99.99/mois", note: 20, short: "Un assistant de clavardage formé sur votre entreprise." },
+        booking: { name: "Réservation / Planification en ligne", price: "C$49.99/mois", note: 21, short: "Vos clients réservent en ligne." },
         blog: { name: "Blogue et mises à jour", price: "C$34.99/mois", note: 22, short: "" },
         bilingual: { name: "Bilingue EN/FR", price: "C$34.99/mois", note: 23, short: "" },
-        ecommerce: { name: "Commerce électronique simplifié / Liens de paiement", price: "C$59.99/mois", note: 24, short: "Pour des paiements en ligne simples sans boutique en ligne complète." },
+        ecommerce: { name: "Commerce électronique simplifié / Liens de paiement", price: "C$59.99/mois", note: 24, short: "Des paiements en ligne simples, sans boutique complète." },
         email: { name: "Marketing par courriel", price: "C$29.99/mois", note: 0, short: "" },
         report: { name: "Rapport de croissance mensuel", price: "C$29.99/mois", note: 11, short: "" },
         extrapage: { name: "Page supplémentaire", price: "C$44.99 paiement unique", note: 25, short: "" },
@@ -530,7 +530,7 @@ const fr = {
       title: "Votre sélection",
       change: "Modifier sur la page des tarifs →",
       planLegend: "Forfait",
-      noneHint: "Options seulement — pour un site WEBAO existant.",
+      noneHint: "Options seulement, pour un site WEBAO existant.",
       extrasTitle: "Options et forfaits groupés",
       remove: "Retirer {name}",
       defaultNote: "Grow est présélectionné : c'est notre forfait le plus populaire. Choisissez-en un autre ou ajoutez des options sur la page des tarifs.",
@@ -623,7 +623,7 @@ const fr = {
       "4": {
         title: "Launch",
         blocks: [
-          { text: "Conçu pour les travailleurs autonomes qui ont surtout besoin d'une présence en ligne professionnelle et d'un moyen pour les clients de les joindre." },
+          { text: "Pour les travailleurs autonomes qui doivent avoir l’air professionnels en ligne et être faciles à joindre." },
           { text: "Les soumissions du formulaire de contact arrivent par courriel." },
           { label: "Positionnement", text: "Soyez en ligne et ayez l'air professionnel." },
         ],
@@ -664,9 +664,9 @@ const fr = {
       "9": {
         title: "Grow",
         blocks: [
-          { text: "Conçu pour les entreprises locales établies qui ont besoin d'un site web qui génère activement des prospects." },
+          { text: "Pour les entreprises locales établies qui ont besoin que leur site attire des clients." },
           { label: "Positionnement", text: "Transformez votre site web en outil de génération de prospects." },
-          { text: "Cela reste l'offre webao principale et le point d'ancrage à C$149." },
+          { text: "Grow est notre forfait le plus populaire." },
         ],
       },
       "10": {
@@ -699,7 +699,7 @@ const fr = {
       "12": {
         title: "Scale",
         blocks: [
-          { text: "Conçu pour les entreprises en croissance qui veulent que leur site web fasse partie de leur système d'acquisition de clients." },
+          { text: "Pour les entreprises en croissance qui veulent que leur site vende davantage." },
           { label: "Positionnement", text: "Un site web géré et un système de génération de prospects pour les entreprises en croissance." },
         ],
       },
@@ -720,7 +720,7 @@ const fr = {
         title: "Lead Pack",
         blocks: [
           { text: "Combine les trois services les plus axés sur la croissance : la gestion du SEO local, le moteur de génération d'avis et l'assistant clavardage IA entraîné." },
-          { text: "Une excellente vente additionnelle pour les clients Launch et Grow qui veulent que webao s'occupe activement de la génération de prospects." },
+          { text: "Pour les clients Launch et Grow qui veulent que WEBAO s’occupe de la génération de prospects." },
         ],
       },
       "16": {
@@ -750,7 +750,7 @@ const fr = {
               "Surveillance des avis",
             ],
           },
-          { text: "Pour les entreprises qui veulent une optimisation continue du référencement local plutôt qu'une simple configuration initiale." },
+          { text: "Un travail de référencement local continu, au-delà de la configuration initiale." },
           { text: "Distinction importante : Grow inclut la configuration du GBP, tandis que cette option offre la gestion continue." },
         ],
       },
@@ -767,7 +767,7 @@ const fr = {
               "500 crédits SMS/mois inclus; utilisation supplémentaire facturée à C$0.05/SMS [13]",
             ],
           },
-          { text: "Automatise le processus d'obtention d'avis clients." },
+          { text: "Des demandes d’avis automatiques après chaque travail." },
         ],
       },
       "20": {
@@ -783,7 +783,7 @@ const fr = {
               "Intégration de réservation lorsque prise en charge",
             ],
           },
-          { text: "Un assistant IA entraîné spécifiquement autour de l'entreprise." },
+          { text: "Un assistant de clavardage formé sur votre entreprise." },
           { text: "Ceci est la version payante, entraînée et spécifique à l'entreprise. Grow et Scale incluent une FAQ étendue (voir 5)." },
         ],
       },
@@ -794,7 +794,7 @@ const fr = {
             listLabel: "Inclus :",
             items: ["Réservation en ligne", "Planification", "Gestion des disponibilités", "Intégration de réservation"],
           },
-          { text: "Pour les entreprises qui prennent des rendez-vous." },
+          { text: "Vos clients réservent en ligne." },
         ],
       },
       "22": {
@@ -839,7 +839,7 @@ const fr = {
               "Transactions simples propulsées par Stripe",
             ],
           },
-          { text: "Pour des paiements en ligne simples sans boutique en ligne complète." },
+          { text: "Des paiements en ligne simples, sans boutique complète." },
         ],
       },
       "25": {
@@ -932,7 +932,7 @@ const fr = {
     hero: {
       eyebrow: "Contact · Parlez à une vraie personne",
       title: "Des questions ?<br /><span>Demandez-nous.</span>",
-      desc: "Tout ce qui concerne WEBAO, votre site actuel ou si on est le bon choix pour vous. On lit chaque message et on répond en un jour ouvrable.",
+      desc: "Tout ce qui concerne WEBAO, votre site actuel ou si on est le bon choix pour vous.",
       email: "contact@webao.ca",
       emailNote: "On répond habituellement en un jour ouvrable",
       location: "Montréal, Québec",
@@ -945,7 +945,6 @@ const fr = {
     },
     form: {
       title: "Envoyez-nous un message",
-      subtitle: "On répond en un jour ouvrable · Sans engagement",
       name: "Votre nom",
       namePlaceholder: "Votre nom",
       email: "Courriel",
@@ -955,9 +954,6 @@ const fr = {
       consent: "J’aimerais que WEBAO réponde à mon message.",
       privacy: "Vos infos servent juste à vous répondre. Pas d’infolettre, pas de partage.",
       submit: "Envoyer le message →",
-      submitNote: "Vous préférez l’écrire vous-même ? Écrivez à",
-      submitNoteEmail: "contact@webao.ca",
-      lock: "Votre message nous est envoyé directement. Rien n’est conservé au-delà de ce qu’il faut pour vous répondre.",
       validationError:
         "Veuillez remplir votre nom, un courriel valide, votre message et cocher la case.",
       success: "Message envoyé. On vous répond en un jour ouvrable.",
@@ -966,11 +962,11 @@ const fr = {
     info: {
       reply: {
         title: "Comment on répond",
-        desc: "Habituellement en un jour ouvrable, avec :",
+        desc: "Notre réponse comprend :",
         bullets: [
           "→ Deux directions de démo qui collent à votre métier",
           "→ Un échéancier honnête et ce qu’on a besoin de vous",
-          "→ Le prix fixe (149.99 $/mois pour la plupart) ou un devis sur mesure",
+          "→ Le prix exact, avant de vous engager",
         ],
         note: "Pas de script de vente. Juste le site, le prix et le travail.",
       },
@@ -986,8 +982,8 @@ const fr = {
       },
       plain: {
         title: "Vous préférez un courriel tout simple ?",
-        desc: "Ça marche aussi. Joignez-nous directement :",
-        lines: ["✉ contact@webao.ca", "⌚ Lun–ven, 9 h à 17 h, heure de l’Est", "📍 Montréal · Partout au Canada"],
+        desc: "Joignez-nous directement :",
+        lines: ["✉ contact@webao.ca", "⌚ Lun–ven, 9 h à 17 h, heure de l’Est"],
         cta: "Nous écrire directement →",
       },
     },
@@ -1054,7 +1050,6 @@ const fr = {
     addons: {
       eyebrow: "Modules",
       title: "Ajouter une fonction à votre site",
-      desc: "Ajoutez-en un depuis la page des tarifs, ou demandez-le dans le formulaire ci-dessus et on s’en occupe.",
       addCta: "Ajouter",
     },
     faq: {
@@ -1087,7 +1082,7 @@ const fr = {
     hero: {
       eyebrow: "Démos · Directions de design pour entreprises fictives.",
       title: "À quoi pourrait ressembler <span>le vôtre</span> ?",
-      desc: "Chaque démo a sa propre direction artistique avec sa typo, sa palette, sa mise en page et sa voix, créée pour une entreprise locale fictive. Cherchez par métier pour sentir l’étendue.",
+      desc: "Chaque démo est une direction de design différente pour une entreprise locale fictive. Cherchez par métier.",
       countNote: "41 DIRECTIONS · ENTREPRISES TOUTES FICTIVES · AUCUNE N’EST CLIENTE DE WEBAO",
       howTitle: "COMMENT UTILISER CE CATALOGUE",
       howSteps: [
@@ -1127,7 +1122,7 @@ const fr = {
     fictional: "FICTIVE",
     noteLeft: "TOUTES LES DÉMOS SONT FICTIVES · PAS DE VRAIS CLIENTS WEBAO",
     noteRight:
-      "→ Chaque carte montre une direction : typo, palette, mise en page et ton. Vous en aimez une ? Dites-le-nous et on bâtira votre site autour.",
+      "→ Vous aimez une direction ? Dites-le-nous et on bâtira votre site autour.",
     ctaTitle: "Vous avez trouvé une direction qui vous plaît ?",
     ctaDesc: "Dites-nous quelle démo est la plus proche et on conçoit votre site autour de cette direction.",
     ctaPrimary: "Partir d’une démo →",

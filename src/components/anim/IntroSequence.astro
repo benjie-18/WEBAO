@@ -41,7 +41,7 @@ const promptKey = t.intro.prompt.key;
 ---
 
 <!--
-  Boot gate — runs before #main is parsed, so the page is hidden below the
+  Boot gate: runs before #main is parsed, so the page is hidden below the
   fold with zero flash. Without JS (or on any error) no class is added and the
   site renders completely normally.
 -->
@@ -1398,7 +1398,7 @@ const promptKey = t.intro.prompt.key;
       }
       // live region is localized via static text from translation (fallback)
       const liveText = refs.root.querySelector<HTMLElement>("[data-wi-static] .wi-static-sub")?.textContent || "";
-      refs.live.textContent = `Intro: ${touch ? localizedTouch : localizedPointer} — ${liveText}`;
+      refs.live.textContent = `Intro: ${touch ? localizedTouch : localizedPointer}: ${liveText}`;
 
       /* --- composition reveal ------------------------------------------- */
       clock.tween({ ms: 380, ease: EASE.outCubic, onUpdate: (v) => (refs.veil.style.opacity = String(r2(v))) });

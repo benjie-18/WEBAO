@@ -3,7 +3,7 @@ const en = {
     home: {
       title: "Custom Websites for Small Businesses in Canada | WEBAO",
       description:
-        "Custom websites for businesses across Canada, from $89.99 CAD a month. Design, domain, hosting, updates, and support included. See the demo catalog.",
+        "Custom websites for businesses across Canada, from $89.99 CAD a month. Design, domain, hosting, updates and support included.",
     },
     pricing: {
       title: "Website Pricing · Plans from C$89.99/mo | WEBAO",
@@ -23,7 +23,7 @@ const en = {
     support: {
       title: "Client Support · WEBAO",
       description:
-        "Existing WEBAO client? Reach support, request changes, add features, and get answers about your plan and billing. Email support@webao.ca or use the form.",
+        "For existing WEBAO clients: changes, add-ons, billing and support. Email support@webao.ca or use the form.",
     },
     demos: {
       title: "Website Design Examples · 41 Demos for Local Businesses | WEBAO",
@@ -54,7 +54,7 @@ const en = {
 
   footer: {
     tagline:
-      "Custom websites for businesses across Canada. One monthly fee. We handle the domain, hosting, maintenance, and support, so you can run your business.",
+      "Custom websites for businesses across Canada. One monthly fee: domain, hosting, maintenance and support included.",
     location: "BASED IN MONTRÉAL · SERVING BUSINESSES ACROSS CANADA",
     studio: "Studio",
     demoCatalog: "Demo catalog",
@@ -103,9 +103,9 @@ const en = {
       titleWork: "website,",
       title2: "Our",
       title3: "mission",
-      lead: "We offer custom, professional website without the hassle that comes with making a website. We believe your web presence deserves as much importance as your business, that's why a caring human is behind every website and every request.",
+      lead: "A custom website for your business, built and looked after by a person.",
       leadStrong: "One simple monthly fee.",
-      leadRest: "We design, launch, host, and maintain it while you run your business.",
+      leadRest: "We design, launch, host and maintain it. You run your business.",
       ctaPrimary: "Start your site",
       ctaSecondary: "See demo sites",
       priceNote: "$89.99 <span>CAD/month</span> · All-inclusive",
@@ -141,7 +141,7 @@ const en = {
       steps: [
         {
           title: "You send the basics",
-          desc: "Photos (phone is fine), services, service area, and what you want clients to do: call, book, or request a quote. We handle the rest and ask only good questions.",
+          desc: "Photos (phone is fine), services, service area, and what you want clients to do: call, book, or request a quote. We handle the rest.",
           bullets: ["→ 15-min call or form", "→ We pick 2 directions from our demos"],
           visualInbox: "INBOX · CONTACT@WEBAO.CA",
           subject: "Subject:",
@@ -151,7 +151,7 @@ const en = {
         },
         {
           title: "We design & build",
-          desc: "You get a private preview link within a few days. Click through a real homepage on your phone. One round of clear feedback in, we polish.",
+          desc: "You get a private preview link within a few days. Click through the homepage on your phone. One round of clear feedback in, we polish.",
           bullets: ["→ Private preview URL", "→ One revision round"],
           preview: "PREVIEW · YOUR SITE DRAFT",
           approve: "Approve →",
@@ -183,21 +183,21 @@ const en = {
         price: "$89.99",
         priceSuffix: "CAD / month<br />all-in",
         title: "Three plans.<br />Everything in.",
-        desc: "Custom website, domain, hosting, SSL, SEO basics, analytics, and support. Three plans — pick the one that fits.",
+        desc: "Custom website, domain, hosting, SSL, SEO basics, analytics and support.",
         cta: "See what's included",
         mini: ["Custom site", "·", "Hosting", "·", "Updates included"],
       },
       contact: {
         top: "02 · CONTACT",
         title: "Tell us about<br />your business.",
-        desc: "Email us your trade, your city, and a few photos. A person reads every message and usually replies within one business day.",
+        desc: "Email us your trade, your city and a few photos. We reply within one business day.",
         pills: ["contact@webao.ca", "Montréal · Eastern Time"],
         cta: "Start a conversation",
       },
       demos: {
         top: "03 · DEMOS",
         title: "41 design directions,<br />all fictional.",
-        desc: "Search the catalog by trade or style. Each demo is an art-directed concept, so you can see the range before you choose.",
+        desc: "Search the catalog by trade or style.",
         cta: "Browse demo catalog",
         mini: ["Filterable", "·", "Searchable", "·", "41 styles"],
       },
@@ -264,23 +264,23 @@ const en = {
         },
         {
           q: "How long until my site is online?",
-          a: "Most sites launch in 2 to 3 weeks from the day you send us your photos, logo, and basic info — simple one-pagers can go faster. We give you an honest timeline before you pay anything, and if we’re ever running behind, you’ll be the first to know.",
+          a: "Most sites launch in 2 to 3 weeks from the day you send us your photos, logo, and basic info. Simple one-pagers can go faster. We give you an honest timeline before you pay anything, and if we’re ever running behind, you’ll be the first to know.",
         },
         {
           q: "What’s actually included in the $89.99/mo?",
-          a: "Everything a small-business site needs: a custom 1-page site, your domain, hosting, SSL, mobile-friendly design, a contact form, basic SEO, stats, security and maintenance — plus an hour of content updates each month. No setup fee, no per-change billing.",
+          a: "Everything a small-business site needs: a custom 1-page site, your domain, hosting, SSL, mobile-friendly design, a contact form, basic SEO, stats, security and maintenance, plus an hour of content updates each month. No setup fee, no per-change billing.",
         },
         {
           q: "Will my site show up on Google?",
-          a: "Yes — that’s the point. Every site ships with the SEO basics done properly: clean titles and descriptions, a sitemap, fast load times, and mobile-friendly pages. We also help set up your Google Business Profile, which is how most local customers find trades. Nobody can promise position #1, and be wary of anyone who does.",
+          a: "Yes. That’s the point. Every site ships with the SEO basics done properly: clean titles and descriptions, a sitemap, fast load times, and mobile-friendly pages. We also help set up your Google Business Profile, which is how most local customers find trades. Nobody can promise position #1, and be wary of anyone who does.",
         },
         {
           q: "Can I pause or change things later?",
-          a: "Yes. It’s month-to-month, so you can pause or cancel anytime. Need an extra page or a new feature down the road? We’ll give you a clear quote before doing any work — nothing gets added to your bill without your approval.",
+          a: "Yes. It’s month-to-month, so you can pause or cancel anytime. Need an extra page or a new feature down the road? We’ll give you a clear quote before doing any work. Nothing gets added to your bill without your approval.",
         },
         {
           q: "Do you only build sites for trades?",
-          a: "Trades are our home turf — electricians, plumbers, HVAC, landscapers — but we build sites for any local service business: restaurants, clinics, garages, cleaning services, and more. If you serve customers in person, we can probably help. Just ask.",
+          a: "Trades are our home turf: electricians, plumbers, HVAC, landscapers. But we build sites for any local service business: restaurants, clinics, garages, cleaning services, and more. If you serve customers in person, we can probably help. Just ask.",
         },
       ],
     },
@@ -318,7 +318,7 @@ const en = {
         annual: "(C$890.99/yr)",
         priceNote: 4,
         badge: "",
-        desc: "Designed for solo operators who mainly need a professional online presence and a way for customers to contact them.",
+        desc: "For solo operators who need to look professional online and be easy to contact.",
         inherits: "",
         features: [
           "Custom 1-page website",
@@ -335,7 +335,7 @@ const en = {
         annual: "(C$1,490.99/yr)",
         priceNote: 9,
         badge: "Most Popular",
-        desc: "Designed for established local businesses that need a website to actively generate leads.",
+        desc: "For established local businesses that need their website to bring in leads.",
         inherits: "Everything in Launch, plus:",
         features: [
           "3 to 5 page custom website",
@@ -352,7 +352,7 @@ const en = {
         annual: "(C$3,490.99/yr)",
         priceNote: 12,
         badge: "",
-        desc: "Designed for growing businesses that want their website to become part of their customer-acquisition system.",
+        desc: "For growing businesses that want their site to do more of the selling.",
         inherits: "Everything in Grow, plus:",
         features: [
           "Up to 10 pages, incl. service areas",
@@ -412,13 +412,13 @@ const en = {
       title: "Add-ons",
       popularTag: "Popular",
       items: {
-        localseo: { name: "Local SEO / Google Business Profile Management", price: "C$159.99/mo", note: 18, short: "For businesses that want ongoing local search optimization rather than just initial setup." },
-        review: { name: "Review Generation Engine", price: "C$99.99/mo", note: 19, short: "Automates the process of getting more customer reviews." },
-        aichat: { name: "Trained AI Chat Assistant", price: "C$99.99/mo", note: 20, short: "An AI assistant trained specifically around the business." },
-        booking: { name: "Online Booking / Scheduling", price: "C$49.99/mo", note: 21, short: "For businesses that take appointments." },
+        localseo: { name: "Local SEO / Google Business Profile Management", price: "C$159.99/mo", note: 18, short: "Ongoing local search work, beyond the initial setup." },
+        review: { name: "Review Generation Engine", price: "C$99.99/mo", note: 19, short: "Automatic review requests after each job." },
+        aichat: { name: "Trained AI Chat Assistant", price: "C$99.99/mo", note: 20, short: "A chat assistant trained on your business." },
+        booking: { name: "Online Booking / Scheduling", price: "C$49.99/mo", note: 21, short: "Customers book appointments online." },
         blog: { name: "Blog & Updates", price: "C$34.99/mo", note: 22, short: "" },
         bilingual: { name: "Bilingual EN/FR", price: "C$34.99/mo", note: 23, short: "" },
-        ecommerce: { name: "E-commerce Lite / Payment Links", price: "C$59.99/mo", note: 24, short: "For simple online payments without a full online store." },
+        ecommerce: { name: "E-commerce Lite / Payment Links", price: "C$59.99/mo", note: 24, short: "Simple online payments, no full store." },
         email: { name: "Email Marketing", price: "C$29.99/mo", note: 0, short: "" },
         report: { name: "Monthly Growth Report", price: "C$29.99/mo", note: 11, short: "" },
         extrapage: { name: "Extra Page", price: "C$44.99 one-time", note: 25, short: "" },
@@ -524,7 +524,7 @@ const en = {
       title: "Your selection",
       change: "Change on the pricing page →",
       planLegend: "Plan",
-      noneHint: "Add-ons only — for an existing WEBAO site.",
+      noneHint: "Add-ons only, for an existing WEBAO site.",
       extrasTitle: "Add-ons & bundles",
       remove: "Remove {name}",
       defaultNote: "Grow is pre-selected as our most popular plan. Pick another, or add options on the pricing page.",
@@ -617,7 +617,7 @@ const en = {
       "4": {
         title: "Launch",
         blocks: [
-          { text: "Designed for solo operators who mainly need a professional online presence and a way for customers to contact them." },
+          { text: "For solo operators who need to look professional online and be easy to contact." },
           { text: "Contact form submissions arrive by email." },
           { label: "Positioning", text: "Get online and look professional." },
         ],
@@ -658,9 +658,9 @@ const en = {
       "9": {
         title: "Grow",
         blocks: [
-          { text: "Designed for established local businesses that need a website to actively generate leads." },
+          { text: "For established local businesses that need their website to bring in leads." },
           { label: "Positioning", text: "Turn your website into a lead-generation tool." },
-          { text: "This remains the core webao offer and the C$149 anchor." },
+          { text: "Grow is our most popular plan." },
         ],
       },
       "10": {
@@ -693,7 +693,7 @@ const en = {
       "12": {
         title: "Scale",
         blocks: [
-          { text: "Designed for growing businesses that want their website to become part of their customer-acquisition system." },
+          { text: "For growing businesses that want their site to do more of the selling." },
           { label: "Positioning", text: "A managed website and lead-generation system for growing businesses." },
         ],
       },
@@ -714,7 +714,7 @@ const en = {
         title: "Lead Pack",
         blocks: [
           { text: "Combines the three strongest growth-focused services: Local SEO Management, Review Generation Engine and Trained AI Chat Assistant." },
-          { text: "A strong upsell for Launch and Grow customers who want webao to actively handle lead generation." },
+          { text: "For Launch and Grow customers who want WEBAO to handle lead generation." },
         ],
       },
       "16": {
@@ -744,7 +744,7 @@ const en = {
               "Review monitoring",
             ],
           },
-          { text: "For businesses that want ongoing local search optimization rather than just initial setup." },
+          { text: "Ongoing local search work, beyond the initial setup." },
           { text: "Important distinction: Grow includes GBP setup, while this add-on provides ongoing management." },
         ],
       },
@@ -761,7 +761,7 @@ const en = {
               "500 SMS credits/month included; additional usage billed at C$0.05/SMS [13]",
             ],
           },
-          { text: "Automates the process of getting more customer reviews." },
+          { text: "Automatic review requests after each job." },
         ],
       },
       "20": {
@@ -777,7 +777,7 @@ const en = {
               "Booking integration where supported",
             ],
           },
-          { text: "An AI assistant trained specifically around the business." },
+          { text: "A chat assistant trained on your business." },
           { text: "This is the paid, trained, business-specific version. Grow and Scale include an Extended FAQ (see 5)." },
         ],
       },
@@ -788,7 +788,7 @@ const en = {
             listLabel: "Includes:",
             items: ["Online booking", "Scheduling", "Availability management", "Booking integration"],
           },
-          { text: "For businesses that take appointments." },
+          { text: "Customers book appointments online." },
         ],
       },
       "22": {
@@ -833,7 +833,7 @@ const en = {
               "Simple Stripe-powered transactions",
             ],
           },
-          { text: "For simple online payments without a full online store." },
+          { text: "Simple online payments, no full store." },
         ],
       },
       "25": {
@@ -926,7 +926,7 @@ const en = {
     hero: {
       eyebrow: "Contact · Talk to a person",
       title: "Questions?<br /><span>Just ask.</span>",
-      desc: "Anything about WEBAO, your current site, or whether we're the right fit. We read every message and reply within one business day.",
+      desc: "Anything about WEBAO, your current site, or whether we're the right fit.",
       email: "contact@webao.ca",
       emailNote: "We usually reply within one business day",
       location: "Montréal, Québec",
@@ -939,7 +939,6 @@ const en = {
     },
     form: {
       title: "Send us a message",
-      subtitle: "We reply within one business day · No commitment",
       name: "Your name",
       namePlaceholder: "Your name",
       email: "Email",
@@ -949,9 +948,6 @@ const en = {
       consent: "I'd like WEBAO to reply to my message.",
       privacy: "Your details are used only to reply to you. No mailing list, no sharing.",
       submit: "Send message →",
-      submitNote: "Prefer to write it yourself? Email",
-      submitNoteEmail: "contact@webao.ca",
-      lock: "Your message is sent directly to us. Nothing is stored beyond what we need to reply.",
       validationError: "Please fill in your name, a valid email, your message, and tick the checkbox.",
       success: "Message sent. We'll reply within one business day.",
       ready: "Sent ✓",
@@ -959,11 +955,11 @@ const en = {
     info: {
       reply: {
         title: "How we reply",
-        desc: "Usually within one business day, with:",
+        desc: "Our reply includes:",
         bullets: [
           "→ Two demo directions that fit your trade",
           "→ An honest timeline and what we need from you",
-          "→ The fixed price ($149.99/mo for most sites) or a tailored quote",
+          "→ The exact price, before you commit",
         ],
         note: "No sales script. Just the site, the price, and the work.",
       },
@@ -979,8 +975,8 @@ const en = {
       },
       plain: {
         title: "Prefer plain email?",
-        desc: "That works too. Reach us directly:",
-        lines: ["✉ contact@webao.ca", "⌚ Mon–Fri, 9am–5pm Eastern", "📍 Montréal · Serving all of Canada"],
+        desc: "Reach us directly:",
+        lines: ["✉ contact@webao.ca", "⌚ Mon–Fri, 9am–5pm Eastern"],
         cta: "Email us directly →",
       },
     },
@@ -990,7 +986,7 @@ const en = {
     hero: {
       eyebrow: "Support · Existing clients",
       title: "Already a client?<br /><span>You're in the right place.</span>",
-      desc: "Questions about your site, your plan or your bill — or a change you want made. Send the form, or write to us directly.",
+      desc: "Questions about your site, your plan or your bill, or a change you want made. Send the form, or write to us directly.",
       email: "support@webao.ca",
       emailNote: "We usually reply within one business day",
       hours: "Mon–Fri, 9am–5pm Eastern",
@@ -1027,7 +1023,7 @@ const en = {
     info: {
       changes: {
         title: "Changes, included",
-        desc: "Hours, services, prices, photos, promos — small updates are included in your plan.",
+        desc: "Hours, services, prices, photos, promos. Small updates are included in your plan.",
         note: "Use the form (category: Changes to my site). We reply with when it'll be live.",
       },
       send: {
@@ -1047,7 +1043,6 @@ const en = {
     addons: {
       eyebrow: "Add-ons",
       title: "Add a feature to your site",
-      desc: "Add one from the pricing page, or ask in the form above and we'll set it up.",
       addCta: "Add",
     },
     faq: {
@@ -1080,7 +1075,7 @@ const en = {
     hero: {
       eyebrow: "Demos · Design directions for fictional businesses.",
       title: "What could <span>yours</span> look like?",
-      desc: "Each demo is its own design direction with its own type, palette, layout, and voice, created for a fictional local business. Search by trade to feel the range.",
+      desc: "Each demo is a different design direction for a fictional local business. Search by trade.",
       countNote: "41 DIRECTIONS · ALL BUSINESSES FICTIONAL · NONE OF THEM ARE WEBAO CLIENTS",
       howTitle: "HOW TO USE THIS CATALOG",
       howSteps: [

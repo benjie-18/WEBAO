@@ -56,7 +56,7 @@ const addonPriceCents: Record<string, { cents: number; interval: "month" | "one-
         <a
           class="addon-strip"
           href={`${termsPath}#note-${strip.note}`}
-          aria-label={`${strip.name}, ${strip.price} — ${noteAria.replace("{n}", String(strip.note))}`}
+          aria-label={`${strip.name}, ${strip.price}: ${noteAria.replace("{n}", String(strip.note))}`}
         >
           <span class="addon-strip-tag" aria-hidden="true">{strip.label}</span>
           <strong>{strip.name}</strong>

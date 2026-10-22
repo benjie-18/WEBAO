@@ -73,7 +73,7 @@ const compatRows = compatibility.map((c) => ({
         <svg viewBox="0 0 16 16" aria-hidden="true" class="legend-check"><path d="M3.5 8.2l3.2 3.2 5.8-6.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         {tc.legendIncluded}
       </span>
-      <span class="legend-item"><span class="legend-dash" aria-hidden="true">—</span> {tc.legendDash}</span>
+      <span class="legend-item"><span class="legend-dash" aria-hidden="true">✕</span> {tc.legendDash}</span>
       <span class="legend-item"><span class="cell-addon cell-addon--static">{tc.cellAddonShort}</span> {tc.legendAddon}</span>
     </p>
 
@@ -108,7 +108,7 @@ const compatRows = compatibility.map((c) => ({
                   )}
                   {row[pid] === "N" && (
                     <span class="cell-dash">
-                      <span aria-hidden="true">—</span>
+                      <span aria-hidden="true">✕</span>
                       <span class="visually-hidden">{tc.cellNotInTier}</span>
                     </span>
                   )}
@@ -136,7 +136,7 @@ const compatRows = compatibility.map((c) => ({
                   )}
                   {row[pid] === "N" && (
                     <span class="cell-dash">
-                      <span aria-hidden="true">—</span>
+                      <span aria-hidden="true">✕</span>
                       <span class="visually-hidden">{tc.cellNotInTier}</span>
                     </span>
                   )}
