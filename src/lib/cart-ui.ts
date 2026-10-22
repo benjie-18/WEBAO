@@ -30,6 +30,30 @@ export const BILLING_KEY = "webao_billing_v1";
 
 const INIT_FLAG = "__webaoCartUiBound";
 
+/** Pending auto-disarm for the drawer's "empty cart" confirm state. */
+let emptyAllTimer: ReturnType<typeof setTimeout> | null = null;
+
+/** Restore the empty-cart button to its idle (red, "Empty cart") state. */
+function disarmEmptyAll(doc: Document, btn: HTMLElement): void {
+  if (emptyAllTimer) {
+    clearTimeout(emptyAllTimer);
+    emptyAllTimer = null;
+  }
+  btn.classList.remove("is-armed");
+  btn.textContent = label(doc, "labelEmptyAll", "Empty cart");
+}
+
+/** First click on the empty-cart button: switch it to the confirm state. */
+function armEmptyAll(doc: Document, btn: HTMLElement): void {
+  btn.classList.add("is-armed");
+  btn.textContent = label(doc, "labelEmptyConfirm", "Confirm");
+  if (emptyAllTimer) clearTimeout(emptyAllTimer);
+  emptyAllTimer = setTimeout(() => {
+    emptyAllTimer = null;
+    disarmEmptyAll(doc, btn);
+  }, 3500);
+}
+
 type Win = Window & typeof globalThis;
 
 /* ── storage ──────────────────────────────────────────────────────────── */
@@ -263,7 +287,7 @@ export function renderDrawer(doc: Document): void {
             removeLabel.replace("{name}", item.name),
           )}">
             <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M3.5 8h9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
             </svg>
           </button>
         </div>`,
@@ -282,6 +306,15 @@ export function renderDrawer(doc: Document): void {
     checkout.classList.toggle("is-disabled", empty);
     checkout.setAttribute("aria-disabled", empty ? "true" : "false");
     checkout.tabIndex = empty ? -1 : 0;
+  }
+
+  // Empty-cart button (footer): visible only with items in the cart, and
+  // every re-render resets it to the idle state, so a stray cart change can
+  // never leave a live "Confirm" armed.
+  const emptyAll = doc.querySelector<HTMLElement>("[data-cart-empty-all]");
+  if (emptyAll) {
+    disarmEmptyAll(doc, emptyAll);
+    emptyAll.hidden = items.length === 0;
   }
 
   // "Start your site" CTAs (header + mobile panel): with items in the cart
@@ -400,6 +433,24 @@ function onClick(event: Event, doc: Document): void {
       win,
       getCart(win).filter((item) => item.key !== key),
     );
+    return;
+  }
+
+  // Empty the whole cart: the first click arms the button ("Confirm"), the
+  // second click within the window clears everything.
+  const emptyAllBtn = closestElement(event.target, "[data-cart-empty-all]");
+  if (emptyAllBtn) {
+    event.preventDefault();
+    const btn = emptyAllBtn as HTMLElement;
+    if (btn.classList.contains("is-armed")) {
+      if (emptyAllTimer) {
+        clearTimeout(emptyAllTimer);
+        emptyAllTimer = null;
+      }
+      setCart(win, []);
+    } else {
+      armEmptyAll(doc, btn);
+    }
     return;
   }
 

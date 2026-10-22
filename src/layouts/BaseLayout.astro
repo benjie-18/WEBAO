@@ -733,6 +733,8 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
       data-label-open={t.cart.open}
       data-label-add={t.cart.add}
       data-label-remove={t.cart.remove}
+      data-label-empty-all={t.cart.emptyAll}
+      data-label-empty-confirm={t.cart.emptyConfirm}
       data-empty-title={t.cart.emptyTitle}
       data-empty-hint={t.cart.emptyHint}
       data-suffix-month={t.cart.suffixMonth}
@@ -770,6 +772,7 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
           {t.cart.checkout}
         </a>
         <p class="cart-drawer-note">{t.cart.note}</p>
+        <button type="button" class="cart-empty-all" data-cart-empty-all hidden>{t.cart.emptyAll}</button>
       </div>
     </aside>
 
@@ -886,12 +889,15 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
         flex-direction: column;
         gap: 16px;
       }
-      .cart-drawer-empty {
+      /* The item rows and the empty state are injected by cart-ui.ts at
+         runtime, so scoped selectors never match them — :global() required
+         (same pattern as StartPage's .sel-extra rows). */
+      :global(.cart-drawer-empty) {
         text-align: center;
         color: var(--muted);
         padding: 40px 20px;
       }
-      .cart-item {
+      :global(.cart-item) {
         display: flex;
         align-items: flex-start;
         gap: 12px;
@@ -900,40 +906,40 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
         border-radius: 12px;
         background: var(--card-bg);
       }
-      .cart-item-info {
+      :global(.cart-item-info) {
         flex: 1;
         min-width: 0;
       }
-      .cart-item-name {
+      :global(.cart-item-name) {
         font-weight: 600;
         font-size: 0.95rem;
         margin: 0 0 4px;
       }
-      .cart-item-meta {
+      :global(.cart-item-meta) {
         font-size: 0.85rem;
         color: var(--muted);
         margin: 0;
       }
-      .cart-item-remove {
+      :global(.cart-item-remove) {
         width: 28px;
         height: 28px;
         border-radius: 50%;
         border: 1px solid var(--line);
         background: transparent;
-        color: var(--muted);
+        color: var(--ink);
         cursor: pointer;
         flex-shrink: 0;
         display: inline-flex;
         align-items: center;
         justify-content: center;
       }
-      .cart-item-remove:hover {
+      :global(.cart-item-remove:hover) {
         color: #e00;
         border-color: #e00;
       }
-      .cart-item-remove svg {
-        width: 14px;
-        height: 14px;
+      :global(.cart-item-remove svg) {
+        width: 15px;
+        height: 15px;
       }
       .cart-drawer-footer {
         padding: 20px 24px;
@@ -965,6 +971,31 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
         font-size: 0.8rem;
         color: var(--muted);
         margin: 12px 0 0;
+      }
+      /* Empty-cart reset: solid red at rest; once clicked it flips to the
+         theme surface with a red outline ("Confirm") until clicked again
+         or the drawer re-renders (cart-ui owns the state). */
+      .cart-empty-all {
+        display: block;
+        margin: 14px auto 0;
+        padding: 7px 16px;
+        font: inherit;
+        font-size: 0.78rem;
+        font-weight: 650;
+        color: #fff;
+        background: #ff3b30;
+        border: 1.5px solid #ff3b30;
+        border-radius: 999px;
+        cursor: pointer;
+        transition: background 0.2s ease, color 0.2s ease;
+      }
+      .cart-empty-all[hidden] {
+        display: none;
+      }
+      .cart-empty-all.is-armed {
+        background: var(--paper);
+        color: #ff3b30;
+        border-color: #ff3b30;
       }
     </style>
     <script>

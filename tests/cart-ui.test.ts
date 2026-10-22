@@ -20,6 +20,8 @@ const drawerAttrs = (over: Record<string, string> = {}) =>
     'data-label-open': 'Open cart',
     'data-label-add': 'Add {name} to cart',
     'data-label-remove': 'Remove {name} from cart',
+    'data-label-empty-all': 'Empty cart',
+    'data-label-empty-confirm': 'Confirm',
     'data-empty-title': 'Your cart is empty.',
     'data-empty-hint': 'Add items from the pricing page.',
     'data-suffix-month': '/mo',
@@ -85,6 +87,7 @@ function fixture(options: { french?: boolean } = {}) {
         <div class="cart-drawer-footer">
           <strong data-cart-total>C$0.00</strong>
           <a href="/checkout" class="cart-drawer-checkout" data-cart-checkout aria-disabled="true">Checkout</a>
+          <button type="button" class="cart-empty-all" data-cart-empty-all hidden>Empty cart</button>
         </div>
       </aside>
     </body></html>`,
@@ -235,6 +238,36 @@ test('removing an item from the drawer updates buttons, badge and total', () => 
   assert.equal(doc.querySelector('[data-cart-count]')!.textContent, '1');
   assert.equal(button('launch')!.classList.contains('is-added'), false);
   assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$99.99');
+  window.close();
+});
+
+test('drawer remove buttons carry a minus icon and the empty-cart button shows with items', () => {
+  const { doc, click, button, window } = fixture();
+  click(button('launch'));
+  const remove = doc.querySelector<HTMLElement>('[data-remove-key="launch-month"]');
+  assert.ok(remove);
+  assert.match(remove.innerHTML, /M3\.5 8h9/);
+  const emptyAll = doc.querySelector<HTMLElement>('[data-cart-empty-all]');
+  assert.ok(emptyAll);
+  assert.equal(emptyAll.hidden, false);
+  assert.equal(emptyAll.textContent, 'Empty cart');
+  window.close();
+});
+
+test('empty cart button needs a confirm click, then clears everything', () => {
+  const { doc, click, button, cart, window } = fixture();
+  click(button('launch'));
+  click(button('review'));
+  const emptyAll = doc.querySelector<HTMLElement>('[data-cart-empty-all]');
+  assert.ok(emptyAll);
+  click(emptyAll);
+  assert.equal(emptyAll.classList.contains('is-armed'), true);
+  assert.equal(emptyAll.textContent, 'Confirm');
+  assert.equal(cart().length, 2);
+  click(emptyAll);
+  assert.deepEqual(cart(), []);
+  assert.equal(emptyAll.hidden, true);
+  assert.match(doc.querySelector('[data-cart-items]')!.textContent ?? '', /Your cart is empty\./);
   window.close();
 });
 

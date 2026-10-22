@@ -475,6 +475,8 @@ const en = {
     total: "Total",
     checkout: "Checkout",
     note: "Taxes calculated at checkout.",
+    emptyAll: "Empty cart",
+    emptyConfirm: "Confirm",
     add: "Add {name} to cart",
     remove: "Remove {name} from cart",
     suffixMonth: "/mo",

@@ -479,6 +479,8 @@ const fr = {
     total: "Total",
     checkout: "Passer à la caisse",
     note: "Taxes calculées à la caisse.",
+    emptyAll: "Vider le panier",
+    emptyConfirm: "Confirmer",
     add: "Ajouter {name} au panier",
     remove: "Retirer {name} du panier",
     suffixMonth: "/mois",
