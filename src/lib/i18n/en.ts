@@ -990,7 +990,7 @@ const en = {
     hero: {
       eyebrow: "Support · Existing clients",
       title: "Already a client?<br /><span>You're in the right place.</span>",
-      desc: "Questions about your site, your plan, or your bill. A change you want made. Send the form, or write to us directly. A person reads every message.",
+      desc: "Questions about your site, your plan or your bill — or a change you want made. Send the form, or write to us directly.",
       email: "support@webao.ca",
       emailNote: "We usually reply within one business day",
       hours: "Mon–Fri, 9am–5pm Eastern",
@@ -1000,7 +1000,6 @@ const en = {
     },
     form: {
       title: "Send a support request",
-      subtitle: "We reply within one business day · No ticket numbers, just email",
       name: "Your name",
       namePlaceholder: "Your name",
       email: "Email",
@@ -1020,9 +1019,6 @@ const en = {
       consent: "I'd like WEBAO to reply to my request.",
       privacy: "Your details are used only to handle your request. No mailing list, no sharing.",
       submit: "Send request →",
-      submitNote: "Prefer plain email? Write to",
-      submitNoteEmail: "support@webao.ca",
-      lock: "Delivered straight to our inbox. We reply by email.",
       validationError: "Please fill in every field with a valid email, and tick the checkbox.",
       success: "Request sent. We'll reply to your email within one business day.",
       ready: "Sent ✓",
@@ -1031,13 +1027,8 @@ const en = {
     info: {
       changes: {
         title: "Changes, included",
-        desc: "Small updates are part of your plan, at no extra cost:",
-        bullets: [
-          "→ Hours, services and prices on your pages",
-          "→ New photos, promos and banners",
-          "→ Staff, contact details and service areas",
-        ],
-        note: "Use the form (category: Changes to my site) or email us. We reply with when it'll be live.",
+        desc: "Hours, services, prices, photos, promos — small updates are included in your plan.",
+        note: "Use the form (category: Changes to my site). We reply with when it'll be live.",
       },
       send: {
         title: "What to send",
@@ -1046,28 +1037,26 @@ const en = {
           "→ New photos or text, ready to use",
           "→ The date it matters by, if there is one",
         ],
-        note: "Vague is fine. We'd rather have the request than a perfect brief.",
       },
       billing: {
         title: "Billing, handled by email",
-        desc: "Invoices, receipts, a new payment method, a plan change: pick the Billing category in the form, or write to us directly:",
-        lines: ["✉ support@webao.ca", "⌚ Mon–Fri, 9am–5pm Eastern"],
+        desc: "Invoices, receipts, payment methods, plan changes.",
         cta: "Email support →",
       },
     },
     addons: {
       eyebrow: "Add-ons",
       title: "Add a feature to your site",
-      desc: "Every add-on works with your existing plan. Add one from the pricing page, or ask in the form above and we'll set it up for you.",
+      desc: "Add one from the pricing page, or ask in the form above and we'll set it up.",
       addCta: "Add",
     },
     faq: {
-      eyebrow: "Client FAQ",
+      eyebrow: "FAQ",
       title: "Questions from clients",
       items: [
         {
           q: "How do I get a change made?",
-          a: "Send the form on this page, or email support@webao.ca. Small changes like hours, services, photos and promo banners are included in your monthly fee. We reply within one business day and tell you when the change will be live.",
+          a: "Send the form on this page, or email support@webao.ca. Small changes (hours, services, photos, promos) are included in your plan.",
         },
         {
           q: "How do add-ons work?",

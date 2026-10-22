@@ -59,7 +59,6 @@ const categoryIds = ["billing", "changes", "addons", "issue", "other"] as const;
         >
           <div class="form-head">
             <h2>{s.form.title}</h2>
-            <p class="mono">{s.form.subtitle}</p>
           </div>
 
           <label>{s.form.name}
@@ -92,15 +91,8 @@ const categoryIds = ["billing", "changes", "addons", "issue", "other"] as const;
           <button type="submit" class="btn btn--primary" style="width:100%; justify-content:center; margin-top:6px;">
             {s.form.submit}
           </button>
-          <div class="mono" style="text-align:center; font-size:11px; color: var(--muted); margin-top:8px;">{s.form.submitNote} <a href="mailto:support@webao.ca" style="color: var(--ink); font-weight:650; text-decoration: underline; text-underline-offset:3px;">{s.form.submitNoteEmail}</a></div>
-
           <div id="support-form-status" role="status" aria-live="polite" class="form-status mono" hidden></div>
         </form>
-
-        <div class="form-foot mono">
-          <span>🔒</span>
-          <span>{s.form.lock}</span>
-        </div>
       </div>
     </div>
   </div>
@@ -113,9 +105,6 @@ const categoryIds = ["billing", "changes", "addons", "issue", "other"] as const;
       <div class="info-card">
         <h3>{s.info.changes.title}</h3>
         <p>{s.info.changes.desc}</p>
-        <ul>
-          {s.info.changes.bullets.map(b => <li>{b}</li>)}
-        </ul>
         <div class="mono" style="margin-top:10px; font-size:11px; color: var(--muted);">{s.info.changes.note}</div>
       </div>
       <div class="info-card">
@@ -123,14 +112,10 @@ const categoryIds = ["billing", "changes", "addons", "issue", "other"] as const;
         <ul>
           {s.info.send.bullets.map(b => <li>{b}</li>)}
         </ul>
-        <div class="mono" style="margin-top:10px; font-size:11px; color: var(--muted);">{s.info.send.note}</div>
       </div>
       <div class="info-card">
         <h3>{s.info.billing.title}</h3>
         <p>{s.info.billing.desc}</p>
-        <div class="mono" style="margin-top:10px; display:grid; gap:6px; font-size:12.5px;">
-          {s.info.billing.lines.map(l => <span>{l}</span>)}
-        </div>
         <a href="mailto:support@webao.ca" class="btn btn--dark btn--sm" style="margin-top:14px; width:100%; justify-content:center;">{s.info.billing.cta}</a>
       </div>
     </div>
@@ -282,7 +267,6 @@ const categoryIds = ["billing", "changes", "addons", "issue", "other"] as const;
   .check-row { display:flex; gap:8px; align-items:center; font-size:12.5px; color: var(--ink-3); font-weight:500; cursor:pointer; }
   .check-row input { width:16px; height:16px; accent-color: var(--ink); }
   .form-status { padding:10px 12px; border-radius:10px; border:1px solid var(--line); font-size:12.5px; line-height:1.5; }
-  .form-foot { display:flex; gap:8px; align-items:center; font-size:11px; color: var(--muted); padding: 6px 2px; line-height:1.5; }
   .info-grid { display:grid; grid-template-columns: repeat(3,1fr); gap:16px; }
   .info-card { background: var(--card-bg); border:1px solid var(--line); border-radius:16px; padding:18px; box-shadow: var(--shadow-sm); }
   .info-card h3 { font-size:14.5px; letter-spacing:-0.02em; font-weight:750; }
