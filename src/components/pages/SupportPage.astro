@@ -1,0 +1,319 @@
+---
+import { useTranslations, localizedPaths, type Locale } from "../../lib/i18n";
+import { featuredAddonOrder, remainingAddonOrder } from "../../lib/pricing";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props as Props;
+const t = useTranslations(locale);
+const paths = localizedPaths[locale];
+const s = t.support;
+const addonIds = [...featuredAddonOrder, ...remainingAddonOrder];
+const categoryIds = ["billing", "changes", "addons", "issue", "other"] as const;
+---
+
+<section class="contact-hero grain">
+  <div class="shell">
+    <div class="contact-grid">
+      <div class="contact-copy" data-reveal>
+        <div class="eyebrow">{s.hero.eyebrow}</div>
+        <h1 class="display" style="font-size: clamp(2.6rem, 6vw, 4.8rem); line-height:.88; margin-top:12px;" set:html={s.hero.title}></h1>
+        <p class="prose" style="margin-top:14px; max-width:52ch;">
+          {s.hero.desc}
+        </p>
+
+        <div class="contact-cards">
+          <a href="mailto:support@webao.ca" class="c-card">
+            <span class="c-icon" aria-hidden="true">✉</span>
+            <span>
+              <strong>{s.hero.email}</strong>
+              <span class="mono">{s.hero.emailNote}</span>
+            </span>
+            <span aria-hidden="true">→</span>
+          </a>
+          <div class="c-card">
+            <span class="c-icon" aria-hidden="true">⌚</span>
+            <span>
+              <strong>{s.hero.hours}</strong>
+              <span class="mono">{s.hero.hoursNote}</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="trust-mini mono">
+          {s.hero.trust.map(tr => <span>{tr}</span>)}
+        </div>
+
+        <div class="testi">
+          <p>{s.hero.newText}</p>
+          <a href={paths.start} class="mono" style="display:inline-block; margin-top:8px; font-size:12px; font-weight:600; color: var(--accent-text); text-decoration: underline; text-underline-offset:3px;">{s.hero.newCta}</a>
+        </div>
+      </div>
+
+      <div class="contact-form-wrap" data-reveal style="--d:120ms">
+        <form
+          class="form"
+          id="support-form"
+          novalidate
+          data-validation-error={s.form.validationError}
+          data-success={s.form.success}
+          data-ready={s.form.ready}
+          data-error-fallback={s.form.errorFallback}
+        >
+          <div class="form-head">
+            <h2>{s.form.title}</h2>
+            <p class="mono">{s.form.subtitle}</p>
+          </div>
+
+          <label>{s.form.name}
+            <input name="name" placeholder={s.form.namePlaceholder} autocomplete="name" required />
+          </label>
+
+          <label>{s.form.email}
+            <input name="email" type="email" placeholder={s.form.emailPlaceholder} autocomplete="email" required />
+          </label>
+
+          <label>{s.form.category}
+            <select name="category" required>
+              {categoryIds.map(id => <option value={id}>{s.form.categories[id]}</option>)}
+            </select>
+          </label>
+
+          <label>{s.form.subject}
+            <input name="subject" placeholder={s.form.subjectPlaceholder} required />
+          </label>
+
+          <label>{s.form.message}
+            <textarea name="message" rows="5" placeholder={s.form.messagePlaceholder} required></textarea>
+          </label>
+
+          <div class="form-meta mono">
+            <label class="check-row"><input type="checkbox" required /> {s.form.consent}</label>
+            <span>{s.form.privacy}</span>
+          </div>
+
+          <button type="submit" class="btn btn--primary" style="width:100%; justify-content:center; margin-top:6px;">
+            {s.form.submit}
+          </button>
+          <div class="mono" style="text-align:center; font-size:11px; color: var(--muted); margin-top:8px;">{s.form.submitNote} <a href="mailto:support@webao.ca" style="color: var(--ink); font-weight:650; text-decoration: underline; text-underline-offset:3px;">{s.form.submitNoteEmail}</a></div>
+
+          <div id="support-form-status" role="status" aria-live="polite" class="form-status mono" hidden></div>
+        </form>
+
+        <div class="form-foot mono">
+          <span>🔒</span>
+          <span>{s.form.lock}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How support works -->
+<section class="section section--tight grain" style="background: var(--paper-2); border-top:1px solid var(--line);">
+  <div class="shell">
+    <div class="info-grid" data-reveal>
+      <div class="info-card">
+        <h3>{s.info.changes.title}</h3>
+        <p>{s.info.changes.desc}</p>
+        <ul>
+          {s.info.changes.bullets.map(b => <li>{b}</li>)}
+        </ul>
+        <div class="mono" style="margin-top:10px; font-size:11px; color: var(--muted);">{s.info.changes.note}</div>
+      </div>
+      <div class="info-card">
+        <h3>{s.info.send.title}</h3>
+        <ul>
+          {s.info.send.bullets.map(b => <li>{b}</li>)}
+        </ul>
+        <div class="mono" style="margin-top:10px; font-size:11px; color: var(--muted);">{s.info.send.note}</div>
+      </div>
+      <div class="info-card">
+        <h3>{s.info.billing.title}</h3>
+        <p>{s.info.billing.desc}</p>
+        <div class="mono" style="margin-top:10px; display:grid; gap:6px; font-size:12.5px;">
+          {s.info.billing.lines.map(l => <span>{l}</span>)}
+        </div>
+        <a href="mailto:support@webao.ca" class="btn btn--dark btn--sm" style="margin-top:14px; width:100%; justify-content:center;">{s.info.billing.cta}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Add-ons for existing plans -->
+<section class="section section--tight grain">
+  <div class="shell">
+    <div data-reveal>
+      <div class="eyebrow">{s.addons.eyebrow}</div>
+      <h2 class="display" style="font-size: clamp(1.9rem, 4vw, 3rem); line-height:.95; margin-top:10px;">{s.addons.title}</h2>
+      <p class="prose" style="margin-top:12px; max-width:62ch;">{s.addons.desc}</p>
+    </div>
+    <div class="addon-list" data-reveal>
+      {addonIds.map(id => {
+        const item = t.pricing.addons.items[id];
+        return (
+          <div class="addon-row">
+            <div class="addon-main">
+              <strong>{item.name}</strong>
+              {item.short ? <span>{item.short}</span> : null}
+            </div>
+            <div class="addon-side">
+              <span class="mono addon-price">{item.price}</span>
+              <button type="button" class="btn btn--dark btn--sm" data-addon-subject={`${s.addons.subjectPrefix} ${item.name}`}>{s.addons.addCta}</button>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+    <div class="mono" style="margin-top:12px; font-size:11px; color: var(--muted);">{s.addons.note}</div>
+  </div>
+</section>
+
+<!-- Client FAQ -->
+<section class="section section--tight grain" style="background: var(--paper-2); border-top:1px solid var(--line);">
+  <div class="shell">
+    <div data-reveal>
+      <div class="eyebrow">{s.faq.eyebrow}</div>
+      <h2 class="display" style="font-size: clamp(1.9rem, 4vw, 3rem); line-height:.95; margin-top:10px;">{s.faq.title}</h2>
+    </div>
+    <div class="faq-grid" data-reveal>
+      {s.faq.items.map(item => (
+        <div class="info-card">
+          <h3>{item.q}</h3>
+          <p>{item.a}</p>
+        </div>
+      ))}
+    </div>
+    <div class="faq-links mono" data-reveal>
+      <a href={paths.terms}>{s.faq.termsLabel}</a>
+      <a href={paths.refunds}>{s.faq.refundsLabel}</a>
+    </div>
+  </div>
+</section>
+
+<script>
+  function initSupportPage() {
+    const form = document.getElementById('support-form') as HTMLFormElement | null;
+    const status = document.getElementById('support-form-status') as HTMLElement | null;
+
+    // "Add" buttons on the add-on list: preselect the add-ons category,
+    // prefill the subject, and bring the client to the form.
+    document.querySelectorAll<HTMLButtonElement>('[data-addon-subject]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (!form) return;
+        const category = form.querySelector('select[name="category"]') as HTMLSelectElement | null;
+        const subject = form.querySelector('input[name="subject"]') as HTMLInputElement | null;
+        if (category) category.value = 'addons';
+        if (subject) subject.value = btn.getAttribute('data-addon-subject') || '';
+        form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const message = form.querySelector('textarea[name="message"]') as HTMLTextAreaElement | null;
+        if (message) message.focus({ preventScroll: true });
+      });
+    });
+
+    if (form && status) {
+      const validationError = form.getAttribute('data-validation-error') || 'Please fill in every field with a valid email, and tick the checkbox.';
+      const successMsg = form.getAttribute('data-success') || 'Request sent. We will reply within one business day.';
+      const readyText = form.getAttribute('data-ready') || 'Sent ✓';
+      const errorFallback = form.getAttribute('data-error-fallback') || 'Could not send right now. Email us directly at support@webao.ca.';
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const data = new FormData(form as HTMLFormElement);
+        const name = String(data.get('name') || '').trim();
+        const email = String(data.get('email') || '').trim();
+        const category = String(data.get('category') || '').trim();
+        const subject = String(data.get('subject') || '').trim();
+        const message = String(data.get('message') || '').trim();
+        let valid = true;
+        if (!name || !email || !category || !subject || !message) valid = false;
+        if (!email.includes('@')) valid = false;
+        const consent = form.querySelector('.check-row input') as HTMLInputElement | null;
+        if (consent && !consent.checked) valid = false;
+        if (!valid) {
+          (status as HTMLElement).hidden = false;
+          status.textContent = validationError;
+          status.classList.remove('form-status--success');
+          status.classList.add('form-status--error');
+          return;
+        }
+        fetch("/api/forms/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          keepalive: true,
+          body: JSON.stringify({
+            form: "support",
+            fields: { name, email, category, subject, message, page: location.pathname },
+          }),
+        })
+          .then((r) => r.json())
+          .then((res) => {
+            if (res && res.ok) {
+              status.hidden = false;
+              status.textContent = successMsg;
+              status.classList.remove('form-status--error');
+              status.classList.add('form-status--success');
+              const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+              if (btn) { btn.textContent = readyText; btn.disabled = true; }
+              form.querySelectorAll('input, textarea, select').forEach((el) => { (el as HTMLInputElement).disabled = true; });
+            } else {
+              throw new Error('submit failed');
+            }
+          })
+          .catch(() => {
+            status.hidden = false;
+            status.textContent = errorFallback;
+            status.classList.remove('form-status--success');
+            status.classList.add('form-status--error');
+          });
+      });
+    }
+  }
+
+  document.addEventListener('astro:page-load', initSupportPage);
+</script>
+
+<style>
+  .contact-hero { padding-block: clamp(28px,5vw,64px); background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%); border-bottom: 1px solid var(--line); }
+  .contact-grid { display:grid; grid-template-columns: 1fr 1.05fr; gap: clamp(24px,4vw,40px); align-items:start; }
+  .contact-copy { position: sticky; top: calc(var(--header-h) + 16px); }
+  .contact-cards { margin-top:18px; display:grid; gap:10px; }
+  .c-card { display:flex; align-items:center; gap:12px; background: var(--card-bg); border:1px solid var(--line); border-radius:14px; padding:14px; box-shadow: var(--shadow-sm); transition: transform .2s var(--ease-out), box-shadow .2s; }
+  a.c-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .c-icon { width:36px; height:36px; border-radius:10px; background: var(--paper-2); border:1px solid var(--line); display:grid; place-items:center; font-size:14px; }
+  .c-card strong { display:block; font-size:14.5px; letter-spacing:-0.02em; }
+  .c-card .mono { display:block; font-size:11px; color: var(--muted); margin-top:2px; }
+  .trust-mini { margin-top:14px; display:flex; gap:8px; flex-wrap:wrap; font-size:11px; color: var(--muted); }
+  .testi { margin-top:18px; background: var(--card-bg); border:1px solid var(--line); border-radius:14px; padding:16px; box-shadow: var(--shadow-sm); }
+  .testi p { font-size:14px; line-height:1.6; color: var(--ink-3); }
+  .contact-form-wrap { display:grid; gap:10px; }
+  .form { background: var(--card-bg); border:1px solid var(--line); border-radius:18px; padding:18px; box-shadow: var(--shadow-md); display:grid; gap:14px; }
+  .form-head h2 { font-size: 1.35rem; letter-spacing:-0.02em; font-weight:750; line-height:1; }
+  .form-head p { margin-top:4px; font-size:11px; color: var(--muted); }
+  label { display:grid; gap:6px; font-size:13px; font-weight:600; letter-spacing:-0.01em; color: var(--ink-3); }
+  input, select, textarea { width:100%; padding:10px 12px; border:1px solid var(--line-strong); border-radius:10px; background: var(--paper-3); font-size:14px; font-weight:500; color: var(--ink); transition: border-color .2s, box-shadow .2s; }
+  textarea { resize: vertical; min-height: 72px; }
+  input:focus, select:focus, textarea:focus { outline:none; border-color: var(--ink); box-shadow: 0 0 0 3px var(--focus-ring); }
+  .form-meta { display:grid; gap:8px; font-size:11px; color: var(--muted); line-height:1.5; }
+  .check-row { display:flex; gap:8px; align-items:center; font-size:12.5px; color: var(--ink-3); font-weight:500; cursor:pointer; }
+  .check-row input { width:16px; height:16px; accent-color: var(--ink); }
+  .form-status { padding:10px 12px; border-radius:10px; border:1px solid var(--line); font-size:12.5px; line-height:1.5; }
+  .form-foot { display:flex; gap:8px; align-items:center; font-size:11px; color: var(--muted); padding: 6px 2px; line-height:1.5; }
+  .info-grid { display:grid; grid-template-columns: repeat(3,1fr); gap:16px; }
+  .info-card { background: var(--card-bg); border:1px solid var(--line); border-radius:16px; padding:18px; box-shadow: var(--shadow-sm); }
+  .info-card h3 { font-size:14.5px; letter-spacing:-0.02em; font-weight:750; }
+  .info-card p { margin-top:8px; font-size:13px; color: var(--muted); line-height:1.5; }
+  .info-card ul { list-style:none; padding:0; margin-top:10px; display:grid; gap:6px; font-size:13px; line-height:1.5; color: var(--ink-3); }
+  .addon-list { margin-top:22px; border:1px solid var(--line); border-radius:16px; background: var(--card-bg); box-shadow: var(--shadow-sm); overflow:hidden; }
+  .addon-row { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 18px; border-top:1px solid var(--line); }
+  .addon-row:first-child { border-top:none; }
+  .addon-main strong { display:block; font-size:14.5px; letter-spacing:-0.02em; }
+  .addon-main span { display:block; margin-top:2px; font-size:12.5px; color: var(--muted); line-height:1.45; }
+  .addon-side { display:flex; align-items:center; gap:14px; flex-shrink:0; }
+  .addon-price { font-size:12.5px; color: var(--ink-3); }
+  .faq-grid { display:grid; grid-template-columns: repeat(2,1fr); gap:16px; margin-top:22px; }
+  .faq-links { margin-top:18px; display:flex; gap:22px; flex-wrap:wrap; font-size:12px; }
+  .faq-links a { color: var(--accent-text); font-weight:600; text-decoration: underline; text-underline-offset:3px; }
+  @media (max-width: 900px) { .contact-grid, .info-grid, .faq-grid { grid-template-columns: 1fr; } .contact-copy { position: static; } .addon-row { flex-direction:column; align-items:flex-start; } }
+</style>

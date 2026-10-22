@@ -23,6 +23,11 @@ const fr = {
       description:
         "Parlez-nous de votre entreprise et on vous répond avec deux directions de démo et un échéancier honnête. Écrivez à contact@webao.ca ou utilisez le formulaire.",
     },
+    support: {
+      title: "Soutien aux clients · WEBAO",
+      description:
+        "Déjà client WEBAO ? Rejoignez le soutien, demandez des modifications, ajoutez des fonctions et obtenez des réponses sur votre forfait et votre facturation. Écrivez à support@webao.ca ou utilisez le formulaire.",
+    },
     demos: {
       title: "Exemples de sites web · 41 démos pour entreprises locales | WEBAO",
       description:
@@ -57,6 +62,7 @@ const fr = {
     studio: "Studio",
     demoCatalog: "Catalogue de démos",
     pricing: "Tarifs",
+    support: "Soutien aux clients",
     contact: "Contact",
     howItWorks: "Fonctionnement",
     services: "Services",
@@ -934,6 +940,8 @@ const fr = {
       trust: ["◐ Une vraie personne lit chaque message", "·", "Vos infos servent juste à vous répondre"],
       browseText: "Prêt à démarrer plutôt ? Ça prend deux minutes.",
       browseCta: "Démarrer mon site →",
+      clientText: "Déjà client ? Le soutien, les modifications et les modules sont ici :",
+      clientCta: "Soutien aux clients →",
     },
     form: {
       title: "Envoyez-nous un message",
@@ -982,6 +990,110 @@ const fr = {
         lines: ["✉ contact@webao.ca", "⌚ Lun–ven, 9 h à 17 h, heure de l’Est", "📍 Montréal · Partout au Canada"],
         cta: "Nous écrire directement →",
       },
+    },
+  },
+
+  support: {
+    hero: {
+      eyebrow: "Soutien · Clients actuels",
+      title: "Déjà client ?<br /><span>Vous êtes au bon endroit.</span>",
+      desc: "Des questions sur votre site, votre forfait ou votre facture. Une modification à faire. Envoyez le formulaire, ou écrivez-nous directement. Une personne lit chaque message.",
+      email: "support@webao.ca",
+      emailNote: "On répond habituellement en un jour ouvrable",
+      hours: "Lun–ven, 9 h à 17 h, heure de l’Est",
+      hoursNote: "Montréal, Québec · Des clients partout au Canada",
+      trust: ["◐ Une personne lit chaque message", "·", "Vos coordonnées servent seulement à vous répondre"],
+      newText: "Pas encore client ? Commencez plutôt ici :",
+      newCta: "Démarrer mon site →",
+    },
+    form: {
+      title: "Envoyer une demande de soutien",
+      subtitle: "On répond en un jour ouvrable · Pas de numéro de billet, juste un courriel",
+      name: "Votre nom",
+      namePlaceholder: "Votre nom",
+      email: "Courriel",
+      emailPlaceholder: "vous@votreentreprise.ca",
+      category: "Catégorie",
+      categories: {
+        billing: "Facturation",
+        changes: "Modifications à mon site",
+        addons: "Ajouter une fonction ou un module",
+        issue: "Quelque chose ne fonctionne pas",
+        other: "Autre",
+      },
+      subject: "Objet",
+      subjectPlaceholder: "De quoi s’agit-il ?",
+      message: "Description",
+      messagePlaceholder: "Dites-nous ce qu’il vous faut. La page, les détails, tout ce qui peut aider.",
+      consent: "J’aimerais que WEBAO réponde à ma demande.",
+      privacy: "Vos coordonnées servent seulement à traiter votre demande. Aucune liste d’envoi, aucun partage.",
+      submit: "Envoyer la demande →",
+      submitNote: "Vous préférez un courriel tout simple ? Écrivez à",
+      submitNoteEmail: "support@webao.ca",
+      lock: "Votre demande arrive directement dans notre panneau d’administration et notre boîte courriel. Rien n’est conservé au-delà de ce qu’il faut pour vous aider.",
+      validationError: "Veuillez remplir tous les champs avec un courriel valide, et cocher la case.",
+      success: "Demande envoyée. On vous répond par courriel en un jour ouvrable.",
+      ready: "Envoyé ✓",
+      errorFallback: "Envoi impossible pour le moment. Écrivez-nous directement à support@webao.ca.",
+    },
+    info: {
+      changes: {
+        title: "Modifications incluses",
+        desc: "Les petits ajustements font partie de votre forfait, sans frais supplémentaires :",
+        bullets: [
+          "→ Heures, services et prix sur vos pages",
+          "→ Nouvelles photos, promos et bannières",
+          "→ Équipe, coordonnées et zones desservies",
+        ],
+        note: "Utilisez le formulaire (catégorie : Modifications à mon site) ou écrivez-nous. On vous répond avec la date de mise en ligne.",
+      },
+      send: {
+        title: "Quoi envoyer",
+        bullets: [
+          "→ La page et le changement exact",
+          "→ Les nouvelles photos ou textes, prêts à utiliser",
+          "→ La date limite, s’il y en a une",
+        ],
+        note: "Même vague, ça va. On préfère recevoir la demande qu’un brief parfait.",
+      },
+      billing: {
+        title: "Facturation, par courriel",
+        desc: "Factures, reçus, nouveau moyen de paiement, changement de forfait : choisissez la catégorie Facturation dans le formulaire, ou écrivez-nous directement :",
+        lines: ["✉ support@webao.ca", "⌚ Lun–ven, 9 h à 17 h, heure de l’Est"],
+        cta: "Écrire au soutien →",
+      },
+    },
+    addons: {
+      eyebrow: "Modules",
+      title: "Ajouter une fonction à votre site",
+      desc: "Les mêmes modules que sur la page des tarifs, pour votre forfait actuel. On l’ajoute à votre forfait, donc tout est facturé ensemble, à la même date.",
+      addCta: "Ajouter",
+      subjectPrefix: "Module :",
+      note: "Les prix sont ceux de la page des tarifs. Les détails de chaque module sont dans les notes des conditions.",
+    },
+    faq: {
+      eyebrow: "FAQ clients",
+      title: "Questions de clients",
+      items: [
+        {
+          q: "Comment je fais faire une modification ?",
+          a: "Envoyez le formulaire sur cette page, ou écrivez à support@webao.ca. Les petits changements comme les heures, les services, les photos et les bannières promo sont inclus dans vos frais mensuels. On répond en un jour ouvrable et on vous dit quand le changement sera en ligne.",
+        },
+        {
+          q: "Comment fonctionnent les modules ?",
+          a: "Choisissez-en un dans la liste ci-dessus et demandez-le par le formulaire (catégorie : Ajouter une fonction ou un module). On l’attache à votre forfait actuel, donc une seule facture, à la même date. Les prix sont mensuels, sauf indication « paiement unique ».",
+        },
+        {
+          q: "Où sont mes factures ? Comment je mets à jour mon moyen de paiement ?",
+          a: "Demandez-le par le formulaire (catégorie : Facturation) ou par courriel. On vous envoie vos factures, ou un moyen sécurisé de mettre à jour votre paiement.",
+        },
+        {
+          q: "Je peux changer de forfait, ou annuler ?",
+          a: "Oui. Écrivez-nous et on s’en occupe. Les conditions exactes sont sur les pages des conditions et des remboursements, liées ci-dessous.",
+        },
+      ],
+      termsLabel: "Lire les conditions et détails →",
+      refundsLabel: "Lire la politique de remboursements →",
     },
   },
 
@@ -1157,6 +1269,7 @@ const fr = {
       filterAll: "Tous",
       filterContact: "Contact",
       filterPricing: "Tarifs",
+      filterSupport: "Soutien",
     },
     config: {
       title: "Réglages",

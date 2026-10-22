@@ -50,8 +50,20 @@ interface ExecutionContext {
   passThroughOnException(): void;
 }
 
+/** send_email binding (destination pinned in wrangler.jsonc). */
+interface SendEmailBinding {
+  send(message: import("cloudflare:email").EmailMessage): Promise<{ messageId: string }>;
+}
+
+declare module "cloudflare:email" {
+  export class EmailMessage {
+    constructor(from: string, to: string, raw: string);
+  }
+}
+
 /** Worker bindings (see wrangler.jsonc). */
 interface Env {
   WEBAO_KV: KVNamespace;
   ASSETS: Fetcher;
+  EMAIL?: SendEmailBinding;
 }

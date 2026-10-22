@@ -38,9 +38,14 @@ stay inside the KV daily write budget, while final beats always persist.
 ## Forms (public)
 
 ### `POST /api/forms/submit`
-Body: `{ form: "pricing" | "contact", fields: { name, email, message?, ... } }`
+Body: `{ form: "pricing" | "contact" | "support", fields: { name, email, message?, ... } }`
 Validation: `name` required; `pricing` requires a valid `email`; `contact`
-requires `email` or `message`. Extra fields are kept (string values, capped).
+requires `email` or `message`; `support` requires a valid `email`, a
+`category` (`billing` | `changes` | `addons` | `issue` | `other`), a
+`subject` and a `message` (the description). Extra fields are kept (string
+values, capped). Support submissions also send a best-effort email copy to
+the WEBAO inbox via the `EMAIL` send_email binding (destination pinned in
+`wrangler.jsonc`); the KV record stays the source of truth.
 → `{ "ok": true, "id": "<ts>:<rand>" }` (400 with an error message otherwise).
 
 ## Checkout (public)

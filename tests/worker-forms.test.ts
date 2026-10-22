@@ -35,6 +35,34 @@ test('a pricing submission is stored, indexed and echoed with its id', async () 
   assert.deepEqual(JSON.parse(memory.store.get('forms:index') ?? '[]'), [key]);
 });
 
+test('a support submission is stored with its category, subject and description', async () => {
+  const memory = memoryKV();
+  const fields = {
+    name: 'Sam',
+    email: 'sam@example.ca',
+    category: 'billing',
+    subject: 'Invoice for October',
+    message: 'Please resend my October invoice.',
+    page: '/support/',
+  };
+  // A present-but-unusable EMAIL binding must not fail the submission: the
+  // email copy is best-effort, the KV record is the source of truth.
+  const env = envOf(memory.kv, {
+    EMAIL: {
+      send: async () => {
+        throw new Error('no mail in tests');
+      },
+    },
+  });
+  const response = await handleFormSubmit(submit({ form: 'support', fields }), env);
+  assert.equal(response.status, 200);
+  const body = await bodyOf(response);
+  assert.equal(body.ok, true);
+  const stored = JSON.parse(memory.store.get(`form:${body.id}`) ?? 'null');
+  assert.equal(stored.form, 'support');
+  assert.deepEqual(stored.fields, fields);
+});
+
 test('the index is newest-first', async () => {
   const memory = memoryKV();
   const first = await bodyOf(await handleFormSubmit(submit(pricingForm), envOf(memory.kv)));
@@ -52,6 +80,11 @@ test('required fields follow the form type', async () => {
     ['contact', { form: 'contact', fields: { name: 'Sam' } }, 'Email or message is required'],
     ['contact', { form: 'contact', fields: { name: 'Sam', email: 'nope' } }, 'Invalid email'],
     ['contact', { form: 'contact', fields: { name: '   ' } }, 'Name is required'],
+    ['support', { form: 'support', fields: { name: 'Sam', email: 'sam@example.ca', subject: 'Hours', message: 'Please update' } }, 'Category is required'],
+    ['support', { form: 'support', fields: { name: 'Sam', email: 'sam@example.ca', category: 'spam', subject: 'Hours', message: 'Please update' } }, 'Category is required'],
+    ['support', { form: 'support', fields: { name: 'Sam', category: 'billing', subject: 'Invoice', message: 'Please resend' } }, 'Valid email is required'],
+    ['support', { form: 'support', fields: { name: 'Sam', email: 'sam@example.ca', category: 'billing', message: 'Please resend' } }, 'Subject is required'],
+    ['support', { form: 'support', fields: { name: 'Sam', email: 'sam@example.ca', category: 'billing', subject: 'Invoice' } }, 'Description is required'],
   ];
   for (const [label, body, message] of cases) {
     const memory = memoryKV();

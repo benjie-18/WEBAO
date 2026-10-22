@@ -20,6 +20,11 @@ const en = {
       description:
         "Tell us about your business and we’ll reply with two demo directions and an honest timeline. Email contact@webao.ca or send the form.",
     },
+    support: {
+      title: "Client Support · WEBAO",
+      description:
+        "Existing WEBAO client? Reach support, request changes, add features, and get answers about your plan and billing. Email support@webao.ca or use the form.",
+    },
     demos: {
       title: "Website Design Examples · 41 Demos for Local Businesses | WEBAO",
       description:
@@ -55,6 +60,7 @@ const en = {
     demoCatalog: "Demo catalog",
     pricing: "Pricing",
     contact: "Contact",
+    support: "Client support",
     howItWorks: "How it works",
     services: "Services",
     customSites: "Custom 3–5 page sites",
@@ -928,6 +934,8 @@ const en = {
       trust: ["◐ A person reads every message", "·", "Your details are used only to reply"],
       browseText: "Ready to start instead? It takes two minutes.",
       browseCta: "Start your site →",
+      clientText: "Already a client? Support, changes and add-ons live here:",
+      clientCta: "Client support →",
     },
     form: {
       title: "Send us a message",
@@ -975,6 +983,110 @@ const en = {
         lines: ["✉ contact@webao.ca", "⌚ Mon–Fri, 9am–5pm Eastern", "📍 Montréal · Serving all of Canada"],
         cta: "Email us directly →",
       },
+    },
+  },
+
+  support: {
+    hero: {
+      eyebrow: "Support · Existing clients",
+      title: "Already a client?<br /><span>You're in the right place.</span>",
+      desc: "Questions about your site, your plan, or your bill. A change you want made. Send the form, or write to us directly. A person reads every message.",
+      email: "support@webao.ca",
+      emailNote: "We usually reply within one business day",
+      hours: "Mon–Fri, 9am–5pm Eastern",
+      hoursNote: "Montréal, Québec · Serving clients across Canada",
+      trust: ["◐ A person reads every message", "·", "Your details are used only to reply"],
+      newText: "Not a client yet? Start here instead:",
+      newCta: "Start your site →",
+    },
+    form: {
+      title: "Send a support request",
+      subtitle: "We reply within one business day · No ticket numbers, just email",
+      name: "Your name",
+      namePlaceholder: "Your name",
+      email: "Email",
+      emailPlaceholder: "you@yourbusiness.ca",
+      category: "Category",
+      categories: {
+        billing: "Billing",
+        changes: "Changes to my site",
+        addons: "Add a feature or add-on",
+        issue: "Something isn't working",
+        other: "Other",
+      },
+      subject: "Subject",
+      subjectPlaceholder: "What is it about?",
+      message: "Description",
+      messagePlaceholder: "Tell us what you need. The page, the details, anything that helps.",
+      consent: "I'd like WEBAO to reply to my request.",
+      privacy: "Your details are used only to handle your request. No mailing list, no sharing.",
+      submit: "Send request →",
+      submitNote: "Prefer plain email? Write to",
+      submitNoteEmail: "support@webao.ca",
+      lock: "Your request goes straight to our admin panel and our inbox. Nothing is stored beyond what we need to help you.",
+      validationError: "Please fill in every field with a valid email, and tick the checkbox.",
+      success: "Request sent. We'll reply to your email within one business day.",
+      ready: "Sent ✓",
+      errorFallback: "Could not send right now. Email us directly at support@webao.ca.",
+    },
+    info: {
+      changes: {
+        title: "Changes, included",
+        desc: "Small updates are part of your plan, at no extra cost:",
+        bullets: [
+          "→ Hours, services and prices on your pages",
+          "→ New photos, promos and banners",
+          "→ Staff, contact details and service areas",
+        ],
+        note: "Use the form (category: Changes to my site) or email us. We reply with when it'll be live.",
+      },
+      send: {
+        title: "What to send",
+        bullets: [
+          "→ The page and the exact change",
+          "→ New photos or text, ready to use",
+          "→ The date it matters by, if there is one",
+        ],
+        note: "Vague is fine. We'd rather have the request than a perfect brief.",
+      },
+      billing: {
+        title: "Billing, handled by email",
+        desc: "Invoices, receipts, a new payment method, a plan change: pick the Billing category in the form, or write to us directly:",
+        lines: ["✉ support@webao.ca", "⌚ Mon–Fri, 9am–5pm Eastern"],
+        cta: "Email support →",
+      },
+    },
+    addons: {
+      eyebrow: "Add-ons",
+      title: "Add a feature to your site",
+      desc: "The same add-ons as the pricing page, for your existing plan. We add it to your plan, so it bills with everything else, on the same date.",
+      addCta: "Add",
+      subjectPrefix: "Add-on:",
+      note: "Prices match the pricing page. Details for every add-on are in the terms notes.",
+    },
+    faq: {
+      eyebrow: "Client FAQ",
+      title: "Questions from clients",
+      items: [
+        {
+          q: "How do I get a change made?",
+          a: "Send the form on this page, or email support@webao.ca. Small changes like hours, services, photos and promo banners are included in your monthly fee. We reply within one business day and tell you when the change will be live.",
+        },
+        {
+          q: "How do add-ons work?",
+          a: "Pick one from the list above and ask through the form (category: Add a feature or add-on). We attach it to your existing plan, so there's one bill, on the same date. Prices are monthly unless marked one-time.",
+        },
+        {
+          q: "Where are my invoices? How do I update my payment method?",
+          a: "Ask through the form (category: Billing) or by email. We'll send your invoices, or a secure way to update your payment method.",
+        },
+        {
+          q: "Can I change plans, or cancel?",
+          a: "Yes. Write to us and we'll take care of it. The exact terms are on the terms and refunds pages, linked below.",
+        },
+      ],
+      termsLabel: "Read the terms and details →",
+      refundsLabel: "Read the refunds policy →",
     },
   },
 
@@ -1148,6 +1260,7 @@ const en = {
       filterAll: "All",
       filterContact: "Contact",
       filterPricing: "Pricing",
+      filterSupport: "Support",
     },
     config: {
       title: "Settings",
