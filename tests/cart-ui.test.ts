@@ -83,11 +83,13 @@ function fixture(options: { french?: boolean } = {}) {
           <h2 class="cart-drawer-title">Your cart</h2>
           <button type="button" class="cart-drawer-close" data-cart-close aria-label="Close cart">×</button>
         </div>
-        <div class="cart-drawer-items" data-cart-items><div class="cart-drawer-empty">Your cart is empty.</div></div>
+        <div class="cart-drawer-scroll">
+          <div class="cart-drawer-items" data-cart-items><div class="cart-drawer-empty">Your cart is empty.</div></div>
+          <button type="button" class="cart-empty-all" data-cart-empty-all hidden>Empty cart</button>
+        </div>
         <div class="cart-drawer-footer">
           <strong data-cart-total>C$0.00</strong>
           <a href="/checkout" class="cart-drawer-checkout" data-cart-checkout aria-disabled="true">Checkout</a>
-          <button type="button" class="cart-empty-all" data-cart-empty-all hidden>Empty cart</button>
         </div>
       </aside>
     </body></html>`,
@@ -251,6 +253,9 @@ test('drawer remove buttons carry a minus icon and the empty-cart button shows w
   assert.ok(emptyAll);
   assert.equal(emptyAll.hidden, false);
   assert.equal(emptyAll.textContent, 'Empty cart');
+  assert.equal(emptyAll.parentElement?.classList.contains('cart-drawer-scroll'), true);
+  assert.equal(emptyAll.previousElementSibling?.hasAttribute('data-cart-items'), true);
+  assert.equal(doc.querySelector('.cart-drawer-footer [data-cart-empty-all]'), null);
   window.close();
 });
 

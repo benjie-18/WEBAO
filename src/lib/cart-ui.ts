@@ -308,7 +308,7 @@ export function renderDrawer(doc: Document): void {
     checkout.tabIndex = empty ? -1 : 0;
   }
 
-  // Empty-cart button (footer): visible only with items in the cart, and
+  // Empty-cart button (end of the item list): visible only with items, and
   // every re-render resets it to the idle state, so a stray cart change can
   // never leave a live "Confirm" armed.
   const emptyAll = doc.querySelector<HTMLElement>("[data-cart-empty-all]");
