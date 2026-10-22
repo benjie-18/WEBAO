@@ -41,10 +41,6 @@ const categoryIds = ["billing", "changes", "addons", "issue", "other"] as const;
           </div>
         </div>
 
-        <div class="trust-mini mono">
-          {s.hero.trust.map(tr => <span>{tr}</span>)}
-        </div>
-
         <div class="testi">
           <p>{s.hero.newText}</p>
           <a href={paths.start} class="mono" style="display:inline-block; margin-top:8px; font-size:12px; font-weight:600; color: var(--accent-text); text-decoration: underline; text-underline-offset:3px;">{s.hero.newCta}</a>
@@ -160,13 +156,12 @@ const categoryIds = ["billing", "changes", "addons", "issue", "other"] as const;
             </div>
             <div class="addon-side">
               <span class="mono addon-price">{item.price}</span>
-              <button type="button" class="btn btn--dark btn--sm" data-addon-subject={`${s.addons.subjectPrefix} ${item.name}`}>{s.addons.addCta}</button>
+              <a class="btn btn--dark btn--sm" href={`${paths.pricing}#addons`}>{s.addons.addCta}</a>
             </div>
           </div>
         );
       })}
     </div>
-    <div class="mono" style="margin-top:12px; font-size:11px; color: var(--muted);">{s.addons.note}</div>
   </div>
 </section>
 
@@ -197,22 +192,8 @@ const categoryIds = ["billing", "changes", "addons", "issue", "other"] as const;
     const form = document.getElementById('support-form') as HTMLFormElement | null;
     const status = document.getElementById('support-form-status') as HTMLElement | null;
 
-    // "Add" buttons on the add-on list: preselect the add-ons category,
-    // prefill the subject, and bring the client to the form.
-    document.querySelectorAll<HTMLButtonElement>('[data-addon-subject]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        if (!form) return;
-        const category = form.querySelector('select[name="category"]') as HTMLSelectElement | null;
-        const subject = form.querySelector('input[name="subject"]') as HTMLInputElement | null;
-        if (category) category.value = 'addons';
-        if (subject) subject.value = btn.getAttribute('data-addon-subject') || '';
-        form.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        const message = form.querySelector('textarea[name="message"]') as HTMLTextAreaElement | null;
-        if (message) message.focus({ preventScroll: true });
-      });
-    });
-
-    if (form && status) {
+    if (form && status && !form.dataset.bound) {
+      form.dataset.bound = '1';
       const validationError = form.getAttribute('data-validation-error') || 'Please fill in every field with a valid email, and tick the checkbox.';
       const successMsg = form.getAttribute('data-success') || 'Request sent. We will reply within one business day.';
       const readyText = form.getAttribute('data-ready') || 'Sent ✓';
@@ -271,6 +252,9 @@ const categoryIds = ["billing", "changes", "addons", "issue", "other"] as const;
     }
   }
 
+  // astro:page-load can land after a fast first interaction, so bind on
+  // script evaluation too; the dataset guard prevents double-binding.
+  initSupportPage();
   document.addEventListener('astro:page-load', initSupportPage);
 </script>
 
@@ -284,7 +268,6 @@ const categoryIds = ["billing", "changes", "addons", "issue", "other"] as const;
   .c-icon { width:36px; height:36px; border-radius:10px; background: var(--paper-2); border:1px solid var(--line); display:grid; place-items:center; font-size:14px; }
   .c-card strong { display:block; font-size:14.5px; letter-spacing:-0.02em; }
   .c-card .mono { display:block; font-size:11px; color: var(--muted); margin-top:2px; }
-  .trust-mini { margin-top:14px; display:flex; gap:8px; flex-wrap:wrap; font-size:11px; color: var(--muted); }
   .testi { margin-top:18px; background: var(--card-bg); border:1px solid var(--line); border-radius:14px; padding:16px; box-shadow: var(--shadow-sm); }
   .testi p { font-size:14px; line-height:1.6; color: var(--ink-3); }
   .contact-form-wrap { display:grid; gap:10px; }

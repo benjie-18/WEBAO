@@ -1,7 +1,7 @@
 // Public form submissions (pricing + contact + support).
 // Stored as form:<ts>:<rand> with a newest-first index capped at 1000 entries.
-// Support submissions also send a best-effort email copy to the WEBAO inbox
-// via the send_email binding; the KV record stays the source of truth.
+// Support and contact submissions also send a best-effort email copy to the
+// WEBAO inbox via the send_email binding; the KV record stays the source of truth.
 
 import { getJson, putJson, deleteKey } from "./kv";
 import { clientIp, clientCountry, readJson, json, err, originAllowed, uuid } from "./util";
@@ -26,8 +26,7 @@ const SUPPORT_CATEGORIES: Record<string, string> = {
   other: "Other",
 };
 
-const SUPPORT_INBOX = "webao.ca@gmail.com";
-const SUPPORT_FROM = "support@webao.ca";
+const NOTIFY_INBOX = "webao.ca@gmail.com";
 
 /** Strip CR/LF so a field can never inject extra MIME headers. */
 function headerSafe(value: string): string {
@@ -48,42 +47,74 @@ function encodeHeader(value: string): string {
   return `=?UTF-8?B?${base64Utf8(safe)}?=`;
 }
 
-/**
- * Best-effort email copy of a support request, via the send_email binding
- * (its destination is pinned to the WEBAO inbox in wrangler.jsonc). A mail
- * failure is logged, never surfaced to the visitor, and never fails the
- * submission — the admin panel record is what counts.
- */
-async function notifySupportByEmail(env: Env, submission: FormSubmission): Promise<void> {
-  if (!env.EMAIL) return;
-  try {
-    const f = submission.fields;
+/** The email copy for a stored submission, or null for forms without one. */
+function notifySpec(submission: FormSubmission): { from: string; fromName: string; subject: string; body: string } | null {
+  const f = submission.fields;
+  const name = (f.name || "").trim();
+  const email = (f.email || "").trim();
+  const page = (f.page || "").trim();
+  const message = (f.message || "").trim();
+  if (submission.form === "support") {
     const category = SUPPORT_CATEGORIES[(f.category || "").trim()] || "Other";
-    const subjectLine = `[Support · ${category}] ${(f.subject || "").trim()}`;
-    const bodyText = [
-      "New support request from the website form.",
-      "",
-      `Category: ${category}`,
-      `From: ${(f.name || "").trim()} <${(f.email || "").trim()}>`,
-      `Page: ${(f.page || "").trim()}`,
-      "",
-      (f.message || "").trim(),
-    ].join("\n");
+    return {
+      from: "support@webao.ca",
+      fromName: "WEBAO Support",
+      subject: `[Support · ${category}] ${(f.subject || "").trim()}`,
+      body: [
+        "New support request from the website form.",
+        "",
+        `Category: ${category}`,
+        `From: ${name} <${email}>`,
+        `Page: ${page}`,
+        "",
+        message,
+      ].join("\n"),
+    };
+  }
+  if (submission.form === "contact") {
+    return {
+      from: "contact@webao.ca",
+      fromName: "WEBAO Contact",
+      subject: `[Contact] Message from ${name}`,
+      body: [
+        "New contact message from the website form.",
+        "",
+        `From: ${name} <${email}>`,
+        `Page: ${page}`,
+        "",
+        message,
+      ].join("\n"),
+    };
+  }
+  return null;
+}
+
+/**
+ * Best-effort email copy of a support or contact submission, via the
+ * send_email binding (its destination is pinned to the WEBAO inbox in
+ * wrangler.jsonc). A mail failure is logged, never surfaced to the visitor,
+ * and never fails the submission — the admin panel record is what counts.
+ */
+async function notifyByEmail(env: Env, submission: FormSubmission): Promise<void> {
+  if (!env.EMAIL) return;
+  const spec = notifySpec(submission);
+  if (!spec) return;
+  try {
     const raw = [
-      `From: "WEBAO Support" <${SUPPORT_FROM}>`,
-      `To: ${SUPPORT_INBOX}`,
-      `Reply-To: ${headerSafe((f.email || "").trim())}`,
-      `Subject: ${encodeHeader(subjectLine)}`,
+      `From: "${spec.fromName}" <${spec.from}>`,
+      `To: ${NOTIFY_INBOX}`,
+      `Reply-To: ${headerSafe((submission.fields.email || "").trim())}`,
+      `Subject: ${encodeHeader(spec.subject)}`,
       "MIME-Version: 1.0",
       "Content-Type: text/plain; charset=UTF-8",
       "Content-Transfer-Encoding: base64",
       "",
-      base64Utf8(bodyText),
+      base64Utf8(spec.body),
     ].join("\r\n");
     const { EmailMessage } = await import("cloudflare:email");
-    await env.EMAIL.send(new EmailMessage(SUPPORT_FROM, SUPPORT_INBOX, raw));
+    await env.EMAIL.send(new EmailMessage(spec.from, NOTIFY_INBOX, raw));
   } catch (e) {
-    console.error("support email notification failed", e);
+    console.error("form email notification failed", e);
   }
 }
 
@@ -163,7 +194,7 @@ export async function handleFormSubmit(req: Request, env: Env): Promise<Response
     }
   }
 
-  if (body.form === "support") await notifySupportByEmail(env, submission);
+  if (body.form === "support" || body.form === "contact") await notifyByEmail(env, submission);
 
   return json({ ok: true, id });
 }

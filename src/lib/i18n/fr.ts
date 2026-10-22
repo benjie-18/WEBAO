@@ -1002,7 +1002,6 @@ const fr = {
       emailNote: "On répond habituellement en un jour ouvrable",
       hours: "Lun–ven, 9 h à 17 h, heure de l’Est",
       hoursNote: "Montréal, Québec · Des clients partout au Canada",
-      trust: ["◐ Une personne lit chaque message", "·", "Vos coordonnées servent seulement à vous répondre"],
       newText: "Pas encore client ? Commencez plutôt ici :",
       newCta: "Démarrer mon site →",
     },
@@ -1030,7 +1029,7 @@ const fr = {
       submit: "Envoyer la demande →",
       submitNote: "Vous préférez un courriel tout simple ? Écrivez à",
       submitNoteEmail: "support@webao.ca",
-      lock: "Votre demande arrive directement dans notre panneau d’administration et notre boîte courriel. Rien n’est conservé au-delà de ce qu’il faut pour vous aider.",
+      lock: "Envoyé directement dans notre boîte courriel. On répond par courriel.",
       validationError: "Veuillez remplir tous les champs avec un courriel valide, et cocher la case.",
       success: "Demande envoyée. On vous répond par courriel en un jour ouvrable.",
       ready: "Envoyé ✓",
@@ -1066,10 +1065,8 @@ const fr = {
     addons: {
       eyebrow: "Modules",
       title: "Ajouter une fonction à votre site",
-      desc: "Les mêmes modules que sur la page des tarifs, pour votre forfait actuel. On l’ajoute à votre forfait, donc tout est facturé ensemble, à la même date.",
+      desc: "Tous les modules fonctionnent avec votre forfait actuel. Ajoutez-en un depuis la page des tarifs, ou demandez-le dans le formulaire ci-dessus et on s’en occupe.",
       addCta: "Ajouter",
-      subjectPrefix: "Module :",
-      note: "Les prix sont ceux de la page des tarifs. Les détails de chaque module sont dans les notes des conditions.",
     },
     faq: {
       eyebrow: "FAQ clients",
@@ -1081,7 +1078,7 @@ const fr = {
         },
         {
           q: "Comment fonctionnent les modules ?",
-          a: "Choisissez-en un dans la liste ci-dessus et demandez-le par le formulaire (catégorie : Ajouter une fonction ou un module). On l’attache à votre forfait actuel, donc une seule facture, à la même date. Les prix sont mensuels, sauf indication « paiement unique ».",
+          a: "Ajoutez-en un depuis la page des tarifs, ou demandez-le par le formulaire sur cette page (catégorie : Ajouter une fonction ou un module) et on l’installera sur votre forfait. Les prix sont mensuels, sauf indication « paiement unique ».",
         },
         {
           q: "Où sont mes factures ? Comment je mets à jour mon moyen de paiement ?",

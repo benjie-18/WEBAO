@@ -63,6 +63,26 @@ test('a support submission is stored with its category, subject and description'
   assert.deepEqual(stored.fields, fields);
 });
 
+test('a contact submission is stored even when the email copy cannot be sent', async () => {
+  const memory = memoryKV();
+  const env = envOf(memory.kv, {
+    EMAIL: {
+      send: async () => {
+        throw new Error('no mail in tests');
+      },
+    },
+  });
+  const response = await handleFormSubmit(
+    submit({ form: 'contact', fields: { name: 'Sam', email: 'sam@example.ca', message: 'Bonjour' } }),
+    env,
+  );
+  assert.equal(response.status, 200);
+  const body = await bodyOf(response);
+  assert.equal(body.ok, true);
+  const stored = JSON.parse(memory.store.get(`form:${body.id}`) ?? 'null');
+  assert.equal(stored.form, 'contact');
+});
+
 test('the index is newest-first', async () => {
   const memory = memoryKV();
   const first = await bodyOf(await handleFormSubmit(submit(pricingForm), envOf(memory.kv)));

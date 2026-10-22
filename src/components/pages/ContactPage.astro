@@ -137,7 +137,8 @@ const paths = localizedPaths[locale];
     const form = document.getElementById('contact-form') as HTMLFormElement | null;
     const status = document.getElementById('form-status') as HTMLElement | null;
     const locale = document.documentElement.lang === 'fr' ? 'fr' : 'en';
-    if (form && status) {
+    if (form && status && !form.dataset.bound) {
+      form.dataset.bound = '1';
       const validationError = form.getAttribute('data-validation-error') || 'Please fill in the required fields with a valid email, and tick the contact checkbox.';
       const successMsg = form.getAttribute('data-success') || 'Your email app should open with the message ready to send. If nothing opened, just email us directly at contact@webao.ca.';
       const readyText = form.getAttribute('data-ready') || 'Email ready ✓';
@@ -197,6 +198,9 @@ const paths = localizedPaths[locale];
     }
   }
 
+  // astro:page-load can land after a fast first interaction, so bind on
+  // script evaluation too; the dataset guard prevents double-binding.
+  initContactPage();
   document.addEventListener('astro:page-load', initContactPage);
 </script>
 

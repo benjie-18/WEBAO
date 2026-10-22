@@ -38,7 +38,7 @@ const addonPriceCents: Record<string, { cents: number; interval: "month" | "one-
   );
 ---
 
-<section class="addon-section" aria-labelledby="addons-h" data-addon-section>
+<section class="addon-section" id="addons" aria-labelledby="addons-h" data-addon-section>
   <div class="addon-bg" aria-hidden="true">
     <div class="ablob ablob--a" data-ablob="0.08"></div>
     <div class="ablob ablob--b" data-ablob="0.16"></div>
@@ -154,6 +154,7 @@ const addonPriceCents: Record<string, { cents: number; interval: "month" | "one-
     position: relative;
     padding-block: clamp(48px, 8vw, 110px);
     overflow: clip;
+    scroll-margin-top: calc(var(--header-h) + 12px);
   }
   .addon-bg {
     position: absolute;

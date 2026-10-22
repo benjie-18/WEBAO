@@ -995,7 +995,6 @@ const en = {
       emailNote: "We usually reply within one business day",
       hours: "Mon–Fri, 9am–5pm Eastern",
       hoursNote: "Montréal, Québec · Serving clients across Canada",
-      trust: ["◐ A person reads every message", "·", "Your details are used only to reply"],
       newText: "Not a client yet? Start here instead:",
       newCta: "Start your site →",
     },
@@ -1023,7 +1022,7 @@ const en = {
       submit: "Send request →",
       submitNote: "Prefer plain email? Write to",
       submitNoteEmail: "support@webao.ca",
-      lock: "Your request goes straight to our admin panel and our inbox. Nothing is stored beyond what we need to help you.",
+      lock: "Delivered straight to our inbox. We reply by email.",
       validationError: "Please fill in every field with a valid email, and tick the checkbox.",
       success: "Request sent. We'll reply to your email within one business day.",
       ready: "Sent ✓",
@@ -1059,10 +1058,8 @@ const en = {
     addons: {
       eyebrow: "Add-ons",
       title: "Add a feature to your site",
-      desc: "The same add-ons as the pricing page, for your existing plan. We add it to your plan, so it bills with everything else, on the same date.",
+      desc: "Every add-on works with your existing plan. Add one from the pricing page, or ask in the form above and we'll set it up for you.",
       addCta: "Add",
-      subjectPrefix: "Add-on:",
-      note: "Prices match the pricing page. Details for every add-on are in the terms notes.",
     },
     faq: {
       eyebrow: "Client FAQ",
@@ -1074,7 +1071,7 @@ const en = {
         },
         {
           q: "How do add-ons work?",
-          a: "Pick one from the list above and ask through the form (category: Add a feature or add-on). We attach it to your existing plan, so there's one bill, on the same date. Prices are monthly unless marked one-time.",
+          a: "Add one from the pricing page, or ask through the form on this page (category: Add a feature or add-on) and we'll set it up on your plan. Prices are monthly unless marked one-time.",
         },
         {
           q: "Where are my invoices? How do I update my payment method?",
