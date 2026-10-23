@@ -38,6 +38,7 @@ import {
   type ClientStage,
 } from "./clients";
 import { assignDomain } from "./tenants";
+import { getBuildState, publishBuild, runBuild, type BuildState } from "./builds";
 import { clampStr } from "./util";
 
 const FORMS_INDEX = "forms:index";
@@ -81,6 +82,10 @@ export async function handleAdmin(req: Request, env: Env, url: URL): Promise<Res
   if (path === "/api/admin/clients" && req.method === "GET") return handleClientsList(kv, url);
   if (path === "/api/admin/clients/update" && req.method === "POST")
     return handleClientUpdate(req, kv);
+  if (path === "/api/admin/clients/build" && req.method === "POST")
+    return handleClientBuild(req, env);
+  if (path === "/api/admin/clients/publish" && req.method === "POST")
+    return handleClientPublish(req, env);
   if (path === "/api/admin/config" && req.method === "GET")
     return json({ ok: true, settings: await getSettings(kv) });
   if (path === "/api/admin/config" && req.method === "POST") return handleConfigSet(req, kv);
@@ -431,7 +436,8 @@ async function handlePasswordChange(req: Request, kv: KVNamespace): Promise<Resp
 // Clients (backbone records; see worker/clients.ts)
 // ---------------------------------------------------------------------------
 
-function clientSummary(client: Client) {
+function clientSummary(client: Client, build?: BuildState) {
+  const qa = build?.latest?.qa;
   return {
     id: client.id,
     email: client.email,
@@ -453,6 +459,15 @@ function clientSummary(client: Client) {
     nudgesEscalatedAt: client.nudgesEscalatedAt,
     stripeCustomerId: client.stripeCustomerId,
     stripeSubscriptionId: client.stripeSubscriptionId,
+    buildAt: build?.latest?.builtAt,
+    buildQaPassed: qa ? qa.passed : undefined,
+    buildQaFailedChecks: qa
+      ? qa.checks.filter((c) => !c.ok).map((c) => ({ id: c.id, detail: c.detail }))
+      : undefined,
+    hasDraft: !!build?.draftBuildId,
+    isPublished: !!build?.publishedBuildId,
+    publishPending:
+      !!build?.draftBuildId && build.draftBuildId !== build.publishedBuildId,
   };
 }
 
@@ -468,7 +483,9 @@ async function handleClientsList(kv: KVNamespace, url: URL): Promise<Response> {
   const items = (
     await batch(slice, 25, async (key) => {
       const rec = await getJson<Client>(kv, key);
-      return rec ? clientSummary(rec) : null;
+      if (!rec) return null;
+      const build = await getBuildState(kv, rec.id);
+      return clientSummary(rec, build);
     })
   ).filter((x): x is ReturnType<typeof clientSummary> => x !== null);
 
@@ -518,5 +535,37 @@ async function handleClientUpdate(req: Request, kv: KVNamespace): Promise<Respon
     }
   }
   await saveClient(kv, client);
-  return json({ ok: true, client: clientSummary(client) });
+  const build = await getBuildState(kv, client.id);
+  return json({ ok: true, client: clientSummary(client, build) });
+}
+
+/** POST /api/admin/clients/build { id } — generate + QA a draft build. */
+async function handleClientBuild(req: Request, env: Env): Promise<Response> {
+  let body: { id?: unknown };
+  try {
+    body = (await readJson(req)) as typeof body;
+  } catch (e) {
+    return err((e as Error).message);
+  }
+  if (typeof body.id !== "string") return err("Client id is required");
+  const client = await getClient(env.WEBAO_KV, body.id);
+  if (!client) return err("Client not found", 404);
+  const result = await runBuild(env, client);
+  return json({ ok: true, buildId: result.buildId, qaPassed: result.qa.passed, checks: result.qa.checks });
+}
+
+/** POST /api/admin/clients/publish { id } — point the tenant host at the draft. */
+async function handleClientPublish(req: Request, env: Env): Promise<Response> {
+  let body: { id?: unknown };
+  try {
+    body = (await readJson(req)) as typeof body;
+  } catch (e) {
+    return err((e as Error).message);
+  }
+  if (typeof body.id !== "string") return err("Client id is required");
+  const client = await getClient(env.WEBAO_KV, body.id);
+  if (!client) return err("Client not found", 404);
+  const result = await publishBuild(env, client);
+  if (!result.ok) return err(result.error || "Publish failed", 400);
+  return json({ ok: true, buildId: result.buildId });
 }

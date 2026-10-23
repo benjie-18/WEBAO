@@ -233,6 +233,37 @@ are served from the same path once the build pipeline writes them.
 The portal shows the client their domain state, including the CNAME record
 to add (`<host>` → `hosting.webao.ca`) while `pending-dns`.
 
+## Build pipeline
+
+`worker/sitegen.ts` renders a deterministic baseline site from the client's
+onboarding answers (the demo picks steer only the palette; the build is
+custom, never a clone). `worker/builds.ts` stores each build immutably:
+files at `site:<clientId>:<buildId>:<path>`, metadata at
+`build:<clientId>:<buildId>`, pointers at `build:<clientId>:latest`,
+`site:<clientId>:draft` and `site:<clientId>:published`.
+
+Every build runs the QA suite (15 checks: files, doctype, title, meta
+description, lang, single h1, tappable phone link, all services and the
+service area rendered, no em dashes, no placeholder text, links resolve,
+contact section, canonical, size budget). A clean report is the launch
+gate: the client advances to `review`, `previewUrl` is set to
+`https://webao.ca/preview/<clientId>/` (the worker serves the draft there,
+noindexed), and the client is emailed. Any failure leaves the build in the
+exception queue: the stage does not move, the inbox gets the failing
+checks, and the admin Clients tab shows them on the card.
+
+### `POST /api/admin/clients/build`
+Body `{ id }`. Generates a draft build and runs QA. → `{ ok, buildId, qaPassed, checks }`.
+
+### `POST /api/admin/clients/publish`
+Body `{ id }`. Publishes the current draft (requires a passing QA report):
+the tenant host serves it, the stage becomes `live`, a `connected` domain
+becomes `live`, and the client is emailed. → `{ ok, buildId }`.
+
+### `POST /api/internal/build`
+Shared-secret Bearer auth (`INTERNAL_CRON_SECRET`). Body `{ clientId }`.
+Same build as the admin action, for agent jobs. → `{ ok, buildId, qaPassed, checks }`.
+
 ### `POST /api/internal/domain-checks`
 Shared-secret Bearer auth (`INTERNAL_CRON_SECRET`), called daily by a cron.
 For each `pending-dns` / `to-register` domain, a DNS-over-HTTPS lookup marks

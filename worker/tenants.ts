@@ -212,7 +212,10 @@ export async function handleDomainChecks(req: Request, env: TenantEnv): Promise<
       /* DNS lookup problems leave the domain pending; the sweep retries. */
     }
     if (connected) {
-      client.domainStatus = "connected";
+      // A client whose build is already published goes straight to live
+      // (the published pointer key format is owned by builds.ts).
+      const published = await getJson<string>(kv, `site:${client.id}:published`);
+      client.domainStatus = published ? "live" : "connected";
       result.connected++;
     } else {
       result.stillPending++;

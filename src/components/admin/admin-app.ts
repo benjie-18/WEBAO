@@ -78,6 +78,12 @@ interface ClientItem {
   domain?: string;
   domainStatus: string;
   domainCheckedAt?: number;
+  buildAt?: number;
+  buildQaPassed?: boolean;
+  buildQaFailedChecks?: { id: string; detail: string }[];
+  hasDraft: boolean;
+  isPublished: boolean;
+  publishPending: boolean;
   nudgeCount: number;
   nudgesEscalatedAt?: number;
   stripeCustomerId?: string;
@@ -1001,6 +1007,12 @@ function initAdmin(): void {
       item.domainStatus && item.domainStatus !== "none"
         ? `<span class="form-badge">${esc(domainBadgeMap[domainBadgeKey] || item.domainStatus)}</span>`
         : "";
+    const qaBadge =
+      item.buildQaPassed === undefined
+        ? `<span class="form-badge">${esc(C.noBuild)}</span>`
+        : item.buildQaPassed
+          ? `<span class="form-badge">${esc(C.qaPassed)}</span>`
+          : `<span class="form-badge form-badge--warn">${esc(C.qaFailed)}</span>`;
     const meta: string[] = [
       `<span><b>${esc(C.billing)}</b> ${esc(item.billingStatus)}</span>`,
       `<span><b>${esc(C.since)}</b> ${esc(fmtDateTime(item.createdAt))}</span>`,
@@ -1038,6 +1050,11 @@ function initAdmin(): void {
     addRow(F.styleDemos, val("styleDemos"));
     addRow(F.styleNotes, val("styleNotes"));
     addRow(F.extraNotes, val("extraNotes"));
+    for (const failed of item.buildQaFailedChecks || []) {
+      rows.push(
+        `<div class="ff-row"><dt>${esc(C.qaTitle)}</dt><dd>${esc(failed.id)}: ${esc(failed.detail)}</dd></div>`
+      );
+    }
 
     const stageOptions = ["onboarding", "build", "review", "live", "paused"]
       .map(
@@ -1050,7 +1067,7 @@ function initAdmin(): void {
       `<article class="form-card" data-client-id="${esc(item.id)}">` +
       `<div class="form-card-head"><div><strong>${esc(item.business || item.email)}</strong>` +
       `<span class="mono">${esc(item.email)}</span></div>` +
-      `<div class="lead-badges">${badge}${domainBadge}</div></div>` +
+      `<div class="lead-badges">${badge}${domainBadge}${qaBadge}</div></div>` +
       `<div class="form-meta">${meta.join("")}</div>` +
       `<div class="form-actions" style="gap:10px; flex-wrap:wrap;">` +
       `<label style="display:flex; gap:8px; align-items:center; font-size:13px; font-weight:600;">${esc(C.stage)}` +
@@ -1060,6 +1077,10 @@ function initAdmin(): void {
       `<label style="display:flex; gap:8px; align-items:center; font-size:13px; font-weight:600; flex:1; min-width:220px;">${esc(C.domain)}` +
       `<input type="text" data-client-domain value="${esc(item.domain || "")}" placeholder="patplumbing.ca" style="flex:1; padding:7px 9px; border-radius:8px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink);" /></label>` +
       `<button type="button" class="admin-ghost-btn" data-client-save>${esc(C.save)}</button>` +
+      `<button type="button" class="admin-ghost-btn" data-client-build>${esc(C.build)}</button>` +
+      (item.publishPending
+        ? `<button type="button" class="admin-ghost-btn" data-client-publish>${esc(C.publish)}</button>`
+        : "") +
       `<button type="button" class="admin-ghost-btn" data-client-expand>${esc(C.details)}</button>` +
       `</div>` +
       `<dl class="form-fields" data-client-fields hidden>` +
@@ -1119,6 +1140,33 @@ function initAdmin(): void {
       if (e instanceof ExpiredSession) return;
       toast(String(I18N.clients.saveError), "err");
     } finally {
+      btn.removeAttribute("disabled");
+    }
+  }
+
+  async function runClientAction(btn: HTMLElement, action: "build" | "publish"): Promise<void> {
+    const card = btn.closest("[data-client-id]") as HTMLElement | null;
+    const id = card?.dataset.clientId;
+    if (!card || !id) return;
+    btn.setAttribute("disabled", "");
+    try {
+      const data = await api(`/api/admin/clients/${action}`, {
+        method: "POST",
+        body: { id },
+      });
+      if (action === "build") {
+        toast(
+          data.qaPassed ? String(I18N.clients.builtOk) : String(I18N.clients.qaFailed),
+          data.qaPassed ? "ok" : "err",
+        );
+      } else {
+        toast(String(I18N.clients.publishedOk), "ok");
+      }
+      tabLoaded.clients = false;
+      void loadClients(true);
+    } catch (e) {
+      if (e instanceof ExpiredSession) return;
+      toast(String(I18N.clients.actionError), "err");
       btn.removeAttribute("disabled");
     }
   }
@@ -1431,6 +1479,16 @@ function initAdmin(): void {
     const clientSave = t.closest("[data-client-save]") as HTMLElement | null;
     if (clientSave) {
       void saveClient(clientSave);
+      return;
+    }
+    const clientBuild = t.closest("[data-client-build]") as HTMLElement | null;
+    if (clientBuild) {
+      void runClientAction(clientBuild, "build");
+      return;
+    }
+    const clientPublish = t.closest("[data-client-publish]") as HTMLElement | null;
+    if (clientPublish) {
+      void runClientAction(clientPublish, "publish");
       return;
     }
     const leadExpand = t.closest("[data-lead-expand]") as HTMLElement | null;

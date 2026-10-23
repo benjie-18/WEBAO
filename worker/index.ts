@@ -18,6 +18,7 @@ import {
   handlePortalRequestLink,
 } from "./portal";
 import { handleDomainChecks, isMainHost, resolveTenant, tenantPageResponse } from "./tenants";
+import { handleInternalBuild, servePreviewSite, servePublishedSite } from "./builds";
 import { json } from "./util";
 import { KvWriteError } from "./kv";
 
@@ -41,6 +42,7 @@ async function routeApi(req: Request, env: Env): Promise<Response> {
   if (p === "/api/portal/logout" && req.method === "POST") return handlePortalLogout(req, env);
   if (p === "/api/internal/onboarding-nudges" && req.method === "POST") return handleOnboardingNudges(req, env);
   if (p === "/api/internal/domain-checks" && req.method === "POST") return handleDomainChecks(req, env);
+  if (p === "/api/internal/build" && req.method === "POST") return handleInternalBuild(req, env);
   if (p.startsWith("/api/admin/")) return handleAdmin(req, env, url);
 
   return json({ ok: false, error: "Not found" }, 404);
@@ -58,9 +60,37 @@ export default {
     if (!isMainHost(url.hostname)) {
       try {
         const tenant = await resolveTenant(env.WEBAO_KV, url.hostname);
-        if (tenant) return tenantPageResponse(tenant, request, url.hostname);
+        if (tenant) {
+          if (request.method !== "GET" && request.method !== "HEAD") {
+            return tenantPageResponse(tenant, request, url.hostname);
+          }
+          const site = await servePublishedSite(env, tenant, url);
+          if (site) {
+            if (request.method === "HEAD") {
+              return new Response(null, { status: site.status, headers: site.headers });
+            }
+            return site;
+          }
+          return tenantPageResponse(tenant, request, url.hostname);
+        }
       } catch (e) {
         console.error("tenant error", (e as Error)?.message);
+        return new Response("Internal error", { status: 500 });
+      }
+    }
+
+    // Client build previews: the draft (or published) site under
+    // /preview/<clientId>/, linked from the portal review card.
+    const previewMatch = /^\/preview\/(cl_[a-f0-9]{24})(?:\/(.*))?$/.exec(url.pathname);
+    if (previewMatch && (request.method === "GET" || request.method === "HEAD")) {
+      try {
+        const res = await servePreviewSite(env, previewMatch[1], previewMatch[2] || "index.html");
+        if (request.method === "HEAD") {
+          return new Response(null, { status: res.status, headers: res.headers });
+        }
+        return res;
+      } catch (e) {
+        console.error("preview error", (e as Error)?.message);
         return new Response("Internal error", { status: 500 });
       }
     }

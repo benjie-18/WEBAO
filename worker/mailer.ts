@@ -13,6 +13,45 @@ export interface ClientEmail {
   text: string;
 }
 
+const NOTIFY_INBOX = "webao.ca@gmail.com";
+
+function base64Utf8(text: string): string {
+  const bytes = new TextEncoder().encode(text);
+  let bin = "";
+  for (const b of bytes) bin += String.fromCharCode(b);
+  return btoa(bin);
+}
+
+/**
+ * Best-effort notification to the WEBAO inbox through the send_email
+ * binding (the one channel that can only ever reach the inbox). Same
+ * pattern as portal.ts; kept here so worker modules that must not import
+ * the portal can still notify.
+ */
+export async function notifyInbox(
+  env: { EMAIL?: SendEmailBinding },
+  subject: string,
+  lines: string[],
+): Promise<void> {
+  if (!env.EMAIL) return;
+  try {
+    const raw = [
+      `From: "WEBAO" <start@webao.ca>`,
+      `To: ${NOTIFY_INBOX}`,
+      `Subject: =?UTF-8?B?${base64Utf8(subject)}?=`,
+      "MIME-Version: 1.0",
+      "Content-Type: text/plain; charset=UTF-8",
+      "Content-Transfer-Encoding: base64",
+      "",
+      base64Utf8(lines.join("\n")),
+    ].join("\r\n");
+    const { EmailMessage } = await import("cloudflare:email");
+    await env.EMAIL.send(new EmailMessage("start@webao.ca", NOTIFY_INBOX, raw));
+  } catch (e) {
+    console.error("mailer: inbox notification failed", e);
+  }
+}
+
 export async function sendClientEmail(
   env: { SMTP2GO_API_KEY?: string },
   mail: ClientEmail,
