@@ -70,4 +70,10 @@ interface Env {
   LEADS_INGEST_KEY?: string;
   /** Stripe webhook signing secret (secret; endpoint 503s until set). */
   STRIPE_WEBHOOK_SECRET?: string;
+  /** Stripe API secret key (checkout + portal claim verification). */
+  STRIPE_SECRET_KEY?: string;
+  /** SMTP2GO API key for client-facing transactional email (secret). */
+  SMTP2GO_API_KEY?: string;
+  /** Shared secret for internal cron-called endpoints (secret). */
+  INTERNAL_CRON_SECRET?: string;
 }

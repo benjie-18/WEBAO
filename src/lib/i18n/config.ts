@@ -2,7 +2,7 @@ export const locales = ["en", "fr"] as const;
 export type Locale = typeof locales[number];
 export const defaultLocale: Locale = "en";
 
-export type PageKey = "home" | "pricing" | "contact" | "demos" | "notfound" | "start" | "terms" | "refunds" | "sources" | "support" | "privacy";
+export type PageKey = "home" | "pricing" | "contact" | "demos" | "notfound" | "start" | "terms" | "refunds" | "sources" | "support" | "privacy" | "portal";
 
 export const localizedPaths: Record<Locale, Record<PageKey, string>> = {
   en: {
@@ -17,6 +17,7 @@ export const localizedPaths: Record<Locale, Record<PageKey, string>> = {
     refunds: "/refunds",
     sources: "/sources",
     support: "/support",
+    portal: "/portal",
   },
   fr: {
     home: "/fr",
@@ -30,6 +31,7 @@ export const localizedPaths: Record<Locale, Record<PageKey, string>> = {
     refunds: "/fr/remboursements",
     sources: "/fr/sources",
     support: "/fr/soutien",
+    portal: "/fr/portail",
   },
 };
 

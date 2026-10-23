@@ -1,0 +1,12 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import PortalPage from "../../../components/pages/PortalPage.astro";
+
+const locale = "fr" as const;
+const title = "Portail client · WEBAO";
+const description = "Votre portail client WEBAO : formulaire de démarrage, avancement de la conception et aperçu.";
+---
+
+<BaseLayout title={title} description={description} locale={locale} pageKey="portal" noIndex stickyCta={false}>
+  <PortalPage locale={locale} />
+</BaseLayout>

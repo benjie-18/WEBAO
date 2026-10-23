@@ -32,6 +32,30 @@ export type BillingStatus =
   | "one-time"
   | "none";
 
+/** What the client tells us in the portal before the build starts. */
+export interface OnboardingData {
+  businessName?: string;
+  contactName?: string;
+  phone?: string;
+  /** What the business sells / does, in the client's words. */
+  services?: string;
+  /** Cities or area served. */
+  serviceArea?: string;
+  hours?: string;
+  /** Key facts for the site copy (the build writes the words). */
+  about?: string;
+  hasLogo?: boolean;
+  brandNotes?: string;
+  photosReady?: boolean;
+  /** "new": WEBAO registers/manages a domain. "existing": client brings one. */
+  domainMode?: "new" | "existing";
+  domainValue?: string;
+  /** Optional style direction: demo ids the client liked (never a template). */
+  styleDemos?: string[];
+  styleNotes?: string;
+  extraNotes?: string;
+}
+
 export interface Client {
   id: string;
   createdAt: number;
@@ -52,6 +76,32 @@ export interface Client {
   canceledAt?: number;
   /** How this record came to exist, e.g. "stripe". */
   source: string;
+  /** Portal onboarding answers; absent until the client starts the form. */
+  onboarding?: OnboardingData;
+  /** Set when the onboarding form first reaches completeness. */
+  onboardingCompletedAt?: number;
+  /** Preview URL shown to the client while the stage is "review". */
+  previewUrl?: string;
+  /** Onboarding nudge bookkeeping (see portal.ts nudges). */
+  nudgeCount?: number;
+  lastNudgeAt?: number;
+  nudgesEscalatedAt?: number;
+}
+
+/** The fields a build cannot start without. */
+export function onboardingComplete(client: Client): boolean {
+  const o = client.onboarding;
+  if (!o) return false;
+  const filled = (v?: string): boolean => !!v && v.trim().length > 0;
+  return (
+    filled(o.businessName) &&
+    filled(o.contactName) &&
+    filled(o.phone) &&
+    filled(o.services) &&
+    filled(o.serviceArea) &&
+    (o.domainMode === "new" || o.domainMode === "existing") &&
+    filled(o.domainValue)
+  );
 }
 
 const customerKey = (customerId: string): string => "client-customer:" + customerId;

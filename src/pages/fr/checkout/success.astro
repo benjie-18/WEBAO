@@ -16,6 +16,17 @@ const description = "Votre abonnement WEBAO est actif. Nous vous contacterons so
         Votre abonnement est actif. Nous vous contacterons dans un délai d'un
         jour ouvrable pour démarrer la création de votre site.
       </p>
+      <div id="portal-card" hidden style="margin-top:28px; text-align:left; border:1px solid var(--line); border-radius:16px; padding:24px; background:var(--card-bg);">
+        <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 8px;">Prochaine étape : votre portail client</h2>
+        <p class="prose" style="font-size:14px; margin:0 0 16px;">
+          Votre portail est l'endroit où vous répondez à quelques questions
+          rapides (services, secteur, heures, domaine) pour que nous puissions
+          commencer la conception, et où vous suivrez l'avancement. Ce bouton
+          vous connecte directement à partir de votre paiement, sans mot de
+          passe.
+        </p>
+        <a id="portal-link" href="/fr/portail" class="btn btn--primary">Ouvrir mon portail</a>
+      </div>
       <div style="margin-top:28px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
         <a href="/fr/demos" class="btn btn--primary">Voir les styles démo</a>
         <a href="/fr/contact" class="btn btn--ghost">Contactez-nous</a>
@@ -92,6 +103,22 @@ const description = "Votre abonnement WEBAO est actif. Nous vous contacterons so
         copy.textContent =
           'Votre paiement est confirmé. Nous vous contacterons dans un délai d\'un jour ouvrable pour démarrer la création de votre site.';
       }
+    } catch (e) {}
+  })();
+</script>
+
+<script is:inline>
+  // Accès au portail : l'URL de retour Stripe porte ?session_id=cs_... —
+  // on le transmet au portail, qui le vérifie côté serveur et connecte le client.
+  (function () {
+    try {
+      var sid = new URLSearchParams(location.search).get('session_id') || '';
+      if (!/^cs_[A-Za-z0-9_]+$/.test(sid)) return;
+      var card = document.getElementById('portal-card');
+      var link = document.getElementById('portal-link');
+      if (!card || !link) return;
+      link.href = '/fr/portail?claim=' + encodeURIComponent(sid);
+      card.hidden = false;
     } catch (e) {}
   })();
 </script>

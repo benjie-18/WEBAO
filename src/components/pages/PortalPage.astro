@@ -1,0 +1,437 @@
+---
+import { demos } from "../../lib/demos";
+import type { Locale } from "../../lib/i18n";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props as Props;
+const fr = locale === "fr";
+
+// Style-direction picker: the public catalog, same hidden set as DemosPage.
+const hiddenDemos = new Set(["boba-club"]);
+const visibleDemos = demos.filter((d) => !hiddenDemos.has(d.id)).map((d) => ({ id: d.id, name: d.name }));
+
+const copy = fr
+  ? {
+      eyebrow: "Portail client",
+      title: "Votre portail client",
+      intro: "C'est ici que vous donnez le coup d'envoi à votre site, puis que vous suivez sa conception.",
+      loading: "Chargement…",
+      signinTitle: "Accédez à votre portail",
+      signinBody: "Entrez l'adresse courriel de votre commande. Nous vous enverrons un lien d'accès valide 30 minutes, sans mot de passe.",
+      emailLabel: "Courriel de la commande",
+      emailButton: "Recevoir mon lien d'accès",
+      sending: "Envoi…",
+      sent: "C'est envoyé. Vérifiez votre boîte courriel et cliquez le lien pour ouvrir votre portail.",
+      signinHelp: "Vous venez de payer ? Le bouton sur la page de confirmation de paiement vous connecte directement.",
+      signOut: "Se déconnecter",
+      stageNames: { onboarding: "Démarrage", build: "Conception", review: "Révision", live: "En ligne" },
+      pausedNote: "Votre projet est en pause. Écrivez à support@webao.ca pour le relancer.",
+      billing: "Facturation",
+      reviewTitle: "Votre site est prêt à réviser",
+      reviewBody: "Jetez un œil à l'aperçu. Pour approuver ou demander des changements, écrivez-nous à support@webao.ca.",
+      reviewButton: "Voir l'aperçu",
+      formTitle: "Formulaire de démarrage",
+      formIntro: "Quelques réponses courtes, et la conception commence. Les champs marqués d'un astérisque sont nécessaires pour démarrer.",
+      formDone: "Formulaire complet, merci. Votre site est en conception.",
+      formEdit: "Revoir ou modifier vos réponses",
+      save: "Enregistrer",
+      saving: "Enregistrement…",
+      saved: "Enregistré.",
+      required: "Il manque : ",
+      fields: {
+        businessName: "Nom de l'entreprise *",
+        contactName: "Personne à contacter *",
+        phone: "Téléphone *",
+        services: "Vos services *",
+        servicesPh: "Ce que vous offrez, un service par ligne si vous voulez",
+        serviceArea: "Secteur desservi *",
+        serviceAreaPh: "Villes ou quartiers, par exemple Montréal et la Rive-Sud",
+        hours: "Heures d'ouverture",
+        hoursPh: "Par exemple lun. au ven. 8 h à 17 h",
+        about: "À propos de votre entreprise",
+        aboutPh: "Les faits importants : depuis quand, ce qui vous distingue, vos spécialités",
+        hasLogo: "J'ai déjà un logo",
+        brandNotes: "Couleurs ou style de marque à respecter",
+        photosReady: "J'ai des photos prêtes à fournir",
+        domainNew: "Je veux un nouveau domaine, géré par Webao *",
+        domainExisting: "J'ai déjà un domaine à connecter *",
+        domainValueNew: "Le domaine que vous aimeriez",
+        domainValueExisting: "Votre domaine actuel",
+        styleTitle: "Une direction de style ? (optionnel)",
+        styleBody: "Nos sites sont conçus sur mesure. Si certains de nos exemples vous plaisent, cochez-les : ils serviront de direction, jamais de modèle à copier.",
+        styleNotes: "Notes sur le style souhaité",
+        extraNotes: "Autre chose à nous dire ?",
+      },
+      genericError: "Quelque chose n'a pas fonctionné. Réessayez dans un instant.",
+    }
+  : {
+      eyebrow: "Client portal",
+      title: "Your client portal",
+      intro: "This is where you kick off your website, then follow its build.",
+      loading: "Loading…",
+      signinTitle: "Open your portal",
+      signinBody: "Enter the email address from your order. We will send you a sign-in link, valid for 30 minutes, no password needed.",
+      emailLabel: "Order email",
+      emailButton: "Email me a sign-in link",
+      sending: "Sending…",
+      sent: "Sent. Check your inbox and click the link to open your portal.",
+      signinHelp: "Just paid? The button on your payment confirmation page signs you in directly.",
+      signOut: "Sign out",
+      stageNames: { onboarding: "Start-up", build: "Build", review: "Review", live: "Live" },
+      pausedNote: "Your project is paused. Write to support@webao.ca to restart it.",
+      billing: "Billing",
+      reviewTitle: "Your website is ready for review",
+      reviewBody: "Take a look at the preview. To approve it or request changes, write to us at support@webao.ca.",
+      reviewButton: "View the preview",
+      formTitle: "Start-up form",
+      formIntro: "A few short answers, and the build starts. Fields marked with an asterisk are needed to begin.",
+      formDone: "Form complete, thank you. Your website is in build.",
+      formEdit: "Review or update your answers",
+      save: "Save",
+      saving: "Saving…",
+      saved: "Saved.",
+      required: "Still needed: ",
+      fields: {
+        businessName: "Business name *",
+        contactName: "Contact person *",
+        phone: "Phone *",
+        services: "Your services *",
+        servicesPh: "What you offer, one service per line if you like",
+        serviceArea: "Service area *",
+        serviceAreaPh: "Cities or neighborhoods, for example Montreal and the South Shore",
+        hours: "Business hours",
+        hoursPh: "For example Mon to Fri, 8 am to 5 pm",
+        about: "About your business",
+        aboutPh: "The key facts: how long in business, what sets you apart, specialties",
+        hasLogo: "I already have a logo",
+        brandNotes: "Brand colors or style to respect",
+        photosReady: "I have photos ready to provide",
+        domainNew: "I want a new domain, managed by Webao *",
+        domainExisting: "I already have a domain to connect *",
+        domainValueNew: "The domain you would like",
+        domainValueExisting: "Your current domain",
+        styleTitle: "A style direction? (optional)",
+        styleBody: "Our sites are custom-built. If some of our examples appeal to you, check them: they guide the direction, they are never copied.",
+        styleNotes: "Notes on the style you want",
+        extraNotes: "Anything else we should know?",
+      },
+      genericError: "Something did not work. Try again in a moment.",
+    };
+
+const demosJson = JSON.stringify(visibleDemos);
+---
+
+<section class="section">
+  <div class="shell" style="max-width: 860px;">
+    <div class="eyebrow">{copy.eyebrow}</div>
+    <h1 class="display" style="font-size: clamp(2rem, 5vw, 3.6rem); line-height:.92; margin-top:12px;">{copy.title}</h1>
+    <p class="prose" style="margin-top:14px; max-width: 60ch;">{copy.intro}</p>
+
+    <div data-portal-root style="margin-top: 32px;">
+      <p class="prose" data-portal-loading>{copy.loading}</p>
+
+      <!-- Signed out -->
+      <div data-portal-signin hidden style="border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg); max-width: 560px;">
+        <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 8px;">{copy.signinTitle}</h2>
+        <p class="prose" style="font-size:14px; margin:0 0 16px;">{copy.signinBody}</p>
+        <form data-portal-signin-form style="display:grid; gap:12px;">
+          <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">
+            {copy.emailLabel}
+            <input type="email" required data-portal-email autocomplete="email" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;" />
+          </label>
+          <button type="submit" class="btn btn--primary" data-portal-signin-btn>{copy.emailButton}</button>
+          <p class="prose" data-portal-signin-status style="font-size:14px; margin:0;" role="status"></p>
+        </form>
+        <p class="prose" style="font-size:13px; margin:16px 0 0; color: var(--muted);">{copy.signinHelp}</p>
+      </div>
+
+      <!-- Signed in -->
+      <div data-portal-app hidden>
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+          <p style="margin:0; font-weight:650;" data-portal-identity></p>
+          <button type="button" class="btn btn--ghost" data-portal-logout>{copy.signOut}</button>
+        </div>
+
+        <ol data-portal-stages style="list-style:none; display:grid; grid-template-columns:repeat(4, 1fr); gap:8px; padding:0; margin:20px 0 0;">
+          {["onboarding", "build", "review", "live"].map((stage) => (
+            <li data-portal-stage={stage} style="border:1px solid var(--line); border-radius:12px; padding:10px 12px; font-size:13px; font-weight:600; background: var(--card-bg); opacity:.55;">
+              {(copy.stageNames as Record<string, string>)[stage]}
+            </li>
+          ))}
+        </ol>
+        <p class="prose" data-portal-paused hidden style="font-size:14px; margin:14px 0 0;">{copy.pausedNote}</p>
+        <p class="prose" style="font-size:14px; margin:14px 0 0; color: var(--muted);">
+          {copy.billing} : <span data-portal-billing></span>
+        </p>
+
+        <div data-portal-review hidden style="margin-top:20px; border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 8px;">{copy.reviewTitle}</h2>
+          <p class="prose" style="font-size:14px; margin:0 0 16px;">{copy.reviewBody}</p>
+          <a class="btn btn--primary" data-portal-preview target="_blank" rel="noopener" href="#">{copy.reviewButton}</a>
+        </div>
+
+        <div style="margin-top:20px; border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 8px;">{copy.formTitle}</h2>
+          <p class="prose" data-portal-form-done hidden style="font-size:14px; margin:0 0 8px; font-weight:600;">{copy.formDone}</p>
+          <p class="prose" style="font-size:14px; margin:0 0 16px;">{copy.formIntro}</p>
+          <form data-portal-form style="display:grid; gap:14px;">
+            <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.fields.businessName}
+              <input type="text" data-f="businessName" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;" />
+            </label>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+              <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.fields.contactName}
+                <input type="text" data-f="contactName" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;" />
+              </label>
+              <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.fields.phone}
+                <input type="tel" data-f="phone" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;" />
+              </label>
+            </div>
+            <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.fields.services}
+              <textarea data-f="services" rows="3" placeholder={copy.fields.servicesPh} style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;"></textarea>
+            </label>
+            <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.fields.serviceArea}
+              <input type="text" data-f="serviceArea" placeholder={copy.fields.serviceAreaPh} style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;" />
+            </label>
+            <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.fields.hours}
+              <input type="text" data-f="hours" placeholder={copy.fields.hoursPh} style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;" />
+            </label>
+            <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.fields.about}
+              <textarea data-f="about" rows="3" placeholder={copy.fields.aboutPh} style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;"></textarea>
+            </label>
+            <label style="display:flex; gap:10px; align-items:center; font-size:14px; font-weight:600;">
+              <input type="checkbox" data-f="hasLogo" /> {copy.fields.hasLogo}
+            </label>
+            <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.fields.brandNotes}
+              <input type="text" data-f="brandNotes" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;" />
+            </label>
+            <label style="display:flex; gap:10px; align-items:center; font-size:14px; font-weight:600;">
+              <input type="checkbox" data-f="photosReady" /> {copy.fields.photosReady}
+            </label>
+            <fieldset style="border:0; padding:0; margin:0; display:grid; gap:8px;">
+              <label style="display:flex; gap:10px; align-items:center; font-size:14px; font-weight:600;">
+                <input type="radio" name="domainMode" value="new" data-f="domainModeNew" /> {copy.fields.domainNew}
+              </label>
+              <label style="display:flex; gap:10px; align-items:center; font-size:14px; font-weight:600;">
+                <input type="radio" name="domainMode" value="existing" data-f="domainModeExisting" /> {copy.fields.domainExisting}
+              </label>
+              <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">
+                <span data-portal-domain-label>{copy.fields.domainValueNew}</span>
+                <input type="text" data-f="domainValue" placeholder="example.ca" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;" />
+              </label>
+            </fieldset>
+            <fieldset style="border:0; padding:0; margin:0;">
+              <legend style="font-size:14px; font-weight:600; margin-bottom:6px;">{copy.fields.styleTitle}</legend>
+              <p class="prose" style="font-size:13px; margin:0 0 10px; color: var(--muted);">{copy.fields.styleBody}</p>
+              <div data-portal-demos style="display:grid; grid-template-columns:repeat(auto-fill, minmax(180px, 1fr)); gap:6px 14px;"></div>
+            </fieldset>
+            <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.fields.styleNotes}
+              <input type="text" data-f="styleNotes" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;" />
+            </label>
+            <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.fields.extraNotes}
+              <textarea data-f="extraNotes" rows="2" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;"></textarea>
+            </label>
+            <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+              <button type="submit" class="btn btn--primary" data-portal-save>{copy.save}</button>
+              <p class="prose" data-portal-form-status style="font-size:14px; margin:0;" role="status"></p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script type="application/json" id="portal-demos-json" set:html={demosJson}></script>
+<span hidden data-portal-msg-generic>{copy.genericError}</span>
+<span hidden data-portal-msg-sending>{copy.sending}</span>
+<span hidden data-portal-msg-sent>{copy.sent}</span>
+<span hidden data-portal-msg-saving>{copy.saving}</span>
+<span hidden data-portal-msg-saved>{copy.saved}</span>
+<span hidden data-portal-msg-required>{copy.required}</span>
+<span hidden data-portal-domain-new>{copy.fields.domainValueNew}</span>
+<span hidden data-portal-domain-existing>{copy.fields.domainValueExisting}</span>
+
+<script data-astro-rerun>
+  function initPortal() {
+    var root = document.querySelector("[data-portal-root]");
+    if (!root || root.dataset.bound) return;
+    root.dataset.bound = "1";
+    var loading = root.querySelector("[data-portal-loading]");
+    var signin = root.querySelector("[data-portal-signin]");
+    var app = root.querySelector("[data-portal-app]");
+    var msg = function (sel) {
+      var el = document.querySelector(sel);
+      return el ? el.textContent : "";
+    };
+
+    function show(state) {
+      loading.hidden = state !== "loading";
+      signin.hidden = state !== "signin";
+      app.hidden = state !== "app";
+    }
+
+    function api(path, options) {
+      return fetch(path, Object.assign({ headers: { "Content-Type": "application/json" } }, options || {})).then(function (res) {
+        return res.json().catch(function () { return { ok: false }; }).then(function (data) {
+          return { status: res.status, data: data };
+        });
+      });
+    }
+
+    var demos = [];
+    try {
+      demos = JSON.parse(document.getElementById("portal-demos-json").textContent || "[]");
+    } catch (e) {}
+    var demosBox = root.querySelector("[data-portal-demos]");
+    demos.forEach(function (d) {
+      var label = document.createElement("label");
+      label.style.cssText = "display:flex; gap:8px; align-items:center; font-size:14px;";
+      var box = document.createElement("input");
+      box.type = "checkbox";
+      box.value = d.id;
+      box.setAttribute("data-demo", d.id);
+      label.appendChild(box);
+      label.appendChild(document.createTextNode(d.name));
+      demosBox.appendChild(label);
+    });
+
+    var current = null;
+
+    function fillForm(client) {
+      var o = client.onboarding || {};
+      root.querySelectorAll("[data-f]").forEach(function (el) {
+        var key = el.getAttribute("data-f");
+        if (el.type === "checkbox") el.checked = !!o[key];
+        else if (el.type === "radio") { /* handled below */ }
+        else el.value = o[key] || "";
+      });
+      var radioNew = root.querySelector('[data-f="domainModeNew"]');
+      var radioExisting = root.querySelector('[data-f="domainModeExisting"]');
+      if (radioNew) radioNew.checked = o.domainMode === "new";
+      if (radioExisting) radioExisting.checked = o.domainMode === "existing";
+      root.querySelectorAll("[data-demo]").forEach(function (box) {
+        box.checked = (o.styleDemos || []).indexOf(box.value) !== -1;
+      });
+      updateDomainLabel();
+    }
+
+    function updateDomainLabel() {
+      var existing = root.querySelector('[data-f="domainModeExisting"]');
+      var label = root.querySelector("[data-portal-domain-label]");
+      if (label) label.textContent = msg(existing && existing.checked ? "[data-portal-domain-existing]" : "[data-portal-domain-new]");
+    }
+    root.querySelectorAll('[name="domainMode"]').forEach(function (r) {
+      r.addEventListener("change", updateDomainLabel);
+    });
+
+    function render(client) {
+      current = client;
+      var identity = root.querySelector("[data-portal-identity]");
+      identity.textContent = (client.business || client.email) + " · " + client.email;
+      root.querySelector("[data-portal-billing]").textContent = client.billingStatus || "";
+      var order = ["onboarding", "build", "review", "live"];
+      var idx = order.indexOf(client.stage);
+      root.querySelectorAll("[data-portal-stage]").forEach(function (li) {
+        var i = order.indexOf(li.getAttribute("data-portal-stage"));
+        var done = idx > i || client.stage === "live";
+        var active = idx === i && client.stage !== "live";
+        li.style.opacity = done || active ? "1" : ".55";
+        li.style.borderColor = active ? "var(--accent)" : "var(--line)";
+        li.style.background = done ? "var(--accent-soft)" : "var(--card-bg)";
+      });
+      root.querySelector("[data-portal-paused]").hidden = client.stage !== "paused";
+      var review = root.querySelector("[data-portal-review]");
+      if (client.stage === "review" && client.previewUrl) {
+        review.hidden = false;
+        root.querySelector("[data-portal-preview]").href = client.previewUrl;
+      } else {
+        review.hidden = true;
+      }
+      root.querySelector("[data-portal-form-done]").hidden = !client.onboardingComplete;
+      fillForm(client);
+      show("app");
+    }
+
+    function loadMe() {
+      return api("/api/portal/me").then(function (r) {
+        if (r.status === 200 && r.data.client) render(r.data.client);
+        else show("signin");
+      });
+    }
+
+    // Entry paths: #t=<token> from the email link, ?claim=<cs_id> from checkout.
+    var hashMatch = /#t=([a-f0-9]+)/.exec(location.hash || "");
+    var claim = new URLSearchParams(location.search).get("claim");
+    if (hashMatch) {
+      history.replaceState(null, "", location.pathname);
+      api("/api/portal/exchange", { method: "POST", body: JSON.stringify({ token: hashMatch[1] }) }).then(function (r) {
+        if (r.data.ok) loadMe();
+        else show("signin");
+      });
+    } else if (claim) {
+      history.replaceState(null, "", location.pathname);
+      api("/api/portal/claim", { method: "POST", body: JSON.stringify({ sessionId: claim }) }).then(function (r) {
+        if (r.data.ok) loadMe();
+        else show("signin");
+      });
+    } else {
+      loadMe();
+    }
+
+    var signinForm = root.querySelector("[data-portal-signin-form]");
+    signinForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var status = root.querySelector("[data-portal-signin-status]");
+      var btn = root.querySelector("[data-portal-signin-btn]");
+      var email = root.querySelector("[data-portal-email]").value;
+      btn.disabled = true;
+      status.textContent = msg("[data-portal-msg-sending]");
+      api("/api/portal/request-link", { method: "POST", body: JSON.stringify({ email: email }) }).then(function (r) {
+        btn.disabled = false;
+        status.textContent = r.data.ok ? msg("[data-portal-msg-sent]") : (r.data.error || msg("[data-portal-msg-generic]"));
+      });
+    });
+
+    root.querySelector("[data-portal-logout]").addEventListener("click", function () {
+      api("/api/portal/logout", { method: "POST", body: "{}" }).then(function () {
+        current = null;
+        show("signin");
+      });
+    });
+
+    var form = root.querySelector("[data-portal-form]");
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var status = root.querySelector("[data-portal-form-status]");
+      var btn = root.querySelector("[data-portal-save]");
+      var payload = {};
+      ["businessName", "contactName", "phone", "services", "serviceArea", "hours", "about", "brandNotes", "domainValue", "styleNotes", "extraNotes"].forEach(function (key) {
+        var el = root.querySelector('[data-f="' + key + '"]');
+        if (el) payload[key] = el.value;
+      });
+      payload.hasLogo = root.querySelector('[data-f="hasLogo"]').checked;
+      payload.photosReady = root.querySelector('[data-f="photosReady"]').checked;
+      var mode = root.querySelector('[name="domainMode"]:checked');
+      if (mode) payload.domainMode = mode.value;
+      payload.styleDemos = Array.prototype.slice.call(root.querySelectorAll("[data-demo]:checked")).map(function (b) { return b.value; });
+      btn.disabled = true;
+      status.textContent = msg("[data-portal-msg-saving]");
+      api("/api/portal/onboarding", { method: "POST", body: JSON.stringify(payload) }).then(function (r) {
+        btn.disabled = false;
+        if (r.data.ok && r.data.client) {
+          render(r.data.client);
+          status.textContent = msg("[data-portal-msg-saved]");
+        } else {
+          status.textContent = r.data.error || msg("[data-portal-msg-generic]");
+        }
+      });
+    });
+  }
+  initPortal();
+  if (!window.__webaoPortalPL) {
+    window.__webaoPortalPL = true;
+    document.addEventListener("astro:page-load", initPortal);
+  }
+</script>

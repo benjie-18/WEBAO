@@ -75,6 +75,10 @@ const a = t.admin;
         aria-selected="false" tabindex="-1" data-tab="leads" class="admin-tab"
       >{a.tabs.outreach}</button>
       <button
+        type="button" role="tab" id="admin-tab-clients" aria-controls="admin-panel-clients"
+        aria-selected="false" tabindex="-1" data-tab="clients" class="admin-tab"
+      >{a.tabs.clients}</button>
+      <button
         type="button" role="tab" id="admin-tab-config" aria-controls="admin-panel-config"
         aria-selected="false" tabindex="-1" data-tab="config" class="admin-tab"
       >{a.tabs.config}</button>
@@ -174,7 +178,18 @@ const a = t.admin;
       </div>
     </section>
 
-    <!-- Tab 4 · Config -->
+    <!-- Tab 4 · Clients -->
+    <section
+      id="admin-panel-clients" role="tabpanel" aria-labelledby="admin-tab-clients"
+      data-panel="clients" class="admin-panel" hidden
+    >
+      <div class="admin-forms-list" data-clients-list></div>
+      <div class="admin-center">
+        <button type="button" class="admin-ghost-btn" data-clients-more hidden>{a.clients.loadMore}</button>
+      </div>
+    </section>
+
+    <!-- Tab 5 · Config -->
     <section
       id="admin-panel-config" role="tabpanel" aria-labelledby="admin-tab-config"
       data-panel="config" class="admin-panel" hidden

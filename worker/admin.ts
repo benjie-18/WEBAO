@@ -28,6 +28,15 @@ import {
 } from "./util";
 import type { Session } from "./track";
 import { handleLeadsList, handleLeadDelete, LEADS_INDEX, type Lead } from "./leads";
+import {
+  CLIENTS_INDEX,
+  getClient,
+  onboardingComplete,
+  saveClient,
+  type Client,
+  type ClientStage,
+} from "./clients";
+import { clampStr } from "./util";
 
 const FORMS_INDEX = "forms:index";
 
@@ -67,6 +76,9 @@ export async function handleAdmin(req: Request, env: Env, url: URL): Promise<Res
   if (path === "/api/admin/leads" && req.method === "GET") return handleLeadsList(kv, url);
   if (path.startsWith("/api/admin/leads/") && req.method === "DELETE")
     return handleLeadDelete(kv, path);
+  if (path === "/api/admin/clients" && req.method === "GET") return handleClientsList(kv, url);
+  if (path === "/api/admin/clients/update" && req.method === "POST")
+    return handleClientUpdate(req, kv);
   if (path === "/api/admin/config" && req.method === "GET")
     return json({ ok: true, settings: await getSettings(kv) });
   if (path === "/api/admin/config" && req.method === "POST") return handleConfigSet(req, kv);
@@ -411,4 +423,79 @@ async function handlePasswordChange(req: Request, kv: KVNamespace): Promise<Resp
   // Log out every other session; the caller keeps its own token.
   await revokeOtherTokens(kv, currentToken(req));
   return json({ ok: true });
+}
+
+// ---------------------------------------------------------------------------
+// Clients (backbone records; see worker/clients.ts)
+// ---------------------------------------------------------------------------
+
+function clientSummary(client: Client) {
+  return {
+    id: client.id,
+    email: client.email,
+    name: client.name,
+    business: client.business || client.onboarding?.businessName,
+    stage: client.stage,
+    billingStatus: client.billingStatus,
+    items: client.items,
+    createdAt: client.createdAt,
+    updatedAt: client.updatedAt,
+    onboardingComplete: onboardingComplete(client),
+    onboarding: client.onboarding || {},
+    onboardingCompletedAt: client.onboardingCompletedAt,
+    previewUrl: client.previewUrl,
+    nudgeCount: client.nudgeCount || 0,
+    nudgesEscalatedAt: client.nudgesEscalatedAt,
+    stripeCustomerId: client.stripeCustomerId,
+    stripeSubscriptionId: client.stripeSubscriptionId,
+  };
+}
+
+/** GET /api/admin/clients?limit=50&cursor=0 — newest first. */
+async function handleClientsList(kv: KVNamespace, url: URL): Promise<Response> {
+  const rawLimit = parseInt(url.searchParams.get("limit") || "50", 10);
+  const limit = Math.min(Math.max(isNaN(rawLimit) ? 50 : rawLimit, 1), 100);
+  const rawCursor = parseInt(url.searchParams.get("cursor") || "0", 10);
+  const cursor = Math.max(isNaN(rawCursor) ? 0 : rawCursor, 0);
+
+  const index = (await getJson<string[]>(kv, CLIENTS_INDEX)) || [];
+  const slice = index.slice(cursor, cursor + limit);
+  const items = (
+    await batch(slice, 25, async (key) => {
+      const rec = await getJson<Client>(kv, key);
+      return rec ? clientSummary(rec) : null;
+    })
+  ).filter((x): x is ReturnType<typeof clientSummary> => x !== null);
+
+  return json({
+    ok: true,
+    items,
+    nextCursor: cursor + limit < index.length ? String(cursor + limit) : null,
+  });
+}
+
+const STAGES: ClientStage[] = ["onboarding", "build", "review", "live", "paused"];
+
+/** POST /api/admin/clients/update { id, stage?, previewUrl? } */
+async function handleClientUpdate(req: Request, kv: KVNamespace): Promise<Response> {
+  let body: { id?: unknown; stage?: unknown; previewUrl?: unknown };
+  try {
+    body = (await readJson(req)) as typeof body;
+  } catch (e) {
+    return err((e as Error).message);
+  }
+  if (typeof body.id !== "string") return err("Client id is required");
+  const client = await getClient(kv, body.id);
+  if (!client) return err("Client not found", 404);
+  if (body.stage !== undefined) {
+    if (!STAGES.includes(body.stage as ClientStage)) return err("Invalid stage");
+    client.stage = body.stage as ClientStage;
+  }
+  if (body.previewUrl !== undefined) {
+    const value = clampStr(body.previewUrl, 500).trim();
+    if (value && !/^https:\/\/[^\s]+$/.test(value)) return err("Preview URL must be an https URL");
+    client.previewUrl = value || undefined;
+  }
+  await saveClient(kv, client);
+  return json({ ok: true, client: clientSummary(client) });
 }

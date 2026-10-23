@@ -17,6 +17,7 @@
 
 import { putJson } from "./kv";
 import { json, err, timingSafeEqual, clampStr } from "./util";
+import { sendClientEmail } from "./mailer";
 import {
   createClient,
   findClientByCustomer,
@@ -144,6 +145,7 @@ async function onCheckoutCompleted(
     client.lastCheckoutAt = at;
     await saveClient(kv, client);
     await notifyNewClient(env, client);
+    await sendWelcomeEmail(env, client);
     return;
   }
 
@@ -237,6 +239,49 @@ function base64Utf8(text: string): string {
 
 function encodeHeader(text: string): string {
   return "=?UTF-8?B?" + base64Utf8(text) + "?=";
+}
+
+/**
+ * Welcome email to the new client (best effort, via SMTP2GO; a no-op until
+ * SMTP2GO_API_KEY is set). Points at the portal, which is where onboarding
+ * happens; the client signs in with this same email address.
+ */
+async function sendWelcomeEmail(env: Env, client: Client): Promise<void> {
+  const fr = client.lang === "fr";
+  const link = `https://webao.ca${fr ? "/fr/portail" : "/portal"}`;
+  await sendClientEmail(env, {
+    to: client.email,
+    subject: fr ? "Bienvenue chez WEBAO, voici la suite" : "Welcome to WEBAO, here is what happens next",
+    text: fr
+      ? [
+          "Bonjour,",
+          "",
+          "Merci pour votre commande. Votre site est maintenant dans notre file de production.",
+          "",
+          "La prochaine étape est courte : ouvrez votre portail client et remplissez le formulaire de démarrage (vos services, votre secteur, vos heures, votre nom de domaine). La conception commence dès que le formulaire est complet.",
+          "",
+          `Portail : ${link}`,
+          "Entrez l'adresse courriel de votre commande et nous vous enverrons un lien d'accès.",
+          "",
+          "Des questions ? Répondez à ce courriel ou écrivez à support@webao.ca.",
+          "",
+          "L'équipe Webao",
+        ].join("\n")
+      : [
+          "Hi,",
+          "",
+          "Thanks for your order. Your website is now in our production queue.",
+          "",
+          "The next step is short: open your client portal and fill in the start-up form (your services, your service area, your hours, your domain name). The build starts as soon as the form is complete.",
+          "",
+          `Portal: ${link}`,
+          "Enter the email address from your order and we will send you a sign-in link.",
+          "",
+          "Questions? Reply to this email or write to support@webao.ca.",
+          "",
+          "The Webao team",
+        ].join("\n"),
+  });
 }
 
 async function notifyNewClient(env: Env, client: Client): Promise<void> {

@@ -61,6 +61,32 @@ interface LeadsResponse {
   nextCursor: string | null;
 }
 
+interface ClientItem {
+  id: string;
+  email: string;
+  name?: string;
+  business?: string;
+  stage: string;
+  billingStatus: string;
+  items: string[];
+  createdAt: number;
+  updatedAt: number;
+  onboardingComplete: boolean;
+  onboarding: Record<string, unknown>;
+  onboardingCompletedAt?: number;
+  previewUrl?: string;
+  nudgeCount: number;
+  nudgesEscalatedAt?: number;
+  stripeCustomerId?: string;
+  stripeSubscriptionId?: string;
+}
+
+interface ClientsResponse {
+  ok: boolean;
+  items: ClientItem[];
+  nextCursor: string | null;
+}
+
 interface ChartsResponse {
   ok: boolean;
   range: string;
@@ -199,6 +225,7 @@ function initAdmin(): void {
     tabLoaded.stats = false;
     tabLoaded.forms = false;
     tabLoaded.leads = false;
+    tabLoaded.clients = false;
     tabLoaded.config = false;
   }
 
@@ -259,7 +286,7 @@ function initAdmin(): void {
 
   /* ── Tabs ── */
   let activeTab = "";
-  const tabLoaded: Record<string, boolean> = { stats: false, forms: false, leads: false, config: false };
+  const tabLoaded: Record<string, boolean> = { stats: false, forms: false, leads: false, clients: false, config: false };
 
   function activateTab(name: string, force = false): void {
     if (!force && name === activeTab) return;
@@ -280,6 +307,7 @@ function initAdmin(): void {
       if (name === "stats") void loadStats();
       else if (name === "forms") void loadForms(true);
       else if (name === "leads") void loadLeads(true);
+      else if (name === "clients") void loadClients(true);
       else if (name === "config") void loadConfig();
     }
     if (name === "forms" && !formsChartsLoaded) void loadFormsCharts();
@@ -949,6 +977,135 @@ function initAdmin(): void {
     }
   }
 
+  /* ── Clients tab ── */
+  let clientsCursor: string | null = null;
+
+  function clientCard(item: ClientItem): string {
+    const C = I18N.clients as Dict;
+    const F = (C.fields || {}) as Dict;
+    const stages = (C.stages || {}) as Dict;
+    const badge = item.onboardingComplete
+      ? `<span class="form-badge">${esc(C.onboardingDone)}</span>`
+      : `<span class="form-badge form-badge--warn">${esc(C.onboardingPending)}</span>`;
+    const meta: string[] = [
+      `<span><b>${esc(C.billing)}</b> ${esc(item.billingStatus)}</span>`,
+      `<span><b>${esc(C.since)}</b> ${esc(fmtDateTime(item.createdAt))}</span>`,
+    ];
+    if (item.items.length > 0)
+      meta.push(`<span><b>${esc(C.items)}</b> ${esc(item.items.join(", "))}</span>`);
+    if (item.nudgeCount > 0) meta.push(`<span><b>${esc(C.nudges)}</b> ${item.nudgeCount}</span>`);
+    if (item.nudgesEscalatedAt)
+      meta.push(`<span><b>${esc(C.escalated)}</b> ${esc(fmtDateTime(item.nudgesEscalatedAt))}</span>`);
+
+    const o = item.onboarding || {};
+    const val = (k: string): string => {
+      const v = o[k];
+      if (v === undefined || v === null || v === "") return "";
+      if (typeof v === "boolean") return String(v ? C.yes : C.no);
+      if (Array.isArray(v)) return v.join(", ");
+      return String(v);
+    };
+    const rows: string[] = [];
+    const addRow = (label: unknown, value: string): void => {
+      if (value) rows.push(`<div class="ff-row"><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`);
+    };
+    addRow(F.businessName, val("businessName"));
+    addRow(F.contactName, val("contactName"));
+    addRow(F.phone, val("phone"));
+    addRow(F.services, val("services"));
+    addRow(F.serviceArea, val("serviceArea"));
+    addRow(F.hours, val("hours"));
+    addRow(F.about, val("about"));
+    addRow(F.hasLogo, val("hasLogo"));
+    addRow(F.brandNotes, val("brandNotes"));
+    addRow(F.photosReady, val("photosReady"));
+    const domain = [o.domainMode ? String(o.domainMode) : "", val("domainValue")].filter(Boolean).join(" · ");
+    addRow(F.domain, domain);
+    addRow(F.styleDemos, val("styleDemos"));
+    addRow(F.styleNotes, val("styleNotes"));
+    addRow(F.extraNotes, val("extraNotes"));
+
+    const stageOptions = ["onboarding", "build", "review", "live", "paused"]
+      .map(
+        (s) =>
+          `<option value="${s}"${item.stage === s ? " selected" : ""}>${esc(stages[s] || s)}</option>`
+      )
+      .join("");
+
+    return (
+      `<article class="form-card" data-client-id="${esc(item.id)}">` +
+      `<div class="form-card-head"><div><strong>${esc(item.business || item.email)}</strong>` +
+      `<span class="mono">${esc(item.email)}</span></div>` +
+      `<div class="lead-badges">${badge}</div></div>` +
+      `<div class="form-meta">${meta.join("")}</div>` +
+      `<div class="form-actions" style="gap:10px; flex-wrap:wrap;">` +
+      `<label style="display:flex; gap:8px; align-items:center; font-size:13px; font-weight:600;">${esc(C.stage)}` +
+      `<select data-client-stage style="padding:7px 9px; border-radius:8px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink);">${stageOptions}</select></label>` +
+      `<label style="display:flex; gap:8px; align-items:center; font-size:13px; font-weight:600; flex:1; min-width:220px;">${esc(C.previewUrl)}` +
+      `<input type="url" data-client-preview value="${esc(item.previewUrl || "")}" placeholder="https://" style="flex:1; padding:7px 9px; border-radius:8px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink);" /></label>` +
+      `<button type="button" class="admin-ghost-btn" data-client-save>${esc(C.save)}</button>` +
+      `<button type="button" class="admin-ghost-btn" data-client-expand>${esc(C.details)}</button>` +
+      `</div>` +
+      `<dl class="form-fields" data-client-fields hidden>` +
+      (rows.length > 0 ? rows.join("") : `<p class="admin-muted" style="font-size:13px;">${esc(C.onboardingPending)}</p>`) +
+      `</dl>` +
+      `</article>`
+    );
+  }
+
+  async function loadClients(reset: boolean): Promise<void> {
+    const list = qq("[data-clients-list]");
+    const more = qq<HTMLButtonElement>("[data-clients-more]");
+    if (!list || !more) return;
+    if (reset) {
+      list.innerHTML = "";
+      clientsCursor = null;
+    }
+    more.hidden = true;
+    try {
+      const data = (await api(
+        `/api/admin/clients?limit=50${clientsCursor ? `&cursor=${encodeURIComponent(clientsCursor)}` : ""}`
+      )) as unknown as ClientsResponse;
+      if (reset && data.items.length === 0) {
+        list.innerHTML = `<div class="admin-empty">${esc(I18N.clients.empty)}</div>`;
+        return;
+      }
+      for (const item of data.items) list.insertAdjacentHTML("beforeend", clientCard(item));
+      clientsCursor = data.nextCursor;
+      more.hidden = !clientsCursor;
+    } catch (e) {
+      if (e instanceof ExpiredSession) return;
+      if (reset) {
+        list.innerHTML =
+          `<div class="admin-retry"><p>${esc(I18N.clients.loadError)}</p>` +
+          `<button type="button" class="admin-ghost-btn" data-clients-retry>${esc(I18N.clients.retry)}</button></div>`;
+      } else {
+        toast(String(I18N.clients.loadError), "err");
+      }
+    }
+  }
+
+  async function saveClient(btn: HTMLElement): Promise<void> {
+    const card = btn.closest("[data-client-id]") as HTMLElement | null;
+    const id = card?.dataset.clientId;
+    if (!card || !id) return;
+    const stage = (card.querySelector("[data-client-stage]") as HTMLSelectElement | null)?.value;
+    const previewUrl = (card.querySelector("[data-client-preview]") as HTMLInputElement | null)?.value;
+    btn.setAttribute("disabled", "");
+    try {
+      await api("/api/admin/clients/update", {
+        method: "POST",
+        body: { id, stage, previewUrl },
+      });
+      toast(String(I18N.clients.saved), "ok");
+    } catch (e) {
+      if (e instanceof ExpiredSession) return;
+      toast(String(I18N.clients.saveError), "err");
+    } finally {
+      btn.removeAttribute("disabled");
+    }
+  }
+
   async function deleteLead(btn: HTMLElement): Promise<void> {
     const card = btn.closest("[data-lead-id]") as HTMLElement | null;
     const id = card?.dataset.leadId;
@@ -1194,6 +1351,7 @@ function initAdmin(): void {
 
   qq("[data-forms-more]")?.addEventListener("click", () => void loadForms(false));
   qq("[data-leads-more]")?.addEventListener("click", () => void loadLeads(false));
+  qq("[data-clients-more]")?.addEventListener("click", () => void loadClients(false));
   qq<HTMLFormElement>("[data-settings-form]")?.addEventListener("submit", (e) => void onSettingsSubmit(e));
   qq<HTMLFormElement>("[data-pw-form]")?.addEventListener("submit", (e) => void onPasswordSubmit(e));
 
@@ -1235,6 +1393,27 @@ function initAdmin(): void {
     }
     if (t.closest("[data-leads-retry]")) {
       void loadLeads(true);
+      return;
+    }
+    if (t.closest("[data-clients-retry]")) {
+      void loadClients(true);
+      return;
+    }
+    const clientExpand = t.closest("[data-client-expand]") as HTMLElement | null;
+    if (clientExpand) {
+      const card = clientExpand.closest("[data-client-id]");
+      const fields = card?.querySelector("[data-client-fields]") as HTMLElement | null;
+      if (fields) {
+        fields.hidden = !fields.hidden;
+        clientExpand.textContent = fields.hidden
+          ? String(I18N.clients.details)
+          : String(I18N.clients.hideDetails);
+      }
+      return;
+    }
+    const clientSave = t.closest("[data-client-save]") as HTMLElement | null;
+    if (clientSave) {
+      void saveClient(clientSave);
       return;
     }
     const leadExpand = t.closest("[data-lead-expand]") as HTMLElement | null;

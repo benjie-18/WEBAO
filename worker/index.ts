@@ -8,6 +8,15 @@ import { handleGo, handleLeadRegister, handleLeadReply } from "./leads";
 import { handleAdmin } from "./admin";
 import { handleCheckoutSession } from "./checkout";
 import { handleStripeWebhook } from "./stripe-webhook";
+import {
+  handleOnboardingNudges,
+  handlePortalClaim,
+  handlePortalExchange,
+  handlePortalLogout,
+  handlePortalMe,
+  handlePortalOnboarding,
+  handlePortalRequestLink,
+} from "./portal";
 import { json } from "./util";
 import { KvWriteError } from "./kv";
 
@@ -23,6 +32,13 @@ async function routeApi(req: Request, env: Env): Promise<Response> {
   if (p === "/api/leads/reply" && req.method === "POST") return handleLeadReply(req, env);
   if (p === "/api/checkout/session" && req.method === "POST") return handleCheckoutSession(req, env);
   if (p === "/api/stripe/webhook" && req.method === "POST") return handleStripeWebhook(req, env);
+  if (p === "/api/portal/request-link" && req.method === "POST") return handlePortalRequestLink(req, env);
+  if (p === "/api/portal/exchange" && req.method === "POST") return handlePortalExchange(req, env);
+  if (p === "/api/portal/claim" && req.method === "POST") return handlePortalClaim(req, env);
+  if (p === "/api/portal/me" && req.method === "GET") return handlePortalMe(req, env);
+  if (p === "/api/portal/onboarding" && req.method === "POST") return handlePortalOnboarding(req, env);
+  if (p === "/api/portal/logout" && req.method === "POST") return handlePortalLogout(req, env);
+  if (p === "/api/internal/onboarding-nudges" && req.method === "POST") return handleOnboardingNudges(req, env);
   if (p.startsWith("/api/admin/")) return handleAdmin(req, env, url);
 
   return json({ ok: false, error: "Not found" }, 404);

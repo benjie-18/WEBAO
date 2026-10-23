@@ -16,6 +16,16 @@ const description = "Your WEBAO subscription is active. We'll be in touch shortl
         Your subscription is active. We'll reach out within one business day
         to kick off your site build. Welcome to WEBAO.
       </p>
+      <div id="portal-card" hidden style="margin-top:28px; text-align:left; border:1px solid var(--line); border-radius:16px; padding:24px; background:var(--card-bg);">
+        <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 8px;">Next step: your client portal</h2>
+        <p class="prose" style="font-size:14px; margin:0 0 16px;">
+          Your portal is where you answer a few quick questions (services,
+          area, hours, domain) so we can start building, and where you will
+          follow the build. This button signs you in directly from your
+          payment, no password needed.
+        </p>
+        <a id="portal-link" href="/portal" class="btn btn--primary">Open my portal</a>
+      </div>
       <div style="margin-top:28px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
         <a href="/demos" class="btn btn--primary">Browse demo styles</a>
         <a href="/contact" class="btn btn--ghost">Contact us</a>
@@ -90,6 +100,22 @@ const description = "Your WEBAO subscription is active. We'll be in touch shortl
         copy.textContent =
           "Your payment is confirmed. We'll reach out within one business day to kick off your site build. Welcome to WEBAO.";
       }
+    } catch (e) {}
+  })();
+</script>
+
+<script is:inline>
+  // Portal claim: Stripe's return URL carries ?session_id=cs_... — hand it
+  // to the portal, which verifies it server-side and signs the client in.
+  (function () {
+    try {
+      var sid = new URLSearchParams(location.search).get('session_id') || '';
+      if (!/^cs_[A-Za-z0-9_]+$/.test(sid)) return;
+      var card = document.getElementById('portal-card');
+      var link = document.getElementById('portal-link');
+      if (!card || !link) return;
+      link.href = '/portal?claim=' + encodeURIComponent(sid);
+      card.hidden = false;
     } catch (e) {}
   })();
 </script>

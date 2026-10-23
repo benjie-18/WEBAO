@@ -139,6 +139,32 @@ a best-effort inbox notification from start@webao.ca), `invoice.paid`,
 Clients live in `client:<cl_id>` with the `client-customer:<cus_id>` lookup;
 unknown customers and unknown event types are acknowledged as no-ops.
 
+## Client portal (cookie session)
+
+Sign-in is passwordless. `POST /api/portal/request-link` `{ email }` mails a
+one-time link (30 min, single use) through SMTP2GO and always answers
+`{ ok: true }` for unknown emails (no enumeration); the link lands on
+`/portal#t=<token>` and the page trades it at `POST /api/portal/exchange` for
+a session cookie (`webao_portal`, HttpOnly, 30 days, `portal-session:<tok>`).
+`POST /api/portal/claim` `{ sessionId }` is the post-checkout bootstrap: the
+Stripe session is verified server-side and a paid session whose customer or
+email resolves to a client signs the browser in, no email needed.
+`GET /api/portal/me` returns the client's own view (stage, billing, items,
+onboarding). `POST /api/portal/onboarding` saves onboarding answers; the
+first save that completes the required fields (business, contact, phone,
+services, service area, domain choice + value) stamps `onboardingCompletedAt`,
+advances stage `onboarding` → `build` and notifies the inbox.
+`POST /api/portal/logout` drops the session. Client-facing mail needs the
+`SMTP2GO_API_KEY` secret (the `send_email` binding can only reach the WEBAO
+inbox); a new-client welcome email is sent from the Stripe webhook on the
+same channel.
+
+### `POST /api/internal/onboarding-nudges`
+Shared-secret Bearer auth (`INTERNAL_CRON_SECRET`), called daily by a cron.
+Clients still in stage `onboarding` with an incomplete form get a reminder
+email on day 2 and day 5; on day 7 the inbox is notified instead
+(escalation, `nudgesEscalatedAt`). Answers `{ nudged, escalated, skippedNoMail }`.
+
 ## Admin (Bearer token)
 
 Login: `POST /api/admin/login` body `{ password }` → `{ "ok": true, "token": "<64-hex>" }`.
@@ -179,6 +205,15 @@ Newest-first by registration order. Same pagination rules as forms.
 ### `DELETE /api/admin/leads/:id`
 `:id` is the `ld_…` lead id. Removes the record and its index entry.
 → `{ "ok": true }`.
+
+### `GET /api/admin/clients?limit=50&cursor=`
+→ `{ "ok": true, "items": [{ id, email, name, business, stage, billingStatus, items, createdAt, updatedAt, onboardingComplete, onboarding, onboardingCompletedAt, previewUrl, nudgeCount, nudgesEscalatedAt, stripeCustomerId, stripeSubscriptionId }], "nextCursor": "50" | null }`
+Newest-first. Same pagination rules as forms. Backs the admin Clients tab.
+
+### `POST /api/admin/clients/update`
+Body `{ id, stage?, previewUrl? }`. Moves a client between stages
+(`onboarding | build | review | live | paused`) and sets or clears the review
+preview URL the portal shows during stage `review`. → `{ "ok": true, "client" }`.
 
 ### `GET /api/admin/charts?range=day|week|month|year`
 Per-day form + outreach series for the admin chart cards, in the same label
