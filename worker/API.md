@@ -165,6 +165,14 @@ Newest-first by registration order. Same pagination rules as forms.
 `:id` is the `ld_…` lead id. Removes the record and its index entry.
 → `{ "ok": true }`.
 
+### `GET /api/admin/charts?range=day|week|month|year`
+Per-day form + outreach series for the admin chart cards, in the same label
+shape as stats (daily buckets; monthly for `year`).
+→ `{ "ok": true, "range", "labels": [...], "forms": { "total": [...], "byType": { "contact": [...], "support": [...], "pricing": [...] } }, "leads": { "sent": [...], "clicked": [...], "replied": [...] }, "leadStages": { "replied", "clicked", "none", "optout", "bounced" }, "clickDests": { "demos", "home", "pricing", "start" } }`
+`leadStages` counts each in-range lead once, at its furthest outcome
+(bounced > opted out > replied > clicked > no response). `clickDests` counts
+human (non-scanner) clicks in range by destination.
+
 ### `GET /api/admin/config`
 → `{ "ok": true, "settings": { "defaultTheme": "system"|"light"|"dark", "trackingEnabled": true } }`
 

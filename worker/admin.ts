@@ -27,7 +27,7 @@ import {
   batch,
 } from "./util";
 import type { Session } from "./track";
-import { handleLeadsList, handleLeadDelete } from "./leads";
+import { handleLeadsList, handleLeadDelete, LEADS_INDEX, type Lead } from "./leads";
 
 const FORMS_INDEX = "forms:index";
 
@@ -63,6 +63,7 @@ export async function handleAdmin(req: Request, env: Env, url: URL): Promise<Res
   if (path === "/api/admin/forms" && req.method === "GET") return handleFormsList(kv, url);
   if (path.startsWith("/api/admin/forms/") && req.method === "DELETE")
     return handleFormDelete(kv, path);
+  if (path === "/api/admin/charts" && req.method === "GET") return handleCharts(kv, url);
   if (path === "/api/admin/leads" && req.method === "GET") return handleLeadsList(kv, url);
   if (path.startsWith("/api/admin/leads/") && req.method === "DELETE")
     return handleLeadDelete(kv, path);
@@ -266,6 +267,104 @@ async function handleFormDelete(kv: KVNamespace, path: string): Promise<Response
   const next = index.filter((k) => k !== key);
   if (next.length !== index.length) await putJson(kv, FORMS_INDEX, next);
   return json({ ok: true });
+}
+
+// ---------------------------------------------------------------------------
+// Charts: per-day form + outreach series for the admin chart cards
+// ---------------------------------------------------------------------------
+
+/**
+ * GET /api/admin/charts?range=day|week|month|year
+ * Buckets form submissions and outreach lead events into the same label
+ * shape as /api/admin/stats (daily buckets, monthly for the year range) so
+ * the admin charts share one axis format. Lead stages are mutually
+ * exclusive (a lead counts once, at its furthest outcome) so they can be
+ * drawn as a donut: bounced > opted out > replied > clicked > no response.
+ */
+async function handleCharts(kv: KVNamespace, url: URL): Promise<Response> {
+  const rangeParam = url.searchParams.get("range") || "week";
+  if (rangeParam !== "day" && rangeParam !== "week" && rangeParam !== "month" && rangeParam !== "year")
+    return err("Invalid range");
+  const range = rangeParam as RangeName;
+
+  const today = dayKey();
+  const days = rangeDays(range, today);
+  const startTs = Date.parse(days[0] + "T00:00:00Z");
+  const endTs = Date.parse(today + "T00:00:00Z") + 24 * 3600 * 1000;
+
+  // Label positions: daily buckets, or one bucket per month for the year.
+  let labels: string[];
+  const bucketOf = new Map<string, number>();
+  if (range === "year") {
+    const months: string[] = [];
+    for (const d of days) {
+      const m = d.slice(0, 7);
+      if (months[months.length - 1] !== m) months.push(m);
+    }
+    labels = months;
+    months.forEach((m, i) => bucketOf.set(m, i));
+  } else {
+    labels = days;
+    days.forEach((d, i) => bucketOf.set(d, i));
+  }
+  const series = (): number[] => labels.map(() => 0);
+  const bump = (arr: number[], ts: number | undefined): void => {
+    if (typeof ts !== "number" || ts < startTs || ts >= endTs) return;
+    const key = range === "year" ? dayKey(ts).slice(0, 7) : dayKey(ts);
+    const i = bucketOf.get(key);
+    if (i !== undefined) arr[i] += 1;
+  };
+
+  // --- Forms: totals + per-type series from the submissions index ---
+  const formsTotal = series();
+  const formsByType = { contact: series(), support: series(), pricing: series() };
+  const formKeys = (await getJson<string[]>(kv, FORMS_INDEX)) || [];
+  const formRecs = await batch(formKeys.slice(0, 1000), 25, (k) =>
+    getJson<{ form?: string; at?: number }>(kv, k),
+  );
+  for (const rec of formRecs) {
+    if (!rec || typeof rec.at !== "number") continue;
+    bump(formsTotal, rec.at);
+    if (rec.form === "contact" || rec.form === "support" || rec.form === "pricing")
+      bump(formsByType[rec.form], rec.at);
+  }
+
+  // --- Leads: activity series, exclusive outcome stages, click targets ---
+  const leadsSent = series();
+  const leadsClicked = series();
+  const leadsReplied = series();
+  const leadStages = { replied: 0, clicked: 0, none: 0, optout: 0, bounced: 0 };
+  const clickDests = { demos: 0, home: 0, pricing: 0, start: 0 };
+  const leadKeys = (await getJson<string[]>(kv, LEADS_INDEX)) || [];
+  const leadRecs = await batch(leadKeys.slice(0, 1000), 25, (k) => getJson<Lead>(kv, k));
+  for (const lead of leadRecs) {
+    if (!lead) continue;
+    bump(leadsSent, lead.sentAt);
+    bump(leadsClicked, lead.firstClickAt);
+    bump(leadsReplied, lead.repliedAt);
+    if (lead.sentAt >= startTs && lead.sentAt < endTs) {
+      if (lead.bouncedAt) leadStages.bounced += 1;
+      else if (lead.optOutAt) leadStages.optout += 1;
+      else if (lead.repliedAt) leadStages.replied += 1;
+      else if ((lead.clickCount || 0) > 0) leadStages.clicked += 1;
+      else leadStages.none += 1;
+    }
+    for (const c of lead.clicks || []) {
+      if (c.suspect || c.at < startTs || c.at >= endTs) continue;
+      if (c.dest === "demos" || c.dest === "home" || c.dest === "pricing" || c.dest === "start")
+        clickDests[c.dest] += 1;
+    }
+  }
+
+  return json({
+    ok: true,
+    range,
+    labels,
+    forms: { total: formsTotal, byType: formsByType },
+    leads: { sent: leadsSent, clicked: leadsClicked, replied: leadsReplied },
+    leadStages,
+    clickDests,
+  });
 }
 
 // ---------------------------------------------------------------------------

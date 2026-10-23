@@ -1211,6 +1211,9 @@ const en = {
       chartTitle: "Views over time",
       chartViews: "Views",
       chartVisitors: "Visitors",
+      chartTypeLabel: "Chart type",
+      typeLine: "Line",
+      typeBars: "Bars",
       topPages: "Top pages",
       devices: "Devices",
       deviceNames: {
@@ -1245,6 +1248,10 @@ const en = {
       filterContact: "Contact",
       filterPricing: "Pricing",
       filterSupport: "Support",
+      chartTitle: "Submissions over time",
+      byTypeTitle: "By form type",
+      submissions: "Submissions",
+      noData: "No submissions recorded for this period yet.",
     },
     leads: {
       title: "Outreach tracking",
@@ -1276,6 +1283,17 @@ const en = {
       loadMore: "Load more",
       loadError: "Couldn’t load outreach leads.",
       retry: "Retry",
+      activityTitle: "Activity over time",
+      outcomesTitle: "Lead outcomes",
+      destsTitle: "Clicked links",
+      stageClicked: "Clicked only",
+      noData: "No outreach activity recorded for this period yet.",
+      destNames: {
+        demos: "Demos",
+        home: "Homepage",
+        pricing: "Pricing",
+        start: "Get started",
+      },
     },
     config: {
       title: "Settings",

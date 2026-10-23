@@ -3,6 +3,8 @@
 // described in worker/API.md. All user-controlled strings are HTML-escaped
 // before rendering. Auth token lives in sessionStorage (never in the URL).
 
+import { donutSegments, donutSlicePath, niceCeil } from "./chart-math";
+
 const TOKEN_KEY = "webao.admin.token";
 
 interface StatsResponse {
@@ -57,6 +59,19 @@ interface LeadsResponse {
   ok: boolean;
   items: LeadItem[];
   nextCursor: string | null;
+}
+
+interface ChartsResponse {
+  ok: boolean;
+  range: string;
+  labels: string[];
+  forms: {
+    total: number[];
+    byType: { contact: number[]; support: number[]; pricing: number[] };
+  };
+  leads: { sent: number[]; clicked: number[]; replied: number[] };
+  leadStages: { replied: number; clicked: number; none: number; optout: number; bounced: number };
+  clickDests: { demos: number; home: number; pricing: number; start: number };
 }
 
 interface Settings {
@@ -267,6 +282,8 @@ function initAdmin(): void {
       else if (name === "leads") void loadLeads(true);
       else if (name === "config") void loadConfig();
     }
+    if (name === "forms" && !formsChartsLoaded) void loadFormsCharts();
+    if (name === "leads" && !leadsChartsLoaded) void loadLeadsCharts();
   }
 
   /* ── Stats tab ── */
@@ -288,12 +305,20 @@ function initAdmin(): void {
     }
   }
 
+  // Traffic chart customization: type + which series are visible. Kept in
+  // state so toggling re-renders from the cached response, no refetch.
+  let chartType: "line" | "bars" = "line";
+  let showViews = true;
+  let showVisitors = true;
+  let lastStats: StatsResponse | null = null;
+
   async function loadStats(): Promise<void> {
     setStatsLoading();
     try {
       const data = (await api(
         `/api/admin/stats?range=${range}&page=${encodeURIComponent(pageFilter)}`
       )) as unknown as StatsResponse;
+      lastStats = data;
       renderStats(data);
     } catch (e) {
       if (e instanceof ExpiredSession) return;
@@ -358,32 +383,54 @@ function initAdmin(): void {
       { label: String(I18N.stats.deviceNames.tablet), value: devices.tablet || 0 },
       { label: String(I18N.stats.deviceNames.desktop), value: devices.desktop || 0 },
     ];
-    const deviceMax = Math.max(1, ...deviceRows.map((r) => r.value));
+    const deviceTotal = deviceRows.reduce((s, r) => s + r.value, 0);
     const countries = d.countries || [];
     const countryMax = Math.max(1, ...countries.map((c) => c.count));
     const topMax = Math.max(1, ...d.topPages.map((p) => p.views));
 
+    const anyTraffic = (showViews && totalViews > 0) || (showVisitors && totalVisitors > 0);
+    const trafficChart = !anyTraffic
+      ? `<div class="admin-empty">${esc(I18N.stats.noData)}</div>`
+      : chartType === "line"
+        ? buildChart(d.labels, d.views, d.visitors)
+        : buildBars(
+            d.labels,
+            [
+              ...(showViews
+                ? [{ name: String(I18N.stats.chartViews), values: d.views, cls: 0 }]
+                : []),
+              ...(showVisitors
+                ? [{ name: String(I18N.stats.chartVisitors), values: d.visitors, cls: 3 }]
+                : []),
+            ],
+            String(I18N.stats.chartTitle)
+          );
+
+    const typeSeg =
+      `<div class="admin-seg admin-seg--sm" role="group" aria-label="${esc(I18N.stats.chartTypeLabel)}">` +
+      `<button type="button" class="admin-seg-btn${chartType === "line" ? " is-active" : ""}" data-chart-type="line">${esc(I18N.stats.typeLine)}</button>` +
+      `<button type="button" class="admin-seg-btn${chartType === "bars" ? " is-active" : ""}" data-chart-type="bars">${esc(I18N.stats.typeBars)}</button>` +
+      `</div>`;
+    const legend =
+      `<div class="admin-legend">` +
+      `<button type="button" class="legend-chip${showViews ? "" : " is-off"}" data-series-toggle="views" aria-pressed="${showViews}"><i class="dot seg-dot--0"></i>${esc(I18N.stats.chartViews)}</button>` +
+      `<button type="button" class="legend-chip${showVisitors ? "" : " is-off"}" data-series-toggle="visitors" aria-pressed="${showVisitors}"><i class="dot seg-dot--3"></i>${esc(I18N.stats.chartVisitors)}</button>` +
+      `</div>`;
+
     body.innerHTML =
       `<div class="admin-kpis">${kpis}</div>` +
       `<div class="admin-card"><div class="admin-card-head"><h2>${esc(I18N.stats.chartTitle)}</h2>` +
-      `<div class="admin-legend"><span><i class="dot dot--views"></i>${esc(I18N.stats.chartViews)}</span>` +
-      `<span><i class="dot dot--visitors"></i>${esc(I18N.stats.chartVisitors)}</span></div></div>` +
-      `<div class="admin-chart">${totalViews === 0 ? `<div class="admin-empty">${esc(I18N.stats.noData)}</div>` : buildChart(d.labels, d.views, d.visitors)}</div></div>` +
+      `<div class="admin-chart-tools">${legend}${typeSeg}</div></div>` +
+      `<div class="admin-chart chart-wrap">${trafficChart}</div></div>` +
       `<div class="admin-grid-3">` +
       `<div class="admin-card"><h2>${esc(I18N.stats.topPages)}</h2>${barList(d.topPages.map((p) => ({ label: p.path, value: p.views })), topMax)}</div>` +
-      `<div class="admin-card"><h2>${esc(I18N.stats.devices)}</h2>${barList(deviceRows, deviceMax)}</div>` +
+      `<div class="admin-card"><h2>${esc(I18N.stats.devices)}</h2>${
+        deviceTotal === 0
+          ? `<p class="admin-muted" style="font-size:13px;">${esc(I18N.stats.noData)}</p>`
+          : buildDonut(deviceRows, nf.format(deviceTotal), String(I18N.stats.kpis.visitors))
+      }</div>` +
       `<div class="admin-card"><h2>${esc(I18N.stats.countries)}</h2>${barList(countries.map((c) => ({ label: `${countryName(c.code)} · ${c.code}`, value: c.count })), countryMax)}</div>` +
       `</div>`;
-  }
-
-  /** Round the chart's top gridline up to a "nice" number. */
-  function niceCeil(v: number): number {
-    if (v <= 0) return 1;
-    const exp = Math.floor(Math.log10(v));
-    const base = Math.pow(10, exp);
-    const n = v / base;
-    const nice = n <= 1 ? 1 : n <= 2 ? 2 : n <= 2.5 ? 2.5 : n <= 5 ? 5 : 10;
-    return nice * base;
   }
 
   /** "2026-10-04" → "Oct 4" (locale-aware); "2026-10" → "Oct". */
@@ -403,7 +450,12 @@ function initAdmin(): void {
     }
   }
 
-  /** Custom SVG line/area chart — no dependencies, theme-aware via CSS classes. */
+  /**
+   * Custom SVG line/area chart — no dependencies, theme-aware via CSS
+   * classes. Interactive: an invisible hover band per point drives the
+   * shared tooltip + crosshair (wired by the delegated pointer handlers),
+   * and the visible series follow the legend toggles.
+   */
   function buildChart(labels: string[], views: number[], visitors: number[]): string {
     const W = 720;
     const H = 250;
@@ -412,7 +464,9 @@ function initAdmin(): void {
     const padT = 16;
     const padB = 30;
     const n = labels.length;
-    const top = niceCeil(Math.max(1, ...views, ...visitors));
+    const top = niceCeil(
+      Math.max(1, ...(showViews ? views : []), ...(showVisitors ? visitors : []))
+    );
     const X = (i: number): number =>
       n === 1 ? padL + (W - padL - padR) / 2 : padL + (i * (W - padL - padR)) / (n - 1);
     const Y = (v: number): number => padT + (1 - v / top) * (H - padT - padB);
@@ -435,24 +489,261 @@ function initAdmin(): void {
       const i = tickCount === 1 ? 0 : Math.round((t * (n - 1)) / (tickCount - 1));
       ticks += `<text class="chart-tick" x="${f(X(i))}" y="${H - 10}" text-anchor="middle">${esc(fmtLabel(labels[i]))}</text>`;
     }
-    const dots = views
-      .map(
-        (v, i) =>
-          `<circle class="chart-dot" cx="${f(X(i))}" cy="${f(Y(v))}" r="3.5">` +
-          `<title>${esc(fmtLabel(labels[i]))}: ${nf.format(v)}</title></circle>`
-      )
+    const dots = showViews
+      ? views
+          .map(
+            (v, i) => `<circle class="chart-dot" cx="${f(X(i))}" cy="${f(Y(v))}" r="3.5"/>`
+          )
+          .join("")
+      : "";
+
+    // One hover band per point; the band carries the tooltip text and the
+    // crosshair x for the delegated pointer handlers.
+    const bandW = (W - padL - padR) / Math.max(1, n);
+    const zones = labels
+      .map((l, i) => {
+        const parts = [fmtLabel(l)];
+        if (showViews) parts.push(`${String(I18N.stats.chartViews)} ${nf.format(views[i])}`);
+        if (showVisitors)
+          parts.push(`${String(I18N.stats.chartVisitors)} ${nf.format(visitors[i])}`);
+        const x = n === 1 ? padL : X(i) - bandW / 2;
+        return (
+          `<rect class="chart-hover-zone" x="${f(x)}" y="${padT}" width="${f(bandW)}" height="${H - padT - padB}"` +
+          ` data-tip="${esc(parts.join(" · "))}" data-cx="${f(X(i))}"/>`
+        );
+      })
       .join("");
 
     return (
       `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(I18N.stats.chartTitle)}">` +
       grid +
-      `<path class="chart-area" d="${area}"/>` +
-      `<path class="chart-line-vis" d="${line(visitors)}"/>` +
-      `<path class="chart-line" d="${line(views)}"/>` +
+      (showViews ? `<path class="chart-area" d="${area}"/><path class="chart-line" d="${line(views)}"/>` : "") +
+      (showVisitors ? `<path class="chart-line-vis" d="${line(visitors)}"/>` : "") +
       ticks +
       dots +
+      `<line class="chart-cross" x1="0" y1="${padT}" x2="0" y2="${H - padB}"/>` +
+      zones +
       `</svg>`
     );
+  }
+
+  interface BarSeries {
+    name: string;
+    values: number[];
+    /** Palette slot 0..4 (maps to the --chart-* theme colors). */
+    cls: number;
+  }
+
+  /** Grouped vertical bar chart with the same frame/axis style as the line chart. */
+  function buildBars(labels: string[], series: BarSeries[], ariaLabel: string): string {
+    const W = 720;
+    const H = 250;
+    const padL = 40;
+    const padR = 14;
+    const padT = 16;
+    const padB = 30;
+    const n = labels.length;
+    const plotW = W - padL - padR;
+    const plotH = H - padT - padB;
+    const top = niceCeil(Math.max(1, ...series.flatMap((s) => s.values)));
+    const Y = (v: number): number => padT + (1 - v / top) * plotH;
+    const f = (x: number): string => x.toFixed(1);
+
+    let grid = "";
+    for (let g = 0; g <= 3; g++) {
+      const v = (top * g) / 3;
+      const y = Y(v);
+      grid +=
+        `<line class="chart-grid" x1="${padL}" y1="${f(y)}" x2="${W - padR}" y2="${f(y)}"/>` +
+        `<text class="chart-tick" x="${padL - 8}" y="${f(y + 3.5)}" text-anchor="end">${nf.format(Math.round(v))}</text>`;
+    }
+
+    const groupW = plotW / Math.max(1, n);
+    const barW = Math.max(2, (groupW * 0.72) / Math.max(1, series.length));
+    let bars = "";
+    let ticks = "";
+    const tickEvery = Math.max(1, Math.ceil(n / 8));
+    for (let i = 0; i < n; i++) {
+      const gx = padL + i * groupW + (groupW - barW * series.length) / 2;
+      series.forEach((s, si) => {
+        const v = s.values[i] || 0;
+        const h = Math.max(0, Y(0) - Y(v));
+        if (v > 0) {
+          bars +=
+            `<rect class="bar-rect seg-fill--${s.cls % 5}" x="${f(gx + si * barW)}" y="${f(Y(v))}" ` +
+            `width="${f(barW - 1.5)}" height="${f(h)}" rx="2.5" ` +
+            `data-tip="${esc(`${fmtLabel(labels[i])} · ${s.name}: ${nf.format(v)}`)}"/>`;
+        }
+      });
+      if (i % tickEvery === 0 || i === n - 1) {
+        ticks += `<text class="chart-tick" x="${f(padL + i * groupW + groupW / 2)}" y="${H - 10}" text-anchor="middle">${esc(fmtLabel(labels[i]))}</text>`;
+      }
+    }
+
+    return (
+      `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(ariaLabel)}">` +
+      grid +
+      bars +
+      ticks +
+      `</svg>`
+    );
+  }
+
+  interface DonutSeg {
+    label: string;
+    value: number;
+  }
+
+  /**
+   * Donut chart with a center total and an HTML legend (value + share).
+   * Slices and legend rows share data-seg-idx so hovering either one
+   * highlights both (delegated pointer handlers).
+   */
+  function buildDonut(segs: DonutSeg[], centerValue: string, centerLabel: string): string {
+    const total = segs.reduce((s, x) => s + Math.max(0, x.value), 0);
+    const slices = donutSegments(segs.map((x) => x.value));
+    const size = 176;
+    const c = size / 2;
+    const paths = segs
+      .map((x, i) => {
+        const d = donutSlicePath(c, c, 84, 55, slices[i].start, slices[i].end);
+        if (!d) return "";
+        const pct = total > 0 ? Math.round((Math.max(0, x.value) / total) * 100) : 0;
+        return (
+          `<path class="donut-slice seg-fill--${i % 5}" d="${d}" data-seg-idx="${i}" ` +
+          `data-tip="${esc(`${x.label}: ${nf.format(x.value)} (${pct}%)`)}"/>`
+        );
+      })
+      .join("");
+    const legend = segs
+      .map((x, i) => {
+        const pct = total > 0 ? Math.round((Math.max(0, x.value) / total) * 100) : 0;
+        return (
+          `<div class="donut-row" data-seg-idx="${i}">` +
+          `<i class="dot seg-dot--${i % 5}"></i>` +
+          `<span class="donut-label">${esc(x.label)}</span>` +
+          `<span class="donut-val">${nf.format(x.value)} · ${pct}%</span></div>`
+        );
+      })
+      .join("");
+    return (
+      `<div class="donut-wrap chart-wrap">` +
+      `<svg class="donut-svg" viewBox="0 0 ${size} ${size}" role="img" aria-label="${esc(centerLabel)}">` +
+      paths +
+      `<text class="donut-center-value" x="${c}" y="${c - 2}" text-anchor="middle">${esc(centerValue)}</text>` +
+      `<text class="donut-center-label" x="${c}" y="${c + 16}" text-anchor="middle">${esc(centerLabel)}</text>` +
+      `</svg>` +
+      `<div class="donut-legend">${legend}</div></div>`
+    );
+  }
+
+  /* ── Forms + Outreach charts (one /api/admin/charts fetch per range) ── */
+  let formsRange: "day" | "week" | "month" | "year" = "month";
+  let leadsRange: "day" | "week" | "month" | "year" = "month";
+  let formsChartsLoaded = false;
+  let leadsChartsLoaded = false;
+  const chartsCache = new Map<string, ChartsResponse>();
+
+  async function fetchCharts(r: string): Promise<ChartsResponse> {
+    const hit = chartsCache.get(r);
+    if (hit) return hit;
+    const data = (await api(`/api/admin/charts?range=${r}`)) as unknown as ChartsResponse;
+    chartsCache.set(r, data);
+    return data;
+  }
+
+  async function loadFormsCharts(): Promise<void> {
+    const wrap = qq("[data-forms-charts]");
+    if (!wrap) return;
+    if (!wrap.innerHTML) wrap.innerHTML = `<p class="admin-loading">${esc(I18N.stats.loading)}</p>`;
+    try {
+      const d = await fetchCharts(formsRange);
+      formsChartsLoaded = true;
+      const totalSum = d.forms.total.reduce((s, v) => s + v, 0);
+      const typeSegs = [
+        { label: String(I18N.forms.filterContact), value: d.forms.byType.contact.reduce((s, v) => s + v, 0) },
+        { label: String(I18N.forms.filterSupport), value: d.forms.byType.support.reduce((s, v) => s + v, 0) },
+        { label: String(I18N.forms.filterPricing), value: d.forms.byType.pricing.reduce((s, v) => s + v, 0) },
+      ];
+      const empty = `<div class="admin-empty">${esc(I18N.forms.noData)}</div>`;
+      wrap.innerHTML =
+        `<div class="admin-grid-2">` +
+        `<div class="admin-card"><h2>${esc(I18N.forms.chartTitle)}</h2>` +
+        (totalSum === 0
+          ? empty
+          : `<div class="chart-wrap">${buildBars(d.labels, [{ name: String(I18N.forms.submissions), values: d.forms.total, cls: 0 }], String(I18N.forms.chartTitle))}</div>`) +
+        `</div>` +
+        `<div class="admin-card"><h2>${esc(I18N.forms.byTypeTitle)}</h2>` +
+        (totalSum === 0
+          ? empty
+          : buildDonut(typeSegs, nf.format(totalSum), String(I18N.forms.submissions))) +
+        `</div></div>`;
+    } catch (e) {
+      if (e instanceof ExpiredSession) return;
+      wrap.innerHTML =
+        `<div class="admin-retry"><p>${esc(I18N.stats.loadError)}</p>` +
+        `<button type="button" class="admin-ghost-btn" data-forms-charts-retry>${esc(I18N.stats.retry)}</button></div>`;
+    }
+  }
+
+  async function loadLeadsCharts(): Promise<void> {
+    const wrap = qq("[data-leads-charts]");
+    if (!wrap) return;
+    if (!wrap.innerHTML) wrap.innerHTML = `<p class="admin-loading">${esc(I18N.stats.loading)}</p>`;
+    try {
+      const d = await fetchCharts(leadsRange);
+      leadsChartsLoaded = true;
+      const L = I18N.leads as Dict;
+      const sentSum = d.leads.sent.reduce((s, v) => s + v, 0);
+      const stageTotal =
+        d.leadStages.replied + d.leadStages.clicked + d.leadStages.none + d.leadStages.optout + d.leadStages.bounced;
+      const stageSegs = [
+        { label: String(L.replied), value: d.leadStages.replied },
+        { label: String(L.stageClicked), value: d.leadStages.clicked },
+        { label: String(L.awaiting), value: d.leadStages.none },
+        { label: String(L.optOut), value: d.leadStages.optout },
+        { label: String(L.bounced), value: d.leadStages.bounced },
+      ];
+      const destRows = [
+        { label: String(L.destNames.demos), value: d.clickDests.demos },
+        { label: String(L.destNames.home), value: d.clickDests.home },
+        { label: String(L.destNames.pricing), value: d.clickDests.pricing },
+        { label: String(L.destNames.start), value: d.clickDests.start },
+      ];
+      const destMax = Math.max(1, ...destRows.map((r) => r.value));
+      const destSum = destRows.reduce((s, r) => s + r.value, 0);
+      const empty = `<div class="admin-empty">${esc(L.noData)}</div>`;
+      wrap.innerHTML =
+        `<div class="admin-grid-2">` +
+        `<div class="admin-card"><h2>${esc(L.activityTitle)}</h2>` +
+        (sentSum === 0 && d.leads.clicked.every((v) => v === 0) && d.leads.replied.every((v) => v === 0)
+          ? empty
+          : `<div class="chart-wrap">${buildBars(
+              d.labels,
+              [
+                { name: String(L.sent), values: d.leads.sent, cls: 0 },
+                { name: String(L.clicked), values: d.leads.clicked, cls: 1 },
+                { name: String(L.replied), values: d.leads.replied, cls: 2 },
+              ],
+              String(L.activityTitle)
+            )}</div>`) +
+        `</div>` +
+        `<div class="admin-card"><h2>${esc(L.outcomesTitle)}</h2>` +
+        (stageTotal === 0
+          ? empty
+          : buildDonut(stageSegs, nf.format(stageTotal), String(L.sent))) +
+        `</div></div>` +
+        `<div class="admin-card"><h2>${esc(L.destsTitle)}</h2>` +
+        (destSum === 0
+          ? `<p class="admin-muted" style="font-size:13px;">${esc(L.noData)}</p>`
+          : barList(destRows, destMax)) +
+        `</div>`;
+    } catch (e) {
+      if (e instanceof ExpiredSession) return;
+      wrap.innerHTML =
+        `<div class="admin-retry"><p>${esc(I18N.stats.loadError)}</p>` +
+        `<button type="button" class="admin-ghost-btn" data-leads-charts-retry>${esc(I18N.stats.retry)}</button></div>`;
+    }
   }
 
   /* ── Forms tab ── */
@@ -795,6 +1086,96 @@ function initAdmin(): void {
     })
   );
 
+  const formsRangeBtns = Array.from(rootEl.querySelectorAll<HTMLElement>("[data-forms-range]"));
+  formsRangeBtns.forEach((b) =>
+    b.addEventListener("click", () => {
+      const r = b.dataset.formsRange;
+      if ((r === "day" || r === "week" || r === "month" || r === "year") && r !== formsRange) {
+        formsRange = r;
+        formsRangeBtns.forEach((x) => x.classList.toggle("is-active", x === b));
+        void loadFormsCharts();
+      }
+    })
+  );
+
+  const leadsRangeBtns = Array.from(rootEl.querySelectorAll<HTMLElement>("[data-leads-range]"));
+  leadsRangeBtns.forEach((b) =>
+    b.addEventListener("click", () => {
+      const r = b.dataset.leadsRange;
+      if ((r === "day" || r === "week" || r === "month" || r === "year") && r !== leadsRange) {
+        leadsRange = r;
+        leadsRangeBtns.forEach((x) => x.classList.toggle("is-active", x === b));
+        void loadLeadsCharts();
+      }
+    })
+  );
+
+  /* ── Chart hover: one shared tooltip per chart wrap, crosshair for the
+        line chart, and slice/legend highlighting for donuts. Pointer
+        events cover touch (tap) as well as the mouse. ── */
+  function tipEl(wrap: HTMLElement): HTMLElement {
+    let tip = wrap.querySelector<HTMLElement>(":scope > .chart-tip");
+    if (!tip) {
+      tip = document.createElement("div");
+      tip.className = "chart-tip";
+      tip.hidden = true;
+      wrap.appendChild(tip);
+    }
+    return tip;
+  }
+
+  function setHot(wrap: HTMLElement, idx: string | null): void {
+    wrap.querySelectorAll(".is-hot").forEach((el) => el.classList.remove("is-hot"));
+    if (idx !== null) {
+      wrap
+        .querySelectorAll(`[data-seg-idx="${idx}"]`)
+        .forEach((el) => el.classList.add("is-hot"));
+    }
+  }
+
+  rootEl.addEventListener("pointermove", (e: PointerEvent) => {
+    const t = e.target as HTMLElement;
+    if (!t || !t.closest) return;
+    const el = t.closest("[data-tip]") as HTMLElement | null;
+    if (!el) return;
+    const wrap = el.closest(".chart-wrap") as HTMLElement | null;
+    if (!wrap) return;
+    const tip = tipEl(wrap);
+    tip.textContent = el.dataset.tip || "";
+    tip.hidden = false;
+    const rect = wrap.getBoundingClientRect();
+    const x = Math.min(Math.max(e.clientX - rect.left, 56), Math.max(56, rect.width - 56));
+    tip.style.left = `${x}px`;
+    tip.style.top = `${Math.max(0, e.clientY - rect.top - 10)}px`;
+    const cx = el.dataset.cx;
+    if (cx) {
+      const cross = el.closest("svg")?.querySelector(".chart-cross");
+      if (cross) {
+        cross.setAttribute("x1", cx);
+        cross.setAttribute("x2", cx);
+        cross.classList.add("is-on");
+      }
+    }
+    const segEl = t.closest("[data-seg-idx]") as HTMLElement | null;
+    if (segEl && wrap.classList.contains("donut-wrap")) setHot(wrap, segEl.dataset.segIdx ?? null);
+  });
+
+  rootEl.addEventListener("pointerout", (e: PointerEvent) => {
+    const t = e.target as HTMLElement;
+    if (!t || !t.closest) return;
+    const el = t.closest("[data-tip], [data-seg-idx]") as HTMLElement | null;
+    if (!el) return;
+    // Still inside the same interactive element: not a real leave.
+    if (e.relatedTarget && el.contains(e.relatedTarget as Node)) return;
+    const wrap = el.closest(".chart-wrap") as HTMLElement | null;
+    if (wrap) {
+      const tip = wrap.querySelector<HTMLElement>(":scope > .chart-tip");
+      if (tip) tip.hidden = true;
+      wrap.querySelector(".chart-cross")?.classList.remove("is-on");
+      if (wrap.classList.contains("donut-wrap")) setHot(wrap, null);
+    }
+  });
+
   const filterBtns = Array.from(rootEl.querySelectorAll<HTMLElement>("[data-forms-filter]"));
   filterBtns.forEach((b) =>
     b.addEventListener("click", () => {
@@ -822,6 +1203,30 @@ function initAdmin(): void {
     if (!t || !t.closest) return;
     if (t.closest("[data-stats-retry]")) {
       void loadStats();
+      return;
+    }
+    if (t.closest("[data-forms-charts-retry]")) {
+      void loadFormsCharts();
+      return;
+    }
+    if (t.closest("[data-leads-charts-retry]")) {
+      void loadLeadsCharts();
+      return;
+    }
+    const typeBtn = t.closest("[data-chart-type]") as HTMLElement | null;
+    if (typeBtn) {
+      const next = typeBtn.dataset.chartType;
+      if ((next === "line" || next === "bars") && next !== chartType) {
+        chartType = next;
+        if (lastStats) renderStats(lastStats);
+      }
+      return;
+    }
+    const seriesBtn = t.closest("[data-series-toggle]") as HTMLElement | null;
+    if (seriesBtn) {
+      if (seriesBtn.dataset.seriesToggle === "views") showViews = !showViews;
+      if (seriesBtn.dataset.seriesToggle === "visitors") showVisitors = !showVisitors;
+      if (lastStats) renderStats(lastStats);
       return;
     }
     if (t.closest("[data-forms-retry]")) {

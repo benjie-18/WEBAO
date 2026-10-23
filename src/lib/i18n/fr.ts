@@ -1220,6 +1220,9 @@ const fr = {
       chartTitle: "Vues dans le temps",
       chartViews: "Vues",
       chartVisitors: "Visiteurs",
+      chartTypeLabel: "Type de graphique",
+      typeLine: "Ligne",
+      typeBars: "Barres",
       topPages: "Pages les plus vues",
       devices: "Appareils",
       deviceNames: {
@@ -1254,6 +1257,10 @@ const fr = {
       filterContact: "Contact",
       filterPricing: "Tarifs",
       filterSupport: "Soutien",
+      chartTitle: "Soumissions dans le temps",
+      byTypeTitle: "Par type de formulaire",
+      submissions: "Soumissions",
+      noData: "Aucune soumission enregistrée pour cette période.",
     },
     leads: {
       title: "Suivi de prospection",
@@ -1285,6 +1292,17 @@ const fr = {
       loadMore: "Charger plus",
       loadError: "Impossible de charger les contacts de prospection.",
       retry: "Réessayer",
+      activityTitle: "Activité dans le temps",
+      outcomesTitle: "Résultats des prospects",
+      destsTitle: "Liens cliqués",
+      stageClicked: "Clics seulement",
+      noData: "Aucune activité de prospection enregistrée pour cette période.",
+      destNames: {
+        demos: "Démos",
+        home: "Accueil",
+        pricing: "Tarifs",
+        start: "Démarrer",
+      },
     },
     config: {
       title: "Réglages",

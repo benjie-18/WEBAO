@@ -140,7 +140,14 @@ const a = t.admin;
           <button type="button" class="admin-seg-btn" data-forms-filter="pricing">{a.forms.filterPricing}</button>
           <button type="button" class="admin-seg-btn" data-forms-filter="support">{a.forms.filterSupport}</button>
         </div>
+        <div class="admin-seg" role="group" aria-label={a.stats.rangeLabel}>
+          <button type="button" class="admin-seg-btn" data-forms-range="day">{a.stats.range.day}</button>
+          <button type="button" class="admin-seg-btn" data-forms-range="week">{a.stats.range.week}</button>
+          <button type="button" class="admin-seg-btn is-active" data-forms-range="month">{a.stats.range.month}</button>
+          <button type="button" class="admin-seg-btn" data-forms-range="year">{a.stats.range.year}</button>
+        </div>
       </div>
+      <div data-forms-charts></div>
       <div class="admin-forms-list" data-forms-list></div>
       <div class="admin-center">
         <button type="button" class="admin-ghost-btn" data-forms-more hidden>{a.forms.loadMore}</button>
@@ -152,6 +159,15 @@ const a = t.admin;
       id="admin-panel-leads" role="tabpanel" aria-labelledby="admin-tab-leads"
       data-panel="leads" class="admin-panel" hidden
     >
+      <div class="admin-controls">
+        <div class="admin-seg" role="group" aria-label={a.stats.rangeLabel}>
+          <button type="button" class="admin-seg-btn" data-leads-range="day">{a.stats.range.day}</button>
+          <button type="button" class="admin-seg-btn" data-leads-range="week">{a.stats.range.week}</button>
+          <button type="button" class="admin-seg-btn is-active" data-leads-range="month">{a.stats.range.month}</button>
+          <button type="button" class="admin-seg-btn" data-leads-range="year">{a.stats.range.year}</button>
+        </div>
+      </div>
+      <div data-leads-charts></div>
       <div class="admin-forms-list" data-leads-list></div>
       <div class="admin-center">
         <button type="button" class="admin-ghost-btn" data-leads-more hidden>{a.leads.loadMore}</button>
@@ -369,6 +385,63 @@ const a = t.admin;
   .admin-chart .chart-tick { fill: var(--muted); font-size: 10px; font-family: "IBM Plex Mono", monospace; }
   .admin-chart .chart-dot { fill: var(--accent); stroke: var(--card-bg); stroke-width: 2; }
 
+  /* Interactive charts (traffic toggles, bars, donuts) */
+  .admin {
+    --chart-1: var(--accent);
+    --chart-2: var(--accent-mid);
+    --chart-3: var(--ink);
+    --chart-4: var(--muted);
+    --chart-5: color-mix(in srgb, var(--accent) 38%, var(--muted));
+  }
+  .seg-fill--0 { fill: var(--chart-1); }
+  .seg-fill--1 { fill: var(--chart-2); }
+  .seg-fill--2 { fill: var(--chart-3); }
+  .seg-fill--3 { fill: var(--chart-4); }
+  .seg-fill--4 { fill: var(--chart-5); }
+  .seg-dot--0 { background: var(--chart-1); }
+  .seg-dot--1 { background: var(--chart-2); }
+  .seg-dot--2 { background: var(--chart-3); }
+  .seg-dot--3 { background: var(--chart-4); }
+  .seg-dot--4 { background: var(--chart-5); }
+  .admin-seg--sm .admin-seg-btn { padding: 6px 10px; font-size: 12px; }
+  .admin-chart-tools { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .admin-legend .legend-chip {
+    display: inline-flex; align-items: center;
+    border: 0; background: transparent; color: inherit;
+    font: inherit; cursor: pointer; padding: 4px 2px;
+  }
+  .admin-legend .legend-chip.is-off { opacity: 0.45; }
+  .chart-wrap { position: relative; }
+  .chart-tip {
+    position: absolute; transform: translate(-50%, -100%);
+    background: var(--ink); color: var(--paper);
+    padding: 6px 10px; border-radius: 8px;
+    font-size: 12px; font-weight: 600; white-space: nowrap;
+    box-shadow: var(--shadow-md); pointer-events: none; z-index: 6;
+  }
+  .chart-tip[hidden] { display: none; }
+  .chart-hover-zone { fill: transparent; }
+  .chart-cross { stroke: var(--line-strong); stroke-width: 1; opacity: 0; pointer-events: none; transition: opacity .15s ease; }
+  .chart-cross.is-on { opacity: 1; }
+  .bar-rect { cursor: pointer; transition: filter .15s ease; }
+  .bar-rect:hover { filter: brightness(1.15); }
+  .donut-wrap { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+  .donut-svg { width: 168px; height: 168px; flex: none; }
+  .donut-slice { cursor: pointer; transform-box: fill-box; transform-origin: center; transition: transform .18s ease; }
+  .donut-slice.is-hot { transform: scale(1.045); }
+  .donut-legend { display: grid; gap: 6px; flex: 1; min-width: 168px; }
+  .donut-row { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 5px 8px; border-radius: 8px; cursor: pointer; }
+  .donut-row.is-hot { background: var(--paper-2); }
+  .donut-row .dot { width: 10px; height: 10px; border-radius: 999px; flex: none; display: inline-block; }
+  .donut-label { font-weight: 600; }
+  .donut-val { margin-left: auto; color: var(--muted); font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
+  .donut-center-value { fill: var(--ink); font-size: 26px; font-weight: 750; }
+  .donut-center-label { fill: var(--muted); font-size: 10.5px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+  .admin-grid-2 { display: grid; gap: 16px; }
+  @media (min-width: 721px) {
+    .admin-grid-2 { grid-template-columns: 1fr 1fr; align-items: start; }
+  }
+
   /* Breakdown bars */
   .bar-row { display: grid; gap: 6px; padding: 8px 0; border-bottom: 1px solid var(--line); }
   .bar-row:last-child { border-bottom: 0; }
@@ -442,6 +515,9 @@ const a = t.admin;
     .admin-controls { align-items: stretch; flex-direction: column; }
     .admin-seg { overflow-x: auto; }
     .form-fields .ff-row { grid-template-columns: 1fr; gap: 2px; }
+    .donut-wrap { flex-direction: column; align-items: stretch; }
+    .donut-svg { margin: 0 auto; }
+    .admin-chart-tools { width: 100%; justify-content: space-between; }
   }
   @media (min-width: 721px) {
     .admin-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: start; }
