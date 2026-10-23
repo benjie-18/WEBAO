@@ -71,6 +71,10 @@ const a = t.admin;
         aria-selected="false" tabindex="-1" data-tab="forms" class="admin-tab"
       >{a.tabs.forms}</button>
       <button
+        type="button" role="tab" id="admin-tab-leads" aria-controls="admin-panel-leads"
+        aria-selected="false" tabindex="-1" data-tab="leads" class="admin-tab"
+      >{a.tabs.outreach}</button>
+      <button
         type="button" role="tab" id="admin-tab-config" aria-controls="admin-panel-config"
         aria-selected="false" tabindex="-1" data-tab="config" class="admin-tab"
       >{a.tabs.config}</button>
@@ -143,7 +147,18 @@ const a = t.admin;
       </div>
     </section>
 
-    <!-- Tab 3 · Config -->
+    <!-- Tab 3 · Outreach leads -->
+    <section
+      id="admin-panel-leads" role="tabpanel" aria-labelledby="admin-tab-leads"
+      data-panel="leads" class="admin-panel" hidden
+    >
+      <div class="admin-forms-list" data-leads-list></div>
+      <div class="admin-center">
+        <button type="button" class="admin-ghost-btn" data-leads-more hidden>{a.leads.loadMore}</button>
+      </div>
+    </section>
+
+    <!-- Tab 4 · Config -->
     <section
       id="admin-panel-config" role="tabpanel" aria-labelledby="admin-tab-config"
       data-panel="config" class="admin-panel" hidden
@@ -392,6 +407,13 @@ const a = t.admin;
     border: 1px dashed var(--line-strong); border-radius: 14px; padding: 36px 20px;
   }
   .admin-center { display: grid; place-items: center; }
+
+  /* Outreach leads (cards reuse the form-card styles) */
+  .lead-badges { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  .form-badge--warn { background: var(--error-bg); color: var(--error-text); }
+  .lead-events { margin: 0; display: grid; gap: 4px; font-size: 13px; }
+  .lead-events li { list-style: none; color: var(--ink-3); }
+  .lead-events .mono { color: var(--muted); font-size: 12px; }
 
   /* Config */
   [data-panel="config"] .admin-card form { display: grid; gap: 12px; margin-top: 4px; }

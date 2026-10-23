@@ -48,6 +48,49 @@ email copy to the WEBAO inbox via the `EMAIL` send_email binding
 (destination pinned in `wrangler.jsonc`); the KV record stays the source of truth.
 → `{ "ok": true, "id": "<ts>:<rand>" }` (400 with an error message otherwise).
 
+## Outreach lead tracking
+
+Who was emailed, who clicked, who replied. Records live in KV as `lead:<id>`
+with a newest-first `leads:index` (cap 1000), the same pattern as forms.
+
+Ingest posture matches `POST /api/forms/submit` (same-origin gate + per-IP
+throttle, 20/min). When the `LEADS_INGEST_KEY` worker secret is set, both
+ingest endpoints instead require it in the `x-ingest-key` header (no origin
+needed) — set the same key on the sender side to harden them.
+
+### `POST /api/leads/register`
+Body: `{ business, email, city?, trade?, subject?, lang?, source?, id?, sentAt? }`
+`business` and a valid `email` are required. `id` may be supplied by the sender
+(`ld_` + 24 lowercase hex chars) or omitted, in which case one is minted.
+Re-registering an existing id is idempotent: it returns the existing links
+with `"existing": true` and never touches click/reply history.
+→ `{ "ok": true, "id": "ld_…", "links": { "demos": "https://webao.ca/go/ld_…?d=demos", "home": "…?d=home", "pricing": "…?d=pricing", "start": "…?d=start" }, "replyTo": "contact+ld_…@webao.ca" }`
+
+Senders put the tracked links in the email (link destinations are fixed:
+`demos` → `/demos`, `home` → `/`, `pricing` → `/pricing`, `start` → `/start`)
+and, when their mail tool supports it, set the Reply-To to the returned
+`replyTo` (the plus-address survives in the To header of replies, which pins
+the reply to this lead). The Gmail `+send` shortcut cannot set Reply-To, so
+replies to those sends are matched by sender email instead (below).
+
+### `GET /go/:id?d=demos|home|pricing|start`
+Public redirect behind every tracked link. Logs the click on the lead
+(timestamp, destination, country, and a `suspect` flag when the user agent
+looks like a mail scanner or link unfurler such as SafeLinks/Proofpoint —
+suspect clicks are stored but never counted in `clickCount`), then answers
+302 to the destination path. Unknown ids and unknown destinations still
+redirect (default `demos`): a link already sitting in an inbox must never
+break. Click logging is best-effort and never blocks the redirect.
+
+### `POST /api/leads/reply`
+Body: `{ leadId?, email?, from?, kind?: "reply" | "optout" | "bounce", subject?, at? }`
+Matches the lead by `leadId` when given, else by the newest lead sent to
+`email`/`from`. Sets `repliedAt` / `optOutAt` / `bouncedAt` on first event of
+each kind and appends to the lead's reply log (cap 50).
+→ `{ "ok": true, "matched": true, "id": "ld_…", "kind": "reply" }`, or
+`{ "ok": true, "matched": false }` when nothing matches (still a 200: the
+inbox scanner should not retry a reply that simply predates tracking).
+
 ## Checkout (public)
 
 ### `POST /api/checkout/session`
@@ -114,6 +157,14 @@ next page; `null` means done.
 ### `DELETE /api/admin/forms/:id`
 `:id` is the `<ts>:<rand>` part returned at submit time. → `{ "ok": true }`.
 
+### `GET /api/admin/leads?limit=50&cursor=`
+→ `{ "ok": true, "items": [{ id, business, email, city, trade, subject, lang, source, sentAt, clicks: [{ at, dest, country, suspect }], replies: [{ at, kind, from, subject }], clickCount, firstClickAt, lastClickAt, repliedAt, optOutAt, bouncedAt }], "nextCursor": "50" | null }`
+Newest-first by registration order. Same pagination rules as forms.
+
+### `DELETE /api/admin/leads/:id`
+`:id` is the `ld_…` lead id. Removes the record and its index entry.
+→ `{ "ok": true }`.
+
 ### `GET /api/admin/config`
 → `{ "ok": true, "settings": { "defaultTheme": "system"|"light"|"dark", "trackingEnabled": true } }`
 
@@ -140,5 +191,7 @@ and revokes all other admin tokens (the caller stays logged in).
 | `views:<yyyy-mm-dd>:__all` | integer total counter for the day |
 | `form:<ts>:<rand>` | form submission object |
 | `forms:index` | JSON array of form keys, newest-first, cap 1000 |
+| `lead:<ld_id>` | outreach lead object (sent/clicks/replies) |
+| `leads:index` | JSON array of lead keys, newest-first, cap 1000 |
 | `admin:token:<64-hex>` | `{ createdAt, ip }` (TTL 7 days) |
 | `rl:<scope>:<ip>` | `{ c, r }` rate-limit window |

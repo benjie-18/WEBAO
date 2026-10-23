@@ -33,6 +33,32 @@ interface FormsResponse {
   nextCursor: string | null;
 }
 
+interface LeadItem {
+  id: string;
+  business: string;
+  email: string;
+  city?: string;
+  trade?: string;
+  subject?: string;
+  lang?: string;
+  source?: string;
+  sentAt: number;
+  clicks: { at: number; dest: string; country: string; suspect: boolean }[];
+  replies: { at: number; kind: string; from?: string; subject?: string }[];
+  clickCount: number;
+  firstClickAt?: number;
+  lastClickAt?: number;
+  repliedAt?: number;
+  optOutAt?: number;
+  bouncedAt?: number;
+}
+
+interface LeadsResponse {
+  ok: boolean;
+  items: LeadItem[];
+  nextCursor: string | null;
+}
+
 interface Settings {
   defaultTheme: "system" | "light" | "dark";
   trackingEnabled: boolean;
@@ -157,6 +183,7 @@ function initAdmin(): void {
     // Refresh data on the next login.
     tabLoaded.stats = false;
     tabLoaded.forms = false;
+    tabLoaded.leads = false;
     tabLoaded.config = false;
   }
 
@@ -217,7 +244,7 @@ function initAdmin(): void {
 
   /* ── Tabs ── */
   let activeTab = "";
-  const tabLoaded: Record<string, boolean> = { stats: false, forms: false, config: false };
+  const tabLoaded: Record<string, boolean> = { stats: false, forms: false, leads: false, config: false };
 
   function activateTab(name: string, force = false): void {
     if (!force && name === activeTab) return;
@@ -237,6 +264,7 @@ function initAdmin(): void {
       tabLoaded[name] = true;
       if (name === "stats") void loadStats();
       else if (name === "forms") void loadForms(true);
+      else if (name === "leads") void loadLeads(true);
       else if (name === "config") void loadConfig();
     }
   }
@@ -534,6 +562,119 @@ function initAdmin(): void {
     }
   }
 
+  /* ── Outreach leads tab ── */
+  let leadsCursor: string | null = null;
+
+  function leadCard(item: LeadItem): string {
+    const L = I18N.leads as Dict;
+    const badges: string[] = [];
+    if (item.repliedAt) badges.push(`<span class="form-badge">${esc(L.replied)}</span>`);
+    if (item.clickCount > 0)
+      badges.push(`<span class="form-badge">${esc(L.clicked)} ×${item.clickCount}</span>`);
+    if (item.optOutAt) badges.push(`<span class="form-badge form-badge--warn">${esc(L.optOut)}</span>`);
+    if (item.bouncedAt) badges.push(`<span class="form-badge form-badge--warn">${esc(L.bounced)}</span>`);
+    if (badges.length === 0) badges.push(`<span class="form-badge">${esc(L.awaiting)}</span>`);
+
+    const meta: string[] = [
+      `<span><b>${esc(L.sent)}</b> ${esc(fmtDateTime(item.sentAt))}</span>`,
+    ];
+    if (item.city) meta.push(`<span><b>${esc(L.city)}</b> ${esc(item.city)}</span>`);
+    if (item.trade) meta.push(`<span><b>${esc(L.trade)}</b> ${esc(item.trade)}</span>`);
+    if (item.firstClickAt) meta.push(`<span><b>${esc(L.firstClick)}</b> ${esc(fmtDateTime(item.firstClickAt))}</span>`);
+    if (item.lastClickAt && item.lastClickAt !== item.firstClickAt)
+      meta.push(`<span><b>${esc(L.lastClick)}</b> ${esc(fmtDateTime(item.lastClickAt))}</span>`);
+    if (item.replies && item.replies.length > 0)
+      meta.push(`<span><b>${esc(L.replies)}</b> ${item.replies.length}</span>`);
+
+    const rows: string[] = [];
+    if (item.subject)
+      rows.push(`<div class="ff-row"><dt>${esc(L.subject)}</dt><dd>${esc(item.subject)}</dd></div>`);
+    const clicks = item.clicks || [];
+    const clickList =
+      clicks.length === 0
+        ? `<p class="admin-muted" style="font-size:13px;">${esc(L.noClicks)}</p>`
+        : `<ul class="lead-events">` +
+          clicks
+            .map(
+              (c) =>
+                `<li>${esc(fmtDateTime(c.at))} · /${esc(c.dest)}${c.country ? ` · ${esc(c.country)}` : ""}` +
+                (c.suspect ? ` <span class="mono">(${esc(L.scanner)})</span>` : "") +
+                `</li>`
+            )
+            .join("") +
+          `</ul>`;
+    rows.push(`<div class="ff-row"><dt>${esc(L.clickHistory)}</dt><dd>${clickList}</dd></div>`);
+    for (const r of item.replies || []) {
+      rows.push(
+        `<div class="ff-row"><dt>${esc(r.kind === "optout" ? L.optOut : r.kind === "bounce" ? L.bounced : L.replied)}</dt>` +
+          `<dd>${esc(fmtDateTime(r.at))}${r.subject ? ` · ${esc(r.subject)}` : ""}</dd></div>`
+      );
+    }
+
+    return (
+      `<article class="form-card" data-lead-id="${esc(item.id)}">` +
+      `<div class="form-card-head"><div><strong>${esc(item.business)}</strong>` +
+      (item.email ? `<span class="mono">${esc(item.email)}</span>` : "") +
+      `</div><div class="lead-badges">${badges.join("")}</div></div>` +
+      `<div class="form-meta">${meta.join("")}</div>` +
+      `<div class="form-actions">` +
+      `<button type="button" class="admin-ghost-btn" data-lead-expand>${esc(L.details)}</button>` +
+      `<button type="button" class="admin-ghost-btn" data-lead-delete>${esc(L.delete)}</button>` +
+      `</div>` +
+      `<dl class="form-fields" data-lead-fields hidden>${rows.join("")}</dl>` +
+      `</article>`
+    );
+  }
+
+  async function loadLeads(reset: boolean): Promise<void> {
+    const list = qq("[data-leads-list]");
+    const more = qq<HTMLButtonElement>("[data-leads-more]");
+    if (!list || !more) return;
+    if (reset) {
+      list.innerHTML = "";
+      leadsCursor = null;
+    }
+    more.hidden = true;
+    try {
+      const data = (await api(
+        `/api/admin/leads?limit=50${leadsCursor ? `&cursor=${encodeURIComponent(leadsCursor)}` : ""}`
+      )) as unknown as LeadsResponse;
+      if (reset && data.items.length === 0) {
+        list.innerHTML = `<div class="admin-empty">${esc(I18N.leads.empty)}</div>`;
+        return;
+      }
+      for (const item of data.items) list.insertAdjacentHTML("beforeend", leadCard(item));
+      leadsCursor = data.nextCursor;
+      more.hidden = !leadsCursor;
+    } catch (e) {
+      if (e instanceof ExpiredSession) return;
+      if (reset) {
+        list.innerHTML =
+          `<div class="admin-retry"><p>${esc(I18N.leads.loadError)}</p>` +
+          `<button type="button" class="admin-ghost-btn" data-leads-retry>${esc(I18N.leads.retry)}</button></div>`;
+      } else {
+        toast(String(I18N.leads.loadError), "err");
+      }
+    }
+  }
+
+  async function deleteLead(btn: HTMLElement): Promise<void> {
+    const card = btn.closest("[data-lead-id]") as HTMLElement | null;
+    const id = card?.dataset.leadId;
+    if (!card || !id) return;
+    if (!window.confirm(String(I18N.leads.deleteConfirm))) return;
+    btn.setAttribute("disabled", "");
+    try {
+      await api(`/api/admin/leads/${encodeURIComponent(id)}`, { method: "DELETE" });
+      card.remove();
+      toast(String(I18N.leads.deleted), "ok");
+    } catch (e) {
+      if (e instanceof ExpiredSession) return;
+      btn.removeAttribute("disabled");
+      toast(String(I18N.leads.deleteError), "err");
+    }
+  }
+
   /* ── Config tab ── */
   async function loadConfig(): Promise<void> {
     const errEl = qq("[data-settings-error]");
@@ -671,6 +812,7 @@ function initAdmin(): void {
   });
 
   qq("[data-forms-more]")?.addEventListener("click", () => void loadForms(false));
+  qq("[data-leads-more]")?.addEventListener("click", () => void loadLeads(false));
   qq<HTMLFormElement>("[data-settings-form]")?.addEventListener("submit", (e) => void onSettingsSubmit(e));
   qq<HTMLFormElement>("[data-pw-form]")?.addEventListener("submit", (e) => void onPasswordSubmit(e));
 
@@ -686,6 +828,24 @@ function initAdmin(): void {
       void loadForms(true);
       return;
     }
+    if (t.closest("[data-leads-retry]")) {
+      void loadLeads(true);
+      return;
+    }
+    const leadExpand = t.closest("[data-lead-expand]") as HTMLElement | null;
+    if (leadExpand) {
+      const card = leadExpand.closest("[data-lead-id]");
+      const fields = card?.querySelector("[data-lead-fields]") as HTMLElement | null;
+      if (fields) {
+        fields.hidden = !fields.hidden;
+        leadExpand.textContent = fields.hidden
+          ? String(I18N.leads.details)
+          : String(I18N.leads.hideDetails);
+      }
+      return;
+    }
+    const leadDel = t.closest("[data-lead-delete]") as HTMLElement | null;
+    if (leadDel) void deleteLead(leadDel);
     const expand = t.closest("[data-expand]") as HTMLElement | null;
     if (expand) {
       const card = expand.closest("[data-form-id]");

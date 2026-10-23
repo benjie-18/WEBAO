@@ -66,4 +66,6 @@ interface Env {
   WEBAO_KV: KVNamespace;
   ASSETS: Fetcher;
   EMAIL?: SendEmailBinding;
+  /** Optional shared key for the lead-tracking ingest endpoints (secret). */
+  LEADS_INGEST_KEY?: string;
 }

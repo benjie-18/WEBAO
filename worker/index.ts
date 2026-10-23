@@ -4,6 +4,7 @@
 
 import { handlePageview, handleClick, handleHeartbeat } from "./track";
 import { handleFormSubmit } from "./forms";
+import { handleGo, handleLeadRegister, handleLeadReply } from "./leads";
 import { handleAdmin } from "./admin";
 import { handleCheckoutSession } from "./checkout";
 import { json } from "./util";
@@ -17,6 +18,8 @@ async function routeApi(req: Request, env: Env): Promise<Response> {
   if (p === "/api/track/click" && req.method === "POST") return handleClick(req, env);
   if (p === "/api/track/heartbeat" && req.method === "POST") return handleHeartbeat(req, env);
   if (p === "/api/forms/submit" && req.method === "POST") return handleFormSubmit(req, env);
+  if (p === "/api/leads/register" && req.method === "POST") return handleLeadRegister(req, env);
+  if (p === "/api/leads/reply" && req.method === "POST") return handleLeadReply(req, env);
   if (p === "/api/checkout/session" && req.method === "POST") return handleCheckoutSession(req, env);
   if (p.startsWith("/api/admin/")) return handleAdmin(req, env, url);
 
@@ -32,6 +35,12 @@ export default {
       url.hostname = "webao.ca";
       url.protocol = "https:";
       return Response.redirect(url.toString(), 301);
+    }
+
+    // Tracked outreach links: log the click, redirect to the real page.
+    // handleGo never throws for logging problems, a sent link must not break.
+    if (url.pathname.startsWith("/go/")) {
+      return handleGo(request, env, url);
     }
 
     if (url.pathname.startsWith("/api/")) {

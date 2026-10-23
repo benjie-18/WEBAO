@@ -27,6 +27,7 @@ import {
   batch,
 } from "./util";
 import type { Session } from "./track";
+import { handleLeadsList, handleLeadDelete } from "./leads";
 
 const FORMS_INDEX = "forms:index";
 
@@ -62,6 +63,9 @@ export async function handleAdmin(req: Request, env: Env, url: URL): Promise<Res
   if (path === "/api/admin/forms" && req.method === "GET") return handleFormsList(kv, url);
   if (path.startsWith("/api/admin/forms/") && req.method === "DELETE")
     return handleFormDelete(kv, path);
+  if (path === "/api/admin/leads" && req.method === "GET") return handleLeadsList(kv, url);
+  if (path.startsWith("/api/admin/leads/") && req.method === "DELETE")
+    return handleLeadDelete(kv, path);
   if (path === "/api/admin/config" && req.method === "GET")
     return json({ ok: true, settings: await getSettings(kv) });
   if (path === "/api/admin/config" && req.method === "POST") return handleConfigSet(req, kv);
