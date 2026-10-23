@@ -75,6 +75,9 @@ interface ClientItem {
   onboarding: Record<string, unknown>;
   onboardingCompletedAt?: number;
   previewUrl?: string;
+  domain?: string;
+  domainStatus: string;
+  domainCheckedAt?: number;
   nudgeCount: number;
   nudgesEscalatedAt?: number;
   stripeCustomerId?: string;
@@ -987,6 +990,17 @@ function initAdmin(): void {
     const badge = item.onboardingComplete
       ? `<span class="form-badge">${esc(C.onboardingDone)}</span>`
       : `<span class="form-badge form-badge--warn">${esc(C.onboardingPending)}</span>`;
+    const domainBadgeMap = (C.domainStatuses || {}) as Dict;
+    const domainBadgeKey =
+      item.domainStatus === "to-register"
+        ? "toRegister"
+        : item.domainStatus === "pending-dns"
+          ? "pendingDns"
+          : item.domainStatus;
+    const domainBadge =
+      item.domainStatus && item.domainStatus !== "none"
+        ? `<span class="form-badge">${esc(domainBadgeMap[domainBadgeKey] || item.domainStatus)}</span>`
+        : "";
     const meta: string[] = [
       `<span><b>${esc(C.billing)}</b> ${esc(item.billingStatus)}</span>`,
       `<span><b>${esc(C.since)}</b> ${esc(fmtDateTime(item.createdAt))}</span>`,
@@ -1036,13 +1050,15 @@ function initAdmin(): void {
       `<article class="form-card" data-client-id="${esc(item.id)}">` +
       `<div class="form-card-head"><div><strong>${esc(item.business || item.email)}</strong>` +
       `<span class="mono">${esc(item.email)}</span></div>` +
-      `<div class="lead-badges">${badge}</div></div>` +
+      `<div class="lead-badges">${badge}${domainBadge}</div></div>` +
       `<div class="form-meta">${meta.join("")}</div>` +
       `<div class="form-actions" style="gap:10px; flex-wrap:wrap;">` +
       `<label style="display:flex; gap:8px; align-items:center; font-size:13px; font-weight:600;">${esc(C.stage)}` +
       `<select data-client-stage style="padding:7px 9px; border-radius:8px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink);">${stageOptions}</select></label>` +
       `<label style="display:flex; gap:8px; align-items:center; font-size:13px; font-weight:600; flex:1; min-width:220px;">${esc(C.previewUrl)}` +
       `<input type="url" data-client-preview value="${esc(item.previewUrl || "")}" placeholder="https://" style="flex:1; padding:7px 9px; border-radius:8px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink);" /></label>` +
+      `<label style="display:flex; gap:8px; align-items:center; font-size:13px; font-weight:600; flex:1; min-width:220px;">${esc(C.domain)}` +
+      `<input type="text" data-client-domain value="${esc(item.domain || "")}" placeholder="patplumbing.ca" style="flex:1; padding:7px 9px; border-radius:8px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink);" /></label>` +
       `<button type="button" class="admin-ghost-btn" data-client-save>${esc(C.save)}</button>` +
       `<button type="button" class="admin-ghost-btn" data-client-expand>${esc(C.details)}</button>` +
       `</div>` +
@@ -1091,11 +1107,12 @@ function initAdmin(): void {
     if (!card || !id) return;
     const stage = (card.querySelector("[data-client-stage]") as HTMLSelectElement | null)?.value;
     const previewUrl = (card.querySelector("[data-client-preview]") as HTMLInputElement | null)?.value;
+    const domain = (card.querySelector("[data-client-domain]") as HTMLInputElement | null)?.value;
     btn.setAttribute("disabled", "");
     try {
       await api("/api/admin/clients/update", {
         method: "POST",
-        body: { id, stage, previewUrl },
+        body: { id, stage, previewUrl, domain },
       });
       toast(String(I18N.clients.saved), "ok");
     } catch (e) {

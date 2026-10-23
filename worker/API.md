@@ -211,9 +211,34 @@ Newest-first by registration order. Same pagination rules as forms.
 Newest-first. Same pagination rules as forms. Backs the admin Clients tab.
 
 ### `POST /api/admin/clients/update`
-Body `{ id, stage?, previewUrl? }`. Moves a client between stages
-(`onboarding | build | review | live | paused`) and sets or clears the review
-preview URL the portal shows during stage `review`. → `{ "ok": true, "client" }`.
+Body `{ id, stage?, previewUrl?, domain? }`. Moves a client between stages
+(`onboarding | build | review | live | paused`), sets or clears the review
+preview URL the portal shows during stage `review`, and assigns or clears
+(`""`) the client's domain (normalized to a bare hostname; 409 when another
+client owns it, 400 when unusable). → `{ "ok": true, "client" }`.
+
+## Tenant domains (multi-tenant serving)
+
+A client's canonical domain lives on the record (`domain`, `domainStatus`:
+`none | to-register | pending-dns | connected | live`) with a
+`domain:<host>` KV mapping to the client key. Assignment happens three ways:
+onboarding completion claims the form's domain automatically (existing →
+`pending-dns`, new → `to-register`), the admin Clients tab, and this API.
+A non-main hostname with a mapping resolves through it (a www/bare mismatch
+is tolerated) to a per-client "coming soon" page (or "temporarily
+unavailable" when paused). Unmapped hosts fall through to the main site for
+now; once Cloudflare for SaaS custom hostnames are enabled, unverified
+hosts are rejected at the edge before reaching the worker. Published builds
+are served from the same path once the build pipeline writes them.
+The portal shows the client their domain state, including the CNAME record
+to add (`<host>` → `hosting.webao.ca`) while `pending-dns`.
+
+### `POST /api/internal/domain-checks`
+Shared-secret Bearer auth (`INTERNAL_CRON_SECRET`), called daily by a cron.
+For each `pending-dns` / `to-register` domain, a DNS-over-HTTPS lookup marks
+it `connected` when its CNAME points into webao.ca (the instructed target is
+hosting.webao.ca); `domainCheckedAt` is stamped either way.
+Answers `{ checked, connected, stillPending }`.
 
 ### `GET /api/admin/charts?range=day|week|month|year`
 Per-day form + outreach series for the admin chart cards, in the same label

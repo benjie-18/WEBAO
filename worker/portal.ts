@@ -27,11 +27,13 @@ import {
   findClientByEmail,
   findClientByCustomer,
   getClient,
+  normalizeDomain,
   onboardingComplete,
   saveClient,
   type Client,
   type OnboardingData,
 } from "./clients";
+import { assignDomain } from "./tenants";
 import { sendClientEmail } from "./mailer";
 import { batch, clampStr, clientIp, err, json, originAllowed, randomHex, readJson, timingSafeEqual } from "./util";
 
@@ -132,6 +134,8 @@ function portalView(client: Client) {
     billingStatus: client.billingStatus,
     items: client.items,
     previewUrl: client.previewUrl,
+    domain: client.domain,
+    domainStatus: client.domainStatus || "none",
     createdAt: client.createdAt,
     onboarding: client.onboarding || {},
     onboardingComplete: onboardingComplete(client),
@@ -333,6 +337,20 @@ export async function handlePortalOnboarding(req: Request, env: Env): Promise<Re
   if (!wasComplete && onboardingComplete(client)) {
     client.onboardingCompletedAt = Date.now();
     if (client.stage === "onboarding") client.stage = "build";
+    // First completion also claims the client's domain: an existing domain
+    // waits on its CNAME, a new one queues for registration. A domain
+    // already owned by another client is left for the admin to sort out.
+    if (!client.domain) {
+      const host = normalizeDomain(data.domainValue);
+      if (host) {
+        await assignDomain(
+          env.WEBAO_KV,
+          client,
+          host,
+          data.domainMode === "new" ? "to-register" : "pending-dns",
+        );
+      }
+    }
     await saveClient(env.WEBAO_KV, client);
     await notifyInbox(env, `Onboarding complete: ${data.businessName || client.email}`, [
       `A client finished the onboarding form; the build can start.`,

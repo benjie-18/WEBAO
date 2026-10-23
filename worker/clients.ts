@@ -86,6 +86,40 @@ export interface Client {
   nudgeCount?: number;
   lastNudgeAt?: number;
   nudgesEscalatedAt?: number;
+  /** Canonical bare hostname of the client's site, e.g. "patplumbing.ca". */
+  domain?: string;
+  /**
+   * Domain lifecycle: "to-register" (WEBAO registers a managed domain),
+   * "pending-dns" (waiting on a CNAME to hosting.webao.ca), "connected"
+   * (DNS verified by the sweep), "live" (a build is published on it).
+   */
+  domainStatus?: "none" | "to-register" | "pending-dns" | "connected" | "live";
+  domainAssignedAt?: number;
+  domainCheckedAt?: number;
+}
+
+/** KV key that maps a hostname to its owning client's record key. */
+export const domainKey = (host: string): string => "domain:" + host;
+
+const HOSTNAME_RE =
+  /^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)+$/;
+
+/**
+ * Normalize free-form domain input ("https://www.PatPlumbing.ca/") to a
+ * canonical bare hostname, or null when it is not a usable public hostname.
+ * The main site's own domain is never a tenant domain.
+ */
+export function normalizeDomain(raw?: string | null): string | null {
+  if (!raw) return null;
+  let host = raw.trim().toLowerCase();
+  host = host.replace(/^[a-z][a-z0-9+.-]*:\/\//, "");
+  host = host.split(/[/?#]/)[0];
+  host = host.replace(/:\d+$/, "").replace(/\.$/, "");
+  if (host.startsWith("www.")) host = host.slice(4);
+  if (!host || host.length > 253) return null;
+  if (host === "webao.ca" || host.endsWith(".webao.ca")) return null;
+  if (!HOSTNAME_RE.test(host)) return null;
+  return host;
 }
 
 /** The fields a build cannot start without. */

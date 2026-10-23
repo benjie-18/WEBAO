@@ -17,6 +17,7 @@ import {
   handlePortalOnboarding,
   handlePortalRequestLink,
 } from "./portal";
+import { handleDomainChecks, isMainHost, resolveTenant, tenantPageResponse } from "./tenants";
 import { json } from "./util";
 import { KvWriteError } from "./kv";
 
@@ -39,6 +40,7 @@ async function routeApi(req: Request, env: Env): Promise<Response> {
   if (p === "/api/portal/onboarding" && req.method === "POST") return handlePortalOnboarding(req, env);
   if (p === "/api/portal/logout" && req.method === "POST") return handlePortalLogout(req, env);
   if (p === "/api/internal/onboarding-nudges" && req.method === "POST") return handleOnboardingNudges(req, env);
+  if (p === "/api/internal/domain-checks" && req.method === "POST") return handleDomainChecks(req, env);
   if (p.startsWith("/api/admin/")) return handleAdmin(req, env, url);
 
   return json({ ok: false, error: "Not found" }, 404);
@@ -47,6 +49,21 @@ async function routeApi(req: Request, env: Env): Promise<Response> {
 export default {
   async fetch(request: Request, env: Env, _ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
+
+    // Tenant hosts: a non-main hostname with a domain mapping resolves to
+    // its client and serves only that client's space. Unmapped hosts fall
+    // through to the main site for now; once Cloudflare for SaaS custom
+    // hostnames are enabled, unverified hosts are rejected at the edge
+    // before they ever reach this worker.
+    if (!isMainHost(url.hostname)) {
+      try {
+        const tenant = await resolveTenant(env.WEBAO_KV, url.hostname);
+        if (tenant) return tenantPageResponse(tenant, request, url.hostname);
+      } catch (e) {
+        console.error("tenant error", (e as Error)?.message);
+        return new Response("Internal error", { status: 500 });
+      }
+    }
 
     // Redirect old subdomain to the canonical domain.
     if (url.hostname === "webao.bnji.net") {

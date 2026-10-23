@@ -26,6 +26,11 @@ const copy = fr
       sent: "C'est envoyé. Vérifiez votre boîte courriel et cliquez le lien pour ouvrir votre portail.",
       signinHelp: "Vous venez de payer ? Le bouton sur la page de confirmation de paiement vous connecte directement.",
       signOut: "Se déconnecter",
+      domainTitle: "Votre domaine",
+      domainToRegister: "Nous enregistrons {d} pour vous. Rien à faire de votre côté.",
+      domainPending: "Pour connecter {d}, ajoutez cet enregistrement DNS chez votre registraire :",
+      domainConnected: "{d} est connecté et vérifié.",
+      domainLive: "Votre site est en ligne sur {d}.",
       stageNames: { onboarding: "Démarrage", build: "Conception", review: "Révision", live: "En ligne" },
       pausedNote: "Votre projet est en pause. Écrivez à support@webao.ca pour le relancer.",
       billing: "Facturation",
@@ -79,6 +84,11 @@ const copy = fr
       sent: "Sent. Check your inbox and click the link to open your portal.",
       signinHelp: "Just paid? The button on your payment confirmation page signs you in directly.",
       signOut: "Sign out",
+      domainTitle: "Your domain",
+      domainToRegister: "We are registering {d} for you. Nothing to do on your side.",
+      domainPending: "To connect {d}, add this DNS record at your registrar:",
+      domainConnected: "{d} is connected and verified.",
+      domainLive: "Your website is live at {d}.",
       stageNames: { onboarding: "Start-up", build: "Build", review: "Review", live: "Live" },
       pausedNote: "Your project is paused. Write to support@webao.ca to restart it.",
       billing: "Billing",
@@ -166,6 +176,14 @@ const demosJson = JSON.stringify(visibleDemos);
           {copy.billing} : <span data-portal-billing></span>
         </p>
 
+        <div data-portal-domain hidden style="margin-top:20px; border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 8px;">{copy.domainTitle}</h2>
+          <p class="prose" data-portal-domain-text style="font-size:14px; margin:0;"></p>
+          <p data-portal-domain-cname hidden style="font-size:14px; margin:12px 0 0;">
+            <code style="background: var(--accent-soft); padding:3px 8px; border-radius:6px;">CNAME&nbsp;&nbsp;<span data-portal-domain-host></span>&nbsp;&nbsp;→&nbsp;&nbsp;hosting.webao.ca</code>
+          </p>
+        </div>
+
         <div data-portal-review hidden style="margin-top:20px; border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
           <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 8px;">{copy.reviewTitle}</h2>
           <p class="prose" style="font-size:14px; margin:0 0 16px;">{copy.reviewBody}</p>
@@ -252,6 +270,10 @@ const demosJson = JSON.stringify(visibleDemos);
 <span hidden data-portal-msg-required>{copy.required}</span>
 <span hidden data-portal-domain-new>{copy.fields.domainValueNew}</span>
 <span hidden data-portal-domain-existing>{copy.fields.domainValueExisting}</span>
+<span hidden data-portal-msg-domain-register>{copy.domainToRegister}</span>
+<span hidden data-portal-msg-domain-pending>{copy.domainPending}</span>
+<span hidden data-portal-msg-domain-connected>{copy.domainConnected}</span>
+<span hidden data-portal-msg-domain-live>{copy.domainLive}</span>
 
 <script data-astro-rerun>
   function initPortal() {
@@ -341,6 +363,23 @@ const demosJson = JSON.stringify(visibleDemos);
         li.style.borderColor = active ? "var(--accent)" : "var(--line)";
         li.style.background = done ? "var(--accent-soft)" : "var(--card-bg)";
       });
+      var domainBox = root.querySelector("[data-portal-domain]");
+      if (client.domain) {
+        domainBox.hidden = false;
+        var dText = root.querySelector("[data-portal-domain-text]");
+        var dCname = root.querySelector("[data-portal-domain-cname]");
+        var fill = function (sel) { return msg(sel).replace("{d}", client.domain); };
+        dCname.hidden = true;
+        if (client.domainStatus === "to-register") dText.textContent = fill("[data-portal-msg-domain-register]");
+        else if (client.domainStatus === "pending-dns") {
+          dText.textContent = fill("[data-portal-msg-domain-pending]");
+          root.querySelector("[data-portal-domain-host]").textContent = client.domain;
+          dCname.hidden = false;
+        } else if (client.domainStatus === "live") dText.textContent = fill("[data-portal-msg-domain-live]");
+        else dText.textContent = fill("[data-portal-msg-domain-connected]");
+      } else {
+        domainBox.hidden = true;
+      }
       root.querySelector("[data-portal-paused]").hidden = client.stage !== "paused";
       var review = root.querySelector("[data-portal-review]");
       if (client.stage === "review" && client.previewUrl) {

@@ -29,7 +29,7 @@ test('deployment explicitly binds the static asset fetcher', () => {
 
 test('existing static images bypass KV', async () => {
   const { env, keys } = environment(async () => new Response(bytes));
-  const response = await worker.fetch(new Request('https://example.com/demos/tactile/01.jpg'), env, ctx);
+  const response = await worker.fetch(new Request('https://webao.ca/demos/tactile/01.jpg'), env, ctx);
   assert.deepEqual(await response.arrayBuffer(), bytes);
   assert.deepEqual(keys, []);
 });
@@ -41,7 +41,7 @@ for (const path of ['/demos/tactile/01.jpg', '/carousel/tactile.jpg']) {
         if (failure === 'throw') throw new Error('asset unavailable');
         return new Response('Not found', { status: 404 });
       });
-      const response = await worker.fetch(new Request(`https://example.com${path}`), env, ctx);
+      const response = await worker.fetch(new Request(`https://webao.ca${path}`), env, ctx);
       assert.equal(response.status, 200);
       assert.equal(response.headers.get('content-type'), 'image/jpeg');
       assert.deepEqual(await response.arrayBuffer(), bytes);
@@ -52,7 +52,7 @@ for (const path of ['/demos/tactile/01.jpg', '/carousel/tactile.jpg']) {
 
 test('missing KV images return 404, not a successful image response', async () => {
   const { env } = environment(async () => new Response(null, { status: 404 }), null);
-  const response = await worker.fetch(new Request('https://example.com/demos/missing.jpg'), env, ctx);
+  const response = await worker.fetch(new Request('https://webao.ca/demos/missing.jpg'), env, ctx);
   assert.equal(response.status, 404);
 });
 

@@ -31,11 +31,13 @@ import { handleLeadsList, handleLeadDelete, LEADS_INDEX, type Lead } from "./lea
 import {
   CLIENTS_INDEX,
   getClient,
+  normalizeDomain,
   onboardingComplete,
   saveClient,
   type Client,
   type ClientStage,
 } from "./clients";
+import { assignDomain } from "./tenants";
 import { clampStr } from "./util";
 
 const FORMS_INDEX = "forms:index";
@@ -444,6 +446,9 @@ function clientSummary(client: Client) {
     onboarding: client.onboarding || {},
     onboardingCompletedAt: client.onboardingCompletedAt,
     previewUrl: client.previewUrl,
+    domain: client.domain,
+    domainStatus: client.domainStatus || "none",
+    domainCheckedAt: client.domainCheckedAt,
     nudgeCount: client.nudgeCount || 0,
     nudgesEscalatedAt: client.nudgesEscalatedAt,
     stripeCustomerId: client.stripeCustomerId,
@@ -476,9 +481,9 @@ async function handleClientsList(kv: KVNamespace, url: URL): Promise<Response> {
 
 const STAGES: ClientStage[] = ["onboarding", "build", "review", "live", "paused"];
 
-/** POST /api/admin/clients/update { id, stage?, previewUrl? } */
+/** POST /api/admin/clients/update { id, stage?, previewUrl?, domain? } */
 async function handleClientUpdate(req: Request, kv: KVNamespace): Promise<Response> {
-  let body: { id?: unknown; stage?: unknown; previewUrl?: unknown };
+  let body: { id?: unknown; stage?: unknown; previewUrl?: unknown; domain?: unknown };
   try {
     body = (await readJson(req)) as typeof body;
   } catch (e) {
@@ -495,6 +500,22 @@ async function handleClientUpdate(req: Request, kv: KVNamespace): Promise<Respon
     const value = clampStr(body.previewUrl, 500).trim();
     if (value && !/^https:\/\/[^\s]+$/.test(value)) return err("Preview URL must be an https URL");
     client.previewUrl = value || undefined;
+  }
+  if (body.domain !== undefined) {
+    if (typeof body.domain !== "string") return err("Invalid domain");
+    if (!body.domain.trim()) {
+      await assignDomain(kv, client, null, "none");
+    } else {
+      const host = normalizeDomain(body.domain);
+      if (!host) return err("Invalid domain");
+      const result = await assignDomain(
+        kv,
+        client,
+        host,
+        client.onboarding?.domainMode === "new" ? "to-register" : "pending-dns",
+      );
+      if (!result.ok) return err("That domain is assigned to another client", 409);
+    }
   }
   await saveClient(kv, client);
   return json({ ok: true, client: clientSummary(client) });
