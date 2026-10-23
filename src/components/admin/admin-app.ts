@@ -78,6 +78,8 @@ interface ClientItem {
   domain?: string;
   domainStatus: string;
   domainCheckedAt?: number;
+  reviewDecision?: { decision: string; note?: string; at: number; buildId?: string };
+  revisionCount: number;
   buildAt?: number;
   buildQaPassed?: boolean;
   buildQaFailedChecks?: { id: string; detail: string }[];
@@ -1013,6 +1015,12 @@ function initAdmin(): void {
         : item.buildQaPassed
           ? `<span class="form-badge">${esc(C.qaPassed)}</span>`
           : `<span class="form-badge form-badge--warn">${esc(C.qaFailed)}</span>`;
+    const decisionBadge =
+      item.reviewDecision?.decision === "changes"
+        ? `<span class="form-badge form-badge--warn">${esc(C.changesRequested)}</span>`
+        : item.reviewDecision?.decision === "approved"
+          ? `<span class="form-badge">${esc(C.approved)}</span>`
+          : "";
     const meta: string[] = [
       `<span><b>${esc(C.billing)}</b> ${esc(item.billingStatus)}</span>`,
       `<span><b>${esc(C.since)}</b> ${esc(fmtDateTime(item.createdAt))}</span>`,
@@ -1020,6 +1028,8 @@ function initAdmin(): void {
     if (item.items.length > 0)
       meta.push(`<span><b>${esc(C.items)}</b> ${esc(item.items.join(", "))}</span>`);
     if (item.nudgeCount > 0) meta.push(`<span><b>${esc(C.nudges)}</b> ${item.nudgeCount}</span>`);
+    if (item.revisionCount > 0)
+      meta.push(`<span><b>${esc(C.revisions)}</b> ${item.revisionCount}</span>`);
     if (item.nudgesEscalatedAt)
       meta.push(`<span><b>${esc(C.escalated)}</b> ${esc(fmtDateTime(item.nudgesEscalatedAt))}</span>`);
 
@@ -1055,6 +1065,11 @@ function initAdmin(): void {
         `<div class="ff-row"><dt>${esc(C.qaTitle)}</dt><dd>${esc(failed.id)}: ${esc(failed.detail)}</dd></div>`
       );
     }
+    if (item.reviewDecision?.decision === "changes" && item.reviewDecision.note) {
+      rows.push(
+        `<div class="ff-row"><dt>${esc(C.changeNote)}</dt><dd>${esc(item.reviewDecision.note)}</dd></div>`
+      );
+    }
 
     const stageOptions = ["onboarding", "build", "review", "live", "paused"]
       .map(
@@ -1067,7 +1082,7 @@ function initAdmin(): void {
       `<article class="form-card" data-client-id="${esc(item.id)}">` +
       `<div class="form-card-head"><div><strong>${esc(item.business || item.email)}</strong>` +
       `<span class="mono">${esc(item.email)}</span></div>` +
-      `<div class="lead-badges">${badge}${domainBadge}${qaBadge}</div></div>` +
+      `<div class="lead-badges">${badge}${domainBadge}${qaBadge}${decisionBadge}</div></div>` +
       `<div class="form-meta">${meta.join("")}</div>` +
       `<div class="form-actions" style="gap:10px; flex-wrap:wrap;">` +
       `<label style="display:flex; gap:8px; align-items:center; font-size:13px; font-weight:600;">${esc(C.stage)}` +

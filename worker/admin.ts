@@ -455,6 +455,8 @@ function clientSummary(client: Client, build?: BuildState) {
     domain: client.domain,
     domainStatus: client.domainStatus || "none",
     domainCheckedAt: client.domainCheckedAt,
+    reviewDecision: client.reviewDecision,
+    revisionCount: client.revisionCount || 0,
     nudgeCount: client.nudgeCount || 0,
     nudgesEscalatedAt: client.nudgesEscalatedAt,
     stripeCustomerId: client.stripeCustomerId,

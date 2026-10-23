@@ -35,8 +35,16 @@ const copy = fr
       pausedNote: "Votre projet est en pause. Écrivez à support@webao.ca pour le relancer.",
       billing: "Facturation",
       reviewTitle: "Votre site est prêt à réviser",
-      reviewBody: "Jetez un œil à l'aperçu. Pour approuver ou demander des changements, écrivez-nous à support@webao.ca.",
+      reviewBody: "Jetez un œil à l'aperçu. S'il vous convient, approuvez-le et votre site sera publié. Quelque chose à corriger ? Dites-le-nous.",
       reviewButton: "Voir l'aperçu",
+      reviewApprove: "Approuver et publier",
+      reviewChanges: "Demander des changements",
+      reviewNotePh: "Que devons-nous changer ?",
+      reviewSend: "Envoyer les changements",
+      reviewWorking: "Un instant…",
+      reviewApprovedMsg: "Approuvé, merci. Votre site web est en ligne.",
+      reviewChangesMsg: "Changements envoyés. Votre site retourne en conception, vous recevrez un nouvel aperçu.",
+      viewsLabel: "Pages vues ce mois-ci",
       formTitle: "Formulaire de démarrage",
       formIntro: "Quelques réponses courtes, et la conception commence. Les champs marqués d'un astérisque sont nécessaires pour démarrer.",
       formDone: "Formulaire complet, merci. Votre site est en conception.",
@@ -93,8 +101,16 @@ const copy = fr
       pausedNote: "Your project is paused. Write to support@webao.ca to restart it.",
       billing: "Billing",
       reviewTitle: "Your website is ready for review",
-      reviewBody: "Take a look at the preview. To approve it or request changes, write to us at support@webao.ca.",
+      reviewBody: "Take a look at the preview. If it looks right, approve it and your site goes live. Anything off? Tell us what to change.",
       reviewButton: "View the preview",
+      reviewApprove: "Approve and publish",
+      reviewChanges: "Request changes",
+      reviewNotePh: "What should we change?",
+      reviewSend: "Send the changes",
+      reviewWorking: "One moment…",
+      reviewApprovedMsg: "Approved, thank you. Your website is live.",
+      reviewChangesMsg: "Changes sent. Your site goes back into build, and you will get a fresh preview.",
+      viewsLabel: "Views this month",
       formTitle: "Start-up form",
       formIntro: "A few short answers, and the build starts. Fields marked with an asterisk are needed to begin.",
       formDone: "Form complete, thank you. Your website is in build.",
@@ -163,6 +179,7 @@ const demosJson = JSON.stringify(visibleDemos);
           <p style="margin:0; font-weight:650;" data-portal-identity></p>
           <button type="button" class="btn btn--ghost" data-portal-logout>{copy.signOut}</button>
         </div>
+        <p class="prose" data-portal-notice hidden style="font-size:14px; margin:14px 0 0; font-weight:600;" role="status"></p>
 
         <ol data-portal-stages style="list-style:none; display:grid; grid-template-columns:repeat(4, 1fr); gap:8px; padding:0; margin:20px 0 0;">
           {["onboarding", "build", "review", "live"].map((stage) => (
@@ -179,6 +196,7 @@ const demosJson = JSON.stringify(visibleDemos);
         <div data-portal-domain hidden style="margin-top:20px; border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
           <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 8px;">{copy.domainTitle}</h2>
           <p class="prose" data-portal-domain-text style="font-size:14px; margin:0;"></p>
+          <p class="prose" data-portal-views hidden style="font-size:14px; margin:8px 0 0;">{copy.viewsLabel} : <strong data-portal-views-count></strong></p>
           <p data-portal-domain-cname hidden style="font-size:14px; margin:12px 0 0;">
             <code style="background: var(--accent-soft); padding:3px 8px; border-radius:6px;">CNAME&nbsp;&nbsp;<span data-portal-domain-host></span>&nbsp;&nbsp;→&nbsp;&nbsp;hosting.webao.ca</code>
           </p>
@@ -187,7 +205,18 @@ const demosJson = JSON.stringify(visibleDemos);
         <div data-portal-review hidden style="margin-top:20px; border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
           <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 8px;">{copy.reviewTitle}</h2>
           <p class="prose" style="font-size:14px; margin:0 0 16px;">{copy.reviewBody}</p>
-          <a class="btn btn--primary" data-portal-preview target="_blank" rel="noopener" href="#">{copy.reviewButton}</a>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+            <a class="btn btn--primary" data-portal-preview target="_blank" rel="noopener" href="#">{copy.reviewButton}</a>
+            <button type="button" class="btn btn--primary" data-portal-approve>{copy.reviewApprove}</button>
+            <button type="button" class="btn btn--ghost" data-portal-changes-toggle>{copy.reviewChanges}</button>
+          </div>
+          <div data-portal-changes hidden style="margin-top:14px;">
+            <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">
+              <textarea data-portal-changes-note rows="3" placeholder={copy.reviewNotePh} style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;"></textarea>
+            </label>
+            <button type="button" class="btn btn--primary" data-portal-changes-send style="margin-top:10px;">{copy.reviewSend}</button>
+          </div>
+          <p class="prose" data-portal-review-status style="font-size:14px; margin:12px 0 0;" role="status"></p>
         </div>
 
         <div style="margin-top:20px; border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
@@ -270,6 +299,9 @@ const demosJson = JSON.stringify(visibleDemos);
 <span hidden data-portal-msg-required>{copy.required}</span>
 <span hidden data-portal-domain-new>{copy.fields.domainValueNew}</span>
 <span hidden data-portal-domain-existing>{copy.fields.domainValueExisting}</span>
+<span hidden data-portal-msg-review-working>{copy.reviewWorking}</span>
+<span hidden data-portal-msg-review-approved>{copy.reviewApprovedMsg}</span>
+<span hidden data-portal-msg-review-changes>{copy.reviewChangesMsg}</span>
 <span hidden data-portal-msg-domain-register>{copy.domainToRegister}</span>
 <span hidden data-portal-msg-domain-pending>{copy.domainPending}</span>
 <span hidden data-portal-msg-domain-connected>{copy.domainConnected}</span>
@@ -388,6 +420,13 @@ const demosJson = JSON.stringify(visibleDemos);
       } else {
         review.hidden = true;
       }
+      var viewsLine = root.querySelector("[data-portal-views]");
+      if (client.stage === "live" && typeof client.siteViewsThisMonth === "number") {
+        viewsLine.hidden = false;
+        root.querySelector("[data-portal-views-count]").textContent = String(client.siteViewsThisMonth);
+      } else {
+        viewsLine.hidden = true;
+      }
       root.querySelector("[data-portal-form-done]").hidden = !client.onboardingComplete;
       fillForm(client);
       show("app");
@@ -430,6 +469,54 @@ const demosJson = JSON.stringify(visibleDemos);
       api("/api/portal/request-link", { method: "POST", body: JSON.stringify({ email: email }) }).then(function (r) {
         btn.disabled = false;
         status.textContent = r.data.ok ? msg("[data-portal-msg-sent]") : (r.data.error || msg("[data-portal-msg-generic]"));
+      });
+    });
+
+    function notice(text) {
+      var el = root.querySelector("[data-portal-notice]");
+      el.textContent = text;
+      el.hidden = !text;
+    }
+
+    root.querySelector("[data-portal-approve]").addEventListener("click", function () {
+      var status = root.querySelector("[data-portal-review-status]");
+      var btn = root.querySelector("[data-portal-approve]");
+      btn.disabled = true;
+      status.textContent = msg("[data-portal-msg-review-working]");
+      api("/api/portal/review", { method: "POST", body: JSON.stringify({ decision: "approved" }) }).then(function (r) {
+        btn.disabled = false;
+        if (r.data.ok && r.data.client) {
+          render(r.data.client);
+          notice(msg("[data-portal-msg-review-approved]"));
+        } else {
+          status.textContent = r.data.error || msg("[data-portal-msg-generic]");
+        }
+      });
+    });
+
+    root.querySelector("[data-portal-changes-toggle]").addEventListener("click", function () {
+      var box = root.querySelector("[data-portal-changes]");
+      box.hidden = !box.hidden;
+    });
+
+    root.querySelector("[data-portal-changes-send]").addEventListener("click", function () {
+      var status = root.querySelector("[data-portal-review-status]");
+      var note = root.querySelector("[data-portal-changes-note]").value.trim();
+      if (!note) {
+        status.textContent = msg("[data-portal-msg-generic]");
+        return;
+      }
+      var btn = root.querySelector("[data-portal-changes-send]");
+      btn.disabled = true;
+      status.textContent = msg("[data-portal-msg-review-working]");
+      api("/api/portal/review", { method: "POST", body: JSON.stringify({ decision: "changes", note: note }) }).then(function (r) {
+        btn.disabled = false;
+        if (r.data.ok && r.data.client) {
+          render(r.data.client);
+          notice(msg("[data-portal-msg-review-changes]"));
+        } else {
+          status.textContent = r.data.error || msg("[data-portal-msg-generic]");
+        }
       });
     });
 

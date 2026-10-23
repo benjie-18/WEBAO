@@ -13,12 +13,14 @@ import {
   handlePortalClaim,
   handlePortalExchange,
   handlePortalLogout,
+  handlePortalReview,
   handlePortalMe,
   handlePortalOnboarding,
   handlePortalRequestLink,
 } from "./portal";
 import { handleDomainChecks, isMainHost, resolveTenant, tenantPageResponse } from "./tenants";
 import { handleInternalBuild, servePreviewSite, servePublishedSite } from "./builds";
+import { handleMonthlyReports, recordTenantView } from "./reports";
 import { json } from "./util";
 import { KvWriteError } from "./kv";
 
@@ -39,17 +41,19 @@ async function routeApi(req: Request, env: Env): Promise<Response> {
   if (p === "/api/portal/claim" && req.method === "POST") return handlePortalClaim(req, env);
   if (p === "/api/portal/me" && req.method === "GET") return handlePortalMe(req, env);
   if (p === "/api/portal/onboarding" && req.method === "POST") return handlePortalOnboarding(req, env);
+  if (p === "/api/portal/review" && req.method === "POST") return handlePortalReview(req, env);
   if (p === "/api/portal/logout" && req.method === "POST") return handlePortalLogout(req, env);
   if (p === "/api/internal/onboarding-nudges" && req.method === "POST") return handleOnboardingNudges(req, env);
   if (p === "/api/internal/domain-checks" && req.method === "POST") return handleDomainChecks(req, env);
   if (p === "/api/internal/build" && req.method === "POST") return handleInternalBuild(req, env);
+  if (p === "/api/internal/monthly-reports" && req.method === "POST") return handleMonthlyReports(req, env);
   if (p.startsWith("/api/admin/")) return handleAdmin(req, env, url);
 
   return json({ ok: false, error: "Not found" }, 404);
 }
 
 export default {
-  async fetch(request: Request, env: Env, _ctx: ExecutionContext): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
 
     // Tenant hosts: a non-main hostname with a domain mapping resolves to
@@ -66,6 +70,9 @@ export default {
           }
           const site = await servePublishedSite(env, tenant, url);
           if (site) {
+            if (request.method === "GET" && ctx && typeof ctx.waitUntil === "function") {
+              ctx.waitUntil(recordTenantView(env.WEBAO_KV, tenant.id));
+            }
             if (request.method === "HEAD") {
               return new Response(null, { status: site.status, headers: site.headers });
             }

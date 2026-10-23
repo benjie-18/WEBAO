@@ -34,7 +34,9 @@ import {
   type OnboardingData,
 } from "./clients";
 import { assignDomain } from "./tenants";
-import { sendClientEmail } from "./mailer";
+import { notifyInbox as notifyInboxShared, sendClientEmail } from "./mailer";
+import { getBuildState, publishBuild } from "./builds";
+import { monthKey, tenantViews } from "./reports";
 import { batch, clampStr, clientIp, err, json, originAllowed, randomHex, readJson, timingSafeEqual } from "./util";
 
 const NOTIFY_INBOX = "webao.ca@gmail.com";
@@ -136,6 +138,8 @@ function portalView(client: Client) {
     previewUrl: client.previewUrl,
     domain: client.domain,
     domainStatus: client.domainStatus || "none",
+    reviewDecision: client.reviewDecision,
+    revisionCount: client.revisionCount || 0,
     createdAt: client.createdAt,
     onboarding: client.onboarding || {},
     onboardingComplete: onboardingComplete(client),
@@ -286,7 +290,80 @@ export async function handlePortalLogout(req: Request, env: Env): Promise<Respon
 export async function handlePortalMe(req: Request, env: Env): Promise<Response> {
   const client = await clientForSession(req, env);
   if (!client) return err("Not signed in", 401);
-  return json({ ok: true, client: portalView(client) });
+  const view = portalView(client) as Record<string, unknown>;
+  if (client.stage === "live") {
+    const stats = await tenantViews(env.WEBAO_KV, client.id, monthKey(Date.now()));
+    view.siteViewsThisMonth = stats.views;
+  }
+  return json({ ok: true, client: view });
+}
+
+/**
+ * POST /api/portal/review { decision: "approved" | "changes", note? } —
+ * the client's call on the build in review. Approval publishes the site
+ * (the QA gate already passed; this is the client's sign-off). A changes
+ * request needs a note and sends the record back to the build stage.
+ */
+export async function handlePortalReview(req: Request, env: Env): Promise<Response> {
+  if (!originAllowed(req, true, env)) return err("Forbidden origin", 403);
+  const client = await clientForSession(req, env);
+  if (!client) return err("Not signed in", 401);
+  if (client.stage !== "review") return err("Nothing is in review right now", 409);
+  let body: { decision?: unknown; note?: unknown };
+  try {
+    body = (await readJson(req)) as typeof body;
+  } catch (e) {
+    return err((e as Error).message);
+  }
+  const state = await getBuildState(env.WEBAO_KV, client.id);
+  if (!state.draftBuildId) return err("No build is waiting for review", 409);
+  const name = client.business || client.email;
+
+  if (body.decision === "approved") {
+    const result = await publishBuild(env, client);
+    if (!result.ok) return err(result.error || "Publish failed", 400);
+    client.reviewDecision = {
+      decision: "approved",
+      at: Date.now(),
+      buildId: state.draftBuildId,
+    };
+    await saveClient(env.WEBAO_KV, client);
+    // publishBuild already notified the inbox that the site is live.
+    return json({ ok: true, client: portalView(client) });
+  }
+
+  if (body.decision === "changes") {
+    const note = typeof body.note === "string" ? clampStr(body.note, 2000).trim() : "";
+    if (!note) return err("Tell us what to change", 400);
+    client.reviewDecision = {
+      decision: "changes",
+      note,
+      at: Date.now(),
+      buildId: state.draftBuildId,
+    };
+    client.revisionCount = (client.revisionCount || 0) + 1;
+    client.stage = "build";
+    await saveClient(env.WEBAO_KV, client);
+    await notifyInboxShared(env, `Changes requested: ${name}`, [
+      `${name} <${client.email}> asked for changes on build ${state.draftBuildId} (revision ${client.revisionCount}).`,
+      ``,
+      note,
+      ``,
+      `Rebuild from the admin Clients tab when ready; a clean QA sends it back to review.`,
+    ]);
+    await sendClientEmail(env, {
+      to: client.email,
+      subject:
+        client.lang === "fr" ? "Nous avons bien reçu vos changements" : "We received your changes",
+      text:
+        client.lang === "fr"
+          ? `Bonjour,\n\nMerci, nous avons bien reçu vos demandes de changements. Votre site retourne en conception; vous recevrez un nouvel aperçu à réviser.\n\nWebao`
+          : `Hello,\n\nThank you, we received your change requests. Your website goes back into build; you will get a fresh preview to review.\n\nWebao`,
+    });
+    return json({ ok: true, client: portalView(client) });
+  }
+
+  return err("Decision must be approved or changes", 400);
 }
 
 const TEXT_FIELDS = [

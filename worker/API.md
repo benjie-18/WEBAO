@@ -159,6 +159,13 @@ advances stage `onboarding` → `build` and notifies the inbox.
 inbox); a new-client welcome email is sent from the Stripe webhook on the
 same channel.
 
+`POST /api/portal/review` `{ decision: "approved" | "changes", note? }` is
+the client's sign-off on the build in review (stage must be `review`).
+Approval publishes the draft on the spot (it already passed QA) and records
+the decision; a changes request requires a note, bumps `revisionCount`,
+returns the record to stage `build`, and notifies the inbox with the note.
+The decision shows on the admin Clients card.
+
 ### `POST /api/internal/onboarding-nudges`
 Shared-secret Bearer auth (`INTERNAL_CRON_SECRET`), called daily by a cron.
 Clients still in stage `onboarding` with an incomplete form get a reminder
@@ -259,6 +266,22 @@ Body `{ id }`. Generates a draft build and runs QA. → `{ ok, buildId, qaPassed
 Body `{ id }`. Publishes the current draft (requires a passing QA report):
 the tenant host serves it, the stage becomes `live`, a `connected` domain
 becomes `live`, and the client is emailed. → `{ ok, buildId }`.
+
+## Client reports
+
+Published tenant pageviews are counted per client per month
+(`tstats:<clientId>:<yyyy-mm>` = `{ views, byDay }`) when the worker serves
+a published site (GET only, via waitUntil; previews and placeholders are
+not counted). The portal shows a live client their current month's views.
+
+### `POST /api/internal/monthly-reports`
+Shared-secret Bearer auth (`INTERNAL_CRON_SECRET`), run monthly. Emails
+every `live` client their previous month's real numbers (page views, days
+with visits, site URL) and writes `report:<clientId>:<yyyy-mm>` so a client
+is never reported twice for a month; a failed send (for example the SMTP2GO
+key missing) is left unrecorded and retries next run. An optional
+`{ month: "yyyy-mm" }` body targets a specific month.
+Answers `{ month, sent, skipped, failed }`.
 
 ### `POST /api/internal/build`
 Shared-secret Bearer auth (`INTERNAL_CRON_SECRET`). Body `{ clientId }`.

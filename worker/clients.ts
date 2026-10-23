@@ -96,6 +96,15 @@ export interface Client {
   domainStatus?: "none" | "to-register" | "pending-dns" | "connected" | "live";
   domainAssignedAt?: number;
   domainCheckedAt?: number;
+  /** The client's latest decision on the build in review. */
+  reviewDecision?: {
+    decision: "approved" | "changes";
+    note?: string;
+    at: number;
+    buildId?: string;
+  };
+  /** How many times the client has sent a build back with changes. */
+  revisionCount?: number;
 }
 
 /** KV key that maps a hostname to its owning client's record key. */
