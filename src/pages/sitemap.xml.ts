@@ -16,6 +16,7 @@ const pagesByLocale: Record<Locale, { key: keyof typeof localizedPaths.en; chang
     { key: "start", changefreq: "monthly", priority: "0.9" },
     { key: "terms", changefreq: "monthly", priority: "0.5" },
     { key: "refunds", changefreq: "yearly", priority: "0.3" },
+    { key: "privacy", changefreq: "yearly", priority: "0.3" },
     { key: "support", changefreq: "monthly", priority: "0.5" },
   ],
   fr: [
@@ -26,6 +27,7 @@ const pagesByLocale: Record<Locale, { key: keyof typeof localizedPaths.en; chang
     { key: "start", changefreq: "monthly", priority: "0.9" },
     { key: "terms", changefreq: "monthly", priority: "0.5" },
     { key: "refunds", changefreq: "yearly", priority: "0.3" },
+    { key: "privacy", changefreq: "yearly", priority: "0.3" },
     { key: "support", changefreq: "monthly", priority: "0.5" },
   ],
 };

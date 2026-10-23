@@ -1,0 +1,177 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const locale = "en" as const;
+const title = "Privacy policy · WEBAO";
+const description = "How WEBAO collects, uses and deletes personal information: forms, billing, site analytics, outreach and connected ad accounts.";
+---
+
+<BaseLayout title={title} description={description} locale={locale} pageKey="privacy">
+  <section class="section">
+    <div class="shell" style="max-width: 860px;">
+      <div class="eyebrow">Policy</div>
+      <h1 class="display" style="font-size: clamp(2rem, 5vw, 3.6rem); line-height:.92; margin-top:12px;">Privacy policy</h1>
+      <p class="prose" style="margin-top:14px; max-width: 60ch;">
+        What we collect, why we collect it, and how to get it deleted.
+        Written in plain language, because that is the only kind worth
+        reading. Last updated: October 23, 2026.
+      </p>
+
+      <div style="margin-top: 36px; display:grid; gap: 20px;">
+        <div style="border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 12px;">Who we are</h2>
+          <p class="prose" style="font-size:14px; margin:0;">
+            Webao is a website studio based in Montreal, Canada. This policy
+            covers webao.ca, the sites we build and host for clients, and the
+            services we run for them. Questions about privacy go to
+            <a href="mailto:contact@webao.ca" style="color: var(--accent-text);">contact@webao.ca</a>.
+            The person responsible for the protection of personal information
+            at Webao is Benjamin Emond, the owner.
+          </p>
+        </div>
+
+        <div style="border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 12px;">Messages you send us</h2>
+          <p class="prose" style="font-size:14px; margin:0;">
+            When you use the contact, support or start form, we receive the
+            details you enter, such as your name, email, phone number,
+            business name and your message. A copy lands in our email inbox
+            and the submission is kept in our system so we can reply, follow
+            up and keep a record of the request. We use it only to handle
+            what you asked about. We do not add you to a mailing list.
+          </p>
+        </div>
+
+        <div style="border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 12px;">Clients, billing and payments</h2>
+          <p class="prose" style="font-size:14px; margin:0;">
+            If you buy from us, we keep your name, email, business details,
+            what you purchased and your billing status, so we can run your
+            site and your account. Payments are processed by Stripe. Your
+            card details go to Stripe directly and never pass through our
+            servers. Stripe tells us whether a payment succeeded, so we know
+            where your account stands.
+          </p>
+        </div>
+
+        <div style="border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 12px;">Visits to this site</h2>
+          <p class="prose" style="font-size:14px; margin:0 0 12px;">
+            We measure our own traffic with our own tool. There are no
+            third-party trackers on webao.ca and no advertising cookies.
+            When you visit, we record:
+          </p>
+          <ul class="prose" style="font-size:14px; margin:0; padding-left:18px; display:grid; gap:6px;">
+            <li>The pages you view, how long you stay, and the links and buttons you click on our site</li>
+            <li>The page you arrived from, your device type and browser</li>
+            <li>Your country and city, worked out from your IP address, which is stored with the visit</li>
+            <li>Your language and light or dark theme preference</li>
+          </ul>
+          <p class="prose" style="font-size:14px; margin:12px 0 0;">
+            Visits are tied to a random session number kept in your browser,
+            not to your name. Session records delete themselves after 90
+            days. We look at this data in aggregate to see which pages are
+            useful and to fix problems. Your theme, language, cart contents
+            and the session number itself are stored in your browser's local
+            storage, on your device, not in tracking cookies.
+          </p>
+        </div>
+
+        <div style="border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 12px;">Business outreach</h2>
+          <p class="prose" style="font-size:14px; margin:0;">
+            We find the businesses we write to, and their public contact
+            details, from public sources such as their own listings and
+            directories. If we email a business, we record whether the links
+            in that email were clicked and whether it got a reply. We keep
+            this so we can honor opt-outs and never write again to a business
+            that said no. Reply to any outreach email and ask us to stop, and
+            we stop.
+          </p>
+        </div>
+
+        <div style="border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 12px;">Accounts you connect with us</h2>
+          <p class="prose" style="font-size:14px; margin:0;">
+            Some services involve connecting accounts you own, for example a
+            Meta or Google advertising account. With your authorization, we
+            receive data from those platforms, such as campaign results and
+            leads sent through your ads. We use it only to manage and report
+            on your advertising, as you instruct. You can cut the access at
+            any time in the platform's own settings, and you can ask us to
+            delete what we received, as described below.
+          </p>
+        </div>
+
+        <div style="border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 12px;">Who processes data for us</h2>
+          <p class="prose" style="font-size:14px; margin:0 0 12px;">
+            A short list of providers runs parts of the service, and each one
+            only gets what it needs to do its job:
+          </p>
+          <ul class="prose" style="font-size:14px; margin:0; padding-left:18px; display:grid; gap:6px;">
+            <li>Cloudflare: hosting, storage and email delivery for the site</li>
+            <li>Stripe: payment processing</li>
+            <li>Google: our email inbox</li>
+            <li>SMTP2GO: sending email from our addresses</li>
+          </ul>
+          <p class="prose" style="font-size:14px; margin:12px 0 0;">
+            We never sell personal information. Apart from the providers
+            above, we disclose information only when the law requires it.
+          </p>
+        </div>
+
+        <div style="border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 12px;">How long we keep it</h2>
+          <p class="prose" style="font-size:14px; margin:0;">
+            Visit records delete themselves after 90 days. Messages and
+            client records are kept while you are a client and for a
+            reasonable period after, and some billing records have to be kept
+            longer because tax and accounting law requires it. Outreach
+            records, including opt-outs, are kept so we can respect them. If
+            you ask us to delete your information, we delete everything we
+            are not required to keep.
+          </p>
+        </div>
+
+        <div style="border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 12px;">Your rights</h2>
+          <p class="prose" style="font-size:14px; margin:0;">
+            You can ask what personal information we hold about you, get a
+            copy of it, have it corrected, and ask us to delete it. You can
+            also withdraw consent to our use of it. Write to
+            <a href="mailto:contact@webao.ca" style="color: var(--accent-text);">contact@webao.ca</a>
+            and we will answer within 30 days. If we cannot settle your
+            concern, you can contact the Commission d'accès à l'information
+            du Québec.
+          </p>
+        </div>
+
+        <div id="data-deletion" style="border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg); scroll-margin-top: 100px;">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 12px;">Delete your data</h2>
+          <p class="prose" style="font-size:14px; margin:0;">
+            To have your data deleted, email
+            <a href="mailto:contact@webao.ca" style="color: var(--accent-text);">contact@webao.ca</a>
+            from the address concerned and tell us what to delete, for
+            example a form submission, your client record, or data received
+            from a connected platform such as Meta. We delete it within 30
+            days, except for records the law requires us to keep, and we
+            confirm by email when it is done.
+          </p>
+        </div>
+
+        <div style="border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 12px;">Security and changes</h2>
+          <p class="prose" style="font-size:14px; margin:0;">
+            The site runs over HTTPS, access to our systems is limited to the
+            owner, and our providers run their own security programs. No
+            system is perfect, so if a privacy incident involving your
+            information ever happens, we will notify you and the authorities
+            as the law requires. If this policy changes, the new version goes
+            on this page with a new date at the top.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -7,6 +7,7 @@ import { handleFormSubmit } from "./forms";
 import { handleGo, handleLeadRegister, handleLeadReply } from "./leads";
 import { handleAdmin } from "./admin";
 import { handleCheckoutSession } from "./checkout";
+import { handleStripeWebhook } from "./stripe-webhook";
 import { json } from "./util";
 import { KvWriteError } from "./kv";
 
@@ -21,6 +22,7 @@ async function routeApi(req: Request, env: Env): Promise<Response> {
   if (p === "/api/leads/register" && req.method === "POST") return handleLeadRegister(req, env);
   if (p === "/api/leads/reply" && req.method === "POST") return handleLeadReply(req, env);
   if (p === "/api/checkout/session" && req.method === "POST") return handleCheckoutSession(req, env);
+  if (p === "/api/stripe/webhook" && req.method === "POST") return handleStripeWebhook(req, env);
   if (p.startsWith("/api/admin/")) return handleAdmin(req, env, url);
 
   return json({ ok: false, error: "Not found" }, 404);

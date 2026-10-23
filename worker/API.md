@@ -124,6 +124,21 @@ showed.
 (503) is returned when `STRIPE_SECRET_KEY` is unset, or when the legacy flow runs
 without `STRIPE_PRICE_ID`.
 
+### `POST /api/stripe/webhook`
+Stripe server-to-server webhook (no origin gate; authenticity comes from the
+`Stripe-Signature` HMAC, verified against `STRIPE_WEBHOOK_SECRET` with a
+5-minute timestamp tolerance). Returns 503 until the secret is set, 400 on a
+bad signature. Events are deduped via `stripe-event:<event_id>` (TTL 30 days),
+written only after successful handling so failures get Stripe retries.
+
+Handled events: `checkout.session.completed` (create or enrich the client
+record at stage `onboarding`, items from the session's `metadata[items]`, plus
+a best-effort inbox notification from start@webao.ca), `invoice.paid`,
+`invoice.payment_failed`, `customer.subscription.updated` and
+`customer.subscription.deleted` (mirror billing status onto the client).
+Clients live in `client:<cl_id>` with the `client-customer:<cus_id>` lookup;
+unknown customers and unknown event types are acknowledged as no-ops.
+
 ## Admin (Bearer token)
 
 Login: `POST /api/admin/login` body `{ password }` → `{ "ok": true, "token": "<64-hex>" }`.
@@ -201,5 +216,9 @@ and revokes all other admin tokens (the caller stays logged in).
 | `forms:index` | JSON array of form keys, newest-first, cap 1000 |
 | `lead:<ld_id>` | outreach lead object (sent/clicks/replies) |
 | `leads:index` | JSON array of lead keys, newest-first, cap 1000 |
+| `client:<cl_id>` | client record (stage, billing status, Stripe ids, items) |
+| `clients:index` | JSON array of client keys, newest-first, cap 1000 |
+| `client-customer:<cus_id>` | client key for a Stripe customer id |
+| `stripe-event:<event_id>` | webhook dedupe marker `{ type, at }` (TTL 30 days) |
 | `admin:token:<64-hex>` | `{ createdAt, ip }` (TTL 7 days) |
 | `rl:<scope>:<ip>` | `{ c, r }` rate-limit window |

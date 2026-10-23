@@ -1,0 +1,197 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const locale = "fr" as const;
+const title = "Politique de confidentialité · WEBAO";
+const description = "Comment WEBAO recueille, utilise et supprime les renseignements personnels : formulaires, facturation, statistiques du site, prospection et comptes publicitaires connectés.";
+---
+
+<BaseLayout title={title} description={description} locale={locale} pageKey="privacy">
+  <section class="section">
+    <div class="shell" style="max-width: 860px;">
+      <div class="eyebrow">Politique</div>
+      <h1 class="display" style="font-size: clamp(2rem, 5vw, 3.6rem); line-height:.92; margin-top:12px;">Politique de confidentialité</h1>
+      <p class="prose" style="margin-top:14px; max-width: 60ch;">
+        Ce que nous recueillons, pourquoi nous le recueillons, et comment
+        faire supprimer vos renseignements. Rédigé en langage clair, parce
+        que c'est le seul qui vaille la peine d'être lu. Dernière mise à
+        jour : 23 octobre 2026.
+      </p>
+
+      <div style="margin-top: 36px; display:grid; gap: 20px;">
+        <div style="border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 12px;">Qui nous sommes</h2>
+          <p class="prose" style="font-size:14px; margin:0;">
+            Webao est un studio de sites web basé à Montréal, au Canada.
+            Cette politique couvre webao.ca, les sites que nous créons et
+            hébergeons pour nos clients, ainsi que les services que nous
+            exploitons pour eux. Les questions sur la confidentialité vont à
+            <a href="mailto:contact@webao.ca" style="color: var(--accent-text);">contact@webao.ca</a>.
+            La personne responsable de la protection des renseignements
+            personnels chez Webao est Benjamin Emond, le propriétaire.
+          </p>
+        </div>
+
+        <div style="border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 12px;">Les messages que vous nous envoyez</h2>
+          <p class="prose" style="font-size:14px; margin:0;">
+            Quand vous utilisez le formulaire de contact, de soutien ou de
+            démarrage, nous recevons les renseignements que vous y inscrivez,
+            comme votre nom, votre courriel, votre numéro de téléphone, le
+            nom de votre entreprise et votre message. Une copie arrive dans
+            notre boîte courriel et la soumission est conservée dans notre
+            système pour pouvoir vous répondre, faire le suivi et garder une
+            trace de la demande. Nous l'utilisons uniquement pour traiter ce
+            dont vous nous avez parlé. Nous ne vous ajoutons à aucune liste
+            d'envoi.
+          </p>
+        </div>
+
+        <div style="border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 12px;">Clients, facturation et paiements</h2>
+          <p class="prose" style="font-size:14px; margin:0;">
+            Si vous achetez chez nous, nous conservons votre nom, votre
+            courriel, les renseignements sur votre entreprise, ce que vous
+            avez acheté et l'état de votre facturation, pour exploiter votre
+            site et votre compte. Les paiements sont traités par Stripe. Les
+            renseignements de votre carte vont directement à Stripe et ne
+            passent jamais par nos serveurs. Stripe nous dit si un paiement
+            a réussi, pour que nous sachions où en est votre compte.
+          </p>
+        </div>
+
+        <div style="border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 12px;">Les visites sur ce site</h2>
+          <p class="prose" style="font-size:14px; margin:0 0 12px;">
+            Nous mesurons notre propre achalandage avec notre propre outil.
+            Il n'y a aucun pisteur tiers sur webao.ca et aucun témoin
+            publicitaire. Quand vous visitez le site, nous enregistrons :
+          </p>
+          <ul class="prose" style="font-size:14px; margin:0; padding-left:18px; display:grid; gap:6px;">
+            <li>Les pages que vous consultez, le temps que vous y passez, et les liens et boutons sur lesquels vous cliquez sur notre site</li>
+            <li>La page d'où vous arrivez, votre type d'appareil et votre navigateur</li>
+            <li>Votre pays et votre ville, déterminés à partir de votre adresse IP, qui est conservée avec la visite</li>
+            <li>Votre langue et votre préférence de thème clair ou sombre</li>
+          </ul>
+          <p class="prose" style="font-size:14px; margin:12px 0 0;">
+            Les visites sont liées à un numéro de session aléatoire conservé
+            dans votre navigateur, pas à votre nom. Les enregistrements de
+            session se suppriment eux-mêmes après 90 jours. Nous consultons
+            ces données de façon globale pour voir quelles pages sont utiles
+            et régler les problèmes. Votre thème, votre langue, le contenu
+            de votre panier et le numéro de session lui-même sont conservés
+            dans le stockage local de votre navigateur, sur votre appareil,
+            et non dans des témoins de suivi.
+          </p>
+        </div>
+
+        <div style="border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 12px;">La prospection auprès des entreprises</h2>
+          <p class="prose" style="font-size:14px; margin:0;">
+            Nous trouvons les entreprises à qui nous écrivons, et leurs
+            coordonnées publiques, à partir de sources publiques comme leurs
+            propres inscriptions et répertoires. Si nous envoyons un courriel
+            à une entreprise, nous enregistrons si les liens de ce courriel
+            ont été cliqués et s'il a reçu une réponse. Nous gardons ces
+            renseignements pour respecter les désinscriptions et ne plus
+            jamais écrire à une entreprise qui a dit non. Répondez à
+            n'importe quel courriel de prospection et demandez-nous d'arrêter,
+            et nous arrêtons.
+          </p>
+        </div>
+
+        <div style="border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 12px;">Les comptes que vous connectez avec nous</h2>
+          <p class="prose" style="font-size:14px; margin:0;">
+            Certains services demandent de connecter des comptes qui vous
+            appartiennent, par exemple un compte publicitaire Meta ou
+            Google. Avec votre autorisation, nous recevons des données de
+            ces plateformes, comme les résultats de vos campagnes et les
+            demandes envoyées par vos publicités. Nous les utilisons
+            uniquement pour gérer vos publicités et vous en rendre compte,
+            selon vos instructions. Vous pouvez couper l'accès en tout temps
+            dans les paramètres de la plateforme elle-même, et vous pouvez
+            nous demander de supprimer ce que nous avons reçu, comme décrit
+            ci-dessous.
+          </p>
+        </div>
+
+        <div style="border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 12px;">Qui traite les données pour nous</h2>
+          <p class="prose" style="font-size:14px; margin:0 0 12px;">
+            Une courte liste de fournisseurs fait fonctionner une partie du
+            service, et chacun ne reçoit que ce qu'il lui faut pour faire
+            son travail :
+          </p>
+          <ul class="prose" style="font-size:14px; margin:0; padding-left:18px; display:grid; gap:6px;">
+            <li>Cloudflare : hébergement, stockage et livraison des courriels du site</li>
+            <li>Stripe : traitement des paiements</li>
+            <li>Google : notre boîte courriel</li>
+            <li>SMTP2GO : envoi des courriels depuis nos adresses</li>
+          </ul>
+          <p class="prose" style="font-size:14px; margin:12px 0 0;">
+            Nous ne vendons jamais de renseignements personnels. À part les
+            fournisseurs ci-dessus, nous ne communiquons des renseignements
+            que lorsque la loi l'exige.
+          </p>
+        </div>
+
+        <div style="border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 12px;">Combien de temps nous les gardons</h2>
+          <p class="prose" style="font-size:14px; margin:0;">
+            Les enregistrements de visite se suppriment eux-mêmes après 90
+            jours. Les messages et les dossiers clients sont conservés tant
+            que vous êtes client et pendant une période raisonnable ensuite,
+            et certains documents de facturation doivent être gardés plus
+            longtemps parce que les lois fiscales et comptables l'exigent.
+            Les dossiers de prospection, y compris les désinscriptions, sont
+            conservés pour pouvoir les respecter. Si vous nous demandez de
+            supprimer vos renseignements, nous supprimons tout ce que nous ne
+            sommes pas tenus de garder.
+          </p>
+        </div>
+
+        <div style="border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 12px;">Vos droits</h2>
+          <p class="prose" style="font-size:14px; margin:0;">
+            Vous pouvez demander quels renseignements personnels nous détenons
+            à votre sujet, en obtenir une copie, les faire corriger et nous
+            demander de les supprimer. Vous pouvez aussi retirer votre
+            consentement à leur utilisation. Écrivez à
+            <a href="mailto:contact@webao.ca" style="color: var(--accent-text);">contact@webao.ca</a>
+            et nous répondrons dans les 30 jours. Si nous ne pouvons pas
+            régler votre préoccupation, vous pouvez contacter la Commission
+            d'accès à l'information du Québec.
+          </p>
+        </div>
+
+        <div id="data-deletion" style="border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg); scroll-margin-top: 100px;">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 12px;">Supprimer vos données</h2>
+          <p class="prose" style="font-size:14px; margin:0;">
+            Pour faire supprimer vos données, écrivez à
+            <a href="mailto:contact@webao.ca" style="color: var(--accent-text);">contact@webao.ca</a>
+            depuis l'adresse concernée et dites-nous quoi supprimer, par
+            exemple une soumission de formulaire, votre dossier client, ou
+            des données reçues d'une plateforme connectée comme Meta. Nous
+            les supprimons dans les 30 jours, sauf les documents que la loi
+            nous oblige à conserver, et nous confirmons par courriel quand
+            c'est fait.
+          </p>
+        </div>
+
+        <div style="border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 12px;">Sécurité et modifications</h2>
+          <p class="prose" style="font-size:14px; margin:0;">
+            Le site fonctionne en HTTPS, l'accès à nos systèmes est limité au
+            propriétaire, et nos fournisseurs exploitent leurs propres
+            programmes de sécurité. Aucun système n'est parfait, alors si un
+            incident de confidentialité touchant vos renseignements survenait,
+            nous vous en aviserions ainsi que les autorités, comme la loi
+            l'exige. Si cette politique change, la nouvelle version sera
+            publiée sur cette page avec une nouvelle date en haut.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
