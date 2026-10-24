@@ -661,13 +661,18 @@ const processId = locale === "fr" ? "processus" : "process";
       const a = hero.querySelector('[data-parallax="a"]') as HTMLElement | null;
       const b = hero.querySelector('[data-parallax="b"]') as HTMLElement | null;
       let raf = 0, tx = 0, ty = 0, cx = 0, cy = 0;
+      let px = 0, py = 0, hasPointer = false;
       const onMove = (e: MouseEvent) => {
-        const r = hero.getBoundingClientRect();
-        tx = ((e.clientX - r.left) / r.width - 0.5) * 2;
-        ty = ((e.clientY - r.top) / r.height - 0.5) * 2;
+        // Store the pointer only; the rect read happens once per frame in
+        // tick() instead of once per mousemove event (high-polling mice
+        // fire far more events than frames). Same math, same result.
+        px = e.clientX;
+        py = e.clientY;
+        hasPointer = true;
         if (!raf) raf = requestAnimationFrame(tick);
       };
       const onLeave = () => {
+        hasPointer = false;
         tx = 0; ty = 0;
         if (!raf) raf = requestAnimationFrame(tick);
       };
@@ -680,6 +685,11 @@ const processId = locale === "fr" ? "processus" : "process";
       });
       function tick() {
         raf = 0;
+        if (hasPointer) {
+          const r = hero!.getBoundingClientRect();
+          tx = ((px - r.left) / r.width - 0.5) * 2;
+          ty = ((py - r.top) / r.height - 0.5) * 2;
+        }
         cx += (tx - cx) * 0.08;
         cy += (ty - cy) * 0.08;
         if (stack) stack.style.transform = `perspective(1400px) rotateY(-6deg) rotateX(1deg) translate3d(${cx * 6}px, ${cy * 6}px, 0)`;
@@ -770,13 +780,37 @@ const processId = locale === "fr" ? "processus" : "process";
       return Math.max(0, (isNaN(frac) ? 0.5 : frac) - 0.07);
     });
 
+    // Geometry is cached: reading getBoundingClientRect + offsetHeight on
+    // every scroll frame forces a synchronous layout flush each frame.
+    // The wrap's page position and height only change on resize/reflow,
+    // so measure there and keep the per-frame path to pure scrollY math.
+    // The progress values produced are identical.
+    let wrapTop = 0;
+    let wrapTotal = 1;
+    const measure = () => {
+      wrapTop = wrap.getBoundingClientRect().top + window.scrollY;
+      wrapTotal = wrap.offsetHeight - window.innerHeight;
+    };
+    measure();
+    if ('fonts' in document && (document as any).fonts?.ready) {
+      (document as any).fonts.ready.then(measure);
+    }
+    // Sections above the wrap use content-visibility, so their settled
+    // height can shift the wrap's position without a window resize; a
+    // ResizeObserver keeps the cache exact in that case too.
+    if ('ResizeObserver' in window) {
+      const ro = new ResizeObserver(measure);
+      ro.observe(wrap);
+      if (document.body) ro.observe(document.body);
+      onHomeDispose(() => ro.disconnect());
+    }
+
     let ticking = false;
     let lastProgress = -1;
     const update = () => {
       ticking = false;
-      const rect = wrap.getBoundingClientRect();
-      const total = wrap.offsetHeight - window.innerHeight;
-      const travelled = Math.min(Math.max(-rect.top, 0), Math.max(total, 1));
+      const total = wrapTotal;
+      const travelled = Math.min(Math.max(window.scrollY - wrapTop, 0), Math.max(total, 1));
       const progress = total > 0 ? travelled / total : 1;
       if (Math.abs(progress - lastProgress) < 0.0005) return;
       lastProgress = progress;
@@ -798,11 +832,12 @@ const processId = locale === "fr" ? "processus" : "process";
         requestAnimationFrame(update);
       }
     };
+    const onResize = () => { measure(); onScroll(); };
     window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
+    window.addEventListener('resize', onResize);
     onHomeDispose(() => {
       window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
+      window.removeEventListener('resize', onResize);
     });
     // If the viewport crosses the narrow breakpoint mid-session, fall back
     // to the static stack rather than a half-driven scrub.

@@ -266,6 +266,12 @@
     });
 
     // Re-evaluate suppression when the intro or journey toggles classes.
+    // Only <html> and the journey container itself are observed. This used
+    // to watch class changes across the entire body subtree, which fired
+    // on the main thread for every reveal / station / cart class toggle
+    // anywhere on the page, to maintain a state that mousemove already
+    // re-checks (onMove calls updateOff on every move). Same behaviour,
+    // a fraction of the callbacks.
     var mo = new MutationObserver(function (mutations) {
       for (var i = 0; i < mutations.length; i++) {
         var m = mutations[i];
@@ -278,8 +284,9 @@
       }
     });
     mo.observe(html, { attributes: true, attributeFilter: ["class"] });
-    if (document.body) {
-      mo.observe(document.body, {
+    var journeyRoot = document.querySelector(".cursor-journey");
+    if (journeyRoot) {
+      mo.observe(journeyRoot, {
         attributes: true,
         subtree: true,
         attributeFilter: ["class"],
@@ -299,6 +306,15 @@
       }
       html.classList.remove("cc-ready", "cc-down", "cc-away");
       bind();
+      // The journey element is fresh DOM after a navigation; re-observe it.
+      var j = document.querySelector(".cursor-journey");
+      if (j) {
+        mo.observe(j, {
+          attributes: true,
+          subtree: true,
+          attributeFilter: ["class"],
+        });
+      }
       updateOff();
     });
 

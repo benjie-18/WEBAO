@@ -1216,3 +1216,11 @@ html.theming *::after {
     font-size: 0.82rem;
   }
 }
+
+/* Off-screen animation pause: BaseLayout toggles data-anim-paused on
+   .grain / .marquee sections while they are outside the viewport
+   (IntersectionObserver). Pausing preserves the animation's phase, so
+   what is on screen never changes; off-screen loops simply stop
+   consuming paint/composite time while the visitor scrolls elsewhere. */
+.grain[data-anim-paused]::before { animation-play-state: paused; }
+.marquee[data-anim-paused] .marquee-track { animation-play-state: paused; }

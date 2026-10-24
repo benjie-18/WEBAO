@@ -495,6 +495,7 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
 
     <script>
       let scrollCleanup: (() => void) | null = null;
+      let pauseCleanup: (() => void) | null = null;
 
       function initLayout() {
         // Mobile menu setup & reset
@@ -584,28 +585,44 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
         }
         if (header || progress || toTop) {
           let ticking = false;
+          // The header and back-to-top styles only ever flip between two
+          // states (scrolled / not). Writing them on every scroll frame
+          // forces a style recalc + repaint of the blurred header each
+          // frame for no visual difference, so writes happen only when
+          // the state actually changes. Same values, same look.
+          let headerState: string | null = null;
+          let toTopShown: boolean | null = null;
           const onScroll = () => {
             if (!ticking) {
               requestAnimationFrame(() => {
                 const y = window.scrollY;
+                // Read geometry before any style writes in this frame, so
+                // the read never forces a synchronous layout flush.
+                const docH = document.documentElement.scrollHeight - window.innerHeight;
                 if (header) {
                   const dark = document.documentElement.getAttribute('data-theme') === 'dark';
-                  header.style.boxShadow = y > 8
-                    ? (dark
-                        ? '0 4px 24px rgba(0,0,0,.45), 0 1px 0 rgba(248,245,239,.07)'
-                        : '0 4px 24px rgba(10,15,28,.06), 0 1px 0 rgba(10,15,28,.04)')
-                    : 'none';
-                  header.style.background = y > 8 ? 'color-mix(in srgb, var(--paper) 96%, transparent)' : 'color-mix(in srgb, var(--paper) 88%, transparent)';
+                  const state = (y > 8 ? 'scrolled' : 'top') + (dark ? '-dark' : '-light');
+                  if (state !== headerState) {
+                    headerState = state;
+                    header.style.boxShadow = y > 8
+                      ? (dark
+                          ? '0 4px 24px rgba(0,0,0,.45), 0 1px 0 rgba(248,245,239,.07)'
+                          : '0 4px 24px rgba(10,15,28,.06), 0 1px 0 rgba(10,15,28,.04)')
+                      : 'none';
+                    header.style.background = y > 8 ? 'color-mix(in srgb, var(--paper) 96%, transparent)' : 'color-mix(in srgb, var(--paper) 88%, transparent)';
+                  }
                 }
                 if (progress) {
-                  const h = document.documentElement.scrollHeight - window.innerHeight;
-                  const p = h > 0 ? Math.min(y / h, 1) : 0;
+                  const p = docH > 0 ? Math.min(y / docH, 1) : 0;
                   progress.style.transform = `scaleX(${p})`;
                 }
                 if (toTop) {
                   const show = y > window.innerHeight * 0.9;
-                  toTop.hidden = !show;
-                  toTop.classList.toggle('is-visible', show);
+                  if (show !== toTopShown) {
+                    toTopShown = show;
+                    toTop.hidden = !show;
+                    toTop.classList.toggle('is-visible', show);
+                  }
                 }
                 ticking = false;
               });
@@ -623,11 +640,15 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
         if (stickyCta) {
           const coarse = window.matchMedia('(max-width: 768px)');
           let ctaTicking = false;
+          let ctaShown: boolean | null = null;
           const prevCleanup = scrollCleanup;
           const updateCta = () => {
             const show = coarse.matches && window.scrollY > 480;
-            stickyCta.classList.toggle('is-visible', show);
-            document.body.classList.toggle('has-sticky-cta', show);
+            if (show !== ctaShown) {
+              ctaShown = show;
+              stickyCta.classList.toggle('is-visible', show);
+              document.body.classList.toggle('has-sticky-cta', show);
+            }
             ctaTicking = false;
           };
           const onScrollCta = () => {
@@ -647,19 +668,56 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
           };
         }
 
+        // Pause looping CSS animations while their section is off-screen.
+        // Pausing preserves each animation's phase, so nothing on screen
+        // changes; the grain shift, the marquee and the pricing bundle's
+        // drifting blobs/cards just stop consuming paint time while the
+        // visitor is looking elsewhere. Rules live in global.css (grain,
+        // marquee) and in BundleCarousel's own styles (blobs, card drift).
+        if (pauseCleanup) { pauseCleanup(); pauseCleanup = null; }
+        if ('IntersectionObserver' in window) {
+          const pausables = document.querySelectorAll('.grain, .marquee, [data-bundle-section]');
+          if (pausables.length) {
+            const pio = new IntersectionObserver((entries) => {
+              for (const e of entries) {
+                if (e.isIntersecting) e.target.removeAttribute('data-anim-paused');
+                else e.target.setAttribute('data-anim-paused', '');
+              }
+            });
+            pausables.forEach(el => pio.observe(el));
+            pauseCleanup = () => pio.disconnect();
+          }
+        }
+
         // Magnetic buttons: desktop only, respects reduced motion
         if (!prefersReduced && !isCoarse && 'ontouchstart' in window === false) {
           const magnetics = document.querySelectorAll('.btn--primary, .btn--dark, .cta .btn');
           magnetics.forEach(btn => {
             const el = btn as HTMLElement;
             el.classList.add('btn--magnetic');
+            // Coalesce through rAF: high-polling mice can fire mousemove
+            // many times per frame, and each event used to do its own
+            // rect read + transform write. One write per frame with the
+            // latest position is visually identical (the button already
+            // smooths via its .15s linear transform transition).
+            let magRaf = 0;
+            let magX = 0;
+            let magY = 0;
             el.addEventListener('mousemove', (e: MouseEvent) => {
-              const r = el.getBoundingClientRect();
-              const x = (e.clientX - r.left - r.width/2) * 0.18;
-              const y = (e.clientY - r.top - r.height/2) * 0.28;
-              el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+              magX = e.clientX;
+              magY = e.clientY;
+              if (!magRaf) {
+                magRaf = requestAnimationFrame(() => {
+                  magRaf = 0;
+                  const r = el.getBoundingClientRect();
+                  const x = (magX - r.left - r.width/2) * 0.18;
+                  const y = (magY - r.top - r.height/2) * 0.28;
+                  el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+                });
+              }
             });
             el.addEventListener('mouseleave', () => {
+              if (magRaf) { cancelAnimationFrame(magRaf); magRaf = 0; }
               el.style.transform = '';
             });
           });

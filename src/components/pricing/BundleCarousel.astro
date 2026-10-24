@@ -354,6 +354,12 @@ const names = bundles.map((bd) => tb[bd.id].name);
     justify-items: center;
   }
 
+  /* Off-screen pause: BaseLayout toggles data-anim-paused on the section
+     while it is outside the viewport. Phase is preserved, so the drift
+     looks identical whenever the section is actually on screen. */
+  [data-anim-paused] .bblob,
+  [data-anim-paused] .bcard-tilt { animation-play-state: paused; }
+
   @media (prefers-reduced-motion: reduce) {
     .bundle-scroll {
       display: none;
@@ -437,13 +443,26 @@ const names = bundles.map((bd) => tb[bd.id].name);
     function clamp01(v) {
       return v < 0 ? 0 : v > 1 ? 1 : v;
     }
+    // Cached geometry: progress() runs on every scroll frame, and reading
+    // getBoundingClientRect/offsetHeight there forces a layout flush per
+    // frame. The scroller's page position and height only change on
+    // resize/reflow, so measure at those moments and keep the hot path
+    // to pure scrollY math. Progress values produced are identical.
+    var scrollTop = 0;
+    var scrollTotal = 0;
+    function measureScroll() {
+      scrollTop = scroll.getBoundingClientRect().top + window.scrollY;
+      scrollTotal = scroll.offsetHeight - window.innerHeight;
+    }
+    measureScroll();
+    if ("ResizeObserver" in window) {
+      new ResizeObserver(measureScroll).observe(scroll);
+    }
     function progress() {
-      var r = scroll.getBoundingClientRect();
-      var total = scroll.offsetHeight - window.innerHeight;
-      if (total <= 0) return 0;
+      if (scrollTotal <= 0) return 0;
       // Reach full progress at 70% of scroll distance, leaving 30% as
       // trailing breathing room after the last card settles into view.
-      return clamp01((-r.top / total) / 0.7);
+      return clamp01(((window.scrollY - scrollTop) / scrollTotal) / 0.7);
     }
     function segIndex(p) {
       return Math.max(0, Math.min(cardCount - 1, Math.round(p * segCount)));
@@ -475,7 +494,14 @@ const names = bundles.map((bd) => tb[bd.id].name);
         card.style.zIndex = String(Math.max(1, 100 - Math.round(angleAbs)));
         // Fade with angle, floored so the back card stays faintly visible.
         card.style.opacity = (angleAbs >= 100 ? 0.1 : 1 - (angleAbs / 100) * 0.88).toFixed(3);
-        var filterStr = angleAbs > 28 && angleAbs < 150 ? "blur(" + (Math.min((angleAbs - 28) / 70, 1) * 6).toFixed(2) + "px)" : "";
+        // Depth blur in whole-pixel steps: a continuous blur value makes
+        // the browser re-rasterise the card's filter on every frame of a
+        // scroll, while the difference between e.g. 2.4px and 3px of blur
+        // on a swung-away card is not visible. Same look, a handful of
+        // distinct filter values instead of hundreds. (The cardState
+        // cache below then also hits far more often.)
+        var blurPx = Math.round(Math.min((angleAbs - 28) / 70, 1) * 6);
+        var filterStr = angleAbs > 28 && angleAbs < 150 && blurPx > 0 ? "blur(" + blurPx + "px)" : "";
         if (cardState[i].filter !== filterStr) {
           cardState[i].filter = filterStr;
           card.style.filter = filterStr;
@@ -507,7 +533,7 @@ const names = bundles.map((bd) => tb[bd.id].name);
       }
       for (var k = 0; k < blobs.length; k++) {
         var sp = parseFloat(blobs[k].getAttribute("data-blob") || "0.1");
-        blobs[k].style.translate = "0 " + (current * sp * 900).toFixed(1) + "px";
+        blobs[k].style.translate = "0 " + Math.round(current * sp * 900) + "px";
       }
     }
 
@@ -597,6 +623,7 @@ const names = bundles.map((bd) => tb[bd.id].name);
         window.removeEventListener("resize", onResize);
         return;
       }
+      measureScroll();
       target = progress();
       current = target;
       render();

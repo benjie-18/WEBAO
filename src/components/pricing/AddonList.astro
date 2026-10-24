@@ -494,19 +494,36 @@ const addonPriceCents: Record<string, { cents: number; interval: "month" | "one-
     if (reduced) return;
 
     // Scroll progress rail + blob parallax, rAF-throttled.
+    // Geometry is cached: reading getBoundingClientRect on every scroll
+    // frame forces a layout flush per frame. The section's page position
+    // and height only change on resize/reflow, so measure at those
+    // moments and keep the hot path to pure scrollY math. The progress
+    // values produced are identical.
+    var secTop = 0;
+    var secH = 1;
+    function measure() {
+      var r = section.getBoundingClientRect();
+      secTop = r.top + window.scrollY;
+      secH = r.height;
+    }
+    measure();
+    if ("ResizeObserver" in window) {
+      new ResizeObserver(measure).observe(section);
+    }
+    window.addEventListener("resize", measure);
     var ticking = false;
     function update() {
       ticking = false;
-      var r = section.getBoundingClientRect();
       var vh = window.innerHeight;
+      var rTop = secTop - window.scrollY;
       // 0 when the section's top edge reaches the viewport bottom,
       // 1 when its bottom edge passes the viewport top.
-      var p = (vh - r.top) / (r.height + vh);
+      var p = (vh - rTop) / (secH + vh);
       p = p < 0 ? 0 : p > 1 ? 1 : p;
       if (rail) rail.style.transform = "scaleX(" + p.toFixed(4) + ")";
       for (var i = 0; i < blobs.length; i++) {
         var drift = parseFloat(blobs[i].getAttribute("data-blob") || "0.1");
-        blobs[i].style.translate = "0 " + ((p - 0.5) * drift * 1200).toFixed(1) + "px";
+        blobs[i].style.translate = "0 " + Math.round((p - 0.5) * drift * 1200) + "px";
       }
     }
     function onScroll() {
