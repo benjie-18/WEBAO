@@ -1,0 +1,130 @@
+---
+import GuidePage from "../../../components/pages/GuidePage.astro";
+
+const locale = "en" as const;
+---
+
+<GuidePage
+  locale={locale}
+  pageKey="guideLaw25"
+  title="Quebec Law 25: privacy basics for a small business website | WEBAO"
+  description="The privacy basics for a small business website that collects personal information from people in Quebec, in plain language. General information, not legal advice."
+  eyebrow="Guides"
+  heading="Quebec Law 25: privacy basics for a small business website"
+  intro="Law 25 is Quebec's law that modernized the rules for the protection of personal information in the private sector. It applies to businesses that collect, hold, use, or communicate the personal information of people in Quebec. Personal information is information that can identify a person, such as a name, an email address, a phone number, or an IP address."
+  answerLine="A contact form alone is enough to bring a site into this topic, because a contact form collects a name and an email address."
+  sections={[
+    {
+      heading: "Disclaimer",
+      body: "This page is general information, not legal advice. It explains the basics in plain language. For a decision about a specific business, check with the Commission d'acces a l'information (CAI) or a Quebec lawyer.",
+    },
+    {
+      heading: "Who this is for",
+      body: "A small business with a website that collects personal information from visitors or customers in Quebec. A contact form alone is enough to bring a site into this topic, because a contact form collects a name and an email address.",
+    },
+    {
+      heading: "The basics, in plain language",
+      subsections: [
+        {
+          heading: "1. Name a person responsible for personal information",
+          body: "A business must designate a person responsible for the protection of personal information. If no one else is named, the person with the highest authority in the business holds that role by default. The title and contact details of that person must be published on the company's website, or made available by another appropriate means if the business has no website. Naming the person by title is enough; the law does not require publishing a personal name in every case.",
+        },
+        {
+          heading: "2. Publish a confidentiality policy",
+          body: "A business that collects personal information using technology must publish a confidentiality policy on its website. The policy must be written in simple, clear terms, and it must explain the business's practices for managing personal information: what is collected, for what purpose, how it is used and communicated, and how a person can exercise their rights. If the site uses technology that can identify, track, or profile a visitor, the people concerned must be given additional information about that technology.",
+        },
+        {
+          heading: "3. Get valid consent",
+          body: "Consent must be manifest, free, and informed, and it must be given for specific purposes. A single blanket agreement covering several unrelated uses of data does not meet that standard, and a pre-checked box is not a clear expression of intent. Consent must be easy to withdraw. For sensitive personal information, consent must be express: given by a clear gesture or statement, such as checking a box or signing a document, that leaves no doubt about the person's intent.",
+        },
+        {
+          heading: "4. Privacy by default",
+          body: "A product or service offered to the public, including a website with tracking, must have its privacy settings set to the highest level of confidentiality by default, without the visitor having to act. Analytics or tracking that runs before consent, and pre-checked tracking boxes, fail that test.",
+        },
+        {
+          heading: "5. Keep data only as long as needed, then destroy or anonymize it",
+          body: "Once personal information is no longer needed for the purpose it was collected for, it must be destroyed or anonymized. That means a business needs a rough idea of how long it keeps each kind of data, and a process to act on it, rather than keeping everything indefinitely by default.",
+        },
+        {
+          heading: "6. Assess transfers outside Quebec",
+          body: "Before communicating personal information outside Quebec, a business must assess the privacy factors involved, including when it entrusts a service provider outside Quebec with collecting, using, communicating, or keeping personal information on its behalf. This matters for a small business website whenever hosting, email, analytics, or another tool stores visitor data outside Quebec.",
+        },
+        {
+          heading: "7. Keep a register of confidentiality incidents, and notify when required",
+          body: "A business must keep a register of confidentiality incidents, such as unauthorized access, unauthorized use, unauthorized disclosure, or loss of personal information. If an incident presents a risk of serious harm, the business must notify the CAI and the people concerned.",
+        },
+        {
+          heading: "8. Respect people's rights over their information",
+          body: "People in Quebec have rights over their own personal information, including access, correction, withdrawal of consent, and asking for their information to stop being disseminated or to be de-indexed. A business needs a process to receive and handle those requests.",
+        },
+      ],
+    },
+    {
+      heading: "A short checklist for a small business website",
+      items: [
+        "Person responsible for personal information named, with title and contact details published on the site.",
+        "Confidentiality policy published on the site, in simple and clear terms, covering what is collected and why.",
+        "Contact and signup forms that ask for consent for a specific purpose, with no pre-checked tracking boxes.",
+        "Tracking and analytics off by default until consent is given.",
+        "A plan for how long each kind of data is kept, and for destroying it when it is no longer needed.",
+        "A register of confidentiality incidents, and a plan for notifying the CAI and the people concerned if an incident presents a risk of serious harm.",
+        "A process for handling access, correction, withdrawal, and de-indexation requests.",
+      ],
+    },
+    {
+      heading: "What this page does not claim",
+      body: "This page does not state fine amounts, and it does not give a retention period in years or an incident register retention period. Fine figures found during drafting conflicted between secondary sources, and no figure was verified from a primary or official source, so no figure is given. The same applies to any specific deadline: none is stated here.",
+    },
+    {
+      heading: "What Webao does about this",
+      body: "Webao builds custom websites in English and French for small businesses in Montreal and across Canada. A Webao site includes a contact form, basic SEO, and content updates under its website plans. The business owner remains responsible for their own confidentiality policy, for naming their person responsible for personal information, and for the consent settings on their own site. Webao does not provide legal advice on Law 25.",
+    },
+    {
+      heading: "How to start",
+      body: "Go to /start and describe the business and the site you need. Tell Webao if the site collects personal information through forms, bookings, or online sales, so those parts of the site can be built with consent and privacy in mind from the start.",
+    },
+    {
+      heading: "Sources",
+      links: [
+        { label: "CFIB: Quebec's Law 25, Frequently Asked Questions", href: "https://www.cfib-fcei.ca/en/tools-resources/law-25-faq?hs_amp=true" },
+        { label: "Lexology: Quebec Law No. 25", href: "https://www.lexology.com/library/detail.aspx?g=40b4166f-2c35-4a00-a4e9-d5f402ff6a06" },
+        { label: "Koumbit: Make your website legally compliant with Quebec's Bill 25", href: "https://www.koumbit.org/en/content/make-your-website-legally-compliant-quebecs-bill-25" },
+        { label: "Law 25 summary", href: "https://www.law25.ca/timeline.html" },
+      ],
+    },
+  ]}
+  faqs={[
+    {
+      q: "Does a contact form alone bring a site into Law 25?",
+      a: "Yes. Law 25 applies to businesses that collect, hold, use, or communicate the personal information of people in Quebec, and personal information is information that can identify a person, such as a name, an email address, a phone number, or an IP address. A contact form alone is enough to bring a site into this topic, because a contact form collects a name and an email address.",
+    },
+    {
+      q: "What must a business publish?",
+      a: "A business must designate a person responsible for the protection of personal information, and the title and contact details of that person must be published on the company's website, or made available by another appropriate means if the business has no website. A business that collects personal information using technology must also publish a confidentiality policy on its website, written in simple, clear terms, explaining what is collected, for what purpose, how it is used and communicated, and how a person can exercise their rights.",
+    },
+    {
+      q: "What do valid consent and privacy by default mean?",
+      a: "Consent must be manifest, free, and informed, and given for specific purposes. A single blanket agreement covering several unrelated uses does not meet that standard, a pre-checked box is not a clear expression of intent, and consent must be easy to withdraw. For sensitive personal information, consent must be express. Privacy settings must be set to the highest level of confidentiality by default, without the visitor having to act, so analytics or tracking that runs before consent, and pre-checked tracking boxes, fail that test.",
+    },
+    {
+      q: "Is this page legal advice, and what does Webao do about this?",
+      a: "No. This page is general information, not legal advice. For a decision about a specific business, check with the Commission d'acces a l'information (CAI) or a Quebec lawyer. This page does not state fine amounts, a retention period in years, or a specific deadline, because no figure was verified from a primary or official source. Webao builds custom websites in English and French for small businesses in Montreal and across Canada, and a Webao site includes a contact form, basic SEO, and content updates under its website plans. The business owner remains responsible for their own confidentiality policy, for naming their person responsible for personal information, and for the consent settings on their own site. To start, go to /start and say if the site collects personal information through forms, bookings, or online sales.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other guides"
+  siblings={[
+    { href: "/guides/website-cost-canada/", label: "How much does a website cost in Canada?", note: "How website pricing works, and what Webao charges, with no invented ranges." },
+    { href: "/guides/quebec-bill-96-website/", label: "Quebec Bill 96: French language basics for a small business website", note: "The basic French language rule for a website aimed at Quebec customers, in plain language." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  articleSchema={{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: "Quebec Law 25: privacy basics for a small business website",
+    description: "The privacy basics for a small business website that collects personal information from people in Quebec, in plain language. General information, not legal advice.",
+    author: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    inLanguage: "en-CA",
+  }}
+/>

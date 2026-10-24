@@ -1,0 +1,120 @@
+---
+import GuidePage from "../../../../components/pages/GuidePage.astro";
+
+const locale = "fr" as const;
+---
+
+<GuidePage
+  locale={locale}
+  pageKey="guideCost"
+  title="Combien coûte un site web au Canada? | WEBAO"
+  description="Le fonctionnement des prix pour un site web au Canada, et ce que Webao facture : Launch 89,99 $ CA/mois, Grow 149,99 $ CA/mois, Scale 349,99 $ CA/mois, facturation annuelle 2 mois gratuits."
+  eyebrow="Guides"
+  heading="Combien coûte un site web au Canada?"
+  intro="Une explication simple du fonctionnement des prix pour un site web, et de ce que Webao facture. Aucune moyenne du marché, aucun prix de concurrent, aucune fourchette inventée. Les seuls prix concrets sur cette page sont ceux de Webao, car ce sont les seuls vérifiés ici."
+  answerLine="Launch 89,99 $ CA/mois, Grow 149,99 $ CA/mois, Scale 349,99 $ CA/mois. La facturation annuelle donne 2 mois gratuits."
+  sections={[
+    {
+      heading: "À qui cette page s'adresse",
+      body: "À un propriétaire de petite entreprise au Canada qui a besoin d'un site web et qui veut savoir ce que l'argent couvre avant de commencer.",
+    },
+    {
+      heading: "Deux façons habituelles de facturer un site web",
+      body: "Il existe deux modèles courants. Ce ne sont pas le même achat, donc comparer seulement le prix affiché ne compare pas le coût complet.",
+      subsections: [
+        {
+          heading: "Construction payée une seule fois",
+          body: "Vous payez une fois pour la construction. Après le lancement, les coûts de fonctionnement sont habituellement séparés : renouvellement du domaine, hébergement, mises à jour de sécurité et changements ultérieurs. Ces coûts ultérieurs dépendent de qui s'occupe du site et des changements demandés, donc un prix unique à lui seul ne dit pas combien coûte le site chaque année pour le garder en ligne.",
+        },
+        {
+          heading: "Forfait mensuel",
+          body: "Vous payez un montant mensuel qui couvre la construction et le fonctionnement courant du site en un seul paiement. La question à poser pour tout forfait mensuel est la même que pour une construction payée une fois : qu'est-ce qui est inclus exactement, pendant combien de temps le prix est fixe, et que se passe-t-il à la fin de la durée.",
+        },
+      ],
+    },
+    {
+      heading: "Ce que Webao facture",
+      body: "Webao construit des sites web sur mesure. Chaque site est construit pour l'entreprise qui le commande. Webao ne vend pas de copies de modèles, et les sites de démonstration sur webao.ca sont seulement une direction de style facultative, pas un site fini acheté tel quel. Forfaits de site web, en dollars canadiens :",
+      items: [
+        "Launch : 89,99 $ CA par mois (899,90 $ CA par an)",
+        "Grow : 149,99 $ CA par mois (1 499,90 $ CA par an)",
+        "Scale : 349,99 $ CA par mois (3 499,90 $ CA par an)",
+        "La facturation annuelle donne 2 mois gratuits.",
+        "Durée initiale : 6 mois, puis de mois en mois, avec un préavis de 30 jours.",
+        "Aucun frais d'installation pour les forfaits de site web.",
+      ],
+    },
+    {
+      heading: "Ce qui est inclus dans un forfait de site web",
+      items: [
+        "Domaine",
+        "Hébergement",
+        "SSL",
+        "Design adapté aux mobiles",
+        "Formulaire de contact",
+        "SEO de base",
+        "Mises à jour de contenu",
+      ],
+    },
+    {
+      heading: "Ce qui n'est pas inclus",
+      items: [
+        "L'hébergement complet de boîtes courriel n'est pas inclus. La redirection de courriel est incluse; un service complet de boîte courriel ne fait pas partie d'un forfait de site web.",
+        "Les dépenses publicitaires ne sont pas incluses dans un forfait de site web. Voir le Pack publicitaire ci-dessous pour la publicité.",
+        "Tout ce qui n'est pas dans la liste des inclusions ci-dessus doit être considéré comme non inclus jusqu'à confirmation écrite.",
+      ],
+    },
+    {
+      heading: "Le Pack publicitaire, séparé des forfaits de site web",
+      body: "Le Pack publicitaire est un service de publicité autonome, pas un forfait de site web :",
+      items: [
+        "899,99 $ CA par mois",
+        "499,99 $ CA en frais d'installation uniques",
+        "Dépenses publicitaires du client à partir de 1 500 $ CA par mois, payées sur la carte du client",
+        "Les dépenses publicitaires vont à la plateforme publicitaire, pas à Webao, et elles sont séparées des frais du Pack publicitaire.",
+      ],
+    },
+    {
+      heading: "Comment commencer",
+      items: [
+        "Allez à /fr/commencer et décrivez l'entreprise et le site dont vous avez besoin.",
+        "Choisissez un forfait, ou demandez quel forfait convient au site décrit.",
+        "Webao construit le site sur mesure, puis s'en occupe dans le cadre du forfait.",
+      ],
+    },
+  ]}
+  faqs={[
+    {
+      q: "Que couvre ce guide?",
+      a: "Une explication simple du fonctionnement des prix pour un site web, et de ce que Webao facture. Aucune moyenne du marché, aucun prix de concurrent, aucune fourchette inventée. Les seuls prix concrets sur cette page sont ceux de Webao, car ce sont les seuls vérifiés ici.",
+    },
+    {
+      q: "Combien coûtent les forfaits de site web de Webao?",
+      a: "Launch : 89,99 $ CA par mois (899,90 $ CA par an), Grow : 149,99 $ CA par mois (1 499,90 $ CA par an) et Scale : 349,99 $ CA par mois (3 499,90 $ CA par an). La facturation annuelle donne 2 mois gratuits. La durée initiale est de 6 mois, puis de mois en mois, avec un préavis de 30 jours. Aucun frais d'installation pour les forfaits de site web.",
+    },
+    {
+      q: "Qu'est-ce qui est inclus, et qu'est-ce qui n'est pas inclus?",
+      a: "Un forfait de site web inclut un domaine, l'hébergement, le SSL, un design adapté aux mobiles, un formulaire de contact, le SEO de base et des mises à jour de contenu. L'hébergement complet de boîtes courriel n'est pas inclus : la redirection de courriel est incluse, et un service complet de boîte courriel ne fait pas partie d'un forfait de site web. Les dépenses publicitaires ne sont pas incluses dans un forfait de site web. Tout ce qui n'est pas dans la liste des inclusions doit être considéré comme non inclus jusqu'à confirmation écrite.",
+    },
+    {
+      q: "Comment commencer?",
+      a: "Allez à /fr/commencer et décrivez l'entreprise et le site dont vous avez besoin. Choisissez un forfait, ou demandez quel forfait convient au site décrit. Webao construit le site sur mesure, puis s'en occupe dans le cadre du forfait.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Autres guides"
+  siblings={[
+    { href: "/fr/guides/loi-96-site-web-quebec/", label: "Loi 96 du Québec : les bases du français pour le site web d'une petite entreprise", note: "La règle de base du français pour un site web destiné aux clients du Québec, en langage simple." },
+    { href: "/fr/guides/loi-25-site-web-quebec/", label: "Loi 25 du Québec : les bases de la confidentialité pour le site web d'une petite entreprise", note: "Les bases de la confidentialité pour un site qui recueille des renseignements personnels de personnes au Québec." },
+  ]}
+  startLabel="Commencer votre site"
+  emailLabel="Courriel contact@webao.ca"
+  articleSchema={{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: "Combien coûte un site web au Canada?",
+    description: "Le fonctionnement des prix pour un site web au Canada, et ce que Webao facture : Launch 89,99 $ CA/mois, Grow 149,99 $ CA/mois, Scale 349,99 $ CA/mois, facturation annuelle 2 mois gratuits.",
+    author: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    inLanguage: "fr-CA",
+  }}
+/>

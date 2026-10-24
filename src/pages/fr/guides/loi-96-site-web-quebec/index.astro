@@ -1,0 +1,101 @@
+---
+import GuidePage from "../../../../components/pages/GuidePage.astro";
+
+const locale = "fr" as const;
+---
+
+<GuidePage
+  locale={locale}
+  pageKey="guideBill96"
+  title="Loi 96 du Québec : les bases du français pour le site web d'une petite entreprise | WEBAO"
+  description="La règle de base du français pour le site web d'une entreprise du Québec, en langage simple. Renseignements généraux, pas des conseils juridiques."
+  eyebrow="Guides"
+  heading="Loi 96 du Québec : les bases du français pour le site web d'une petite entreprise"
+  intro="La loi 96 est la loi de 2022 qui a modifié la Charte de la langue française du Québec. Le français est la langue officielle du Québec, et la Charte fixe des règles sur la façon dont les entreprises informent le public en français et le servent en français."
+  answerLine="Si votre entreprise a une adresse au Québec et offre des produits ou des services aux Québécois, vous devez avoir une version française de votre site web."
+  sections={[
+    {
+      heading: "Avertissement",
+      body: "Cette page donne des renseignements généraux, pas des conseils juridiques. Elle explique les bases en langage simple. Pour une décision concernant une entreprise précise, vérifiez auprès de l'Office québécois de la langue française (OQLF) ou d'un avocat du Québec.",
+    },
+    {
+      heading: "À qui cette page s'adresse",
+      body: "À une petite entreprise qui offre des biens ou des services à des gens au Québec, et dont le site web est visible par le public québécois.",
+    },
+    {
+      heading: "La règle de base pour un site web",
+      body: "Si votre entreprise a une adresse au Québec et offre des produits ou des services aux Québécois, vous devez avoir une version française de votre site web. Vous pouvez aussi avoir une version en anglais ou dans une autre langue, à condition qu'une version française de qualité comparable soit disponible. En pratique, cela veut dire :",
+      items: [
+        "La version française doit couvrir les mêmes renseignements commerciaux que la version dans l'autre langue, pas seulement une page d'accueil ou une traduction partielle.",
+        "La version française doit être aussi facile à trouver et à utiliser que la version dans l'autre langue.",
+        "Pour un site qui vend en ligne, la version française doit inclure tous les renseignements dont un client a besoin pour faire un achat. Cela comprend les renseignements sur le produit ou le service, les formulaires de commande, les factures et les reçus.",
+        "Un site uniquement en anglais destiné au marché québécois ne respecte pas cette règle. Une version française qui omet des renseignements importants ne la respecte pas non plus.",
+      ],
+    },
+    {
+      heading: "Ce qui compte comme contenu commercial",
+      body: "Les catalogues, brochures, formulaires de commande, reçus, garanties, sites web, pages de médias sociaux et autres documents commerciaux doivent être disponibles en français, qu'ils soient imprimés ou en ligne. La même règle couvre le contenu commercial d'un site web : descriptions, prix, conditions d'achat et renseignements de soutien destinés aux clients du Québec. Sur les médias sociaux, la règle de réponse décrite par Éducaloi est simple : si un client publie dans une langue autre que le français, vous pouvez répondre dans cette même langue. Si le client publie en français, vous devez répondre en français.",
+    },
+    {
+      heading: "Qu'en est-il des entreprises hors Québec",
+      body: "Ce guide est écrit pour une entreprise du Québec, et c'est le cas que les sources ci-dessous décrivent clairement. Pour une entreprise sans établissement au Québec qui vend au Québec, les sources ne s'entendent pas sur la façon dont l'OQLF aborde l'application de la loi, et une source décrit une approche incitative pour ce cas. Cette question est volontairement exclue des conseils donnés ici. Si votre entreprise est hors Québec et vend à des clients du Québec, demandez un conseil pour ce cas précis au lieu de vous fier à cette page.",
+    },
+    {
+      heading: "Exceptions limitées",
+      body: "Éducaloi énumère des cas limités où une publication écrite ou un document commercial peut être en anglais ou dans une autre langue sans version française : dans des médias non francophones, lorsqu'il est envoyé à quelqu'un qui a demandé par écrit de recevoir le document dans une langue précise, et lorsqu'il concerne des produits ou des activités culturels ou éducatifs. Ce sont des cas étroits, pas une façon générale d'éviter la règle pour un site web.",
+    },
+    {
+      heading: "Ce que cette page n'affirme pas",
+      body: "Cette page n'indique aucun montant d'amende, aucun délai de plainte ou de conformité, ni aucune liste complète d'exemptions. Ces éléments ont été exclus parce qu'ils n'ont pas pu être vérifiés à partir d'une source primaire ou officielle pendant la rédaction. Le non-respect peut mener à des plaintes à l'OQLF et à des mesures d'application, mais cette page ne donne aucun chiffre à ce sujet. D'autres obligations de la Charte, comme l'inscription à la francisation, s'appliquent aux entreprises de plus grande taille et sont distinctes de la règle pour un site web. Elles ne sont pas traitées ici, parce qu'elles ne changent pas ce qu'une entreprise d'une personne doit faire pour son site web.",
+    },
+    {
+      heading: "Ce que Webao fait à ce sujet",
+      body: "Webao construit des sites web sur mesure en anglais et en français pour des petites entreprises à Montréal et partout au Canada. Un site Webao construit pour des clients du Québec inclut une version française dans la construction même, pas après coup. Webao ne donne pas de conseils juridiques sur la loi 96, et le propriétaire de l'entreprise reste responsable du contenu de son propre site.",
+    },
+    {
+      heading: "Comment commencer",
+      body: "Allez à /fr/commencer et décrivez l'entreprise et le site dont vous avez besoin, en anglais ou en français. Dites à Webao si le site doit servir des clients du Québec en français, et quelles pages l'entreprise a déjà en français, le cas échéant.",
+    },
+    {
+      heading: "Sources",
+      links: [
+        { label: "Éducaloi : Language Laws and Doing Business in Quebec", href: "https://educaloi.qc.ca/en/capsules/language-laws-and-doing-business-in-quebec/" },
+        { label: "Fasken : Reform of the Charter of the French Language, FAQ", href: "https://www.fasken.com/en/knowledge/projet-de-loi-96/faq-pl96-comment-faire-affaire-au-quebec" },
+      ],
+    },
+  ]}
+  faqs={[
+    {
+      q: "Quelle est la règle de base pour un site web?",
+      a: "Si votre entreprise a une adresse au Québec et offre des produits ou des services aux Québécois, vous devez avoir une version française de votre site web. La version française doit couvrir les mêmes renseignements commerciaux que la version dans l'autre langue, pas seulement une page d'accueil ou une traduction partielle, et elle doit être aussi facile à trouver et à utiliser. Pour un site qui vend en ligne, la version française doit inclure tous les renseignements dont un client a besoin pour faire un achat, y compris les renseignements sur le produit ou le service, les formulaires de commande, les factures et les reçus.",
+    },
+    {
+      q: "Qu'est-ce qui compte comme contenu commercial?",
+      a: "Les catalogues, brochures, formulaires de commande, reçus, garanties, sites web, pages de médias sociaux et autres documents commerciaux doivent être disponibles en français, qu'ils soient imprimés ou en ligne. Cela couvre les descriptions, les prix, les conditions d'achat et les renseignements de soutien destinés aux clients du Québec. Sur les médias sociaux, si un client publie dans une langue autre que le français, vous pouvez répondre dans cette même langue. Si le client publie en français, vous devez répondre en français.",
+    },
+    {
+      q: "Cette page donne-t-elle des conseils juridiques?",
+      a: "Non. Cette page donne des renseignements généraux, pas des conseils juridiques. Elle explique les bases en langage simple. Pour une décision concernant une entreprise précise, vérifiez auprès de l'Office québécois de la langue française (OQLF) ou d'un avocat du Québec. Cette page n'indique aucun montant d'amende, aucun délai de plainte ou de conformité, ni aucune liste complète d'exemptions, parce que ces éléments n'ont pas pu être vérifiés à partir d'une source primaire ou officielle pendant la rédaction.",
+    },
+    {
+      q: "Que fait Webao à ce sujet?",
+      a: "Webao construit des sites web sur mesure en anglais et en français pour des petites entreprises à Montréal et partout au Canada. Un site Webao construit pour des clients du Québec inclut une version française dans la construction même, pas après coup. Webao ne donne pas de conseils juridiques sur la loi 96, et le propriétaire de l'entreprise reste responsable du contenu de son propre site. Pour commencer, allez à /fr/commencer et dites si le site doit servir des clients du Québec en français.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Autres guides"
+  siblings={[
+    { href: "/fr/guides/cout-site-web-canada/", label: "Combien coûte un site web au Canada?", note: "Le fonctionnement des prix pour un site web, et ce que Webao facture, sans fourchette inventée." },
+    { href: "/fr/guides/loi-25-site-web-quebec/", label: "Loi 25 du Québec : les bases de la confidentialité pour le site web d'une petite entreprise", note: "Les bases de la confidentialité pour un site qui recueille des renseignements personnels de personnes au Québec." },
+  ]}
+  startLabel="Commencer votre site"
+  emailLabel="Courriel contact@webao.ca"
+  articleSchema={{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: "Loi 96 du Québec : les bases du français pour le site web d'une petite entreprise",
+    description: "La règle de base du français pour le site web d'une entreprise du Québec, en langage simple. Renseignements généraux, pas des conseils juridiques.",
+    author: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    inLanguage: "fr-CA",
+  }}
+/>

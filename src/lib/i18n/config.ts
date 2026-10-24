@@ -2,7 +2,7 @@ export const locales = ["en", "fr"] as const;
 export type Locale = typeof locales[number];
 export const defaultLocale: Locale = "en";
 
-export type PageKey = "home" | "pricing" | "contact" | "demos" | "notfound" | "start" | "terms" | "refunds" | "sources" | "support" | "privacy" | "portal" | "serviceDesign" | "servicePlans" | "serviceHosting" | "serviceMontreal";
+export type PageKey = "home" | "pricing" | "contact" | "demos" | "notfound" | "start" | "terms" | "refunds" | "sources" | "support" | "privacy" | "portal" | "serviceDesign" | "servicePlans" | "serviceHosting" | "serviceMontreal" | "guideCost" | "guideBill96" | "guideLaw25";
 
 export const localizedPaths: Record<Locale, Record<PageKey, string>> = {
   en: {
@@ -22,6 +22,9 @@ export const localizedPaths: Record<Locale, Record<PageKey, string>> = {
     servicePlans: "/services/monthly-website-plans",
     serviceHosting: "/services/website-hosting-maintenance",
     serviceMontreal: "/services/montreal-web-design",
+    guideCost: "/guides/website-cost-canada",
+    guideBill96: "/guides/quebec-bill-96-website",
+    guideLaw25: "/guides/quebec-law-25-website",
   },
   fr: {
     home: "/fr",
@@ -40,6 +43,9 @@ export const localizedPaths: Record<Locale, Record<PageKey, string>> = {
     servicePlans: "/fr/services/forfaits-mensuels-site-web",
     serviceHosting: "/fr/services/hebergement-entretien-site-web",
     serviceMontreal: "/fr/services/conception-site-web-montreal",
+    guideCost: "/fr/guides/cout-site-web-canada",
+    guideBill96: "/fr/guides/loi-96-site-web-quebec",
+    guideLaw25: "/fr/guides/loi-25-site-web-quebec",
   },
 };
 

@@ -1,0 +1,120 @@
+---
+import GuidePage from "../../../components/pages/GuidePage.astro";
+
+const locale = "en" as const;
+---
+
+<GuidePage
+  locale={locale}
+  pageKey="guideCost"
+  title="How much does a website cost in Canada? | WEBAO"
+  description="How website pricing works in Canada, and what Webao charges: Launch C$89.99/mo, Grow C$149.99/mo, Scale C$349.99/mo, annual billing 2 months free."
+  eyebrow="Guides"
+  heading="How much does a website cost in Canada?"
+  intro="A plain explanation of how website pricing works, and what Webao charges. No market averages, no competitor prices, and no invented ranges. The only concrete prices on this page are Webao's own prices, because those are the only ones verified here."
+  answerLine="Launch C$89.99/mo, Grow C$149.99/mo, Scale C$349.99/mo. Annual billing is 2 months free."
+  sections={[
+    {
+      heading: "Who this is for",
+      body: "A small business owner in Canada who needs a website and wants to know what the money covers before starting.",
+    },
+    {
+      heading: "Two ways websites are usually priced",
+      body: "There are two common pricing models. They are not the same purchase, so comparing only the headline number does not compare the full cost.",
+      subsections: [
+        {
+          heading: "One time build",
+          body: "You pay once for the build. After launch, the running costs are usually separate: domain renewal, hosting, security updates, and any later changes. Those later costs depend on who looks after the site and what changes you ask for, so a one time quote on its own does not tell you the yearly cost of keeping the site live.",
+        },
+        {
+          heading: "Monthly plan",
+          body: "You pay a monthly fee that covers the build and the ongoing running of the site in one payment. The question to ask with any monthly plan is the same as with a one time build: what exactly is included, for how long is the price fixed, and what happens when the term ends.",
+        },
+      ],
+    },
+    {
+      heading: "What Webao charges",
+      body: "Webao builds custom websites. Each site is built for the business that orders it. Webao does not sell template clones, and the demo sites on webao.ca are only an optional style direction, not a finished site you buy as is. Website plans, in Canadian dollars:",
+      items: [
+        "Launch: C$89.99 per month (C$899.90 per year)",
+        "Grow: C$149.99 per month (C$1,499.90 per year)",
+        "Scale: C$349.99 per month (C$3,499.90 per year)",
+        "Annual billing is 2 months free.",
+        "Initial term: 6 months, then month to month, with 30 days notice.",
+        "No setup fee for website plans.",
+      ],
+    },
+    {
+      heading: "What is included in a website plan",
+      items: [
+        "Domain",
+        "Hosting",
+        "SSL",
+        "Mobile friendly design",
+        "Contact form",
+        "Basic SEO",
+        "Content updates",
+      ],
+    },
+    {
+      heading: "What is not included",
+      items: [
+        "Full mailbox hosting is not included. Email forwarding is included; a full mailbox service is not part of a website plan.",
+        "Advertising spend is not included in a website plan. See the Ads Pack below for advertising.",
+        "Anything not listed in the included list above should be treated as not included until confirmed in writing.",
+      ],
+    },
+    {
+      heading: "The Ads Pack, separate from website plans",
+      body: "The Ads Pack is a standalone advertising service, not a website plan.",
+      items: [
+        "C$899.99 per month",
+        "C$499.99 one time setup fee",
+        "Client ad spend from C$1,500 per month, paid on the client's own card",
+        "Ad spend goes to the advertising platform, not to Webao, and it is separate from the Ads Pack fee.",
+      ],
+    },
+    {
+      heading: "How to start",
+      items: [
+        "Go to /start and describe the business and the site you need.",
+        "Pick a plan, or ask which plan fits the site you described.",
+        "Webao builds the custom site, then looks after it under the plan.",
+      ],
+    },
+  ]}
+  faqs={[
+    {
+      q: "What does this guide cover?",
+      a: "A plain explanation of how website pricing works, and what Webao charges. It gives no market averages, no competitor prices, and no invented ranges. The only concrete prices on this page are Webao's own prices, because those are the only ones verified here.",
+    },
+    {
+      q: "What do Webao's website plans cost?",
+      a: "Launch C$89.99 per month (C$899.90 per year), Grow C$149.99 per month (C$1,499.90 per year), and Scale C$349.99 per month (C$3,499.90 per year). Annual billing is 2 months free. The initial term is 6 months, then month to month, with 30 days notice. There is no setup fee for website plans.",
+    },
+    {
+      q: "What is included, and what is not included?",
+      a: "A website plan includes a domain, hosting, SSL, mobile friendly design, a contact form, basic SEO, and content updates. Full mailbox hosting is not included: email forwarding is included, and a full mailbox service is not part of a website plan. Advertising spend is not included in a website plan. Anything not listed as included should be treated as not included until confirmed in writing.",
+    },
+    {
+      q: "How do I start?",
+      a: "Go to /start and describe the business and the site you need. Pick a plan, or ask which plan fits the site you described. Webao builds the custom site, then looks after it under the plan.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other guides"
+  siblings={[
+    { href: "/guides/quebec-bill-96-website/", label: "Quebec Bill 96: French language basics for a small business website", note: "The basic French language rule for a website aimed at Quebec customers, in plain language." },
+    { href: "/guides/quebec-law-25-website/", label: "Quebec Law 25: privacy basics for a small business website", note: "The privacy basics for a site that collects personal information from people in Quebec." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  articleSchema={{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: "How much does a website cost in Canada?",
+    description: "How website pricing works in Canada, and what Webao charges: Launch C$89.99/mo, Grow C$149.99/mo, Scale C$349.99/mo, annual billing 2 months free.",
+    author: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    inLanguage: "en-CA",
+  }}
+/>

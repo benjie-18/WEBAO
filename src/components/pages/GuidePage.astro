@@ -1,0 +1,175 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { localizedPaths, type Locale, type PageKey } from "../../lib/i18n";
+
+export interface GuideSubsection {
+  heading: string;
+  body: string;
+}
+
+export interface GuideLink {
+  label: string;
+  href: string;
+}
+
+export interface GuideSection {
+  heading: string;
+  body?: string;
+  items?: string[];
+  subsections?: GuideSubsection[];
+  links?: GuideLink[];
+}
+
+export interface GuideFaq {
+  q: string;
+  a: string;
+}
+
+export interface GuideSibling {
+  href: string;
+  label: string;
+  note: string;
+}
+
+interface Props {
+  locale: Locale;
+  pageKey: PageKey;
+  title: string;
+  description: string;
+  eyebrow: string;
+  heading: string;
+  intro: string;
+  answerLine?: string;
+  sections: GuideSection[];
+  faqs?: GuideFaq[];
+  faqHeading?: string;
+  siblingsHeading: string;
+  siblings: GuideSibling[];
+  startLabel: string;
+  emailLabel: string;
+  articleSchema: Record<string, unknown>;
+}
+
+const {
+  locale,
+  pageKey,
+  title,
+  description,
+  eyebrow,
+  heading,
+  intro,
+  answerLine,
+  sections,
+  faqs,
+  faqHeading,
+  siblingsHeading,
+  siblings,
+  startLabel,
+  emailLabel,
+  articleSchema,
+} = Astro.props as Props;
+
+const paths = localizedPaths[locale];
+const faqSchema = faqs && {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((item) => ({
+    "@type": "Question",
+    name: item.q,
+    acceptedAnswer: { "@type": "Answer", text: item.a },
+  })),
+};
+---
+
+<BaseLayout title={title} description={description} locale={locale} pageKey={pageKey}>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  {faqSchema && <script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />}
+
+  <section class="section">
+    <div class="shell" style="max-width: 860px;">
+      <div class="eyebrow">{eyebrow}</div>
+      <h1 class="display" style="font-size: clamp(2.2rem, 5vw, 3.8rem); line-height:.95; margin-top:12px;">{heading}</h1>
+      <p class="prose" style="margin-top:14px; max-width: 62ch;">{intro}</p>
+      {answerLine && <p class="prose" style="margin-top:12px; max-width: 62ch;"><strong>{answerLine}</strong></p>}
+      <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:24px;">
+        <a href={paths.start} class="btn btn--primary">{startLabel}</a>
+        <a href="mailto:contact@webao.ca" class="btn btn--ghost">{emailLabel}</a>
+      </div>
+
+      <div style="margin-top: 44px; display:grid; gap: 20px;">
+        {sections.map((section) => (
+          <div class="info-card">
+            <h2>{section.heading}</h2>
+            {section.body && <p>{section.body}</p>}
+            {section.items && (
+              <ul>
+                {section.items.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            )}
+            {section.subsections && section.subsections.map((sub) => (
+              <div style="margin-top:14px;">
+                <h3>{sub.heading}</h3>
+                <p>{sub.body}</p>
+              </div>
+            ))}
+            {section.links && (
+              <ul>
+                {section.links.map((link) => (
+                  <li><a href={link.href} style="color: var(--accent-text); font-weight:600; text-decoration: underline; text-underline-offset:3px;">{link.label}</a></li>
+                ))}
+              </ul>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {faqs && faqHeading && (
+  <section class="section section--tight" style="background: var(--paper-2); border-top:1px solid var(--line);">
+    <div class="shell" style="max-width: 860px;">
+      <h2 class="display" style="font-size: clamp(1.9rem, 4vw, 3rem); line-height:.95;">{faqHeading}</h2>
+      <div class="faq-grid" style="margin-top: 24px;">
+        {faqs.map((item) => (
+          <div class="info-card">
+            <h3>{item.q}</h3>
+            <p>{item.a}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+  )}
+
+  <section class="section section--tight">
+    <div class="shell" style="max-width: 860px;">
+      <h2 class="display" style="font-size: clamp(1.6rem, 3.5vw, 2.4rem); line-height:.95;">{siblingsHeading}</h2>
+      <div style="margin-top: 20px; display:grid; gap: 16px;">
+        {siblings.map((sibling) => (
+          <div class="info-card">
+            <h3><a href={sibling.href} style="color: inherit; text-decoration: underline; text-underline-offset:3px;">{sibling.label}</a></h3>
+            <p>{sibling.note}</p>
+          </div>
+        ))}
+      </div>
+      <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:28px;">
+        <a href={paths.start} class="btn btn--primary">{startLabel}</a>
+        <a href="mailto:contact@webao.ca" class="btn btn--ghost">{emailLabel}</a>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .info-card { background: var(--card-bg); border:1px solid var(--line); border-radius:16px; padding:20px 22px; box-shadow: var(--shadow-sm); }
+    .info-card h2 { font-size:1.15rem; letter-spacing:-0.01em; margin:0 0 10px; }
+    .info-card h3 { font-size:14.5px; letter-spacing:-0.02em; font-weight:750; margin:0; }
+    .info-card p { margin-top:8px; font-size:14px; color: var(--muted); line-height:1.6; }
+    .info-card p strong { color: var(--ink); }
+    .info-card ul { list-style:none; padding:0; margin:10px 0 0; display:grid; gap:6px; font-size:14px; line-height:1.6; color: var(--ink-3); }
+    .info-card ul li::before { content: "· "; color: var(--accent-text); font-weight:700; }
+    .faq-grid { display:grid; gap: 16px; }
+    @media (min-width: 720px) { .faq-grid { grid-template-columns: 1fr 1fr; } }
+  </style>
+</BaseLayout>

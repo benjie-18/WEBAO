@@ -22,6 +22,9 @@ const pagesByLocale: Record<Locale, { key: keyof typeof localizedPaths.en; chang
     { key: "servicePlans", changefreq: "monthly", priority: "0.8" },
     { key: "serviceHosting", changefreq: "monthly", priority: "0.8" },
     { key: "serviceMontreal", changefreq: "monthly", priority: "0.8" },
+    { key: "guideCost", changefreq: "monthly", priority: "0.8" },
+    { key: "guideBill96", changefreq: "monthly", priority: "0.8" },
+    { key: "guideLaw25", changefreq: "monthly", priority: "0.8" },
   ],
   fr: [
     { key: "home", changefreq: "weekly", priority: "1.0" },
@@ -37,6 +40,9 @@ const pagesByLocale: Record<Locale, { key: keyof typeof localizedPaths.en; chang
     { key: "servicePlans", changefreq: "monthly", priority: "0.8" },
     { key: "serviceHosting", changefreq: "monthly", priority: "0.8" },
     { key: "serviceMontreal", changefreq: "monthly", priority: "0.8" },
+    { key: "guideCost", changefreq: "monthly", priority: "0.8" },
+    { key: "guideBill96", changefreq: "monthly", priority: "0.8" },
+    { key: "guideLaw25", changefreq: "monthly", priority: "0.8" },
   ],
 };
 

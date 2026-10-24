@@ -1,0 +1,101 @@
+---
+import GuidePage from "../../../components/pages/GuidePage.astro";
+
+const locale = "en" as const;
+---
+
+<GuidePage
+  locale={locale}
+  pageKey="guideBill96"
+  title="Quebec Bill 96: French language basics for a small business website | WEBAO"
+  description="The basic French language rule for a Quebec business website, in plain language. General information, not legal advice."
+  eyebrow="Guides"
+  heading="Quebec Bill 96: French language basics for a small business website"
+  intro="Bill 96 is the 2022 law that amended Quebec's Charter of the French language. French is the official language of Quebec, and the Charter sets rules for how businesses inform and serve the public in French."
+  answerLine="If your business has an address in Quebec and offers products or services to Quebecers, you must have a French version of your website."
+  sections={[
+    {
+      heading: "Disclaimer",
+      body: "This page is general information, not legal advice. It explains the basics in plain language. For a decision about a specific business, check with the Office quebecois de la langue francaise (OQLF) or a Quebec lawyer.",
+    },
+    {
+      heading: "Who this is for",
+      body: "A small business that offers goods or services to people in Quebec, and that has a website the Quebec public can see.",
+    },
+    {
+      heading: "The basic website rule",
+      body: "If your business has an address in Quebec and offers products or services to Quebecers, you must have a French version of your website. You may also have a version in English or another language, as long as a French version of comparable quality is available. That means, in practice:",
+      items: [
+        "The French version must cover the same commercial information as the other language version, not only a landing page or a partial translation.",
+        "The French version must be as easy to find and use as the other language version.",
+        "For a site that sells online, the French version must include all the information a customer needs to make a purchase. That includes information about the product or service, order forms, invoices, and receipts.",
+        "An English only site aimed at the Quebec market does not meet this rule. A French version that omits important content does not meet it either.",
+      ],
+    },
+    {
+      heading: "What counts as commercial content",
+      body: "Catalogues, brochures, order forms, receipts, warranties, websites, social media pages, and other commercial documents must be available in French, whether print or online. The same rule covers the commercial content on a website: descriptions, prices, purchase terms, and support information aimed at Quebec customers. On social media, the reply rule described by Educaloi is simple: if a customer posts in a language other than French, you may reply in that same language. If the customer posts in French, you must reply in French.",
+    },
+    {
+      heading: "What about businesses outside Quebec",
+      body: "This guide is written for a Quebec business, and that is the case the sources below describe clearly. For a business with no establishment in Quebec that sells into Quebec, the sources disagree on how the OQLF approaches enforcement, and one source describes an incentive based approach for that case. That question is left out of the advice here on purpose. If your business is outside Quebec and sells to Quebec customers, get advice for that specific case instead of relying on this page.",
+    },
+    {
+      heading: "Limited exceptions",
+      body: "Educaloi lists limited cases where a written publication or commercial document can be in English or another language without a French version: in non-French media, when sent to someone who made a written request to receive the document in a specific language, and when it concerns cultural or educational products or activities. These are narrow cases, not a general way out of the website rule.",
+    },
+    {
+      heading: "What this page does not claim",
+      body: "This page does not state fine amounts, complaint deadlines, or a full list of exemptions. Those were left out because they could not be verified from a primary or official source during drafting. Non compliance can lead to complaints to the OQLF and enforcement action, but this page gives no figure for that. Other Charter duties, such as francization registration, apply at larger business sizes and are separate from the website rule. They are not covered here, because they do not change what a one person business must do about its website.",
+    },
+    {
+      heading: "What Webao does about this",
+      body: "Webao builds custom websites in English and French for small businesses in Montreal and across Canada. A Webao site built for Quebec customers includes a French version as part of the build, not as an afterthought. Webao does not provide legal advice on Bill 96, and the business owner remains responsible for the content of their own site.",
+    },
+    {
+      heading: "How to start",
+      body: "Go to /start and describe the business and the site you need, in English or French. Tell Webao if the site must serve Quebec customers in French, and which pages the business already has in French, if any.",
+    },
+    {
+      heading: "Sources",
+      links: [
+        { label: "Educaloi: Language Laws and Doing Business in Quebec", href: "https://educaloi.qc.ca/en/capsules/language-laws-and-doing-business-in-quebec/" },
+        { label: "Fasken: Reform of the Charter of the French Language, FAQ", href: "https://www.fasken.com/en/knowledge/projet-de-loi-96/faq-pl96-comment-faire-affaire-au-quebec" },
+      ],
+    },
+  ]}
+  faqs={[
+    {
+      q: "What is the basic website rule?",
+      a: "If your business has an address in Quebec and offers products or services to Quebecers, you must have a French version of your website. The French version must cover the same commercial information as the other language version, not only a landing page or a partial translation, and it must be as easy to find and use. For a site that sells online, the French version must include all the information a customer needs to make a purchase, including information about the product or service, order forms, invoices, and receipts.",
+    },
+    {
+      q: "What counts as commercial content?",
+      a: "Catalogues, brochures, order forms, receipts, warranties, websites, social media pages, and other commercial documents must be available in French, whether print or online. That covers descriptions, prices, purchase terms, and support information aimed at Quebec customers. On social media, if a customer posts in a language other than French, you may reply in that same language. If the customer posts in French, you must reply in French.",
+    },
+    {
+      q: "Is this page legal advice?",
+      a: "No. This page is general information, not legal advice. It explains the basics in plain language. For a decision about a specific business, check with the Office quebecois de la langue francaise (OQLF) or a Quebec lawyer. This page does not state fine amounts, complaint deadlines, or a full list of exemptions, because those could not be verified from a primary or official source during drafting.",
+    },
+    {
+      q: "What does Webao do about this?",
+      a: "Webao builds custom websites in English and French for small businesses in Montreal and across Canada. A Webao site built for Quebec customers includes a French version as part of the build, not as an afterthought. Webao does not provide legal advice on Bill 96, and the business owner remains responsible for the content of their own site. To start, go to /start and say if the site must serve Quebec customers in French.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other guides"
+  siblings={[
+    { href: "/guides/website-cost-canada/", label: "How much does a website cost in Canada?", note: "How website pricing works, and what Webao charges, with no invented ranges." },
+    { href: "/guides/quebec-law-25-website/", label: "Quebec Law 25: privacy basics for a small business website", note: "The privacy basics for a site that collects personal information from people in Quebec." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  articleSchema={{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: "Quebec Bill 96: French language basics for a small business website",
+    description: "The basic French language rule for a Quebec business website, in plain language. General information, not legal advice.",
+    author: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    inLanguage: "en-CA",
+  }}
+/>

@@ -1,0 +1,130 @@
+---
+import GuidePage from "../../../../components/pages/GuidePage.astro";
+
+const locale = "fr" as const;
+---
+
+<GuidePage
+  locale={locale}
+  pageKey="guideLaw25"
+  title="Loi 25 du Québec : les bases de la confidentialité pour le site web d'une petite entreprise | WEBAO"
+  description="Les bases de la confidentialité pour le site web d'une petite entreprise qui recueille des renseignements personnels de personnes au Québec, en langage simple. Renseignements généraux, pas des conseils juridiques."
+  eyebrow="Guides"
+  heading="Loi 25 du Québec : les bases de la confidentialité pour le site web d'une petite entreprise"
+  intro="La loi 25 est la loi du Québec qui a modernisé les règles de protection des renseignements personnels dans le secteur privé. Elle s'applique aux entreprises qui recueillent, détiennent, utilisent ou communiquent les renseignements personnels de personnes au Québec. Un renseignement personnel est un renseignement qui permet d'identifier une personne, comme un nom, une adresse courriel, un numéro de téléphone ou une adresse IP."
+  answerLine="Un simple formulaire de contact suffit pour entrer dans ce sujet, parce qu'un formulaire de contact recueille un nom et une adresse courriel."
+  sections={[
+    {
+      heading: "Avertissement",
+      body: "Cette page donne des renseignements généraux, pas des conseils juridiques. Elle explique les bases en langage simple. Pour une décision concernant une entreprise précise, vérifiez auprès de la Commission d'accès à l'information (CAI) ou d'un avocat du Québec.",
+    },
+    {
+      heading: "À qui cette page s'adresse",
+      body: "À une petite entreprise dont le site web recueille des renseignements personnels de visiteurs ou de clients au Québec. Un simple formulaire de contact suffit pour entrer dans ce sujet, parce qu'un formulaire de contact recueille un nom et une adresse courriel.",
+    },
+    {
+      heading: "Les bases, en langage simple",
+      subsections: [
+        {
+          heading: "1. Nommer une personne responsable des renseignements personnels",
+          body: "Une entreprise doit désigner une personne responsable de la protection des renseignements personnels. Si personne d'autre n'est nommé, la personne qui exerce la plus haute autorité dans l'entreprise occupe ce rôle par défaut. Le titre et les coordonnées de cette personne doivent être publiés sur le site web de l'entreprise, ou rendus disponibles par un autre moyen approprié si l'entreprise n'a pas de site web. Nommer la personne par son titre suffit; la loi n'exige pas de publier un nom personnel dans tous les cas.",
+        },
+        {
+          heading: "2. Publier une politique de confidentialité",
+          body: "Une entreprise qui recueille des renseignements personnels au moyen d'une technologie doit publier une politique de confidentialité sur son site web. La politique doit être rédigée en termes simples et clairs, et elle doit expliquer les pratiques de l'entreprise pour la gestion des renseignements personnels : ce qui est recueilli, dans quel but, comment c'est utilisé et communiqué, et comment une personne peut exercer ses droits. Si le site utilise une technologie qui peut identifier une personne, la suivre ou dresser son profil, les personnes concernées doivent recevoir des renseignements supplémentaires sur cette technologie.",
+        },
+        {
+          heading: "3. Obtenir un consentement valide",
+          body: "Le consentement doit être manifeste, libre et éclairé, et il doit être donné pour des fins précises. Un accord général unique couvrant plusieurs utilisations sans lien entre elles ne respecte pas cette norme, et une case déjà cochée n'est pas une expression claire d'intention. Le consentement doit être facile à retirer. Pour les renseignements personnels sensibles, le consentement doit être explicite : donné par un geste ou une déclaration claire, comme cocher une case ou signer un document, qui ne laisse aucun doute sur l'intention de la personne.",
+        },
+        {
+          heading: "4. Confidentialité par défaut",
+          body: "Un produit ou un service offert au public, y compris un site web avec suivi, doit avoir ses paramètres de confidentialité réglés au niveau de confidentialité le plus élevé par défaut, sans que le visiteur ait à agir. Les outils d'analyse ou de suivi qui fonctionnent avant le consentement, et les cases de suivi déjà cochées, ne respectent pas ce test.",
+        },
+        {
+          heading: "5. Garder les données seulement aussi longtemps que nécessaire, puis les détruire ou les anonymiser",
+          body: "Une fois que les renseignements personnels ne sont plus nécessaires aux fins pour lesquelles ils ont été recueillis, ils doivent être détruits ou anonymisés. Cela veut dire qu'une entreprise doit avoir une idée générale de la durée de conservation de chaque type de données, et un processus pour agir en conséquence, au lieu de tout garder indéfiniment par défaut.",
+        },
+        {
+          heading: "6. Évaluer les transferts hors Québec",
+          body: "Avant de communiquer des renseignements personnels hors Québec, une entreprise doit évaluer les facteurs relatifs à la vie privée en jeu, y compris lorsqu'elle confie à un fournisseur de services hors Québec la tâche de recueillir, d'utiliser, de communiquer ou de conserver des renseignements personnels pour son compte. Cela compte pour le site web d'une petite entreprise chaque fois que l'hébergement, le courriel, les outils d'analyse ou un autre outil stocke des données de visiteurs hors Québec.",
+        },
+        {
+          heading: "7. Tenir un registre des incidents de confidentialité, et aviser lorsque requis",
+          body: "Une entreprise doit tenir un registre des incidents de confidentialité, comme un accès non autorisé, une utilisation non autorisée, une communication non autorisée ou une perte de renseignements personnels. Si un incident présente un risque de préjudice sérieux, l'entreprise doit aviser la CAI et les personnes concernées.",
+        },
+        {
+          heading: "8. Respecter les droits des gens sur leurs renseignements",
+          body: "Les gens au Québec ont des droits sur leurs propres renseignements personnels, y compris l'accès, la rectification, le retrait du consentement, et la demande de cessation de diffusion ou de déindexation. Une entreprise doit avoir un processus pour recevoir et traiter ces demandes.",
+        },
+      ],
+    },
+    {
+      heading: "Une courte liste de vérification pour le site web d'une petite entreprise",
+      items: [
+        "Personne responsable des renseignements personnels nommée, avec titre et coordonnées publiés sur le site.",
+        "Politique de confidentialité publiée sur le site, en termes simples et clairs, couvrant ce qui est recueilli et pourquoi.",
+        "Formulaires de contact et d'inscription qui demandent un consentement pour une fin précise, sans cases de suivi déjà cochées.",
+        "Suivi et outils d'analyse désactivés par défaut jusqu'à l'obtention du consentement.",
+        "Un plan pour la durée de conservation de chaque type de données, et pour leur destruction lorsqu'elles ne sont plus nécessaires.",
+        "Un registre des incidents de confidentialité, et un plan pour aviser la CAI et les personnes concernées si un incident présente un risque de préjudice sérieux.",
+        "Un processus pour traiter les demandes d'accès, de rectification, de retrait et de déindexation.",
+      ],
+    },
+    {
+      heading: "Ce que cette page n'affirme pas",
+      body: "Cette page n'indique aucun montant d'amende, et elle ne donne aucune durée de conservation en années ni aucune durée de conservation du registre des incidents. Les chiffres d'amendes trouvés pendant la rédaction étaient en contradiction entre les sources secondaires, et aucun chiffre n'a été vérifié à partir d'une source primaire ou officielle, donc aucun chiffre n'est donné. Il en va de même pour tout délai précis : aucun n'est indiqué ici.",
+    },
+    {
+      heading: "Ce que Webao fait à ce sujet",
+      body: "Webao construit des sites web sur mesure en anglais et en français pour des petites entreprises à Montréal et partout au Canada. Un site Webao inclut un formulaire de contact, du SEO de base et des mises à jour de contenu dans le cadre de ses forfaits de site web. Le propriétaire de l'entreprise reste responsable de sa propre politique de confidentialité, de la nomination de sa personne responsable des renseignements personnels, et des paramètres de consentement de son propre site. Webao ne donne pas de conseils juridiques sur la loi 25.",
+    },
+    {
+      heading: "Comment commencer",
+      body: "Allez à /fr/commencer et décrivez l'entreprise et le site dont vous avez besoin. Dites à Webao si le site recueille des renseignements personnels par des formulaires, des réservations ou des ventes en ligne, afin que ces parties du site puissent être construites en tenant compte du consentement et de la confidentialité dès le départ.",
+    },
+    {
+      heading: "Sources",
+      links: [
+        { label: "FCEI : Quebec's Law 25, Frequently Asked Questions", href: "https://www.cfib-fcei.ca/en/tools-resources/law-25-faq?hs_amp=true" },
+        { label: "Lexology : Quebec Law No. 25", href: "https://www.lexology.com/library/detail.aspx?g=40b4166f-2c35-4a00-a4e9-d5f402ff6a06" },
+        { label: "Koumbit : Make your website legally compliant with Quebec's Bill 25", href: "https://www.koumbit.org/en/content/make-your-website-legally-compliant-quebecs-bill-25" },
+        { label: "Résumé de la loi 25", href: "https://www.law25.ca/timeline.html" },
+      ],
+    },
+  ]}
+  faqs={[
+    {
+      q: "Un simple formulaire de contact suffit-il pour entrer dans le champ de la loi 25?",
+      a: "Oui. La loi 25 s'applique aux entreprises qui recueillent, détiennent, utilisent ou communiquent les renseignements personnels de personnes au Québec, et un renseignement personnel est un renseignement qui permet d'identifier une personne, comme un nom, une adresse courriel, un numéro de téléphone ou une adresse IP. Un simple formulaire de contact suffit pour entrer dans ce sujet, parce qu'un formulaire de contact recueille un nom et une adresse courriel.",
+    },
+    {
+      q: "Qu'est-ce qu'une entreprise doit publier?",
+      a: "Une entreprise doit désigner une personne responsable de la protection des renseignements personnels, et le titre et les coordonnées de cette personne doivent être publiés sur le site web de l'entreprise, ou rendus disponibles par un autre moyen approprié si l'entreprise n'a pas de site web. Une entreprise qui recueille des renseignements personnels au moyen d'une technologie doit aussi publier une politique de confidentialité sur son site web, rédigée en termes simples et clairs, expliquant ce qui est recueilli, dans quel but, comment c'est utilisé et communiqué, et comment une personne peut exercer ses droits.",
+    },
+    {
+      q: "Que veulent dire un consentement valide et la confidentialité par défaut?",
+      a: "Le consentement doit être manifeste, libre et éclairé, et il doit être donné pour des fins précises. Un accord général unique couvrant plusieurs utilisations sans lien entre elles ne respecte pas cette norme, une case déjà cochée n'est pas une expression claire d'intention, et le consentement doit être facile à retirer. Pour les renseignements personnels sensibles, le consentement doit être explicite. Les paramètres de confidentialité doivent être réglés au niveau de confidentialité le plus élevé par défaut, sans que le visiteur ait à agir, donc les outils d'analyse ou de suivi qui fonctionnent avant le consentement, et les cases de suivi déjà cochées, ne respectent pas ce test.",
+    },
+    {
+      q: "Cette page donne-t-elle des conseils juridiques, et que fait Webao à ce sujet?",
+      a: "Non. Cette page donne des renseignements généraux, pas des conseils juridiques. Pour une décision concernant une entreprise précise, vérifiez auprès de la Commission d'accès à l'information (CAI) ou d'un avocat du Québec. Cette page n'indique aucun montant d'amende, aucune durée de conservation en années, ni aucun délai précis, parce qu'aucun chiffre n'a été vérifié à partir d'une source primaire ou officielle. Webao construit des sites web sur mesure en anglais et en français pour des petites entreprises à Montréal et partout au Canada, et un site Webao inclut un formulaire de contact, du SEO de base et des mises à jour de contenu dans le cadre de ses forfaits de site web. Le propriétaire de l'entreprise reste responsable de sa propre politique de confidentialité, de la nomination de sa personne responsable des renseignements personnels, et des paramètres de consentement de son propre site. Pour commencer, allez à /fr/commencer et dites si le site recueille des renseignements personnels par des formulaires, des réservations ou des ventes en ligne.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Autres guides"
+  siblings={[
+    { href: "/fr/guides/cout-site-web-canada/", label: "Combien coûte un site web au Canada?", note: "Le fonctionnement des prix pour un site web, et ce que Webao facture, sans fourchette inventée." },
+    { href: "/fr/guides/loi-96-site-web-quebec/", label: "Loi 96 du Québec : les bases du français pour le site web d'une petite entreprise", note: "La règle de base du français pour un site web destiné aux clients du Québec, en langage simple." },
+  ]}
+  startLabel="Commencer votre site"
+  emailLabel="Courriel contact@webao.ca"
+  articleSchema={{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: "Loi 25 du Québec : les bases de la confidentialité pour le site web d'une petite entreprise",
+    description: "Les bases de la confidentialité pour le site web d'une petite entreprise qui recueille des renseignements personnels de personnes au Québec, en langage simple. Renseignements généraux, pas des conseils juridiques.",
+    author: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    inLanguage: "fr-CA",
+  }}
+/>
