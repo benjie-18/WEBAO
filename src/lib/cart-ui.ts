@@ -360,6 +360,8 @@ function clearCartOnPaidPage(doc: Document): void {
 export function openDrawer(doc: Document): void {
   const drawer = drawerEl(doc);
   const overlay = overlayEl(doc);
+  // Remember who opened the drawer so focus can return there on close.
+  (doc as unknown as Record<string, unknown>).__webaoCartOpener = doc.activeElement;
   if (drawer) {
     drawer.hidden = false;
     requestFrame(() => drawer.classList.add("is-open"));
@@ -370,6 +372,10 @@ export function openDrawer(doc: Document): void {
   }
   if (doc.body) doc.body.style.overflow = "hidden";
   renderDrawer(doc);
+  // Modal behavior: move focus inside. The close button is first in the
+  // drawer header, so keyboard users land on a way out, not a dead end.
+  const closeBtn = drawer?.querySelector<HTMLElement>("[data-cart-close]");
+  if (closeBtn) closeBtn.focus();
 }
 
 export function closeDrawer(doc: Document, options: { instant?: boolean } = {}): void {
@@ -378,15 +384,56 @@ export function closeDrawer(doc: Document, options: { instant?: boolean } = {}):
   if (drawer) drawer.classList.remove("is-open");
   if (overlay) overlay.classList.remove("is-open");
   if (doc.body) doc.body.style.overflow = "";
+  const opener = (doc as unknown as Record<string, unknown>).__webaoCartOpener as
+    | HTMLElement
+    | null
+    | undefined;
+  const returnFocus = () => {
+    if (opener && typeof (opener as HTMLElement).focus === "function" && doc.contains(opener)) {
+      (opener as HTMLElement).focus();
+    }
+  };
   if (options.instant) {
     if (drawer) drawer.hidden = true;
     if (overlay) overlay.hidden = true;
+    returnFocus();
     return;
   }
   setTimeout(() => {
     if (drawer) drawer.hidden = true;
     if (overlay) overlay.hidden = true;
+    returnFocus();
   }, 350);
+}
+
+/**
+ * Keep Tab inside the open drawer (WCAG dialog pattern). Without this,
+ * keyboard users tabbed straight out of the drawer into the page behind
+ * the overlay, and closing dropped focus entirely.
+ */
+function trapDrawerTab(event: KeyboardEvent, doc: Document): void {
+  const drawer = drawerEl(doc);
+  if (!drawer || drawer.hidden) return;
+  const focusables = Array.from(
+    drawer.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+    ),
+  ).filter((el) => !el.hasAttribute("hidden"));
+  if (focusables.length === 0) return;
+  const active = doc.activeElement as HTMLElement | null;
+  const first = focusables[0];
+  const last = focusables[focusables.length - 1];
+  if (event.shiftKey) {
+    if (active === first || !drawer.contains(active)) {
+      event.preventDefault();
+      last.focus();
+    }
+  } else {
+    if (active === last || !drawer.contains(active)) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
 }
 
 function requestFrame(fn: () => void): void {
@@ -495,6 +542,7 @@ export function initCart(doc: Document = document): void {
     doc.addEventListener("click", (event) => onClick(event, doc));
     doc.addEventListener("keydown", (event) => {
       if ((event as KeyboardEvent).key === "Escape") closeDrawer(doc);
+      if ((event as KeyboardEvent).key === "Tab") trapDrawerTab(event as KeyboardEvent, doc);
     });
     win?.addEventListener(CART_CHANGE_EVENT, () => refresh(doc));
     // Keep multiple tabs in sync.

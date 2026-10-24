@@ -52,7 +52,7 @@ const routes = { start: paths.start, pricing: paths.pricing, locale };
           <!-- Cart items injected by JS -->
         </div>
         <div id="stripe-checkout">
-          <div class="mono" style="padding:40px 20px; text-align:center; color: var(--muted); font-size:12.5px;" id="checkout-loading">
+          <div class="mono" style="padding:40px 20px; text-align:center; color: var(--muted); font-size:12.5px;" id="checkout-loading" role="status" aria-live="polite">
             {t.checkout.loading}
           </div>
         </div>

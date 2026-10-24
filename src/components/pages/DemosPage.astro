@@ -477,6 +477,14 @@ const families = styleFamilies;
 <script>
   function initDemosPage() {
     const search = document.getElementById('search') as HTMLInputElement | null;
+    // Bound guard, on the page's own elements: this init runs immediately
+    // at evaluation AND on astro:page-load, and without a guard the
+    // evaluation call and the page-load call would double-bind every
+    // listener. The flag lives on the element (not the document) so a
+    // soft navigation to a fresh demos page still rebinds its new nodes.
+    const guardEl = (search as HTMLElement | null) || document.querySelector('[data-filter]');
+    if (guardEl && (guardEl as HTMLElement).dataset.webaoBound) return;
+    if (guardEl) (guardEl as HTMLElement).dataset.webaoBound = '1';
     const chips = Array.from(document.querySelectorAll('[data-filter]'));
     const tradeChips = Array.from(document.querySelectorAll('[data-trade-filter]'));
     const cards = Array.from(document.querySelectorAll('[data-category]')) as HTMLElement[];
@@ -589,6 +597,11 @@ const families = styleFamilies;
     }
   }
 
+  // Immediate init (house pattern: Support/Contact/Portal all call
+  // immediately AND on page-load) so a fast visitor typing in the search
+  // box before page-load still gets filtering; the bound guard above
+  // makes the second call a no-op.
+  initDemosPage();
   document.addEventListener('astro:page-load', initDemosPage);
 </script>
 

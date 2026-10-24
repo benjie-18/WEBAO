@@ -50,7 +50,7 @@ const names = bundles.map((bd) => tb[bd.id].name);
 
       <div class="bundle-ui">
         <div class="bp-steps" role="group" aria-label={tb.title}>
-          {bundles.map((bd, i) => (
+          {bundles.map((_bd, i) => (
             <button
               type="button"
               class:list={["bp-step", i === 0 && "is-active"]}

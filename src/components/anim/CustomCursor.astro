@@ -13,8 +13,7 @@
 // - The native cursor is hidden only after the custom one is confirmed live
 //   (first mousemove -> html.cc-ready), so a JS failure never leaves the
 //   user without a cursor. Native I-beam is kept over form fields.
-// - Hidden while the intro plays and while the CursorJourney's own cursor
-//   is visible, so it never fights the existing animations.
+// - Hidden while the intro plays, so it never fights the existing animations.
 // - Theme-aware through --ink / --accent tokens.
 // - All shape morphs are opacity + transform only (shapes cross-fade).
 ---

@@ -347,7 +347,7 @@ function initAdmin(): void {
 
   /* ── Stats tab ── */
   type Range = "day" | "week" | "month" | "year";
-  let range: Range = "week";
+  let range: Range = "day";
   let pageFilter = "all";
 
   function setStatsLoading(): void {
@@ -1179,15 +1179,18 @@ function initAdmin(): void {
               typeof a.amountTotal === "number"
                 ? ` · $${(a.amountTotal / 100).toFixed(2)}`
                 : "";
+            const statusLabel =
+              (I18N.clients.abandonedStatuses as Record<string, string> | undefined)?.[a.status] || a.status;
+            const itemsLabel = a.items.join(", ") || String(I18N.clients.abandonedCheckout || "checkout");
             return (
               `<div class="form-meta"><span>${esc(a.email)}</span>` +
-              `<span>${esc(a.items.join(", ") || "checkout")}${amount} · ${esc(a.status)} · ${esc(fmtDateTime(a.createdAt))}</span></div>`
+              `<span>${esc(itemsLabel)}${amount} · ${esc(statusLabel)} · ${esc(fmtDateTime(a.createdAt))}</span></div>`
             );
           })
           .join("");
         list.insertAdjacentHTML(
           "beforeend",
-          `<div class="form-card"><div class="form-card-head">Abandoned checkouts</div>${rows}</div>`,
+          `<div class="form-card"><div class="form-card-head">${esc(I18N.clients.abandonedTitle)}</div>${rows}</div>`,
         );
       }
       clientsCursor = data.nextCursor;
@@ -1438,7 +1441,7 @@ function initAdmin(): void {
     if (!cur || !next || !conf || !errEl) return;
     errEl.hidden = true;
     const nextVal = next.value;
-    if (nextVal.length < 5) {
+    if (nextVal.length < 12) {
       errEl.textContent = String(I18N.config.pwTooShort);
       errEl.hidden = false;
       return;

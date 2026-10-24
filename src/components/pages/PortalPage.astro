@@ -88,6 +88,7 @@ const copy = fr
       save: "Enregistrer",
       saving: "Enregistrement…",
       saved: "Enregistré.",
+      domainConflict: "Enregistré, mais ce domaine est déjà rattaché à un autre client : votre domaine actuel est inchangé. Écrivez-nous si c'est une erreur.",
       required: "Il manque : ",
       fields: {
         businessName: "Nom de l'entreprise *",
@@ -190,6 +191,7 @@ const copy = fr
       save: "Save",
       saving: "Saving…",
       saved: "Saved.",
+      domainConflict: "Saved, but that domain is already attached to another client, so your current domain is unchanged. Write to us if that is a mistake.",
       required: "Still needed: ",
       fields: {
         businessName: "Business name *",
@@ -462,6 +464,7 @@ const supportHref = fr ? "/fr/soutien" : "/support";
      clipped by the site's overflow-x: clip. Verified in a 390px repro. */
   [data-portal-root] form { grid-template-columns: minmax(0, 1fr); }
   [data-portal-root] form label { min-width: 0; }
+  [data-portal-root] fieldset { min-width: 0; }
   [data-portal-root] input:not([type="checkbox"]):not([type="radio"]),
   [data-portal-root] select,
   [data-portal-root] textarea { min-width: 0; }
@@ -477,6 +480,7 @@ const supportHref = fr ? "/fr/soutien" : "/support";
 <span hidden data-portal-msg-sent>{copy.sent}</span>
 <span hidden data-portal-msg-saving>{copy.saving}</span>
 <span hidden data-portal-msg-saved>{copy.saved}</span>
+<span hidden data-portal-msg-domain-conflict>{copy.domainConflict}</span>
 <span hidden data-portal-msg-required>{copy.required}</span>
 <span hidden data-portal-domain-new>{copy.fields.domainValueNew}</span>
 <span hidden data-portal-domain-existing>{copy.fields.domainValueExisting}</span>
@@ -541,8 +545,6 @@ const supportHref = fr ? "/fr/soutien" : "/support";
       label.appendChild(document.createTextNode(d.name));
       demosBox.appendChild(label);
     });
-
-    var current = null;
 
     function fillForm(client) {
       var o = client.onboarding || {};
@@ -883,7 +885,9 @@ const supportHref = fr ? "/fr/soutien" : "/support";
         btn.disabled = false;
         if (r.data.ok && r.data.client) {
           render(r.data.client);
-          status.textContent = msg("[data-portal-msg-saved]");
+          status.textContent = r.data.domainConflict
+            ? msg("[data-portal-msg-domain-conflict]")
+            : msg("[data-portal-msg-saved]");
         } else {
           status.textContent = r.data.error || msg("[data-portal-msg-generic]");
         }

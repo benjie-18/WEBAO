@@ -16,6 +16,13 @@ export function useTranslations(locale: Locale) {
 
 export function t(locale: Locale, path: string): string {
   const keys = path.split(".");
+  // Deliberately untyped traversal (any): a recursive DeepKey type was
+  // judged more churn than safety here. The guard is tests/i18n.test.ts,
+  // which asserts the en/fr key trees are identical, so en/fr drift
+  // fails the suite. It does NOT guard call-site typos: an unknown
+  // path still renders the raw path at runtime (see the i18n test's
+  // explicit unknown-path case), so a typo'd t() call is a runtime
+  // miss, not a suite failure.
   let cur: any = translations[locale] ?? translations[defaultLocale];
   for (const k of keys) {
     if (cur && typeof cur === "object" && k in cur) {

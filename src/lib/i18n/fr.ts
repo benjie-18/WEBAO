@@ -1335,6 +1335,14 @@ const fr = {
       loadError: "Impossible de charger les clients.",
       retry: "Réessayer",
       loadMore: "Charger plus",
+      abandonedTitle: "Commandes abandonnées",
+      abandonedCheckout: "commande",
+      abandonedStatuses: {
+        pending: "En attente",
+        emailed: "Relance envoyée",
+        converted: "Converti",
+        stale: "Expirée",
+      },
       details: "Détails",
       hideDetails: "Masquer",
       viewAs: "Voir comme client",
@@ -1421,7 +1429,7 @@ const fr = {
       pwChanged: "Mot de passe mis à jour.",
       pwWrong: "Le mot de passe actuel est incorrect.",
       pwMismatch: "Les nouveaux mots de passe ne correspondent pas.",
-      pwTooShort: "Le nouveau mot de passe doit contenir au moins 5 caractères.",
+      pwTooShort: "Le nouveau mot de passe doit contenir au moins 12 caractères.",
       siteTitle: "Réglages par défaut du site",
       defaultTheme: "Thème par défaut",
       themeOptions: {

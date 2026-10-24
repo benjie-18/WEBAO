@@ -233,7 +233,7 @@ button, input, textarea, select { font: inherit; }
 .sticky-cta-btn {
   flex: none;
   display: inline-block;
-  background: var(--accent);
+  background: var(--btn-primary-bg);
   color: #fff;
   font-weight: 700;
   font-size: 14px;
@@ -283,6 +283,13 @@ button, input, textarea, select { font: inherit; }
   --accent: #FF3B30;
   --focus-outline: #FF3B30;
   --accent-hover: #E6352B;
+  /* Text-bearing red surfaces (buttons, offer panel) use deepened reds:
+     white on the brand #FF3B30 is only 3.55:1, below the 4.5:1 AA bar.
+     #C62820 is 5.64:1, #A81E14 is 7.34:1. Brand #FF3B30 stays for
+     decoration (borders, glows, graphics). */
+  --btn-primary-bg: #C62820;
+  --btn-primary-hover-bg: #A81E14;
+  --offer-panel-bg: #A81E14;
   --accent-soft: #FFF0EF;
   --accent-dark: #1A0A08;
   /* Accent derivatives (text-safe + gradients + glows) */
@@ -442,6 +449,11 @@ button, input, textarea, select { font: inherit; }
   --accent: #0043E0;
   --focus-outline: #8FADFF;
   --accent-hover: #003BB8;
+  /* Dark theme already passes AA on these, so the tokens match the
+     existing accent values exactly: no dark-mode visual change. */
+  --btn-primary-bg: #0043E0;
+  --btn-primary-hover-bg: #003BB8;
+  --offer-panel-bg: #0043E0;
   --accent-soft: rgba(0,67,224,.14);
   --accent-dark: #0A1030;
   --accent-text: #4D7FFF;
@@ -799,7 +811,7 @@ html.theming *::after {
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(248,245,239,.44);
+  color: rgba(248,245,239,.56);
   margin-bottom: 16px;
 }
 .footer-col a {
@@ -819,7 +831,7 @@ html.theming *::after {
   gap: 12px;
   justify-content: space-between;
   font-size: 13px;
-  color: rgba(248,245,239,.46);
+  color: rgba(248,245,239,.56);
 }
 @media (max-width: 900px) {
   .footer-grid { grid-template-columns: 1fr 1fr; }
@@ -863,11 +875,11 @@ html.theming *::after {
 .btn:active { transform: translateY(1px) scale(.98); }
 .btn:focus-visible { outline-offset: 3px; }
 .btn--primary {
-  background: var(--accent);
+  background: var(--btn-primary-bg);
   color: white;
   box-shadow: 0 8px 20px var(--accent-glow);
 }
-.btn--primary:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 12px 28px var(--accent-glow); }
+.btn--primary:hover { background: var(--btn-primary-hover-bg); transform: translateY(-1px); box-shadow: 0 12px 28px var(--accent-glow); }
 .btn--dark {
   background: var(--ink);
   color: var(--paper);

@@ -1326,6 +1326,14 @@ const en = {
       loadError: "Couldn’t load clients.",
       retry: "Retry",
       loadMore: "Load more",
+      abandonedTitle: "Abandoned checkouts",
+      abandonedCheckout: "checkout",
+      abandonedStatuses: {
+        pending: "Pending",
+        emailed: "Follow-up sent",
+        converted: "Converted",
+        stale: "Stale",
+      },
       details: "Details",
       hideDetails: "Hide details",
       viewAs: "View as client",
@@ -1412,7 +1420,7 @@ const en = {
       pwChanged: "Password updated.",
       pwWrong: "The current password is incorrect.",
       pwMismatch: "The new passwords don’t match.",
-      pwTooShort: "The new password must be at least 5 characters.",
+      pwTooShort: "The new password must be at least 12 characters.",
       siteTitle: "Site defaults",
       defaultTheme: "Default theme",
       themeOptions: {

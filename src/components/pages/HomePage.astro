@@ -389,7 +389,7 @@ const processId = locale === "fr" ? "processus" : "process";
   }
   @media (max-width: 560px) { .hero { padding-block: 12px 16px; } .hero-title { font-size: clamp(2.6rem, 12.5vw, 4.2rem); } .float-card { position: relative; inset:auto !important; transform: none !important; margin-top:12px; width:auto; } .visual-stack { transform: none; } .preview-meta { flex-direction: column; align-items: flex-start; } }
   .section-head { max-width: 60ch; }
-  .process { --journey-accent: var(--accent); }
+  .process { --journey-accent: var(--btn-primary-bg); }
   /* Pinned scrub stage: the wrap provides scroll distance, the stage sticks */
   .pin-wrap { height: 280vh; position: relative; }
   .pin-stage {
@@ -527,7 +527,7 @@ const processId = locale === "fr" ? "processus" : "process";
      fracture motif; hover displaces along the fracture edge (transform-only). */
   .offer-head { display:grid; gap:6px; }
   .offer-grid { margin-top: 28px; display:grid; grid-template-columns: 1.5fr 1fr; gap: clamp(20px, 3vw, 44px); align-items: stretch; }
-  .offer-panel { position:relative; display:flex; flex-direction:column; gap:14px; background: var(--accent); color:#fff; border-radius: var(--r-lg); padding: clamp(24px, 3vw, 40px); overflow: clip; isolation:isolate; }
+  .offer-panel { position:relative; display:flex; flex-direction:column; gap:14px; background: var(--offer-panel-bg); color:#fff; border-radius: var(--r-lg); padding: clamp(24px, 3vw, 40px); overflow: clip; isolation:isolate; }
   .offer-panel:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
   .offer-fracture { position:absolute; left:0; top:-2%; bottom:-2%; width:16px; background: var(--section-ink2-bg); clip-path: polygon(43% 0%, 57% 7%, 36% 14%, 57% 22%, 43% 31%, 64% 40%, 36% 49%, 57% 58%, 43% 67%, 64% 76%, 36% 85%, 57% 93%, 43% 100%, 57% 100%, 71% 93%, 50% 85%, 78% 76%, 57% 67%, 71% 58%, 50% 49%, 78% 40%, 57% 31%, 71% 22%, 50% 14%, 71% 7%, 57% 0%); pointer-events:none; transition: transform var(--dur-3) var(--ease-out-expo); }
   .offer-panel-top { display:flex; justify-content:space-between; align-items:center; font-size:10px; letter-spacing:.14em; color: rgba(255,255,255,.8); }
@@ -537,8 +537,8 @@ const processId = locale === "fr" ? "processus" : "process";
   .offer-title { font-size: clamp(1.6rem, 2.6vw, 2.2rem); line-height:1; letter-spacing:-0.03em; font-weight:750; }
   .offer-desc { font-size:14px; line-height:1.6; color: rgba(255,255,255,.85); max-width: 44ch; }
   .offer-foot { margin-top:auto; padding-top:16px; border-top:1px solid rgba(255,255,255,.2); display:grid; gap:10px; }
-  .offer-cta { display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:13px; letter-spacing:-0.01em; background:#fff; color: var(--accent); padding:10px 16px; border-radius:99px; width: fit-content; }
-  .offer-mini { display:flex; gap:8px; flex-wrap:wrap; font-size:10px; letter-spacing:.04em; color: rgba(255,255,255,.65); }
+  .offer-cta { display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:13px; letter-spacing:-0.01em; background:#fff; color: var(--offer-panel-bg); padding:10px 16px; border-radius:99px; width: fit-content; }
+  .offer-mini { display:flex; gap:8px; flex-wrap:wrap; font-size:10px; letter-spacing:.04em; color: rgba(255,255,255,.80); }
   @media (hover: hover) and (pointer: fine) {
     /* Keep the fracture-reveal clip-path transition AND add the hover
        displacement; both transitions must be listed or one is lost. */
@@ -576,7 +576,7 @@ const processId = locale === "fr" ? "processus" : "process";
   .margin-note { position: absolute; z-index: 3; width: 218px; background: var(--card-bg); border: 1px solid var(--line); border-radius: var(--r-md); padding: 12px 14px; box-shadow: var(--shadow-md); }
   .margin-note strong { display: block; font-size: 13px; letter-spacing: -0.01em; margin: 6px 0 4px; }
   .margin-note p { margin: 0; font-size: 12px; line-height: 1.55; color: var(--muted); }
-  .margin-note-tag { font-size: 10px; letter-spacing: .14em; color: var(--accent); }
+  .margin-note-tag { font-size: 10px; letter-spacing: .14em; color: var(--accent-text); }
   .margin-note::after { content: ""; position: absolute; background: var(--line-strong); }
   .margin-note--0 { top: -22px; left: -26px; transform: rotate(-1.6deg); }
   .margin-note--0::after { left: 30px; top: 100%; width: 1px; height: 22px; }
@@ -621,7 +621,7 @@ const processId = locale === "fr" ? "processus" : "process";
   .cta-statement-desc { color: rgba(248,245,239,.68); font-size: clamp(1rem, 1.6vw, 1.15rem); line-height: 1.6; max-width: 46ch; text-wrap: pretty; }
   .cta-statement-actions { justify-content: center; }
   .cta-statement-contact { font-size: 11px; letter-spacing: .06em; color: rgba(248,245,239,.46); }
-  .btn--crack { background: var(--accent); color: #fff; }
+  .btn--crack { background: var(--btn-primary-bg); color: #fff; }
   .btn--crack:hover { transform: none; filter: none; box-shadow: 0 14px 34px color-mix(in srgb, var(--accent) 45%, transparent); }
   .btn--crack .btn--crack-label { position: relative; z-index: 1; color: var(--on-dark-btn-text); }
   .btn--crack::before, .btn--crack::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--on-dark-btn-bg); transition: transform var(--dur-3) var(--ease-out-expo); }
@@ -637,6 +637,14 @@ const processId = locale === "fr" ? "processus" : "process";
   }
   .section { content-visibility: auto; contain-intrinsic-size: auto 700px; }
   .hero, .marquee { content-visibility: visible; contain-intrinsic-size: auto; }
+  /* Dark theme only: --accent (#0043E0) as TEXT on near-black surfaces
+     fails WCAG even for large text (~2.4:1). --accent-text (#4D7FFF)
+     passes everywhere (5.6/5.4/4.9 on the hero gradient, 5.6 on the
+     final-CTA bg, 5.1 on offer cards). Light theme keeps --accent here
+     (it already passes) so light rendering is untouched. */
+  html[data-theme="dark"] .hero-title .hero-italic { color: var(--accent-text); }
+  html[data-theme="dark"] .cta-statement-title span { color: var(--accent-text); }
+  html[data-theme="dark"] .offer-link:hover .offer-link-cta { color: var(--accent-text); border-bottom-color: var(--accent-text); }
 </style>
 
 <script>
@@ -841,14 +849,16 @@ const processId = locale === "fr" ? "processus" : "process";
     });
     // If the viewport crosses the narrow breakpoint mid-session, fall back
     // to the static stack rather than a half-driven scrub.
-    narrow.addEventListener('change', (e) => {
-      if ((e as MediaQueryListEvent).matches) {
+    const onNarrow = (e: MediaQueryListEvent) => {
+      if (e.matches) {
         window.removeEventListener('scroll', onScroll);
         stations.forEach((s) => s.classList.add('is-active'));
         journey.style.setProperty('--scrub', '1');
         if (readout) readout.textContent = 'DAY 7';
       }
-    });
+    };
+    narrow.addEventListener('change', onNarrow);
+    onHomeDispose(() => narrow.removeEventListener('change', onNarrow));
     update();
   }
 
@@ -938,5 +948,8 @@ const processId = locale === "fr" ? "processus" : "process";
     }
   }
 
+  // Immediate init (house pattern): initHomePage disposes first, so the
+  // evaluation call and the page-load call cannot double-bind.
+  initHomePage();
   document.addEventListener('astro:page-load', initHomePage);
 </script>

@@ -788,6 +788,8 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
     <aside
       class="cart-drawer"
       data-cart-drawer
+      role="dialog"
+      aria-modal="true"
       aria-label={t.cart.title}
       hidden
       data-label-open={t.cart.open}

@@ -9,7 +9,7 @@
     "preview": "astro preview",
     "check": "astro check",
     "cf:dev": "wrangler dev --config wrangler.jsonc",
-    "cf:deploy": "npm run build && wrangler deploy --config wrangler.jsonc",
+    "cf:deploy": "npm run build && rm -f dist/client/wrangler.json && wrangler deploy --config wrangler.jsonc",
     "cf:build": "npm run build",
     "lint": "astro check",
     "prebuild": "node scripts/restore-images.mjs",

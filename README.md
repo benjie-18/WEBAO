@@ -109,7 +109,7 @@ Project architecture:
 
 - `src/layouts/BaseLayout.astro`: SEO, header/footer, scroll progress, ClientRouter, reveal
 - `src/styles/global.css`: tokens, typography (Instrument Serif + Inter + IBM Plex Mono), layout, motion (respects `prefers-reduced-motion`)
-- `src/components/{ui,layout,anim}`: reusable Button, Card, Badge, Section, Reveal, CursorJourney, **IntroSequence**
+- `src/components/{ui,layout,anim}`: reusable Button, Card, Badge, Section, Reveal, **IntroSequence**
 - `src/lib/{demos,motion}.ts`: demo catalog (12 art-directed fictional businesses, clearly labeled as demos) + motion helpers
 - `src/lib/intro/{config,engine}.ts`: the intro's art direction (`INTRO_CONFIG`) and its dependency-free motion engine
 - `src/pages/{index,pricing,contact,demos,404,sitemap.xml.ts}`: polished marketing site; demos are a searchable/filterable catalog (no demo microsites yet per spec)
@@ -168,7 +168,7 @@ then closes the last gap with its own eased approach.
 - **No JS / JS failure**: the inline boot gate never fires and a 7 s failsafe
   releases the page, so the site always renders normally.
 - **After the handoff** the overlay, classes and transforms are removed
-  completely; scroll, navigation and the site's own `CursorJourney` behave
+  completely; scroll, navigation and the site's own cursor behave
   exactly as they did before the intro existed.
 - Inspect/tune live: `__wiDebug.state()`, `__wiDebug.config`,
   `__wiDebug.forceTimeScale(0.4)` (slow motion), `__wiDebug.skipToInvite()`.
