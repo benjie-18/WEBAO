@@ -1,0 +1,85 @@
+---
+import ServicePage from "../../../../components/pages/ServicePage.astro";
+
+const locale = "fr" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="serviceMontreal"
+  title="Conception de site web à Montréal | WEBAO"
+  description="Conception de site web à Montréal, en français et en anglais, pour les entreprises locales qui servent les deux communautés linguistiques. Sites web sur mesure, jamais des copies de modèles."
+  eyebrow="Montréal"
+  heading="Conception de site web à Montréal"
+  intro="Webao est basé à Montréal et sert les petites entreprises partout au Canada, en français et en anglais. Les forfaits de sites web commencent à 89,99 $ CA par mois et incluent domaine, hébergement, SSL, design adapté au mobile, formulaire de contact, référencement de base et mises à jour de contenu. Aucun frais d'installation pour les forfaits de sites web."
+  answerLine="Basé à Montréal, en français et en anglais, ce qui compte pour les entreprises de Montréal qui servent les deux communautés linguistiques."
+  sections={[
+    {
+      heading: "Pourquoi Montréal compte ici",
+      body: "Les entreprises de Montréal servent des clients en français et en anglais. Nous construisons des sites dans les deux langues, et du contenu commercial d'abord en français pour les entreprises du Québec, selon les exigences linguistiques du Québec pour les sites web commerciaux destinés au public québécois.",
+    },
+    {
+      heading: "Pour qui",
+      body: "Métiers et entreprises locales, avec Montréal comme base : métiers, commerces, restaurants, cliniques, garages et services de nettoyage, servis partout au Canada.",
+    },
+    {
+      heading: "Ce qui est inclus",
+      items: [
+        "Un site web sur mesure, pas un modèle",
+        "Design adapté au mobile",
+        "Formulaire de contact et appel en un clic",
+        "Domaine, hébergement et SSL",
+        "Référencement de base",
+        "Statistiques, sécurité et entretien",
+      ],
+    },
+    {
+      heading: "Comment commencer",
+      body: "Envoyez votre métier, votre ville et quelques photos. Nous répondons avec deux directions de démos et un délai honnête. Les directions de démos sont choisies dans le catalogue de 41 démos comme direction de style seulement. Les sites clients sont construits sur mesure, jamais des copies de modèles.",
+    },
+    {
+      heading: "Et ensuite",
+      body: "Vous envoyez l'essentiel : photos, services, zone desservie, et ce que vous voulez que vos clients fassent, soit appeler, réserver ou demander un devis. Nous concevons et construisons, nous vous montrons un aperçu privé en quelques jours, et nous faisons une ronde de révisions. La plupart des sites sont lancés en 2 à 3 semaines après la réception du matériel complet.",
+    },
+    {
+      heading: "Conditions",
+      body: "Le terme initial est de 6 mois, puis de mois en mois avec un préavis de 30 jours. La facturation annuelle donne 2 mois gratuits. Aucun frais d'installation pour les forfaits de sites web. Le domaine appartient à l'entreprise.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "Construisez-vous des sites en français?",
+      a: "Oui. Nous travaillons en français et en anglais, et nous construisons du contenu commercial d'abord en français pour les entreprises du Québec.",
+    },
+    {
+      q: "Mon site est-il un modèle?",
+      a: "Non. Les sites clients sont construits sur mesure. Les directions de démos sont une direction de style seulement, jamais une copie de modèle.",
+    },
+    {
+      q: "Comment commencer?",
+      a: "Envoyez votre métier, votre ville et quelques photos à contact@webao.ca, ou utilisez le formulaire de démarrage. Nous répondons avec deux directions de démos et un délai honnête.",
+    },
+    {
+      q: "Combien de temps cela prend-il?",
+      a: "La plupart des sites sont lancés en 2 à 3 semaines après la réception du matériel complet. Les sites simples d'une page peuvent aller plus vite.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Autres services"
+  siblings={[
+    { href: "/fr/services/conception-site-web-pme/", label: "Conception de site web pour PME", note: "Un site web sur mesure, pas un modèle, pour les travailleurs autonomes et les entreprises de services locales." },
+    { href: "/fr/services/forfaits-mensuels-site-web/", label: "Forfaits mensuels de site web", note: "Lancement 89,99 $ CA/mois, Croissance 149,99 $ CA/mois, Échelle 349,99 $ CA/mois. La facturation annuelle donne 2 mois gratuits." },
+    { href: "/fr/services/hebergement-entretien-site-web/", label: "Hébergement et entretien de site web", note: "Hébergement, SSL, sécurité, sauvegardes et petites mises à jour, sans CMS à apprendre." },
+  ]}
+  startLabel="Démarrer votre site"
+  emailLabel="Courriel contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Conception de site web à Montréal",
+    description: "Conception de site web à Montréal, en français et en anglais, pour les entreprises locales qui servent les deux communautés linguistiques. Sites web sur mesure, jamais des copies de modèles.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "City", name: "Montreal" },
+    serviceType: "Web design",
+  }}
+/>

@@ -1,0 +1,81 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="serviceDesign"
+  title="Small-business website design | WEBAO"
+  description="A custom website for small businesses in Canada. Mobile-friendly design, domain, hosting, SSL, contact form, basic SEO, and maintenance. Based in Montreal, in English and French."
+  eyebrow="Website design"
+  heading="Small-business website design"
+  intro="Webao builds custom websites for small businesses, trades, shops and local service businesses. Plans start at C$89.99 per month and include domain, hosting, SSL, mobile-friendly design, a contact form, basic SEO, and content updates. No setup fee for website plans. English and French. Based in Montreal."
+  answerLine="A custom website, not a template, for solo operators and local service businesses that need to look professional online and be easy to contact."
+  sections={[
+    {
+      heading: "Who it is for",
+      body: "Solo operators and local service businesses: trades, shops, restaurants, clinics, garages, and cleaning services. If clients need to find you, trust you, and contact you, this is the service.",
+    },
+    {
+      heading: "What is included",
+      items: [
+        "A custom website, not a template",
+        "Mobile-friendly design",
+        "Contact form and click-to-call",
+        "Domain, hosting and SSL",
+        "Basic SEO",
+        "Stats, security and maintenance",
+      ],
+    },
+    {
+      heading: "How it starts",
+      body: "Send your trade, your city, and a couple of photos. We reply with two demo directions and an honest timeline.",
+    },
+    {
+      heading: "What happens next",
+      body: "You send the basics: photos, services, service area, and what you want clients to do, whether that is call, book, or request a quote. We design and build, show you a private preview within a few days, and take one revision round. Then we launch and maintain the site.",
+    },
+    {
+      heading: "Timeline and terms",
+      body: "Most sites launch in 2 to 3 weeks from complete materials. Simple one-pagers can go faster. An honest timeline is given before payment. The initial term is 6 months, then month to month with 30 days notice. Annual billing is 2 months free. No setup fee for website plans. The domain belongs to the business.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "Is my site a template?",
+      a: "No. Client sites are custom builds. The demo catalog is a showcase of what is possible, and a demo you like can be a style direction only.",
+    },
+    {
+      q: "How long does it take?",
+      a: "Most sites launch in 2 to 3 weeks from complete materials. Simple one-pagers can go faster. You get an honest timeline before payment.",
+    },
+    {
+      q: "What do I need to send to start?",
+      a: "Your trade, your city, a couple of photos, your services, your service area, and what you want clients to do: call, book, or request a quote.",
+    },
+    {
+      q: "What happens after launch?",
+      a: "We maintain the site: domain, hosting, SSL, backups, and small updates are included in the monthly fee.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/monthly-website-plans/", label: "Monthly website plans", note: "Launch C$89.99/mo, Grow C$149.99/mo, Scale C$349.99/mo. Annual billing is 2 months free." },
+    { href: "/services/website-hosting-maintenance/", label: "Website hosting and maintenance", note: "Hosting, SSL, security, backups, and small updates, with no CMS to learn." },
+    { href: "/services/montreal-web-design/", label: "Web design in Montreal", note: "Based in Montreal, working in English and French for Quebec-facing businesses." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Small-business website design",
+    description: "A custom website for small businesses in Canada. Mobile-friendly design, domain, hosting, SSL, contact form, basic SEO, and maintenance. Based in Montreal, in English and French.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: "CA",
+    serviceType: "Web design",
+  }}
+/>

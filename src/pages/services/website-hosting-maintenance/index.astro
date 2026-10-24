@@ -1,0 +1,83 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="serviceHosting"
+  title="Website hosting and maintenance | WEBAO"
+  description="Hosting, SSL, security, backups, and small updates for your website, with no CMS to learn. Based in Montreal, in English and French."
+  eyebrow="Hosting and maintenance"
+  heading="Website hosting and maintenance"
+  intro="For businesses that already have a site, or are launching one, and do not want to manage hosting, security, backups, or small updates themselves. English and French. Based in Montreal."
+  answerLine="Hosting, SSL, security and maintenance, backups, and small updates included in the monthly fee. No CMS to learn, no per-change billing."
+  sections={[
+    {
+      heading: "Who it is for",
+      body: "Businesses that already have a site or are launching one and do not want to manage hosting, security, backups, or small updates themselves.",
+    },
+    {
+      heading: "What is included",
+      items: [
+        "Hosting",
+        "SSL",
+        "Security and maintenance",
+        "Backups",
+        "Domain management and renewals while subscribed",
+        "Small updates included in the monthly fee: hours, services, photos, promo banners",
+        "No CMS to learn",
+        "No per-change billing",
+      ],
+    },
+    {
+      heading: "What is not included",
+      body: "Full mailbox hosting is not included. Email forwarding is set up so info@yourdomain.ca lands in the inbox you already use. Mailboxes with webmail and calendars come from an email provider, and we can help connect them.",
+    },
+    {
+      heading: "How it starts",
+      body: "Email contact@webao.ca with your current site, or the details of the new site. We reply with what is included and an honest timeline.",
+    },
+    {
+      heading: "Terms",
+      body: "Website plans start at C$89.99 per month. The initial term is 6 months, then month to month with 30 days notice. Annual billing is 2 months free. No setup fee for website plans.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "What counts as a small update?",
+      a: "Hours, services, photos, and promo banners. Small updates are included in the monthly fee, with no per-change billing.",
+    },
+    {
+      q: "Is email hosting included?",
+      a: "Full mailbox hosting is not included. Email forwarding is set up so info@yourdomain.ca lands in the inbox you already use. Mailboxes with webmail and calendars come from an email provider, and we can help connect them.",
+    },
+    {
+      q: "Do I need to learn a CMS?",
+      a: "No. There is no CMS to learn. Send the change, and we make it.",
+    },
+    {
+      q: "What happens to my domain?",
+      a: "Domain management and renewals are included while subscribed. The domain stays with the business.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/small-business-website-design/", label: "Small-business website design", note: "A custom website, not a template, for solo operators and local service businesses." },
+    { href: "/services/monthly-website-plans/", label: "Monthly website plans", note: "Launch C$89.99/mo, Grow C$149.99/mo, Scale C$349.99/mo. Annual billing is 2 months free." },
+    { href: "/services/montreal-web-design/", label: "Web design in Montreal", note: "Based in Montreal, working in English and French for Quebec-facing businesses." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Website hosting and maintenance",
+    description: "Hosting, SSL, security, backups, and small updates for your website, with no CMS to learn. Based in Montreal, in English and French.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: "CA",
+    serviceType: "Web hosting",
+  }}
+/>

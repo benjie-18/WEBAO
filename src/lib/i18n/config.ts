@@ -2,7 +2,7 @@ export const locales = ["en", "fr"] as const;
 export type Locale = typeof locales[number];
 export const defaultLocale: Locale = "en";
 
-export type PageKey = "home" | "pricing" | "contact" | "demos" | "notfound" | "start" | "terms" | "refunds" | "sources" | "support" | "privacy" | "portal";
+export type PageKey = "home" | "pricing" | "contact" | "demos" | "notfound" | "start" | "terms" | "refunds" | "sources" | "support" | "privacy" | "portal" | "serviceDesign" | "servicePlans" | "serviceHosting" | "serviceMontreal";
 
 export const localizedPaths: Record<Locale, Record<PageKey, string>> = {
   en: {
@@ -18,6 +18,10 @@ export const localizedPaths: Record<Locale, Record<PageKey, string>> = {
     sources: "/sources",
     support: "/support",
     portal: "/portal",
+    serviceDesign: "/services/small-business-website-design",
+    servicePlans: "/services/monthly-website-plans",
+    serviceHosting: "/services/website-hosting-maintenance",
+    serviceMontreal: "/services/montreal-web-design",
   },
   fr: {
     home: "/fr",
@@ -32,6 +36,10 @@ export const localizedPaths: Record<Locale, Record<PageKey, string>> = {
     sources: "/fr/sources",
     support: "/fr/soutien",
     portal: "/fr/portail",
+    serviceDesign: "/fr/services/conception-site-web-pme",
+    servicePlans: "/fr/services/forfaits-mensuels-site-web",
+    serviceHosting: "/fr/services/hebergement-entretien-site-web",
+    serviceMontreal: "/fr/services/conception-site-web-montreal",
   },
 };
 

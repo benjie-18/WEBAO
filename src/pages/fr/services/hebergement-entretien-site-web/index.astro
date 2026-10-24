@@ -1,0 +1,83 @@
+---
+import ServicePage from "../../../../components/pages/ServicePage.astro";
+
+const locale = "fr" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="serviceHosting"
+  title="Hébergement et entretien de site web | WEBAO"
+  description="Hébergement, SSL, sécurité, sauvegardes et petites mises à jour pour votre site web, sans CMS à apprendre. Basé à Montréal, en français et en anglais."
+  eyebrow="Hébergement et entretien"
+  heading="Hébergement et entretien de site web"
+  intro="Pour les entreprises qui ont déjà un site, ou qui en lancent un, et qui ne veulent pas gérer l'hébergement, la sécurité, les sauvegardes ou les petites mises à jour elles-mêmes. En français et en anglais. Basé à Montréal."
+  answerLine="Hébergement, SSL, sécurité et entretien, sauvegardes et petites mises à jour inclus dans le frais mensuel. Aucun CMS à apprendre, aucune facturation par changement."
+  sections={[
+    {
+      heading: "Pour qui",
+      body: "Les entreprises qui ont déjà un site ou qui en lancent un et qui ne veulent pas gérer l'hébergement, la sécurité, les sauvegardes ou les petites mises à jour elles-mêmes.",
+    },
+    {
+      heading: "Ce qui est inclus",
+      items: [
+        "Hébergement",
+        "SSL",
+        "Sécurité et entretien",
+        "Sauvegardes",
+        "Gestion du domaine et renouvellements pendant l'abonnement",
+        "Petites mises à jour incluses dans le frais mensuel : heures, services, photos, bannières promotionnelles",
+        "Aucun CMS à apprendre",
+        "Aucune facturation par changement",
+      ],
+    },
+    {
+      heading: "Ce qui n'est pas inclus",
+      body: "L'hébergement complet de boîtes courriel n'est pas inclus. La redirection de courriel est configurée pour que info@votredomaine.ca arrive dans la boîte de réception déjà utilisée. Les boîtes courriel avec webmail et calendriers viennent d'un fournisseur de courriel, et nous pouvons aider à les connecter.",
+    },
+    {
+      heading: "Comment commencer",
+      body: "Envoyez un courriel à contact@webao.ca avec votre site actuel, ou les détails du nouveau site. Nous répondons avec ce qui est inclus et un délai honnête.",
+    },
+    {
+      heading: "Conditions",
+      body: "Les forfaits de sites web commencent à 89,99 $ CA par mois. Le terme initial est de 6 mois, puis de mois en mois avec un préavis de 30 jours. La facturation annuelle donne 2 mois gratuits. Aucun frais d'installation pour les forfaits de sites web.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "Qu'est-ce qu'une petite mise à jour?",
+      a: "Heures, services, photos et bannières promotionnelles. Les petites mises à jour sont incluses dans le frais mensuel, sans facturation par changement.",
+    },
+    {
+      q: "L'hébergement de courriel est-il inclus?",
+      a: "L'hébergement complet de boîtes courriel n'est pas inclus. La redirection de courriel est configurée pour que info@votredomaine.ca arrive dans la boîte de réception déjà utilisée. Les boîtes courriel avec webmail et calendriers viennent d'un fournisseur de courriel, et nous pouvons aider à les connecter.",
+    },
+    {
+      q: "Dois-je apprendre un CMS?",
+      a: "Non. Il n'y a aucun CMS à apprendre. Envoyez le changement, et nous le faisons.",
+    },
+    {
+      q: "Que se passe-t-il avec mon domaine?",
+      a: "La gestion du domaine et les renouvellements sont inclus pendant l'abonnement. Le domaine reste à l'entreprise.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Autres services"
+  siblings={[
+    { href: "/fr/services/conception-site-web-pme/", label: "Conception de site web pour PME", note: "Un site web sur mesure, pas un modèle, pour les travailleurs autonomes et les entreprises de services locales." },
+    { href: "/fr/services/forfaits-mensuels-site-web/", label: "Forfaits mensuels de site web", note: "Lancement 89,99 $ CA/mois, Croissance 149,99 $ CA/mois, Échelle 349,99 $ CA/mois. La facturation annuelle donne 2 mois gratuits." },
+    { href: "/fr/services/conception-site-web-montreal/", label: "Conception de site web à Montréal", note: "Basé à Montréal, en français et en anglais, pour les entreprises du Québec." },
+  ]}
+  startLabel="Démarrer votre site"
+  emailLabel="Courriel contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Hébergement et entretien de site web",
+    description: "Hébergement, SSL, sécurité, sauvegardes et petites mises à jour pour votre site web, sans CMS à apprendre. Basé à Montréal, en français et en anglais.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: "CA",
+    serviceType: "Web hosting",
+  }}
+/>

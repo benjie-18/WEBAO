@@ -1,0 +1,85 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="serviceMontreal"
+  title="Web design in Montreal | WEBAO"
+  description="Web design in Montreal, in English and French, for local businesses serving both language communities. Custom websites, never template clones."
+  eyebrow="Montreal"
+  heading="Web design in Montreal"
+  intro="Webao is based in Montreal and serves small businesses across Canada, in English and French. Website plans start at C$89.99 per month and include domain, hosting, SSL, mobile-friendly design, a contact form, basic SEO, and content updates. No setup fee for website plans."
+  answerLine="Based in Montreal, working in English and French, which matters for Montreal businesses serving both language communities."
+  sections={[
+    {
+      heading: "Why Montreal matters here",
+      body: "Montreal businesses serve clients in both English and French. We build sites in both languages, and French-first commercial content for Quebec-facing businesses, per Quebec language requirements for commercial websites aimed at the Quebec public.",
+    },
+    {
+      heading: "Who it is for",
+      body: "Trades and local businesses, with Montreal as home base: trades, shops, restaurants, clinics, garages, and cleaning services, served across Canada.",
+    },
+    {
+      heading: "What is included",
+      items: [
+        "A custom website, not a template",
+        "Mobile-friendly design",
+        "Contact form and click-to-call",
+        "Domain, hosting and SSL",
+        "Basic SEO",
+        "Stats, security and maintenance",
+      ],
+    },
+    {
+      heading: "How it starts",
+      body: "Send your trade, your city, and a couple of photos. We reply with two demo directions and an honest timeline. Demo directions are chosen from the 41-demo catalog as a style direction only. Client sites are custom builds, never template clones.",
+    },
+    {
+      heading: "What happens next",
+      body: "You send the basics: photos, services, service area, and what you want clients to do, whether that is call, book, or request a quote. We design and build, show you a private preview within a few days, and take one revision round. Most sites launch in 2 to 3 weeks from complete materials.",
+    },
+    {
+      heading: "Terms",
+      body: "The initial term is 6 months, then month to month with 30 days notice. Annual billing is 2 months free. No setup fee for website plans. The domain belongs to the business.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "Do you build sites in French?",
+      a: "Yes. We work in English and French, and build French-first commercial content for Quebec-facing businesses.",
+    },
+    {
+      q: "Is my site a template?",
+      a: "No. Client sites are custom builds. Demo directions are a style direction only, never a template clone.",
+    },
+    {
+      q: "How do we start?",
+      a: "Send your trade, your city, and a couple of photos to contact@webao.ca, or use the start form. We reply with two demo directions and an honest timeline.",
+    },
+    {
+      q: "How long does it take?",
+      a: "Most sites launch in 2 to 3 weeks from complete materials. Simple one-pagers can go faster.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/small-business-website-design/", label: "Small-business website design", note: "A custom website, not a template, for solo operators and local service businesses." },
+    { href: "/services/monthly-website-plans/", label: "Monthly website plans", note: "Launch C$89.99/mo, Grow C$149.99/mo, Scale C$349.99/mo. Annual billing is 2 months free." },
+    { href: "/services/website-hosting-maintenance/", label: "Website hosting and maintenance", note: "Hosting, SSL, security, backups, and small updates, with no CMS to learn." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Web design in Montreal",
+    description: "Web design in Montreal, in English and French, for local businesses serving both language communities. Custom websites, never template clones.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "City", name: "Montreal" },
+    serviceType: "Web design",
+  }}
+/>

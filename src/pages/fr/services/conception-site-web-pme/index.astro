@@ -1,0 +1,81 @@
+---
+import ServicePage from "../../../../components/pages/ServicePage.astro";
+
+const locale = "fr" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="serviceDesign"
+  title="Conception de site web pour PME | WEBAO"
+  description="Un site web sur mesure pour petites entreprises au Canada. Design adapté au mobile, domaine, hébergement, SSL, formulaire de contact, référencement de base et entretien. Basé à Montréal, en français et en anglais."
+  eyebrow="Conception de site web"
+  heading="Conception de site web pour PME"
+  intro="Webao crée des sites web sur mesure pour petites entreprises, métiers, commerces et entreprises de services locales. Les forfaits commencent à 89,99 $ CA par mois et incluent domaine, hébergement, SSL, design adapté au mobile, formulaire de contact, référencement de base et mises à jour de contenu. Aucun frais d'installation pour les forfaits de sites web. En français et en anglais. Basé à Montréal."
+  answerLine="Un site web sur mesure, pas un modèle, pour les travailleurs autonomes et les entreprises de services locales qui veulent avoir l'air professionnelles en ligne et être faciles à joindre."
+  sections={[
+    {
+      heading: "Pour qui",
+      body: "Travailleurs autonomes et entreprises de services locales : métiers, commerces, restaurants, cliniques, garages et services de nettoyage. Si vos clients doivent vous trouver, vous faire confiance et vous joindre, ce service est pour vous.",
+    },
+    {
+      heading: "Ce qui est inclus",
+      items: [
+        "Un site web sur mesure, pas un modèle",
+        "Design adapté au mobile",
+        "Formulaire de contact et appel en un clic",
+        "Domaine, hébergement et SSL",
+        "Référencement de base",
+        "Statistiques, sécurité et entretien",
+      ],
+    },
+    {
+      heading: "Comment commencer",
+      body: "Envoyez votre métier, votre ville et quelques photos. Nous répondons avec deux directions de démos et un délai honnête.",
+    },
+    {
+      heading: "Et ensuite",
+      body: "Vous envoyez l'essentiel : photos, services, zone desservie, et ce que vous voulez que vos clients fassent, soit appeler, réserver ou demander un devis. Nous concevons et construisons, nous vous montrons un aperçu privé en quelques jours, et nous faisons une ronde de révisions. Ensuite, nous lançons le site et nous l'entretenons.",
+    },
+    {
+      heading: "Délais et conditions",
+      body: "La plupart des sites sont lancés en 2 à 3 semaines après la réception du matériel complet. Les sites simples d'une page peuvent aller plus vite. Un délai honnête est donné avant le paiement. Le terme initial est de 6 mois, puis de mois en mois avec un préavis de 30 jours. La facturation annuelle donne 2 mois gratuits. Aucun frais d'installation pour les forfaits de sites web. Le domaine appartient à l'entreprise.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "Mon site est-il un modèle?",
+      a: "Non. Les sites clients sont construits sur mesure. Le catalogue de démos montre ce qui est possible, et une démo qui vous plaît peut servir de direction de style seulement.",
+    },
+    {
+      q: "Combien de temps cela prend-il?",
+      a: "La plupart des sites sont lancés en 2 à 3 semaines après la réception du matériel complet. Les sites simples d'une page peuvent aller plus vite. Vous recevez un délai honnête avant le paiement.",
+    },
+    {
+      q: "Que dois-je envoyer pour commencer?",
+      a: "Votre métier, votre ville, quelques photos, vos services, votre zone desservie, et ce que vous voulez que vos clients fassent : appeler, réserver ou demander un devis.",
+    },
+    {
+      q: "Que se passe-t-il après le lancement?",
+      a: "Nous entretenons le site : domaine, hébergement, SSL, sauvegardes et petites mises à jour sont inclus dans le frais mensuel.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Autres services"
+  siblings={[
+    { href: "/fr/services/forfaits-mensuels-site-web/", label: "Forfaits mensuels de site web", note: "Lancement 89,99 $ CA/mois, Croissance 149,99 $ CA/mois, Échelle 349,99 $ CA/mois. La facturation annuelle donne 2 mois gratuits." },
+    { href: "/fr/services/hebergement-entretien-site-web/", label: "Hébergement et entretien de site web", note: "Hébergement, SSL, sécurité, sauvegardes et petites mises à jour, sans CMS à apprendre." },
+    { href: "/fr/services/conception-site-web-montreal/", label: "Conception de site web à Montréal", note: "Basé à Montréal, en français et en anglais, pour les entreprises du Québec." },
+  ]}
+  startLabel="Démarrer votre site"
+  emailLabel="Courriel contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Conception de site web pour PME",
+    description: "Un site web sur mesure pour petites entreprises au Canada. Design adapté au mobile, domaine, hébergement, SSL, formulaire de contact, référencement de base et entretien. Basé à Montréal, en français et en anglais.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: "CA",
+    serviceType: "Web design",
+  }}
+/>

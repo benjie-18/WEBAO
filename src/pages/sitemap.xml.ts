@@ -18,6 +18,10 @@ const pagesByLocale: Record<Locale, { key: keyof typeof localizedPaths.en; chang
     { key: "refunds", changefreq: "yearly", priority: "0.3" },
     { key: "privacy", changefreq: "yearly", priority: "0.3" },
     { key: "support", changefreq: "monthly", priority: "0.5" },
+    { key: "serviceDesign", changefreq: "monthly", priority: "0.8" },
+    { key: "servicePlans", changefreq: "monthly", priority: "0.8" },
+    { key: "serviceHosting", changefreq: "monthly", priority: "0.8" },
+    { key: "serviceMontreal", changefreq: "monthly", priority: "0.8" },
   ],
   fr: [
     { key: "home", changefreq: "weekly", priority: "1.0" },
@@ -29,6 +33,10 @@ const pagesByLocale: Record<Locale, { key: keyof typeof localizedPaths.en; chang
     { key: "refunds", changefreq: "yearly", priority: "0.3" },
     { key: "privacy", changefreq: "yearly", priority: "0.3" },
     { key: "support", changefreq: "monthly", priority: "0.5" },
+    { key: "serviceDesign", changefreq: "monthly", priority: "0.8" },
+    { key: "servicePlans", changefreq: "monthly", priority: "0.8" },
+    { key: "serviceHosting", changefreq: "monthly", priority: "0.8" },
+    { key: "serviceMontreal", changefreq: "monthly", priority: "0.8" },
   ],
 };
 

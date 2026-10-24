@@ -1,0 +1,107 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="servicePlans"
+  title="Monthly website plans | WEBAO"
+  description="Monthly website plans for small businesses: Launch C$89.99/mo, Grow C$149.99/mo, Scale C$349.99/mo. No large upfront design fee. Based in Montreal, in English and French."
+  eyebrow="Monthly plans"
+  heading="Monthly website plans"
+  intro="A website for a monthly fee, instead of a large upfront design fee. Every plan includes a custom website, domain, hosting and SSL. English and French. Based in Montreal."
+  answerLine="Launch C$89.99/mo, Grow C$149.99/mo, Scale C$349.99/mo. Annual billing is 2 months free. No setup fee for website plans."
+  sections={[
+    {
+      heading: "Launch, C$89.99/mo (C$890.99/yr)",
+      items: [
+        "Custom 1-page website",
+        "Domain, hosting and SSL included",
+        "Contact form and click-to-call",
+        "Foundational SEO",
+        "1 hour of content updates per month",
+        "Email support",
+      ],
+    },
+    {
+      heading: "Grow, C$149.99/mo (C$1,490.99/yr)",
+      items: [
+        "Everything in Launch, plus:",
+        "3 to 5 page custom website",
+        "Quote form with photo upload",
+        "Google Business Profile and reviews setup",
+        "Enhanced on-page SEO",
+        "3 hours of content updates per month",
+        "Priority support with 2-day response",
+      ],
+    },
+    {
+      heading: "Scale, C$349.99/mo (C$3,490.99/yr)",
+      items: [
+        "Everything in Grow, plus:",
+        "Up to 10 pages including service areas",
+        "Online booking",
+        "Review Generation Engine",
+        "Monthly Growth Report",
+        "Unlimited content updates",
+        "Same-day priority support",
+      ],
+    },
+    {
+      heading: "What monthly means here",
+      body: "No large upfront design fee, and no per-change billing for small updates. Pause or cancel under the terms below. The domain stays with the business.",
+      link: { href: "/pricing/", label: "See the full pricing page" },
+    },
+    {
+      heading: "Terms",
+      body: "The initial term is 6 months, then month to month with 30 days notice. Annual billing is 2 months free. No setup fee for website plans.",
+    },
+    {
+      heading: "How it starts",
+      body: "Send the basics: photos, services, service area, and what you want clients to do, whether that is call, book, or request a quote. We design and build, show you a private preview within a few days, and take one revision round. Most sites launch in 2 to 3 weeks from complete materials.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "What does the monthly fee cover?",
+      a: "A custom website, domain, hosting and SSL, plus the features of your plan, including content updates and support. Small updates are included, with no per-change billing.",
+    },
+    {
+      q: "What happens after the first 6 months?",
+      a: "The plan continues month to month, with 30 days notice to cancel.",
+    },
+    {
+      q: "Is there a setup fee?",
+      a: "No setup fee for website plans.",
+    },
+    {
+      q: "Does the domain belong to my business?",
+      a: "Yes. The domain stays with the business.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/small-business-website-design/", label: "Small-business website design", note: "A custom website, not a template, for solo operators and local service businesses." },
+    { href: "/services/website-hosting-maintenance/", label: "Website hosting and maintenance", note: "Hosting, SSL, security, backups, and small updates, with no CMS to learn." },
+    { href: "/services/montreal-web-design/", label: "Web design in Montreal", note: "Based in Montreal, working in English and French for Quebec-facing businesses." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Monthly website plans",
+    description: "Monthly website plans for small businesses: Launch C$89.99/mo, Grow C$149.99/mo, Scale C$349.99/mo. No large upfront design fee. Based in Montreal, in English and French.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: "CA",
+    serviceType: "Web design",
+    offers: [
+      { "@type": "Offer", name: "Launch", price: "89.99", priceCurrency: "CAD", description: "Custom 1-page website, domain, hosting and SSL included." },
+      { "@type": "Offer", name: "Grow", price: "149.99", priceCurrency: "CAD", description: "3 to 5 page custom website, quote form with photo upload, enhanced on-page SEO." },
+      { "@type": "Offer", name: "Scale", price: "349.99", priceCurrency: "CAD", description: "Up to 10 pages including service areas, online booking, Review Generation Engine, Monthly Growth Report." },
+    ],
+  }}
+/>

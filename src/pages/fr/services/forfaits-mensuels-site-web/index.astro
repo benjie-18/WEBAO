@@ -1,0 +1,107 @@
+---
+import ServicePage from "../../../../components/pages/ServicePage.astro";
+
+const locale = "fr" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="servicePlans"
+  title="Forfaits mensuels de site web | WEBAO"
+  description="Forfaits mensuels de site web pour petites entreprises : Lancement 89,99 $ CA/mois, Croissance 149,99 $ CA/mois, Échelle 349,99 $ CA/mois. Aucun gros frais de conception initial. Basé à Montréal, en français et en anglais."
+  eyebrow="Forfaits mensuels"
+  heading="Forfaits mensuels de site web"
+  intro="Un site web pour un frais mensuel, au lieu d'un gros frais de conception initial. Chaque forfait inclut un site web sur mesure, un domaine, l'hébergement et le SSL. En français et en anglais. Basé à Montréal."
+  answerLine="Lancement 89,99 $ CA/mois, Croissance 149,99 $ CA/mois, Échelle 349,99 $ CA/mois. La facturation annuelle donne 2 mois gratuits. Aucun frais d'installation pour les forfaits de sites web."
+  sections={[
+    {
+      heading: "Lancement, 89,99 $ CA/mois (890,99 $ CA/an)",
+      items: [
+        "Site web sur mesure d'une page",
+        "Domaine, hébergement et SSL inclus",
+        "Formulaire de contact et appel en un clic",
+        "Référencement de base",
+        "1 heure de mises à jour de contenu par mois",
+        "Soutien par courriel",
+      ],
+    },
+    {
+      heading: "Croissance, 149,99 $ CA/mois (1 490,99 $ CA/an)",
+      items: [
+        "Tout ce qui est dans Lancement, plus :",
+        "Site web sur mesure de 3 à 5 pages",
+        "Formulaire de devis avec téléchargement de photos",
+        "Profil Google Business et configuration des avis",
+        "Référencement sur page amélioré",
+        "3 heures de mises à jour de contenu par mois",
+        "Soutien prioritaire avec réponse en 2 jours",
+      ],
+    },
+    {
+      heading: "Échelle, 349,99 $ CA/mois (3 490,99 $ CA/an)",
+      items: [
+        "Tout ce qui est dans Croissance, plus :",
+        "Jusqu'à 10 pages, incluant les zones desservies",
+        "Réservation en ligne",
+        "Moteur de génération d'avis",
+        "Rapport de croissance mensuel",
+        "Mises à jour de contenu illimitées",
+        "Soutien prioritaire le jour même",
+      ],
+    },
+    {
+      heading: "Ce que mensuel veut dire ici",
+      body: "Aucun gros frais de conception initial, et aucune facturation par changement pour les petites mises à jour. Pause ou annulation selon les conditions ci-dessous. Le domaine reste à l'entreprise.",
+      link: { href: "/fr/tarifs/", label: "Voir la page complète des tarifs" },
+    },
+    {
+      heading: "Conditions",
+      body: "Le terme initial est de 6 mois, puis de mois en mois avec un préavis de 30 jours. La facturation annuelle donne 2 mois gratuits. Aucun frais d'installation pour les forfaits de sites web.",
+    },
+    {
+      heading: "Comment commencer",
+      body: "Envoyez l'essentiel : photos, services, zone desservie, et ce que vous voulez que vos clients fassent, soit appeler, réserver ou demander un devis. Nous concevons et construisons, nous vous montrons un aperçu privé en quelques jours, et nous faisons une ronde de révisions. La plupart des sites sont lancés en 2 à 3 semaines après la réception du matériel complet.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "Que couvre le frais mensuel?",
+      a: "Un site web sur mesure, un domaine, l'hébergement et le SSL, plus les fonctions de votre forfait, incluant les mises à jour de contenu et le soutien. Les petites mises à jour sont incluses, sans facturation par changement.",
+    },
+    {
+      q: "Que se passe-t-il après les 6 premiers mois?",
+      a: "Le forfait continue de mois en mois, avec un préavis de 30 jours pour annuler.",
+    },
+    {
+      q: "Y a-t-il des frais d'installation?",
+      a: "Aucun frais d'installation pour les forfaits de sites web.",
+    },
+    {
+      q: "Le domaine appartient-il à mon entreprise?",
+      a: "Oui. Le domaine reste à l'entreprise.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Autres services"
+  siblings={[
+    { href: "/fr/services/conception-site-web-pme/", label: "Conception de site web pour PME", note: "Un site web sur mesure, pas un modèle, pour les travailleurs autonomes et les entreprises de services locales." },
+    { href: "/fr/services/hebergement-entretien-site-web/", label: "Hébergement et entretien de site web", note: "Hébergement, SSL, sécurité, sauvegardes et petites mises à jour, sans CMS à apprendre." },
+    { href: "/fr/services/conception-site-web-montreal/", label: "Conception de site web à Montréal", note: "Basé à Montréal, en français et en anglais, pour les entreprises du Québec." },
+  ]}
+  startLabel="Démarrer votre site"
+  emailLabel="Courriel contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Forfaits mensuels de site web",
+    description: "Forfaits mensuels de site web pour petites entreprises : Lancement 89,99 $ CA/mois, Croissance 149,99 $ CA/mois, Échelle 349,99 $ CA/mois. Aucun gros frais de conception initial. Basé à Montréal, en français et en anglais.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: "CA",
+    serviceType: "Web design",
+    offers: [
+      { "@type": "Offer", name: "Lancement", price: "89.99", priceCurrency: "CAD", description: "Site web sur mesure d'une page, domaine, hébergement et SSL inclus." },
+      { "@type": "Offer", name: "Croissance", price: "149.99", priceCurrency: "CAD", description: "Site web sur mesure de 3 à 5 pages, formulaire de devis avec téléchargement de photos, référencement sur page amélioré." },
+      { "@type": "Offer", name: "Échelle", price: "349.99", priceCurrency: "CAD", description: "Jusqu'à 10 pages incluant les zones desservies, réservation en ligne, moteur de génération d'avis, rapport de croissance mensuel." },
+    ],
+  }}
+/>
