@@ -28,6 +28,9 @@ const copy = fr
       signOut: "Se déconnecter",
       adminBanner: "Vous voyez ce portail en tant qu'administrateur (vue client).",
       adminExit: "Quitter la vue client",
+      paymentActionTitle: "Votre carte doit être confirmée",
+      paymentActionBody: "Votre banque demande une confirmation pour votre dernier paiement. Confirmez-le auprès de Stripe pour garder votre abonnement et votre site actifs.",
+      paymentActionButton: "Confirmer mon paiement",
       progressLabel: "Votre progression",
       supportButton: "Soutien client",
       helpTitle: "Besoin d'un coup de main ?",
@@ -127,6 +130,9 @@ const copy = fr
       signOut: "Sign out",
       adminBanner: "You are viewing this portal as an admin (client view).",
       adminExit: "Exit client view",
+      paymentActionTitle: "Your card needs confirmation",
+      paymentActionBody: "Your bank asked you to confirm your latest payment. Confirm it with Stripe to keep your subscription and your site running.",
+      paymentActionButton: "Confirm my payment",
       progressLabel: "Your progress",
       supportButton: "Client support",
       helpTitle: "Need a hand?",
@@ -250,6 +256,11 @@ const supportHref = fr ? "/fr/soutien" : "/support";
             <span style="font-size:14px; font-weight:600;">{copy.adminBanner}</span>
             <button type="button" class="btn btn--ghost" data-portal-admin-exit>{copy.adminExit}</button>
           </div>
+        </div>
+        <div data-portal-payment-banner hidden style="border:1px solid var(--line-strong); border-radius:12px; padding:12px 14px; margin-bottom:16px; background: var(--card-bg);">
+          <p style="margin:0 0 4px; font-size:14px; font-weight:700;">{copy.paymentActionTitle}</p>
+          <p class="prose" style="margin:0 0 10px; font-size:14px;">{copy.paymentActionBody}</p>
+          <a class="btn" data-portal-payment-link href="#" target="_blank" rel="noopener">{copy.paymentActionButton}</a>
         </div>
         <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
           <p style="margin:0; font-weight:650;" data-portal-identity></p>
@@ -629,6 +640,13 @@ const supportHref = fr ? "/fr/soutien" : "/support";
       }
       var adminBanner = root.querySelector("[data-portal-admin-banner]");
       if (adminBanner) adminBanner.hidden = !client.viaAdmin;
+      var paymentBanner = root.querySelector("[data-portal-payment-banner]");
+      var actionRequired = client.paymentActionRequired;
+      if (paymentBanner) paymentBanner.hidden = !actionRequired;
+      if (actionRequired && actionRequired.url) {
+        var paymentLink = root.querySelector("[data-portal-payment-link]");
+        if (paymentLink) paymentLink.href = actionRequired.url;
+      }
       var viewsLine = root.querySelector("[data-portal-views]");
       if (client.stage === "live" && typeof client.siteViewsThisMonth === "number") {
         viewsLine.hidden = false;

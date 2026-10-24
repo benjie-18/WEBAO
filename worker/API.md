@@ -135,7 +135,13 @@ Handled events: `checkout.session.completed` (create or enrich the client
 record at stage `onboarding`, items from the session's `metadata[items]`, plus
 a best-effort inbox notification from start@webao.ca), `invoice.paid`,
 `invoice.payment_failed`, `customer.subscription.updated` and
-`customer.subscription.deleted` (mirror billing status onto the client).
+`customer.subscription.deleted` (mirror billing status onto the client),
+`checkout.session.expired` (store an abandoned checkout for recovery, see
+`recovery.ts`), `charge.dispute.created` (record the dispute at
+`dispute:<id>`, flag the client, alert the inbox immediately through the
+send_email binding) and `invoice.payment_action_required` (set
+`client.paymentActionRequired` with the hosted invoice URL, bannered in the
+portal and emailed to the client; the next `invoice.paid` clears it).
 Clients live in `client:<cl_id>` with the `client-customer:<cus_id>` lookup;
 unknown customers and unknown event types are acknowledged as no-ops.
 
@@ -296,6 +302,15 @@ is never reported twice for a month; a failed send (for example the SMTP2GO
 key missing) is left unrecorded and retries next run. An optional
 `{ month: "yyyy-mm" }` body targets a specific month.
 Answers `{ month, sent, skipped, failed }`.
+
+### `POST /api/internal/abandoned-followups`
+Shared-secret Bearer <redacted> (`INTERNAL_CRON_SECRET`), run daily by the
+automation cron. Sends one follow-up email per abandoned checkout
+(`abandoned:<sessionId>`, written by the webhook on
+`checkout.session.expired`) once it is at least 12 hours old: skipped and
+marked `converted` when the email now belongs to a client, marked `stale`
+unemailed after 14 days, left `pending` when the mailer cannot send.
+Answers `{ emailed, converted, stale, pending }`.
 
 ## Ads Pack
 

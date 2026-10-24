@@ -44,6 +44,7 @@ import {
 import { startAdminViewSession } from "./portal";
 import { assignDomain } from "./tenants";
 import { getBuildState, publishBuild, runBuild, type BuildState } from "./builds";
+import { listAbandoned } from "./recovery";
 import { buildLaunchPacket, recordAdsSpend } from "./ads";
 import { clampStr } from "./util";
 
@@ -480,6 +481,8 @@ function clientSummary(client: Client, build?: BuildState) {
     adAccountId: client.ads?.adAccountId,
     nudgeCount: client.nudgeCount || 0,
     nudgesEscalatedAt: client.nudgesEscalatedAt,
+    paymentActionRequired: client.paymentActionRequired || null,
+    disputeFlag: client.disputeFlag || null,
     stripeCustomerId: client.stripeCustomerId,
     stripeSubscriptionId: client.stripeSubscriptionId,
     buildAt: build?.latest?.builtAt,
@@ -512,9 +515,13 @@ async function handleClientsList(kv: KVNamespace, url: URL): Promise<Response> {
     })
   ).filter((x): x is ReturnType<typeof clientSummary> => x !== null);
 
+  // Abandoned checkouts ride the first page only (warm leads, see recovery.ts).
+  const abandoned = cursor === 0 ? await listAbandoned(kv, 50) : [];
+
   return json({
     ok: true,
     items,
+    abandoned,
     nextCursor: cursor + limit < index.length ? String(cursor + limit) : null,
   });
 }

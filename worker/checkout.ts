@@ -251,6 +251,11 @@ export async function handleCheckoutSession(req: Request, env: Env): Promise<Res
   }
   // Which products this session was built from, for the Stripe dashboard.
   params.set("metadata[items]", lineItems.map((item) => item.key).join(",").slice(0, 480));
+  // The buyer's language, read back by the webhook (welcome email, and the
+  // abandoned-checkout follow-up if the session expires): the checkout POST
+  // comes from the EN or FR pricing page, so the referer carries the locale.
+  const referer = req.headers.get("referer") || "";
+  params.set("metadata[lang]", referer.includes("/fr/") ? "fr" : "en");
 
   let stripeRes: Response;
   try {

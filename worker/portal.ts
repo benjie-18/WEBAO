@@ -164,6 +164,7 @@ function portalView(client: Client) {
     lang: client.lang,
     stage: client.stage,
     billingStatus: client.billingStatus,
+    paymentActionRequired: client.paymentActionRequired || null,
     items: client.items,
     previewUrl: client.previewUrl,
     domain: client.domain,

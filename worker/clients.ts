@@ -73,6 +73,12 @@ export interface Client {
   lastCheckoutAt?: number;
   lastInvoicePaidAt?: number;
   paymentFailedAt?: number;
+  /** Set by invoice.payment_action_required: the client must confirm their
+   *  card (3D Secure) on Stripe's hosted invoice page to rescue the payment.
+   *  The portal banners it; the next invoice.paid clears it. */
+  paymentActionRequired?: { invoiceId: string; url: string; at: number };
+  /** Latest Stripe dispute opened against this client (charge.dispute.created). */
+  disputeFlag?: { disputeId: string; at: number };
   canceledAt?: number;
   /** How this record came to exist, e.g. "stripe". */
   source: string;

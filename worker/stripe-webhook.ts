@@ -13,11 +13,18 @@
 //   invoice.payment_failed      -> billingStatus past_due, stamp paymentFailedAt
 //   customer.subscription.updated -> mirror the subscription status
 //   customer.subscription.deleted -> billingStatus canceled, stamp canceledAt
+//   checkout.session.expired    -> store an abandoned checkout (see
+//                                  recovery.ts; one follow-up email later)
+//   charge.dispute.created      -> record the dispute, flag the client, and
+//                                  alert the WEBAO inbox immediately
+//   invoice.payment_action_required -> flag the client (the portal banners
+//                                  it) and email Stripe's confirmation link
 // Anything else is acknowledged and ignored.
 
 import { putJson } from "./kv";
 import { json, err, timingSafeEqual, clampStr } from "./util";
-import { sendClientEmail } from "./mailer";
+import { notifyInbox, sendClientEmail } from "./mailer";
+import { storeAbandonedCheckout } from "./recovery";
 import {
   createClient,
   findClientByCustomer,
@@ -188,6 +195,7 @@ async function onInvoice(
     client.billingStatus = "active";
     client.lastInvoicePaidAt = at;
     client.paymentFailedAt = undefined;
+    client.paymentActionRequired = undefined;
   } else {
     client.billingStatus = "past_due";
     client.paymentFailedAt = at;
@@ -235,6 +243,143 @@ async function onSubscription(
     }
   }
   await saveClient(kv, client);
+}
+
+async function onCheckoutExpired(kv: KVNamespace, event: StripeEvent): Promise<void> {
+  const s = event.data.object;
+  const details = (s.customer_details || {}) as Record<string, unknown>;
+  const email = (str(details.email) || str(s.customer_email)).trim().toLowerCase();
+  if (!EMAIL_RE.test(email)) return; // nobody to follow up with
+  const metadata = (s.metadata || {}) as Record<string, unknown>;
+  const items = str(metadata.items)
+    .split(",")
+    .map((k) => k.trim())
+    .filter(Boolean);
+  await storeAbandonedCheckout(kv, {
+    sessionId: str(s.id),
+    email,
+    name: clampStr(details.name, 120).trim() || undefined,
+    items,
+    amountTotal: typeof s.amount_total === "number" ? s.amount_total : undefined,
+    currency: str(s.currency) || undefined,
+    lang: str(metadata.lang) === "fr" ? "fr" : "en",
+    createdAt: event.created > 0 ? event.created * 1000 : Date.now(),
+    status: "pending",
+  });
+}
+
+async function onDisputeCreated(
+  kv: KVNamespace,
+  env: Env,
+  event: StripeEvent,
+): Promise<void> {
+  const d = event.data.object;
+  const disputeId = str(d.id);
+  if (!disputeId) return;
+  const chargeId = str(d.charge);
+  const at = event.created > 0 ? event.created * 1000 : Date.now();
+  const evidence = (d.evidence_details || {}) as Record<string, unknown>;
+  const dueBySec = typeof evidence.due_by === "number" ? evidence.due_by : 0;
+
+  // Best effort: resolve the client through the charge's customer (the
+  // dispute object itself carries no customer id).
+  let client: Client | null = null;
+  if (chargeId && env.STRIPE_SECRET_KEY) {
+    try {
+      const res = await fetch(`https://api.stripe.com/v1/charges/${chargeId}`, {
+        headers: { Authorization: `Bearer ${env.STRIPE_SECRET_KEY}` },
+      });
+      if (res.ok) {
+        const charge = (await res.json()) as Record<string, unknown>;
+        client = await findClientByCustomer(kv, str(charge.customer));
+      }
+    } catch {
+      // The record and the alert below still go out without the match.
+    }
+  }
+  if (client) {
+    client.disputeFlag = { disputeId, at };
+    await saveClient(kv, client);
+  }
+  const amount = typeof d.amount === "number" ? d.amount : 0;
+  const currency = (str(d.currency) || "cad").toUpperCase();
+  const money = `${(amount / 100).toFixed(2)} ${currency}`;
+  await putJson(kv, "dispute:" + disputeId, {
+    id: disputeId,
+    chargeId,
+    amount,
+    currency: currency.toLowerCase(),
+    reason: str(d.reason),
+    status: str(d.status),
+    dueBy: dueBySec ? dueBySec * 1000 : undefined,
+    clientId: client?.id,
+    email: client?.email,
+    at,
+  });
+  await notifyInbox(env, `Stripe dispute opened: ${money}`, [
+    "A charge dispute (chargeback) was opened in Stripe.",
+    "",
+    `Dispute: ${disputeId}`,
+    `Amount: ${money}`,
+    `Reason: ${str(d.reason) || "(not given)"}`,
+    dueBySec
+      ? `Evidence due by: ${new Date(dueBySec * 1000).toISOString()}`
+      : "Evidence due by: see Stripe",
+    client ? `Client: ${client.email} (${client.id})` : "Client: not matched to a record",
+    "",
+    "Respond in the Stripe Dashboard (Payments, then Disputes) before the deadline; an unanswered dispute is lost automatically.",
+  ]);
+}
+
+async function onPaymentActionRequired(
+  kv: KVNamespace,
+  env: Env,
+  event: StripeEvent,
+): Promise<void> {
+  const inv = event.data.object;
+  const customerId = str(inv.customer);
+  const email = str(inv.customer_email).trim().toLowerCase();
+  const client = await resolveClient(kv, customerId, email);
+  if (!client) return;
+  const url = str(inv.hosted_invoice_url);
+  const at = event.created > 0 ? event.created * 1000 : Date.now();
+  client.paymentActionRequired = { invoiceId: str(inv.id), url, at };
+  await saveClient(kv, client);
+  if (!url) return;
+  const fr = client.lang === "fr";
+  await sendClientEmail(env, {
+    to: client.email,
+    subject: fr
+      ? "Action requise : confirmez votre carte pour garder votre service actif"
+      : "Action needed: confirm your card to keep your service active",
+    text: fr
+      ? [
+          "Bonjour,",
+          "",
+          "Votre banque demande une confirmation rapide avant que votre dernier paiement WEBAO puisse passer. Rien n'est brisé et aucun frais supplémentaire ne s'applique : Stripe doit simplement confirmer que la carte est bien la vôtre.",
+          "",
+          `Confirmez ici : ${url}`,
+          "",
+          "Tant que ce n'est pas confirmé, votre abonnement ne peut pas se renouveler. Merci de le faire dès que possible pour éviter une interruption de service.",
+          "",
+          "Des questions ? Répondez à ce courriel ou écrivez à support@webao.ca.",
+          "",
+          "L'équipe Webao",
+        ].join("\n")
+      : [
+          "Hi,",
+          "",
+          "Your bank asked for a quick confirmation before your latest WEBAO payment can go through. Nothing is broken and no extra charge applies: Stripe just needs to confirm the card is yours.",
+          "",
+          `Confirm here: ${url}`,
+          "",
+          "Until it is confirmed, your subscription cannot renew. Please do it as soon as you can so your service continues without interruption.",
+          "",
+          "Questions? Reply to this email or write to support@webao.ca.",
+          "",
+          "The Webao team",
+        ].join("\n"),
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -371,6 +516,15 @@ export async function handleStripeWebhook(req: Request, env: Env): Promise<Respo
       break;
     case "customer.subscription.deleted":
       await onSubscription(kv, event, true);
+      break;
+    case "checkout.session.expired":
+      await onCheckoutExpired(kv, event);
+      break;
+    case "charge.dispute.created":
+      await onDisputeCreated(kv, env, event);
+      break;
+    case "invoice.payment_action_required":
+      await onPaymentActionRequired(kv, env, event);
       break;
     default:
       break; // Acknowledged, nothing to mirror.

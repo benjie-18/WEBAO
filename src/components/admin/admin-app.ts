@@ -99,9 +99,22 @@ interface ClientItem {
   stripeSubscriptionId?: string;
 }
 
+interface AbandonedItem {
+  sessionId: string;
+  email: string;
+  name?: string;
+  items: string[];
+  amountTotal?: number;
+  currency?: string;
+  lang: string;
+  createdAt: number;
+  status: string;
+}
+
 interface ClientsResponse {
   ok: boolean;
   items: ClientItem[];
+  abandoned?: AbandonedItem[];
   nextCursor: string | null;
 }
 
@@ -1154,11 +1167,29 @@ function initAdmin(): void {
       const data = (await api(
         `/api/admin/clients?limit=50${clientsCursor ? `&cursor=${encodeURIComponent(clientsCursor)}` : ""}`
       )) as unknown as ClientsResponse;
-      if (reset && data.items.length === 0) {
+      if (reset && data.items.length === 0 && !(data.abandoned && data.abandoned.length > 0)) {
         list.innerHTML = `<div class="admin-empty">${esc(I18N.clients.empty)}</div>`;
         return;
       }
       for (const item of data.items) list.insertAdjacentHTML("beforeend", clientCard(item));
+      if (reset && data.abandoned && data.abandoned.length > 0) {
+        const rows = data.abandoned
+          .map((a) => {
+            const amount =
+              typeof a.amountTotal === "number"
+                ? ` · $${(a.amountTotal / 100).toFixed(2)}`
+                : "";
+            return (
+              `<div class="form-meta"><span>${esc(a.email)}</span>` +
+              `<span>${esc(a.items.join(", ") || "checkout")}${amount} · ${esc(a.status)} · ${esc(fmtDateTime(a.createdAt))}</span></div>`
+            );
+          })
+          .join("");
+        list.insertAdjacentHTML(
+          "beforeend",
+          `<div class="form-card"><div class="form-card-head">Abandoned checkouts</div>${rows}</div>`,
+        );
+      }
       clientsCursor = data.nextCursor;
       more.hidden = !clientsCursor;
     } catch (e) {
