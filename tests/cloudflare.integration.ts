@@ -2,7 +2,7 @@
 // Run after an Astro build, so its deployment-config redirect is present.
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { JSDOM, VirtualConsole } from 'jsdom';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -548,5 +548,33 @@ test('built success page shows the purchased selection', async () => {
     assert.ok(!copy.includes('$149'), 'no hardcoded $149 without a cart');
   } finally {
     dom?.window.close();
+  }
+});
+
+// Audit built-output pins (this file runs after `npm run build`, so dist
+// is fresh): the duplicate cart-clip id is gone, the portal fieldset
+// overflow guard and the new AA button/offer tokens shipped.
+test('audit built output: no cart-clip id, portal fieldset guard, AA tokens', () => {
+  const htmlFiles = readdirSync('dist/client', { recursive: true, withFileTypes: true })
+    .filter((e) => e.isFile() && e.name.endsWith('.html'))
+    .map((e) => join((e.parentPath ?? (e as unknown as { path: string }).path), e.name));
+  assert.ok(htmlFiles.length > 100, `expected the full site build, got ${htmlFiles.length} pages`);
+  for (const file of htmlFiles) {
+    assert.ok(!readFileSync(file, 'utf-8').includes('id="cart-clip"'), `duplicate cart-clip id in ${file}`);
+  }
+  const css = readdirSync('dist/client/_astro')
+    .filter((n) => n.endsWith('.css'))
+    .map((n) => readFileSync(join('dist/client/_astro', n), 'utf-8'))
+    .join('\n');
+  assert.ok(css.includes('--btn-primary-bg:#c62820'), 'light AA primary button token present');
+  assert.ok(css.includes('--offer-panel-bg:#a81e14'), 'light AA offer panel token present');
+  // Portal styles are inlined into the page by Astro, not bundled: the
+  // fieldset guard lives in the portal HTML style blocks, EN + FR.
+  for (const page of ['dist/client/portal/index.html', 'dist/client/fr/portail/index.html']) {
+    const html = readFileSync(page, 'utf-8');
+    assert.ok(
+      html.split('}').some((rule) => rule.includes('data-portal-root') && /fieldset[^{]*\{[^}]*min-width:0/.test(rule + '}')),
+      `portal fieldset min-width guard present in ${page}`,
+    );
   }
 });

@@ -377,3 +377,33 @@ test('billing changes only touch recurring items', () => {
   ]);
   window.close();
 });
+
+test('drawer focus: opening moves focus inside, Tab is trapped, closing returns focus', async () => {
+  const { doc, window, click } = fixture();
+  const openBtn = doc.querySelector<HTMLElement>('[data-cart-open]')!;
+  const closeBtn = doc.querySelector<HTMLElement>('[data-cart-close]')!;
+  const checkout = doc.querySelector<HTMLElement>('[data-cart-checkout]')!;
+  const tab = (shift = false) =>
+    doc.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Tab', shiftKey: shift, bubbles: true, cancelable: true }));
+
+  openBtn.focus();
+  click(openBtn);
+  assert.equal(doc.activeElement, closeBtn, 'opening focuses the drawer close button');
+
+  checkout.focus();
+  tab();
+  assert.equal(doc.activeElement, closeBtn, 'Tab on the last focusable wraps to the first');
+
+  closeBtn.focus();
+  tab(true);
+  assert.equal(doc.activeElement, checkout, 'Shift+Tab on the first focusable wraps to the last');
+
+  doc.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+  await new Promise((resolve) => setTimeout(resolve, 400));
+  assert.equal(doc.activeElement, openBtn, 'closing returns focus to the opener');
+
+  // With the drawer closed, Tab is untouched by the trap.
+  tab();
+  assert.equal(doc.activeElement, openBtn);
+  window.close();
+});

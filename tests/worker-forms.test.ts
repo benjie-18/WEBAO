@@ -211,7 +211,7 @@ test('requests are gated by origin and content type', async () => {
   assert.deepEqual(await bodyOf(response), { ok: false, error: 'Expected application/json' });
 });
 
-test('the index is capped at 1000 and evicted submissions are deleted', async () => {
+test('the index is capped at 1000 but evicted submissions are kept', async () => {
   const memory = memoryKV();
   const oldKeys = Array.from({ length: 1000 }, (_, i) => `form:${1000 + i}:old${String(i).padStart(13, '0')}`);
   memory.store.set('forms:index', JSON.stringify(oldKeys));
@@ -223,9 +223,11 @@ test('the index is capped at 1000 and evicted submissions are deleted', async ()
   assert.equal(index.length, 1000);
   assert.equal(index[0].startsWith('form:'), true);
   assert.equal(index[1], oldKeys[0], 'the newest old entries survive');
-  assert.equal(index[999], oldKeys[998], 'the oldest old entry is pushed out');
-  assert.equal(memory.store.has(oldKeys[999]), false, 'the evicted submission is deleted');
-  assert.equal(memory.deletes.includes(oldKeys[999]), true);
+  assert.equal(index[999], oldKeys[998], 'the oldest old entry is pushed out of the listing');
+  // The record itself survives: trimming bounds listings only (pricing
+  // submissions have no inbox copy, so deleting them lost them entirely).
+  assert.equal(memory.store.has(oldKeys[999]), true, 'the evicted submission is kept');
+  assert.equal(memory.deletes.includes(oldKeys[999]), false);
 });
 
 test('submissions include the visitor metadata the admin panel shows', async () => {

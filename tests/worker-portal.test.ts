@@ -50,7 +50,7 @@ function cookieOf(res: Response): string {
   return `webao_portal=${m![1]}`;
 }
 
-test('request-link: unknown email is a silent ok, known email without mail config is 503', async () => {
+test('request-link: unknown and known emails are both a silent ok (no client enumeration)', async () => {
   const memory = memoryKV();
   await seedClient(memory);
   const env = envOf(memory.kv, {});
@@ -59,8 +59,11 @@ test('request-link: unknown email is a silent ok, known email without mail confi
   assert.equal(unknown.status, 200);
   assert.equal([...memory.store.keys()].some((k) => k.startsWith('portal-login:')), false);
 
+  // Known email, mail unconfigured: still a silent ok (the old 503 leaked
+  // exactly which addresses are clients) and no login token is minted.
   const known = await handlePortalRequestLink(apiRequest('/api/portal/request-link', { email: 'owner@example.ca' }), env);
-  assert.equal(known.status, 503);
+  assert.equal(known.status, 200);
+  assert.equal([...memory.store.keys()].some((k) => k.startsWith('portal-login:')), false);
 });
 
 test('magic link: request, exchange once, session reads me, token cannot be reused', async () => {
