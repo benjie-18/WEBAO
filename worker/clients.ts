@@ -105,6 +105,58 @@ export interface Client {
   };
   /** How many times the client has sent a build back with changes. */
   revisionCount?: number;
+  /** Ads Pack engagement, present once the client buys ads (or is set up). */
+  ads?: AdsState;
+}
+
+/** What an Ads Pack client tells us before a campaign can be built. */
+export interface AdsOnboarding {
+  trade?: string;
+  services?: string;
+  serviceArea?: string;
+  radiusKm?: number;
+  /** The client's own monthly ad spend, in dollars (minimum 1500). */
+  monthlyBudget?: number;
+  /** Their existing website when WEBAO does not host it. */
+  websiteUrl?: string;
+  leadEmail?: string;
+  leadPhone?: string;
+  notes?: string;
+}
+
+export type AdsStatus = "onboarding" | "setup" | "ready" | "live" | "paused";
+
+export interface AdsState {
+  status: AdsStatus;
+  platform: "meta";
+  onboarding?: AdsOnboarding;
+  onboardingCompletedAt?: number;
+  /** The client's own Meta ad account id (act_...), never WEBAO's. */
+  adAccountId?: string;
+  updatedAt: number;
+}
+
+/** True when the client's purchases include the Ads Pack. */
+export function hasAdsPack(client: Client): boolean {
+  return (client.items || []).some((k) => k.startsWith("ads-pack"));
+}
+
+/** Minimum monthly ad spend (client's own card) for the Ads Pack. */
+export const ADS_MIN_MONTHLY_BUDGET = 1500;
+
+/** An ads onboarding form counts as complete with trade, area, a budget at
+ *  or above the minimum, and somewhere to send leads. */
+export function adsOnboardingComplete(client: Client): boolean {
+  const o = client.ads?.onboarding;
+  if (!o) return false;
+  return Boolean(
+    o.trade?.trim() &&
+      o.serviceArea?.trim() &&
+      typeof o.monthlyBudget === "number" &&
+      o.monthlyBudget >= ADS_MIN_MONTHLY_BUDGET &&
+      (o.leadEmail?.trim() || o.leadPhone?.trim()) &&
+      (o.websiteUrl?.trim() || client.domain),
+  );
 }
 
 /** KV key that maps a hostname to its owning client's record key. */

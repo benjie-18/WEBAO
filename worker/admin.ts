@@ -31,14 +31,17 @@ import { handleLeadsList, handleLeadDelete, LEADS_INDEX, type Lead } from "./lea
 import {
   CLIENTS_INDEX,
   getClient,
+  hasAdsPack,
   normalizeDomain,
   onboardingComplete,
   saveClient,
+  type AdsStatus,
   type Client,
   type ClientStage,
 } from "./clients";
 import { assignDomain } from "./tenants";
 import { getBuildState, publishBuild, runBuild, type BuildState } from "./builds";
+import { buildLaunchPacket, recordAdsSpend } from "./ads";
 import { clampStr } from "./util";
 
 const FORMS_INDEX = "forms:index";
@@ -86,6 +89,10 @@ export async function handleAdmin(req: Request, env: Env, url: URL): Promise<Res
     return handleClientBuild(req, env);
   if (path === "/api/admin/clients/publish" && req.method === "POST")
     return handleClientPublish(req, env);
+  if (path === "/api/admin/clients/ads-packet" && req.method === "GET")
+    return handleClientAdsPacket(kv, url);
+  if (path === "/api/admin/clients/ads-spend" && req.method === "POST")
+    return handleClientAdsSpend(req, kv);
   if (path === "/api/admin/config" && req.method === "GET")
     return json({ ok: true, settings: await getSettings(kv) });
   if (path === "/api/admin/config" && req.method === "POST") return handleConfigSet(req, kv);
@@ -457,6 +464,11 @@ function clientSummary(client: Client, build?: BuildState) {
     domainCheckedAt: client.domainCheckedAt,
     reviewDecision: client.reviewDecision,
     revisionCount: client.revisionCount || 0,
+    hasAds: hasAdsPack(client),
+    adsStatus: client.ads?.status,
+    adsTrade: client.ads?.onboarding?.trade,
+    adsBudget: client.ads?.onboarding?.monthlyBudget,
+    adAccountId: client.ads?.adAccountId,
     nudgeCount: client.nudgeCount || 0,
     nudgesEscalatedAt: client.nudgesEscalatedAt,
     stripeCustomerId: client.stripeCustomerId,
@@ -500,9 +512,18 @@ async function handleClientsList(kv: KVNamespace, url: URL): Promise<Response> {
 
 const STAGES: ClientStage[] = ["onboarding", "build", "review", "live", "paused"];
 
-/** POST /api/admin/clients/update { id, stage?, previewUrl?, domain? } */
+const ADS_STATUSES: AdsStatus[] = ["onboarding", "setup", "ready", "live", "paused"];
+
+/** POST /api/admin/clients/update { id, stage?, previewUrl?, domain?, adsStatus?, adAccountId? } */
 async function handleClientUpdate(req: Request, kv: KVNamespace): Promise<Response> {
-  let body: { id?: unknown; stage?: unknown; previewUrl?: unknown; domain?: unknown };
+  let body: {
+    id?: unknown;
+    stage?: unknown;
+    previewUrl?: unknown;
+    domain?: unknown;
+    adsStatus?: unknown;
+    adAccountId?: unknown;
+  };
   try {
     body = (await readJson(req)) as typeof body;
   } catch (e) {
@@ -536,6 +557,21 @@ async function handleClientUpdate(req: Request, kv: KVNamespace): Promise<Respon
       if (!result.ok) return err("That domain is assigned to another client", 409);
     }
   }
+  if (body.adsStatus !== undefined || body.adAccountId !== undefined) {
+    if (!client.ads) {
+      if (!hasAdsPack(client)) return err("Client has no Ads Pack");
+      client.ads = { status: "onboarding", platform: "meta", updatedAt: Date.now() };
+    }
+    if (body.adsStatus !== undefined) {
+      if (!ADS_STATUSES.includes(body.adsStatus as AdsStatus)) return err("Invalid ads status");
+      client.ads.status = body.adsStatus as AdsStatus;
+    }
+    if (body.adAccountId !== undefined) {
+      if (typeof body.adAccountId !== "string") return err("Invalid ad account id");
+      client.ads.adAccountId = clampStr(body.adAccountId, 64).trim() || undefined;
+    }
+    client.ads.updatedAt = Date.now();
+  }
   await saveClient(kv, client);
   const build = await getBuildState(kv, client.id);
   return json({ ok: true, client: clientSummary(client, build) });
@@ -554,6 +590,35 @@ async function handleClientBuild(req: Request, env: Env): Promise<Response> {
   if (!client) return err("Client not found", 404);
   const result = await runBuild(env, client);
   return json({ ok: true, buildId: result.buildId, qaPassed: result.qa.passed, checks: result.qa.checks });
+}
+
+/** GET /api/admin/clients/ads-packet?id= — the launch packet for a client. */
+async function handleClientAdsPacket(kv: KVNamespace, url: URL): Promise<Response> {
+  const id = url.searchParams.get("id") || "";
+  const client = await getClient(kv, id);
+  if (!client) return err("Client not found", 404);
+  return json({ ok: true, packet: buildLaunchPacket(client) });
+}
+
+/** POST /api/admin/clients/ads-spend { id, month: "yyyy-mm", amountCents } */
+async function handleClientAdsSpend(req: Request, kv: KVNamespace): Promise<Response> {
+  let body: { id?: unknown; month?: unknown; amountCents?: unknown };
+  try {
+    body = (await readJson(req)) as typeof body;
+  } catch (e) {
+    return err((e as Error).message);
+  }
+  if (typeof body.id !== "string") return err("Client id is required");
+  if (typeof body.month !== "string" || !/^\d{4}-\d{2}$/.test(body.month)) {
+    return err("Month must be yyyy-mm");
+  }
+  if (typeof body.amountCents !== "number" || !(body.amountCents >= 0)) {
+    return err("amountCents must be a non-negative number");
+  }
+  const client = await getClient(kv, body.id);
+  if (!client) return err("Client not found", 404);
+  await recordAdsSpend(kv, client.id, body.month, Math.round(body.amountCents));
+  return json({ ok: true });
 }
 
 /** POST /api/admin/clients/publish { id } — point the tenant host at the draft. */

@@ -12,6 +12,8 @@ import {
   handleOnboardingNudges,
   handlePortalClaim,
   handlePortalExchange,
+  handlePortalAdsLeadOutcome,
+  handlePortalAdsOnboarding,
   handlePortalLogout,
   handlePortalReview,
   handlePortalMe,
@@ -21,6 +23,7 @@ import {
 import { handleDomainChecks, isMainHost, resolveTenant, tenantPageResponse } from "./tenants";
 import { handleInternalBuild, servePreviewSite, servePublishedSite } from "./builds";
 import { handleMonthlyReports, recordTenantView } from "./reports";
+import { handleAdsLeadIntake } from "./ads";
 import { json } from "./util";
 import { KvWriteError } from "./kv";
 
@@ -42,11 +45,14 @@ async function routeApi(req: Request, env: Env): Promise<Response> {
   if (p === "/api/portal/me" && req.method === "GET") return handlePortalMe(req, env);
   if (p === "/api/portal/onboarding" && req.method === "POST") return handlePortalOnboarding(req, env);
   if (p === "/api/portal/review" && req.method === "POST") return handlePortalReview(req, env);
+  if (p === "/api/portal/ads-onboarding" && req.method === "POST") return handlePortalAdsOnboarding(req, env);
+  if (p === "/api/portal/ads-lead-outcome" && req.method === "POST") return handlePortalAdsLeadOutcome(req, env);
   if (p === "/api/portal/logout" && req.method === "POST") return handlePortalLogout(req, env);
   if (p === "/api/internal/onboarding-nudges" && req.method === "POST") return handleOnboardingNudges(req, env);
   if (p === "/api/internal/domain-checks" && req.method === "POST") return handleDomainChecks(req, env);
   if (p === "/api/internal/build" && req.method === "POST") return handleInternalBuild(req, env);
   if (p === "/api/internal/monthly-reports" && req.method === "POST") return handleMonthlyReports(req, env);
+  if (p === "/api/internal/ads-lead" && req.method === "POST") return handleAdsLeadIntake(req, env);
   if (p.startsWith("/api/admin/")) return handleAdmin(req, env, url);
 
   return json({ ok: false, error: "Not found" }, 404);

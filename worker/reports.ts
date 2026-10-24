@@ -7,6 +7,7 @@
 // a report record per client per month makes the job idempotent.
 
 import { CLIENTS_INDEX, type Client } from "./clients";
+import { adsLeadIds, adsLeadKey, adsSpend, type AdsLead } from "./ads";
 import { getJson, putJson } from "./kv";
 import { notifyInbox, sendClientEmail } from "./mailer";
 import { batch, err, json, timingSafeEqual } from "./util";
@@ -116,55 +117,80 @@ export async function handleMonthlyReports(req: Request, env: ReportEnv): Promis
   let skipped = 0;
   let failed = 0;
 
+  const [yy, mm] = month.split("-").map((s) => parseInt(s, 10));
+  const monthStart = Date.UTC(yy, (mm || 1) - 1, 1);
+  const monthEnd = Date.UTC(yy, mm || 1, 1);
+
   for (const client of records) {
-    if (!client || client.stage !== "live") continue;
+    if (!client) continue;
+    const siteLive = client.stage === "live";
+    const adsLive = client.ads?.status === "live";
+    if (!siteLive && !adsLive) continue;
     const existing = await getJson<{ sentAt: number }>(kv, reportKey(client.id, month));
     if (existing) {
       skipped++;
       continue;
     }
-    const stats = await tenantViews(kv, client.id, month);
     const fr = client.lang === "fr";
     const label = monthLabel(month, fr);
-    const activeDays = Object.keys(stats.byDay).length;
-    const siteLine = client.domain ? `https://${client.domain}/` : "";
+    const lines: string[] = [fr ? `Bonjour,` : `Hello,`, ``];
+
+    let views = 0;
+    if (siteLive) {
+      const stats = await tenantViews(kv, client.id, month);
+      views = stats.views;
+      const activeDays = Object.keys(stats.byDay).length;
+      const siteLine = client.domain ? `https://${client.domain}/` : "";
+      lines.push(
+        fr ? `Voici l'activité de votre site pour ${label} :` : `Here is your website's activity for ${label}:`,
+        ...(siteLine ? [siteLine] : []),
+        fr ? `Pages vues : ${stats.views}` : `Page views: ${stats.views}`,
+        fr ? `Jours avec des visites : ${activeDays}` : `Days with visits: ${activeDays}`,
+        ``,
+      );
+    }
+
+    if (adsLive) {
+      const ids = await adsLeadIds(kv, client.id);
+      const all = await batch(ids.slice(0, 500), 25, (id) => getJson<AdsLead>(kv, adsLeadKey(id)));
+      const inMonth = all.filter(
+        (l): l is AdsLead => Boolean(l) && (l as AdsLead).at >= monthStart && (l as AdsLead).at < monthEnd,
+      );
+      const booked = inMonth.filter((l) => l.outcome === "booked").length;
+      lines.push(
+        fr ? `Vos publicités pour ${label} :` : `Your ads for ${label}:`,
+        fr ? `Prospects reçus : ${inMonth.length}` : `Leads received: ${inMonth.length}`,
+        fr ? `Travaux réservés (selon vos suivis) : ${booked}` : `Jobs booked (from your follow-ups): ${booked}`,
+      );
+      const spendCents = await adsSpend(kv, client.id, month);
+      if (spendCents !== null && inMonth.length > 0) {
+        const cpl = (spendCents / 100 / inMonth.length).toFixed(2);
+        lines.push(fr ? `Coût par prospect : ${cpl} $` : `Cost per lead: $${cpl}`);
+        if (booked > 0) {
+          const cpb = (spendCents / 100 / booked).toFixed(2);
+          lines.push(fr ? `Coût par travail réservé : ${cpb} $` : `Cost per booked job: $${cpb}`);
+        }
+      }
+      lines.push(``);
+    }
+
+    lines.push(
+      fr
+        ? `Une question ou un changement à demander ? Écrivez à support@webao.ca.`
+        : `Questions, or a change to request? Write to support@webao.ca.`,
+      ``,
+      `Webao`,
+    );
+
     const ok = await sendClientEmail(env, {
       to: client.email,
       subject: fr ? `Votre rapport Webao pour ${label}` : `Your Webao report for ${label}`,
-      text: fr
-        ? [
-            `Bonjour,`,
-            ``,
-            `Voici l'activité de votre site pour ${label} :`,
-            siteLine ? `Site : ${siteLine}` : ``,
-            `Pages vues : ${stats.views}`,
-            `Jours avec des visites : ${activeDays}`,
-            ``,
-            `Une question ou un changement à demander ? Écrivez à support@webao.ca.`,
-            ``,
-            `Webao`,
-          ]
-            .filter(Boolean)
-            .join("\n")
-        : [
-            `Hello,`,
-            ``,
-            `Here is your website's activity for ${label}:`,
-            siteLine ? `Site: ${siteLine}` : ``,
-            `Page views: ${stats.views}`,
-            `Days with visits: ${activeDays}`,
-            ``,
-            `Questions, or a change to request? Write to support@webao.ca.`,
-            ``,
-            `Webao`,
-          ]
-            .filter(Boolean)
-            .join("\n"),
+      text: lines.filter((l) => l !== undefined).join("\n"),
     });
     if (ok) {
       await putJson(kv, reportKey(client.id, month), {
         sentAt: Date.now(),
-        views: stats.views,
+        views,
       });
       sent++;
     } else {

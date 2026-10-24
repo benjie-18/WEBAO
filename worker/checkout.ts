@@ -19,6 +19,10 @@ import { throttle } from "./auth";
 type Env = {
   STRIPE_SECRET_KEY?: string;
   STRIPE_PRICE_ID?: string;
+  /** Ads Pack prices live in env until the pack joins the static catalog
+   *  (real Stripe price ids are created once, then pasted as secrets). */
+  STRIPE_PRICE_ADS_PACK?: string;
+  STRIPE_PRICE_ADS_SETUP?: string;
   WEBAO_KV?: KVNamespace;
 };
 
@@ -135,7 +139,15 @@ export async function handleCheckoutSession(req: Request, env: Env): Promise<Res
 
     const unknown: string[] = [];
     for (const key of keys) {
-      const priceId = key === LEGACY_KEY ? legacyPriceId : PRICE_MAP[key];
+      const priceId =
+        key === LEGACY_KEY
+          ? legacyPriceId
+          : PRICE_MAP[key] ??
+            (key === "ads-pack-month"
+              ? env.STRIPE_PRICE_ADS_PACK
+              : key === "ads-setup-onetime"
+                ? env.STRIPE_PRICE_ADS_SETUP
+                : undefined);
       if (!priceId) {
         unknown.push(key);
         continue;
@@ -177,6 +189,20 @@ export async function handleCheckoutSession(req: Request, env: Env): Promise<Res
   }
   if (recurring.length > MAX_RECURRING_ITEMS || oneTime.length > MAX_ONE_TIME_ITEMS) {
     return err("Too many items in one checkout", 400);
+  }
+
+  // Ads Pack: the one-time setup fee rides along automatically, added
+  // server-side so it cannot be removed from the cart.
+  if (
+    env.STRIPE_PRICE_ADS_SETUP &&
+    lineItems.some((item) => item.key === "ads-pack-month") &&
+    !lineItems.some((item) => item.key === "ads-setup-onetime")
+  ) {
+    lineItems.push({
+      key: "ads-setup-onetime",
+      priceId: env.STRIPE_PRICE_ADS_SETUP,
+      interval: "one-time",
+    });
   }
 
   if (!secretKey) {

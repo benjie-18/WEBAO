@@ -45,6 +45,28 @@ const copy = fr
       reviewApprovedMsg: "Approuvé, merci. Votre site web est en ligne.",
       reviewChangesMsg: "Changements envoyés. Votre site retourne en conception, vous recevrez un nouvel aperçu.",
       viewsLabel: "Pages vues ce mois-ci",
+      adsTitle: "Votre publicité",
+      adsIntro: "Dites-nous en plus sur votre entreprise et vos clients. Nous préparons vos campagnes à partir de ceci.",
+      adsStOnboarding: "Étape : vos informations",
+      adsStSetup: "Étape : préparation de vos campagnes",
+      adsStReady: "Étape : prêt à lancer",
+      adsStLive: "Vos campagnes sont en ligne",
+      adsStPaused: "Campagnes en pause",
+      adsTrade: "Métier",
+      adsTrades: [["plumbing", "Plomberie"], ["electrical", "Électricité"], ["hvac", "Chauffage et climatisation"], ["painting", "Peinture"], ["renovation", "Rénovation"], ["general", "Services généraux"]],
+      adsRadius: "Rayon autour de votre zone (km)",
+      adsBudget: "Budget publicitaire mensuel (min 1 500 $)",
+      adsWebsite: "Votre site web (si nous ne l'hébergeons pas)",
+      adsLeadEmail: "Où envoyer les prospects ? (courriel)",
+      adsLeadPhone: "Alertes de prospects par téléphone (optionnel)",
+      adsSave: "Enregistrer",
+      adsSaved: "Enregistré, merci.",
+      adsCompleteNote: "Nous avons ce qu'il faut. Nous préparons vos campagnes et nous vous écrirons avant le lancement.",
+      adsLeadsTitle: "Vos prospects",
+      adsNoLeads: "Aucun prospect pour le moment.",
+      adsBooked: "Réservé",
+      adsNotFit: "Pas un bon fit",
+      adsClear: "Effacer",
       formTitle: "Formulaire de démarrage",
       formIntro: "Quelques réponses courtes, et la conception commence. Les champs marqués d'un astérisque sont nécessaires pour démarrer.",
       formDone: "Formulaire complet, merci. Votre site est en conception.",
@@ -111,6 +133,28 @@ const copy = fr
       reviewApprovedMsg: "Approved, thank you. Your website is live.",
       reviewChangesMsg: "Changes sent. Your site goes back into build, and you will get a fresh preview.",
       viewsLabel: "Views this month",
+      adsTitle: "Your advertising",
+      adsIntro: "Tell us about your business and where your customers are. We build your campaigns from this.",
+      adsStOnboarding: "Step: your details",
+      adsStSetup: "Step: we are setting up your campaigns",
+      adsStReady: "Step: ready to launch",
+      adsStLive: "Your campaigns are live",
+      adsStPaused: "Campaigns paused",
+      adsTrade: "Trade",
+      adsTrades: [["plumbing", "Plumbing"], ["electrical", "Electrical"], ["hvac", "Heating and cooling"], ["painting", "Painting"], ["renovation", "Renovation"], ["general", "General services"]],
+      adsRadius: "Radius around your area (km)",
+      adsBudget: "Monthly ad budget (min $1,500)",
+      adsWebsite: "Your website (if we do not host it)",
+      adsLeadEmail: "Where should leads go? (email)",
+      adsLeadPhone: "Lead alerts by phone (optional)",
+      adsSave: "Save",
+      adsSaved: "Saved, thank you.",
+      adsCompleteNote: "We have what we need. We are setting up your campaigns and will write before launch.",
+      adsLeadsTitle: "Your leads",
+      adsNoLeads: "No leads yet.",
+      adsBooked: "Booked",
+      adsNotFit: "Not a fit",
+      adsClear: "Clear",
       formTitle: "Start-up form",
       formIntro: "A few short answers, and the build starts. Fields marked with an asterisk are needed to begin.",
       formDone: "Form complete, thank you. Your website is in build.",
@@ -219,6 +263,53 @@ const demosJson = JSON.stringify(visibleDemos);
           <p class="prose" data-portal-review-status style="font-size:14px; margin:12px 0 0;" role="status"></p>
         </div>
 
+        <div data-portal-ads hidden style="margin-top:20px; border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 8px;">{copy.adsTitle}</h2>
+          <p class="prose" data-portal-ads-statusline style="font-size:14px; font-weight:650; margin:0 0 6px;"></p>
+          <p class="prose" style="font-size:14px; margin:0 0 16px;">{copy.adsIntro}</p>
+          <form data-portal-ads-form style="display:grid; gap:14px;">
+            <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.adsTrade}
+              <select data-ads-f="trade" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;">
+                {copy.adsTrades.map(([value, label]) => <option value={value}>{label}</option>)}
+              </select>
+            </label>
+            <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.fields.services}
+              <textarea data-ads-f="services" rows="2" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;"></textarea>
+            </label>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+              <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.fields.serviceArea}
+                <input data-ads-f="serviceArea" type="text" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;" />
+              </label>
+              <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.adsRadius}
+                <input data-ads-f="radiusKm" type="number" min="1" max="200" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;" />
+              </label>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+              <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.adsBudget}
+                <input data-ads-f="monthlyBudget" type="number" min="0" step="50" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;" />
+              </label>
+              <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.adsWebsite}
+                <input data-ads-f="websiteUrl" type="text" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;" />
+              </label>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+              <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.adsLeadEmail}
+                <input data-ads-f="leadEmail" type="email" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;" />
+              </label>
+              <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.adsLeadPhone}
+                <input data-ads-f="leadPhone" type="tel" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;" />
+              </label>
+            </div>
+            <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+              <button type="submit" class="btn btn--primary">{copy.adsSave}</button>
+              <p class="prose" data-portal-ads-formstatus style="font-size:14px; margin:0;" role="status"></p>
+            </div>
+            <p class="prose" data-portal-ads-complete hidden style="font-size:14px; margin:0;">{copy.adsCompleteNote}</p>
+          </form>
+          <h3 style="font-size:15px; margin:22px 0 10px;">{copy.adsLeadsTitle}</h3>
+          <div data-portal-ads-leads style="display:grid; gap:10px;"></div>
+        </div>
+
         <div style="margin-top:20px; border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
           <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 8px;">{copy.formTitle}</h2>
           <p class="prose" data-portal-form-done hidden style="font-size:14px; margin:0 0 8px; font-weight:600;">{copy.formDone}</p>
@@ -299,6 +390,16 @@ const demosJson = JSON.stringify(visibleDemos);
 <span hidden data-portal-msg-required>{copy.required}</span>
 <span hidden data-portal-domain-new>{copy.fields.domainValueNew}</span>
 <span hidden data-portal-domain-existing>{copy.fields.domainValueExisting}</span>
+<span hidden data-portal-msg-ads-st-onboarding>{copy.adsStOnboarding}</span>
+<span hidden data-portal-msg-ads-st-setup>{copy.adsStSetup}</span>
+<span hidden data-portal-msg-ads-st-ready>{copy.adsStReady}</span>
+<span hidden data-portal-msg-ads-st-live>{copy.adsStLive}</span>
+<span hidden data-portal-msg-ads-st-paused>{copy.adsStPaused}</span>
+<span hidden data-portal-msg-ads-saved>{copy.adsSaved}</span>
+<span hidden data-portal-msg-ads-noleads>{copy.adsNoLeads}</span>
+<span hidden data-portal-msg-ads-booked>{copy.adsBooked}</span>
+<span hidden data-portal-msg-ads-notfit>{copy.adsNotFit}</span>
+<span hidden data-portal-msg-ads-clear>{copy.adsClear}</span>
 <span hidden data-portal-msg-review-working>{copy.reviewWorking}</span>
 <span hidden data-portal-msg-review-approved>{copy.reviewApprovedMsg}</span>
 <span hidden data-portal-msg-review-changes>{copy.reviewChangesMsg}</span>
@@ -420,6 +521,22 @@ const demosJson = JSON.stringify(visibleDemos);
       } else {
         review.hidden = true;
       }
+      var adsCard = root.querySelector("[data-portal-ads]");
+      if (client.ads) {
+        adsCard.hidden = false;
+        var stSel = "[data-portal-msg-ads-st-" + (client.ads.status || "onboarding") + "]";
+        root.querySelector("[data-portal-ads-statusline]").textContent = msg(stSel);
+        var ob = client.ads.onboarding || {};
+        root.querySelectorAll("[data-ads-f]").forEach(function (el) {
+          var f = el.getAttribute("data-ads-f");
+          var v = ob[f];
+          el.value = v === undefined || v === null ? "" : String(v);
+        });
+        root.querySelector("[data-portal-ads-complete]").hidden = !client.ads.complete;
+        renderAdsLeads(client.ads.leads || []);
+      } else {
+        adsCard.hidden = true;
+      }
       var viewsLine = root.querySelector("[data-portal-views]");
       if (client.stage === "live" && typeof client.siteViewsThisMonth === "number") {
         viewsLine.hidden = false;
@@ -469,6 +586,107 @@ const demosJson = JSON.stringify(visibleDemos);
       api("/api/portal/request-link", { method: "POST", body: JSON.stringify({ email: email }) }).then(function (r) {
         btn.disabled = false;
         status.textContent = r.data.ok ? msg("[data-portal-msg-sent]") : (r.data.error || msg("[data-portal-msg-generic]"));
+      });
+    });
+
+    function renderAdsLeads(leads) {
+      var wrap = root.querySelector("[data-portal-ads-leads]");
+      wrap.textContent = "";
+      if (!leads.length) {
+        var p = document.createElement("p");
+        p.className = "prose";
+        p.style.cssText = "font-size:14px; margin:0;";
+        p.textContent = msg("[data-portal-msg-ads-noleads]");
+        wrap.appendChild(p);
+        return;
+      }
+      leads.forEach(function (lead) {
+        var card = document.createElement("div");
+        card.style.cssText = "border:1px solid var(--line); border-radius:12px; padding:12px 14px;";
+        var head = document.createElement("p");
+        head.style.cssText = "margin:0; font-size:14px;";
+        var strong = document.createElement("strong");
+        strong.textContent = lead.name;
+        head.appendChild(strong);
+        var when = document.createElement("span");
+        when.textContent = " · " + new Date(lead.at).toLocaleDateString(document.documentElement.lang || undefined);
+        head.appendChild(when);
+        card.appendChild(head);
+        var bits = [lead.phone, lead.email, lead.service].filter(Boolean).join(" · ");
+        if (bits) {
+          var d = document.createElement("p");
+          d.className = "prose";
+          d.style.cssText = "font-size:14px; margin:4px 0 0;";
+          d.textContent = bits;
+          card.appendChild(d);
+        }
+        if (lead.message) {
+          var m = document.createElement("p");
+          m.className = "prose";
+          m.style.cssText = "font-size:14px; margin:4px 0 0;";
+          m.textContent = lead.message;
+          card.appendChild(m);
+        }
+        var row = document.createElement("div");
+        row.style.cssText = "display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; align-items:center;";
+        function outcomeBtn(label, outcome) {
+          var b = document.createElement("button");
+          b.type = "button";
+          b.className = "btn btn--ghost";
+          b.style.cssText = "padding:6px 12px; font-size:13px;";
+          b.textContent = label;
+          b.setAttribute("data-lead", lead.id);
+          b.setAttribute("data-outcome", outcome);
+          return b;
+        }
+        if (lead.outcome) {
+          var badge = document.createElement("span");
+          badge.style.cssText = "font-size:13px; font-weight:650;";
+          badge.textContent = lead.outcome === "booked" ? msg("[data-portal-msg-ads-booked]") : msg("[data-portal-msg-ads-notfit]");
+          row.appendChild(badge);
+          row.appendChild(outcomeBtn(msg("[data-portal-msg-ads-clear]"), ""));
+        } else {
+          row.appendChild(outcomeBtn(msg("[data-portal-msg-ads-booked]"), "booked"));
+          row.appendChild(outcomeBtn(msg("[data-portal-msg-ads-notfit]"), "not-fit"));
+        }
+        card.appendChild(row);
+        wrap.appendChild(card);
+      });
+    }
+
+    root.querySelector("[data-portal-ads-leads]").addEventListener("click", function (ev) {
+      var btn = ev.target.closest("button[data-lead]");
+      if (!btn) return;
+      btn.disabled = true;
+      api("/api/portal/ads-lead-outcome", {
+        method: "POST",
+        body: JSON.stringify({ leadId: btn.getAttribute("data-lead"), outcome: btn.getAttribute("data-outcome") || null }),
+      }).then(function (r) {
+        if (r.data.ok && r.data.leads) renderAdsLeads(r.data.leads);
+        else btn.disabled = false;
+      });
+    });
+
+    root.querySelector("[data-portal-ads-form]").addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      var status = root.querySelector("[data-portal-ads-formstatus]");
+      var payload = {};
+      root.querySelectorAll("[data-ads-f]").forEach(function (el) {
+        var f = el.getAttribute("data-ads-f");
+        if (f === "radiusKm" || f === "monthlyBudget") {
+          payload[f] = el.value === "" ? undefined : Number(el.value);
+        } else {
+          payload[f] = el.value;
+        }
+      });
+      status.textContent = msg("[data-portal-msg-loading]");
+      api("/api/portal/ads-onboarding", { method: "POST", body: JSON.stringify(payload) }).then(function (r) {
+        if (r.data.ok) {
+          status.textContent = msg("[data-portal-msg-ads-saved]");
+          loadMe();
+        } else {
+          status.textContent = r.data.error || msg("[data-portal-msg-generic]");
+        }
       });
     });
 

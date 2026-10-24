@@ -283,6 +283,42 @@ key missing) is left unrecorded and retries next run. An optional
 `{ month: "yyyy-mm" }` body targets a specific month.
 Answers `{ month, sent, skipped, failed }`.
 
+## Ads Pack
+
+Buying the pack (cart key `ads-pack-month`) opens an ads track on the
+client record (`ads.status`: onboarding → setup → ready → live / paused).
+The one-time setup fee is added by checkout automatically (server-side)
+when the cart holds the pack. Both Ads Pack prices are env-configured
+until the pack joins the static catalog: `STRIPE_PRICE_ADS_PACK`
+(recurring, C$899.99/mo) and `STRIPE_PRICE_ADS_SETUP` (one-time,
+C$499.99); without them the pack cannot be checked out.
+
+`POST /api/portal/ads-onboarding` saves the ads intake (trade, services,
+area, radius, monthly budget, landing website, lead contacts). It counts
+as complete with a trade, an area, a budget of at least $1,500 (the
+client's own ad spend, on their card), a lead destination, and a landing
+page (their site or the WEBAO domain); completion moves the status to
+`setup` and notifies the inbox.
+
+`POST /api/internal/ads-lead` (shared-secret) records a lead for a client
+from any source (Meta lead sync, landing page, manual): it is stored
+(`adslead:<id>`, index `adsleads:<clientId>`), emailed to the client's
+lead contact instantly, and copied to the inbox. In the portal, the
+client can mark a lead `booked` or `not-fit` with one tap
+(`POST /api/portal/ads-lead-outcome`), which feeds the monthly report:
+leads received, jobs booked, and, when a spend record exists
+(`POST /api/admin/clients/ads-spend` { id, month, amountCents }), cost
+per lead and cost per booked job.
+
+`GET /api/admin/clients/ads-packet?id=` returns the launch packet: the
+per-trade Meta template (worker/ads-templates.ts) filled with the
+client's business, area and budget (daily = monthly / 30), landing page,
+creative angles, lead form questions, and the readiness checklist
+(pack bought, onboarding complete, budget floor, landing page, client ad
+account connected). Campaign creation itself waits on the Meta app
+review; the admin Clients card also carries the ads status, the client
+ad account id, and the spend recorder.
+
 ### `POST /api/internal/build`
 Shared-secret Bearer auth (`INTERNAL_CRON_SECRET`). Body `{ clientId }`.
 Same build as the admin action, for agent jobs. → `{ ok, buildId, qaPassed, checks }`.

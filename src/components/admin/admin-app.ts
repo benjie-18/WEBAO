@@ -80,6 +80,11 @@ interface ClientItem {
   domainCheckedAt?: number;
   reviewDecision?: { decision: string; note?: string; at: number; buildId?: string };
   revisionCount: number;
+  hasAds: boolean;
+  adsStatus?: string;
+  adsTrade?: string;
+  adsBudget?: number;
+  adAccountId?: string;
   buildAt?: number;
   buildQaPassed?: boolean;
   buildQaFailedChecks?: { id: string; detail: string }[];
@@ -1021,6 +1026,9 @@ function initAdmin(): void {
         : item.reviewDecision?.decision === "approved"
           ? `<span class="form-badge">${esc(C.approved)}</span>`
           : "";
+    const adsBadge = item.hasAds
+      ? `<span class="form-badge">${esc(C.adsBadge)} · ${esc(item.adsStatus || "onboarding")}</span>`
+      : "";
     const meta: string[] = [
       `<span><b>${esc(C.billing)}</b> ${esc(item.billingStatus)}</span>`,
       `<span><b>${esc(C.since)}</b> ${esc(fmtDateTime(item.createdAt))}</span>`,
@@ -1030,6 +1038,10 @@ function initAdmin(): void {
     if (item.nudgeCount > 0) meta.push(`<span><b>${esc(C.nudges)}</b> ${item.nudgeCount}</span>`);
     if (item.revisionCount > 0)
       meta.push(`<span><b>${esc(C.revisions)}</b> ${item.revisionCount}</span>`);
+    if (item.hasAds && item.adsTrade)
+      meta.push(`<span><b>${esc(C.adsTrade)}</b> ${esc(item.adsTrade)}</span>`);
+    if (item.hasAds && item.adsBudget)
+      meta.push(`<span><b>${esc(C.adsBudget)}</b> $${item.adsBudget}</span>`);
     if (item.nudgesEscalatedAt)
       meta.push(`<span><b>${esc(C.escalated)}</b> ${esc(fmtDateTime(item.nudgesEscalatedAt))}</span>`);
 
@@ -1078,11 +1090,31 @@ function initAdmin(): void {
       )
       .join("");
 
+    const adsStatusOptions = ["onboarding", "setup", "ready", "live", "paused"]
+      .map(
+        (s) =>
+          `<option value="${s}"${item.adsStatus === s ? " selected" : ""}>${s}</option>`
+      )
+      .join("");
+    const adsControls = item.hasAds
+      ? `<div class="form-actions" style="gap:10px; flex-wrap:wrap; margin-top:8px;">` +
+        `<label style="display:flex; gap:8px; align-items:center; font-size:13px; font-weight:600;">${esc(C.adsStatus)}` +
+        `<select data-client-ads-status style="padding:7px 9px; border-radius:8px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink);">${adsStatusOptions}</select></label>` +
+        `<label style="display:flex; gap:8px; align-items:center; font-size:13px; font-weight:600; flex:1; min-width:200px;">${esc(C.adsAccount)}` +
+        `<input type="text" data-client-ads-account value="${esc(item.adAccountId || "")}" placeholder="act_..." style="flex:1; padding:7px 9px; border-radius:8px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink);" /></label>` +
+        `<input type="text" data-client-ads-spend-month placeholder="${esc(C.adsSpendMonth)}" style="width:90px; padding:7px 9px; border-radius:8px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink);" />` +
+        `<input type="number" data-client-ads-spend-amount placeholder="${esc(C.adsSpendAmount)}" style="width:110px; padding:7px 9px; border-radius:8px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink);" />` +
+        `<button type="button" class="admin-ghost-btn" data-client-ads-spend>${esc(C.adsSpendSave)}</button>` +
+        `<button type="button" class="admin-ghost-btn" data-client-ads-packet>${esc(C.adsPacket)}</button>` +
+        `</div>` +
+        `<pre data-client-packet hidden style="white-space:pre-wrap; font-size:12.5px; line-height:1.55; border:1px solid var(--line); border-radius:10px; padding:14px; margin-top:10px; overflow:auto;"></pre>`
+      : "";
+
     return (
       `<article class="form-card" data-client-id="${esc(item.id)}">` +
       `<div class="form-card-head"><div><strong>${esc(item.business || item.email)}</strong>` +
       `<span class="mono">${esc(item.email)}</span></div>` +
-      `<div class="lead-badges">${badge}${domainBadge}${qaBadge}${decisionBadge}</div></div>` +
+      `<div class="lead-badges">${badge}${domainBadge}${qaBadge}${decisionBadge}${adsBadge}</div></div>` +
       `<div class="form-meta">${meta.join("")}</div>` +
       `<div class="form-actions" style="gap:10px; flex-wrap:wrap;">` +
       `<label style="display:flex; gap:8px; align-items:center; font-size:13px; font-weight:600;">${esc(C.stage)}` +
@@ -1098,6 +1130,7 @@ function initAdmin(): void {
         : "") +
       `<button type="button" class="admin-ghost-btn" data-client-expand>${esc(C.details)}</button>` +
       `</div>` +
+      adsControls +
       `<dl class="form-fields" data-client-fields hidden>` +
       (rows.length > 0 ? rows.join("") : `<p class="admin-muted" style="font-size:13px;">${esc(C.onboardingPending)}</p>`) +
       `</dl>` +
@@ -1144,11 +1177,20 @@ function initAdmin(): void {
     const stage = (card.querySelector("[data-client-stage]") as HTMLSelectElement | null)?.value;
     const previewUrl = (card.querySelector("[data-client-preview]") as HTMLInputElement | null)?.value;
     const domain = (card.querySelector("[data-client-domain]") as HTMLInputElement | null)?.value;
+    const adsStatus = (card.querySelector("[data-client-ads-status]") as HTMLSelectElement | null)?.value;
+    const adAccountId = (card.querySelector("[data-client-ads-account]") as HTMLInputElement | null)?.value;
     btn.setAttribute("disabled", "");
     try {
       await api("/api/admin/clients/update", {
         method: "POST",
-        body: { id, stage, previewUrl, domain },
+        body: {
+          id,
+          stage,
+          previewUrl,
+          domain,
+          ...(adsStatus !== undefined ? { adsStatus } : {}),
+          ...(adAccountId !== undefined ? { adAccountId } : {}),
+        },
       });
       toast(String(I18N.clients.saved), "ok");
     } catch (e) {
@@ -1182,6 +1224,73 @@ function initAdmin(): void {
     } catch (e) {
       if (e instanceof ExpiredSession) return;
       toast(String(I18N.clients.actionError), "err");
+      btn.removeAttribute("disabled");
+    }
+  }
+
+  async function recordClientAdsSpend(btn: HTMLElement): Promise<void> {
+    const card = btn.closest("[data-client-id]") as HTMLElement | null;
+    const id = card?.dataset.clientId;
+    if (!card || !id) return;
+    const month = (card.querySelector("[data-client-ads-spend-month]") as HTMLInputElement | null)?.value.trim() || "";
+    const dollars = Number((card.querySelector("[data-client-ads-spend-amount]") as HTMLInputElement | null)?.value);
+    if (!/^\d{4}-\d{2}$/.test(month) || !(dollars >= 0)) {
+      toast(String(I18N.clients.actionError), "err");
+      return;
+    }
+    btn.setAttribute("disabled", "");
+    try {
+      await api("/api/admin/clients/ads-spend", {
+        method: "POST",
+        body: { id, month, amountCents: Math.round(dollars * 100) },
+      });
+      toast(String(I18N.clients.saved), "ok");
+    } catch (e) {
+      if (e instanceof ExpiredSession) return;
+      toast(String(I18N.clients.actionError), "err");
+    } finally {
+      btn.removeAttribute("disabled");
+    }
+  }
+
+  async function showClientAdsPacket(btn: HTMLElement): Promise<void> {
+    const card = btn.closest("[data-client-id]") as HTMLElement | null;
+    const id = card?.dataset.clientId;
+    const pre = card?.querySelector("[data-client-packet]") as HTMLElement | null;
+    if (!card || !id || !pre) return;
+    if (!pre.hidden) {
+      pre.hidden = true;
+      return;
+    }
+    btn.setAttribute("disabled", "");
+    try {
+      const data = await api(`/api/admin/clients/ads-packet?id=${encodeURIComponent(id)}`);
+      const p = data.packet as Record<string, unknown>;
+      const readiness = (p.readiness as Array<{ ok: boolean; labelEn: string }>) || [];
+      const lines = [
+        `${p.business} · ${p.trade} · Meta`,
+        `Budget: $${p.monthlyBudget}/mo ($${p.dailyBudget}/day) · Area: ${p.serviceArea} · Radius: ${p.radiusKm} km`,
+        `Landing: ${p.landingPage || "(none)"}`,
+        `Services: ${((p.services as string[]) || []).join(", ")}`,
+        ``,
+        `Headlines:`,
+        ...((p.headlines as string[]) || []).map((h) => `- ${h}`),
+        ``,
+        `Primary texts:`,
+        ...((p.primaryTexts as string[]) || []).map((h) => `- ${h}`),
+        ``,
+        `Lead form questions:`,
+        ...((p.formQuestions as string[]) || []).map((h) => `- ${h}`),
+        ``,
+        `Readiness: ${p.ready ? "READY" : "NOT READY"}`,
+        ...readiness.map((c) => `${c.ok ? "✓" : "✗"} ${c.labelEn}`),
+      ];
+      pre.textContent = lines.join("\n");
+      pre.hidden = false;
+    } catch (e) {
+      if (e instanceof ExpiredSession) return;
+      toast(String(I18N.clients.actionError), "err");
+    } finally {
       btn.removeAttribute("disabled");
     }
   }
@@ -1504,6 +1613,16 @@ function initAdmin(): void {
     const clientPublish = t.closest("[data-client-publish]") as HTMLElement | null;
     if (clientPublish) {
       void runClientAction(clientPublish, "publish");
+      return;
+    }
+    const clientAdsSpend = t.closest("[data-client-ads-spend]") as HTMLElement | null;
+    if (clientAdsSpend) {
+      void recordClientAdsSpend(clientAdsSpend);
+      return;
+    }
+    const clientAdsPacket = t.closest("[data-client-ads-packet]") as HTMLElement | null;
+    if (clientAdsPacket) {
+      void showClientAdsPacket(clientAdsPacket);
       return;
     }
     const leadExpand = t.closest("[data-lead-expand]") as HTMLElement | null;

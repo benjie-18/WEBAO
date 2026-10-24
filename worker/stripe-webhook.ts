@@ -22,11 +22,19 @@ import {
   createClient,
   findClientByCustomer,
   findClientByEmail,
+  hasAdsPack,
   mergeItems,
   saveClient,
   type BillingStatus,
   type Client,
 } from "./clients";
+
+/** Buying the Ads Pack opens its onboarding track on the client record. */
+function ensureAdsState(client: Client): void {
+  if (hasAdsPack(client) && !client.ads) {
+    client.ads = { status: "onboarding", platform: "meta", updatedAt: Date.now() };
+  }
+}
 
 const SIGNATURE_TOLERANCE_SEC = 300;
 const EVENT_TTL_SEC = 30 * 24 * 60 * 60;
@@ -143,6 +151,7 @@ async function onCheckoutCompleted(
       billingStatus: subscriptionId ? "active" : "one-time",
     });
     client.lastCheckoutAt = at;
+    ensureAdsState(client);
     await saveClient(kv, client);
     await notifyNewClient(env, client);
     await sendWelcomeEmail(env, client);
@@ -155,6 +164,7 @@ async function onCheckoutCompleted(
   if (name && !existing.name) existing.name = name;
   if (email && existing.email !== email) existing.email = email;
   mergeItems(existing, items);
+  ensureAdsState(existing);
   existing.lastCheckoutAt = at;
   if (subscriptionId && (existing.billingStatus === "none" || existing.billingStatus === "one-time")) {
     existing.billingStatus = "active";

@@ -24,15 +24,20 @@ import { getJson, putJson, deleteKey } from "./kv";
 import { throttle } from "./auth";
 import {
   CLIENTS_INDEX,
+  adsOnboardingComplete,
   findClientByEmail,
   findClientByCustomer,
   getClient,
+  hasAdsPack,
   normalizeDomain,
   onboardingComplete,
   saveClient,
+  type AdsOnboarding,
   type Client,
   type OnboardingData,
 } from "./clients";
+import { adsLeadKey, listAdsLeads } from "./ads";
+import { TRADE_IDS } from "./ads-templates";
 import { assignDomain } from "./tenants";
 import { notifyInbox as notifyInboxShared, sendClientEmail } from "./mailer";
 import { getBuildState, publishBuild } from "./builds";
@@ -295,6 +300,14 @@ export async function handlePortalMe(req: Request, env: Env): Promise<Response> 
     const stats = await tenantViews(env.WEBAO_KV, client.id, monthKey(Date.now()));
     view.siteViewsThisMonth = stats.views;
   }
+  if (hasAdsPack(client)) {
+    view.ads = {
+      status: client.ads?.status || "onboarding",
+      onboarding: client.ads?.onboarding,
+      complete: adsOnboardingComplete(client),
+      leads: await listAdsLeads(env.WEBAO_KV, client.id),
+    };
+  }
   return json({ ok: true, client: view });
 }
 
@@ -445,6 +458,102 @@ export async function handlePortalOnboarding(req: Request, env: Env): Promise<Re
     await saveClient(env.WEBAO_KV, client);
   }
   return json({ ok: true, client: portalView(client) });
+}
+
+// ---------------------------------------------------------------------------
+// Ads Pack: onboarding + lead outcomes
+// ---------------------------------------------------------------------------
+
+const ADS_TEXT_LIMITS: Record<string, number> = {
+  services: 1000,
+  serviceArea: 200,
+  websiteUrl: 300,
+  leadEmail: 200,
+  leadPhone: 60,
+  notes: 1000,
+};
+
+/** POST /api/portal/ads-onboarding — saves the ads intake form. */
+export async function handlePortalAdsOnboarding(req: Request, env: Env): Promise<Response> {
+  if (!originAllowed(req, true, env)) return err("Forbidden origin", 403);
+  const client = await clientForSession(req, env);
+  if (!client) return err("Not signed in", 401);
+  if (!hasAdsPack(client)) return err("No Ads Pack on this account", 409);
+  let body: Record<string, unknown>;
+  try {
+    body = (await readJson(req)) as Record<string, unknown>;
+  } catch (e) {
+    return err((e as Error).message);
+  }
+  if (!client.ads) {
+    client.ads = { status: "onboarding", platform: "meta", updatedAt: Date.now() };
+  }
+  const data: AdsOnboarding = { ...(client.ads.onboarding || {}) };
+  for (const [field, limit] of Object.entries(ADS_TEXT_LIMITS)) {
+    const value = body[field];
+    if (typeof value === "string") {
+      (data as Record<string, unknown>)[field] = clampStr(value, limit).trim() || undefined;
+    }
+  }
+  if (typeof body.trade === "string") {
+    data.trade = (TRADE_IDS as readonly string[]).includes(body.trade) ? body.trade : undefined;
+  }
+  if (typeof body.radiusKm === "number" && Number.isFinite(body.radiusKm)) {
+    data.radiusKm = Math.min(200, Math.max(1, Math.round(body.radiusKm)));
+  }
+  if (typeof body.monthlyBudget === "number" && Number.isFinite(body.monthlyBudget)) {
+    data.monthlyBudget = Math.min(100000, Math.max(0, Math.round(body.monthlyBudget)));
+  }
+  client.ads.onboarding = data;
+  client.ads.updatedAt = Date.now();
+  const firstComplete = adsOnboardingComplete(client) && !client.ads.onboardingCompletedAt;
+  if (firstComplete) {
+    client.ads.onboardingCompletedAt = Date.now();
+    if (client.ads.status === "onboarding") client.ads.status = "setup";
+  }
+  await saveClient(env.WEBAO_KV, client);
+  if (firstComplete) {
+    await notifyInboxShared(env, `Ads onboarding complete: ${client.business || client.email}`, [
+      `Trade: ${data.trade || ""}. Area: ${data.serviceArea || ""} (${data.radiusKm || "?"} km).`,
+      `Monthly ad budget: $${data.monthlyBudget || 0}. Landing: ${data.websiteUrl || client.domain || ""}.`,
+      `Leads to: ${data.leadEmail || ""} ${data.leadPhone || ""}.`,
+      `Build the launch packet from the admin Clients tab.`,
+    ]);
+  }
+  return json({
+    ok: true,
+    ads: {
+      status: client.ads.status,
+      onboarding: client.ads.onboarding,
+      complete: adsOnboardingComplete(client),
+    },
+  });
+}
+
+/** POST /api/portal/ads-lead-outcome { leadId, outcome } — one tap, optional. */
+export async function handlePortalAdsLeadOutcome(req: Request, env: Env): Promise<Response> {
+  if (!originAllowed(req, true, env)) return err("Forbidden origin", 403);
+  const client = await clientForSession(req, env);
+  if (!client) return err("Not signed in", 401);
+  let body: { leadId?: unknown; outcome?: unknown };
+  try {
+    body = (await readJson(req)) as typeof body;
+  } catch (e) {
+    return err((e as Error).message);
+  }
+  const leadId = typeof body.leadId === "string" ? body.leadId : "";
+  const outcome =
+    body.outcome === "booked" || body.outcome === "not-fit" ? body.outcome : null;
+  if (!leadId) return err("leadId is required", 400);
+  const lead = await getJson<{ clientId: string } & Record<string, unknown>>(
+    env.WEBAO_KV,
+    adsLeadKey(leadId),
+  );
+  if (!lead || lead.clientId !== client.id) return err("Lead not found", 404);
+  lead.outcome = outcome;
+  lead.outcomeAt = Date.now();
+  await putJson(env.WEBAO_KV, adsLeadKey(leadId), lead);
+  return json({ ok: true, leads: await listAdsLeads(env.WEBAO_KV, client.id) });
 }
 
 // ---------------------------------------------------------------------------
