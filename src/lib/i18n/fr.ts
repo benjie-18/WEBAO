@@ -16,7 +16,7 @@ const fr = {
     terms: {
       title: "Conditions et détails · Notes tarifaires WEBAO",
       description:
-        "Les conditions complètes derrière les tarifs WEBAO : facturation, contrat, détails des forfaits, packs et options. Notes numérotées comme sur la page des tarifs.",
+        "Les conditions complètes derrière les tarifs WEBAO : facturation, contrat, détails des forfaits, packs, options et publicité. Notes numérotées comme sur la page des tarifs.",
     },
     contact: {
       title: "Contact WEBAO · Démarrez votre site sur mesure",
@@ -403,6 +403,21 @@ const fr = {
       next: "Pack suivant",
       ofLabel: "sur",
     },
+    adsPack: {
+      eyebrow: "Service autonome",
+      name: "Ads Pack",
+      price: "C$899.99/mois",
+      includesLabel: "Inclus :",
+      includes: [
+        "Campagnes créées et gérées sur Facebook et Instagram",
+        "Demandes envoyées à votre courriel et dans votre portail client",
+        "Rapport mensuel : demandes, travaux réservés, coût par travail réservé",
+      ],
+      setupLabel: "Mise en place :",
+      setup: "C$499.99 unique, ajouté au paiement",
+      budgetLabel: "Budget publicitaire :",
+      budget: "À partir de C$1,500/mois, sur votre propre carte et votre compte publicitaire",
+    },
     popularStrip: {
       label: "Option populaire :",
       name: "Gestion du SEO local",
@@ -590,6 +605,7 @@ const fr = {
       plans: "Forfaits",
       details: "Fonctionnalités et services",
       bundles: "Packs",
+      ads: "Publicité",
       addons: "Options",
     },
     noteLabel: "Note",
@@ -907,6 +923,15 @@ const fr = {
       "29": {
         title: "Domaine",
         blocks: [{ text: "1 domaine personnalisé standard est inclus. Le domaine reste enregistré au nom du client." }],
+      },
+      "30": {
+        title: "Ads Pack",
+        blocks: [
+          { text: "Publicité gérée sur Facebook et Instagram : C$899.99 par mois, plus des frais de mise en place uniques de C$499.99 facturés avec le premier paiement. Les frais mensuels couvrent la création et la gestion continue des campagnes, l'envoi des demandes à votre courriel et dans votre portail client, et un rapport mensuel." },
+          { text: "Le budget publicitaire est distinct et n'est jamais facturé par Webao. Vos annonces roulent dans votre propre compte publicitaire, facturé par la plateforme à votre propre carte de paiement. Le budget publicitaire minimum est de C$1,500 par mois, payé par vous directement à la plateforme." },
+          { text: "Webao ne garantit aucun nombre de demandes, d'appels ou de ventes. Les résultats publicitaires varient. Le rapport mensuel montre ce que vos campagnes ont livré : demandes reçues, travaux réservés et coût par travail réservé." },
+          { text: "Vous pouvez annuler le Ads Pack avec un préavis de 30 jours. Les campagnes arrêtent à la fin de la période de préavis, et votre compte publicitaire ainsi que ses données restent les vôtres." },
+        ],
       },
     },
     // Add-ons without a note number in the plan are rendered unnumbered,

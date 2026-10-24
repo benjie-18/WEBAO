@@ -152,6 +152,18 @@ test('every catalog key has a Stripe price, and every price has a catalog key', 
   assert.equal(normalizeKey('extrapage-one-time'), 'extrapage-onetime');
 });
 
+test('ads pack is monthly-only and stays monthly on a yearly cart', () => {
+  assert.equal(intervalFor('ads-pack', 'month'), 'month');
+  assert.equal(priceCentsFor('ads-pack', 'month'), 89999);
+  assert.equal(priceCentsFor('ads-pack', 'year'), undefined);
+  const cart: CartItem[] = [
+    item({ key: 'ads-pack-month', product: 'ads-pack', name: 'Ads Pack', priceCents: 89999, type: 'bundle' }),
+  ];
+  const yearly = convertItemsToBilling(cart, 'year');
+  assert.deepEqual(yearly.map((i) => i.key), ['ads-pack-month']);
+  assert.deepEqual(yearly.map((i) => i.priceCents), [89999]);
+});
+
 test('switching the billing term re-prices recurring items only', () => {
   const cart: CartItem[] = [
     item(),

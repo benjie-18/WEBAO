@@ -13,7 +13,7 @@ const en = {
     terms: {
       title: "Terms & Details · WEBAO Pricing Notes",
       description:
-        "The full terms behind WEBAO pricing: billing, contract, plan details, bundles and add-ons. Notes numbered to match the pricing page.",
+        "The full terms behind WEBAO pricing: billing, contract, plan details, bundles, add-ons and advertising. Notes numbered to match the pricing page.",
     },
     contact: {
       title: "Contact WEBAO · Start Your Custom Website",
@@ -400,6 +400,21 @@ const en = {
       next: "Next bundle",
       ofLabel: "of",
     },
+    adsPack: {
+      eyebrow: "Standalone service",
+      name: "Ads Pack",
+      price: "C$899.99/mo",
+      includesLabel: "Includes:",
+      includes: [
+        "Campaigns set up and managed on Facebook and Instagram",
+        "Leads sent to your inbox and your client portal",
+        "Monthly report: leads, booked jobs, cost per booked job",
+      ],
+      setupLabel: "Setup:",
+      setup: "C$499.99 one-time, added at checkout",
+      budgetLabel: "Ad budget:",
+      budget: "From C$1,500/mo, on your own card and ad account",
+    },
     popularStrip: {
       label: "Popular add-on:",
       name: "Local SEO Management",
@@ -584,6 +599,7 @@ const en = {
       plans: "Plans",
       details: "Features & services",
       bundles: "Bundles",
+      ads: "Advertising",
       addons: "Add-ons",
     },
     noteLabel: "Note",
@@ -901,6 +917,15 @@ const en = {
       "29": {
         title: "Domain",
         blocks: [{ text: "1 standard custom domain is included. Domain remains registered to the client." }],
+      },
+      "30": {
+        title: "Ads Pack",
+        blocks: [
+          { text: "Managed advertising on Facebook and Instagram: C$899.99 per month, plus a one-time setup fee of C$499.99 charged with the first payment. The monthly fee covers campaign setup and ongoing management, lead delivery to your inbox and client portal, and a monthly report." },
+          { text: "Ad spend is separate and is never billed by Webao. Your ads run in your own ad account, charged by the platform to your own payment card. The minimum ad budget is C$1,500 per month, paid by you directly to the platform." },
+          { text: "Webao does not guarantee any number of leads, calls or sales. Advertising results vary. The monthly report shows what your campaigns delivered: leads received, jobs booked, and the cost per booked job." },
+          { text: "You can cancel the Ads Pack with 30 days' notice. Campaigns stop at the end of the notice period, and your ad account and its data stay yours." },
+        ],
       },
     },
     // Add-ons without a note number in the plan are rendered unnumbered,

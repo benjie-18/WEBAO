@@ -54,6 +54,9 @@ const catalog = {
     monthCents: 9999,
     yearCents: 9999 * TEN_MONTHS,
   },
+  // Monthly only (no annual term). The one-time setup fee is not sold here:
+  // checkout adds it server-side from the STRIPE_PRICE_ADS_SETUP secret.
+  "ads-pack": { product: "ads-pack", type: "bundle", monthCents: 89999 },
 
   /* ── Add-ons (featured group first, then the rest) ───────────────────── */
   localseo: { product: "localseo", type: "addon", monthCents: 15999, yearCents: 15999 * TEN_MONTHS },
@@ -141,6 +144,9 @@ export function convertItemsToBilling<T extends { product: string; key: string; 
     if (item.interval === "one-time") return item;
     const interval = intervalFor(item.product, billing);
     const priceCents = priceCentsFor(item.product, interval);
+    // A product with no price on the target term (e.g. the monthly-only
+    // Ads Pack on a yearly cart) keeps its current interval and price.
+    if (priceCents === undefined) return item;
     if (interval === item.interval && (priceCents === undefined || priceCents === item.priceCents)) return item;
     return {
       ...item,

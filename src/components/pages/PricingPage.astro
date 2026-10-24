@@ -2,6 +2,7 @@
 import { useTranslations, localizedPaths, type Locale } from "../../lib/i18n";
 import PlanCards from "../pricing/PlanCards.astro";
 import BundleCarousel from "../pricing/BundleCarousel.astro";
+import AdsPackCard from "../pricing/AdsPackCard.astro";
 import AddonList from "../pricing/AddonList.astro";
 import CompareTable from "../pricing/CompareTable.astro";
 import NoteRef from "../NoteRef.astro";
@@ -61,6 +62,14 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
 </section>
 
 <BundleCarousel locale={locale} />
+
+<!-- Ads Pack: standalone service, sold on its own or next to a plan -->
+<section class="section ads-section" aria-labelledby="ads-h">
+  <div class="shell ads-wrap">
+    <h2 id="ads-h" class="visually-hidden">{t.pricing.adsPack.eyebrow}: {t.pricing.adsPack.name}</h2>
+    <AdsPackCard locale={locale} />
+  </div>
+</section>
 
 <AddonList locale={locale} />
 
@@ -125,6 +134,10 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
   /* .billing-toggle-wrap / .billing-toggle / .billing-opt live in global.css:
      the same control is rendered on the start page. */
 
+  .ads-wrap {
+    display: flex;
+    justify-content: center;
+  }
   .plans-section {
     padding-top: clamp(8px, 2vw, 16px);
     overflow-x: clip;

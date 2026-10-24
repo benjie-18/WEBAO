@@ -1,0 +1,157 @@
+---
+// Ads Pack card: a standalone service (managed Facebook/Instagram ads),
+// sold on its own or next to a website plan. Monthly only, there is no
+// annual term; the one-time setup fee is added by checkout server-side
+// and is stated on the card so the total is clear before buying.
+import { useTranslations, type Locale } from "../../lib/i18n";
+import { priceCentsFor } from "../../lib/cart-catalog";
+import CartButton from "./CartButton.astro";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props as Props;
+const t = useTranslations(locale);
+const a = t.pricing.adsPack;
+const priceCents = priceCentsFor("ads-pack", "month") ?? 0;
+---
+
+<div class="bundle-card">
+  <p class="bc-kicker">{a.eyebrow}</p>
+  <div class="bc-name-row">
+    <h3 class="bc-name">{a.name}</h3>
+    <CartButton product="ads-pack" name={a.name} priceCents={priceCents} interval="month" type="bundle" />
+  </div>
+  <p class="bc-price">{a.price}</p>
+
+  <p class="bc-label">{a.includesLabel}</p>
+  <ul class="bc-includes">
+    {a.includes.map((inc) => (
+      <li>
+        <svg viewBox="0 0 16 16" aria-hidden="true" class="bc-check">
+          <path
+            d="M3.5 8.2l3.2 3.2 5.8-6.8"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <span>{inc}</span>
+      </li>
+    ))}
+  </ul>
+
+  <dl class="bc-meta">
+    <div class="bc-row">
+      <dt>{a.setupLabel}</dt>
+      <dd>{a.setup}</dd>
+    </div>
+    <div class="bc-row">
+      <dt>{a.budgetLabel}</dt>
+      <dd>{a.budget}</dd>
+    </div>
+  </dl>
+</div>
+
+<style>
+  .bundle-card {
+    --bc-bg: var(--bundle-bg);
+    --bc-text: var(--bundle-text);
+    --bc-soft: var(--bundle-soft);
+    --bc-line: var(--bundle-line);
+    background: linear-gradient(165deg, var(--bundle-bg-2) 0%, var(--bc-bg) 60%);
+    color: var(--bc-text);
+    border: 1px solid var(--bc-line);
+    border-radius: 26px;
+    padding: clamp(22px, 3vw, 32px);
+    box-shadow: var(--shadow-lg);
+    width: 100%;
+    max-width: 400px;
+  }
+  .bc-kicker {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--bc-soft);
+  }
+  .bc-name-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .bc-name {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    margin-top: 6px;
+    line-height: 1;
+  }
+  .bc-price {
+    margin-top: 10px;
+    font-size: clamp(2rem, 3.4vw, 2.7rem);
+    font-weight: 750;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .bc-label {
+    margin-top: 18px;
+    font-size: 0.78rem;
+    font-weight: 650;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--bc-soft);
+  }
+  .bc-includes {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0;
+    display: grid;
+    gap: 9px;
+    font-size: 0.94rem;
+  }
+  .bc-includes li {
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    gap: 10px;
+    align-items: start;
+  }
+  .bc-check {
+    width: 18px;
+    height: 18px;
+    margin-top: 1px;
+    color: var(--bc-text);
+    opacity: 0.85;
+    flex: none;
+  }
+  .bc-meta {
+    margin: 18px 0 0;
+    padding: 0;
+    border-top: 1px solid var(--bc-line);
+  }
+  .bc-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--bc-line);
+    font-size: 0.88rem;
+  }
+  .bc-row:last-child {
+    border-bottom: 0;
+  }
+  .bc-row dt {
+    color: var(--bc-soft);
+  }
+  .bc-row dd {
+    margin: 0;
+    font-weight: 650;
+    text-align: right;
+  }
+</style>

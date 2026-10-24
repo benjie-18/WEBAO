@@ -19,8 +19,10 @@ import { throttle } from "./auth";
 type Env = {
   STRIPE_SECRET_KEY?: string;
   STRIPE_PRICE_ID?: string;
-  /** Ads Pack prices live in env until the pack joins the static catalog
-   *  (real Stripe price ids are created once, then pasted as secrets). */
+  /** Ads Pack: the monthly price is in PRICE_MAP below. The one-time setup
+   *  price stays a secret because it is not a catalog item: checkout adds it
+   *  server-side and it cannot be bought on its own. STRIPE_PRICE_ADS_PACK
+   *  remains only as a fallback if the price-map entry is ever removed. */
   STRIPE_PRICE_ADS_PACK?: string;
   STRIPE_PRICE_ADS_SETUP?: string;
   WEBAO_KV?: KVNamespace;
@@ -37,6 +39,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 export const PRICE_MAP: Record<string, string> = {
   "admin-month": "price_1UO3EeE57vVzxI41Vv1DW6l5",
   "admin-year": "price_1UORSCE57vVzxI4182C4kxPY",
+  "ads-pack-month": "price_1UTsvJE57vVzxI41esicPXuU",
   "aichat-month": "price_1UO3E9E57vVzxI41BTXxcMD6",
   "aichat-year": "price_1UORS1E57vVzxI41852FAJaZ",
   "bilingual-month": "price_1UO3ELE57vVzxI41ULR08WMo",

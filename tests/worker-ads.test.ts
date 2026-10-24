@@ -3,7 +3,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { createHmac } from 'node:crypto';
-import { handleCheckoutSession } from '../worker/checkout';
+import { handleCheckoutSession, PRICE_MAP } from '../worker/checkout';
 import { handleStripeWebhook } from '../worker/stripe-webhook';
 import { handlePortalAdsOnboarding, handlePortalAdsLeadOutcome } from '../worker/portal';
 import {
@@ -55,7 +55,7 @@ async function adsClient(memory: ReturnType<typeof memoryKV>): Promise<Client> {
   return (await getClient(memory.kv, client.id))!;
 }
 
-test('checkout: ads pack resolves from env prices and the setup fee rides along', async () => {
+test('checkout: ads pack monthly price comes from the price map and the setup fee rides along', async () => {
   const original = globalThis.fetch;
   let captured = '';
   globalThis.fetch = (async (_input: unknown, init?: { body?: unknown }) => {
@@ -69,7 +69,6 @@ test('checkout: ads pack resolves from env prices and the setup fee rides along'
   try {
     const env = {
       STRIPE_SECRET_KEY: 'sk_test',
-      STRIPE_PRICE_ADS_PACK: 'price_ads_month',
       STRIPE_PRICE_ADS_SETUP: 'price_ads_setup',
     };
     const res = await handleCheckoutSession(
@@ -85,11 +84,12 @@ test('checkout: ads pack resolves from env prices and the setup fee rides along'
     const prices = [...params.entries()]
       .filter(([k]) => /^line_items\[\d+\]\[price\]$/.test(k))
       .map(([, v]) => v);
-    assert.deepEqual(prices.sort(), ['price_ads_month', 'price_ads_setup']);
+    assert.deepEqual(prices.sort(), [PRICE_MAP['ads-pack-month'], 'price_ads_setup']);
     assert.ok((params.get('metadata[items]') || '').includes('ads-setup-onetime'));
 
-    // Without the env prices the pack is simply not available yet.
-    const unavailable = await handleCheckoutSession(
+    // Without the setup secret the pack still checks out, monthly price
+    // only: the setup fee is added only when its secret is configured.
+    const noSetup = await handleCheckoutSession(
       new Request('https://webao.ca/api/checkout/session', {
         method: 'POST',
         headers: { 'content-type': 'application/json', origin: 'https://webao.ca' },
@@ -97,7 +97,12 @@ test('checkout: ads pack resolves from env prices and the setup fee rides along'
       }),
       { STRIPE_SECRET_KEY: 'sk_test' },
     );
-    assert.equal(unavailable.status, 400);
+    assert.equal(noSetup.status, 200);
+    const noSetupParams = new URLSearchParams(captured);
+    const noSetupPrices = [...noSetupParams.entries()]
+      .filter(([k]) => /^line_items\[\d+\]\[price\]$/.test(k))
+      .map(([, v]) => v);
+    assert.deepEqual(noSetupPrices, [PRICE_MAP['ads-pack-month']]);
   } finally {
     globalThis.fetch = original;
   }
