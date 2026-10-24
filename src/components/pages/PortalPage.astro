@@ -789,7 +789,7 @@ const supportHref = fr ? "/fr/soutien" : "/support";
           payload[f] = el.value;
         }
       });
-      status.textContent = msg("[data-portal-msg-loading]");
+      status.textContent = msg("[data-portal-msg-saving]");
       api("/api/portal/ads-onboarding", { method: "POST", body: JSON.stringify(payload) }).then(function (r) {
         if (r.data.ok) {
           status.textContent = msg("[data-portal-msg-ads-saved]");
