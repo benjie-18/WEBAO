@@ -607,7 +607,7 @@ const names = bundles.map((bd) => tb[bd.id].name);
     }
 
     function goTo(i) {
-      i = i >= n ? 0 : (i < 0 ? n - 1 : i);
+      i = i >= cardCount ? 0 : (i < 0 ? cardCount - 1 : i);
       var top = scroll.getBoundingClientRect().top + window.scrollY;
       var total = scroll.offsetHeight - window.innerHeight;
       try {
