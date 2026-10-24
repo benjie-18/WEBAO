@@ -28,6 +28,15 @@ const copy = fr
       signOut: "Se déconnecter",
       adminBanner: "Vous voyez ce portail en tant qu'administrateur (vue client).",
       adminExit: "Quitter la vue client",
+      progressLabel: "Votre progression",
+      supportButton: "Soutien client",
+      helpTitle: "Besoin d'un coup de main ?",
+      helpBody: "Des questions sur votre site, votre facturation ou un changement que vous voulez faire ? La page de soutien est le moyen le plus rapide de nous joindre.",
+      helpButton: "Aller au soutien client",
+      hintOnboarding: "À vous : remplissez le formulaire ci-dessous. Dès qu'il est complet, nous commençons la conception.",
+      hintBuild: "Nous concevons votre site en ce moment. Rien à faire de votre côté, nous vous écrirons quand il sera prêt à réviser.",
+      hintReview: "À vous : jetez un œil à l'aperçu ci-dessous, puis approuvez-le ou dites-nous quoi changer. Rien ne va en ligne sans votre approbation.",
+      hintLive: "Votre site est en ligne. Votre domaine et vos visites sont ci-dessous, et vous pouvez mettre vos informations à jour en tout temps.",
       domainTitle: "Votre domaine",
       domainToRegister: "Nous enregistrons {d} pour vous. Rien à faire de votre côté.",
       domainPending: "Pour connecter {d}, ajoutez cet enregistrement DNS chez votre registraire :",
@@ -118,6 +127,15 @@ const copy = fr
       signOut: "Sign out",
       adminBanner: "You are viewing this portal as an admin (client view).",
       adminExit: "Exit client view",
+      progressLabel: "Your progress",
+      supportButton: "Client support",
+      helpTitle: "Need a hand?",
+      helpBody: "Questions about your website, your billing, or something you want changed? The support page is the fastest way to reach us.",
+      helpButton: "Go to client support",
+      hintOnboarding: "Your turn: fill in the form below. Once it is complete, we start building.",
+      hintBuild: "We are building your site now. Nothing is needed from you, and we will email you when it is ready to review.",
+      hintReview: "Your turn: look at the draft below, then approve it or tell us what to change. Nothing goes live until you approve it.",
+      hintLive: "Your site is live. Your domain and visits are below, and you can update your details anytime.",
       domainTitle: "Your domain",
       domainToRegister: "We are registering {d} for you. Nothing to do on your side.",
       domainPending: "To connect {d}, add this DNS record at your registrar:",
@@ -195,6 +213,7 @@ const copy = fr
     };
 
 const demosJson = JSON.stringify(visibleDemos);
+const supportHref = fr ? "/fr/soutien" : "/support";
 ---
 
 <section class="section">
@@ -219,6 +238,9 @@ const demosJson = JSON.stringify(visibleDemos);
           <p class="prose" data-portal-signin-status style="font-size:14px; margin:0;" role="status"></p>
         </form>
         <p class="prose" style="font-size:13px; margin:16px 0 0; color: var(--muted);">{copy.signinHelp}</p>
+        <div style="margin-top:16px;">
+          <a class="btn btn--ghost" href={supportHref}>{copy.supportButton}</a>
+        </div>
       </div>
 
       <!-- Signed in -->
@@ -235,26 +257,18 @@ const demosJson = JSON.stringify(visibleDemos);
         </div>
         <p class="prose" data-portal-notice hidden style="font-size:14px; margin:14px 0 0; font-weight:600;" role="status"></p>
 
-        <ol data-portal-stages style="list-style:none; display:grid; grid-template-columns:repeat(4, 1fr); gap:8px; padding:0; margin:20px 0 0;">
+        <ol data-portal-stages aria-label={copy.progressLabel} style="list-style:none; display:grid; grid-template-columns:repeat(4, 1fr); gap:8px; padding:0; margin:20px 0 0;">
           {["onboarding", "build", "review", "live"].map((stage) => (
             <li data-portal-stage={stage} style="border:1px solid var(--line); border-radius:12px; padding:10px 12px; font-size:13px; font-weight:600; background: var(--card-bg); opacity:.55;">
               {(copy.stageNames as Record<string, string>)[stage]}
             </li>
           ))}
         </ol>
+        <p class="prose" data-portal-stage-hint hidden style="font-size:14.5px; margin:14px 0 0; font-weight:600;" role="status"></p>
         <p class="prose" data-portal-paused hidden style="font-size:14px; margin:14px 0 0;">{copy.pausedNote}</p>
         <p class="prose" style="font-size:14px; margin:14px 0 0; color: var(--muted);">
           {copy.billing} : <span data-portal-billing></span>
         </p>
-
-        <div data-portal-domain hidden style="margin-top:20px; border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
-          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 8px;">{copy.domainTitle}</h2>
-          <p class="prose" data-portal-domain-text style="font-size:14px; margin:0;"></p>
-          <p class="prose" data-portal-views hidden style="font-size:14px; margin:8px 0 0;">{copy.viewsLabel} : <strong data-portal-views-count></strong></p>
-          <p data-portal-domain-cname hidden style="font-size:14px; margin:12px 0 0;">
-            <code style="background: var(--accent-soft); padding:3px 8px; border-radius:6px;">CNAME&nbsp;&nbsp;<span data-portal-domain-host></span>&nbsp;&nbsp;→&nbsp;&nbsp;hosting.webao.ca</code>
-          </p>
-        </div>
 
         <div data-portal-review hidden style="margin-top:20px; border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
           <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 8px;">{copy.reviewTitle}</h2>
@@ -273,54 +287,7 @@ const demosJson = JSON.stringify(visibleDemos);
           <p class="prose" data-portal-review-status style="font-size:14px; margin:12px 0 0;" role="status"></p>
         </div>
 
-        <div data-portal-ads hidden style="margin-top:20px; border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
-          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 8px;">{copy.adsTitle}</h2>
-          <p class="prose" data-portal-ads-statusline style="font-size:14px; font-weight:650; margin:0 0 6px;"></p>
-          <p class="prose" style="font-size:14px; margin:0 0 16px;">{copy.adsIntro}</p>
-          <form data-portal-ads-form style="display:grid; gap:14px;">
-            <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.adsTrade}
-              <select data-ads-f="trade" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;">
-                {copy.adsTrades.map(([value, label]) => <option value={value}>{label}</option>)}
-              </select>
-            </label>
-            <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.fields.services}
-              <textarea data-ads-f="services" rows="2" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;"></textarea>
-            </label>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
-              <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.fields.serviceArea}
-                <input data-ads-f="serviceArea" type="text" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;" />
-              </label>
-              <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.adsRadius}
-                <input data-ads-f="radiusKm" type="number" min="1" max="200" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;" />
-              </label>
-            </div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
-              <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.adsBudget}
-                <input data-ads-f="monthlyBudget" type="number" min="0" step="50" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;" />
-              </label>
-              <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.adsWebsite}
-                <input data-ads-f="websiteUrl" type="text" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;" />
-              </label>
-            </div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
-              <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.adsLeadEmail}
-                <input data-ads-f="leadEmail" type="email" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;" />
-              </label>
-              <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.adsLeadPhone}
-                <input data-ads-f="leadPhone" type="tel" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;" />
-              </label>
-            </div>
-            <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
-              <button type="submit" class="btn btn--primary">{copy.adsSave}</button>
-              <p class="prose" data-portal-ads-formstatus style="font-size:14px; margin:0;" role="status"></p>
-            </div>
-            <p class="prose" data-portal-ads-complete hidden style="font-size:14px; margin:0;">{copy.adsCompleteNote}</p>
-          </form>
-          <h3 style="font-size:15px; margin:22px 0 10px;">{copy.adsLeadsTitle}</h3>
-          <div data-portal-ads-leads style="display:grid; gap:10px;"></div>
-        </div>
-
-        <div style="margin-top:20px; border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+        <div data-portal-formcard style="margin-top:20px; border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
           <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 8px;">{copy.formTitle}</h2>
           <p class="prose" data-portal-form-done hidden style="font-size:14px; margin:0 0 8px; font-weight:600;">{copy.formDone}</p>
           <p class="prose" style="font-size:14px; margin:0 0 16px;">{copy.formIntro}</p>
@@ -386,12 +353,106 @@ const demosJson = JSON.stringify(visibleDemos);
             </div>
           </form>
         </div>
+<div data-portal-domain hidden style="margin-top:20px; border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 8px;">{copy.domainTitle}</h2>
+          <p class="prose" data-portal-domain-text style="font-size:14px; margin:0;"></p>
+          <p class="prose" data-portal-views hidden style="font-size:14px; margin:8px 0 0;">{copy.viewsLabel} : <strong data-portal-views-count></strong></p>
+          <p data-portal-domain-cname hidden style="font-size:14px; margin:12px 0 0;">
+            <code style="background: var(--accent-soft); padding:3px 8px; border-radius:6px;">CNAME&nbsp;&nbsp;<span data-portal-domain-host></span>&nbsp;&nbsp;→&nbsp;&nbsp;hosting.webao.ca</code>
+          </p>
+        </div>
+
+        <div data-portal-ads hidden style="margin-top:20px; border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 8px;">{copy.adsTitle}</h2>
+          <p class="prose" data-portal-ads-statusline style="font-size:14px; font-weight:650; margin:0 0 6px;"></p>
+          <p class="prose" style="font-size:14px; margin:0 0 16px;">{copy.adsIntro}</p>
+          <form data-portal-ads-form style="display:grid; gap:14px;">
+            <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.adsTrade}
+              <select data-ads-f="trade" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;">
+                {copy.adsTrades.map(([value, label]) => <option value={value}>{label}</option>)}
+              </select>
+            </label>
+            <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.fields.services}
+              <textarea data-ads-f="services" rows="2" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;"></textarea>
+            </label>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+              <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.fields.serviceArea}
+                <input data-ads-f="serviceArea" type="text" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;" />
+              </label>
+              <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.adsRadius}
+                <input data-ads-f="radiusKm" type="number" min="1" max="200" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;" />
+              </label>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+              <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.adsBudget}
+                <input data-ads-f="monthlyBudget" type="number" min="0" step="50" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;" />
+              </label>
+              <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.adsWebsite}
+                <input data-ads-f="websiteUrl" type="text" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;" />
+              </label>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+              <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.adsLeadEmail}
+                <input data-ads-f="leadEmail" type="email" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;" />
+              </label>
+              <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.adsLeadPhone}
+                <input data-ads-f="leadPhone" type="tel" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;" />
+              </label>
+            </div>
+            <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+              <button type="submit" class="btn btn--primary">{copy.adsSave}</button>
+              <p class="prose" data-portal-ads-formstatus style="font-size:14px; margin:0;" role="status"></p>
+            </div>
+            <p class="prose" data-portal-ads-complete hidden style="font-size:14px; margin:0;">{copy.adsCompleteNote}</p>
+          </form>
+          <h3 style="font-size:15px; margin:22px 0 10px;">{copy.adsLeadsTitle}</h3>
+          <div data-portal-ads-leads style="display:grid; gap:10px;"></div>
+        </div>
+
+                <div data-portal-help style="margin-top:20px; border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 8px;">{copy.helpTitle}</h2>
+          <p class="prose" style="font-size:14px; margin:0 0 16px;">{copy.helpBody}</p>
+          <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+            <a class="btn btn--ghost" href={supportHref}>{copy.helpButton}</a>
+            <a href="mailto:support@webao.ca" style="font-size:14px; font-weight:600;">support@webao.ca</a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
+<style>
+  [data-portal-signin],
+  [data-portal-domain],
+  [data-portal-review],
+  [data-portal-ads],
+  [data-portal-formcard],
+  [data-portal-help] {
+    box-shadow: 0 1px 2px rgba(10, 15, 28, 0.05), 0 12px 32px rgba(10, 15, 28, 0.05);
+  }
+  [data-portal-root] .btn { min-height: 44px; }
+  [data-portal-root] input:not([type="checkbox"]):not([type="radio"]),
+  [data-portal-root] select,
+  [data-portal-root] textarea { font-size: 16px !important; }
+  [data-portal-root] :focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+  [data-portal-stages] li { transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, opacity 0.2s ease; }
+  [data-portal-stages] li[data-state="done"] { opacity: 1; background: var(--accent-soft); border-color: var(--line-strong); }
+  [data-portal-stages] li[data-state="done"]::before { content: "✓ "; font-weight: 700; }
+  [data-portal-stages] li[data-state="current"] { opacity: 1; background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  @media (max-width: 560px) {
+    [data-portal-stages] { grid-template-columns: 1fr 1fr !important; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-portal-root] *, [data-portal-stages] li { transition: none !important; }
+  }
+</style>
+
 <script type="application/json" id="portal-demos-json" set:html={demosJson}></script>
+<span hidden data-portal-msg-hint-onboarding>{copy.hintOnboarding}</span>
+<span hidden data-portal-msg-hint-build>{copy.hintBuild}</span>
+<span hidden data-portal-msg-hint-review>{copy.hintReview}</span>
+<span hidden data-portal-msg-hint-live>{copy.hintLive}</span>
 <span hidden data-portal-msg-generic>{copy.genericError}</span>
 <span hidden data-portal-msg-sending>{copy.sending}</span>
 <span hidden data-portal-msg-sent>{copy.sent}</span>
@@ -502,10 +563,21 @@ const demosJson = JSON.stringify(visibleDemos);
         var i = order.indexOf(li.getAttribute("data-portal-stage"));
         var done = idx > i || client.stage === "live";
         var active = idx === i && client.stage !== "live";
-        li.style.opacity = done || active ? "1" : ".55";
-        li.style.borderColor = active ? "var(--accent)" : "var(--line)";
-        li.style.background = done ? "var(--accent-soft)" : "var(--card-bg)";
+        li.setAttribute("data-state", done ? "done" : active ? "current" : "todo");
+        li.style.removeProperty("opacity");
+        li.style.removeProperty("border-color");
+        li.style.removeProperty("background");
+        if (active) li.setAttribute("aria-current", "step");
+        else li.removeAttribute("aria-current");
       });
+      var hintEl = root.querySelector("[data-portal-stage-hint]");
+      var hintText = "";
+      if (client.stage === "onboarding") hintText = msg("[data-portal-msg-hint-onboarding]");
+      else if (client.stage === "build") hintText = msg("[data-portal-msg-hint-build]");
+      else if (client.stage === "review") hintText = msg("[data-portal-msg-hint-review]");
+      else if (client.stage === "live") hintText = msg("[data-portal-msg-hint-live]");
+      hintEl.hidden = !hintText;
+      if (hintText) hintEl.textContent = hintText;
       var domainBox = root.querySelector("[data-portal-domain]");
       if (client.domain) {
         domainBox.hidden = false;
@@ -645,7 +717,7 @@ const demosJson = JSON.stringify(visibleDemos);
           var b = document.createElement("button");
           b.type = "button";
           b.className = "btn btn--ghost";
-          b.style.cssText = "padding:6px 12px; font-size:13px;";
+          b.style.cssText = "padding:10px 16px; font-size:14px; min-height:44px;";
           b.textContent = label;
           b.setAttribute("data-lead", lead.id);
           b.setAttribute("data-outcome", outcome);
