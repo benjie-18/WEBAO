@@ -1328,6 +1328,11 @@ const en = {
       loadMore: "Load more",
       details: "Details",
       hideDetails: "Hide details",
+      viewAs: "View as client",
+      createTest: "Create test client",
+      testBadge: "Test client",
+      testCreated: "Test client created.",
+      testEmailPrompt: "Email for the test client (your own email also lets you try the sign-in link):",
       stage: "Stage",
       stages: {
         onboarding: "Onboarding",

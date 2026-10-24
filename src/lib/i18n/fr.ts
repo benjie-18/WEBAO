@@ -1337,6 +1337,11 @@ const fr = {
       loadMore: "Charger plus",
       details: "Détails",
       hideDetails: "Masquer",
+      viewAs: "Voir comme client",
+      createTest: "Créer un client test",
+      testBadge: "Client test",
+      testCreated: "Client test créé.",
+      testEmailPrompt: "Courriel du client test (votre courriel vous permet aussi d'essayer le lien d'accès) :",
       stage: "Étape",
       stages: {
         onboarding: "Démarrage",

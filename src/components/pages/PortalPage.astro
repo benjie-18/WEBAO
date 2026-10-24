@@ -26,6 +26,8 @@ const copy = fr
       sent: "C'est envoyé. Vérifiez votre boîte courriel et cliquez le lien pour ouvrir votre portail.",
       signinHelp: "Vous venez de payer ? Le bouton sur la page de confirmation de paiement vous connecte directement.",
       signOut: "Se déconnecter",
+      adminBanner: "Vous voyez ce portail en tant qu'administrateur (vue client).",
+      adminExit: "Quitter la vue client",
       domainTitle: "Votre domaine",
       domainToRegister: "Nous enregistrons {d} pour vous. Rien à faire de votre côté.",
       domainPending: "Pour connecter {d}, ajoutez cet enregistrement DNS chez votre registraire :",
@@ -114,6 +116,8 @@ const copy = fr
       sent: "Sent. Check your inbox and click the link to open your portal.",
       signinHelp: "Just paid? The button on your payment confirmation page signs you in directly.",
       signOut: "Sign out",
+      adminBanner: "You are viewing this portal as an admin (client view).",
+      adminExit: "Exit client view",
       domainTitle: "Your domain",
       domainToRegister: "We are registering {d} for you. Nothing to do on your side.",
       domainPending: "To connect {d}, add this DNS record at your registrar:",
@@ -219,6 +223,12 @@ const demosJson = JSON.stringify(visibleDemos);
 
       <!-- Signed in -->
       <div data-portal-app hidden>
+        <div data-portal-admin-banner hidden style="border:1px solid var(--line-strong); border-radius:12px; padding:10px 14px; margin-bottom:16px; background: var(--card-bg);">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+            <span style="font-size:14px; font-weight:600;">{copy.adminBanner}</span>
+            <button type="button" class="btn btn--ghost" data-portal-admin-exit>{copy.adminExit}</button>
+          </div>
+        </div>
         <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
           <p style="margin:0; font-weight:650;" data-portal-identity></p>
           <button type="button" class="btn btn--ghost" data-portal-logout>{copy.signOut}</button>
@@ -537,6 +547,8 @@ const demosJson = JSON.stringify(visibleDemos);
       } else {
         adsCard.hidden = true;
       }
+      var adminBanner = root.querySelector("[data-portal-admin-banner]");
+      if (adminBanner) adminBanner.hidden = !client.viaAdmin;
       var viewsLine = root.querySelector("[data-portal-views]");
       if (client.stage === "live" && typeof client.siteViewsThisMonth === "number") {
         viewsLine.hidden = false;
@@ -742,6 +754,13 @@ const demosJson = JSON.stringify(visibleDemos);
       api("/api/portal/logout", { method: "POST", body: "{}" }).then(function () {
         current = null;
         show("signin");
+      });
+    });
+
+    var adminExitBtn = root.querySelector("[data-portal-admin-exit]");
+    if (adminExitBtn) adminExitBtn.addEventListener("click", function () {
+      api("/api/portal/logout", { method: "POST", body: "{}" }).then(function () {
+        location.href = "/admin";
       });
     });
 

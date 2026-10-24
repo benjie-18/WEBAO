@@ -113,15 +113,40 @@ async function clientForSession(req: Request, env: Env): Promise<Client | null> 
   return getClient(env.WEBAO_KV, session.clientId);
 }
 
-async function startSession(env: Env, client: Client): Promise<Response> {
+async function startSession(
+  env: Env,
+  client: Client,
+  opts?: { viaAdmin?: boolean; ttlSeconds?: number },
+): Promise<Response> {
   const token = randomHex(32);
+  const ttl = opts?.ttlSeconds ?? SESSION_TTL;
   await putJson(
     env.WEBAO_KV,
     "portal-session:" + token,
-    { clientId: client.id, createdAt: Date.now() },
-    SESSION_TTL,
+    { clientId: client.id, createdAt: Date.now(), ...(opts?.viaAdmin ? { viaAdmin: true } : {}) },
+    ttl,
   );
-  return json({ ok: true }, 200, { "Set-Cookie": sessionCookie(token, SESSION_TTL) });
+  return json({ ok: true }, 200, { "Set-Cookie": sessionCookie(token, ttl) });
+}
+
+const ADMIN_VIEW_TTL = 24 * 3600; // admin "view as client" sessions: 24 hours
+
+/**
+ * Mint a portal session as if the client had signed in, for the admin
+ * panel's "view as client". The session record is flagged viaAdmin so the
+ * portal can banner it and /me can report it, and it lives 24 hours
+ * instead of the usual 30 days.
+ */
+export async function startAdminViewSession(env: Env, client: Client): Promise<Response> {
+  return startSession(env, client, { viaAdmin: true, ttlSeconds: ADMIN_VIEW_TTL });
+}
+
+/** Whether the request's portal session was minted by an admin (view-as). */
+export async function sessionViaAdmin(req: Request, env: Env): Promise<boolean> {
+  const token = readSessionToken(req);
+  if (!token) return false;
+  const session = await getJson<{ viaAdmin?: boolean }>(env.WEBAO_KV, "portal-session:" + token);
+  return session?.viaAdmin === true;
 }
 
 /** Same-origin + per-IP throttle gate shared by the public portal posts. */
@@ -296,6 +321,7 @@ export async function handlePortalMe(req: Request, env: Env): Promise<Response> 
   const client = await clientForSession(req, env);
   if (!client) return err("Not signed in", 401);
   const view = portalView(client) as Record<string, unknown>;
+  if (await sessionViaAdmin(req, env)) view.viaAdmin = true;
   if (client.stage === "live") {
     const stats = await tenantViews(env.WEBAO_KV, client.id, monthKey(Date.now()));
     view.siteViewsThisMonth = stats.views;
@@ -576,7 +602,7 @@ export async function handleOnboardingNudges(req: Request, env: Env): Promise<Re
   let skippedNoMail = 0;
 
   for (const client of clients) {
-    if (!client || client.stage !== "onboarding" || client.onboardingCompletedAt) continue;
+    if (!client || client.test || client.stage !== "onboarding" || client.onboardingCompletedAt) continue;
     const ageDays = Math.floor((now - client.createdAt) / DAY_MS);
     if (ageDays >= 7 && !client.nudgesEscalatedAt) {
       client.nudgesEscalatedAt = now;

@@ -30,6 +30,8 @@ import type { Session } from "./track";
 import { handleLeadsList, handleLeadDelete, LEADS_INDEX, type Lead } from "./leads";
 import {
   CLIENTS_INDEX,
+  createClient,
+  findClientByEmail,
   getClient,
   hasAdsPack,
   normalizeDomain,
@@ -39,6 +41,7 @@ import {
   type Client,
   type ClientStage,
 } from "./clients";
+import { startAdminViewSession } from "./portal";
 import { assignDomain } from "./tenants";
 import { getBuildState, publishBuild, runBuild, type BuildState } from "./builds";
 import { buildLaunchPacket, recordAdsSpend } from "./ads";
@@ -93,6 +96,10 @@ export async function handleAdmin(req: Request, env: Env, url: URL): Promise<Res
     return handleClientAdsPacket(kv, url);
   if (path === "/api/admin/clients/ads-spend" && req.method === "POST")
     return handleClientAdsSpend(req, kv);
+  if (path === "/api/admin/clients/create-test" && req.method === "POST")
+    return handleClientCreateTest(req, kv);
+  if (path === "/api/admin/clients/view-as" && req.method === "POST")
+    return handleClientViewAs(req, env);
   if (path === "/api/admin/config" && req.method === "GET")
     return json({ ok: true, settings: await getSettings(kv) });
   if (path === "/api/admin/config" && req.method === "POST") return handleConfigSet(req, kv);
@@ -448,6 +455,8 @@ function clientSummary(client: Client, build?: BuildState) {
   return {
     id: client.id,
     email: client.email,
+    lang: client.lang,
+    test: client.test === true,
     name: client.name,
     business: client.business || client.onboarding?.businessName,
     stage: client.stage,
@@ -619,6 +628,57 @@ async function handleClientAdsSpend(req: Request, kv: KVNamespace): Promise<Resp
   if (!client) return err("Client not found", 404);
   await recordAdsSpend(kv, client.id, body.month, Math.round(body.amountCents));
   return json({ ok: true });
+}
+
+/**
+ * POST /api/admin/clients/create-test { email, business?, lang? } — create a
+ * test client record (Launch plan + Ads Pack) for walking the portal as a
+ * customer. Flagged test: no onboarding nudges, no monthly reports. A real
+ * checkout with the same email graduates it into a real record.
+ */
+async function handleClientCreateTest(req: Request, kv: KVNamespace): Promise<Response> {
+  let body: { email?: unknown; business?: unknown; lang?: unknown };
+  try {
+    body = (await readJson(req)) as typeof body;
+  } catch (e) {
+    return err((e as Error).message);
+  }
+  const email = clampStr(body.email, 200).trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return err("A valid email is required");
+  if (await findClientByEmail(kv, email)) {
+    return err("A client with that email already exists", 409);
+  }
+  const business = clampStr(body.business, 120).trim() || "TEST Client";
+  const client = await createClient(kv, {
+    email,
+    name: "Test client",
+    business,
+    lang: body.lang === "fr" ? "fr" : "en",
+    items: ["launch-month", "ads-pack-month"],
+    source: "admin-test",
+    test: true,
+  });
+  client.ads = { status: "onboarding", platform: "meta", updatedAt: Date.now() };
+  await saveClient(kv, client);
+  return json({ ok: true, client: clientSummary(client) });
+}
+
+/**
+ * POST /api/admin/clients/view-as { id } — mint an admin-flagged portal
+ * session for this client and set it as the portal cookie, so the admin's
+ * browser opens the portal exactly as the client sees it.
+ */
+async function handleClientViewAs(req: Request, env: Env): Promise<Response> {
+  let body: { id?: unknown };
+  try {
+    body = (await readJson(req)) as typeof body;
+  } catch (e) {
+    return err((e as Error).message);
+  }
+  if (typeof body.id !== "string") return err("Client id is required");
+  const client = await getClient(env.WEBAO_KV, body.id);
+  if (!client) return err("Client not found", 404);
+  return startAdminViewSession(env, client);
 }
 
 /** POST /api/admin/clients/publish { id } — point the tenant host at the draft. */

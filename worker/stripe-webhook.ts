@@ -164,6 +164,7 @@ async function onCheckoutCompleted(
   if (name && !existing.name) existing.name = name;
   if (email && existing.email !== email) existing.email = email;
   mergeItems(existing, items);
+  if (existing.test) existing.test = undefined; // a real purchase graduates a test record
   ensureAdsState(existing);
   existing.lastCheckoutAt = at;
   if (subscriptionId && (existing.billingStatus === "none" || existing.billingStatus === "one-time")) {

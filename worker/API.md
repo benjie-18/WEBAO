@@ -267,6 +267,20 @@ Body `{ id }`. Publishes the current draft (requires a passing QA report):
 the tenant host serves it, the stage becomes `live`, a `connected` domain
 becomes `live`, and the client is emailed. → `{ ok, buildId }`.
 
+### `POST /api/admin/clients/create-test`
+Body `{ email, business?, lang? }`. Creates a test client record (Launch +
+Ads Pack, `source: "admin-test"`, flagged `test`): excluded from onboarding
+nudges and monthly reports, and a real checkout with the same email
+graduates it into a real record. → `{ ok, client }` (409 if the email
+already has a record).
+
+### `POST /api/admin/clients/view-as`
+Body `{ id }`. Mints an admin-flagged portal session for the client (24 h,
+`viaAdmin` on the session record) and returns it as the portal cookie, so
+the admin's browser opens the portal exactly as the client sees it.
+`/api/portal/me` reports `viaAdmin` and the portal shows a banner with an
+exit back to /admin. → `{ ok }` + `Set-Cookie`.
+
 ## Client reports
 
 Published tenant pageviews are counted per client per month

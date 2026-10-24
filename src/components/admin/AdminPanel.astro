@@ -183,6 +183,9 @@ const a = t.admin;
       id="admin-panel-clients" role="tabpanel" aria-labelledby="admin-tab-clients"
       data-panel="clients" class="admin-panel" hidden
     >
+      <div class="admin-controls">
+        <button type="button" class="admin-ghost-btn" data-clients-create-test>{a.clients.createTest}</button>
+      </div>
       <div class="admin-forms-list" data-clients-list></div>
       <div class="admin-center">
         <button type="button" class="admin-ghost-btn" data-clients-more hidden>{a.clients.loadMore}</button>

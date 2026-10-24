@@ -64,6 +64,8 @@ interface LeadsResponse {
 interface ClientItem {
   id: string;
   email: string;
+  lang?: string;
+  test?: boolean;
   name?: string;
   business?: string;
   stage: string;
@@ -1111,10 +1113,10 @@ function initAdmin(): void {
       : "";
 
     return (
-      `<article class="form-card" data-client-id="${esc(item.id)}">` +
+      `<article class="form-card" data-client-id="${esc(item.id)}" data-client-lang="${esc(item.lang || "en")}">` +
       `<div class="form-card-head"><div><strong>${esc(item.business || item.email)}</strong>` +
       `<span class="mono">${esc(item.email)}</span></div>` +
-      `<div class="lead-badges">${badge}${domainBadge}${qaBadge}${decisionBadge}${adsBadge}</div></div>` +
+      `<div class="lead-badges">${badge}${domainBadge}${qaBadge}${decisionBadge}${adsBadge}${item.test ? `<span class="form-badge form-badge--warn">${esc(C.testBadge)}</span>` : ""}</div></div>` +
       `<div class="form-meta">${meta.join("")}</div>` +
       `<div class="form-actions" style="gap:10px; flex-wrap:wrap;">` +
       `<label style="display:flex; gap:8px; align-items:center; font-size:13px; font-weight:600;">${esc(C.stage)}` +
@@ -1125,6 +1127,7 @@ function initAdmin(): void {
       `<input type="text" data-client-domain value="${esc(item.domain || "")}" placeholder="patplumbing.ca" style="flex:1; padding:7px 9px; border-radius:8px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink);" /></label>` +
       `<button type="button" class="admin-ghost-btn" data-client-save>${esc(C.save)}</button>` +
       `<button type="button" class="admin-ghost-btn" data-client-build>${esc(C.build)}</button>` +
+      `<button type="button" class="admin-ghost-btn" data-client-view-as>${esc(C.viewAs)}</button>` +
       (item.publishPending
         ? `<button type="button" class="admin-ghost-btn" data-client-publish>${esc(C.publish)}</button>`
         : "") +
@@ -1198,6 +1201,41 @@ function initAdmin(): void {
       toast(String(I18N.clients.saveError), "err");
     } finally {
       btn.removeAttribute("disabled");
+    }
+  }
+
+  async function viewAsClient(btn: HTMLElement): Promise<void> {
+    const card = btn.closest("[data-client-id]") as HTMLElement | null;
+    const id = card?.dataset.clientId;
+    if (!card || !id) return;
+    btn.setAttribute("disabled", "");
+    try {
+      await api("/api/admin/clients/view-as", { method: "POST", body: { id } });
+      window.location.href = card.dataset.clientLang === "fr" ? "/fr/portail" : "/portal";
+    } catch (e) {
+      if (e instanceof ExpiredSession) return;
+      toast(String(I18N.clients.actionError), "err");
+      btn.removeAttribute("disabled");
+    }
+  }
+
+  async function createTestClient(): Promise<void> {
+    const email = window.prompt(String(I18N.clients.testEmailPrompt), "");
+    if (!email) return;
+    try {
+      await api("/api/admin/clients/create-test", {
+        method: "POST",
+        body: {
+          email: email.trim(),
+          lang: document.documentElement.lang.startsWith("fr") ? "fr" : "en",
+        },
+      });
+      toast(String(I18N.clients.testCreated), "ok");
+      tabLoaded.clients = false;
+      void loadClients(true);
+    } catch (e) {
+      if (e instanceof ExpiredSession) return;
+      toast(String(I18N.clients.actionError), "err");
     }
   }
 
@@ -1541,6 +1579,7 @@ function initAdmin(): void {
   qq("[data-forms-more]")?.addEventListener("click", () => void loadForms(false));
   qq("[data-leads-more]")?.addEventListener("click", () => void loadLeads(false));
   qq("[data-clients-more]")?.addEventListener("click", () => void loadClients(false));
+  qq("[data-clients-create-test]")?.addEventListener("click", () => void createTestClient());
   qq<HTMLFormElement>("[data-settings-form]")?.addEventListener("submit", (e) => void onSettingsSubmit(e));
   qq<HTMLFormElement>("[data-pw-form]")?.addEventListener("submit", (e) => void onPasswordSubmit(e));
 
@@ -1613,6 +1652,11 @@ function initAdmin(): void {
     const clientPublish = t.closest("[data-client-publish]") as HTMLElement | null;
     if (clientPublish) {
       void runClientAction(clientPublish, "publish");
+      return;
+    }
+    const clientViewAs = t.closest("[data-client-view-as]") as HTMLElement | null;
+    if (clientViewAs) {
+      void viewAsClient(clientViewAs);
       return;
     }
     const clientAdsSpend = t.closest("[data-client-ads-spend]") as HTMLElement | null;

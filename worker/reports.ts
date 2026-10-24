@@ -122,7 +122,7 @@ export async function handleMonthlyReports(req: Request, env: ReportEnv): Promis
   const monthEnd = Date.UTC(yy, mm || 1, 1);
 
   for (const client of records) {
-    if (!client) continue;
+    if (!client || client.test) continue;
     const siteLive = client.stage === "live";
     const adsLive = client.ads?.status === "live";
     if (!siteLive && !adsLive) continue;

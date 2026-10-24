@@ -76,6 +76,8 @@ export interface Client {
   canceledAt?: number;
   /** How this record came to exist, e.g. "stripe". */
   source: string;
+  /** Admin-created test record: excluded from nudges and monthly reports. */
+  test?: boolean;
   /** Portal onboarding answers; absent until the client starts the form. */
   onboarding?: OnboardingData;
   /** Set when the onboarding form first reaches completeness. */
@@ -252,6 +254,7 @@ export async function createClient(
     stripeSubscriptionId?: string;
     billingStatus?: BillingStatus;
     source?: string;
+    test?: boolean;
   },
 ): Promise<Client> {
   const now = Date.now();
@@ -269,6 +272,7 @@ export async function createClient(
     stripeSubscriptionId: init.stripeSubscriptionId,
     items: init.items ? [...init.items] : [],
     source: init.source || "stripe",
+    test: init.test || undefined,
   };
   await saveClient(kv, client);
 
