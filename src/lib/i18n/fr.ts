@@ -318,7 +318,7 @@ const fr = {
       launch: {
         name: "Launch",
         monthly: "C$89.99/mois",
-        annual: "(C$890.99/an)",
+        annual: "(C$899.90/an)",
         priceNote: 4,
         badge: "",
         desc: "Pour les travailleurs autonomes qui doivent avoir l’air professionnels en ligne et être faciles à joindre.",
@@ -335,7 +335,7 @@ const fr = {
       grow: {
         name: "Grow",
         monthly: "C$149.99/mois",
-        annual: "(C$1,490.99/an)",
+        annual: "(C$1,499.90/an)",
         priceNote: 9,
         badge: "Le plus populaire",
         desc: "Pour les entreprises locales établies qui ont besoin que leur site attire des clients.",
@@ -352,7 +352,7 @@ const fr = {
       scale: {
         name: "Scale",
         monthly: "C$349.99/mois",
-        annual: "(C$3,490.99/an)",
+        annual: "(C$3,499.90/an)",
         priceNote: 12,
         badge: "",
         desc: "Pour les entreprises en croissance qui veulent que leur site vende davantage.",
@@ -633,9 +633,9 @@ const fr = {
         blocks: [
           { text: "Facturé mensuellement, ou annuellement à l'avance avec 2 mois gratuits (prix annuel = 10 mois)." },
           { label: "Comparaison sur 12 mois", text: "" },
-          { label: "Launch", text: "C$89.99/mois x 12 = C$1,079.88 facturé mensuellement, ou C$890.99 facturé annuellement (environ C$74.25/mois). L'option annuelle fait économiser C$188.89." },
-          { label: "Grow", text: "C$149.99/mois x 12 = C$1,799.88 facturé mensuellement, ou C$1,490.99 facturé annuellement (environ C$124.25/mois). L'option annuelle fait économiser C$308.89." },
-          { label: "Scale", text: "C$349.99/mois x 12 = C$4,199.88 facturé mensuellement, ou C$3,490.99 facturé annuellement (environ C$290.92/mois). L'option annuelle fait économiser C$708.89." },
+          { label: "Launch", text: "C$89.99/mois x 12 = C$1,079.88 facturé mensuellement, ou C$899.90 facturé annuellement (environ C$74.99/mois). L'option annuelle fait économiser C$179.98." },
+          { label: "Grow", text: "C$149.99/mois x 12 = C$1,799.88 facturé mensuellement, ou C$1,499.90 facturé annuellement (environ C$124.99/mois). L'option annuelle fait économiser C$299.98." },
+          { label: "Scale", text: "C$349.99/mois x 12 = C$4,199.88 facturé mensuellement, ou C$3,499.90 facturé annuellement (environ C$291.66/mois). L'option annuelle fait économiser C$699.98." },
         ],
       },
       "4": {

@@ -158,15 +158,15 @@ test('a visitor arriving with a cart keeps exactly that cart', () => {
     ['launch-year', 'extrapage-one-time'],
   );
   assert.equal(radio('launch').checked, true);
-  assert.equal(price('launch'), 'C$890.99/yr');
-  assert.equal(price('grow'), 'C$1,490.99/yr');
+  assert.equal(price('launch'), 'C$899.90/yr');
+  assert.equal(price('grow'), 'C$1,499.90/yr');
   assert.equal(doc.querySelector<HTMLElement>('[data-start-default-note]')!.hidden, true);
   const extras = doc.querySelector<HTMLElement>('[data-start-extras]')!;
   assert.equal(extras.hidden, false);
   assert.match(extras.textContent ?? '', /Extra Page/);
   assert.match(extras.textContent ?? '', /C\$44\.99 one-time/);
   assert.equal(extras.querySelector('[data-remove-key]')!.getAttribute('aria-label'), 'Remove Extra Page');
-  assert.equal(doc.querySelector('[data-start-total]')!.textContent, 'C$935.98');
+  assert.equal(doc.querySelector('[data-start-total]')!.textContent, 'C$944.89');
   window.close();
 });
 
@@ -195,9 +195,9 @@ test('the yearly toggle re-prices the plan options and the selection', () => {
   );
   assert.equal(window.localStorage.getItem(BILLING_KEY), 'year');
   assert.equal(doc.querySelector('[data-billing-opt="year"]')!.getAttribute('aria-pressed'), 'true');
-  assert.equal(price('grow'), 'C$1,490.99/yr');
-  assert.equal(price('scale'), 'C$3,490.99/yr');
-  assert.equal(doc.querySelector('[data-start-total]')!.textContent, 'C$1,490.99');
+  assert.equal(price('grow'), 'C$1,499.90/yr');
+  assert.equal(price('scale'), 'C$3,499.90/yr');
+  assert.equal(doc.querySelector('[data-start-total]')!.textContent, 'C$1,499.90');
   window.close();
 });
 

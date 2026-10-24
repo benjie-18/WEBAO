@@ -118,7 +118,7 @@ monthly and yearly items are rejected with 400 rather than letting Stripe fail
 Unknown keys are rejected too, so a stale cart can never be charged less than it
 showed.
 
-→ `{ "ok": true, "clientSecret": "<stripe_client_secret>", "mode": "subscription", "lineItems": [{ "description": "Launch", "amount": 89099, "currency": "cad", "interval": "year" }] }`.
+→ `{ "ok": true, "clientSecret": "<stripe_client_secret>", "mode": "subscription", "lineItems": [{ "description": "Launch", "amount": 89990, "currency": "cad", "interval": "year" }] }`.
 → `{ "ok": false, "error": "…" }` (400 invalid cart / mixed intervals, 403 origin,
 429 rate-limited, 502 Stripe error, 503 configuration). `Checkout not configured`
 (503) is returned when `STRIPE_SECRET_KEY` is unset, or when the legacy flow runs

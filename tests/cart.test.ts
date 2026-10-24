@@ -66,7 +66,7 @@ test('malformed storage never throws and never yields broken items', () => {
   storage.setItem(STORAGE_KEY, JSON.stringify([{ key: 'launch-month' }, null, { key: 'x', product: 'x', interval: 'nope', priceCents: 1 }]));
   assert.deepEqual(readCart(storage), []);
   assert.deepEqual(readCart(undefined), []);
-  assert.equal(sanitizeCartItem({ key: 'grow-year', product: 'grow', name: 'Grow', priceCents: 149099, interval: 'year', type: 'plan' })?.interval, 'year');
+  assert.equal(sanitizeCartItem({ key: 'grow-year', product: 'grow', name: 'Grow', priceCents: 149990, interval: 'year', type: 'plan' })?.interval, 'year');
 });
 
 test('public helpers operate on localStorage', () => {
@@ -102,25 +102,23 @@ test('catalog prices match the pricing plan', () => {
   assert.equal(priceCentsFor('launch', 'month'), 8999);
   assert.equal(priceCentsFor('grow', 'month'), 14999);
   assert.equal(priceCentsFor('scale', 'month'), 34999);
-  assert.equal(priceCentsFor('launch', 'year'), 89099);
-  assert.equal(priceCentsFor('grow', 'year'), 149099);
-  assert.equal(priceCentsFor('scale', 'year'), 349099);
+  assert.equal(priceCentsFor('launch', 'year'), 89990);
+  assert.equal(priceCentsFor('grow', 'year'), 149990);
+  assert.equal(priceCentsFor('scale', 'year'), 349990);
   assert.equal(priceCentsFor('localseo', 'month'), 15999);
   assert.equal(priceCentsFor('extrapage', 'one-time'), 4499);
   assert.equal(priceCentsFor('extrapage', 'month'), undefined);
-  // Add-ons and bundles are billed in advance at ten months ("2 months free").
-  // Plans are the exception: their annual figures are the published
-  // C$890 / C$1,490 / C$3,490 (rendered with the site's .99 endings).
+  // Every recurring product is billed in advance at ten months ("2 months free"),
+  // plans included: their annual figures are exactly 10 monthly payments.
   for (const [id, product] of Object.entries(cartProducts)) {
     if (product.monthCents === undefined || product.yearCents === undefined) continue;
-    if (product.type === "plan") continue;
     assert.equal(product.yearCents, product.monthCents * 10, `${id}: annual = 10 months`);
   }
   assert.deepEqual(
     Object.values(cartProducts)
       .filter((product) => product.type === "plan")
       .map((product) => product.yearCents),
-    [89099, 149099, 349099],
+    [89990, 149990, 349990],
   );
   // Every product declares at least one price, and every interval has a price.
   for (const [id, product] of Object.entries(cartProducts)) {
@@ -172,7 +170,7 @@ test('switching the billing term re-prices recurring items only', () => {
   ];
   const yearly = convertItemsToBilling(cart, 'year');
   assert.deepEqual(yearly.map((i) => i.key), ['launch-year', 'localseo-year', 'extrapage-one-time']);
-  assert.deepEqual(yearly.map((i) => i.priceCents), [89099, 159990, 4499]);
+  assert.deepEqual(yearly.map((i) => i.priceCents), [89990, 159990, 4499]);
   assert.equal(yearly[0].interval, 'year');
 
   const monthly = convertItemsToBilling(yearly, 'month');

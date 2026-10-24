@@ -69,9 +69,9 @@ function fixture(options: { french?: boolean } = {}) {
           <button type="button" class="billing-opt" data-billing-opt="year" aria-pressed="false">Yearly</button>
         </div>
         <button type="button" class="cart-btn" data-cart-btn data-key="launch-month" data-product="launch"
-          data-name="Launch" data-price-cents="8999" data-interval="month" data-type="plan" data-price-year="89099"></button>
+          data-name="Launch" data-price-cents="8999" data-interval="month" data-type="plan" data-price-year="89990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="grow-month" data-product="grow"
-          data-name="Grow" data-price-cents="14999" data-interval="month" data-type="plan" data-price-year="149099"></button>
+          data-name="Grow" data-price-cents="14999" data-interval="month" data-type="plan" data-price-year="149990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="review-month" data-product="review"
           data-name="Review Generation Engine" data-price-cents="9999" data-interval="month" data-type="addon" data-price-year="99990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="extrapage-one-time" data-product="extrapage"
@@ -164,7 +164,7 @@ test('the yearly toggle prices every recurring item, one-time items untouched', 
 
   assert.equal(window.localStorage.getItem(BILLING_KEY), 'year');
   assert.deepEqual(cart().map((i) => [i.key, i.priceCents]), [
-    ['launch-year', 89099],
+    ['launch-year', 89990],
     ['review-year', 99990],
     ['extrapage-one-time', 4499],
   ]);
@@ -172,8 +172,8 @@ test('the yearly toggle prices every recurring item, one-time items untouched', 
   assert.equal(doc.querySelector('[data-billing-opt="year"]')!.classList.contains('is-active'), true);
   assert.equal(doc.querySelector('[data-billing-opt="month"]')!.classList.contains('is-active'), false);
   assert.equal(button('launch')!.classList.contains('is-added'), true, 'the yearly button stays marked');
-  assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$1,935.88');
-  assert.match(doc.querySelector('[data-cart-items]')!.textContent ?? '', /C\$890\.99\/yr/);
+  assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$1,944.79');
+  assert.match(doc.querySelector('[data-cart-items]')!.textContent ?? '', /C\$899\.90\/yr/);
 
   // A button clicked while yearly adds the yearly price, and plans still
   // replace each other.
@@ -198,7 +198,7 @@ test('a persisted billing term is honoured on load', () => {
   refresh(doc);
   assert.equal(doc.querySelector('[data-billing-opt="year"]')!.classList.contains('is-active'), true);
   click(button('launch'));
-  assert.deepEqual(cart().map((i) => [i.key, i.priceCents]), [['launch-year', 89099]]);
+  assert.deepEqual(cart().map((i) => [i.key, i.priceCents]), [['launch-year', 89990]]);
 });
 
 test('drawer opens from the header, closes with Escape, the overlay and the close button', async () => {
@@ -284,7 +284,7 @@ test('the cart keeps working after a ClientRouter navigation', () => {
   // nodes), closes the drawer and fires astro:page-load.
   doc.querySelector('main')!.innerHTML =
     '<button type="button" class="cart-btn" data-cart-btn data-product="scale" data-name="Scale"' +
-    ' data-price-cents="34999" data-interval="month" data-type="plan" data-price-year="349099"></button>';
+    ' data-price-cents="34999" data-interval="month" data-type="plan" data-price-year="349990"></button>';
   doc.querySelector<HTMLElement>('[data-cart-drawer]')!.hidden = true;
   doc.dispatchEvent(new window.Event('astro:before-preparation'));
   assert.equal(doc.body.style.overflow, '', 'a navigation never leaves the page scroll-locked');
@@ -352,9 +352,9 @@ test('French drawers format money and intervals in French', () => {
   assert.equal(intervalSuffix(doc, 'one-time'), ' unique');
   const fmt = moneyFormat(doc);
   assert.deepEqual(fmt, { prefix: '', suffix: '\u00a0$', decimal: ',' });
-  assert.equal(formatMoney(89099, fmt), '890,99\u00a0$');
+  assert.equal(formatMoney(89990, fmt), '899,90\u00a0$');
   assert.equal(formatMoney(193534, fmt), '1\u00a0935,34\u00a0$');
-  assert.equal(formatMoney(89099), 'C$890.99');
+  assert.equal(formatMoney(89990), 'C$899.90');
   assert.equal(formatMoney(19353399), 'C$193,533.99');
 });
 
@@ -372,7 +372,7 @@ test('billing changes only touch recurring items', () => {
   );
   applyBilling(doc, 'year');
   assert.deepEqual(cart().map((i) => [i.key, i.priceCents]), [
-    ['launch-year', 89099],
+    ['launch-year', 89990],
     ['extrapage-one-time', 4499],
   ]);
   window.close();

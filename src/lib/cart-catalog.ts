@@ -15,8 +15,8 @@
  * - the Extra Page add-on is one-time.
  *
  * Plans use the annual figures already shown on the pricing page
- * (`t.pricing.plans.*.annual`), which the plan publishes as C$890 / C$1,490 /
- * C$3,490 (displayed with the site's .99 endings).
+ * (`t.pricing.plans.*.annual`): exactly 10 monthly payments, as for
+ * bundles and add-ons.
  */
 
 import { cartKey, type CartInterval } from "./cart";
@@ -42,9 +42,9 @@ const TEN_MONTHS = 10;
 
 const catalog = {
   /* ── Plans ───────────────────────────────────────────────────────────── */
-  launch: { product: "launch", type: "plan", monthCents: 8999, yearCents: 89099 },
-  grow: { product: "grow", type: "plan", monthCents: 14999, yearCents: 149099 },
-  scale: { product: "scale", type: "plan", monthCents: 34999, yearCents: 349099 },
+  launch: { product: "launch", type: "plan", monthCents: 8999, yearCents: 8999 * TEN_MONTHS },
+  grow: { product: "grow", type: "plan", monthCents: 14999, yearCents: 14999 * TEN_MONTHS },
+  scale: { product: "scale", type: "plan", monthCents: 34999, yearCents: 34999 * TEN_MONTHS },
 
   /* ── Bundles ─────────────────────────────────────────────────────────── */
   "lead-pack": { product: "lead-pack", type: "bundle", monthCents: 23999, yearCents: 23999 * TEN_MONTHS },

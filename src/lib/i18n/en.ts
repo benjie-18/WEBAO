@@ -315,7 +315,7 @@ const en = {
       launch: {
         name: "Launch",
         monthly: "C$89.99/mo",
-        annual: "(C$890.99/yr)",
+        annual: "(C$899.90/yr)",
         priceNote: 4,
         badge: "",
         desc: "For solo operators who need to look professional online and be easy to contact.",
@@ -332,7 +332,7 @@ const en = {
       grow: {
         name: "Grow",
         monthly: "C$149.99/mo",
-        annual: "(C$1,490.99/yr)",
+        annual: "(C$1,499.90/yr)",
         priceNote: 9,
         badge: "Most Popular",
         desc: "For established local businesses that need their website to bring in leads.",
@@ -349,7 +349,7 @@ const en = {
       scale: {
         name: "Scale",
         monthly: "C$349.99/mo",
-        annual: "(C$3,490.99/yr)",
+        annual: "(C$3,499.90/yr)",
         priceNote: 12,
         badge: "",
         desc: "For growing businesses that want their site to do more of the selling.",
@@ -627,9 +627,9 @@ const en = {
         blocks: [
           { text: "Billed monthly, or annually in advance with 2 months free (annual price = 10 months)." },
           { label: "Comparison over 12 months", text: "" },
-          { label: "Launch", text: "C$89.99/mo x 12 = C$1,079.88 billed monthly, or C$890.99 billed annually (about C$74.25/mo). Annual saves C$188.89." },
-          { label: "Grow", text: "C$149.99/mo x 12 = C$1,799.88 billed monthly, or C$1,490.99 billed annually (about C$124.25/mo). Annual saves C$308.89." },
-          { label: "Scale", text: "C$349.99/mo x 12 = C$4,199.88 billed monthly, or C$3,490.99 billed annually (about C$290.92/mo). Annual saves C$708.89." },
+          { label: "Launch", text: "C$89.99/mo x 12 = C$1,079.88 billed monthly, or C$899.90 billed annually (about C$74.99/mo). Annual saves C$179.98." },
+          { label: "Grow", text: "C$149.99/mo x 12 = C$1,799.88 billed monthly, or C$1,499.90 billed annually (about C$124.99/mo). Annual saves C$299.98." },
+          { label: "Scale", text: "C$349.99/mo x 12 = C$4,199.88 billed monthly, or C$3,499.90 billed annually (about C$291.66/mo). Annual saves C$699.98." },
         ],
       },
       "4": {
