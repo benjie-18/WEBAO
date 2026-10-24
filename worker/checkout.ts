@@ -13,7 +13,7 @@
 //  2. mode must be "subscription" as soon as one recurring price is present,
 //     and "payment" when the cart is one-time only.
 
-import { json, err, originAllowed, clientIp } from "./util";
+import { EMAIL_RE, json, err, originAllowed, clientIp } from "./util";
 import { throttle } from "./auth";
 
 type Env = {
@@ -26,9 +26,8 @@ type Env = {
   STRIPE_PRICE_ADS_PACK?: string;
   STRIPE_PRICE_ADS_SETUP?: string;
   WEBAO_KV?: KVNamespace;
+  ALLOWED_ORIGINS?: string;
 };
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 /**
  * Stripe Price IDs for cart items.
@@ -180,22 +179,30 @@ export async function handleCheckoutSession(req: Request, env: Env): Promise<Res
     lineItems = [{ key: LEGACY_KEY, priceId: legacyPriceId, interval: "month" }];
   }
 
+  // The setup fee cannot be bought on its own: a crafted request with only
+  // ads-setup-onetime used to create a checkout for a setup with no pack
+  // attached (and no ads state, since hasAdsPack matches ads-pack*).
+  if (
+    lineItems.some((item) => item.key === "ads-setup-onetime") &&
+    !lineItems.some((item) => item.key === "ads-pack-month")
+  ) {
+    return err("The Ads Pack setup fee cannot be bought on its own", 400);
+  }
+
   // Checkout refuses sessions mixing several billing intervals, so reject
   // instead of letting Stripe return an opaque error.
   const recurring = lineItems.filter((item) => item.interval !== "one-time");
-  const oneTime = lineItems.filter((item) => item.interval === "one-time");
   if (new Set(recurring.map((item) => item.interval)).size > 1) {
     return err(
       "Monthly and yearly items can't be paid in the same checkout. Choose one billing term in your cart.",
       400,
     );
   }
-  if (recurring.length > MAX_RECURRING_ITEMS || oneTime.length > MAX_ONE_TIME_ITEMS) {
-    return err("Too many items in one checkout", 400);
-  }
 
   // Ads Pack: the one-time setup fee rides along automatically, added
-  // server-side so it cannot be removed from the cart.
+  // server-side so it cannot be removed from the cart. This runs BEFORE
+  // the cap check, so a cart already at the one-time cap plus the pack is
+  // rejected instead of leaving with 21 one-time items.
   if (
     env.STRIPE_PRICE_ADS_SETUP &&
     lineItems.some((item) => item.key === "ads-pack-month") &&
@@ -206,6 +213,12 @@ export async function handleCheckoutSession(req: Request, env: Env): Promise<Res
       priceId: env.STRIPE_PRICE_ADS_SETUP,
       interval: "one-time",
     });
+  }
+  if (
+    lineItems.filter((item) => item.interval !== "one-time").length > MAX_RECURRING_ITEMS ||
+    lineItems.filter((item) => item.interval === "one-time").length > MAX_ONE_TIME_ITEMS
+  ) {
+    return err("Too many items in one checkout", 400);
   }
 
   if (!secretKey) {

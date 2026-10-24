@@ -137,6 +137,18 @@ export async function assignDomain(
   host: string | null,
   status: NonNullable<Client["domainStatus"]>,
 ): Promise<AssignResult> {
+  // Check the new host FIRST. The old code deleted the existing mapping
+  // before the conflict check, so a rejected change silently broke the
+  // client's live site on its old domain.
+  if (host) {
+    const owner = await getJson<string>(kv, domainKey(host));
+    if (owner && owner !== "client:" + client.id) return { ok: false, conflict: true };
+    // Write the new mapping BEFORE deleting the old: if the delete then
+    // fails (KV write outage), both mappings point at this client and
+    // the next assignDomain call cleans up — where the old order left
+    // the client with no mapping at all (live site broken).
+    await putJson(kv, domainKey(host), "client:" + client.id);
+  }
   if (client.domain && client.domain !== host) {
     const old = await getJson<string>(kv, domainKey(client.domain));
     if (old === "client:" + client.id) await deleteKey(kv, domainKey(client.domain));
@@ -147,9 +159,6 @@ export async function assignDomain(
     delete client.domainAssignedAt;
     return { ok: true };
   }
-  const owner = await getJson<string>(kv, domainKey(host));
-  if (owner && owner !== "client:" + client.id) return { ok: false, conflict: true };
-  await putJson(kv, domainKey(host), "client:" + client.id);
   if (client.domain !== host) {
     client.domain = host;
     client.domainAssignedAt = Date.now();
@@ -179,7 +188,7 @@ export async function handleDomainChecks(req: Request, env: TenantEnv): Promise<
 
   const kv = env.WEBAO_KV;
   const index = (await getJson<string[]>(kv, CLIENTS_INDEX)) || [];
-  const records = await batch(index.slice(0, 200), 25, (k) => getJson<Client>(kv, k));
+  const records = await batch(index.slice(0, 1000), 25, (k) => getJson<Client>(kv, k));
   const result: DomainCheckResult = { checked: 0, connected: 0, stillPending: 0 };
 
   for (const client of records) {

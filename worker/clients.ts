@@ -12,7 +12,7 @@
 // mapping client-customer:<cus_id> -> client key so webhook events for
 // invoices and subscriptions resolve in one read.
 
-import { getJson, putJson, deleteKey } from "./kv";
+import { getJson, getJsonStrict, putJson } from "./kv";
 import { batch, randomHex } from "./util";
 
 export const CLIENTS_INDEX = "clients:index";
@@ -80,6 +80,12 @@ export interface Client {
   /** Latest Stripe dispute opened against this client (charge.dispute.created). */
   disputeFlag?: { disputeId: string; at: number };
   canceledAt?: number;
+  /**
+   * Stripe `event.created` (ms) of the newest billing event applied to this
+   * record. Billing handlers ignore older events, so a redelivered stale
+   * invoice/subscription event can never resurrect a canceled status.
+   */
+  lastBillingEventAt?: number;
   /** How this record came to exist, e.g. "stripe". */
   source: string;
   /** Admin-created test record: excluded from nudges and monthly reports. */
@@ -208,6 +214,7 @@ export function onboardingComplete(client: Client): boolean {
 }
 
 const customerKey = (customerId: string): string => "client-customer:" + customerId;
+const emailKey = (email: string): string => "client-email:" + email.trim().toLowerCase();
 
 /** Load a client by its cl_ id. */
 export async function getClient(kv: KVNamespace, id: string): Promise<Client | null> {
@@ -215,36 +222,70 @@ export async function getClient(kv: KVNamespace, id: string): Promise<Client | n
   return getJson<Client>(kv, "client:" + id);
 }
 
-/** Resolve a client from a Stripe customer id in one mapping read. */
+/**
+ * Resolve a client from a Stripe customer id in one mapping read.
+ * Strict reads: a KV outage throws (the webhook answers 5xx and Stripe
+ * retries) instead of resolving to null and minting a duplicate record.
+ */
 export async function findClientByCustomer(
   kv: KVNamespace,
   customerId: string,
 ): Promise<Client | null> {
   if (!customerId) return null;
-  const key = await getJson<string>(kv, customerKey(customerId));
+  const key = await getJsonStrict<string>(kv, customerKey(customerId));
   if (!key) return null;
-  return getJson<Client>(kv, key);
+  return getJsonStrict<Client>(kv, key);
 }
 
-/** Newest client with this email (repeat buyers keep a single record). */
+/**
+ * Newest client with this email (repeat buyers keep a single record).
+ * The email mapping is tried first so clients that rolled off the
+ * newest-1000 index still resolve; the index scan stays as fallback.
+ * The mapping read is always strict; the record + scan reads are
+ * lenient by default (a read outage resolves to "not found", which is
+ * what the portal request-link path needs to stay silent). Pass
+ * { strict: true } for the webhook path, where a read outage must
+ * fail closed (500, Stripe retries) instead of creating a duplicate
+ * client.
+ */
 export async function findClientByEmail(
   kv: KVNamespace,
   email: string,
+  opts?: { strict?: boolean },
 ): Promise<Client | null> {
   const target = email.trim().toLowerCase();
   if (!target) return null;
-  const index = (await getJson<string[]>(kv, CLIENTS_INDEX)) || [];
-  const records = await batch(index.slice(0, MAX_INDEX), 25, (k) => getJson<Client>(kv, k));
+  const mapped = await getJsonStrict<string>(kv, emailKey(target));
+  if (mapped) {
+    const rec = opts?.strict
+      ? await getJsonStrict<Client>(kv, mapped)
+      : await getJson<Client>(kv, mapped);
+    if (rec) return rec;
+  }
+  const index = opts?.strict
+    ? (await getJsonStrict<string[]>(kv, CLIENTS_INDEX)) || []
+    : (await getJson<string[]>(kv, CLIENTS_INDEX)) || [];
+  const read = opts?.strict
+    ? (k: string) => getJsonStrict<Client>(kv, k)
+    : (k: string) => getJson<Client>(kv, k);
+  const records = await batch(index.slice(0, MAX_INDEX), 25, read);
   return records.find((r): r is Client => !!r && r.email === target) || null;
 }
 
-/** Persist a client and its stripe customer mapping. */
+/**
+ * Persist a client and its mappings. Mappings are written BEFORE the
+ * record: if the record write then fails, the mappings dangle to a
+ * missing record and the next webhook event recreates it (self-healing),
+ * whereas the old record-first order left a live record unreachable by
+ * customer id, silently dropping subscription events for it.
+ */
 export async function saveClient(kv: KVNamespace, client: Client): Promise<void> {
   client.updatedAt = Date.now();
-  await putJson(kv, "client:" + client.id, client);
+  await putJson(kv, emailKey(client.email), "client:" + client.id);
   if (client.stripeCustomerId) {
     await putJson(kv, customerKey(client.stripeCustomerId), "client:" + client.id);
   }
+  await putJson(kv, "client:" + client.id, client);
 }
 
 /** Create a fresh client record (stage "onboarding") and index it. */
@@ -282,18 +323,13 @@ export async function createClient(
   };
   await saveClient(kv, client);
 
+  // Newest-first index; trimming it only bounds listings. Records are
+  // NEVER deleted on eviction: the old code destroyed the oldest client
+  // (with its domain mapping and ads state) once 1000 clients existed.
   const index = (await getJson<string[]>(kv, CLIENTS_INDEX)) || [];
   index.unshift("client:" + client.id);
-  let overflow: string[] = [];
-  if (index.length > MAX_INDEX) overflow = index.splice(MAX_INDEX);
+  if (index.length > MAX_INDEX) index.splice(MAX_INDEX);
   await putJson(kv, CLIENTS_INDEX, index);
-  for (const old of overflow) {
-    try {
-      await deleteKey(kv, old);
-    } catch {
-      /* best effort */
-    }
-  }
   return client;
 }
 

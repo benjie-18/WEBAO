@@ -252,7 +252,7 @@ export async function handleAdsLeadIntake(req: Request, env: AdsEnv): Promise<Re
 
   const to = client.ads?.onboarding?.leadEmail || client.email;
   const fr = client.lang === "fr";
-  await sendClientEmail(env, {
+  const emailed = await sendClientEmail(env, {
     to,
     subject: fr ? `Nouveau prospect : ${lead.name}` : `New lead: ${lead.name}`,
     text: [
@@ -277,5 +277,15 @@ export async function handleAdsLeadIntake(req: Request, env: AdsEnv): Promise<Re
     lead.service ? `Service: ${lead.service}` : "",
     `Source: ${lead.source || "meta"}`,
   ]);
-  return json({ ok: true, leadId: lead.id });
+  // The instant lead email is the product's real-time promise: a silent
+  // failure used to still answer ok:true. Surface it, and alert the inbox
+  // (the lead itself is already recorded and copied above, so nothing is
+  // lost — but the owner should know the instant path failed).
+  if (!emailed) {
+    await notifyInbox(env, `Ads lead email failed: ${lead.name} (${client.business || client.email})`, [
+      `The instant lead email to ${to} did not go out. The lead is recorded`,
+      `in the portal and copied above; check the mailer configuration.`,
+    ]);
+  }
+  return json({ ok: true, leadId: lead.id, emailed });
 }

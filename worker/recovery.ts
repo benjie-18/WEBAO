@@ -10,7 +10,7 @@
 // clients pattern: records at abandoned:<sessionId>, a newest-first
 // abandoned:index capped at 500.
 
-import { getJson, putJson } from "./kv";
+import { getJson, listAllKeys, putJson } from "./kv";
 import { batch, err, json, timingSafeEqual } from "./util";
 import { findClientByEmail } from "./clients";
 import { sendClientEmail } from "./mailer";
@@ -34,6 +34,9 @@ const INDEX = "abandoned:index";
 const MAX_INDEX = 500;
 const MIN_AGE_MS = 12 * 60 * 60 * 1000;
 const MAX_AGE_MS = 14 * 24 * 60 * 60 * 1000;
+/** Per-run send cap: without one, a backlog week (mailer down) would try
+ *  every due follow-up at once and burn the day's SMTP2GO budget. */
+const MAX_SENDS_PER_RUN = 20;
 
 const keyOf = (sessionId: string): string => "abandoned:" + sessionId;
 
@@ -120,7 +123,14 @@ export async function handleAbandonedFollowups(req: Request, env: Env): Promise<
   }
   const kv = env.WEBAO_KV;
   const now = Date.now();
-  const records = await listAbandoned(kv, MAX_INDEX);
+  // Follow-ups scan abandoned: keys directly, not the 500-capped index:
+  // a record that rolled off the index was previously never emailed,
+  // converted, or marked stale — it just sat in KV. (The index key itself
+  // is excluded: it is a string array, not a record.)
+  const keys = (await listAllKeys(kv, "abandoned:", 5000)).filter((k) => k !== INDEX);
+  const records = (
+    await batch(keys, 25, (k) => getJson<AbandonedCheckout>(kv, k))
+  ).filter((r): r is AbandonedCheckout => !!r && typeof r.sessionId === "string");
   let emailed = 0;
   let converted = 0;
   let stale = 0;
@@ -144,6 +154,10 @@ export async function handleAbandonedFollowups(req: Request, env: Env): Promise<
       converted++;
       continue;
     }
+    if (emailed >= MAX_SENDS_PER_RUN) {
+      pending++;
+      continue;
+    }
     const mail = followupEmail(rec);
     const sent = await sendClientEmail(env, {
       to: rec.email,
@@ -158,6 +172,10 @@ export async function handleAbandonedFollowups(req: Request, env: Env): Promise<
     } else {
       // Mailer not configured yet (or a send failure): leave the record
       // pending so a later run retries, and count it honestly.
+      // (Send-then-record ordering is deliberate: if the record write
+      // itself fails after a successful send, the next run resends —
+      // a benign duplicate beats a silently lost follow-up. There is no
+      // mailer idempotency key to do better with KV primitives alone.)
       pending++;
     }
   }

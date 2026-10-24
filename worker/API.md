@@ -46,6 +46,7 @@ requires `email` or `message`; `support` requires a valid `email`, a
 values, capped). Support and contact submissions also send a best-effort
 email copy to the WEBAO inbox via the `EMAIL` send_email binding
 (destination pinned in `wrangler.jsonc`); the KV record stays the source of truth.
+Throttled to 10 submissions/min per IP (429 beyond that).
 → `{ "ok": true, "id": "<ts>:<rand>" }` (400 with an error message otherwise).
 
 ## Outreach lead tracking
@@ -128,8 +129,12 @@ without `STRIPE_PRICE_ID`.
 Stripe server-to-server webhook (no origin gate; authenticity comes from the
 `Stripe-Signature` HMAC, verified against `STRIPE_WEBHOOK_SECRET` with a
 5-minute timestamp tolerance). Returns 503 until the secret is set, 400 on a
-bad signature. Events are deduped via `stripe-event:<event_id>` (TTL 30 days),
-written only after successful handling so failures get Stripe retries.
+bad signature. Events are deduped via `stripe-event:<event_id>`: a
+processing claim is written before handling (60s TTL; a concurrent
+delivery for the same event gets 503 so Stripe retries), replaced by a
+completed marker (TTL 30 days) after successful handling, which answers
+`{ duplicate: true }`. Failures leave no completed marker, so Stripe
+retries still work.
 
 Handled events: `checkout.session.completed` (create or enrich the client
 record at stage `onboarding`, items from the session's `metadata[items]`, plus
@@ -159,7 +164,10 @@ email resolves to a client signs the browser in, no email needed.
 onboarding). `POST /api/portal/onboarding` saves onboarding answers; the
 first save that completes the required fields (business, contact, phone,
 services, service area, domain choice + value) stamps `onboardingCompletedAt`,
-advances stage `onboarding` → `build` and notifies the inbox.
+advances stage `onboarding` → `build` and notifies the inbox. When the
+save is post-completion and the requested domain is taken by another
+client, the save still succeeds but the response carries
+`domainConflict: true` and the client's domain is unchanged.
 `POST /api/portal/logout` drops the session. Client-facing mail needs the
 `SMTP2GO_API_KEY` secret (the `send_email` binding can only reach the WEBAO
 inbox); a new-client welcome email is sent from the Stripe webhook on the
@@ -220,15 +228,19 @@ Newest-first by registration order. Same pagination rules as forms.
 → `{ "ok": true }`.
 
 ### `GET /api/admin/clients?limit=50&cursor=`
-→ `{ "ok": true, "items": [{ id, email, name, business, stage, billingStatus, items, createdAt, updatedAt, onboardingComplete, onboarding, onboardingCompletedAt, previewUrl, nudgeCount, nudgesEscalatedAt, stripeCustomerId, stripeSubscriptionId }], "nextCursor": "50" | null }`
+→ `{ "ok": true, "items": [{ id, email, lang, test, name, business, stage, billingStatus, items, createdAt, updatedAt, onboardingComplete, onboarding, onboardingCompletedAt, previewUrl, domain, domainStatus, domainCheckedAt, reviewDecision, revisionCount, nudgeCount, nudgesEscalatedAt, stripeCustomerId, stripeSubscriptionId, paymentActionRequired, disputeFlag, hasAds, adsStatus, adsTrade, adsBudget, adAccountId, buildAt, buildQaPassed, buildQaFailedChecks, hasDraft, isPublished, publishPending }], "abandoned": [{ sessionId, email, items, amountTotal, currency, lang, createdAt, status }], "nextCursor": "50" | null }`
 Newest-first. Same pagination rules as forms. Backs the admin Clients tab.
+The top-level `abandoned` list is the first page (max 50) of abandoned
+checkouts, newest-first; it is present only on the first page.
 
 ### `POST /api/admin/clients/update`
-Body `{ id, stage?, previewUrl?, domain? }`. Moves a client between stages
+Body `{ id, stage?, previewUrl?, domain?, adsStatus?, adAccountId? }`. Moves a client between stages
 (`onboarding | build | review | live | paused`), sets or clears the review
 preview URL the portal shows during stage `review`, and assigns or clears
 (`""`) the client's domain (normalized to a bare hostname; 409 when another
-client owns it, 400 when unusable). → `{ "ok": true, "client" }`.
+client owns it, 400 when unusable). `adsStatus` moves the ads track
+(`onboarding | setup | ready | live | paused`); `adAccountId` stores the
+client's Meta ad account id. → `{ "ok": true, "client" }`.
 
 ## Tenant domains (multi-tenant serving)
 
@@ -310,6 +322,7 @@ automation cron. Sends one follow-up email per abandoned checkout
 `checkout.session.expired`) once it is at least 12 hours old: skipped and
 marked `converted` when the email now belongs to a client, marked `stale`
 unemailed after 14 days, left `pending` when the mailer cannot send.
+At most 20 follow-ups per run.
 Answers `{ emailed, converted, stale, pending }`.
 
 ## Ads Pack
@@ -317,10 +330,11 @@ Answers `{ emailed, converted, stale, pending }`.
 Buying the pack (cart key `ads-pack-month`) opens an ads track on the
 client record (`ads.status`: onboarding → setup → ready → live / paused).
 The one-time setup fee is added by checkout automatically (server-side)
-when the cart holds the pack. Both Ads Pack prices are env-configured
-until the pack joins the static catalog: `STRIPE_PRICE_ADS_PACK`
-(recurring, C$899.99/mo) and `STRIPE_PRICE_ADS_SETUP` (one-time,
-C$499.99); without them the pack cannot be checked out.
+when the cart holds the pack. The monthly price is static in the
+checkout catalog (`price_1UTsvJE57vVzxI41esicPXuU`, C$899.99/mo); only
+the setup fee is env-configured (`STRIPE_PRICE_ADS_SETUP`, C$499.99
+one-time). Without the setup secret the pack still checks out, monthly
+only, with no setup line.
 
 `POST /api/portal/ads-onboarding` saves the ads intake (trade, services,
 area, radius, monthly budget, landing website, lead contacts). It counts
@@ -392,12 +406,26 @@ and revokes all other admin tokens (the caller stays logged in).
 | `views:<yyyy-mm-dd>:<urlenc-path>` | integer pageview counter |
 | `views:<yyyy-mm-dd>:__all` | integer total counter for the day |
 | `form:<ts>:<rand>` | form submission object |
-| `forms:index` | JSON array of form keys, newest-first, cap 1000 |
+| `forms:index` | JSON array of form keys, newest-first, cap 1000 (index trim only; records are never deleted) |
 | `lead:<ld_id>` | outreach lead object (sent/clicks/replies) |
-| `leads:index` | JSON array of lead keys, newest-first, cap 1000 |
+| `leads:index` | JSON array of lead keys, newest-first, cap 5000 (index trim only; records are never deleted) |
 | `client:<cl_id>` | client record (stage, billing status, Stripe ids, items) |
-| `clients:index` | JSON array of client keys, newest-first, cap 1000 |
+| `clients:index` | JSON array of client keys, newest-first, cap 1000 (index trim only; records are never deleted) |
 | `client-customer:<cus_id>` | client key for a Stripe customer id |
-| `stripe-event:<event_id>` | webhook dedupe marker `{ type, at }` (TTL 30 days) |
+| `client-email:<email>` | client key for a client email |
+| `stripe-event:<event_id>` | webhook dedupe: processing claim `{ processing: true }` (TTL 60s), then completed marker `{ type, at }` (TTL 30 days) |
+| `abandoned:<sessionId>` | abandoned checkout record (status pending/emailed/converted/stale) |
+| `abandoned:index` | JSON array of abandoned keys, newest-first, cap 500 (follow-up sweep reads `abandoned:` keys directly, not the index) |
+| `dispute:<dispute_id>` | dispute record (amount, reason, evidence due date) |
+| `portal-session:<tok>` | portal session (TTL 30 days) |
+| `portal-login:<tok>` | portal login token (TTL 30 min) |
+| `domain:<host>` | client key for a mapped hostname |
+| `build:<clientId>:<buildId>` | build record (files, QA results, published flag); `build:<clientId>:latest` points at the newest |
+| `site:<clientId>:<buildId>:<path>` | published site files (per-page HTML); `site:<clientId>:draft` is the working draft |
+| `tstats:<clientId>:<yyyy-mm>` | tenant traffic counters |
+| `report:<clientId>:<yyyy-mm>` | monthly report record (idempotency marker) |
+| `adslead:<lead_id>` | ads lead record (contact, outcome) |
+| `adsleads:<clientId>` | JSON array of ads lead keys for a client |
+| `adsspend:<clientId>:<yyyy-mm>` | recorded ad spend for a client-month |
 | `admin:token:<64-hex>` | `{ createdAt, ip }` (TTL 7 days) |
 | `rl:<scope>:<ip>` | `{ c, r }` rate-limit window |

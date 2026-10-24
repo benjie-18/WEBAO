@@ -153,6 +153,22 @@ export function clampStr(v: unknown, max: number): string {
   return typeof v === "string" ? v.slice(0, max) : "";
 }
 
+/** Shared email shape check (same pattern that lived in five worker files). */
+export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+/**
+ * Strict "yyyy-mm" month key: shape AND a real month (1-12). The bare
+ * /^\d{4}-\d{2}$/ regex accepted 2026-13, which produced phantom report
+ * keys and an "undefined 2026" label.
+ */
+export function isMonthKey(value: unknown): value is string {
+  if (typeof value !== "string") return false;
+  const m = /^(\d{4})-(\d{2})$/.exec(value);
+  if (!m) return false;
+  const mm = parseInt(m[2], 10);
+  return mm >= 1 && mm <= 12;
+}
+
 export async function readJson(req: Request, maxBytes = 64 * 1024): Promise<unknown> {
   const ct = req.headers.get("content-type") || "";
   if (!ct.includes("application/json")) throw new Error("Expected application/json");

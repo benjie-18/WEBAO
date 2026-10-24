@@ -1,10 +1,13 @@
 // Public form submissions (pricing + contact + support).
-// Stored as form:<ts>:<rand> with a newest-first index capped at 1000 entries.
+// Stored as form:<ts>:<rand> with a newest-first index capped at 1000 entries
+// (listings only; records are never deleted on eviction).
 // Support and contact submissions also send a best-effort email copy to the
 // WEBAO inbox via the send_email binding; the KV record stays the source of truth.
 
-import { getJson, putJson, deleteKey } from "./kv";
-import { clientIp, clientCountry, readJson, json, err, originAllowed, uuid } from "./util";
+import { getJson, putJson } from "./kv";
+import { throttle } from "./auth";
+import { buildInboxEmail, INBOX_ADDRESS } from "./mailer";
+import { EMAIL_RE, clientIp, clientCountry, readJson, json, err, originAllowed, uuid } from "./util";
 
 const INDEX_KEY = "forms:index";
 const MAX_INDEX = 1000;
@@ -25,27 +28,6 @@ const SUPPORT_CATEGORIES: Record<string, string> = {
   issue: "Something isn't working",
   other: "Other",
 };
-
-const NOTIFY_INBOX = "webao.ca@gmail.com";
-
-/** Strip CR/LF so a field can never inject extra MIME headers. */
-function headerSafe(value: string): string {
-  return value.replace(/[\r\n]+/g, " ").trim();
-}
-
-function base64Utf8(value: string): string {
-  const bytes = new TextEncoder().encode(value);
-  let bin = "";
-  for (const b of bytes) bin += String.fromCharCode(b);
-  return btoa(bin);
-}
-
-/** Plain-ASCII headers pass through; anything else is RFC 2047 encoded. */
-function encodeHeader(value: string): string {
-  const safe = headerSafe(value);
-  if (/^[\x20-\x7e]*$/.test(safe)) return safe;
-  return `=?UTF-8?B?${base64Utf8(safe)}?=`;
-}
 
 /** The email copy for a stored submission, or null for forms without one. */
 function notifySpec(submission: FormSubmission): { from: string; fromName: string; subject: string; body: string } | null {
@@ -100,25 +82,21 @@ async function notifyByEmail(env: Env, submission: FormSubmission): Promise<void
   const spec = notifySpec(submission);
   if (!spec) return;
   try {
-    const raw = [
-      `From: "${spec.fromName}" <${spec.from}>`,
-      `To: ${NOTIFY_INBOX}`,
-      `Reply-To: ${headerSafe((submission.fields.email || "").trim())}`,
-      `Subject: ${encodeHeader(spec.subject)}`,
-      "MIME-Version: 1.0",
-      "Content-Type: text/plain; charset=UTF-8",
-      "Content-Transfer-Encoding: base64",
-      "",
-      base64Utf8(spec.body),
-    ].join("\r\n");
+    const raw = buildInboxEmail({
+      from: spec.from,
+      fromName: spec.fromName,
+      subject: spec.subject,
+      body: spec.body,
+      replyTo: (submission.fields.email || "").trim() || undefined,
+    });
     const { EmailMessage } = await import("cloudflare:email");
-    await env.EMAIL.send(new EmailMessage(spec.from, NOTIFY_INBOX, raw));
+    await env.EMAIL.send(new EmailMessage(spec.from, INBOX_ADDRESS, raw));
   } catch (e) {
     console.error("form email notification failed", e);
   }
 }
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
 
 /** Keep only string values, bounded in size and count. */
 function sanitizeFields(fields: unknown): Record<string, string> | null {
@@ -140,6 +118,12 @@ interface SubmitBody {
 /** POST /api/forms/submit — validate and store a form submission. */
 export async function handleFormSubmit(req: Request, env: Env): Promise<Response> {
   if (!originAllowed(req, true, env)) return err("Forbidden origin", 403);
+  // The one public write endpoint that had no throttle: without it, a
+  // scripted caller could exhaust the daily KV write quota (which 503s
+  // the whole API) and flood the inbox. 10/min per IP, like checkout.
+  if (!(await throttle(env.WEBAO_KV, "forms", clientIp(req), 10))) {
+    return err("Too many requests", 429);
+  }
   const kv = env.WEBAO_KV;
 
   let body: SubmitBody;
@@ -180,19 +164,13 @@ export async function handleFormSubmit(req: Request, env: Env): Promise<Response
   };
   await putJson(kv, key, submission);
 
-  // Newest-first index; trim overflow and delete the evicted submissions.
+  // Newest-first index; trimming it only bounds listings. Records are
+  // never deleted on eviction (pricing submissions have no inbox copy, so
+  // the old code lost them entirely past the cap).
   const index = (await getJson<string[]>(kv, INDEX_KEY)) || [];
   index.unshift(key);
-  let overflow: string[] = [];
-  if (index.length > MAX_INDEX) overflow = index.splice(MAX_INDEX);
+  if (index.length > MAX_INDEX) index.splice(MAX_INDEX);
   await putJson(kv, INDEX_KEY, index);
-  for (const old of overflow) {
-    try {
-      await deleteKey(kv, old);
-    } catch {
-      /* best effort */
-    }
-  }
 
   if (body.form === "support" || body.form === "contact") await notifyByEmail(env, submission);
 

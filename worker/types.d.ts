@@ -66,6 +66,12 @@ interface Env {
   WEBAO_KV: KVNamespace;
   ASSETS: Fetcher;
   EMAIL?: SendEmailBinding;
+  /**
+   * Comma-separated extra allowed origins (local/preview hosts). Declared
+   * here so Env shares a property with OriginEnv (util.ts) and the
+   * same-origin gate typechecks — its absence was the whole TS2559 set.
+   */
+  ALLOWED_ORIGINS?: string;
   /** Optional shared key for the lead-tracking ingest endpoints (secret). */
   LEADS_INGEST_KEY?: string;
   /** Stripe webhook signing secret (secret; endpoint 503s until set). */

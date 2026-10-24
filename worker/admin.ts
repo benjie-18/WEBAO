@@ -25,6 +25,7 @@ import {
   sanitizePath,
   sha256Hex,
   batch,
+  isMonthKey,
 } from "./util";
 import type { Session } from "./track";
 import { handleLeadsList, handleLeadDelete, LEADS_INDEX, type Lead } from "./leads";
@@ -625,7 +626,7 @@ async function handleClientAdsSpend(req: Request, kv: KVNamespace): Promise<Resp
     return err((e as Error).message);
   }
   if (typeof body.id !== "string") return err("Client id is required");
-  if (typeof body.month !== "string" || !/^\d{4}-\d{2}$/.test(body.month)) {
+  if (!isMonthKey(body.month)) {
     return err("Month must be yyyy-mm");
   }
   if (typeof body.amountCents !== "number" || !(body.amountCents >= 0)) {

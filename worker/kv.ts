@@ -21,6 +21,17 @@ export async function getJson<T>(kv: KVNamespace, key: string): Promise<T | null
   }
 }
 
+/**
+ * Strict twin of getJson: null only when the key is genuinely absent.
+ * A read failure (KV outage) throws instead of masquerading as "not
+ * found" — callers that must not act on a false absence (webhook dedupe
+ * and client resolution) use this so a failed read retries via Stripe
+ * instead of creating a duplicate record.
+ */
+export async function getJsonStrict<T>(kv: KVNamespace, key: string): Promise<T | null> {
+  return kv.get<T>(key, { type: "json" });
+}
+
 export async function putJson(
   kv: KVNamespace,
   key: string,

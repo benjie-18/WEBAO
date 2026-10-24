@@ -13,9 +13,14 @@ export interface ClientEmail {
   text: string;
 }
 
-const NOTIFY_INBOX = "webao.ca@gmail.com";
+export const INBOX_ADDRESS = "webao.ca@gmail.com";
 
-function base64Utf8(text: string): string {
+/** Strip CR/LF so a value can never inject extra MIME headers. */
+export function headerSafe(value: string): string {
+  return value.replace(/[\r\n]+/g, " ").trim();
+}
+
+export function base64Utf8(text: string): string {
   const bytes = new TextEncoder().encode(text);
   let bin = "";
   for (const b of bytes) bin += String.fromCharCode(b);
@@ -23,10 +28,49 @@ function base64Utf8(text: string): string {
 }
 
 /**
+ * One header-encoding policy for every inbox mail path (the forms path
+ * used to pass ASCII through while portal/webhook always encoded, so the
+ * same subject rendered differently by path). Plain-ASCII headers pass
+ * through; anything else is RFC 2047 encoded.
+ */
+export function encodeHeader(text: string): string {
+  const safe = headerSafe(text);
+  if (/^[\x20-\x7e]*$/.test(safe)) return safe;
+  return `=?UTF-8?B?${base64Utf8(safe)}?=`;
+}
+
+export interface InboxEmail {
+  from: string;
+  fromName: string;
+  subject: string;
+  body: string;
+  replyTo?: string;
+}
+
+/**
+ * The single MIME builder for WEBAO inbox mail (mailer, forms, webhook,
+ * portal all used to hand-roll this separately and had already drifted).
+ * The send_email binding's destination is pinned to the inbox, so `to`
+ * is always the inbox address; `from` is the @webao.ca sender identity.
+ */
+export function buildInboxEmail(mail: InboxEmail): string {
+  const lines = [
+    `From: "${headerSafe(mail.fromName)}" <${headerSafe(mail.from)}>`,
+    `To: ${INBOX_ADDRESS}`,
+    ...(mail.replyTo ? [`Reply-To: ${headerSafe(mail.replyTo)}`] : []),
+    `Subject: ${encodeHeader(mail.subject)}`,
+    "MIME-Version: 1.0",
+    "Content-Type: text/plain; charset=UTF-8",
+    "Content-Transfer-Encoding: base64",
+    "",
+    base64Utf8(mail.body),
+  ];
+  return lines.join("\r\n");
+}
+
+/**
  * Best-effort notification to the WEBAO inbox through the send_email
- * binding (the one channel that can only ever reach the inbox). Same
- * pattern as portal.ts; kept here so worker modules that must not import
- * the portal can still notify.
+ * binding (the one channel that can only ever reach the inbox).
  */
 export async function notifyInbox(
   env: { EMAIL?: SendEmailBinding },
@@ -35,18 +79,14 @@ export async function notifyInbox(
 ): Promise<void> {
   if (!env.EMAIL) return;
   try {
-    const raw = [
-      `From: "WEBAO" <start@webao.ca>`,
-      `To: ${NOTIFY_INBOX}`,
-      `Subject: =?UTF-8?B?${base64Utf8(subject)}?=`,
-      "MIME-Version: 1.0",
-      "Content-Type: text/plain; charset=UTF-8",
-      "Content-Transfer-Encoding: base64",
-      "",
-      base64Utf8(lines.join("\n")),
-    ].join("\r\n");
+    const raw = buildInboxEmail({
+      from: "start@webao.ca",
+      fromName: "WEBAO",
+      subject,
+      body: lines.join("\n"),
+    });
     const { EmailMessage } = await import("cloudflare:email");
-    await env.EMAIL.send(new EmailMessage("start@webao.ca", NOTIFY_INBOX, raw));
+    await env.EMAIL.send(new EmailMessage("start@webao.ca", INBOX_ADDRESS, raw));
   } catch (e) {
     console.error("mailer: inbox notification failed", e);
   }

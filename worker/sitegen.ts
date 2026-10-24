@@ -35,7 +35,7 @@ export function themeFor(client: Client): Theme {
   return (pick && THEMES[pick]) || THEMES.default;
 }
 
-function esc(s: string): string {
+export function esc(s: string): string {
   return s
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")

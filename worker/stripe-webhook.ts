@@ -3,9 +3,14 @@
 // POST /api/stripe/webhook — registered in the Stripe dashboard, signed with
 // the STRIPE_WEBHOOK_SECRET worker secret. Until that secret is set the
 // endpoint answers 503, so deploying this code before the dashboard setup is
-// harmless. Stripe retries any non-2xx, and every handler here is an
-// idempotent upsert, so retries and duplicate deliveries are safe: the
-// event-id dedupe key is written only AFTER successful handling.
+// harmless. Stripe retries any non-2xx. Duplicate deliveries are handled by
+// a processing claim: the event-id key is written BEFORE handling with a
+// 60s TTL, so a concurrent second delivery answers 503 (Stripe retries it
+// after the first run completes and then sees the completed key); after
+// handling succeeds the key is overwritten with the 30-day TTL. A failed
+// run leaves only the short claim, so Stripe's retry reprocesses it. The
+// handlers are also upserts (resolve-then-create), so sequential retries
+// never duplicate a client.
 //
 // Events handled:
 //   checkout.session.completed  -> create/update the client (stage onboarding)
@@ -22,8 +27,8 @@
 // Anything else is acknowledged and ignored.
 
 import { putJson } from "./kv";
-import { json, err, timingSafeEqual, clampStr } from "./util";
-import { notifyInbox, sendClientEmail } from "./mailer";
+import { EMAIL_RE, json, err, timingSafeEqual, clampStr } from "./util";
+import { buildInboxEmail, notifyInbox, sendClientEmail, INBOX_ADDRESS } from "./mailer";
 import { storeAbandonedCheckout } from "./recovery";
 import {
   createClient,
@@ -45,8 +50,9 @@ function ensureAdsState(client: Client): void {
 
 const SIGNATURE_TOLERANCE_SEC = 300;
 const EVENT_TTL_SEC = 30 * 24 * 60 * 60;
-const NOTIFY_INBOX = "webao.ca@gmail.com";
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+/** Processing-claim TTL: long enough for one handler run, short enough that
+ *  a failed run's claim expires before Stripe gives up retrying. */
+const CLAIM_TTL_SEC = 60;
 
 // ---------------------------------------------------------------------------
 // Signature verification (Stripe's v1 scheme: HMAC-SHA256 of "<t>.<payload>")
@@ -116,7 +122,7 @@ async function resolveClient(
     const byCustomer = await findClientByCustomer(kv, customerId);
     if (byCustomer) return byCustomer;
   }
-  if (email) return findClientByEmail(kv, email);
+  if (email) return findClientByEmail(kv, email, { strict: true });
   return null;
 }
 
@@ -149,10 +155,16 @@ async function onCheckoutCompleted(
       console.error("stripe webhook: checkout session with unusable email", event.id);
       return;
     }
+    // The checkout stamps the buyer's language into session metadata; the
+    // webhook is the one place that turns it into the client record. It
+    // used to be dropped here, so every real client stayed lang-less and
+    // got an English site and English mail regardless of checkout locale.
+    const lang = str(metadata.lang) === "fr" ? "fr" : "en";
     const client = await createClient(kv, {
       email,
       name,
       items,
+      lang,
       stripeCustomerId: customerId || undefined,
       stripeSubscriptionId: subscriptionId || undefined,
       billingStatus: subscriptionId ? "active" : "one-time",
@@ -170,6 +182,10 @@ async function onCheckoutCompleted(
   if (subscriptionId) existing.stripeSubscriptionId = subscriptionId;
   if (name && !existing.name) existing.name = name;
   if (email && existing.email !== email) existing.email = email;
+  // A record that somehow has no language yet (pre-fix checkouts) takes
+  // the language of this purchase; an existing language is never flipped
+  // by a later checkout in another locale.
+  if (!existing.lang) existing.lang = str(metadata.lang) === "fr" ? "fr" : "en";
   mergeItems(existing, items);
   if (existing.test) existing.test = undefined; // a real purchase graduates a test record
   ensureAdsState(existing);
@@ -191,6 +207,11 @@ async function onInvoice(
   const client = await resolveClient(kv, customerId, email);
   if (!client) return; // Pre-webhook customer or unrelated account: nothing to mirror.
   const at = event.created > 0 ? event.created * 1000 : Date.now();
+  // Billing events apply in event order only: a redelivered stale event
+  // must never flip a newer state back (e.g. resurrect a canceled
+  // subscription with a late invoice.paid).
+  if (client.lastBillingEventAt && at < client.lastBillingEventAt) return;
+  client.lastBillingEventAt = at;
   if (paid) {
     client.billingStatus = "active";
     client.lastInvoicePaidAt = at;
@@ -231,15 +252,18 @@ async function onSubscription(
   const customerId = str(sub.customer);
   const client = await resolveClient(kv, customerId, "");
   if (!client) return;
+  const at = event.created > 0 ? event.created * 1000 : Date.now();
+  if (client.lastBillingEventAt && at < client.lastBillingEventAt) return;
+  client.lastBillingEventAt = at;
   if (str(sub.id)) client.stripeSubscriptionId = str(sub.id);
   if (deleted) {
     client.billingStatus = "canceled";
-    client.canceledAt = event.created > 0 ? event.created * 1000 : Date.now();
+    client.canceledAt = at;
   } else {
     const mapped = mapSubscriptionStatus(str(sub.status));
     if (mapped) client.billingStatus = mapped;
     if (mapped === "canceled" && !client.canceledAt) {
-      client.canceledAt = event.created > 0 ? event.created * 1000 : Date.now();
+      client.canceledAt = at;
     }
   }
   await saveClient(kv, client);
@@ -342,10 +366,13 @@ async function onPaymentActionRequired(
   const client = await resolveClient(kv, customerId, email);
   if (!client) return;
   const url = str(inv.hosted_invoice_url);
+  // Without a URL there is nothing to banner: persisting the flag would
+  // render a "Confirm my payment" button pointing nowhere, so bail out
+  // before any write.
+  if (!url) return;
   const at = event.created > 0 ? event.created * 1000 : Date.now();
   client.paymentActionRequired = { invoiceId: str(inv.id), url, at };
   await saveClient(kv, client);
-  if (!url) return;
   const fr = client.lang === "fr";
   await sendClientEmail(env, {
     to: client.email,
@@ -385,17 +412,6 @@ async function onPaymentActionRequired(
 // ---------------------------------------------------------------------------
 // Internal notification (best effort, same pattern as form email copies)
 // ---------------------------------------------------------------------------
-
-function base64Utf8(text: string): string {
-  const bytes = new TextEncoder().encode(text);
-  let bin = "";
-  for (const b of bytes) bin += String.fromCharCode(b);
-  return btoa(bin);
-}
-
-function encodeHeader(text: string): string {
-  return "=?UTF-8?B?" + base64Utf8(text) + "?=";
-}
 
 /**
  * Welcome email to the new client (best effort, via SMTP2GO; a no-op until
@@ -455,18 +471,14 @@ async function notifyNewClient(env: Env, client: Client): Promise<void> {
       ``,
       `Record: client:${client.id}, stage: onboarding.`,
     ].filter((l): l is string => l !== null);
-    const raw = [
-      `From: "WEBAO" <start@webao.ca>`,
-      `To: ${NOTIFY_INBOX}`,
-      `Subject: ${encodeHeader(`New client: ${client.email}`)}`,
-      "MIME-Version: 1.0",
-      "Content-Type: text/plain; charset=UTF-8",
-      "Content-Transfer-Encoding: base64",
-      "",
-      base64Utf8(lines.join("\n")),
-    ].join("\r\n");
+    const raw = buildInboxEmail({
+      from: "start@webao.ca",
+      fromName: "WEBAO",
+      subject: `New client: ${client.email}`,
+      body: lines.join("\n"),
+    });
     const { EmailMessage } = await import("cloudflare:email");
-    await env.EMAIL.send(new EmailMessage("start@webao.ca", NOTIFY_INBOX, raw));
+    await env.EMAIL.send(new EmailMessage("start@webao.ca", INBOX_ADDRESS, raw));
   } catch (e) {
     console.error("stripe webhook: new-client notification failed", e);
   }
@@ -481,6 +493,13 @@ export async function handleStripeWebhook(req: Request, env: Env): Promise<Respo
   if (!secret) return json({ ok: false, error: "Webhook not configured" }, 503);
   const kv = env.WEBAO_KV;
 
+  // Stripe events are tens of KB; refuse absurd bodies before reading and
+  // HMACing all of them (the old code read an unbounded body first).
+  const contentLength = req.headers.get("content-length");
+  if (contentLength && parseInt(contentLength, 10) > 1_000_000) {
+    return err("Payload too large", 413);
+  }
+
   const rawBody = await req.text();
   const ok = await verifyStripeSignature(rawBody, req.headers.get("stripe-signature"), secret);
   if (!ok) return err("Invalid signature", 400);
@@ -493,13 +512,24 @@ export async function handleStripeWebhook(req: Request, env: Env): Promise<Respo
   }
   if (!event.id || !event.type || !event.data?.object) return err("Invalid event", 400);
 
-  // Idempotency: Stripe delivers at least once. The dedupe key is written
-  // only after handling succeeds, so a failed run is retried by Stripe and
-  // reprocessed (all handlers above are upserts, so reprocessing is safe).
+  // Idempotency: Stripe delivers at least once. Claim the event BEFORE
+  // handling (60s TTL): a concurrent second delivery sees the claim and
+  // answers 503, so Stripe retries it after this run finishes instead of
+  // racing the client-create path. After handling, the key is overwritten
+  // with the 30-day completed marker, which answers duplicate:true.
   const dedupeKey = "stripe-event:" + event.id;
-  if ((await kv.get(dedupeKey)) !== null) {
+  const existing = await kv.get(dedupeKey);
+  if (existing !== null) {
+    let processing = false;
+    try {
+      processing = (JSON.parse(existing) as { processing?: boolean }).processing === true;
+    } catch {
+      processing = false;
+    }
+    if (processing) return json({ ok: false, error: "Event already being processed" }, 503);
     return json({ ok: true, received: true, duplicate: true });
   }
+  await putJson(kv, dedupeKey, { type: event.type, at: Date.now(), processing: true }, CLAIM_TTL_SEC);
 
   switch (event.type) {
     case "checkout.session.completed":

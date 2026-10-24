@@ -9,8 +9,10 @@
 // whatever reads the WEBAO inbox, e.g. the daily inbox report job.
 //
 // Records live in KV as lead:<id> with a newest-first leads:index capped at
-// 1000 entries, the same pattern as form submissions (see forms.ts). Lead ids
-// are 24 random hex chars minted by the sender (or here, when omitted), so a
+// 5000 entries. Trimming the index only bounds listings: records are never
+// deleted on eviction (the old code destroyed click/reply history once the
+// cap filled, about 24 days in at full outreach tilt). Lead ids are 24
+// random hex chars minted by the sender (or here, when omitted), so a
 // tracked link is unguessable and only the recipient and the sender know it.
 //
 // Ingest posture matches /api/forms/submit (same-origin gate + per-IP
@@ -31,10 +33,11 @@ import {
   randomHex,
   timingSafeEqual,
   batch,
+  EMAIL_RE,
 } from "./util";
 
 export const LEADS_INDEX = "leads:index";
-const MAX_INDEX = 1000;
+const MAX_INDEX = 5000;
 const MAX_CLICKS = 100;
 const MAX_REPLIES = 50;
 
@@ -85,7 +88,6 @@ export interface Lead {
 }
 
 const LEAD_ID_RE = /^ld_[a-f0-9]{24}$/;
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 /** User-agent fragments that mean "a machine fetched this link, not a human". */
 const SCANNER_UA =
@@ -101,7 +103,7 @@ function isDest(v: string | null): v is LeadDest {
  */
 async function ingestGate(req: Request, env: Env, scope: string): Promise<Response | null> {
   const kv = env.WEBAO_KV;
-  const ingestKey = (env as Env & { LEADS_INGEST_KEY?: string }).LEADS_INGEST_KEY;
+  const ingestKey = env.LEADS_INGEST_KEY;
   if (ingestKey) {
     const given = req.headers.get("x-ingest-key") || "";
     if (!timingSafeEqual(given, ingestKey)) return err("Unauthorized", 401);
@@ -185,16 +187,9 @@ export async function handleLeadRegister(req: Request, env: Env): Promise<Respon
 
   const index = (await getJson<string[]>(kv, LEADS_INDEX)) || [];
   index.unshift(key);
-  let overflow: string[] = [];
-  if (index.length > MAX_INDEX) overflow = index.splice(MAX_INDEX);
+  // Trimming bounds listings only; evicted records stay in KV (see header).
+  if (index.length > MAX_INDEX) index.splice(MAX_INDEX);
   await putJson(kv, LEADS_INDEX, index);
-  for (const old of overflow) {
-    try {
-      await deleteKey(kv, old);
-    } catch {
-      /* best effort */
-    }
-  }
 
   return json({ ok: true, id, links, replyTo });
 }

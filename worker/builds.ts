@@ -13,9 +13,9 @@ import {
   saveClient,
   type Client,
 } from "./clients";
-import { getJson, putJson } from "./kv";
+import { deleteKey, getJson, listAllKeys, putJson } from "./kv";
 import { notifyInbox, sendClientEmail } from "./mailer";
-import { generateSite, parseServices, type SiteFile } from "./sitegen";
+import { generateSite, parseServices, esc, type SiteFile } from "./sitegen";
 import { err, json, randomHex, readJson, timingSafeEqual } from "./util";
 
 export interface BuildEnv {
@@ -70,7 +70,7 @@ export function runQa(client: Client, files: SiteFile[]): QaReport {
   add("doctype", /^<!doctype html>/i.test(html.trim()), "document starts with a doctype");
   add(
     "title",
-    !!business && new RegExp(`<title>[^<]*${business.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`, "i").test(html),
+    !!business && new RegExp(`<title>[^<]*${esc(business).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`, "i").test(html),
     "title carries the business name",
   );
   const desc = /<meta name="description" content="([^"]*)"/.exec(html)?.[1] || "";
@@ -88,7 +88,7 @@ export function runQa(client: Client, files: SiteFile[]): QaReport {
     "a tappable phone link with the onboarding number",
   );
   const services = parseServices(o.services);
-  const missing = services.filter((s) => !html.includes(s));
+  const missing = services.filter((s) => !html.includes(s) && !html.includes(esc(s)));
   add(
     "services-present",
     services.length > 0 && missing.length === 0,
@@ -96,13 +96,30 @@ export function runQa(client: Client, files: SiteFile[]): QaReport {
   );
   add(
     "area-present",
-    !o.serviceArea || html.includes(o.serviceArea),
+    !o.serviceArea || html.includes(o.serviceArea) || html.includes(esc(o.serviceArea)),
     o.serviceArea ? "service area rendered" : "no service area provided",
   );
   add("no-em-dash", !html.includes("—"), "no em dashes in generated copy");
+  // Client data is not draft text: a business, service, area, about or
+  // hours string that itself contains a placeholder word must not trip
+  // this check. Strip every such string before scanning, in each form
+  // sitegen renders it: raw, HTML-escaped, lowercased (the meta
+  // description lowercases services), and escaped-lowercased. Only
+  // strings that actually match the pattern are stripped, so template
+  // text is never touched. (Word boundaries alone do not fix this:
+  // "Todo" is a standalone word in "Todo Renovations" itself.)
+  const PLACEHOLDER_RE = /\blorem\b|\bplaceholder\b|\bcoming soon\b|\btodo\b/i;
+  let scannable = html;
+  for (const s of [business, ...services, o.serviceArea || "", o.about || "", o.hours || ""]) {
+    if (s && PLACEHOLDER_RE.test(s)) {
+      for (const form of [s, esc(s), s.toLowerCase(), esc(s.toLowerCase())]) {
+        scannable = scannable.split(form).join("");
+      }
+    }
+  }
   add(
     "no-placeholder",
-    !/lorem|placeholder|coming soon|todo/i.test(html),
+    !PLACEHOLDER_RE.test(scannable),
     "no placeholder or draft text",
   );
   const hrefs = [...html.matchAll(/href="([^"]*)"/g)].map((m) => m[1]);
@@ -178,13 +195,22 @@ export async function runBuild(
             ? `Bonjour,\n\nVotre site web est prêt. Vous pouvez le voir ici :\n${client.previewUrl}\n\nDites-nous ce que vous en pensez en écrivant à support@webao.ca.\n\nWebao`
             : `Hello,\n\nYour website is ready for a first look:\n${client.previewUrl}\n\nTell us what you think at support@webao.ca.\n\nWebao`,
       });
+      await notifyInbox(env, `Build ready for review: ${name}`, [
+        `QA passed ${passedCount}/${qa.checks.length}.`,
+        `Client: ${name} <${client.email}>`,
+        `Stage: ${client.stage}. Preview: ${client.previewUrl}`,
+        `Build: ${buildId}`,
+      ]);
+    } else {
+      // QA passed but the stage did not advance (e.g. an admin rebuild of
+      // a live or paused client): the inbox still hears about it, but not
+      // as "ready for review" with an unset preview.
+      await notifyInbox(env, `Build passed QA: ${name}`, [
+        `QA passed ${passedCount}/${qa.checks.length}.`,
+        `Client: ${name} <${client.email}>`,
+        `Stage: ${client.stage} (unchanged). Build: ${buildId}`,
+      ]);
     }
-    await notifyInbox(env, `Build ready for review: ${name}`, [
-      `QA passed ${passedCount}/${qa.checks.length}.`,
-      `Client: ${name} <${client.email}>`,
-      `Stage: ${client.stage}. Preview: ${client.previewUrl || "(not set)"}`,
-      `Build: ${buildId}`,
-    ]);
   } else {
     const failed = qa.checks.filter((c) => !c.ok);
     await notifyInbox(env, `Build QA failed: ${name}`, [
@@ -208,7 +234,16 @@ export async function publishBuild(
   const meta = await getJson<BuildMeta>(kv, buildMetaKey(client.id, draft));
   if (!meta) return { ok: false, error: "Draft build record is missing" };
   if (!meta.qa.passed) return { ok: false, error: "The draft has not passed QA" };
+  const previous = await getJson<string>(kv, publishedKey(client.id));
   await putJson(kv, publishedKey(client.id), draft);
+  // Garbage-collect the superseded published build: every rebuild used to
+  // orphan the previous build's files forever. Never delete the build just
+  // published (a re-publish of the same draft).
+  if (previous && previous !== draft) {
+    const oldKeys = await listAllKeys(kv, `site:${client.id}:${previous}:`, 1000);
+    for (const k of oldKeys) await deleteKey(kv, k);
+    await deleteKey(kv, buildMetaKey(client.id, previous));
+  }
   client.stage = "live";
   if (client.domain && client.domainStatus === "connected") client.domainStatus = "live";
   await saveClient(kv, client);

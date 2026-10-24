@@ -10,7 +10,7 @@ import { CLIENTS_INDEX, type Client } from "./clients";
 import { adsLeadIds, adsLeadKey, adsSpend, type AdsLead } from "./ads";
 import { getJson, putJson } from "./kv";
 import { notifyInbox, sendClientEmail } from "./mailer";
-import { batch, err, json, timingSafeEqual } from "./util";
+import { batch, err, isMonthKey, json, timingSafeEqual } from "./util";
 
 export interface ReportEnv {
   WEBAO_KV: KVNamespace;
@@ -105,14 +105,14 @@ export async function handleMonthlyReports(req: Request, env: ReportEnv): Promis
   let month = previousMonthKey(Date.now());
   try {
     const body = (await req.json()) as { month?: unknown };
-    if (typeof body?.month === "string" && /^\d{4}-\d{2}$/.test(body.month)) month = body.month;
+    if (isMonthKey(body?.month)) month = body.month;
   } catch {
     /* empty body is fine */
   }
 
   const kv = env.WEBAO_KV;
   const index = (await getJson<string[]>(kv, CLIENTS_INDEX)) || [];
-  const records = await batch(index.slice(0, 200), 25, (k) => getJson<Client>(kv, k));
+  const records = await batch(index.slice(0, 1000), 25, (k) => getJson<Client>(kv, k));
   let sent = 0;
   let skipped = 0;
   let failed = 0;

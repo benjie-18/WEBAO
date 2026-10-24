@@ -42,10 +42,8 @@ import { assignDomain } from "./tenants";
 import { notifyInbox as notifyInboxShared, sendClientEmail } from "./mailer";
 import { getBuildState, publishBuild } from "./builds";
 import { monthKey, tenantViews } from "./reports";
-import { batch, clampStr, clientIp, err, json, originAllowed, randomHex, readJson, timingSafeEqual } from "./util";
+import { EMAIL_RE, batch, clampStr, clientIp, err, json, originAllowed, randomHex, readJson, timingSafeEqual } from "./util";
 
-const NOTIFY_INBOX = "webao.ca@gmail.com";
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const LOGIN_TTL = 30 * 60; // one-time sign-in link: 30 minutes
 const SESSION_TTL = 30 * 24 * 3600; // portal session: 30 days
 const COOKIE = "webao_portal";
@@ -56,38 +54,6 @@ type PortalEnv = Env & { STRIPE_SECRET_KEY?: string };
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-
-function base64Utf8(text: string): string {
-  const bytes = new TextEncoder().encode(text);
-  let bin = "";
-  for (const b of bytes) bin += String.fromCharCode(b);
-  return btoa(bin);
-}
-
-function encodeHeader(text: string): string {
-  return "=?UTF-8?B?" + base64Utf8(text) + "?=";
-}
-
-/** Best-effort inbox notification via the send_email binding. */
-async function notifyInbox(env: Env, subject: string, lines: string[]): Promise<void> {
-  if (!env.EMAIL) return;
-  try {
-    const raw = [
-      `From: "WEBAO" <start@webao.ca>`,
-      `To: ${NOTIFY_INBOX}`,
-      `Subject: ${encodeHeader(subject)}`,
-      "MIME-Version: 1.0",
-      "Content-Type: text/plain; charset=UTF-8",
-      "Content-Transfer-Encoding: base64",
-      "",
-      base64Utf8(lines.join("\n")),
-    ].join("\r\n");
-    const { EmailMessage } = await import("cloudflare:email");
-    await env.EMAIL.send(new EmailMessage("start@webao.ca", NOTIFY_INBOX, raw));
-  } catch (e) {
-    console.error("portal: inbox notification failed", e);
-  }
-}
 
 function sessionCookie(token: string, maxAge: number): string {
   return `${COOKIE}=${token}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${maxAge}`;
@@ -196,10 +162,13 @@ export async function handlePortalRequestLink(req: Request, env: Env): Promise<R
 
   const client = await findClientByEmail(env.WEBAO_KV, email);
   // Unknown emails get the same answer as known ones (no client enumeration);
-  // the mail simply never goes out.
+  // the mail simply never goes out. That promise holds even when the mailer
+  // is unconfigured or a send fails: those paths used to answer 503/502 for
+  // known emails only, leaking exactly which addresses are clients.
   if (!client) return json({ ok: true });
   if (!env.SMTP2GO_API_KEY) {
-    return err("Portal email is not configured yet. Use the access link from your checkout, or contact support@webao.ca.", 503);
+    console.error("portal: sign-in link requested but mail is not configured");
+    return json({ ok: true });
   }
 
   const token = randomHex(24);
@@ -235,7 +204,9 @@ export async function handlePortalRequestLink(req: Request, env: Env): Promise<R
   });
   if (!sent) {
     await deleteKey(env.WEBAO_KV, "portal-login:" + token);
-    return err("The sign-in email could not be sent. Please try again shortly.", 502);
+    // Same ok:true as the unknown-email path: a send failure must not
+    // reveal that this address is a client. The failure is logged above.
+    return json({ ok: true });
   }
   return json({ ok: true });
 }
@@ -294,7 +265,11 @@ export async function handlePortalClaim(req: Request, env: PortalEnv): Promise<R
   } catch {
     return err("Could not verify the checkout session", 502);
   }
-  if (session.payment_status !== "paid" && session.status !== "complete") {
+  // A checkout counts only once Stripe reports payment. The old OR also
+  // accepted a merely "complete" session with payment unpaid, which would
+  // sign a browser into the portal before any money moved (reachable today
+  // only if an async payment method is ever enabled in Stripe).
+  if (session.payment_status !== "paid") {
     return err("That checkout is not complete", 403);
   }
   let client: Client | null = null;
@@ -469,7 +444,7 @@ export async function handlePortalOnboarding(req: Request, env: Env): Promise<Re
       }
     }
     await saveClient(env.WEBAO_KV, client);
-    await notifyInbox(env, `Onboarding complete: ${data.businessName || client.email}`, [
+    await notifyInboxShared(env, `Onboarding complete: ${data.businessName || client.email}`, [
       `A client finished the onboarding form; the build can start.`,
       ``,
       `Business: ${data.businessName || ""}`,
@@ -484,7 +459,28 @@ export async function handlePortalOnboarding(req: Request, env: Env): Promise<Re
   } else {
     await saveClient(env.WEBAO_KV, client);
   }
-  return json({ ok: true, client: portalView(client) });
+  // A domain change after first completion used to be silently ignored:
+  // the new value sat in the form data while client.domain kept the old
+  // host. Re-run assignment whenever the saved value differs; on conflict
+  // the old mapping survives (assignDomain checks before deleting) and
+  // the response flags it so the portal can say so.
+  let domainConflict = false;
+  const newHost = normalizeDomain(data.domainValue);
+  if (newHost && newHost !== client.domain) {
+    const result = await assignDomain(
+      env.WEBAO_KV,
+      client,
+      newHost,
+      data.domainMode === "new" ? "to-register" : "pending-dns",
+    );
+    if (!result.ok) domainConflict = true;
+    else await saveClient(env.WEBAO_KV, client);
+  }
+  return json({
+    ok: true,
+    client: portalView(client),
+    ...(domainConflict ? { domainConflict: true } : {}),
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -521,6 +517,17 @@ export async function handlePortalAdsOnboarding(req: Request, env: Env): Promise
     if (typeof value === "string") {
       (data as Record<string, unknown>)[field] = clampStr(value, limit).trim() || undefined;
     }
+  }
+  // The lead destination is the whole point of the Ads Pack: a typo'd
+  // address would silently swallow every instant lead email. Validate
+  // only when the caller actually supplied a value, so a legacy record
+  // with a stale address does not block unrelated saves.
+  if (
+    typeof body.leadEmail === "string" &&
+    body.leadEmail.trim() &&
+    !EMAIL_RE.test(data.leadEmail || "")
+  ) {
+    return err("A valid lead email is required", 400);
   }
   if (typeof body.trade === "string") {
     data.trade = (TRADE_IDS as readonly string[]).includes(body.trade) ? body.trade : undefined;
@@ -569,8 +576,13 @@ export async function handlePortalAdsLeadOutcome(req: Request, env: Env): Promis
     return err((e as Error).message);
   }
   const leadId = typeof body.leadId === "string" ? body.leadId : "";
-  const outcome =
-    body.outcome === "booked" || body.outcome === "not-fit" ? body.outcome : null;
+  // Only the two real outcomes plus "" (the portal's explicit "clear"
+  // button) are accepted. A malformed or missing outcome used to
+  // overwrite a recorded outcome with null instead of being rejected.
+  if (body.outcome !== "booked" && body.outcome !== "not-fit" && body.outcome !== "") {
+    return err("Invalid outcome", 400);
+  }
+  const outcome = body.outcome === "" ? null : body.outcome;
   if (!leadId) return err("leadId is required", 400);
   const lead = await getJson<{ clientId: string } & Record<string, unknown>>(
     env.WEBAO_KV,
@@ -596,20 +608,23 @@ export async function handleOnboardingNudges(req: Request, env: Env): Promise<Re
 
   const kv = env.WEBAO_KV;
   const index = (await getJson<string[]>(kv, CLIENTS_INDEX)) || [];
-  const clients = await batch(index.slice(0, 200), 25, (k) => getJson<Client>(kv, k));
+  const clients = await batch(index.slice(0, 1000), 25, (k) => getJson<Client>(kv, k));
   const now = Date.now();
   let nudged = 0;
   let escalated = 0;
   let skippedNoMail = 0;
 
   for (const client of clients) {
-    if (!client || client.test || client.stage !== "onboarding" || client.onboardingCompletedAt) continue;
+    // Canceled clients never get "your order is in" reminders: the order
+    // is not in anymore. (past_due clients still get nudged: their order
+    // stands while payment is retried.)
+    if (!client || client.test || client.stage !== "onboarding" || client.onboardingCompletedAt || client.billingStatus === "canceled") continue;
     const ageDays = Math.floor((now - client.createdAt) / DAY_MS);
     if (ageDays >= 7 && !client.nudgesEscalatedAt) {
       client.nudgesEscalatedAt = now;
       await saveClient(kv, client);
       escalated++;
-      await notifyInbox(env, `Onboarding stalled (7 days): ${client.business || client.email}`, [
+      await notifyInboxShared(env, `Onboarding stalled (7 days): ${client.business || client.email}`, [
         `This client paid ${Math.floor((now - client.createdAt) / DAY_MS)} days ago and has not finished the onboarding form.`,
         ``,
         `Email: ${client.email}`,
