@@ -358,7 +358,7 @@ const supportHref = fr ? "/fr/soutien" : "/support";
           <p class="prose" data-portal-domain-text style="font-size:14px; margin:0;"></p>
           <p class="prose" data-portal-views hidden style="font-size:14px; margin:8px 0 0;">{copy.viewsLabel} : <strong data-portal-views-count></strong></p>
           <p data-portal-domain-cname hidden style="font-size:14px; margin:12px 0 0;">
-            <code style="background: var(--accent-soft); padding:3px 8px; border-radius:6px;">CNAME&nbsp;&nbsp;<span data-portal-domain-host></span>&nbsp;&nbsp;→&nbsp;&nbsp;hosting.webao.ca</code>
+            <code style="background: var(--accent-soft); padding:3px 8px; border-radius:6px; overflow-wrap:anywhere;">CNAME&nbsp;&nbsp;<span data-portal-domain-host></span>&nbsp;&nbsp;→&nbsp;&nbsp;hosting.webao.ca</code>
           </p>
         </div>
 
@@ -446,6 +446,14 @@ const supportHref = fr ? "/fr/soutien" : "/support";
   @media (prefers-reduced-motion: reduce) {
     [data-portal-root] *, [data-portal-stages] li { transition: none !important; }
   }
+  /* Mobile overflow guards: grid forms must be allowed to shrink below their
+     content's intrinsic size, or wide rows push past the screen and get
+     clipped by the site's overflow-x: clip. Verified in a 390px repro. */
+  [data-portal-root] form { grid-template-columns: minmax(0, 1fr); }
+  [data-portal-root] form label { min-width: 0; }
+  [data-portal-root] input:not([type="checkbox"]):not([type="radio"]),
+  [data-portal-root] select,
+  [data-portal-root] textarea { min-width: 0; }
 </style>
 
 <script type="application/json" id="portal-demos-json" set:html={demosJson}></script>
