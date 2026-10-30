@@ -417,7 +417,7 @@ test('built pages carry the full SEO head', () => {
   // Demos catalog: ItemList of the visible demos.
   const catalog = head('demos/index.html');
   assert.match(catalog, /"@type":"ItemList"/);
-  assert.match(catalog, /"numberOfItems":41/);
+  assert.match(catalog, /"numberOfItems":42/);
 
   // Sources: breadcrumb wired through the new pageKey.
   const sources = head('sources/index.html');

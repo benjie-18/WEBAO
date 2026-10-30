@@ -11,7 +11,7 @@ const paths = localizedPaths[locale];
 const demos = getDemos(locale);
 
 // Demos with published standalone microsites
-const liveDemos = new Set(["nora", "mira", "atelier-nord", "encre-brute", "kanso", "leduc", "boise", "sora", "forma", "toit-fils", "verte", "lune", "maison-lune", "finition-r", "pouf", "hexline", "papier-ciseaux", "studio-reve", "cyberdoll", "pixelforge", "vhs-dreams", "prism", "tactile", "lattice", "maximal", "atelier-caractere", "esquisse", "brume", "sahara-sage", "aeris", "debit", "bec-fin", "voltige", "lueur", "21-degres", "extreme-climat", "confort-76", "zenith", "toitures-tempete", "chantier-brut", "maison-dore"]);
+const liveDemos = new Set(["nora", "mira", "atelier-nord", "encre-brute", "kanso", "leduc", "boise", "sora", "forma", "toit-fils", "verte", "lune", "maison-lune", "finition-r", "pouf", "hexline", "papier-ciseaux", "studio-reve", "cyberdoll", "pixelforge", "vhs-dreams", "prism", "tactile", "lattice", "maximal", "atelier-caractere", "esquisse", "brume", "sahara-sage", "aeris", "debit", "bec-fin", "voltige", "lueur", "21-degres", "extreme-climat", "confort-76", "zenith", "toitures-tempete", "chantier-brut", "maison-dore", "sneaker-pro"]);
 // Hidden from the catalog: style already covered by another demo (boba-club = Y2K, covered by cyberdoll)
 const hiddenDemos = new Set(["boba-club"]);
 const visibleDemos = demos.filter((d) => !hiddenDemos.has(d.id));
@@ -416,6 +416,13 @@ const families = styleFamilies;
                   <div class="md-name">Maison Doré</div>
                   <div class="md-rule" aria-hidden="true"><i></i></div>
                   <div class="md-bar">WESTMOUNT · ATELIER DE RÉNOVATION</div>
+                </div>
+              )}
+              {d.id === "sneaker-pro" && (
+                <div class="dthumb-art">
+                  <div class="sp-pill"><span aria-hidden="true"></span>DROP 07 · LIVE</div>
+                  <div class="sp-name">SNEAKER<br />PRO</div>
+                  <div class="sp-bar">{locale === "fr" ? "MONTRÉAL · VÉRIFIÉ NFC · 48 H" : "MONTRÉAL · NFC-VERIFIED · 48 H"}</div>
                 </div>
               )}
             </div>
@@ -1146,6 +1153,44 @@ const families = styleFamilies;
   .dthumb-maison-dore .md-bar {
     font-size: 10.5px; letter-spacing: .3em; color: #e6c96a;
     font-family: Georgia, serif; text-transform: uppercase;
+  }
+  /* SNEAKER PRO: futurist glass */
+  .dthumb-sneaker-pro {
+    background:
+      radial-gradient(90% 70% at 80% 10%, rgba(61, 245, 192, 0.22) 0%, transparent 60%),
+      radial-gradient(80% 70% at 15% 90%, rgba(139, 123, 255, 0.26) 0%, transparent 62%),
+      linear-gradient(160deg, #0b0f14 0%, #05070a 100%);
+    color: #eef4f2;
+    font-family: "Space Grotesk", "Archivo", system-ui, sans-serif;
+  }
+  .dthumb-sneaker-pro .dthumb-art {
+    height: 100%; display: flex; flex-direction: column; justify-content: center;
+    gap: 14px; padding: 20px; border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px; margin: 12px;
+    background: rgba(255, 255, 255, 0.045);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+  .dthumb-sneaker-pro .sp-pill {
+    display: inline-flex; align-items: center; gap: 7px; align-self: flex-start;
+    font-size: 9.5px; letter-spacing: 0.2em; font-weight: 600; color: #3df5c0;
+    border: 1px solid rgba(61, 245, 192, 0.5); border-radius: 99px; padding: 5px 10px;
+    background: rgba(61, 245, 192, 0.08);
+  }
+  .dthumb-sneaker-pro .sp-pill span {
+    width: 6px; height: 6px; border-radius: 50%; background: #3df5c0;
+    box-shadow: 0 0 8px #3df5c0; animation: sp-pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes sp-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .dthumb-sneaker-pro .sp-name {
+    font-size: clamp(26px, 3.4vw, 40px); font-weight: 700; line-height: 0.92;
+    letter-spacing: -0.02em; text-transform: uppercase;
+    background: linear-gradient(105deg, #eef4f2 30%, #3df5c0 75%, #8b7bff 115%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .dthumb-sneaker-pro .sp-bar {
+    font-size: 9.5px; letter-spacing: 0.24em; color: rgba(238, 244, 242, 0.6);
+    font-family: "IBM Plex Mono", monospace; text-transform: uppercase;
   }
   .empty { text-align:center; padding:32px; background: var(--paper-2); border:1px dashed var(--line-strong); border-radius:16px; font-size:13px; color: var(--muted); margin-top:12px; }
   .demos-note { margin-top:14px; display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; font-size:10px; color: var(--muted); border-top:1px solid var(--line); padding-top:12px; }

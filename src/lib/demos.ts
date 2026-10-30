@@ -517,6 +517,17 @@ export const demos: Demo[] = [
     description: "Luxury renovations. Art-deco glamour, Gatsby-grade finishes.",
     pages: ["Home", "Portfolio", "Craft", "Process", "Contact"],
   },
+  {
+    id: "sneaker-pro",
+    name: "Sneaker Pro",
+    category: "Fashion",
+    city: "Montréal",
+    tone: "Futurist glass",
+    palette: "Obsidian / mint aurora",
+    accent: "#3DF5C0",
+    description: "Sneaker e-commerce. Drops, glass, motion.",
+    pages: ["Home", "Drops", "Technology", "Reviews", "Contact"],
+  },
 ];
 
 
@@ -575,6 +586,7 @@ export const demoFamily: Record<string, StyleFamily> = {
   "toitures-tempete": "bold",
   "chantier-brut": "bold",
   "maison-dore": "elegant",
+  "sneaker-pro": "bold",
 };
 
 export function getDemoFamily(id: string): StyleFamily {

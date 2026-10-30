@@ -92,6 +92,7 @@ const demoDescriptions: Record<Locale, Record<string, string>> = {
     "toitures-tempete": "Storm-response roofers. When the sky falls, we're already there.",
     "chantier-brut": "General contractors, no varnish. Raw builds, straight talk.",
     "maison-dore": "Luxury renovations. Art-deco glamour, Gatsby-grade finishes.",
+    "sneaker-pro": "Sneaker e-commerce. Weekly drops, glass panels, midnight launches.",
   },
   fr: {
     nora: "Urgence résidentielle + commerciale, répartition 24 h.",
@@ -136,6 +137,7 @@ const demoDescriptions: Record<Locale, Record<string, string>> = {
     "toitures-tempete": "Couvreurs d'intervention tempête. Quand le ciel tombe, on est déjà là.",
     "chantier-brut": "Entrepreneurs généraux, sans vernis. Constructions brutes, franc-parler.",
     "maison-dore": "Rénovations de luxe. Glamour art déco, finitions dignes de Gatsby.",
+    "sneaker-pro": "E-commerce de sneakers. Drops de la semaine, panneaux de verre, lancements à minuit.",
   },
 };
 
