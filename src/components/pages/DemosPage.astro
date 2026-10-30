@@ -11,7 +11,7 @@ const paths = localizedPaths[locale];
 const demos = getDemos(locale);
 
 // Demos with published standalone microsites
-const liveDemos = new Set(["nora", "mira", "atelier-nord", "encre-brute", "kanso", "leduc", "boise", "sora", "forma", "toit-fils", "verte", "lune", "maison-lune", "finition-r", "pouf", "hexline", "papier-ciseaux", "studio-reve", "cyberdoll", "pixelforge", "vhs-dreams", "prism", "tactile", "lattice", "maximal", "atelier-caractere", "esquisse", "brume", "sahara-sage", "aeris", "debit", "bec-fin", "voltige", "lueur", "21-degres", "extreme-climat", "confort-76", "zenith", "toitures-tempete", "chantier-brut", "maison-dore", "sneaker-pro"]);
+const liveDemos = new Set(["nora", "mira", "atelier-nord", "encre-brute", "kanso", "leduc", "boise", "sora", "forma", "toit-fils", "verte", "lune", "maison-lune", "finition-r", "pouf", "hexline", "papier-ciseaux", "studio-reve", "cyberdoll", "pixelforge", "vhs-dreams", "prism", "tactile", "lattice", "maximal", "atelier-caractere", "esquisse", "brume", "sahara-sage", "aeris", "debit", "bec-fin", "voltige", "lueur", "21-degres", "extreme-climat", "confort-76", "zenith", "toitures-tempete", "chantier-brut", "maison-dore", "sneaker-pro", "onde"]);
 // Hidden from the catalog: style already covered by another demo (boba-club = Y2K, covered by cyberdoll)
 const hiddenDemos = new Set(["boba-club"]);
 const visibleDemos = demos.filter((d) => !hiddenDemos.has(d.id));
@@ -423,6 +423,14 @@ const families = styleFamilies;
                   <div class="sp-pill"><span aria-hidden="true"></span>DROP 07 · LIVE</div>
                   <div class="sp-name">SNEAKER<br />PRO</div>
                   <div class="sp-bar">{locale === "fr" ? "MONTRÉAL · VÉRIFIÉ NFC · 48 H" : "MONTRÉAL · NFC-VERIFIED · 48 H"}</div>
+                </div>
+              )}
+              {d.id === "onde" && (
+                <div class="dthumb-art">
+                  <div class="od-pill"><span aria-hidden="true"></span>{locale === "fr" ? "NOUVEAU · EN STOCK" : "NEW · IN STOCK"}</div>
+                  <div class="od-name">ONDE</div>
+                  <div class="od-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                  <div class="od-bar">{locale === "fr" ? "LONGUEUIL · SON AUDIOPHILE · −42 dB" : "LONGUEUIL · AUDIOPHILE SOUND · −42 dB"}</div>
                 </div>
               )}
             </div>
@@ -1190,6 +1198,59 @@ const families = styleFamilies;
   }
   .dthumb-sneaker-pro .sp-bar {
     font-size: 9.5px; letter-spacing: 0.24em; color: rgba(238, 244, 242, 0.6);
+    font-family: "IBM Plex Mono", monospace; text-transform: uppercase;
+  }
+  /* ONDE: liquid chrome / pearl fuchsia */
+  .dthumb-onde {
+    background:
+      radial-gradient(90% 70% at 78% 12%, rgba(217, 70, 239, 0.2) 0%, transparent 58%),
+      radial-gradient(80% 70% at 12% 88%, rgba(139, 92, 246, 0.18) 0%, transparent 60%),
+      linear-gradient(160deg, #f6f3fa 0%, #e9e4f2 55%, #ddd5ea 100%);
+    color: #17141d;
+    font-family: "Manrope", system-ui, sans-serif;
+  }
+  .dthumb-onde .dthumb-art {
+    height: 100%; display: flex; flex-direction: column; justify-content: center;
+    gap: 13px; padding: 20px; border: 1px solid rgba(23, 20, 29, 0.1);
+    border-radius: 14px; margin: 12px;
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  }
+  .dthumb-onde .od-pill {
+    display: inline-flex; align-items: center; gap: 7px; align-self: flex-start;
+    font-size: 9.5px; letter-spacing: 0.2em; font-weight: 700; color: #b01fc7;
+    border: 1px solid rgba(217, 70, 239, 0.45); border-radius: 99px; padding: 5px 10px;
+    background: rgba(217, 70, 239, 0.08);
+  }
+  .dthumb-onde .od-pill span {
+    width: 6px; height: 6px; border-radius: 50%; background: #d946ef;
+    box-shadow: 0 0 8px #d946ef; animation: od-pulse-thumb 1.6s ease-in-out infinite;
+  }
+  @keyframes od-pulse-thumb { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .dthumb-onde .od-name {
+    font-size: clamp(28px, 3.6vw, 42px); font-weight: 800; line-height: 0.92;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    background: linear-gradient(105deg, #17141d 20%, #b01fc7 70%, #8b5cf6 110%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .dthumb-onde .od-wave { display: flex; align-items: flex-end; gap: 3px; height: 26px; }
+  .dthumb-onde .od-wave i {
+    width: 3.5px; border-radius: 3px;
+    background: linear-gradient(180deg, #d946ef, #8b5cf6);
+    animation: od-eq-thumb 1.25s ease-in-out infinite;
+  }
+  .dthumb-onde .od-wave i:nth-child(1) { height: 9px; animation-delay: 0s; }
+  .dthumb-onde .od-wave i:nth-child(2) { height: 18px; animation-delay: 0.12s; }
+  .dthumb-onde .od-wave i:nth-child(3) { height: 13px; animation-delay: 0.24s; }
+  .dthumb-onde .od-wave i:nth-child(4) { height: 24px; animation-delay: 0.36s; }
+  .dthumb-onde .od-wave i:nth-child(5) { height: 15px; animation-delay: 0.48s; }
+  .dthumb-onde .od-wave i:nth-child(6) { height: 21px; animation-delay: 0.6s; }
+  .dthumb-onde .od-wave i:nth-child(7) { height: 10px; animation-delay: 0.72s; }
+  .dthumb-onde .od-wave i:nth-child(8) { height: 17px; animation-delay: 0.84s; }
+  @keyframes od-eq-thumb { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(0.45); } }
+  .dthumb-onde .od-bar {
+    font-size: 9.5px; letter-spacing: 0.24em; color: rgba(23, 20, 29, 0.55);
     font-family: "IBM Plex Mono", monospace; text-transform: uppercase;
   }
   .empty { text-align:center; padding:32px; background: var(--paper-2); border:1px dashed var(--line-strong); border-radius:16px; font-size:13px; color: var(--muted); margin-top:12px; }

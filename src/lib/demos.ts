@@ -528,6 +528,17 @@ export const demos: Demo[] = [
     description: "Sneaker e-commerce. Drops, glass, motion.",
     pages: ["Home", "Drops", "Technology", "Reviews", "Contact"],
   },
+  {
+    id: "onde",
+    name: "ONDE",
+    category: "Technology",
+    city: "Longueuil",
+    tone: "Liquid chrome",
+    palette: "Pearl / chrome fuchsia",
+    accent: "#D946EF",
+    description: "Audiophile e-commerce. Liquid chrome, deep silence.",
+    pages: ["Home", "Collection", "Technology", "Reviews", "Contact"],
+  },
 ];
 
 
@@ -587,6 +598,7 @@ export const demoFamily: Record<string, StyleFamily> = {
   "chantier-brut": "bold",
   "maison-dore": "elegant",
   "sneaker-pro": "bold",
+  "onde": "bold",
 };
 
 export function getDemoFamily(id: string): StyleFamily {
