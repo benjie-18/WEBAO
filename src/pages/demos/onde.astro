@@ -904,8 +904,9 @@ import DemoSeo from "../../components/demos/DemoSeo.astro";
             const r = stage.getBoundingClientRect();
             if (r.bottom > 0 && r.top < window.innerHeight) {
               const shift = (window.innerHeight - r.top) * 0.03;
-              heroCard.style.setProperty("--od-shift", shift.toFixed(1) + "px");
-              heroCard.style.translate = "0 " + (-shift * 0.4).toFixed(1) + "px";
+              // Parallax lives on #od-stage: the card keeps its float
+              // (od-float animates `translate`) and its tilt (`transform`).
+              stage.style.translate = "0 " + (-shift * 0.4).toFixed(1) + "px";
             }
           });
         };
