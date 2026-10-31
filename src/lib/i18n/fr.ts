@@ -141,6 +141,7 @@ const fr = {
     process: {
       eyebrow: "Fonctionnement · Trois étapes, sans réunions qui auraient pu être des courriels",
       title: "De l’idée au <span>en ligne</span>, habituellement en une semaine.",
+      day: "JOUR",
       steps: [
         {
           title: "Vous envoyez l’essentiel",
