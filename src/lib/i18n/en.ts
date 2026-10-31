@@ -138,6 +138,7 @@ const en = {
     process: {
       eyebrow: "How it works · Three steps, and no meetings that should have been emails",
       title: "From idea to <span>live</span>, usually in about a week.",
+      day: "DAY",
       steps: [
         {
           title: "You send the basics",
