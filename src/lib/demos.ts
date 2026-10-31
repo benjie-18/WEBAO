@@ -41,6 +41,28 @@ export type Demo = {
 
 export const demos: Demo[] = [
   {
+    id: "noctua",
+    name: "Noctua",
+    category: "Hospitality",
+    city: "Baie-Saint-Paul",
+    tone: "Sidereal instrument",
+    palette: "Ink sky / old brass / starlight",
+    accent: "#B7B06B",
+    description: "Dark-sky lodge in Charlevoix. The site is the instrument.",
+    pages: ["Home", "Nights", "Stays", "Planner", "Booking"],
+  },
+  {
+    id: "lisiere",
+    name: "Lisière",
+    category: "Creative",
+    city: "Danville",
+    tone: "Loom draft",
+    palette: "Linen / indigo / madder",
+    accent: "#A02F3E",
+    description: "Handweaving atelier in Danville. The page is the loom.",
+    pages: ["Home", "Drafts", "Atelier", "Commissions", "Contact"],
+  },
+  {
     id: "brume",
     name: "Brume Parfums",
     category: "Beauty",
@@ -599,6 +621,8 @@ export const demoFamily: Record<string, StyleFamily> = {
   "maison-dore": "elegant",
   "sneaker-pro": "bold",
   "onde": "bold",
+  noctua: "elegant",
+  lisiere: "timeless",
 };
 
 export function getDemoFamily(id: string): StyleFamily {

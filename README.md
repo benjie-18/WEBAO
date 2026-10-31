@@ -86,7 +86,7 @@ tests (`tests/demo-seo.test.ts`, `tests/sitemap.test.ts`,
 - JSON-LD: `Organization` + `WebSite` everywhere, `BreadcrumbList` on subpages,
   `FAQPage` on the home page, `Product`/`Offer` on pricing, `ItemList` on the
   demo catalog, and `WebPage` + breadcrumb on every demo microsite.
-- `sitemap.xml` lists all 120 public URLs with hreflang alternates and image
+- `sitemap.xml` lists all 124 public URLs with hreflang alternates and image
   entries (the Google image-sitemap namespace) for the demo lead images.
 - Demo microsites are standalone HTML documents (no `BaseLayout`); their head
   block is rendered by `src/components/demos/DemoSeo.astro` from the helpers
@@ -110,7 +110,7 @@ Project architecture:
 - `src/layouts/BaseLayout.astro`: SEO, header/footer, scroll progress, ClientRouter, reveal
 - `src/styles/global.css`: tokens, typography (Instrument Serif + Inter + IBM Plex Mono), layout, motion (respects `prefers-reduced-motion`)
 - `src/components/{ui,layout,anim}`: reusable Button, Card, Badge, Section, Reveal, **IntroSequence**
-- `src/lib/{demos,motion}.ts`: demo catalog (44 art-directed fictional businesses, clearly labeled as demos; 43 visible in the public catalog) + motion helpers
+- `src/lib/{demos,motion}.ts`: demo catalog (46 art-directed fictional businesses, clearly labeled as demos; 45 visible in the public catalog) + motion helpers
 - `src/lib/intro/{config,engine}.ts`: the intro's art direction (`INTRO_CONFIG`) and its dependency-free motion engine
 - `src/pages/{index,pricing,contact,demos,404,sitemap.xml.ts}`: polished marketing site; demos are a searchable/filterable catalog, each visible demo shipping its own standalone microsite under `src/pages/{,fr/}demos/`
 

@@ -1,0 +1,1547 @@
+---
+import DemoSeo from "../../components/demos/DemoSeo.astro";
+import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+// Demo microsite: Noctua · auberge du ciel sombre fictive, Baie-Saint-Paul (Charlevoix).
+// The page is a working orrery and star chart: radial disposition, no banner hero,
+// no card grids. Engraved brass on ink night.
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <DemoSeo
+    demoId="noctua"
+    locale="en"
+    title="Noctua — Dark-Sky Lodge &amp; Observatory Nights · Baie-Saint-Paul"
+    description="Fictional dark-sky lodge in Charlevoix: a working orrery, a night-sky planner, telescope vigils, and six rooms under a reserve sky. Design demo, not a real business."
+    ogImage="https://webao.ca/demos/noctua/01.jpg"
+  />
+
+  <script is:inline>
+    // Marks JS availability so engraved fallbacks can collapse to a static chart.
+    document.documentElement.classList.add("nt-js");
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --nt-ink: #0a0e18;
+      --nt-ink-2: #0e1322;
+      --nt-ink-3: #131a2c;
+      --nt-star: #ede8da;
+      --nt-star-2: #c9c3b2;
+      --nt-star-3: rgba(237, 232, 218, 0.55);
+      --nt-faint: rgba(237, 232, 218, 0.55);
+      --nt-brass: #b7b06b;
+      --nt-brass-hi: #d8d29a;
+      --nt-brass-dim: rgba(183, 176, 107, 0.4);
+      --nt-line: rgba(183, 176, 107, 0.26);
+      --nt-line-soft: rgba(237, 232, 218, 0.1);
+      --nt-warn: #c98a5b;
+      color-scheme: dark;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 20px; }
+    body {
+      background: var(--nt-ink);
+      color: var(--nt-star-2);
+      font-family: "EB Garamond", Georgia, serif;
+      font-size: 17px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; background: none; border: none; color: inherit; }
+    ::selection { background: var(--nt-brass); color: var(--nt-ink); }
+    :focus-visible { outline: 1.5px solid var(--nt-brass-hi); outline-offset: 3px; }
+
+    .nt-mono { font-family: "Courier Prime", "Courier New", monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; }
+    .nt-serif { font-family: "Marcellus", "Times New Roman", serif; }
+    .nt-wrap { position: relative; z-index: 2; max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+    .nt-vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+    /* Fixed sky canvas ----------------------------------------------------- */
+    #nt-sky {
+      position: fixed; inset: 0; width: 100%; height: 100%;
+      z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(120% 90% at 50% 118%, rgba(183, 176, 107, 0.09) 0%, transparent 42%),
+        linear-gradient(180deg, #070a12 0%, var(--nt-ink) 46%, var(--nt-ink-2) 100%);
+    }
+
+    /* Station head (shared engraved heading) -------------------------------- */
+    .nt-station { position: relative; padding: 22vh 0 6vh; }
+    .nt-st-head { text-align: center; margin-bottom: 6vh; }
+    .nt-st-num {
+      display: inline-flex; align-items: center; gap: 12px;
+      color: var(--nt-brass); margin-bottom: 18px;
+    }
+    .nt-st-num::before, .nt-st-num::after {
+      content: ""; width: 44px; height: 1px; background: var(--nt-line);
+    }
+    .nt-st-head h2 {
+      font-family: "Marcellus", serif; font-weight: 400;
+      font-size: clamp(1.7rem, 3.6vw, 2.7rem); letter-spacing: 0.06em;
+      color: var(--nt-star); text-wrap: balance;
+    }
+    .nt-st-head p { max-width: 52ch; margin: 14px auto 0; color: var(--nt-star-2); font-size: 17.5px; }
+
+    /* ——— Station 0 · The instrument (radial hero) ———————————————— */
+    .nt-hero {
+      min-height: 100svh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; position: relative;
+      padding: 88px 20px 40px;
+    }
+    .nt-fixbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 40;
+      display: flex; justify-content: space-between; gap: 14px;
+      padding: 12px 20px; pointer-events: none;
+      background: linear-gradient(180deg, rgba(7, 10, 18, 0.88), transparent);
+      color: var(--nt-faint);
+    }
+    .nt-fixbar b { color: var(--nt-brass); font-weight: 400; }
+    .nt-brandline { display: inline-flex; align-items: center; gap: 10px; pointer-events: auto; }
+    .nt-brandline svg { width: 14px; height: 14px; stroke: var(--nt-brass); fill: none; stroke-width: 1.4; }
+
+    .nt-hero-title { text-align: center; margin-bottom: 3.2vh; }
+    .nt-hero-title .nt-kicker { color: var(--nt-brass); margin-bottom: 14px; }
+    .nt-hero-title h1 {
+      font-family: "Marcellus", serif; font-weight: 400;
+      font-size: clamp(3rem, 8.5vw, 5.6rem); letter-spacing: 0.22em;
+      color: var(--nt-star); text-indent: 0.22em; line-height: 1;
+    }
+    .nt-hero-title .nt-sub {
+      margin-top: 16px; font-style: italic; font-size: clamp(16px, 2.2vw, 19px);
+      color: var(--nt-star-2); max-width: 44ch; margin-left: auto; margin-right: auto;
+    }
+
+    /* Orrery + orbit-ring navigation ---------------------------------------- */
+    .nt-instrument {
+      position: relative;
+      width: min(78vmin, 640px); aspect-ratio: 1;
+      margin: 0 auto;
+    }
+    .nt-ring-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+    .nt-ring-svg circle, .nt-ring-svg line { stroke: var(--nt-line); fill: none; }
+    .nt-ring-svg .nt-tick { stroke: var(--nt-brass-dim); }
+    #nt-orrery {
+      position: absolute; inset: 7%; width: 86%; height: 86%;
+      cursor: grab; touch-action: none; border-radius: 50%;
+    }
+    #nt-orrery:active { cursor: grabbing; }
+    /* JS-off fallback: engraved orbit rings behind the (empty) canvas */
+    html:not(.nt-js) #nt-orrery {
+      background:
+        repeating-radial-gradient(circle at 50% 50%, transparent 0 44px, rgba(183, 176, 107, 0.22) 44px 45px),
+        radial-gradient(circle at 50% 50%, rgba(216, 210, 154, 0.5) 0 6px, transparent 7px);
+      border-radius: 50%;
+    }
+    .nt-orbit-nav { position: absolute; inset: 0; }
+    .nt-orbit-nav a {
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%) rotate(var(--a)) translateY(calc(min(39vmin, 320px) * -1)) rotate(calc(var(--a) * -1));
+      font-family: "Courier Prime", monospace; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--nt-star-3); padding: 7px 12px; border: 1px solid transparent; border-radius: 99px;
+      transition: color 0.25s, border-color 0.25s, background 0.25s;
+      white-space: nowrap;
+    }
+    .nt-orbit-nav a:hover, .nt-orbit-nav a:focus-visible {
+      color: var(--nt-brass-hi); border-color: var(--nt-line);
+      background: rgba(10, 14, 24, 0.72);
+    }
+    .nt-orbit-nav a::before {
+      content: ""; position: absolute; left: -14px; top: 50%; width: 5px; height: 5px;
+      border-radius: 50%; background: var(--nt-brass); transform: translateY(-50%);
+      opacity: 0.65;
+    }
+
+    .nt-readout {
+      margin-top: 3.4vh; text-align: center; color: var(--nt-faint);
+      display: flex; flex-wrap: wrap; gap: 8px 26px; justify-content: center;
+    }
+    .nt-readout b { color: var(--nt-brass); font-weight: 400; }
+    .nt-draghint { color: var(--nt-star-3); }
+
+    /* ——— Station I · The system (ephemeris) ———————————————————— */
+    .nt-ephem { max-width: 860px; margin: 0 auto; }
+    .nt-ephem-row {
+      display: grid; grid-template-columns: 52px 1fr auto; gap: 8px 22px;
+      align-items: baseline; padding: 22px 6px;
+      border-top: 1px solid var(--nt-line);
+      transition: background 0.25s;
+      cursor: pointer;
+    }
+    .nt-ephem-row:last-child { border-bottom: 1px solid var(--nt-line); }
+    .nt-ephem-row:hover, .nt-ephem-row.is-sel { background: rgba(183, 176, 107, 0.05); }
+    .nt-ephem-row.is-sel .nt-ephem-num { color: var(--nt-brass-hi); border-color: var(--nt-brass-hi); }
+    .nt-ephem-num {
+      width: 34px; height: 34px; border: 1px solid var(--nt-line); border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-family: "Courier Prime", monospace; font-size: 12px; color: var(--nt-brass);
+      transition: border-color 0.25s, color 0.25s;
+    }
+    .nt-ephem-row h3 { font-family: "Marcellus", serif; font-weight: 400; font-size: 19px; letter-spacing: 0.04em; color: var(--nt-star); }
+    .nt-ephem-row p { grid-column: 2; max-width: 56ch; font-size: 15.5px; }
+    .nt-ephem-meta { text-align: right; color: var(--nt-brass); white-space: nowrap; }
+    .nt-ephem-meta small { display: block; color: var(--nt-faint); margin-top: 4px; letter-spacing: 0.1em; }
+
+    .nt-plate { max-width: 420px; margin: 7vh auto 0; text-align: center; }
+    .nt-plate-frame {
+      border: 1px solid var(--nt-line); border-radius: 50%;
+      padding: 14px; margin: 0 auto; width: min(72vw, 340px);
+      background: rgba(14, 19, 34, 0.5);
+    }
+    .nt-plate-frame img { border-radius: 50%; aspect-ratio: 1; object-fit: cover; filter: saturate(0.85) brightness(0.92); }
+    .nt-plate figcaption { margin-top: 16px; font-style: italic; color: var(--nt-faint); font-size: 14.5px; }
+
+    /* ——— Station II · The night (planner) —————————————————————— */
+    .nt-planner { display: grid; grid-template-columns: auto 1fr; gap: 40px 56px; max-width: 960px; margin: 0 auto; align-items: start; }
+    .nt-moon { text-align: center; }
+    .nt-moon svg { width: min(46vw, 190px); height: auto; display: block; margin: 0 auto; }
+    .nt-moon .nt-moon-ring { fill: none; stroke: var(--nt-line); stroke-width: 1; }
+    .nt-moon .nt-moon-tick { stroke: var(--nt-brass-dim); stroke-width: 1; }
+    .nt-moon .nt-moon-disc { fill: var(--nt-star); }
+    .nt-moon .nt-moon-shade { fill: var(--nt-ink); }
+    .nt-moon .nt-moon-hand { stroke: var(--nt-brass-hi); stroke-width: 1.6; }
+    .nt-moon-read { margin-top: 14px; }
+    .nt-moon-read strong { display: block; font-family: "Marcellus", serif; font-size: 18px; letter-spacing: 0.05em; color: var(--nt-star); font-weight: 400; }
+    .nt-moon-read span { color: var(--nt-brass); }
+    .nt-moon-read em { display: block; font-size: 14px; color: var(--nt-faint); font-style: italic; margin-top: 4px; }
+
+    .nt-dates { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 26px; }
+    .nt-dates label { color: var(--nt-faint); }
+    .nt-dates input[type="date"] {
+      font-family: "Courier Prime", monospace; font-size: 13px; letter-spacing: 0.06em;
+      background: var(--nt-ink-2); color: var(--nt-star);
+      border: 1px solid var(--nt-line); border-radius: 0; padding: 10px 14px;
+    }
+    .nt-step {
+      width: 40px; height: 40px; border: 1px solid var(--nt-line);
+      color: var(--nt-brass); font-family: "Courier Prime", monospace; font-size: 15px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .nt-step:hover { background: rgba(183, 176, 107, 0.1); color: var(--nt-brass-hi); }
+
+    .nt-az { display: flex; gap: 28px; align-items: center; flex-wrap: wrap; }
+    .nt-az svg { width: 120px; height: 120px; flex: none; }
+    .nt-az .nt-az-ring { fill: none; stroke: var(--nt-line); }
+    .nt-az .nt-az-card { fill: var(--nt-faint); font-family: "Courier Prime", monospace; font-size: 9px; letter-spacing: 0.08em; }
+    .nt-az .nt-az-needle { stroke: var(--nt-brass-hi); stroke-width: 1.8; transition: transform 0.5s cubic-bezier(0.3, 0.9, 0.3, 1); transform-origin: 60px 60px; }
+    .nt-az .nt-az-hub { fill: var(--nt-brass); }
+    .nt-altgauge { display: flex; gap: 12px; align-items: flex-end; height: 120px; }
+    .nt-altgauge .nt-alt-track {
+      width: 14px; height: 100%; border: 1px solid var(--nt-line); position: relative;
+      background: repeating-linear-gradient(0deg, transparent 0 11px, var(--nt-line-soft) 11px 12px);
+    }
+    .nt-altgauge .nt-alt-fill {
+      position: absolute; left: 0; right: 0; bottom: 0; height: 0%;
+      background: linear-gradient(180deg, var(--nt-brass-hi), var(--nt-brass));
+      transition: height 0.6s cubic-bezier(0.3, 0.9, 0.3, 1);
+    }
+    .nt-altgauge .nt-alt-read { font-family: "Courier Prime", monospace; color: var(--nt-star); font-size: 20px; letter-spacing: 0.04em; padding-bottom: 2px; }
+    .nt-altgauge .nt-alt-read small { display: block; color: var(--nt-faint); font-size: 10px; letter-spacing: 0.14em; }
+
+    .nt-objchips { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 8px; }
+    .nt-objchip {
+      font-family: "Courier Prime", monospace; font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 8px 13px; border: 1px solid var(--nt-line); color: var(--nt-star-3);
+      border-radius: 99px; transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .nt-objchip:hover { color: var(--nt-brass-hi); }
+    .nt-objchip[aria-pressed="true"] {
+      color: var(--nt-ink); background: var(--nt-brass); border-color: var(--nt-brass);
+    }
+    .nt-simnote { color: var(--nt-faint); margin-top: 14px; }
+
+    .nt-forecast { grid-column: 1 / -1; }
+    .nt-forecast h3 { font-family: "Marcellus", serif; font-weight: 400; letter-spacing: 0.08em; color: var(--nt-star); font-size: 17px; margin-bottom: 16px; text-align: center; }
+    .nt-fcast-strip { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+    .nt-fcast-cell {
+      border: 1px solid var(--nt-line); padding: 12px 8px 10px; text-align: center;
+      background: rgba(14, 19, 34, 0.45); cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
+      min-width: 0;
+    }
+    .nt-fcast-cell:hover { border-color: var(--nt-brass); }
+    .nt-fcast-cell.is-sel {
+      border-color: var(--nt-brass-hi); background: rgba(183, 176, 107, 0.09);
+      transform: translateY(-3px);
+    }
+    .nt-fcast-cell .nt-fc-date { color: var(--nt-star); font-family: "Courier Prime", monospace; font-size: 11px; letter-spacing: 0.06em; }
+    .nt-fcast-cell .nt-fc-lab { color: var(--nt-faint); font-family: "Courier Prime", monospace; font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase; margin: 8px 0 3px; }
+    .nt-fc-bar { height: 6px; border: 1px solid var(--nt-line); position: relative; overflow: hidden; }
+    .nt-fc-bar i { position: absolute; inset: 0 auto 0 0; display: block; }
+    .nt-fc-bar i.nt-fc-transp { background: repeating-linear-gradient(90deg, var(--nt-brass) 0 3px, transparent 3px 5px); }
+    .nt-fc-bar i.nt-fc-seeing { background: var(--nt-star-3); }
+    .nt-fc-bar i.nt-fc-moon { background: var(--nt-warn); }
+    .nt-fcast-cell .nt-fc-cloud { color: var(--nt-star-3); font-family: "Courier Prime", monospace; font-size: 10px; margin-top: 6px; }
+
+    .nt-obs { grid-column: 1 / -1; margin-top: 8px; }
+    .nt-obs table { width: 100%; border-collapse: collapse; }
+    .nt-obs th {
+      text-align: left; font-family: "Courier Prime", monospace; font-size: 9.5px;
+      letter-spacing: 0.16em; text-transform: uppercase; color: var(--nt-faint);
+      font-weight: 400; padding: 8px 10px; border-bottom: 1px solid var(--nt-line);
+    }
+    .nt-obs td { padding: 11px 10px; border-bottom: 1px solid var(--nt-line-soft); font-size: 15.5px; }
+    .nt-obs td.mono { font-family: "Courier Prime", monospace; font-size: 12px; color: var(--nt-brass); letter-spacing: 0.05em; }
+    .nt-obs tr.is-washed td { color: var(--nt-faint); text-decoration: line-through; text-decoration-color: var(--nt-brass-dim); }
+    .nt-obs .nt-washmark { text-decoration: none; color: var(--nt-warn); font-family: "Courier Prime", monospace; font-size: 9.5px; letter-spacing: 0.1em; }
+
+    /* ——— Station III · Constellations ——————————————————————————— */
+    .nt-const { max-width: 920px; margin: 0 auto; }
+    .nt-const-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 26px; }
+    .nt-cchip {
+      font-family: "Courier Prime", monospace; font-size: 10.5px; letter-spacing: 0.13em; text-transform: uppercase;
+      padding: 8px 14px; border: 1px solid var(--nt-line); color: var(--nt-star-3); border-radius: 99px;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .nt-cchip:hover { color: var(--nt-brass-hi); }
+    .nt-cchip[aria-pressed="true"] { background: rgba(183, 176, 107, 0.14); color: var(--nt-brass-hi); border-color: var(--nt-brass); }
+    .nt-chart-frame { border: 1px solid var(--nt-line); background: rgba(10, 14, 24, 0.55); position: relative; }
+    .nt-chart-frame svg { display: block; width: 100%; height: auto; }
+    .nt-chart-frame .nt-c-line { fill: none; stroke: var(--nt-brass); stroke-width: 1.1; stroke-linecap: round; opacity: 0.9; }
+    .nt-chart-frame .nt-c-star { fill: var(--nt-star); }
+    .nt-chart-frame .nt-c-star.is-bright { fill: var(--nt-brass-hi); }
+    .nt-chart-frame .nt-c-dim { fill: var(--nt-faint); }
+    .nt-js .nt-c-line.is-armed { stroke-dasharray: 640; stroke-dashoffset: 640; }
+    .nt-js .nt-c-line.is-draw { animation: nt-draw 2.4s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+    @keyframes nt-draw { to { stroke-dashoffset: 0; } }
+    .nt-chart-corner { position: absolute; top: 10px; left: 12px; color: var(--nt-faint); }
+    .nt-const-info { text-align: center; margin-top: 18px; min-height: 3em; font-style: italic; color: var(--nt-star-2); }
+    .nt-const-info b { font-style: normal; font-family: "Marcellus", serif; font-weight: 400; letter-spacing: 0.06em; color: var(--nt-star); }
+
+    /* ——— Station IV · Stays ——————————————————————————————————— */
+    .nt-stays { max-width: 900px; margin: 0 auto; }
+    .nt-rate { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    .nt-rate th {
+      text-align: left; font-family: "Courier Prime", monospace; font-size: 9.5px;
+      letter-spacing: 0.16em; text-transform: uppercase; color: var(--nt-faint); font-weight: 400;
+      padding: 10px 12px; border-bottom: 1px solid var(--nt-line);
+    }
+    .nt-rate td { padding: 16px 12px; border-bottom: 1px solid var(--nt-line); vertical-align: top; }
+    .nt-rate td:first-child { font-family: "Marcellus", serif; letter-spacing: 0.04em; color: var(--nt-star); font-size: 17px; white-space: nowrap; }
+    .nt-rate td.desc { font-size: 15.5px; color: var(--nt-star-2); }
+    .nt-rate td.price { font-family: "Courier Prime", monospace; color: var(--nt-brass); font-size: 13px; letter-spacing: 0.05em; white-space: nowrap; }
+    .nt-season { text-align: center; margin-top: 22px; color: var(--nt-faint); }
+    .nt-plates { display: grid; grid-template-columns: 1fr 1fr; gap: 34px; margin-top: 7vh; }
+    .nt-plate .nt-plate-frame { width: min(64vw, 260px); }
+
+    /* ——— Station V · Booking orbit ————————————————————————————— */
+    .nt-book { max-width: 880px; margin: 0 auto; text-align: center; }
+    .nt-book-ring {
+      position: relative; width: min(74vw, 420px); aspect-ratio: 1; margin: 0 auto 30px;
+      border: 1px solid var(--nt-line); border-radius: 50%;
+      transition: transform 0.7s cubic-bezier(0.3, 0.9, 0.25, 1);
+    }
+    .nt-book-ring::before {
+      content: ""; position: absolute; inset: 14%; border: 1px dashed var(--nt-line-soft); border-radius: 50%;
+    }
+    .nt-book-index {
+      position: absolute; top: -7px; left: 50%; transform: translateX(-50%);
+      width: 0; height: 0; border-left: 7px solid transparent; border-right: 7px solid transparent;
+      border-top: 11px solid var(--nt-brass-hi);
+    }
+    .nt-book-hub {
+      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+      font-family: "Marcellus", serif; letter-spacing: 0.14em; color: var(--nt-faint); font-size: 13px;
+      text-transform: uppercase;
+    }
+    .nt-sess {
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%) rotate(var(--a)) translateY(-46%) rotate(calc(var(--a) * -1));
+      transition: transform 0.7s cubic-bezier(0.3, 0.9, 0.25, 1);
+      font-family: "Courier Prime", monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--nt-star-3); border: 1px solid var(--nt-line); background: var(--nt-ink);
+      padding: 10px 12px; border-radius: 99px; max-width: 150px; line-height: 1.5;
+      transition-property: transform, color, border-color, background;
+    }
+    .nt-sess:hover { color: var(--nt-brass-hi); border-color: var(--nt-brass); }
+    .nt-sess[aria-pressed="true"] { color: var(--nt-ink); background: var(--nt-brass); border-color: var(--nt-brass); }
+
+    .nt-book-panels { text-align: left; border-top: 1px solid var(--nt-line); padding-top: 28px; }
+    .nt-bpanel { padding: 4px 2px 18px; }
+    .nt-bpanel h3 { font-family: "Marcellus", serif; font-weight: 400; font-size: 21px; letter-spacing: 0.05em; color: var(--nt-star); }
+    .nt-bpanel .nt-bp-meta { color: var(--nt-brass); margin: 8px 0 10px; }
+    .nt-bpanel p { max-width: 58ch; font-size: 15.5px; }
+    .nt-bpanel .nt-bp-next { margin-top: 10px; color: var(--nt-faint); }
+    .nt-bpanel .nt-bp-next b { color: var(--nt-star-2); font-weight: 400; }
+    /* Without JS all panels stay visible; JS collapses to the selected one. */
+
+    .nt-form { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 26px; text-align: left; }
+    .nt-form label { display: block; color: var(--nt-faint); margin-bottom: 6px; }
+    .nt-form input, .nt-form select, .nt-form textarea {
+      width: 100%; font-family: "Courier Prime", monospace; font-size: 13px; letter-spacing: 0.04em;
+      background: var(--nt-ink-2); color: var(--nt-star);
+      border: 1px solid var(--nt-line); border-radius: 0; padding: 12px 14px;
+    }
+    .nt-form input:focus, .nt-form select:focus, .nt-form textarea:focus { outline: none; border-color: var(--nt-brass); }
+    .nt-form .nt-f-wide { grid-column: 1 / -1; }
+    .nt-form textarea { resize: vertical; min-height: 74px; }
+    .nt-submit {
+      grid-column: 1 / -1; justify-self: center; margin-top: 6px;
+      font-family: "Courier Prime", monospace; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--nt-ink); background: var(--nt-brass); border: 1px solid var(--nt-brass);
+      padding: 14px 30px; transition: background 0.2s, transform 0.15s;
+    }
+    .nt-submit:hover { background: var(--nt-brass-hi); }
+    .nt-submit:active { transform: scale(0.98); }
+    .nt-stamp {
+      display: none; margin: 30px auto 0; padding: 22px 30px;
+      border: 1.5px solid var(--nt-brass); max-width: 420px; text-align: center;
+      color: var(--nt-brass-hi); font-family: "Courier Prime", monospace; letter-spacing: 0.12em;
+      transform: rotate(-2deg); background: rgba(183, 176, 107, 0.06);
+    }
+    .nt-stamp.is-on { display: block; }
+    .nt-stamp b { display: block; font-size: 15px; margin-bottom: 8px; }
+    .nt-stamp small { color: var(--nt-faint); letter-spacing: 0.08em; }
+
+    /* ——— Footer as horizon ———————————————————————————————————— */
+    .nt-horizon { position: relative; margin-top: 24vh; z-index: 2; }
+    .nt-horizon svg.nt-hills { display: block; width: 100%; height: auto; }
+    .nt-horizon .nt-hills .nt-skyline { fill: #05070d; }
+    .nt-horizon .nt-hills .nt-rule { stroke: var(--nt-brass-dim); }
+    .nt-hfoot {
+      background: #05070d; color: var(--nt-faint); padding: 34px 24px 46px;
+    }
+    .nt-hfoot-in {
+      max-width: 1120px; margin: 0 auto; display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr; gap: 30px; align-items: start;
+    }
+    .nt-hfoot h2 {
+      font-family: "Marcellus", serif; font-weight: 400; letter-spacing: 0.2em;
+      color: var(--nt-star); font-size: 20px; margin-bottom: 10px;
+    }
+    .nt-hfoot p { font-size: 14.5px; max-width: 40ch; }
+    .nt-hfoot a:hover { color: var(--nt-brass-hi); }
+    .nt-hfoot ul { list-style: none; display: flex; flex-direction: column; gap: 8px; font-family: "Courier Prime", monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
+    .nt-legal {
+      max-width: 1120px; margin: 30px auto 0; padding-top: 18px;
+      border-top: 1px solid rgba(183, 176, 107, 0.16);
+      display: flex; flex-wrap: wrap; gap: 10px 24px; justify-content: space-between;
+      font-family: "Courier Prime", monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    }
+
+    /* Reveal ---------------------------------------------------------------- */
+    .nt-js .nt-reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.25, 0.8, 0.3, 1); }
+    .nt-js .nt-reveal.is-in { opacity: 1; transform: none; }
+
+    /* Responsive ------------------------------------------------------------ */
+    @media (max-width: 880px) {
+      .nt-planner { grid-template-columns: 1fr; justify-items: center; }
+      .nt-az { justify-content: center; }
+      .nt-fcast-strip { grid-template-columns: repeat(4, 1fr); }
+      .nt-plates { grid-template-columns: 1fr; justify-items: center; }
+      .nt-form { grid-template-columns: 1fr; }
+      .nt-hfoot-in { grid-template-columns: 1fr; gap: 22px; }
+      .nt-ephem-row { grid-template-columns: 40px 1fr; }
+      .nt-ephem-meta { grid-column: 2; text-align: left; }
+      .nt-rate td:first-child { white-space: normal; }
+      .nt-rate, .nt-rate tbody, .nt-rate tr, .nt-rate td { display: block; width: 100%; }
+      .nt-rate thead { display: none; }
+      .nt-rate tr { border-bottom: 1px solid var(--nt-line); padding: 8px 0; }
+      .nt-rate td { border: 0; padding: 4px 2px; }
+    }
+    @media (max-width: 640px) {
+      .nt-hero { padding-top: 76px; }
+      .nt-orbit-nav a { font-size: 9px; padding: 6px 8px; letter-spacing: 0.1em; }
+      .nt-orbit-nav a::before { left: -10px; width: 4px; height: 4px; }
+      .nt-fcast-strip { grid-template-columns: repeat(2, 1fr); }
+      .nt-fixbar .nt-fixbar-right { display: none; }
+      .nt-sess { font-size: 8.5px; padding: 8px 9px; max-width: 108px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important; animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .nt-js .nt-reveal { opacity: 1; transform: none; }
+      .nt-js .nt-c-line.is-armed { stroke-dasharray: none; stroke-dashoffset: 0; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="nt-sky" aria-hidden="true"></canvas>
+
+  <div class="nt-fixbar nt-mono" aria-hidden="true">
+    <span class="nt-brandline">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><ellipse cx="12" cy="12" rx="10" ry="4.4"/><ellipse cx="12" cy="12" rx="10" ry="4.4" transform="rotate(60 12 12)"/></svg>
+      Noctua · <b>Charlevoix</b>
+    </span>
+    <span class="nt-fixbar-right">47°27′N · 70°30′W · <b id="nt-utc">UTC —</b></span>
+  </div>
+
+  <main>
+    <!-- Station 0 · the instrument -->
+    <header class="nt-hero" id="nt-instrument">
+      <div class="nt-hero-title">
+        <p class="nt-kicker nt-mono">Dark-sky lodge · Baie-Saint-Paul</p>
+        <h1>Noctua</h1>
+        <p class="nt-sub">Six rooms, one refractor, and a ridge that faces true north. This page is the lodge's instrument: drag the system, read the night, book along the orbit.</p>
+      </div>
+
+      <figure class="nt-instrument" aria-label="Orrery of Noctua experiences">
+        <svg class="nt-ring-svg" viewBox="0 0 640 640" aria-hidden="true">
+          <circle cx="320" cy="320" r="312" />
+          <circle cx="320" cy="320" r="300" stroke-dasharray="1 7" />
+          <circle cx="320" cy="320" r="176" stroke-dasharray="2 9" opacity="0.7" />
+          <g class="nt-tick">
+            <line x1="320" y1="4" x2="320" y2="18" /><line x1="320" y1="622" x2="320" y2="636" />
+            <line x1="4" y1="320" x2="18" y2="320" /><line x1="622" y1="320" x2="636" y2="320" />
+            <line x1="97" y1="97" x2="107" y2="107" /><line x1="533" y1="533" x2="543" y2="543" />
+            <line x1="543" y1="97" x2="533" y2="107" /><line x1="107" y1="533" x2="97" y2="543" />
+          </g>
+        </svg>
+        <canvas id="nt-orrery" width="560" height="560" role="img" aria-label="Interactive orrery: the lodge at centre, five experiences on tilted orbits. Drag to rotate."></canvas>
+        <nav class="nt-orbit-nav" aria-label="Orbital navigation">
+          <a href="#nt-system" style="--a: 0deg">System</a>
+          <a href="#nt-night" style="--a: 72deg">Sky</a>
+          <a href="#nt-constellations" style="--a: 144deg">Stars</a>
+          <a href="#nt-stays" style="--a: 216deg">Stays</a>
+          <a href="#nt-booking" style="--a: 288deg">Book</a>
+        </nav>
+      </figure>
+
+      <div class="nt-readout nt-mono">
+        <span>Instrument <b>Noctua-1</b></span>
+        <span>Epoch <b>2026-11-12</b></span>
+        <span>Seeing <b id="nt-seeing">3/5</b></span>
+        <span class="nt-draghint">Drag to rotate · scroll to ascend</span>
+      </div>
+      <ul class="nt-vh">
+        <li>Telescope vigil, 0.9 AU, nightly</li>
+        <li>Constellation walk, 1.4 AU, Thursday to Sunday</li>
+        <li>Optics workshop, 1.9 AU, biweekly</li>
+        <li>Boréal dome stay, 2.3 AU, year-round</li>
+        <li>Astrophoto night, 2.8 AU, monthly</li>
+      </ul>
+    </header>
+
+    <!-- Station I · the system -->
+    <section class="nt-station" id="nt-system" aria-labelledby="nt-system-h">
+      <div class="nt-wrap">
+        <div class="nt-st-head nt-reveal">
+          <p class="nt-st-num nt-mono">Station I</p>
+          <h2 id="nt-system-h">The system, read from the centre</h2>
+          <p>The lodge is the sun of this page. Every service keeps its own orbit, its own distance, its own period. Select a row and the orrery above highlights it.</p>
+        </div>
+
+        <div class="nt-ephem nt-reveal" role="list">
+          <div class="nt-ephem-row" role="listitem" tabindex="0" data-orbit="vigil">
+            <span class="nt-ephem-num">I</span>
+            <h3>Telescope vigil</h3>
+            <p>The 203 mm refractor on the east pier. Ninety minutes at the eyepiece, gloves optional, focal steps from 32 mm down to 5 mm. Cancelled without charge above 60&nbsp;% cloud.</p>
+            <span class="nt-ephem-meta nt-mono">0.9 AU<small>Nightly · from 58 $</small></span>
+          </div>
+          <div class="nt-ephem-row" role="listitem" tabindex="0" data-orbit="walk">
+            <span class="nt-ephem-num">II</span>
+            <h3>Constellation walk</h3>
+            <p>A guide, one red flashlight between two, and the whole northern sky in a slow hour along the ridge. Binoculars provided; voices kept at telescope level.</p>
+            <span class="nt-ephem-meta nt-mono">1.4 AU<small>Thu–Sun · from 34 $</small></span>
+          </div>
+          <div class="nt-ephem-row" role="listitem" tabindex="0" data-orbit="optics">
+            <span class="nt-ephem-num">III</span>
+            <h3>Optics workshop</h3>
+            <p>Grind, test, and take home a 150 mm mirror blank. Two Saturdays a month at the instrument bench, tea on the hotplate, Foucault tester included.</p>
+            <span class="nt-ephem-meta nt-mono">1.9 AU<small>Biweekly · 120 $</small></span>
+          </div>
+          <div class="nt-ephem-row" role="listitem" tabindex="0" data-orbit="dome">
+            <span class="nt-ephem-num">IV</span>
+            <h3>Boréal dome stay</h3>
+            <p>Bed under a roof that opens. The dome cabin rotates its aperture with the season's best window; breakfast arrives before the sky turns blue.</p>
+            <span class="nt-ephem-meta nt-mono">2.3 AU<small>Year-round · from 285 $</small></span>
+          </div>
+          <div class="nt-ephem-row" role="listitem" tabindex="0" data-orbit="photo">
+            <span class="nt-ephem-num">V</span>
+            <h3>Astrophoto night</h3>
+            <p>Tracking mount, a shared laptop, and a member of staff who stays up worse than you do. One target per night, stacked and handed over by dawn.</p>
+            <span class="nt-ephem-meta nt-mono">2.8 AU<small>Monthly new moon · 145 $</small></span>
+          </div>
+        </div>
+
+        <figure class="nt-plate nt-reveal">
+          <div class="nt-plate-frame">
+            <img src="/demos/noctua/02.jpg" alt="Engraving of a brass orrery with concentric gear rings and tilted planetary arms on an ink background" width="1536" height="1024" loading="lazy" decoding="async" />
+          </div>
+          <figcaption>Plate II. The house orrery, cut 1894, still keeping the booking calendar.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Station II · the night -->
+    <section class="nt-station" id="nt-night" aria-labelledby="nt-night-h">
+      <div class="vt-wrap nt-wrap">
+        <div class="nt-st-head nt-reveal">
+          <p class="nt-st-num nt-mono">Station II</p>
+          <h2 id="nt-night-h">Pick a night, read the sky it brings</h2>
+          <p>Season 2026–27 runs 12 November to 30 April. Choose a date: the dial, the readouts, the seven-day strip, and the observable list all follow it.</p>
+        </div>
+
+        <div class="nt-planner nt-reveal">
+          <div class="nt-moon">
+            <svg viewBox="0 0 140 140" role="img" aria-label="Moon phase dial">
+              <circle class="nt-moon-ring" cx="70" cy="70" r="64" />
+              <circle class="nt-moon-ring" cx="70" cy="70" r="52" stroke-dasharray="1 5" />
+              <g class="nt-moon-tick">
+                <line x1="70" y1="4" x2="70" y2="12" /><line x1="70" y1="128" x2="70" y2="136" />
+                <line x1="4" y1="70" x2="12" y2="70" /><line x1="128" y1="70" x2="136" y2="70" />
+              </g>
+              <circle class="nt-moon-disc" cx="70" cy="70" r="34" />
+              <path class="nt-moon-shade" id="nt-moon-shade" d="M70 36 A34 34 0 0 1 70 104 A20 34 0 0 0 70 36 Z" />
+              <line class="nt-moon-hand" id="nt-moon-hand" x1="70" y1="70" x2="70" y2="12" />
+              <circle cx="70" cy="70" r="2.4" fill="var(--nt-brass)" />
+            </svg>
+            <div class="nt-moon-read">
+              <strong id="nt-moon-name">First quarter</strong>
+              <span class="nt-mono" id="nt-moon-illum">50 % illuminated</span>
+              <em id="nt-moon-note">Sets after midnight; dark enough for deep sky after 23 h.</em>
+            </div>
+          </div>
+
+          <div>
+            <div class="nt-dates">
+              <button class="nt-step" type="button" id="nt-day-prev" aria-label="Previous day">‹</button>
+              <label class="nt-mono" for="nt-date">Date</label>
+              <input type="date" id="nt-date" value="2026-12-21" min="2026-11-12" max="2027-04-30" />
+              <button class="nt-step" type="button" id="nt-day-next" aria-label="Next day">›</button>
+            </div>
+
+            <div class="nt-objchips" role="group" aria-label="Object for altitude and azimuth readout">
+              <button class="nt-objchip" type="button" aria-pressed="true" data-obj="moon">Moon</button>
+              <button class="nt-objchip" type="button" aria-pressed="false" data-obj="vega">Vega</button>
+              <button class="nt-objchip" type="button" aria-pressed="false" data-obj="aldebaran">Aldebaran</button>
+              <button class="nt-objchip" type="button" aria-pressed="false" data-obj="andromeda">Andromeda</button>
+              <button class="nt-objchip" type="button" aria-pressed="false" data-obj="saturn">Saturn</button>
+            </div>
+
+            <div class="nt-az">
+              <svg viewBox="0 0 120 120" role="img" aria-label="Azimuth compass">
+                <circle class="nt-az-ring" cx="60" cy="60" r="50" />
+                <circle class="nt-az-ring" cx="60" cy="60" r="38" stroke-dasharray="1 5" />
+                <text class="nt-az-card" x="60" y="14" text-anchor="middle">N</text>
+                <text class="nt-az-card" x="110" y="63" text-anchor="middle">E</text>
+                <text class="nt-az-card" x="60" y="112" text-anchor="middle">S</text>
+                <text class="nt-az-card" x="10" y="63" text-anchor="middle">W</text>
+                <line class="nt-az-needle" id="nt-az-needle" x1="60" y1="60" x2="60" y2="20" />
+                <circle class="nt-az-hub" cx="60" cy="60" r="3" />
+              </svg>
+              <div class="nt-altgauge">
+                <div class="nt-alt-track" aria-hidden="true"><div class="nt-alt-fill" id="nt-alt-fill"></div></div>
+                <div class="nt-alt-read"><span id="nt-alt-read">0</span>°<small>Altitude</small></div>
+                <div class="nt-alt-read"><span id="nt-az-read">0</span>°<small>Azimuth</small></div>
+              </div>
+            </div>
+            <p class="nt-simnote nt-mono">Simulated ephemeris · demo data · not for navigation</p>
+          </div>
+
+          <div class="nt-forecast">
+            <h3>Seven-night visibility strip</h3>
+            <div class="nt-fcast-strip" id="nt-fcast" role="group" aria-label="Seven-night forecast, select a night"></div>
+          </div>
+
+          <div class="nt-obs">
+            <table>
+              <thead>
+                <tr><th scope="col">Observable</th><th scope="col">Type</th><th scope="col">Best after</th><th scope="col">Minimum</th></tr>
+              </thead>
+              <tbody id="nt-obs-body">
+                <tr><td>Moon, 62 % waxing</td><td class="mono">Satellite</td><td class="mono">18 h 40</td><td class="mono">Binoculars</td></tr>
+                <tr><td>Saturn, ring tilt 3.1°</td><td class="mono">Planet</td><td class="mono">19 h 10</td><td class="mono">80 mm scope</td></tr>
+                <tr><td>Pleiades (M45)</td><td class="mono">Cluster</td><td class="mono">21 h 00</td><td class="mono">Naked eye</td></tr>
+                <tr><td>Orion Nebula (M42)</td><td class="mono">Nebula</td><td class="mono">22 h 15</td><td class="mono">Binoculars</td></tr>
+                <tr><td>Andromeda (M31)</td><td class="mono">Galaxy</td><td class="mono">20 h 30</td><td class="mono">Binoculars</td></tr>
+                <tr><td>Double Cluster</td><td class="mono">Cluster</td><td class="mono">23 h 00</td><td class="mono">Naked eye</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Station III · constellations -->
+    <section class="nt-station" id="nt-constellations" aria-labelledby="nt-const-h">
+      <div class="nt-wrap">
+        <div class="nt-st-head nt-reveal">
+          <p class="nt-st-num nt-mono">Station III</p>
+          <h2 id="nt-const-h">The connector draws what the guide would</h2>
+          <p>Four figures the ridge sees most. Pick one: its lines are inked star by star, the way a red flashlight would trace them at the start of a walk.</p>
+        </div>
+
+        <div class="nt-const nt-reveal">
+          <div class="nt-const-chips" role="group" aria-label="Constellations">
+            <button class="nt-cchip" type="button" aria-pressed="true" data-con="ursa">Great Bear</button>
+            <button class="nt-cchip" type="button" aria-pressed="false" data-con="cassiopeia">Cassiopeia</button>
+            <button class="nt-cchip" type="button" aria-pressed="false" data-con="cygnus">Cygnus</button>
+            <button class="nt-cchip" type="button" aria-pressed="false" data-con="bootes">Boötes</button>
+          </div>
+
+          <div class="nt-chart-frame">
+            <span class="nt-chart-corner nt-mono">Chart · lat 47.4 N · epoch demo</span>
+            <svg viewBox="0 0 800 440" role="img" aria-label="Star chart with four selectable constellations">
+              <g class="nt-c-dim" aria-hidden="true">
+                <circle cx="60" cy="70" r="1.4"/><circle cx="140" cy="330" r="1.2"/><circle cx="245" cy="118" r="1.3"/>
+                <circle cx="330" cy="380" r="1.2"/><circle cx="415" cy="66" r="1.4"/><circle cx="505" cy="350" r="1.3"/>
+                <circle cx="590" cy="105" r="1.2"/><circle cx="675" cy="300" r="1.4"/><circle cx="750" cy="160" r="1.2"/>
+                <circle cx="180" cy="210" r="1.1"/><circle cx="460" cy="200" r="1.2"/><circle cx="620" cy="410" r="1.2"/>
+                <circle cx="95" cy="400" r="1.3"/><circle cx="300" cy="240" r="1.1"/><circle cx="720" cy="60" r="1.3"/>
+                <circle cx="540" cy="180" r="1.1"/><circle cx="390" cy="300" r="1.2"/><circle cx="210" cy="50" r="1.2"/>
+              </g>
+              <!-- Ursa Major -->
+              <g data-group="ursa">
+                <path class="nt-c-line is-armed" data-con-line="ursa" d="M120 120 L185 105 L250 112 L300 150 L295 210 L230 235 L175 205 M300 150 L345 120" />
+                <circle class="nt-c-star is-bright" cx="120" cy="120" r="3.4"/><circle class="nt-c-star" cx="185" cy="105" r="2.6"/>
+                <circle class="nt-c-star" cx="250" cy="112" r="2.8"/><circle class="nt-c-star" cx="300" cy="150" r="3"/>
+                <circle class="nt-c-star" cx="295" cy="210" r="2.5"/><circle class="nt-c-star" cx="230" cy="235" r="2.7"/>
+                <circle class="nt-c-star is-bright" cx="175" cy="205" r="3.2"/><circle class="nt-c-star" cx="345" cy="120" r="2.4"/>
+              </g>
+              <!-- Cassiopeia -->
+              <g data-group="cassiopeia">
+                <path class="nt-c-line is-armed" data-con-line="cassiopeia" d="M470 90 L520 130 L565 95 L615 140 L665 105" />
+                <circle class="nt-c-star is-bright" cx="470" cy="90" r="3.2"/><circle class="nt-c-star" cx="520" cy="130" r="2.7"/>
+                <circle class="nt-c-star is-bright" cx="565" cy="95" r="3.3"/><circle class="nt-c-star" cx="615" cy="140" r="2.6"/>
+                <circle class="nt-c-star" cx="665" cy="105" r="2.8"/>
+              </g>
+              <!-- Cygnus -->
+              <g data-group="cygnus">
+                <path class="nt-c-line is-armed" data-con-line="cygnus" d="M700 210 L660 280 L620 355 M660 280 L600 260 M660 280 L730 300" />
+                <circle class="nt-c-star is-bright" cx="700" cy="210" r="3.4"/><circle class="nt-c-star" cx="660" cy="280" r="3"/>
+                <circle class="nt-c-star" cx="620" cy="355" r="2.7"/><circle class="nt-c-star" cx="600" cy="260" r="2.5"/>
+                <circle class="nt-c-star" cx="730" cy="300" r="2.6"/>
+              </g>
+              <!-- Boötes -->
+              <g data-group="bootes">
+                <path class="nt-c-line is-armed" data-con-line="bootes" d="M180 300 L225 340 L280 330 L310 285 L280 245 L225 255 Z M280 245 L268 205" />
+                <circle class="nt-c-star is-bright" cx="180" cy="300" r="3"/><circle class="nt-c-star" cx="225" cy="340" r="2.5"/>
+                <circle class="nt-c-star" cx="280" cy="330" r="2.6"/><circle class="nt-c-star is-bright" cx="310" cy="285" r="3.5"/>
+                <circle class="nt-c-star" cx="280" cy="245" r="2.7"/><circle class="nt-c-star" cx="225" cy="255" r="2.5"/>
+                <circle class="nt-c-star" cx="268" cy="205" r="2.4"/>
+              </g>
+            </svg>
+          </div>
+          <p class="nt-const-info" id="nt-const-info"><b>Great Bear</b> · circumpolar, never sets · the pointer stars find Polaris, the walk's first lesson.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Station IV · stays -->
+    <section class="nt-station" id="nt-stays" aria-labelledby="nt-stays-h">
+      <div class="nt-wrap">
+        <div class="nt-st-head nt-reveal">
+          <p class="nt-st-num nt-mono">Station IV</p>
+          <h2 id="nt-stays-h">Six rooms, counted like magnitude</h2>
+          <p>Rates hold from 12 November to 30 April. Every stay includes the morning debrief: what you saw, what it cost in sleep, what to aim at next season.</p>
+        </div>
+
+        <div class="nt-stays nt-reveal">
+          <table class="nt-rate">
+            <thead>
+              <tr><th scope="col">Room</th><th scope="col">Character</th><th scope="col">Sleeps</th><th scope="col">Per night</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Dôme Boréal</td>
+                <td class="desc">Cabin with a roof that opens on cue. Aperture tracks the season's best window; bed points at zenith.</td>
+                <td class="mono" style="font-family:'Courier Prime',monospace;color:var(--nt-brass);font-size:13px;">2</td>
+                <td class="price">285 $</td>
+              </tr>
+              <tr>
+                <td>Chambre Méridien</td>
+                <td class="desc">Lodge room over the instrument bench. Brass lamp, blackout shutters, a chart of the month pinned by the desk.</td>
+                <td class="mono" style="font-family:'Courier Prime',monospace;color:var(--nt-brass);font-size:13px;">2</td>
+                <td class="price">195 $</td>
+              </tr>
+              <tr>
+                <td>Refuge de l'Étoile</td>
+                <td class="desc">Off-grid cabin, ten minutes walk up the ridge. Wood stove, no signal, the darkest sky on the property.</td>
+                <td class="mono" style="font-family:'Courier Prime',monospace;color:var(--nt-brass);font-size:13px;">3</td>
+                <td class="price">240 $</td>
+              </tr>
+              <tr>
+                <td>Chambre Nadir</td>
+                <td class="desc">Ground floor, for late returns from the east pier. Boots stay in the vestibule; the kettle stays on.</td>
+                <td class="mono" style="font-family:'Courier Prime',monospace;color:var(--nt-brass);font-size:13px;">2</td>
+                <td class="price">175 $</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="nt-season nt-mono">Season 2026–27 · dark from 17 h 42 · office line +1 418 555-0142</p>
+
+          <div class="nt-plates">
+            <figure class="nt-plate">
+              <div class="nt-plate-frame">
+                <img src="/demos/noctua/04.jpg" alt="Engraving of an observatory dome with its shutter open above a spruce clearing under a stippled Milky Way" width="1536" height="1024" loading="lazy" decoding="async" />
+              </div>
+              <figcaption>Plate IV. East pier, shutter open, 23 h 10.</figcaption>
+            </figure>
+            <figure class="nt-plate">
+              <div class="nt-plate-frame">
+                <img src="/demos/noctua/03.jpg" alt="Antique star-chart engraving of northern constellations joined by fine brass lines inside a graduated circle" width="1536" height="1024" loading="lazy" decoding="async" />
+              </div>
+              <figcaption>Plate VI. The chart every room keeps by the bed.</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Station V · booking orbit -->
+    <section class="nt-station" id="nt-booking" aria-labelledby="nt-book-h">
+      <div class="nt-wrap">
+        <div class="nt-st-head nt-reveal">
+          <p class="nt-st-num nt-mono">Station V</p>
+          <h2 id="nt-book-h">Book along the orbit</h2>
+          <p>Four session types circle the index mark. Turn the ring with a click or the arrow keys; the panel and the form follow your selection.</p>
+        </div>
+
+        <div class="nt-book nt-reveal">
+          <div class="nt-book-ring" id="nt-book-ring" role="group" aria-label="Session selector ring">
+            <span class="nt-book-index" aria-hidden="true"></span>
+            <span class="nt-book-hub" aria-hidden="true">Noctua</span>
+            <button class="nt-sess" type="button" style="--a: 0deg" data-sess="vigil" aria-pressed="true">Telescope vigil</button>
+            <button class="nt-sess" type="button" style="--a: 90deg" data-sess="walk" aria-pressed="false">Constellation walk</button>
+            <button class="nt-sess" type="button" style="--a: 180deg" data-sess="optics" aria-pressed="false">Optics workshop</button>
+            <button class="nt-sess" type="button" style="--a: 270deg" data-sess="photo" aria-pressed="false">Astrophoto night</button>
+          </div>
+
+          <div class="nt-book-panels" id="nt-book-panels">
+            <div class="nt-bpanel" data-panel="vigil">
+              <h3>Telescope vigil</h3>
+              <p class="nt-bp-meta nt-mono">90 min · max 8 guests · 203 mm refractor · 58 $ per person</p>
+              <p>The pier session. You look, the attendant reads the sky, and nobody checks the time until Cassiopeia stands vertical. Gloves and blankets at the door.</p>
+              <p class="nt-bp-next nt-mono">Next dates · <b>12 Dec · 19 Dec · 09 Jan</b></p>
+            </div>
+            <div class="nt-bpanel" data-panel="walk">
+              <h3>Constellation walk</h3>
+              <p class="nt-bp-meta nt-mono">60 min · max 12 guests · naked eye + binoculars · 34 $ per person</p>
+              <p>From the lodge door to the ridge marker and back, under every figure the season shows. Children welcome; red flashlights handed out at the start.</p>
+              <p class="nt-bp-next nt-mono">Next dates · <b>every Thu–Sun · 20 h 30</b></p>
+            </div>
+            <div class="nt-bpanel" data-panel="optics">
+              <h3>Optics workshop</h3>
+              <p class="nt-bp-meta nt-mono">3 h · max 6 guests · bench tools included · 120 $ per person</p>
+              <p>Two Saturdays a month, six people around the grinding bench. You leave with a figured 150 mm mirror blank and test figures pinned to your coat.</p>
+              <p class="nt-bp-next nt-mono">Next dates · <b>06 Dec · 20 Dec · 10 Jan</b></p>
+            </div>
+            <div class="nt-bpanel" data-panel="photo">
+              <h3>Astrophoto night</h3>
+              <p class="nt-bp-meta nt-mono">4 h · max 4 guests · tracking mount provided · 145 $ per person</p>
+              <p>One target per new-moon weekend. Stacking done together on the lodge laptop; the final file is yours before the kettle boils at dawn.</p>
+              <p class="nt-bp-next nt-mono">Next dates · <b>19 Dec · 17 Jan · 14 Feb</b></p>
+            </div>
+          </div>
+
+          <form class="nt-form" id="nt-book-form" novalidate>
+            <div>
+              <label class="nt-mono" for="nt-name">Name</label>
+              <input id="nt-name" name="name" type="text" autocomplete="name" required placeholder="A. St-Gelais" />
+            </div>
+            <div>
+              <label class="nt-mono" for="nt-email">Email</label>
+              <input id="nt-email" name="email" type="email" autocomplete="email" required placeholder="you@example.com" />
+            </div>
+            <div>
+              <label class="nt-mono" for="nt-book-date">Date</label>
+              <input id="nt-book-date" name="date" type="date" min="2026-11-12" max="2027-04-30" value="2026-12-21" required />
+            </div>
+            <div>
+              <label class="nt-mono" for="nt-party">Party</label>
+              <select id="nt-party" name="party">
+                <option>1</option><option selected>2</option><option>3</option><option>4</option>
+                <option>5</option><option>6</option><option>7</option><option>8</option>
+              </select>
+            </div>
+            <div class="nt-f-wide">
+              <label class="nt-mono" for="nt-session">Session</label>
+              <select id="nt-session" name="session">
+                <option value="vigil">Telescope vigil · 58 $</option>
+                <option value="walk">Constellation walk · 34 $</option>
+                <option value="optics">Optics workshop · 120 $</option>
+                <option value="photo">Astrophoto night · 145 $</option>
+              </select>
+            </div>
+            <div class="nt-f-wide">
+              <label class="nt-mono" for="nt-notes">Notes for the attendant</label>
+              <textarea id="nt-notes" name="notes" placeholder="First telescope night; would rather sit at the eyepiece than stand."></textarea>
+            </div>
+            <button class="nt-submit" type="submit">Log the request</button>
+          </form>
+
+          <div class="nt-stamp" id="nt-stamp" role="status" aria-live="polite">
+            <b>Request logged</b>
+            <span id="nt-stamp-ref">Ref NCT-0000</span>
+            <small>The attendant answers within one clear night. Demo form: nothing was sent.</small>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer as horizon -->
+  <footer class="nt-horizon">
+    <svg class="nt-hills" viewBox="0 0 1440 170" preserveAspectRatio="none" aria-hidden="true">
+      <path class="nt-skyline" d="M0 170 L0 96 C 90 88 150 70 240 74 C 330 78 380 58 470 64 C 540 69 590 84 680 78 C 780 71 840 50 950 58 C 1050 65 1120 86 1230 80 C 1320 75 1390 90 1440 88 L1440 170 Z" />
+      <path class="nt-skyline" d="M980 62 l7 -22 l7 22 z M995 64 l9 -28 l9 28 z M1012 63 l6 -18 l6 18 z M420 70 l8 -24 l8 24 z M438 72 l6 -17 l6 17 z M150 90 l7 -20 l7 20 z" />
+      <path class="nt-skyline" d="M690 80 l0 -26 a13 13 0 0 1 26 0 l0 26 z M701 54 l0 -8" stroke="#05070d" stroke-width="3" fill="#05070d" />
+      <line class="nt-rule" x1="0" y1="140" x2="1440" y2="140" stroke-dasharray="2 8" />
+    </svg>
+    <div class="nt-hfoot">
+      <div class="nt-hfoot-in">
+        <div>
+          <h2>Noctua</h2>
+          <p>A fictional dark-sky lodge in Charlevoix. Every instrument, rate, and reading on this page is invented. A design demo by WEBAO, not a client site.</p>
+        </div>
+        <ul>
+          <li><a href="#nt-night">Sky planner</a></li>
+          <li><a href="#nt-stays">Rooms &amp; rates</a></li>
+          <li><a href="#nt-booking">Log a request</a></li>
+        </ul>
+        <ul>
+          <li>+1 418 555-0142</li>
+          <li>reservations@noctua.example</li>
+          <li>12, chemin du Ciel-Sombre</li>
+          <li>Baie-Saint-Paul (QC)</li>
+        </ul>
+      </div>
+      <div class="nt-legal nt-wrap" style="padding-left:0;padding-right:0;">
+        <span>Noctua · fictional business · demo content only</span>
+        <span>Éphémérides simulées · never for navigation</span>
+      </div>
+    </div>
+  </footer>
+
+  <EscapeHatch locale="en" />
+
+  <script>
+    (function () {
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      /* ——— deterministic PRNG + date helpers ——————————————— */
+      const mulberry = function (seed: number) {
+        let a = seed >>> 0;
+        return function () {
+          a |= 0; a = (a + 0x6d2b79f5) | 0;
+          let t = Math.imul(a ^ (a >>> 15), 1 | a);
+          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      };
+      const daySeed = function (iso: string) {
+        let h = 2166136261;
+        for (let i = 0; i < iso.length; i++) { h ^= iso.charCodeAt(i); h = Math.imul(h, 16777619); }
+        return h >>> 0;
+      };
+      const toISO = function (d: Date) {
+        return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+      };
+      const parseISO = function (iso: string) {
+        const p = iso.split("-").map(Number);
+        return new Date(p[0], (p[1] ?? 1) - 1, p[2] ?? 1);
+      };
+      const addDays = function (iso: string, n: number) {
+        const d = parseISO(iso); d.setDate(d.getDate() + n); return toISO(d);
+      };
+
+      /* ——— UTC clock ————————————————————————————————————— */
+      const utcEl = document.getElementById("nt-utc") as HTMLElement | null;
+      const tickUTC = function () {
+        if (!utcEl) return;
+        const n = new Date();
+        utcEl.textContent = "UTC " + String(n.getUTCHours()).padStart(2, "0") + ":" + String(n.getUTCMinutes()).padStart(2, "0") + ":" + String(n.getUTCSeconds()).padStart(2, "0");
+      };
+      tickUTC();
+      window.setInterval(tickUTC, 1000);
+
+      /* ——— starfield (fixed sky, parallax + zoom) ——————————— */
+      const sky = document.getElementById("nt-sky") as HTMLCanvasElement | null;
+      const skyCtx = sky ? sky.getContext("2d") : null;
+      const stars: { x: number; y: number; r: number; tw: number; depth: number; band: boolean }[] = [];
+      (function seedStars() {
+        const rnd = mulberry(20261112);
+        for (let i = 0; i < 460; i++) {
+          const band = rnd() < 0.22;
+          let x = rnd(); let y = rnd();
+          if (band) {
+            // Milky-way band along a soft diagonal.
+            const t = rnd();
+            x = t;
+            y = 0.18 + t * 0.4 + (rnd() - 0.5) * 0.16;
+          }
+          stars.push({
+            x, y,
+            r: band ? 0.4 + rnd() * 0.9 : 0.5 + rnd() * 1.5,
+            tw: rnd() * Math.PI * 2,
+            depth: 0.25 + rnd() * 0.75,
+            band,
+          });
+        }
+      })();
+
+      let vw = window.innerWidth; let vh = window.innerHeight; let dpr = Math.min(2, window.devicePixelRatio || 1);
+      const resizeSky = function () {
+        if (!sky) return;
+        vw = window.innerWidth; vh = window.innerHeight;
+        dpr = Math.min(2, window.devicePixelRatio || 1);
+        sky.width = Math.round(vw * dpr); sky.height = Math.round(vh * dpr);
+        sky.style.width = vw + "px"; sky.style.height = vh + "px";
+        if (skyCtx) skyCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        drawSky(performance.now());
+      };
+      const drawHorizon = function (ctx: CanvasRenderingContext2D, rise: number) {
+        // rise: 0 = sunk below (deep space), 1 = home horizon at footer.
+        const baseY = vh * (1.04 - rise * 0.22);
+        ctx.fillStyle = "#05070d";
+        ctx.beginPath();
+        ctx.moveTo(0, vh);
+        ctx.lineTo(0, baseY - 24);
+        const pts = [[0.08, -10], [0.16, -26], [0.24, -8], [0.34, -30], [0.44, -14], [0.52, -4], [0.6, -22], [0.7, -12], [0.8, -34], [0.88, -16], [0.96, -26], [1, -12]];
+        for (let i = 0; i < pts.length; i++) {
+          ctx.lineTo(pts[i][0] * vw, baseY + pts[i][1]);
+        }
+        ctx.lineTo(vw, vh);
+        ctx.closePath();
+        ctx.fill();
+        // Lodge point-light on the ridge.
+        if (rise > 0.25) {
+          const g = ctx.createRadialGradient(vw * 0.52, baseY - 6, 0, vw * 0.52, baseY - 6, 46);
+          g.addColorStop(0, "rgba(183,176,107," + (0.5 * rise).toFixed(3) + ")");
+          g.addColorStop(1, "rgba(183,176,107,0)");
+          ctx.fillStyle = g;
+          ctx.fillRect(vw * 0.52 - 46, baseY - 52, 92, 92);
+        }
+      };
+      let scrollP = 0;
+      const drawSky = function (t: number) {
+        if (!skyCtx) return;
+        const ctx = skyCtx;
+        ctx.clearRect(0, 0, vw, vh);
+        const sy = window.scrollY || 0;
+        const doc = Math.max(1, document.documentElement.scrollHeight - vh);
+        scrollP = Math.min(1, Math.max(0, sy / doc));
+        // Ascent: ground (p≈0) → atmosphere → deep space; horizon returns near the footer.
+        const ascend = Math.min(1, scrollP / 0.22);
+        const returnHome = Math.max(0, (scrollP - 0.82) / 0.18);
+        const starAlpha = 0.25 + 0.75 * ascend;
+        const tw = reduceMotion ? 0 : t / 1400;
+        for (let i = 0; i < stars.length; i++) {
+          const s = stars[i];
+          const px = ((s.x + (reduceMotion ? 0 : sy * 0.000012 * s.depth)) % 1 + 1) % 1 * vw;
+          const py = s.y * vh - sy * 0.045 * s.depth;
+          const wrapY = ((py % vh) + vh) % vh;
+          const flick = reduceMotion ? 1 : 0.75 + 0.25 * Math.sin(tw + s.tw);
+          const a = starAlpha * flick * (s.band ? 0.55 : 0.95) * (0.5 + s.depth * 0.5);
+          ctx.globalAlpha = Math.min(1, a);
+          ctx.fillStyle = s.band ? "#b7b06b" : "#ede8da";
+          ctx.beginPath();
+          ctx.arc(px, wrapY, s.r * (0.8 + s.depth * 0.5), 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+        drawHorizon(ctx, returnHome > 0 ? returnHome : 1 - ascend);
+      };
+      const skyLoop = function (t: number) {
+        drawSky(t);
+        requestAnimationFrame(skyLoop);
+      };
+      if (sky && skyCtx) {
+        resizeSky();
+        window.addEventListener("resize", resizeSky);
+        if (!reduceMotion) requestAnimationFrame(skyLoop);
+        else drawSky(0);
+        window.addEventListener("scroll", function () { if (reduceMotion) drawSky(0); }, { passive: true });
+      }
+
+      /* ——— the orrery ————————————————————————————————————— */
+      type OrbitBody = { id: string; r: number; inc: number; phase: number; speed: number; label: string; meta: string };
+      const BODIES: OrbitBody[] = [
+        { id: "vigil", r: 0.92, inc: 0.34, phase: 0.4, speed: 1.0, label: "Telescope vigil", meta: "0.9 AU · nightly" },
+        { id: "walk", r: 1.34, inc: -0.5, phase: 1.9, speed: 0.62, label: "Constellation walk", meta: "1.4 AU · Thu–Sun" },
+        { id: "optics", r: 1.76, inc: 0.62, phase: 3.3, speed: 0.4, label: "Optics workshop", meta: "1.9 AU · biweekly" },
+        { id: "dome", r: 2.18, inc: -0.22, phase: 4.6, speed: 0.25, label: "Boréal dome", meta: "2.3 AU · stays" },
+        { id: "photo", r: 2.6, inc: 0.78, phase: 5.7, speed: 0.16, label: "Astrophoto night", meta: "2.8 AU · monthly" },
+      ];
+      const ocanvas = document.getElementById("nt-orrery") as HTMLCanvasElement | null;
+      const octx = ocanvas ? ocanvas.getContext("2d") : null;
+      let yaw = 0.6; let pitch = 0.5; let yawVel = reduceMotion ? 0 : 0.0016;
+      let dragging = false; let lastX = 0; let lastY = 0;
+      let selected = "vigil";
+      const osize = { w: 560, h: 560 };
+
+      const sizeOrrery = function () {
+        if (!ocanvas || !octx) return;
+        const rect = ocanvas.getBoundingClientRect();
+        const csize = Math.max(220, Math.round(rect.width));
+        dpr = Math.min(2, window.devicePixelRatio || 1);
+        ocanvas.width = Math.round(csize * dpr);
+        ocanvas.height = Math.round(csize * dpr);
+        osize.w = csize; osize.h = csize;
+        octx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      };
+
+      const project = function (x: number, y: number, z: number) {
+        // yaw about Y, then pitch about X, then weak perspective.
+        const cy = Math.cos(yaw); const sy2 = Math.sin(yaw);
+        const x1 = x * cy + z * sy2;
+        const z1 = -x * sy2 + z * cy;
+        const cp = Math.cos(pitch); const sp = Math.sin(pitch);
+        const y2 = y * cp - z1 * sp;
+        const z2 = y * sp + z1 * cp;
+        const F = 6.2;
+        const k = F / (F + z2);
+        const S = Math.min(osize.w, osize.h) * 0.155;
+        return { sx: osize.w / 2 + x1 * k * S, sy: osize.h / 2 + y2 * k * S, k, behind: z2 > 0.15 };
+      };
+
+      const drawOrrery = function (t: number) {
+        if (!octx) return;
+        const ctx = octx;
+        ctx.clearRect(0, 0, osize.w, osize.h);
+        // Sun = the lodge.
+        const sunG = ctx.createRadialGradient(osize.w / 2, osize.h / 2, 2, osize.w / 2, osize.h / 2, 26);
+        sunG.addColorStop(0, "rgba(216,210,154,0.95)");
+        sunG.addColorStop(0.5, "rgba(183,176,107,0.5)");
+        sunG.addColorStop(1, "rgba(183,176,107,0)");
+        ctx.fillStyle = sunG;
+        ctx.beginPath(); ctx.arc(osize.w / 2, osize.h / 2, 26, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "#ede8da";
+        ctx.beginPath(); ctx.arc(osize.w / 2, osize.h / 2, 5.5, 0, Math.PI * 2); ctx.fill();
+        ctx.font = "10px 'Courier Prime', monospace";
+        ctx.textAlign = "center";
+        ctx.fillStyle = "rgba(237,232,218,0.75)";
+        ctx.fillText("LA MAISON", osize.w / 2, osize.h / 2 + 42);
+
+        const tt = reduceMotion ? 0 : t / 1000;
+        for (let b = 0; b < BODIES.length; b++) {
+          const body = BODIES[b];
+          const isSel = body.id === selected;
+          // Orbit ring.
+          ctx.beginPath();
+          for (let i = 0; i <= 72; i++) {
+            const th = (i / 72) * Math.PI * 2;
+            const p = project(Math.cos(th) * body.r, 0, Math.sin(th) * body.r);
+            if (i === 0) ctx.moveTo(p.sx, p.sy); else ctx.lineTo(p.sx, p.sy);
+          }
+          ctx.strokeStyle = isSel ? "rgba(216,210,154,0.85)" : "rgba(183,176,107,0.3)";
+          ctx.lineWidth = isSel ? 1.4 : 1;
+          ctx.stroke();
+
+          const th = body.phase + tt * body.speed * 0.35;
+          const pos = project(Math.cos(th) * body.r, 0, Math.sin(th) * body.r);
+          const alpha = pos.behind ? 0.45 : 1;
+          ctx.globalAlpha = alpha;
+          // Planet bead.
+          if (isSel) {
+            ctx.beginPath();
+            ctx.arc(pos.sx, pos.sy, 11, 0, Math.PI * 2);
+            ctx.strokeStyle = "rgba(216,210,154,0.9)";
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+          ctx.fillStyle = isSel ? "#d8d29a" : "#b7b06b";
+          ctx.beginPath(); ctx.arc(pos.sx, pos.sy, isSel ? 5.5 : 4.2, 0, Math.PI * 2); ctx.fill();
+          // Label (only on roomy canvases, or for the selected body).
+          if (osize.w >= 300 || isSel) {
+            ctx.textAlign = "left";
+            ctx.font = (isSel ? "700 " : "") + "10px 'Courier Prime', monospace";
+            ctx.fillStyle = isSel ? "rgba(216,210,154,0.95)" : "rgba(237,232,218,0.6)";
+            ctx.fillText(body.label.toUpperCase(), pos.sx + 12, pos.sy - 6);
+            ctx.font = "9px 'Courier Prime', monospace";
+            ctx.fillStyle = "rgba(183,176,107,0.65)";
+            ctx.fillText(body.meta, pos.sx + 12, pos.sy + 6);
+          }
+          ctx.globalAlpha = 1;
+        }
+      };
+
+      const oLoop = function (t: number) {
+        if (!dragging) {
+          yaw += yawVel;
+          yawVel = yawVel * 0.985 + (reduceMotion ? 0 : 0.0016) * 0.015;
+        }
+        drawOrrery(t);
+        requestAnimationFrame(oLoop);
+      };
+
+      const selectBody = function (id: string) {
+        selected = id;
+        document.querySelectorAll<HTMLElement>(".nt-ephem-row").forEach(function (row) {
+          row.classList.toggle("is-sel", row.getAttribute("data-orbit") === id);
+        });
+        drawOrrery(performance.now());
+      };
+
+      if (ocanvas && octx) {
+        sizeOrrery();
+        window.addEventListener("resize", function () { sizeOrrery(); drawOrrery(performance.now()); });
+        selectBody("vigil");
+        if (!reduceMotion) requestAnimationFrame(oLoop);
+        else drawOrrery(0);
+
+        ocanvas.addEventListener("pointerdown", function (e) {
+          dragging = true; lastX = e.clientX; lastY = e.clientY;
+          ocanvas.setPointerCapture(e.pointerId);
+        });
+        ocanvas.addEventListener("pointermove", function (e) {
+          if (!dragging) return;
+          const dx = e.clientX - lastX; const dy = e.clientY - lastY;
+          lastX = e.clientX; lastY = e.clientY;
+          yaw += dx * 0.006;
+          pitch = Math.max(-0.15, Math.min(1.25, pitch + dy * 0.005));
+          yawVel = dx * 0.0004;
+          if (reduceMotion) drawOrrery(0);
+        });
+        const endDrag = function () { dragging = false; };
+        ocanvas.addEventListener("pointerup", endDrag);
+        ocanvas.addEventListener("pointercancel", endDrag);
+
+        ocanvas.addEventListener("click", function (e) {
+          const rect = ocanvas.getBoundingClientRect();
+          const mx = e.clientX - rect.left; const my = e.clientY - rect.top;
+          const tt = reduceMotion ? 0 : performance.now() / 1000;
+          let best = -1; let bestD = 18;
+          for (let b = 0; b < BODIES.length; b++) {
+            const body = BODIES[b];
+            const th = body.phase + tt * body.speed * 0.35;
+            const pos = project(Math.cos(th) * body.r, 0, Math.sin(th) * body.r);
+            const d = Math.hypot(pos.sx - mx, pos.sy - my);
+            if (d < bestD) { bestD = d; best = b; }
+          }
+          if (best >= 0) selectBody(BODIES[best].id);
+        });
+      }
+
+      document.querySelectorAll<HTMLElement>(".nt-ephem-row").forEach(function (row) {
+        const pick = function () { selectBody(row.getAttribute("data-orbit") ?? "vigil"); };
+        row.addEventListener("click", pick);
+        row.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(); }
+        });
+      });
+
+      /* ——— moon phase + planner ————————————————————————————— */
+      const dateInput = document.getElementById("nt-date") as HTMLInputElement | null;
+      const bookDate = document.getElementById("nt-book-date") as HTMLInputElement | null;
+      const moonShade = document.getElementById("nt-moon-shade") as SVGPathElement | null;
+      const moonHand = document.getElementById("nt-moon-hand") as SVGLineElement | null;
+      const moonName = document.getElementById("nt-moon-name") as HTMLElement | null;
+      const moonIllum = document.getElementById("nt-moon-illum") as HTMLElement | null;
+      const moonNote = document.getElementById("nt-moon-note") as HTMLElement | null;
+      const altFill = document.getElementById("nt-alt-fill") as HTMLElement | null;
+      const altRead = document.getElementById("nt-alt-read") as HTMLElement | null;
+      const azRead = document.getElementById("nt-az-read") as HTMLElement | null;
+      const azNeedle = document.getElementById("nt-az-needle") as SVGLineElement | null;
+      const fcast = document.getElementById("nt-fcast") as HTMLElement | null;
+      const obsBody = document.getElementById("nt-obs-body") as HTMLElement | null;
+
+      const PHASES_EN = ["New moon", "Waxing crescent", "First quarter", "Waxing gibbous", "Full moon", "Waning gibbous", "Last quarter", "Waning crescent"];
+
+      const moonAge = function (iso: string) {
+        // Synodic month from a known new moon (2000-01-06 18:14 UTC).
+        const ref = Date.UTC(2000, 0, 6, 18, 14);
+        const d = parseISO(iso).getTime() + 12 * 3600 * 1000;
+        const syn = 29.530588853;
+        const days = (d - ref) / 86400000;
+        return ((days % syn) + syn) % syn;
+      };
+      const moonPhaseData = function (iso: string) {
+        const age = moonAge(iso);
+        const frac = age / 29.530588853;
+        const illum = (1 - Math.cos(2 * Math.PI * frac)) / 2;
+        const idx = Math.floor((frac * 8) + 0.5) % 8;
+        return { age, frac, illum, name: PHASES_EN[idx], waxing: frac < 0.5 };
+      };
+
+      const drawMoon = function (iso: string) {
+        const ph = moonPhaseData(iso);
+        // Terminator: circle + ellipse whose x-radius follows |cos| of phase.
+        if (moonShade) {
+          // Two-arc terminator: dark semicircle + ellipse return arc.
+          // Waxing (northern): dark limb on the left; crescents bulge into the lit side.
+          const rx = (Math.abs(Math.cos(2 * Math.PI * ph.frac)) * 34).toFixed(2);
+          let d: string;
+          if (ph.frac < 0.5) {
+            d = "M70 36 A34 34 0 0 0 70 104 A" + rx + " 34 0 0 " + (ph.frac < 0.25 ? 0 : 1) + " 70 36 Z";
+          } else {
+            d = "M70 36 A34 34 0 0 1 70 104 A" + rx + " 34 0 0 " + (ph.frac < 0.75 ? 0 : 1) + " 70 36 Z";
+          }
+          moonShade.setAttribute("d", d);
+        }
+        if (moonHand) {
+          const ang = ph.frac * 360 - 90;
+          const rad = (ang * Math.PI) / 180;
+          moonHand.setAttribute("x2", (70 + Math.cos(rad) * 58).toFixed(1));
+          moonHand.setAttribute("y2", (70 + Math.sin(rad) * 58).toFixed(1));
+        }
+        if (moonName) moonName.textContent = ph.name;
+        if (moonIllum) moonIllum.textContent = Math.round(ph.illum * 100) + " % illuminated";
+        if (moonNote) {
+          if (ph.illum > 0.85) moonNote.textContent = "Full disc. Deep sky washed out; open clusters and planets only.";
+          else if (ph.illum < 0.12) moonNote.textContent = "Moonless hours all night. The Milky Way's grain is visible from the ridge.";
+          else if (ph.waxing) moonNote.textContent = "Sets after midnight; dark enough for deep sky late.";
+          else moonNote.textContent = "Rises after midnight; the first half of the night is dark.";
+        }
+        return ph;
+      };
+
+      type ObjState = { alt: number; az: number };
+      const objStates: Record<string, ObjState> = { moon: { alt: 42, az: 140 }, vega: { alt: 55, az: 300 }, aldebaran: { alt: 38, az: 90 }, andromeda: { alt: 47, az: 310 }, saturn: { alt: 25, az: 210 } };
+      let activeObj = "moon";
+
+      const OBJ_META: Record<string, { best: number; typ: number }> = {
+        moon: { best: 11, typ: 78 }, vega: { best: 7, typ: 72 }, aldebaran: { best: 0, typ: 60 },
+        andromeda: { best: 8, typ: 55 }, saturn: { best: 1, typ: 48 },
+      };
+
+      const computeObj = function (id: string, iso: string): ObjState {
+        const d = parseISO(iso);
+        const month = d.getMonth();
+        const day = d.getDate();
+        const meta = OBJ_META[id];
+        const season = Math.cos((2 * Math.PI * (month - meta.best)) / 12);
+        const base = meta.typ * (0.3 + 0.7 * Math.max(0, season * 0.5 + 0.5));
+        const wave = Math.sin(((day % 29) / 29) * Math.PI * 2 + meta.best);
+        const alt = Math.max(4, Math.min(86, Math.round(base * (0.8 + 0.2 * wave))));
+        const seedR = mulberry(daySeed(iso + id));
+        const az = Math.round((120 + seedR() * 200) % 360);
+        return { alt, az };
+      };
+
+      const paintReadout = function () {
+        const iso = dateInput ? dateInput.value : "2026-12-21";
+        const st = computeObj(activeObj, iso);
+        objStates[activeObj] = st;
+        if (altFill) altFill.style.height = (st.alt / 90 * 100).toFixed(1) + "%";
+        if (altRead) altRead.textContent = String(st.alt);
+        if (azRead) azRead.textContent = String(st.az);
+        if (azNeedle) azNeedle.style.transform = "rotate(" + st.az + "deg)";
+      };
+
+      const OBS_POOL = [
+        { name: "Moon", type: "Satellite", after: "18 h 40", min: "Binoculars", deep: false },
+        { name: "Saturn, ring tilt 3.1°", type: "Planet", after: "19 h 10", min: "80 mm scope", deep: false },
+        { name: "Pleiades (M45)", type: "Cluster", after: "21 h 00", min: "Naked eye", deep: false },
+        { name: "Orion Nebula (M42)", type: "Nebula", after: "22 h 15", min: "Binoculars", deep: true },
+        { name: "Andromeda (M31)", type: "Galaxy", after: "20 h 30", min: "Binoculars", deep: true },
+        { name: "Double Cluster", type: "Cluster", after: "23 h 00", min: "Naked eye", deep: false },
+        { name: "Jupiter + Galilean moons", type: "Planet", after: "18 h 55", min: "60 mm scope", deep: false },
+        { name: "Flame & Horsehead", type: "Nebula", after: "23 h 30", min: "200 mm scope", deep: true },
+        { name: "Omega Centauri (grazing)", type: "Cluster", after: "01 h 10", min: "100 mm scope", deep: true },
+      ];
+      const paintObs = function (iso: string, illum: number) {
+        if (!obsBody) return;
+        const rnd = mulberry(daySeed(iso + "obs"));
+        const picks: typeof OBS_POOL = [];
+        const used: Record<number, boolean> = {};
+        while (picks.length < 6) {
+          const i = Math.floor(rnd() * OBS_POOL.length);
+          if (!used[i]) { used[i] = true; picks.push(OBS_POOL[i]); }
+        }
+        let html = "";
+        for (let i = 0; i < picks.length; i++) {
+          const o = picks[i];
+          const washed = o.deep && illum > 0.72;
+          html += "<tr class=\"" + (washed ? "is-washed" : "") + "\"><td>" + o.name + "</td><td class=\"mono\">" + o.type + "</td><td class=\"mono\">" + o.after + "</td><td class=\"mono\">" + o.min +
+            (washed ? " <span class=\"nt-washmark\">MOONWASH</span>" : "") + "</td></tr>";
+        }
+        obsBody.innerHTML = html;
+      };
+
+      const paintForecast = function (iso: string) {
+        if (!fcast) return;
+        let html = "";
+        let firstSeeing = 3;
+        for (let i = 0; i < 7; i++) {
+          const day = addDays(iso, i);
+          const rnd = mulberry(daySeed(day));
+          const transp = 1 + Math.floor(rnd() * 5);
+          const seeing = 1 + Math.floor(rnd() * 5);
+          if (i === 0) firstSeeing = seeing;
+          const cloud = Math.floor(rnd() * 88);
+          const ph = moonPhaseData(day);
+          const moonless = Math.round((1 - ph.illum) * 9.6 * 10) / 10;
+          const d = parseISO(day);
+          html += "<button class=\"nt-fcast-cell" + (i === 0 ? " is-sel" : "") + "\" type=\"button\" data-day=\"" + day + "\" aria-label=" + JSON.stringify("Night of " + (d.getMonth() + 1) + " " + d.getDate()) + ">" +
+            "<span class=\"nt-fc-date\">" + String(d.getMonth() + 1).padStart(2, "0") + "/" + String(d.getDate()).padStart(2, "0") + "</span>" +
+            "<div class=\"nt-fc-lab\">Transp</div><div class=\"nt-fc-bar\"><i class=\"nt-fc-transp\" style=\"width:" + (transp * 20) + "%\"></i></div>" +
+            "<div class=\"nt-fc-lab\">Seeing</div><div class=\"nt-fc-bar\"><i class=\"nt-fc-seeing\" style=\"width:" + (seeing * 20) + "%\"></i></div>" +
+            "<div class=\"nt-fc-lab\">Dark h</div><div class=\"nt-fc-bar\"><i class=\"nt-fc-moon\" style=\"width:" + Math.min(100, moonless * 10.4).toFixed(0) + "%\"></i></div>" +
+            "<div class=\"nt-fc-cloud\">cloud " + cloud + " %</div></button>";
+        }
+        fcast.innerHTML = html;
+        const seeingEl = document.getElementById("nt-seeing") as HTMLElement | null;
+        if (seeingEl) seeingEl.textContent = firstSeeing + "/5";
+      };
+
+      const refreshNight = function (iso: string) {
+        const ph = drawMoon(iso);
+        paintReadout();
+        paintForecast(iso);
+        paintObs(iso, ph.illum);
+      };
+
+      if (dateInput) {
+        dateInput.addEventListener("change", function () {
+          if (bookDate) bookDate.value = dateInput.value;
+          refreshNight(dateInput.value);
+        });
+        refreshNight(dateInput.value);
+      }
+      const stepDay = document.getElementById("nt-day-prev");
+      const stepNext = document.getElementById("nt-day-next");
+      stepDay?.addEventListener("click", function () {
+        if (!dateInput) return;
+        dateInput.value = addDays(dateInput.value, -1);
+        if (bookDate) bookDate.value = dateInput.value;
+        refreshNight(dateInput.value);
+      });
+      stepNext?.addEventListener("click", function () {
+        if (!dateInput) return;
+        dateInput.value = addDays(dateInput.value, 1);
+        if (bookDate) bookDate.value = dateInput.value;
+        refreshNight(dateInput.value);
+      });
+      fcast?.addEventListener("click", function (e) {
+        const cell = (e.target as HTMLElement).closest<HTMLElement>(".nt-fcast-cell");
+        if (!cell || !dateInput) return;
+        dateInput.value = cell.getAttribute("data-day") ?? dateInput.value;
+        if (bookDate) bookDate.value = dateInput.value;
+        refreshNight(dateInput.value);
+      });
+      document.querySelectorAll<HTMLButtonElement>(".nt-objchip").forEach(function (chip) {
+        chip.addEventListener("click", function () {
+          document.querySelectorAll(".nt-objchip").forEach(function (c) { c.setAttribute("aria-pressed", "false"); });
+          chip.setAttribute("aria-pressed", "true");
+          activeObj = chip.getAttribute("data-obj") ?? "moon";
+          paintReadout();
+        });
+      });
+
+      /* ——— constellation connector ————————————————————————— */
+      const CONST_INFO: Record<string, string> = {
+        ursa: "Great Bear · circumpolar, never sets · the pointer stars find Polaris, the walk's first lesson.",
+        cassiopeia: "Cassiopeia · the W on the meridian after supper · seat of the attendant who named the ridge.",
+        cygnus: "Cygnus · the summer cross, flying the Milky Way · best table for binoculars in July.",
+        bootes: "Boötes · kite behind the Bear · Arcturus is the bright one; follow the handle's curve.",
+      };
+      const CONST_TITLES: Record<string, string> = { ursa: "Great Bear", cassiopeia: "Cassiopeia", cygnus: "Cygnus", bootes: "Boötes" };
+      const constInfo = document.getElementById("nt-const-info") as HTMLElement | null;
+
+      const drawConst = function (id: string) {
+        document.querySelectorAll<SVGPathElement>(".nt-c-line").forEach(function (line) {
+          const match = line.getAttribute("data-con-line") === id;
+          line.classList.remove("is-draw");
+          if (match) {
+            // restart animation
+            void line.getBoundingClientRect();
+            line.classList.add("is-draw");
+          } else {
+            line.style.opacity = "0.18";
+          }
+        });
+        document.querySelectorAll<SVGPathElement>(".nt-c-line[data-con-line=\"" + id + "\"]").forEach(function (line) { line.style.opacity = "0.9"; });
+        if (constInfo) constInfo.innerHTML = "<b>" + CONST_TITLES[id] + "</b> · " + CONST_INFO[id].split("·").slice(1).join("·");
+      };
+      document.querySelectorAll<HTMLButtonElement>(".nt-cchip").forEach(function (chip) {
+        chip.addEventListener("click", function () {
+          document.querySelectorAll(".nt-cchip").forEach(function (c) { c.setAttribute("aria-pressed", "false"); });
+          chip.setAttribute("aria-pressed", "true");
+          drawConst(chip.getAttribute("data-con") ?? "ursa");
+        });
+      });
+      // Draw the default figure once the chart enters view.
+      const chartFrame = document.querySelector(".nt-chart-frame");
+      if (chartFrame && "IntersectionObserver" in window) {
+        const cio = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) { drawConst("ursa"); cio.disconnect(); }
+          });
+        }, { threshold: 0.35 });
+        cio.observe(chartFrame);
+      } else if (chartFrame) {
+        drawConst("ursa");
+      }
+
+      /* ——— booking orbit ————————————————————————————————— */
+      const SESS_ORDER = ["vigil", "walk", "optics", "photo"];
+      const ANGLES: Record<string, number> = { vigil: 0, walk: 90, optics: 180, photo: 270 };
+      const bookRing = document.getElementById("nt-book-ring") as HTMLElement | null;
+      const sessionSelect = document.getElementById("nt-session") as HTMLSelectElement | null;
+      let sess = "vigil";
+
+      const showPanel = function (id: string) {
+        document.querySelectorAll<HTMLElement>(".nt-bpanel").forEach(function (p) {
+          if (p.getAttribute("data-panel") === id) p.removeAttribute("hidden");
+          else p.setAttribute("hidden", "");
+        });
+      };
+      const selectSess = function (id: string) {
+        sess = id;
+        const rot = -ANGLES[id];
+        if (bookRing) bookRing.style.transform = "rotate(" + rot + "deg)";
+        document.querySelectorAll<HTMLElement>(".nt-sess").forEach(function (btn) {
+          const a = Number((btn.getAttribute("style") ?? "").match(/--a:\s*(-?\d+)/)?.[1] ?? "0");
+          btn.style.transform = "translate(-50%, -50%) rotate(" + (-rot) + "deg) translateY(-46%) rotate(" + (-a - rot) + "deg)";
+          btn.setAttribute("aria-pressed", String(btn.getAttribute("data-sess") === id));
+        });
+        showPanel(id);
+        if (sessionSelect) sessionSelect.value = id;
+      };
+      document.querySelectorAll<HTMLButtonElement>(".nt-sess").forEach(function (btn) {
+        btn.addEventListener("click", function () { selectSess(btn.getAttribute("data-sess") ?? "vigil"); });
+      });
+      sessionSelect?.addEventListener("change", function () { selectSess(sessionSelect.value); });
+      // Collapse panels on load (JS only; without JS all four stay readable).
+      selectSess("vigil");
+      bookRing?.addEventListener("keydown", function (e) {
+        if (!bookRing) return;
+        if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+          const i = SESS_ORDER.indexOf(sess);
+          const n = e.key === "ArrowRight" ? (i + 1) % SESS_ORDER.length : (i + SESS_ORDER.length - 1) % SESS_ORDER.length;
+          selectSess(SESS_ORDER[n]);
+        }
+      });
+
+      /* ——— booking form —————————————————————————————————— */
+      const form = document.getElementById("nt-book-form") as HTMLFormElement | null;
+      const stamp = document.getElementById("nt-stamp") as HTMLElement | null;
+      const stampRef = document.getElementById("nt-stamp-ref") as HTMLElement | null;
+      if (form) {
+        const formEl: HTMLFormElement = form;
+        formEl.addEventListener("submit", function (e) {
+          e.preventDefault();
+          const name = (document.getElementById("nt-name") as HTMLInputElement | null)?.value.trim() ?? "";
+          const email = (document.getElementById("nt-email") as HTMLInputElement | null)?.value ?? "";
+          if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            formEl.reportValidity();
+            return;
+          }
+          const ref = "NCT-" + String(Date.now() % 10000).padStart(4, "0");
+          if (stampRef) stampRef.textContent = "Ref " + ref + " · " + (sessionSelect?.selectedOptions[0]?.text ?? sess);
+          formEl.style.display = "none";
+          if (stamp) stamp.classList.add("is-on");
+        });
+      }
+
+      /* ——— reveal on scroll ——————————————————————————————— */
+      const reveals = document.querySelectorAll(".nt-reveal");
+      if (reduceMotion || !("IntersectionObserver" in window)) {
+        reveals.forEach(function (el) { el.classList.add("is-in"); });
+      } else {
+        const rio = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) { entry.target.classList.add("is-in"); rio.unobserve(entry.target); }
+          });
+        }, { threshold: 0.1, rootMargin: "0px 0px -5% 0px" });
+        reveals.forEach(function (el) { rio.observe(el); });
+      }
+    })();
+  </script>
+</body>
+</html>

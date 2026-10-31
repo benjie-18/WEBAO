@@ -1,0 +1,1386 @@
+---
+import DemoSeo from "../../../components/demos/DemoSeo.astro";
+import EscapeHatch from "../../../components/demos/EscapeHatch.astro";
+// Démo microsite: Lisière · atelier de tissage fictif, Danville (Québec).
+// The page IS the loom: fixed warp threads, selvedge rails, weft-pass sections,
+// draft-notation navigation, a live weave configurator. No banner, no cards.
+---
+<!DOCTYPE html>
+<html lang="fr" class="no-js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <DemoSeo
+    demoId="lisiere"
+    locale="fr"
+    title="Lisière — Atelier de tissage à la main · Danville"
+    description="Atelier de tissage fictif au Québec construit comme un métier : configurateur de tissage en direct, éditeur de pointage, registre de prix et commandes de chaîne. Démo de design, pas une vraie entreprise."
+    ogImage="https://webao.ca/demos/lisiere/01.jpg"
+  />
+
+  <script is:inline>
+    // Sans JS, la toile reste dans son état fini, statique.
+    document.documentElement.classList.add("ls-js");
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Vollkorn:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Anonymous+Pro:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ls-linen: #ece5d4;
+      --ls-linen-2: #e4dbc6;
+      --ls-linen-3: #dbd0b6;
+      --ls-wool: #d3c2a0;
+      --ls-indigo: #24314f;
+      --ls-indigo-2: #1a2338;
+      --ls-madder: #a02f3e;
+      --ls-madder-2: #7f2331;
+      --ls-char: #26262a;
+      --ls-ink: #241f1a;
+      --ls-ink-2: rgba(36, 31, 26, 0.7);
+      --ls-ink-3: rgba(36, 31, 26, 0.48);
+      --ls-paper: #f6f1e4;
+      --ls-rail: 42px;
+      --ls-warp-gap: 17px;
+      color-scheme: light;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 96px; }
+    body {
+      background: var(--ls-linen);
+      color: var(--ls-ink);
+      font-family: "Vollkorn", Georgia, serif;
+      font-size: 17px;
+      line-height: 1.62;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; background: none; border: none; color: inherit; }
+    ::selection { background: var(--ls-indigo); color: var(--ls-paper); }
+    :focus-visible { outline: 2px solid var(--ls-madder); outline-offset: 2px; }
+
+    .ls-mono { font-family: "Anonymous Pro", "Courier New", monospace; font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase; }
+    .ls-vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+    /* ——— The loom frame: selvedge rails + fixed warp ——————————————— */
+    .ls-warp {
+      position: fixed; top: 0; bottom: 0; left: var(--ls-rail); right: var(--ls-rail);
+      z-index: 2; pointer-events: none;
+      background-image:
+        repeating-linear-gradient(90deg,
+          rgba(36, 49, 79, 0.5) 0 1.5px, transparent 1.5px 3px,
+          rgba(211, 194, 160, 0.55) 3px 4.5px, transparent 4.5px var(--ls-warp-gap));
+      background-size: var(--ls-warp-gap) 100%;
+      opacity: 0.9;
+    }
+    .ls-warp::after {
+      /* fell line: the weaving edge creeps down slightly with scroll (JS nudges --ls-fell) */
+      content: ""; position: absolute; left: 0; right: 0; top: var(--ls-fell, 34%);
+      border-top: 1px dashed rgba(160, 47, 62, 0.35);
+    }
+    .ls-selvedge {
+      position: fixed; top: 0; bottom: 0; width: var(--ls-rail); z-index: 5; pointer-events: none;
+      background:
+        repeating-linear-gradient(0deg, var(--ls-indigo) 0 7px, var(--ls-linen-3) 7px 9px, var(--ls-madder) 9px 12px, var(--ls-linen-3) 12px 14px),
+        var(--ls-char);
+      box-shadow: inset 0 0 0 1px rgba(36, 31, 26, 0.4);
+    }
+    .ls-selvedge.is-left { left: 0; border-right: 2px solid var(--ls-char); }
+    .ls-selvedge.is-right { right: 0; border-left: 2px solid var(--ls-char); }
+
+    /* ——— Sticky breast beam: brand + draft nav + shuttle track ————— */
+    .ls-beam {
+      position: sticky; top: 0; z-index: 40;
+      background: var(--ls-linen-2);
+      border-bottom: 1px solid var(--ls-char);
+      box-shadow: 0 1px 0 var(--ls-linen-3), 0 6px 18px rgba(36, 31, 26, 0.12);
+      margin: 0 var(--ls-rail);
+    }
+    .ls-beam-in { display: flex; align-items: center; gap: 22px; padding: 10px 16px 8px; }
+    .ls-wordmark {
+      font-family: "Vollkorn", serif; font-weight: 700; font-size: 19px; letter-spacing: 0.26em;
+      text-indent: 0.26em; color: var(--ls-ink); display: flex; align-items: center; gap: 10px; flex: none;
+    }
+    .ls-wordmark svg { width: 16px; height: 16px; }
+    .ls-draftnav { display: flex; gap: 4px; margin-left: auto; overflow-x: auto; scrollbar-width: none; }
+    .ls-draftnav::-webkit-scrollbar { display: none; }
+    .ls-draftnav a {
+      display: flex; align-items: center; gap: 8px; padding: 7px 10px;
+      font-family: "Anonymous Pro", monospace; font-size: 10.5px; letter-spacing: 0.13em; text-transform: uppercase;
+      color: var(--ls-ink-2); white-space: nowrap;
+      border: 1px solid transparent; transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .ls-draftnav a:hover, .ls-draftnav a:focus-visible { background: var(--ls-paper); border-color: var(--ls-char); color: var(--ls-ink); }
+    .ls-draftnav svg { width: 14px; height: 18px; flex: none; shape-rendering: crispEdges; }
+    .ls-draftnav svg rect { stroke: var(--ls-ink-3); stroke-width: 0.6; fill: none; }
+    .ls-draftnav svg rect.on { fill: var(--ls-char); stroke: var(--ls-char); }
+    .ls-draftnav a:hover svg rect.on { fill: var(--ls-madder); stroke: var(--ls-madder); }
+
+    .ls-track { position: relative; height: 14px; border-top: 1px solid var(--ls-linen-3); background: var(--ls-paper); overflow: hidden; }
+    .ls-track::before {
+      content: ""; position: absolute; left: 0; right: 0; top: 6px; height: 1.5px;
+      background: var(--ls-madder); opacity: 0.55;
+    }
+    .ls-shuttle {
+      position: absolute; top: 1.5px; left: 0; width: 54px; height: 11px;
+      transform: translateX(0); will-change: transform;
+    }
+    .ls-shuttle svg { display: block; width: 100%; height: 100%; }
+
+    /* ——— Woven bands ————————————————————————————————— */
+    .ls-band { position: relative; padding: 9vh 0; }
+    .ls-band-in { position: relative; margin: 0 var(--ls-rail); padding: 0 clamp(16px, 4vw, 54px); }
+    .ls-over { position: relative; z-index: 3; background: var(--ls-linen); }
+    .ls-under { position: relative; z-index: 1; }
+
+    .ls-eyebrow { color: var(--ls-madder); margin-bottom: 14px; display: flex; align-items: center; gap: 12px; }
+    .ls-eyebrow::after { content: ""; flex: 1; height: 1px; background: rgba(36, 31, 26, 0.25); }
+    .ls-h2 {
+      font-family: "Vollkorn", serif; font-weight: 600;
+      font-size: clamp(1.7rem, 3.4vw, 2.6rem); line-height: 1.12; letter-spacing: -0.01em;
+      max-width: 26ch; text-wrap: balance; margin-bottom: 16px;
+    }
+    .ls-lede { font-size: 18px; max-width: 58ch; color: var(--ls-ink-2); }
+
+    /* row-by-row weft reveal */
+    .ls-row { position: relative; transition: opacity 0.55s ease, transform 0.65s cubic-bezier(0.2, 0.7, 0.2, 1); transition-delay: var(--ls-d, 0ms); }
+    html.js .ls-row { opacity: 0; transform: translateX(var(--ls-from, -26px)); }
+    .ls-row:nth-child(even) { --ls-from: 26px; }
+    html.js .ls-row.is-in { opacity: 1; transform: none; }
+    .ls-row.is-in::before {
+      content: ""; position: absolute; top: -10px; left: 0; right: 0; height: 1.5px;
+      background: linear-gradient(90deg, var(--ls-indigo), var(--ls-madder) 70%, transparent);
+      transform-origin: left; animation: ls-beat 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+      animation-delay: calc(var(--ls-d, 0ms) + 150ms);
+    }
+    @keyframes ls-beat { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+    /* ——— Band I · woven title row ———————————————————————— */
+    .ls-titleband { padding-top: 7vh; padding-bottom: 4vh; }
+    .ls-title-kicker { color: var(--ls-madder); margin-bottom: 18px; }
+    .ls-h1 {
+      font-family: "Vollkorn", serif; font-weight: 700;
+      font-size: clamp(3.2rem, 11vw, 7.5rem); line-height: 0.96; letter-spacing: 0.02em;
+      color: var(--ls-ink); position: relative; z-index: 1; /* warp crosses the name */
+    }
+    .ls-h1 em { font-style: italic; font-weight: 400; color: var(--ls-indigo); }
+    .ls-title-deck { display: grid; grid-template-columns: 1.4fr 1fr; gap: 28px; margin-top: 30px; position: relative; z-index: 3; }
+    .ls-title-deck p { max-width: 52ch; }
+    .ls-title-deck .ls-facts { list-style: none; border-top: 1.5px solid var(--ls-char); }
+    .ls-title-deck .ls-facts li {
+      display: flex; justify-content: space-between; gap: 14px; padding: 8px 0;
+      border-bottom: 1px solid rgba(36, 31, 26, 0.22);
+      font-family: "Anonymous Pro", monospace; font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--ls-ink-2);
+    }
+    .ls-title-deck .ls-facts b { color: var(--ls-madder); font-weight: 700; }
+    .ls-title-plate { margin-top: 40px; position: relative; z-index: 1; }
+    .ls-title-plate img { width: 100%; max-height: 46vh; object-fit: cover; filter: saturate(0.92); }
+
+    /* ——— Band II · the loom configurator ————————————————— */
+    .ls-loom { display: grid; grid-template-columns: minmax(240px, 320px) 1fr; gap: 34px; align-items: start; }
+    .ls-controls { display: flex; flex-direction: column; gap: 26px; }
+    .ls-ctl h3 {
+      font-family: "Anonymous Pro", monospace; font-size: 11px; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--ls-ink-2); margin-bottom: 12px; font-weight: 700;
+    }
+    .ls-spools { display: flex; gap: 10px; flex-wrap: wrap; }
+    .ls-spool {
+      width: 56px; display: flex; flex-direction: column; align-items: center; gap: 5px;
+      padding: 6px 2px; border: 1px solid transparent; transition: border-color 0.2s, background 0.2s;
+    }
+    .ls-spool:hover { background: var(--ls-paper); border-color: rgba(36, 31, 26, 0.35); }
+    .ls-spool[aria-pressed="true"] { border-color: var(--ls-char); background: var(--ls-paper); }
+    .ls-spool[aria-pressed="true"] .ls-spool-lab { color: var(--ls-madder); font-weight: 700; }
+    .ls-spool svg { width: 34px; height: 34px; }
+    .ls-spool .ls-bobbin { transform-origin: 50% 50%; }
+    .ls-spool.is-spin .ls-bobbin { animation: ls-spin 0.8s cubic-bezier(0.3, 0.7, 0.3, 1) 1; }
+    @keyframes ls-spin { to { transform: rotate(360deg); } }
+    .ls-spool-lab { font-family: "Anonymous Pro", monospace; font-size: 8.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ls-ink-2); }
+
+    .ls-patterns { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+    .ls-pat {
+      padding: 8px 4px 6px; border: 1px solid rgba(36, 31, 26, 0.4); background: var(--ls-paper);
+      display: flex; flex-direction: column; align-items: center; gap: 5px;
+      font-family: "Anonymous Pro", monospace; font-size: 8.5px; letter-spacing: 0.05em; text-transform: uppercase;
+      color: var(--ls-ink-2); transition: background 0.2s, color 0.2s, border-color 0.2s;
+      min-width: 0;
+    }
+    .ls-pat:hover { border-color: var(--ls-char); }
+    .ls-pat[aria-pressed="true"] { background: var(--ls-char); color: var(--ls-paper); border-color: var(--ls-char); }
+    .ls-pat svg { width: 26px; height: 26px; shape-rendering: crispEdges; }
+    .ls-pat svg rect { fill: transparent; stroke: rgba(36, 31, 26, 0.35); stroke-width: 0.6; }
+    .ls-pat svg rect.on { fill: var(--ls-char); }
+    .ls-pat[aria-pressed="true"] svg rect.on { fill: var(--ls-linen); }
+    .ls-pat[aria-pressed="true"] svg rect { stroke: rgba(246, 241, 228, 0.5); }
+
+    .ls-slider-row { display: flex; flex-direction: column; gap: 8px; }
+    .ls-slider-row input[type="range"] {
+      -webkit-appearance: none; appearance: none; width: 100%; height: 4px; border-radius: 0;
+      background: linear-gradient(90deg, var(--ls-madder) var(--ls-fill, 33%), rgba(36, 31, 26, 0.2) var(--ls-fill, 33%));
+      outline: none; cursor: pointer;
+    }
+    .ls-slider-row input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none; width: 18px; height: 26px; border-radius: 2px;
+      background: var(--ls-char); border: 2px solid var(--ls-linen); box-shadow: 0 1px 4px rgba(36, 31, 26, 0.4);
+      transition: transform 0.15s;
+    }
+    .ls-slider-row input[type="range"]::-webkit-slider-thumb:hover { transform: scaleY(1.1); }
+    .ls-slider-row input[type="range"]::-moz-range-thumb {
+      width: 16px; height: 24px; border-radius: 2px;
+      background: var(--ls-char); border: 2px solid var(--ls-linen);
+    }
+    .ls-slider-labels { display: flex; justify-content: space-between; color: var(--ls-ink-3); }
+    .ls-readout { font-family: "Anonymous Pro", monospace; font-size: 12px; color: var(--ls-ink); letter-spacing: 0.06em; }
+    .ls-readout b { color: var(--ls-madder); font-weight: 700; }
+
+    .ls-tension { display: flex; gap: 0; border: 1px solid var(--ls-char); width: fit-content; }
+    .ls-tension button {
+      font-family: "Anonymous Pro", monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 8px 13px; border-right: 1px solid var(--ls-char); color: var(--ls-ink-2); background: var(--ls-paper);
+      transition: background 0.2s, color 0.2s;
+    }
+    .ls-tension button:last-child { border-right: 0; }
+    .ls-tension button[aria-pressed="true"] { background: var(--ls-indigo); color: var(--ls-paper); }
+
+    .ls-cloth-wrap { position: relative; border: 2px solid var(--ls-char); background: var(--ls-char); }
+    .ls-cloth-wrap::before, .ls-cloth-wrap::after {
+      /* woven edge lines inside the frame */
+      content: ""; position: absolute; top: 0; bottom: 0; width: 6px; z-index: 2;
+      background: repeating-linear-gradient(180deg, var(--ls-linen-3) 0 4px, var(--ls-char) 4px 6px); opacity: 0.8;
+    }
+    .ls-cloth-wrap::before { left: 0; }
+    .ls-cloth-wrap::after { right: 0; }
+    #ls-cloth {
+      display: block; width: 100%; height: min(58vh, 480px);
+      /* JS-off fallback: a CSS plain weave so a textile always shows */
+      background:
+        repeating-linear-gradient(90deg, var(--ls-indigo) 0 4px, transparent 4px 8px),
+        repeating-linear-gradient(0deg, var(--ls-wool) 0 4px, transparent 4px 8px),
+        var(--ls-linen-3);
+    }
+    .ls-cloth-meta {
+      display: flex; flex-wrap: wrap; gap: 8px 22px; justify-content: space-between;
+      margin-top: 10px; color: var(--ls-ink-2);
+    }
+    .ls-cloth-meta b { color: var(--ls-madder); font-weight: 700; }
+
+    /* ——— Band III · draft editor ————————————————————————— */
+    .ls-draftband { display: grid; grid-template-columns: 1fr minmax(260px, 360px); gap: 34px; align-items: start; }
+    .ls-draftgrid-wrap { border: 1.5px solid var(--ls-char); background: var(--ls-paper); padding: 14px; width: fit-content; max-width: 100%; overflow-x: auto; }
+    .ls-draftgrid { display: grid; grid-template-columns: repeat(8, 34px); grid-auto-rows: 34px; gap: 2px; }
+    .ls-cell {
+      border: 1px solid rgba(36, 31, 26, 0.5); background: var(--ls-linen);
+      transition: background 0.12s;
+      position: relative;
+    }
+    .ls-cell:hover { border-color: var(--ls-madder); }
+    .ls-cell.on { background: var(--ls-char); box-shadow: inset 0 0 0 2px var(--ls-linen); }
+    .ls-cell.on:hover { background: var(--ls-madder); }
+    .ls-draft-axis { display: grid; grid-template-columns: repeat(8, 34px); gap: 2px; margin-bottom: 6px; }
+    .ls-draft-axis span { font-family: "Anonymous Pro", monospace; font-size: 9px; text-align: center; color: var(--ls-ink-3); }
+    .ls-draft-legend { display: flex; justify-content: space-between; gap: 14px; margin-top: 10px; flex-wrap: wrap; color: var(--ls-ink-3); }
+    .ls-draft-actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+    .ls-btn {
+      font-family: "Anonymous Pro", monospace; font-size: 11px; letter-spacing: 0.13em; text-transform: uppercase;
+      padding: 11px 18px; background: var(--ls-char); color: var(--ls-paper);
+      transition: background 0.2s, transform 0.15s;
+    }
+    .ls-btn:hover { background: var(--ls-madder); }
+    .ls-btn:active { transform: translateY(1px); }
+    .ls-btn.is-ghost { background: transparent; color: var(--ls-ink); border: 1px solid var(--ls-char); }
+    .ls-btn.is-ghost:hover { background: var(--ls-char); color: var(--ls-paper); }
+    #ls-draft-sample {
+      display: block; width: 100%; height: 300px; border: 2px solid var(--ls-char);
+      background:
+        repeating-linear-gradient(90deg, var(--ls-char) 0 3px, transparent 3px 6px),
+        repeating-linear-gradient(0deg, var(--ls-linen-3) 0 3px, transparent 3px 6px),
+        var(--ls-paper);
+    }
+
+    /* ——— shared indigo ledger panels ——————————————————————— */
+    .ls-indigo-panel { background: var(--ls-indigo); color: var(--ls-paper); padding: clamp(22px, 3.4vw, 40px); position: relative; z-index: 3; }
+    .ls-indigo-panel .ls-eyebrow { color: var(--ls-wool); }
+    .ls-indigo-panel .ls-eyebrow::after { background: rgba(246, 241, 228, 0.25); }
+    .ls-indigo-panel .ls-lede { color: rgba(246, 241, 228, 0.78); }
+
+    .ls-yarn-ledger { list-style: none; margin-top: 26px; }
+    .ls-yarn-ledger li {
+      display: grid; grid-template-columns: 120px 1fr auto; gap: 8px 20px; align-items: baseline;
+      padding: 13px 0; border-top: 1px solid rgba(246, 241, 228, 0.22);
+      font-family: "Anonymous Pro", monospace; font-size: 12px; letter-spacing: 0.05em;
+    }
+    .ls-yarn-ledger li:last-child { border-bottom: 1px solid rgba(246, 241, 228, 0.22); }
+    .ls-yarn-ledger .y-name { color: var(--ls-wool); text-transform: uppercase; font-weight: 700; }
+    .ls-yarn-ledger .y-spec { color: rgba(246, 241, 228, 0.75); text-transform: none; }
+    .ls-yarn-ledger .y-lot { color: #e79aa4; white-space: nowrap; }
+
+    .ls-plate-full { margin-top: 36px; }
+    .ls-plate-full img { width: 100%; max-height: 52vh; object-fit: cover; }
+    .ls-plate-cap { position: relative; z-index: 3; background: var(--ls-linen); padding: 12px 14px; display: inline-block; margin-top: -1px; color: var(--ls-ink-2); border-left: 3px solid var(--ls-madder); }
+
+    /* ——— Band IV · calculator ———————————————————————————— */
+    .ls-calc { display: grid; grid-template-columns: minmax(240px, 330px) 1fr; gap: 34px; align-items: start; }
+    .ls-field { margin-bottom: 18px; }
+    .ls-field label { display: block; font-family: "Anonymous Pro", monospace; font-size: 10.5px; letter-spacing: 0.13em; text-transform: uppercase; color: var(--ls-ink-2); margin-bottom: 7px; }
+    .ls-field select, .ls-field input[type="number"], .ls-field input[type="text"], .ls-field input[type="email"], .ls-field input[type="date"], .ls-field textarea {
+      width: 100%; font-family: "Anonymous Pro", monospace; font-size: 13px;
+      background: var(--ls-paper); color: var(--ls-ink);
+      border: 1px solid var(--ls-char); border-radius: 0; padding: 11px 12px;
+    }
+    .ls-field textarea { resize: vertical; min-height: 70px; }
+    .ls-field select:focus, .ls-field input:focus, .ls-field textarea:focus { outline: 2px solid var(--ls-madder); outline-offset: 1px; }
+    .ls-ledger { border-top: 2px solid var(--ls-char); }
+    .ls-ledger-row {
+      display: grid; grid-template-columns: 1fr auto; gap: 16px; padding: 12px 4px;
+      border-bottom: 1px solid rgba(36, 31, 26, 0.25);
+      font-family: "Anonymous Pro", monospace; font-size: 13px; letter-spacing: 0.04em;
+    }
+    .ls-ledger-row span:first-child { color: var(--ls-ink-2); text-transform: uppercase; font-size: 11px; letter-spacing: 0.1em; align-self: center; }
+    .ls-ledger-row b { font-weight: 700; color: var(--ls-ink); }
+    .ls-ledger-row.is-total { border-bottom: 3px double var(--ls-char); border-top: 2px solid var(--ls-char); font-size: 17px; }
+    .ls-ledger-row.is-total b { color: var(--ls-madder); font-size: 22px; }
+    .ls-ledger-note { margin-top: 12px; color: var(--ls-ink-3); }
+
+    /* ——— Band V · pieces (draw-down table, not cards) ——————————— */
+    .ls-drawdown { width: 100%; border-collapse: collapse; position: relative; z-index: 3; background: var(--ls-linen); }
+    .ls-drawdown th {
+      text-align: left; font-family: "Anonymous Pro", monospace; font-size: 10px; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--ls-ink-2); font-weight: 700;
+      padding: 10px 12px; border-bottom: 2px solid var(--ls-char);
+    }
+    .ls-drawdown td { padding: 15px 12px; border-bottom: 1px solid rgba(36, 31, 26, 0.25); vertical-align: top; }
+    .ls-drawdown td:first-child { font-weight: 600; }
+    .ls-drawdown .mono { font-family: "Anonymous Pro", monospace; font-size: 12px; color: var(--ls-ink-2); }
+    .ls-drawdown .price { font-family: "Anonymous Pro", monospace; font-weight: 700; color: var(--ls-madder); white-space: nowrap; }
+    .ls-drawdown tr:hover td { background: var(--ls-paper); }
+
+    /* ——— Band VI · warp order ———————————————————————————— */
+    .ls-order { display: grid; grid-template-columns: 1.15fr minmax(250px, 340px); gap: 36px; align-items: start; }
+    .ls-order-form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .ls-order-form .ls-wide { grid-column: 1 / -1; }
+    .ls-warp-math { border: 1.5px solid var(--ls-char); background: var(--ls-paper); padding: 20px 18px; position: relative; }
+    .ls-warp-math h3 { font-family: "Anonymous Pro", monospace; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 14px; color: var(--ls-ink-2); font-weight: 700; }
+    .ls-wm-row { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px dashed rgba(36, 31, 26, 0.3); font-family: "Anonymous Pro", monospace; font-size: 12.5px; }
+    .ls-wm-row b { color: var(--ls-madder); font-weight: 700; }
+    .ls-wm-formula { margin-top: 12px; font-family: "Anonymous Pro", monospace; font-size: 10.5px; color: var(--ls-ink-3); line-height: 1.7; text-transform: none; letter-spacing: 0.02em; }
+    .ls-stamp {
+      display: none; margin-top: 22px; padding: 18px 20px; border: 2.5px solid var(--ls-madder);
+      color: var(--ls-madder); font-family: "Anonymous Pro", monospace; letter-spacing: 0.12em;
+      transform: rotate(-1.5deg); background: rgba(160, 47, 62, 0.06); text-align: center;
+    }
+    .ls-stamp.is-on { display: block; }
+    .ls-stamp b { display: block; font-size: 15px; margin-bottom: 6px; }
+    .ls-stamp small { color: var(--ls-ink-2); letter-spacing: 0.06em; }
+
+    /* ——— Band VII · atelier facts (through the warp) ————————— */
+    .ls-factsband { position: relative; z-index: 1; }
+    .ls-facts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 1.5px solid var(--ls-char); border-bottom: 1.5px solid var(--ls-char); }
+    .ls-fact {
+      padding: 22px 20px; border-right: 1px solid rgba(36, 31, 26, 0.3);
+      background: rgba(236, 229, 212, 0.82); /* translucent so warp ghosts through */
+    }
+    .ls-fact:last-child { border-right: 0; }
+    .ls-fact h3 { font-family: "Anonymous Pro", monospace; font-size: 10.5px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ls-madder); margin-bottom: 10px; font-weight: 700; }
+    .ls-fact p { font-size: 15.5px; color: var(--ls-ink-2); }
+    .ls-fact p b { color: var(--ls-ink); font-weight: 600; }
+
+    /* ——— Footer: cut off the loom ————————————————————————— */
+    .ls-fringe { margin: 10vh var(--ls-rail) 0; height: 46px; position: relative; z-index: 3;
+      background:
+        repeating-linear-gradient(90deg, var(--ls-char) 0 3px, transparent 3px 14px),
+        repeating-linear-gradient(90deg, var(--ls-indigo) 6px 9px, transparent 9px 14px);
+      -webkit-mask-image: linear-gradient(180deg, #000 0 40%, transparent 100%);
+      mask-image: linear-gradient(180deg, #000 0 40%, transparent 100%);
+    }
+    .ls-foot { background: var(--ls-char); color: rgba(246, 241, 228, 0.75); margin: 0 var(--ls-rail); padding: 40px clamp(16px, 4vw, 54px) 46px; position: relative; z-index: 3; }
+    .ls-label {
+      border: 1px solid rgba(246, 241, 228, 0.4); padding: 22px 24px; max-width: 760px;
+      background:
+        repeating-linear-gradient(0deg, transparent 0 6px, rgba(246, 241, 228, 0.05) 6px 7px);
+    }
+    .ls-label h2 { font-family: "Vollkorn", serif; font-weight: 600; font-size: 22px; letter-spacing: 0.18em; color: var(--ls-paper); margin-bottom: 10px; }
+    .ls-label p { font-size: 15px; max-width: 60ch; }
+    .ls-foot-cols { display: flex; flex-wrap: wrap; gap: 26px 48px; margin-top: 28px; font-family: "Anonymous Pro", monospace; font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; }
+    .ls-foot-cols a:hover { color: var(--ls-wool); }
+    .ls-foot-cols ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+    .ls-legal {
+      display: flex; flex-wrap: wrap; gap: 8px 26px; justify-content: space-between;
+      margin-top: 30px; padding-top: 16px; border-top: 1px solid rgba(246, 241, 228, 0.22);
+      font-family: "Anonymous Pro", monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(246, 241, 228, 0.55);
+    }
+
+    /* ——— responsive ————————————————————————————————— */
+    @media (max-width: 960px) {
+      .ls-loom, .ls-calc, .ls-order, .ls-draftband, .ls-title-deck { grid-template-columns: 1fr; }
+      .ls-facts-grid { grid-template-columns: 1fr; }
+      .ls-fact { border-right: 0; border-bottom: 1px solid rgba(36, 31, 26, 0.3); }
+      .ls-fact:last-child { border-bottom: 0; }
+      .ls-order-form { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 680px) {
+      :root { --ls-rail: 18px; --ls-warp-gap: 13px; }
+      .ls-beam-in { flex-wrap: wrap; gap: 8px 14px; padding: 8px 10px; }
+      .ls-draftnav { margin-left: 0; width: 100%; order: 3; }
+      .ls-patterns { grid-template-columns: repeat(3, 1fr); }
+      .ls-draftgrid { grid-template-columns: repeat(8, 30px); grid-auto-rows: 30px; }
+      .ls-draft-axis { grid-template-columns: repeat(8, 30px); }
+      .ls-drawdown, .ls-drawdown tbody, .ls-drawdown tr, .ls-drawdown td { display: block; width: 100%; }
+      .ls-drawdown thead { display: none; }
+      .ls-drawdown tr { border-bottom: 2px solid var(--ls-char); padding: 8px 0; }
+      .ls-drawdown td { border: 0; padding: 4px 12px; }
+      .ls-yarn-ledger li { grid-template-columns: 1fr; gap: 3px; }
+      .ls-h1 { font-size: clamp(2.6rem, 15vw, 4rem); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important; animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important; transition-delay: 0ms !important;
+      }
+      html.js .ls-row { opacity: 1; transform: none; }
+      .ls-row.is-in::before { animation: none; transform: none; }
+    }
+  </style>
+  <script is:inline>document.documentElement.classList.remove("no-js");document.documentElement.classList.add("js");</script>
+</head>
+<body>
+  <div class="ls-selvedge is-left" aria-hidden="true"></div>
+  <div class="ls-selvedge is-right" aria-hidden="true"></div>
+  <div class="ls-warp" aria-hidden="true"></div>
+
+  <header class="ls-beam">
+    <div class="ls-beam-in">
+      <a class="ls-wordmark" href="#ls-top">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1" y="1" width="14" height="14" fill="none" stroke="#241f1a"/><path d="M1 5h14M1 9h14M5 1v14M9 1v14" stroke="#a02f3e" stroke-width="1.4"/></svg>
+        LISIÈRE
+      </a>
+      <nav class="ls-draftnav" aria-label="Navigation par pointage">
+        <a href="#ls-loom"><svg viewBox="0 0 14 18" aria-hidden="true"><rect class="on" x="1" y="1" width="3" height="3"/><rect x="5" y="1" width="3" height="3"/><rect class="on" x="9" y="1" width="3" height="3"/><rect x="1" y="5" width="3" height="3"/><rect class="on" x="5" y="5" width="3" height="3"/><rect x="9" y="5" width="3" height="3"/><rect class="on" x="1" y="9" width="3" height="3"/><rect x="5" y="9" width="3" height="3"/><rect class="on" x="9" y="9" width="3" height="3"/><rect x="1" y="13" width="3" height="3"/><rect class="on" x="5" y="13" width="3" height="3"/><rect x="9" y="13" width="3" height="3"/></svg>Métier</a>
+        <a href="#ls-draft"><svg viewBox="0 0 14 18" aria-hidden="true"><rect class="on" x="1" y="1" width="3" height="3"/><rect class="on" x="5" y="1" width="3" height="3"/><rect x="9" y="1" width="3" height="3"/><rect x="1" y="5" width="3" height="3"/><rect class="on" x="5" y="5" width="3" height="3"/><rect class="on" x="9" y="5" width="3" height="3"/><rect x="1" y="9" width="3" height="3"/><rect x="5" y="9" width="3" height="3"/><rect class="on" x="9" y="9" width="3" height="3"/><rect class="on" x="1" y="13" width="3" height="3"/><rect x="5" y="13" width="3" height="3"/><rect x="9" y="13" width="3" height="3"/></svg>Pointage</a>
+        <a href="#ls-yarns"><svg viewBox="0 0 14 18" aria-hidden="true"><rect x="1" y="1" width="3" height="3"/><rect class="on" x="5" y="1" width="3" height="3"/><rect x="9" y="1" width="3" height="3"/><rect class="on" x="1" y="5" width="3" height="3"/><rect class="on" x="5" y="5" width="3" height="3"/><rect class="on" x="9" y="5" width="3" height="3"/><rect x="1" y="9" width="3" height="3"/><rect class="on" x="5" y="9" width="3" height="3"/><rect x="9" y="9" width="3" height="3"/><rect x="1" y="13" width="3" height="3"/><rect x="5" y="13" width="3" height="3"/><rect class="on" x="9" y="13" width="3" height="3"/></svg>Fils</a>
+        <a href="#ls-calc"><svg viewBox="0 0 14 18" aria-hidden="true"><rect class="on" x="1" y="1" width="3" height="3"/><rect x="5" y="1" width="3" height="3"/><rect x="9" y="1" width="3" height="3"/><rect class="on" x="1" y="5" width="3" height="3"/><rect class="on" x="5" y="5" width="3" height="3"/><rect x="9" y="5" width="3" height="3"/><rect x="1" y="9" width="3" height="3"/><rect class="on" x="5" y="9" width="3" height="3"/><rect class="on" x="9" y="9" width="3" height="3"/><rect x="1" y="13" width="3" height="3"/><rect x="5" y="13" width="3" height="3"/><rect class="on" x="9" y="13" width="3" height="3"/></svg>Registre</a>
+        <a href="#ls-order"><svg viewBox="0 0 14 18" aria-hidden="true"><rect x="1" y="1" width="3" height="3"/><rect class="on" x="5" y="1" width="3" height="3"/><rect x="9" y="1" width="3" height="3"/><rect class="on" x="1" y="5" width="3" height="3"/><rect x="5" y="5" width="3" height="3"/><rect class="on" x="9" y="5" width="3" height="3"/><rect class="on" x="1" y="9" width="3" height="3"/><rect x="5" y="9" width="3" height="3"/><rect class="on" x="9" y="9" width="3" height="3"/><rect x="1" y="13" width="3" height="3"/><rect class="on" x="5" y="13" width="3" height="3"/><rect class="on" x="9" y="13" width="3" height="3"/></svg>Commande</a>
+      </nav>
+    </div>
+    <div class="ls-track" aria-hidden="true">
+      <div class="ls-shuttle" id="ls-shuttle">
+        <svg viewBox="0 0 54 11"><path d="M2 5.5 L10 1.5 H44 L52 5.5 L44 9.5 H10 Z" fill="#241f1a"/><rect x="16" y="3" width="22" height="5" fill="#a02f3e"/><circle cx="27" cy="5.5" r="1.6" fill="#ece5d4"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <main id="ls-top">
+    <!-- Band I · the title row, half-woven under the warp -->
+    <section class="ls-band ls-titleband" aria-labelledby="ls-h1">
+      <div class="ls-band-in">
+        <p class="ls-title-kicker ls-mono">Atelier de tissage à la main · Danville (Québec) · fondé en 2019 (fictif)</p>
+        <h1 class="ls-h1" id="ls-h1">Lisière<em>.</em></h1>
+        <div class="ls-title-deck">
+          <div class="ls-row" style="--ls-d: 60ms">
+            <p class="ls-lede">Un atelier à un métier, où la page est sous tension. Les fils vont du haut vers le bas; chaque bande que vous traversez est une trame qu'on bat à coups de peigne. Choisissez vos couleurs plus bas et la toile se retisse sous vos yeux.</p>
+          </div>
+          <div class="ls-row" style="--ls-d: 160ms">
+            <ul class="ls-facts">
+              <li><span>Métier</span><b>Louët 8 harnais, 100 cm</b></li>
+              <li><span>Densité par défaut</span><b>24 EPI, sergé 2/2</b></li>
+              <li><span>Saison</span><b>Chaînes d'hiver, 6 à 10 semaines</b></li>
+              <li><span>Ligne des commandes</span><b>+1 819 555-0173</b></li>
+            </ul>
+          </div>
+        </div>
+        <div class="ls-title-plate ls-row" style="--ls-d: 260ms">
+          <img src="/demos/lisiere/01.jpg" alt="Vue macro des fils de chaîne en lin et indigo passant dans le peigne du métier, avec une ligne de trame garance juste battue" width="1536" height="1024" decoding="async" fetchpriority="high" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Band II · the loom configurator -->
+    <section class="ls-band" id="ls-loom" aria-labelledby="ls-loom-h">
+      <div class="ls-band-in ls-over">
+        <div class="ls-row">
+          <p class="ls-eyebrow ls-mono">Navette I · le métier</p>
+          <h2 class="ls-h2" id="ls-loom-h">Chaîne, trame, et ça se bat</h2>
+          <p class="ls-lede">Quatre fils, quatre structures, une densité qu'on entend la navette changer d'avis. Chaque choix relance l'échantillon ci-dessous, fil par fil.</p>
+        </div>
+
+        <div class="ls-loom" style="margin-top: 34px;">
+          <div class="ls-controls ls-row" style="--ls-d: 120ms">
+            <div class="ls-ctl">
+              <h3>Fils de chaîne</h3>
+              <div class="ls-spools" role="group" aria-label="Couleur de chaîne" id="ls-warp-spools">
+                <button class="ls-spool" type="button" aria-pressed="true" data-col="#24314f" data-name="Indigo" aria-label="Couleur de chaîne indigo">
+                  <svg viewBox="0 0 34 34" aria-hidden="true"><g class="ls-bobbin"><rect x="8" y="4" width="18" height="3" fill="#241f1a"/><rect x="8" y="27" width="18" height="3" fill="#241f1a"/><rect x="11" y="7" width="12" height="20" fill="#24314f"/><rect x="11" y="10" width="12" height="1.6" fill="#3d4d73"/><rect x="11" y="15" width="12" height="1.6" fill="#3d4d73"/><rect x="11" y="20" width="12" height="1.6" fill="#3d4d73"/></g></svg>
+                  <span class="ls-spool-lab">Indigo</span>
+                </button>
+                <button class="ls-spool" type="button" aria-pressed="false" data-col="#d3c2a0" data-name="Linen" aria-label="Couleur de chaîne lin écru">
+                  <svg viewBox="0 0 34 34" aria-hidden="true"><g class="ls-bobbin"><rect x="8" y="4" width="18" height="3" fill="#241f1a"/><rect x="8" y="27" width="18" height="3" fill="#241f1a"/><rect x="11" y="7" width="12" height="20" fill="#d3c2a0"/><rect x="11" y="10" width="12" height="1.6" fill="#efe4c8"/><rect x="11" y="15" width="12" height="1.6" fill="#efe4c8"/><rect x="11" y="20" width="12" height="1.6" fill="#efe4c8"/></g></svg>
+                  <span class="ls-spool-lab">Linen</span>
+                </button>
+                <button class="ls-spool" type="button" aria-pressed="false" data-col="#a02f3e" data-name="Madder" aria-label="Couleur de chaîne garance">
+                  <svg viewBox="0 0 34 34" aria-hidden="true"><g class="ls-bobbin"><rect x="8" y="4" width="18" height="3" fill="#241f1a"/><rect x="8" y="27" width="18" height="3" fill="#241f1a"/><rect x="11" y="7" width="12" height="20" fill="#a02f3e"/><rect x="11" y="10" width="12" height="1.6" fill="#c2505e"/><rect x="11" y="15" width="12" height="1.6" fill="#c2505e"/><rect x="11" y="20" width="12" height="1.6" fill="#c2505e"/></g></svg>
+                  <span class="ls-spool-lab">Madder</span>
+                </button>
+                <button class="ls-spool" type="button" aria-pressed="false" data-col="#26262a" data-name="Charcoal" aria-label="Couleur de chaîne charbon">
+                  <svg viewBox="0 0 34 34" aria-hidden="true"><g class="ls-bobbin"><rect x="8" y="4" width="18" height="3" fill="#241f1a"/><rect x="8" y="27" width="18" height="3" fill="#241f1a"/><rect x="11" y="7" width="12" height="20" fill="#26262a"/><rect x="11" y="10" width="12" height="1.6" fill="#4a4a52"/><rect x="11" y="15" width="12" height="1.6" fill="#4a4a52"/><rect x="11" y="20" width="12" height="1.6" fill="#4a4a52"/></g></svg>
+                  <span class="ls-spool-lab">Charcoal</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="ls-ctl">
+              <h3>Trames</h3>
+              <div class="ls-spools" role="group" aria-label="Couleur de trame" id="ls-weft-spools">
+                <button class="ls-spool" type="button" aria-pressed="false" data-col="#24314f" data-name="Indigo" aria-label="Couleur de trame indigo">
+                  <svg viewBox="0 0 34 34" aria-hidden="true"><g class="ls-bobbin"><rect x="8" y="4" width="18" height="3" fill="#241f1a"/><rect x="8" y="27" width="18" height="3" fill="#241f1a"/><rect x="11" y="7" width="12" height="20" fill="#24314f"/><rect x="11" y="10" width="12" height="1.6" fill="#3d4d73"/><rect x="11" y="15" width="12" height="1.6" fill="#3d4d73"/><rect x="11" y="20" width="12" height="1.6" fill="#3d4d73"/></g></svg>
+                  <span class="ls-spool-lab">Indigo</span>
+                </button>
+                <button class="ls-spool" type="button" aria-pressed="true" data-col="#d3c2a0" data-name="Linen" aria-label="Couleur de trame lin écru">
+                  <svg viewBox="0 0 34 34" aria-hidden="true"><g class="ls-bobbin"><rect x="8" y="4" width="18" height="3" fill="#241f1a"/><rect x="8" y="27" width="18" height="3" fill="#241f1a"/><rect x="11" y="7" width="12" height="20" fill="#d3c2a0"/><rect x="11" y="10" width="12" height="1.6" fill="#efe4c8"/><rect x="11" y="15" width="12" height="1.6" fill="#efe4c8"/><rect x="11" y="20" width="12" height="1.6" fill="#efe4c8"/></g></svg>
+                  <span class="ls-spool-lab">Linen</span>
+                </button>
+                <button class="ls-spool" type="button" aria-pressed="false" data-col="#a02f3e" data-name="Madder" aria-label="Couleur de trame garance">
+                  <svg viewBox="0 0 34 34" aria-hidden="true"><g class="ls-bobbin"><rect x="8" y="4" width="18" height="3" fill="#241f1a"/><rect x="8" y="27" width="18" height="3" fill="#241f1a"/><rect x="11" y="7" width="12" height="20" fill="#a02f3e"/><rect x="11" y="10" width="12" height="1.6" fill="#c2505e"/><rect x="11" y="15" width="12" height="1.6" fill="#c2505e"/><rect x="11" y="20" width="12" height="1.6" fill="#c2505e"/></g></svg>
+                  <span class="ls-spool-lab">Madder</span>
+                </button>
+                <button class="ls-spool" type="button" aria-pressed="false" data-col="#26262a" data-name="Charcoal" aria-label="Couleur de trame charbon">
+                  <svg viewBox="0 0 34 34" aria-hidden="true"><g class="ls-bobbin"><rect x="8" y="4" width="18" height="3" fill="#241f1a"/><rect x="8" y="27" width="18" height="3" fill="#241f1a"/><rect x="11" y="7" width="12" height="20" fill="#26262a"/><rect x="11" y="10" width="12" height="1.6" fill="#4a4a52"/><rect x="11" y="15" width="12" height="1.6" fill="#4a4a52"/><rect x="11" y="20" width="12" height="1.6" fill="#4a4a52"/></g></svg>
+                  <span class="ls-spool-lab">Charcoal</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="ls-ctl">
+              <h3>Structure</h3>
+              <div class="ls-patterns" role="group" aria-label="Weave structure">
+                <button class="ls-pat" type="button" aria-pressed="false" data-pat="plain" aria-label="Toile">
+                  <svg viewBox="0 0 26 26" aria-hidden="true"><rect x="1" y="1" width="6" height="6"/><rect x="9" y="1" width="6" height="6"/><rect x="17" y="1" width="6" height="6"/><rect x="5" y="9" width="6" height="6"/><rect x="13" y="9" width="6" height="6"/><rect x="21" y="9" width="6" height="6"/><rect x="1" y="17" width="6" height="6"/><rect x="9" y="17" width="6" height="6"/><rect x="17" y="17" width="6" height="6"/></svg>
+                  Toile
+                </button>
+                <button class="ls-pat" type="button" aria-pressed="true" data-pat="twill" aria-label="Sergé 2/2">
+                  <svg viewBox="0 0 26 26" aria-hidden="true"><rect x="1" y="1" width="6" height="6"/><rect x="9" y="1" width="6" height="6"/><rect x="5" y="9" width="6" height="6"/><rect x="13" y="9" width="6" height="6"/><rect x="21" y="9" width="6" height="6"/><rect x="1" y="17" width="6" height="6"/><rect x="9" y="17" width="6" height="6"/><rect x="17" y="17" width="6" height="6"/></svg>
+                  Sergé
+                </button>
+                <button class="ls-pat" type="button" aria-pressed="false" data-pat="herringbone" aria-label="Chevrons">
+                  <svg viewBox="0 0 26 26" aria-hidden="true"><rect x="1" y="1" width="6" height="6"/><rect x="9" y="1" width="6" height="6"/><rect x="5" y="9" width="6" height="6"/><rect x="13" y="9" width="6" height="6"/><rect x="17" y="9" width="6" height="6"/><rect x="21" y="9" width="6" height="6"/><rect x="1" y="17" width="6" height="6"/><rect x="9" y="17" width="6" height="6"/><rect x="17" y="17" width="6" height="6"/></svg>
+                  Chevrons
+                </button>
+                <button class="ls-pat" type="button" aria-pressed="false" data-pat="overshot" aria-label="Overshot (dérobé)">
+                  <svg viewBox="0 0 26 26" aria-hidden="true"><rect x="1" y="1" width="6" height="6"/><rect x="17" y="1" width="6" height="6"/><rect x="1" y="9" width="6" height="6"/><rect x="5" y="9" width="6" height="6"/><rect x="9" y="9" width="6" height="6"/><rect x="13" y="9" width="6" height="6"/><rect x="17" y="17" width="6" height="6"/><rect x="21" y="17" width="6" height="6"/></svg>
+                  Dérobé
+                </button>
+                <button class="ls-pat" type="button" aria-pressed="false" data-pat="custom" aria-label="Pointage personnalisé">
+                  <svg viewBox="0 0 26 26" aria-hidden="true"><rect x="1" y="1" width="6" height="6"/><rect x="13" y="1" width="6" height="6"/><rect x="5" y="9" width="6" height="6"/><rect x="17" y="9" width="6" height="6"/><rect x="1" y="17" width="6" height="6"/><rect x="9" y="17" width="6" height="6"/><rect x="21" y="17" width="6" height="6"/></svg>
+                  Pointage
+                </button>
+              </div>
+            </div>
+
+            <div class="ls-ctl">
+              <h3>Densité et tension</h3>
+              <div class="ls-slider-row">
+                <label class="ls-vh" for="ls-epi">Densité en fils par pouce</label>
+                <input type="range" id="ls-epi" min="12" max="48" step="2" value="24" />
+                <div class="ls-slider-labels ls-mono"><span>12 EPI aéré</span><span id="ls-epi-read">24 EPI</span><span>48 EPI ferme</span></div>
+              </div>
+              <div class="ls-tension" role="group" aria-label="Tension" style="margin-top:14px;">
+                <button type="button" aria-pressed="false" data-ten="slack">Molle</button>
+                <button type="button" aria-pressed="true" data-ten="working">De travail</button>
+                <button type="button" aria-pressed="false" data-ten="bridge">Maximale</button>
+              </div>
+              <p class="ls-readout" style="margin-top:10px;">Main : <b id="ls-hand">souple, beau drapé</b></p>
+            </div>
+          </div>
+
+          <div class="ls-row" style="--ls-d: 220ms">
+            <div class="ls-cloth-wrap">
+              <canvas id="ls-cloth" width="720" height="480" role="img" aria-label="Échantillon tissé en direct : vos couleurs de chaîne et de trame dans la structure choisie"></canvas>
+            </div>
+            <div class="ls-cloth-meta ls-mono">
+              <span>Échantillon <b id="ls-meta-pat">sergé 2/2</b></span>
+              <span>Chaîne <b id="ls-meta-warp">indigo</b> · Trame <b id="ls-meta-weft">lin</b></span>
+              <span>Densité <b id="ls-meta-epi">24 EPI</b> · Tension <b id="ls-meta-ten">de travail</b></span>
+              <span>Largeur 6 po · tracé à <b id="ls-meta-px">5.0 px</b>/fil</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Band III · draft editor -->
+    <section class="ls-band" id="ls-draft" aria-labelledby="ls-draft-h">
+      <div class="ls-band-in ls-over">
+        <div class="ls-row">
+          <p class="ls-eyebrow ls-mono">Navette II · le pointage</p>
+          <h2 class="ls-h2" id="ls-draft-h">Remplissez les cases comme on lit un pointage</h2>
+          <p class="ls-lede">Huit pédales, huit trames. Cliquez les cases pour lever les harnais, regardez la mini-toile se réécrire, puis lancez ce pointage sur le grand métier.</p>
+        </div>
+        <div class="ls-draftband" style="margin-top: 30px;">
+          <div class="ls-row" style="--ls-d: 120ms">
+            <div class="ls-draftgrid-wrap">
+              <div class="ls-draft-axis" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span></div>
+              <div class="ls-draftgrid" id="ls-draftgrid" role="grid" aria-label="Pointage de montage, 8 trames sur 8 fils">
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 1, fil 1"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 1, fil 2"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 1, fil 3"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 1, fil 4"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 1, fil 5"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 1, fil 6"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 1, fil 7"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 1, fil 8"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 2, fil 1"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 2, fil 2"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 2, fil 3"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 2, fil 4"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 2, fil 5"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 2, fil 6"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 2, fil 7"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 2, fil 8"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 3, fil 1"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 3, fil 2"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 3, fil 3"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 3, fil 4"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 3, fil 5"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 3, fil 6"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 3, fil 7"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 3, fil 8"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 4, fil 1"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 4, fil 2"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 4, fil 3"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 4, fil 4"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 4, fil 5"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 4, fil 6"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 4, fil 7"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 4, fil 8"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 5, fil 1"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 5, fil 2"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 5, fil 3"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 5, fil 4"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 5, fil 5"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 5, fil 6"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 5, fil 7"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 5, fil 8"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 6, fil 1"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 6, fil 2"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 6, fil 3"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 6, fil 4"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 6, fil 5"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 6, fil 6"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 6, fil 7"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 6, fil 8"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 7, fil 1"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 7, fil 2"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 7, fil 3"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 7, fil 4"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 7, fil 5"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 7, fil 6"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 7, fil 7"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 7, fil 8"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 8, fil 1"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 8, fil 2"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 8, fil 3"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 8, fil 4"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 8, fil 5"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 8, fil 6"></button>
+              <button type="button" class="ls-cell" role="gridcell" aria-pressed="false" aria-label="Trame 8, fil 7"></button>
+              <button type="button" class="ls-cell on" role="gridcell" aria-pressed="true" aria-label="Trame 8, fil 8"></button>
+            </div>
+              <div class="ls-draft-legend ls-mono"><span>Rangées : trames 1–8</span><span>Colonnes : fils 1–8 · répétition</span></div>
+            </div>
+            <div class="ls-draft-actions">
+              <button class="ls-btn" type="button" id="ls-use-draft">Lancer sur le métier</button>
+              <button class="ls-btn is-ghost" type="button" id="ls-reset-draft">Remettre le sergé</button>
+            </div>
+            <p class="ls-mono" style="margin-top:14px; color:var(--ls-ink-3);" id="ls-draft-state" aria-live="polite">Pointage : montage sergé 2/2</p>
+          </div>
+          <div class="ls-row" style="--ls-d: 240ms">
+            <canvas id="ls-draft-sample" width="420" height="300" role="img" aria-label="Mini-toile tissée selon votre pointage"></canvas>
+            <p class="ls-mono" style="margin-top:10px; color:var(--ls-ink-3);">Mini-toile · répète le pointage toutes les 8 chaînes × 8 trames</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Band IV · yarns, indigo panel over the warp, plate under it -->
+    <section class="ls-band" id="ls-yarns" aria-labelledby="ls-yarns-h">
+      <div class="ls-band-in">
+        <div class="ls-indigo-panel ls-row">
+          <p class="ls-eyebrow ls-mono">Navette III · les fils</p>
+          <h2 class="ls-h2" id="ls-yarns-h">Des fibres avec des noms, des lots avec des numéros</h2>
+          <p class="ls-lede">Quatre fils en magasin. Tout est teint ou filé par lots qu'on peut nommer par numéro; demandez une carte d'échantillons, elle part avec la prochaine commande de chaîne.</p>
+          <ul class="ls-yarn-ledger">
+            <li><span class="y-name">Laine 2/8</span><span class="y-spec">Type Bluefaced Leicester, filage worsted, 400 m pour 100 g, tonte de printemps</span><span class="y-lot">Lot w-118</span></li>
+            <li><span class="y-name">Lin 10/2</span><span class="y-spec">Lin de champ, rouissage de deux semaines, filé humide, 2 400 m pour 100 g</span><span class="y-lot">Lot f-047</span></li>
+            <li><span class="y-name">Cuve d'indigo</span><span class="y-spec">Six trempées, écheveau de 120 g, teint deux fois pour les fonds profonds</span><span class="y-lot">Bain 47</span></li>
+            <li><span class="y-name">Racine de garance</span><span class="y-spec">Quatre trempées sur alun, écheveau de 80 g, remué à 60 °C pendant deux heures</span><span class="y-lot">Bain 52</span></li>
+          </ul>
+        </div>
+        <div class="ls-plate-full ls-under">
+          <img src="/demos/lisiere/02.jpg" alt="Fils de chaîne de lin et de laine écru passant dans les maillons d'un métier à pied, avec une navette posée sur la poutre de drêche" width="1536" height="1024" loading="lazy" decoding="async" />
+          <p class="ls-plate-cap ls-mono">Planche II · 1 134 fils, noués ce matin</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Band V · length & price calculator -->
+    <section class="ls-band" id="ls-calc" aria-labelledby="ls-calc-h">
+      <div class="ls-band-in ls-over">
+        <div class="ls-row">
+          <p class="ls-eyebrow ls-mono">Navette IV · le registre</p>
+          <h2 class="ls-h2" id="ls-calc-h">Prixsez la pièce avant de monter la chaîne</h2>
+          <p class="ls-lede">Le calculateur lit votre métier : structure et densité nourrissent le compte de trames, le compte de trames nourrit les heures. Pas de surprise au ramassage.</p>
+        </div>
+
+        <div class="ls-calc" style="margin-top: 30px;">
+          <div class="ls-row" style="--ls-d: 120ms">
+            <div class="ls-field">
+              <label for="ls-width">Largeur (cm, tissée)</label>
+              <select id="ls-width">
+                <option value="40">40 · chemin de table</option>
+                <option value="70">70 · châle</option>
+                <option value="120" selected>120 · couverture</option>
+                <option value="150">150 · courtepointe</option>
+              </select>
+            </div>
+            <div class="ls-field">
+              <label for="ls-length">Longueur (m)</label>
+              <input type="range" id="ls-length" min="0.5" max="3" step="0.1" value="1.8" style="width:100%;" />
+              <div class="ls-slider-labels ls-mono" style="margin-top:6px;"><span>0,5 m</span><span id="ls-len-read">1.8 m</span><span>3,0 m</span></div>
+            </div>
+            <div class="ls-field">
+              <label for="ls-fibre">Fibre</label>
+              <select id="ls-fibre">
+                <option value="wool" selected>Laine 2/8 · 0,016 $/m</option>
+                <option value="linen">Lin 10/2 · 0,013 $/m</option>
+                <option value="blend">Laine/lin 50-50 · 0,0145 $/m</option>
+              </select>
+            </div>
+            <div class="ls-field">
+              <label for="ls-finish">Finition</label>
+              <select id="ls-finish">
+                <option value="fringe">Frange, tressée à la main · +15 $</option>
+                <option value="hem" selected>Ourlet machine · +25 $</option>
+                <option value="hand">Bord roulé main · +40 $</option>
+              </select>
+            </div>
+            <p class="ls-mono" style="color:var(--ls-ink-3);">Densité et structure viennent de la bande du métier ci-dessus : <b id="ls-calc-echo">24 EPI · sergé 2/2</b></p>
+          </div>
+
+          <div class="ls-row" style="--ls-d: 240ms">
+            <div class="ls-ledger" role="table" aria-label="Registre de prix">
+              <div class="ls-ledger-row"><span>Fils de chaîne (largeur ÷ 2,54 × EPI)</span><b id="ls-o-ends">1,134</b></div>
+              <div class="ls-ledger-row"><span>Fil de chaîne (fils × (long. + 1,4 m))</span><b id="ls-o-warp">3.2 m/end · C$58.06</b></div>
+              <div class="ls-ledger-row"><span>Trames (long. × 39,37 × EPI)</span><b id="ls-o-picks">1,701</b></div>
+              <div class="ls-ledger-row"><span>Fil de trame (trames × largeur)</span><b id="ls-o-weft">C$32.66</b></div>
+              <div class="ls-ledger-row"><span>Heures de métier (trames × facteur ÷ 300)</span><b id="ls-o-hours">6.2 h × C$48</b></div>
+              <div class="ls-ledger-row"><span>Fils + main-d'œuvre</span><b id="ls-o-mid">C$90.72 + C$299.38</b></div>
+              <div class="ls-ledger-row"><span>Finition</span><b id="ls-o-finish">C$25.00</b></div>
+              <div class="ls-ledger-row is-total"><span>Total estimé</span><b id="ls-o-total">C$420</b></div>
+            </div>
+            <p class="ls-ledger-note ls-mono">Estimation seulement, CAD · 300 trames/heure, 48 $/h d'établi · chiffres de démo, atelier fictif</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Band VI · finished pieces draw-down -->
+    <section class="ls-band" id="ls-pieces" aria-labelledby="ls-pieces-h">
+      <div class="ls-band-in">
+        <div class="ls-row ls-over" style="background:transparent;">
+          <p class="ls-eyebrow ls-mono">Navette V · le relevé</p>
+          <h2 class="ls-h2" id="ls-pieces-h">Ce qui sort du métier, à quel prix</h2>
+        </div>
+        <div class="ls-under" style="margin-top: 8px;">
+          <img src="/demos/lisiere/04.jpg" alt="Pile de couvertures pliées en laine écru, lin, indigo et charbon, avec une rayure garance et des franges tressées" width="1536" height="1024" loading="lazy" decoding="async" style="max-height:40vh; width:100%; object-fit:cover;" />
+        </div>
+        <table class="ls-drawdown ls-row" style="margin-top: 26px; --ls-d: 100ms;">
+          <thead>
+            <tr><th scope="col">Pièce</th><th scope="col">Format (cm)</th><th scope="col">Structure</th><th scope="col">Délai</th><th scope="col">Prix</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Chemin de table</td><td class="mono">40 × 180</td><td class="mono">Toile, bordure garance</td><td class="mono">3–4 sem.</td><td class="price">145 $</td></tr>
+            <tr><td>Couverture</td><td class="mono">130 × 180</td><td class="mono">Sergé 2/2, laine</td><td class="mono">6–8 sem.</td><td class="price">690 $</td></tr>
+            <tr><td>Couverture de bébé</td><td class="mono">80 × 100</td><td class="mono">Chevrons, lavage doux</td><td class="mono">5–7 sem.</td><td class="price">310 $</td></tr>
+            <tr><td>Tissu au mètre</td><td class="mono">150 de large, au mètre</td><td class="mono">Pointage du client</td><td class="mono">6–10 sem.</td><td class="price">185 $/m</td></tr>
+            <tr><td>Set de table, la paire</td><td class="mono">35 × 45</td><td class="mono">Dérobé, fond lin</td><td class="mono">3–4 sem.</td><td class="price">95 $</td></tr>
+          </tbody>
+        </table>
+        <div class="ls-plate-full ls-under">
+          <img src="/demos/lisiere/03.jpg" alt="Établi vu du dessus avec un pointage dessiné à la main sur papier millimétré, bobines indigo et garance, mètre ruban et échantillons de laine" width="1536" height="1024" loading="lazy" decoding="async" />
+          <p class="ls-plate-cap ls-mono">Planche III · le pointage va à l'établi avant le fil</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Band VII · commission as warp order -->
+    <section class="ls-band" id="ls-order" aria-labelledby="ls-order-h">
+      <div class="ls-band-in ls-over">
+        <div class="ls-row">
+          <p class="ls-eyebrow ls-mono">Navette VI · la commande de chaîne</p>
+          <h2 class="ls-h2" id="ls-order-h">Une commission commence par une chaîne, pas par un message</h2>
+          <p class="ls-lede">Remplissez la commande comme on le fait à l'atelier : quelle largeur, quelle densité, jusqu'où court la chaîne. La colonne de droite calcule pendant que vous tapez.</p>
+        </div>
+
+        <div class="ls-order" style="margin-top: 30px;">
+          <form class="ls-order-form ls-row" id="ls-order-form" style="--ls-d: 120ms;" novalidate>
+            <div class="ls-field">
+              <label for="ls-o-width">Largeur tissée (cm)</label>
+              <input type="number" id="ls-o-width" name="width" min="20" max="150" value="100" required />
+            </div>
+            <div class="ls-field">
+              <label for="ls-o-dent">Peigne (dents / 10 cm)</label>
+              <select id="ls-o-dent" name="dent">
+                <option value="20">20 · lâche</option>
+                <option value="30">30</option>
+                <option value="40" selected>40 · standard</option>
+                <option value="60">60 · fin</option>
+              </select>
+            </div>
+            <div class="ls-field">
+              <label for="ls-cpd">Fils par dent</label>
+              <select id="ls-cpd" name="cpd">
+                <option value="1">1</option>
+                <option value="2" selected>2</option>
+                <option value="3">3</option>
+              </select>
+            </div>
+            <div class="ls-field">
+              <label for="ls-o-len">Longueur de chaîne (m)</label>
+              <input type="number" id="ls-o-len" name="length" min="2" max="20" step="0.5" value="6" required />
+            </div>
+            <div class="ls-field">
+              <label for="ls-o-yarn">Fil de chaîne</label>
+              <select id="ls-o-yarn" name="yarn">
+                <option value="wool" selected>Laine 2/8 · 0,25 g/m</option>
+                <option value="linen">Lin 10/2 · 0,16 g/m</option>
+                <option value="blend">Mélange 50-50 · 0,21 g/m</option>
+              </select>
+            </div>
+            <div class="ls-field">
+              <label for="ls-o-window">Fenêtre de début</label>
+              <select id="ls-o-window" name="window">
+                <option>Décembre 2026</option>
+                <option selected>Janvier 2027</option>
+                <option>Février 2027</option>
+                <option>Mars 2027</option>
+              </select>
+            </div>
+            <div class="ls-field ls-wide">
+              <label for="ls-o-notes">Notes pour l'établi de montage</label>
+              <textarea id="ls-o-notes" name="notes" placeholder="Première commande. Un chemin de table sur fond indigo avec une rayure garance."></textarea>
+            </div>
+            <div class="ls-field">
+              <label for="ls-o-name">Name</label>
+              <input type="text" id="ls-o-name" name="name" autocomplete="name" required placeholder="M. Girard" />
+            </div>
+            <div class="ls-field">
+              <label for="ls-o-email">Email</label>
+              <input type="email" id="ls-o-email" name="email" autocomplete="email" required placeholder="vous@exemple.com" />
+            </div>
+            <div class="ls-wide" style="display:flex; gap:14px; align-items:center; flex-wrap:wrap;">
+              <button class="ls-btn" type="submit">Envoyer la commande de chaîne</button>
+              <span class="ls-mono" style="color:var(--ls-ink-3);">Réponse sous 2 jours ouvrables</span>
+            </div>
+          </form>
+
+          <div class="ls-row" style="--ls-d: 260ms;">
+            <div class="ls-warp-math">
+              <h3>Calculateur de chaîne</h3>
+              <div class="ls-wm-row"><span>Fils de chaîne</span><b id="wm-ends">800</b></div>
+              <div class="ls-wm-row"><span>Nouage + perte</span><b>1.2 m</b></div>
+              <div class="ls-wm-row"><span>Chaîne totale</span><b id="wm-total">7.2 m</b></div>
+              <div class="ls-wm-row"><span>Fil requis</span><b id="wm-kg">≈ 1.44 kg</b></div>
+              <div class="ls-wm-row"><span>Trame par 10 cm</span><b id="wm-weft">20.0 g</b></div>
+              <p class="ls-wm-formula">fils = largeur ÷ 10 × dents/10cm × fils/dent<br />total = longueur de chaîne + 1,2 m<br />kg = fils × total × g/m ÷ 1000</p>
+            </div>
+            <div class="ls-stamp" id="ls-stamp" role="status" aria-live="polite">
+              <b>Commande de chaîne consignée</b>
+              <span id="ls-stamp-ref">Réf. LR-0000</span>
+              <small>Réponse de l'établi sous deux jours ouvrables. Formulaire de démo : rien n'a été envoyé.</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Band VIII · atelier facts, translucent so the warp ghosts through -->
+    <section class="ls-band ls-factsband" aria-labelledby="ls-facts-h">
+      <div class="ls-band-in">
+        <h2 class="ls-vh" id="ls-facts-h">Faits de l'atelier</h2>
+        <div class="ls-facts-grid ls-row">
+          <div class="ls-fact">
+            <h3>Heures d'établi</h3>
+            <p><b>Du mardi au samedi, de 9 h à 17 h.</b> Le mercredi est jour de montage; le métier se tait et le peigne sort.</p>
+          </div>
+          <div class="ls-fact">
+            <h3>Étapes de finition</h3>
+            <p><b>Laver à l'eau froide et au savon doux, fouler à la main, sécher à plat, repasser à la vapeur sur l'envers.</b> La frange se tresse après le premier lavage, jamais avant.</p>
+          </div>
+          <div class="ls-fact">
+            <h3>Délais</h3>
+            <p><b>6 à 10 semaines à partir d'un pointage signé.</b> Les chaînes d'hiver passent en premier; le tissu au mètre attend le changement de peigne du printemps.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="ls-fringe" aria-hidden="true"></div>
+  <footer class="ls-foot">
+    <div class="ls-label">
+      <h2>LISIÈRE</h2>
+      <p>Un atelier de tissage fictif à Danville, au Québec. Toute fibre, tout prix, tout peigne et toute date de cette page est inventé. Une démo de design par WEBAO, pas un site de client.</p>
+    </div>
+    <div class="ls-foot-cols">
+      <ul>
+        <li><a href="#ls-loom">Le métier</a></li>
+        <li><a href="#ls-calc">Registre de prix</a></li>
+        <li><a href="#ls-order">Commande de chaîne</a></li>
+      </ul>
+      <ul>
+        <li>+1 819 555-0173</li>
+        <li>atelier@lisiere.example</li>
+        <li>112, rang des Métiers</li>
+        <li>Danville (QC)</li>
+      </ul>
+      <ul>
+        <li>Horaire d'hiver 2026-27</li>
+        <li>Six harnais, une tisserande</li>
+        <li>Cartes d'échantillons sur demande</li>
+      </ul>
+    </div>
+    <div class="ls-legal">
+      <span>Lisière · entreprise fictive · contenu de démo seulement</span>
+      <span>Chiffres d'estimation, jamais un devis</span>
+    </div>
+  </footer>
+
+  <EscapeHatch locale="fr" />
+
+  <script>
+    (function () {
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      /* ——— state ————————————————————————————————— */
+      const state = {
+        warp: "#24314f",
+        weft: "#d3c2a0",
+        pat: "twill",
+        epi: 24,
+        tension: "working" as "slack" | "working" | "bridge",
+      };
+      const draft: number[][] = [];
+      const DRAFT_DEFAULT = function (r: number, c: number) { return ((((c - r) % 4) + 4) % 4) < 2 ? 1 : 0; };
+      for (let r = 0; r < 8; r++) { draft.push([]); for (let c = 0; c < 8; c++) { draft[r].push(DRAFT_DEFAULT(r, c)); } }
+
+      const PAT_NAMES: Record<string, string> = { plain: "toile", twill: "sergé 2/2", herringbone: "chevrons", overshot: "dérobé", custom: "pointage perso" };
+      const PAT_FACTOR: Record<string, number> = { plain: 1, twill: 1.1, herringbone: 1.15, overshot: 1.55, custom: 1.3 };
+      const shade = function (hex: string, amt: number) {
+        const n = parseInt(hex.slice(1), 16);
+        const r = Math.min(255, Math.max(0, (n >> 16) + amt));
+        const g = Math.min(255, Math.max(0, ((n >> 8) & 255) + amt));
+        const b = Math.min(255, Math.max(0, (n & 255) + amt));
+        return "rgb(" + r + "," + g + "," + b + ")";
+      };
+
+      /* ——— weave renderer ————————————————————————— */
+      const warpTop = function (i: number, j: number) {
+        switch (state.pat) {
+          case "plain": return (i + j) % 2 === 0;
+          case "twill": return ((((i - j) % 4) + 4) % 4) < 2;
+          case "herringbone": {
+            const dir = Math.floor(i / 10) % 2;
+            const x = dir === 0 ? (i - j) : (i + j);
+            return ((x % 4) + 4) % 4 < 2;
+          }
+          case "overshot": {
+            if (j % 4 === 0 || j % 4 === 2) return (i + j / 2) % 2 === 0; // tabby ground alternates each tabby pick
+            return i % 4 === 2; // pattern floats: over 3, under 1
+          }
+          default: return draft[j % 8][i % 8] === 1; // custom: raised harness = warp floats on top
+        }
+      };
+
+      const cloth = document.getElementById("ls-cloth") as HTMLCanvasElement | null;
+      const cctx = cloth ? cloth.getContext("2d") : null;
+      const clothSize = { w: 720, h: 480 };
+      const TEN_GAP: Record<string, number> = { slack: 0.34, working: 0.2, bridge: 0.1 };
+
+      const sizeCloth = function () {
+        if (!cloth || !cctx) return;
+        const rect = cloth.getBoundingClientRect();
+        const dpr = Math.min(2, window.devicePixelRatio || 1);
+        clothSize.w = Math.max(240, Math.round(rect.width));
+        clothSize.h = Math.max(200, Math.round(rect.height));
+        cloth.width = Math.round(clothSize.w * dpr);
+        cloth.height = Math.round(clothSize.h * dpr);
+        cctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      };
+
+      let weaveRaf = 0;
+      const drawCloth = function (progress: number) {
+        if (!cctx) return;
+        const ctx = cctx;
+        const W = clothSize.w; const H = clothSize.h;
+        ctx.fillStyle = "#17171b";
+        ctx.fillRect(0, 0, W, H);
+        const ends = Math.max(24, Math.round(6 * state.epi)); // 6-inch sample
+        const cw = W / ends;
+        const gap = TEN_GAP[state.tension];
+        const tw = Math.max(1.5, cw * (1 - gap));
+        const rows = Math.max(24, Math.round(H / cw));
+        const ch = H / rows;
+        const weftTop = state.weft;
+        const warpCol = state.warp;
+        const tabby = "#d3c2a0";
+        const fell = Math.max(1, Math.floor(rows * progress));
+
+        for (let j = 0; j < fell; j++) {
+          const y = j * ch;
+          for (let i = 0; i < ends; i++) {
+            const x = i * cw;
+            const up = warpTop(i, j);
+            if (up) {
+              // warp thread floating: vertical cylinder
+              ctx.fillStyle = warpCol;
+              ctx.fillRect(x + (cw - tw) / 2, y - 0.5, tw, ch + 1);
+              ctx.fillStyle = shade(warpCol, 34);
+              ctx.fillRect(x + (cw - tw) / 2, y - 0.5, Math.max(1, tw * 0.3), ch + 1);
+              ctx.fillStyle = "rgba(0,0,0,0.28)";
+              ctx.fillRect(x + (cw - tw) / 2 + tw - 1, y - 0.5, 1, ch + 1);
+            } else {
+              // weft passing: horizontal cylinder
+              let col = weftTop;
+              if (state.pat === "overshot" && (j % 4 === 0 || j % 4 === 2)) col = tabby;
+              ctx.fillStyle = col;
+              ctx.fillRect(x - 0.5, y + (ch - tw) / 2, cw + 1, tw);
+              ctx.fillStyle = shade(col, 30);
+              ctx.fillRect(x - 0.5, y + (ch - tw) / 2, cw + 1, Math.max(1, tw * 0.3));
+              ctx.fillStyle = "rgba(0,0,0,0.3)";
+              ctx.fillRect(x - 0.5, y + (ch - tw) / 2 + tw - 1, cw + 1, 1);
+            }
+          }
+        }
+        // fell line where the cloth is still being made
+        if (progress < 1) {
+          const fy = fell * ch;
+          ctx.strokeStyle = "rgba(160,47,62,0.9)";
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.moveTo(0, fy + 0.5);
+          ctx.lineTo(W, fy + 0.5);
+          ctx.stroke();
+        }
+        // reed shadow at the top edge
+        const g = ctx.createLinearGradient(0, 0, 0, 18);
+        g.addColorStop(0, "rgba(0,0,0,0.45)");
+        g.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, W, 18);
+      };
+
+      const weave = function (animate: boolean) {
+        if (!cctx) return;
+        cancelAnimationFrame(weaveRaf);
+        if (!animate || reduceMotion) { drawCloth(1); return; }
+        const t0 = performance.now();
+        const dur = 750;
+        const step = function (t: number) {
+          const p = Math.min(1, (t - t0) / dur);
+          drawCloth(1 - Math.pow(1 - p, 2));
+          if (p < 1) weaveRaf = requestAnimationFrame(step);
+        };
+        weaveRaf = requestAnimationFrame(step);
+      };
+
+      /* ——— meta readouts ————————————————————————— */
+      const setText = function (id: string, v: string) { const el = document.getElementById(id); if (el) el.textContent = v; };
+      const syncMeta = function () {
+        setText("ls-meta-pat", PAT_NAMES[state.pat]);
+        const wName = document.querySelector("#ls-warp-spools [aria-pressed='true']")?.getAttribute("data-name")?.toLowerCase() ?? "";
+        const fName = document.querySelector("#ls-weft-spools [aria-pressed='true']")?.getAttribute("data-name")?.toLowerCase() ?? "";
+        setText("ls-meta-warp", wName);
+        setText("ls-meta-weft", fName);
+        setText("ls-meta-epi", state.epi + " EPI");
+        setText("ls-meta-ten", TEN_NAMES[state.tension]);
+        const ends = Math.max(24, Math.round(6 * state.epi));
+        setText("ls-meta-px", (clothSize.w / ends).toFixed(1));
+        setText("ls-epi-read", state.epi + " EPI");
+        setText("ls-hand", state.epi < 17 ? "aéré, drapé marqué" : state.epi < 29 ? "souple, beau drapé" : state.epi < 40 ? "ferme, stable" : "rigide, tapis");
+        setText("ls-calc-echo", state.epi + " EPI · " + PAT_NAMES[state.pat]);
+        const sl = document.getElementById("ls-epi") as HTMLInputElement | null;
+        if (sl) sl.style.setProperty("--ls-fill", (((state.epi - 12) / 36) * 100).toFixed(1) + "%");
+        renderCalc();
+      };
+
+      /* ——— controls ————————————————————————————————— */
+      const spinSpool = function (btn: HTMLElement) {
+        btn.classList.remove("is-spin");
+        void btn.getBoundingClientRect();
+        btn.classList.add("is-spin");
+      };
+      const wireSpools = function (groupId: string, key: "warp" | "weft") {
+        const group = document.getElementById(groupId);
+        if (!group) return;
+        group.querySelectorAll<HTMLButtonElement>(".ls-spool").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            group.querySelectorAll(".ls-spool").forEach(function (b) { b.setAttribute("aria-pressed", "false"); });
+            btn.setAttribute("aria-pressed", "true");
+            (state as Record<string, unknown>)[key] = btn.getAttribute("data-col");
+            spinSpool(btn);
+            syncMeta();
+            weave(true);
+          });
+        });
+      };
+      wireSpools("ls-warp-spools", "warp");
+      wireSpools("ls-weft-spools", "weft");
+
+      document.querySelectorAll<HTMLButtonElement>(".ls-pat").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          document.querySelectorAll(".ls-pat").forEach(function (b) { b.setAttribute("aria-pressed", "false"); });
+          btn.setAttribute("aria-pressed", "true");
+          state.pat = btn.getAttribute("data-pat") ?? "twill";
+          syncMeta();
+          weave(true);
+        });
+      });
+
+      const epiInput = document.getElementById("ls-epi") as HTMLInputElement | null;
+      epiInput?.addEventListener("input", function () {
+        state.epi = Number(epiInput.value);
+        syncMeta();
+        weave(true);
+      });
+      document.querySelectorAll<HTMLButtonElement>(".ls-tension button").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          document.querySelectorAll(".ls-tension button").forEach(function (b) { b.setAttribute("aria-pressed", "false"); });
+          btn.setAttribute("aria-pressed", "true");
+          state.tension = (btn.getAttribute("data-ten") ?? "working") as typeof state.tension;
+          syncMeta();
+          weave(true);
+        });
+      });
+
+      /* ——— draft editor ————————————————————————— */
+      // La grille 8×8 est dans le HTML (lisible sans JS) ; on la câble ici.
+      const grid = document.getElementById("ls-draftgrid");
+      if (grid) {
+        grid.querySelectorAll<HTMLButtonElement>(".ls-cell").forEach(function (cell, idx) {
+          const rr = Math.floor(idx / 8); const cc = idx % 8;
+          cell.addEventListener("click", function () {
+            draft[rr][cc] = draft[rr][cc] ? 0 : 1;
+            cell.classList.toggle("on", draft[rr][cc] === 1);
+            cell.setAttribute("aria-pressed", String(draft[rr][cc] === 1));
+            const el = document.getElementById("ls-draft-state");
+            if (el) el.textContent = "Pointage modifié : " + countOn(draft) + " cases levées";
+            drawDraftSample(true);
+          });
+        });
+      }
+      const countOn = function (g: number[][]) { let n = 0; g.forEach(function (row) { row.forEach(function (v) { n += v; }); }); return n; };
+
+      const dsample = document.getElementById("ls-draft-sample") as HTMLCanvasElement | null;
+      const dctx = dsample ? dsample.getContext("2d") : null;
+      const drawDraftSample = function (animate: boolean) {
+        if (!dctx || !dsample) return;
+        const dpr = Math.min(2, window.devicePixelRatio || 1);
+        const rect = dsample.getBoundingClientRect();
+        const w = Math.max(200, Math.round(rect.width)); const h = 300;
+        dsample.width = Math.round(w * dpr); dsample.height = Math.round(h * dpr);
+        dctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        const draw = function (prog: number) {
+          dctx.fillStyle = "#f6f1e4";
+          dctx.fillRect(0, 0, w, h);
+          const cw = w / 40; const rows = Math.floor(h / cw);
+          const fell = Math.floor(rows * prog);
+          for (let j = 0; j < fell; j++) {
+            for (let i = 0; i < 40; i++) {
+              const up = draft[j % 8][i % 8] === 1;
+              const x = i * cw; const y = j * cw;
+              if (up) {
+                dctx.fillStyle = "#24314f";
+                dctx.fillRect(x + cw * 0.2, y, cw * 0.6, cw + 0.5);
+                dctx.fillStyle = "#3d4d73";
+                dctx.fillRect(x + cw * 0.2, y, cw * 0.18, cw + 0.5);
+              } else {
+                dctx.fillStyle = "#a02f3e";
+                dctx.fillRect(x, y + cw * 0.2, cw + 0.5, cw * 0.6);
+                dctx.fillStyle = "#c2505e";
+                dctx.fillRect(x, y + cw * 0.2, cw + 0.5, cw * 0.18);
+              }
+            }
+          }
+        };
+        cancelAnimationFrame(draftRaf);
+        if (!animate || reduceMotion) { draw(1); return; }
+        const t0 = performance.now();
+        const step = function (t: number) {
+          const p = Math.min(1, (t - t0) / 600);
+          draw(p);
+          if (p < 1) draftRaf = requestAnimationFrame(step);
+        };
+        draftRaf = requestAnimationFrame(step);
+      };
+      let draftRaf = 0;
+
+      document.getElementById("ls-use-draft")?.addEventListener("click", function () {
+        state.pat = "custom";
+        document.querySelectorAll(".ls-pat").forEach(function (b) {
+          b.setAttribute("aria-pressed", String(b.getAttribute("data-pat") === "custom"));
+        });
+        syncMeta();
+        weave(true);
+        document.getElementById("ls-loom")?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
+      });
+      document.getElementById("ls-reset-draft")?.addEventListener("click", function () {
+        for (let r = 0; r < 8; r++) for (let c = 0; c < 8; c++) draft[r][c] = DRAFT_DEFAULT(r, c);
+        document.querySelectorAll<HTMLElement>(".ls-cell").forEach(function (cell, idx) {
+          const r = Math.floor(idx / 8); const c = idx % 8;
+          cell.classList.toggle("on", draft[r][c] === 1);
+          cell.setAttribute("aria-pressed", String(draft[r][c] === 1));
+        });
+        const el = document.getElementById("ls-draft-state");
+        if (el) el.textContent = "Pointage : montage sergé 2/2";
+        drawDraftSample(true);
+      });
+
+      /* ——— calculator ————————————————————————— */
+      const RATES: Record<string, number> = { wool: 0.016, linen: 0.013, blend: 0.0145 };
+      const FINISH: Record<string, number> = { fringe: 15, hem: 25, hand: 40 };
+      const widthSel = document.getElementById("ls-width") as HTMLSelectElement | null;
+      const lenInput = document.getElementById("ls-length") as HTMLInputElement | null;
+      const fibSel = document.getElementById("ls-fibre") as HTMLSelectElement | null;
+      const finSel = document.getElementById("ls-finish") as HTMLSelectElement | null;
+      const money = function (n: number) { return "C$" + n.toFixed(2); };
+      const TEN_NAMES: Record<string, string> = { slack: "molle", working: "de travail", bridge: "maximale" };
+      const renderCalc = function () {
+        if (!widthSel || !lenInput || !fibSel || !finSel) return;
+        const width = Number(widthSel.value);
+        const len = Number(lenInput.value);
+        const rate = RATES[fibSel.value] ?? 0.016;
+        const pf = PAT_FACTOR[state.pat] ?? 1;
+        setText("ls-len-read", len.toFixed(1) + " m");
+        const ends = Math.round((width / 2.54) * state.epi);
+        const warpLen = len + 1.4;
+        const warpCost = ends * warpLen * rate;
+        const picks = Math.round(len * 39.37 * state.epi);
+        const weftCost = picks * (width / 100) * rate;
+        const hours = (picks * pf) / 300;
+        const labour = hours * 48;
+        const yarn = warpCost + weftCost;
+        const finish = FINISH[finSel.value] ?? 25;
+        const total = Math.ceil((yarn + labour + finish) / 5) * 5;
+        setText("ls-o-ends", ends.toLocaleString("en-CA"));
+        setText("ls-o-warp", warpLen.toFixed(1) + " m/end · " + money(warpCost));
+        setText("ls-o-picks", picks.toLocaleString("en-CA"));
+        setText("ls-o-weft", money(weftCost));
+        setText("ls-o-hours", hours.toFixed(1) + " h × C$48");
+        setText("ls-o-mid", money(yarn) + " + " + money(labour));
+        setText("ls-o-finish", money(finish));
+        setText("ls-o-total", "C$" + total);
+      };
+      [widthSel, lenInput, fibSel, finSel].forEach(function (el) {
+        el?.addEventListener("input", renderCalc);
+        el?.addEventListener("change", renderCalc);
+      });
+
+      /* ——— warp order ————————————————————————— */
+      const gPerM: Record<string, number> = { wool: 0.25, linen: 0.16, blend: 0.21 };
+      const ow = document.getElementById("ls-o-width") as HTMLInputElement | null;
+      const od = document.getElementById("ls-o-dent") as HTMLSelectElement | null;
+      const oc = document.getElementById("ls-cpd") as HTMLSelectElement | null;
+      const ol = document.getElementById("ls-o-len") as HTMLInputElement | null;
+      const oy = document.getElementById("ls-o-yarn") as HTMLSelectElement | null;
+      const renderWarp = function () {
+        if (!ow || !od || !oc || !ol || !oy) return;
+        const width = Math.max(20, Math.min(150, Number(ow.value) || 100));
+        const ends = Math.round((width / 10) * Number(od.value) * Number(oc.value));
+        const total = (Number(ol.value) || 6) + 1.2;
+        const kg = (ends * total * (gPerM[oy.value] ?? 0.25)) / 1000;
+        // Weft per 10 cm of cloth: 10 cm of picks × width of the piece.
+        setText("wm-ends", ends.toLocaleString("en-CA"));
+        setText("wm-total", total.toFixed(1) + " m");
+        setText("wm-kg", "≈ " + kg.toFixed(2) + " kg");
+        setText("wm-weft", ((ends / 10) * (gPerM[oy.value] ?? 0.25)).toFixed(1) + " g");
+      };
+      [ow, od, oc, ol, oy].forEach(function (el) {
+        el?.addEventListener("input", renderWarp);
+        el?.addEventListener("change", renderWarp);
+      });
+
+      const orderForm = document.getElementById("ls-order-form") as HTMLFormElement | null;
+      const stamp = document.getElementById("ls-stamp");
+      orderForm?.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const name = (document.getElementById("ls-o-name") as HTMLInputElement | null)?.value.trim() ?? "";
+        const email = (document.getElementById("ls-o-email") as HTMLInputElement | null)?.value ?? "";
+        if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          orderForm.reportValidity();
+          return;
+        }
+        const ref = "LR-" + String(Date.now() % 10000).padStart(4, "0");
+        const refEl = document.getElementById("ls-stamp-ref");
+        if (refEl) refEl.textContent = "Réf. " + ref + " · " + ((document.getElementById("wm-ends")?.textContent ?? "800") + " ends");
+        orderForm.style.display = "none";
+        stamp?.classList.add("is-on");
+      });
+
+      /* ——— shuttle travels with the scroll ————————————— */
+      const shuttle = document.getElementById("ls-shuttle") as HTMLElement | null;
+      const track = shuttle?.parentElement;
+      let shRaf = 0;
+      const moveShuttle = function () {
+        if (!shuttle || !track || reduceMotion) return;
+        cancelAnimationFrame(shRaf);
+        shRaf = requestAnimationFrame(function () {
+          const doc = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+          const p = Math.min(1, Math.max(0, window.scrollY / doc));
+          const tri = 1 - Math.abs(2 * ((p * 6) % 1) - 1); // six passes down the page
+          const span = track.clientWidth - shuttle.offsetWidth;
+          shuttle.style.transform = "translateX(" + (tri * span).toFixed(1) + "px)";
+          document.documentElement.style.setProperty("--ls-fell", (18 + p * 64).toFixed(1) + "%");
+        });
+      };
+      window.addEventListener("scroll", moveShuttle, { passive: true });
+      window.addEventListener("resize", moveShuttle);
+
+      /* ——— weft-pass reveals ————————————————————————— */
+      const rows = document.querySelectorAll(".ls-row");
+      if (reduceMotion || !("IntersectionObserver" in window)) {
+        rows.forEach(function (r) { r.classList.add("is-in"); });
+      } else {
+        const io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) { entry.target.classList.add("is-in"); io.unobserve(entry.target); }
+          });
+        }, { threshold: 0.12, rootMargin: "0px 0px -4% 0px" });
+        rows.forEach(function (r) { io.observe(r); });
+      }
+
+      /* ——— boot ————————————————————————————————— */
+      const boot = function () {
+        sizeCloth();
+        syncMeta();
+        weave(false);
+        drawDraftSample(false);
+        renderCalc();
+        renderWarp();
+        moveShuttle();
+      };
+      boot();
+      window.addEventListener("resize", function () {
+        sizeCloth();
+        weave(false);
+        syncMeta();
+      });
+    })();
+  </script>
+</body>
+</html>
