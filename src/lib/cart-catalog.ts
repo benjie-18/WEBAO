@@ -56,7 +56,18 @@ const catalog = {
   },
   // Monthly only (no annual term). The one-time setup fee is not sold here:
   // checkout adds it server-side from the STRIPE_PRICE_ADS_SETUP secret.
+  // Legacy key, kept so old carts and tests still resolve: same single-channel
+  // price as ads-meta / ads-google below.
   "ads-pack": { product: "ads-pack", type: "bundle", monthCents: 89999 },
+  // Revamped Ads Pack, monthly only. One channel (Meta or Google) is the
+  // single price; both channels together are the bundle price. The setup
+  // fee is added server-side by checkout (single: STRIPE_PRICE_ADS_SETUP
+  // secret; both: the bundle setup price, see worker/checkout.ts).
+  "ads-meta": { product: "ads-meta", type: "bundle", monthCents: 89999 },
+  "ads-google": { product: "ads-google", type: "bundle", monthCents: 89999 },
+  "ads-both": { product: "ads-both", type: "bundle", monthCents: 134999 },
+  // Google Business Profile revamp: one-time, sold on its own or with a pack.
+  "gbp-revamp": { product: "gbp-revamp", type: "addon", oneTimeCents: 14999 },
 
   /* ── Add-ons (featured group first, then the rest) ───────────────────── */
   localseo: { product: "localseo", type: "addon", monthCents: 15999, yearCents: 15999 * TEN_MONTHS },

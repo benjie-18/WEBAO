@@ -25,6 +25,9 @@ type Env = {
    *  remains only as a fallback if the price-map entry is ever removed. */
   STRIPE_PRICE_ADS_PACK?: string;
   STRIPE_PRICE_ADS_SETUP?: string;
+  /** Both-channels setup price. Falls back to the bundle setup price in
+   *  code when unset, so a missing secret never silently drops the fee. */
+  STRIPE_PRICE_ADS_BUNDLE_SETUP?: string;
   WEBAO_KV?: KVNamespace;
   ALLOWED_ORIGINS?: string;
 };
@@ -39,6 +42,13 @@ export const PRICE_MAP: Record<string, string> = {
   "admin-month": "price_1UO3EeE57vVzxI41Vv1DW6l5",
   "admin-year": "price_1UORSCE57vVzxI4182C4kxPY",
   "ads-pack-month": "price_1UTsvJE57vVzxI41esicPXuU",
+  // Revamped Ads Pack: one channel (Meta or Google) shares the single price;
+  // both channels together use the bundle price. The cart key, not the
+  // Stripe price, records which channel was bought (see metadata[items]).
+  "ads-meta-month": "price_1UTsvJE57vVzxI41esicPXuU",
+  "ads-google-month": "price_1UTsvJE57vVzxI41esicPXuU",
+  "ads-both-month": "price_1UWkEsE57vVzxI41TxD7CIV8",
+  "gbp-revamp-onetime": "price_1UWkF9E57vVzxI41yOVeWE6d",
   "aichat-month": "price_1UO3E9E57vVzxI41BTXxcMD6",
   "aichat-year": "price_1UORS1E57vVzxI41852FAJaZ",
   "bilingual-month": "price_1UO3ELE57vVzxI41ULR08WMo",
@@ -102,6 +112,11 @@ export function intervalOf(key: string): LineInterval {
   if (key.endsWith("-month")) return "month";
   return "one-time";
 }
+
+/** Cart keys for a monthly Ads Pack, single channel or both together. */
+const ADS_MONTHLY_KEYS = ["ads-pack-month", "ads-meta-month", "ads-google-month", "ads-both-month"];
+/** Both-channels setup price (Stripe), used when no bundle-setup secret is set. */
+const ADS_BUNDLE_SETUP_PRICE = "price_1UWkEvE57vVzxI41jrWbtpuZ";
 
 export async function handleCheckoutSession(req: Request, env: Env): Promise<Response> {
   if (!originAllowed(req, true, env)) return err("Forbidden origin", 403);
@@ -182,9 +197,19 @@ export async function handleCheckoutSession(req: Request, env: Env): Promise<Res
   // The setup fee cannot be bought on its own: a crafted request with only
   // ads-setup-onetime used to create a checkout for a setup with no pack
   // attached (and no ads state, since hasAdsPack matches ads-pack*).
+  // Only one Ads Pack option per checkout: Meta, Google, or both. Buying
+  // two single channels separately would double-bill the single price
+  // instead of the bundle price.
+  if (lineItems.filter((item) => ADS_MONTHLY_KEYS.includes(item.key)).length > 1) {
+    return err(
+      "Choose one Ads Pack option: Meta, Google, or both together. Buying two single channels separately is not allowed.",
+      400,
+    );
+  }
+
   if (
     lineItems.some((item) => item.key === "ads-setup-onetime") &&
-    !lineItems.some((item) => item.key === "ads-pack-month")
+    !lineItems.some((item) => ADS_MONTHLY_KEYS.includes(item.key))
   ) {
     return err("The Ads Pack setup fee cannot be bought on its own", 400);
   }
@@ -200,12 +225,25 @@ export async function handleCheckoutSession(req: Request, env: Env): Promise<Res
   }
 
   // Ads Pack: the one-time setup fee rides along automatically, added
-  // server-side so it cannot be removed from the cart. This runs BEFORE
+  // server-side so it cannot be removed from the cart (single: the setup
+  // secret; both: the bundle setup price). This runs BEFORE
   // the cap check, so a cart already at the one-time cap plus the pack is
   // rejected instead of leaving with 21 one-time items.
+  // Both channels carry the bundle setup fee, never the single fee: the
+  // bundle setup price is hard-coded as a fallback so a missing secret
+  // cannot silently undercharge, matching how PRICE_MAP holds price ids.
   if (
+    lineItems.some((item) => item.key === "ads-both-month") &&
+    !lineItems.some((item) => item.key === "ads-bundle-setup-onetime")
+  ) {
+    lineItems.push({
+      key: "ads-bundle-setup-onetime",
+      priceId: env.STRIPE_PRICE_ADS_BUNDLE_SETUP ?? ADS_BUNDLE_SETUP_PRICE,
+      interval: "one-time",
+    });
+  } else if (
     env.STRIPE_PRICE_ADS_SETUP &&
-    lineItems.some((item) => item.key === "ads-pack-month") &&
+    lineItems.some((item) => ADS_MONTHLY_KEYS.includes(item.key)) &&
     !lineItems.some((item) => item.key === "ads-setup-onetime")
   ) {
     lineItems.push({
