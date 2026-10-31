@@ -924,7 +924,7 @@ const en = {
           { text: "Managed advertising on Facebook and Instagram: C$899.99 per month, plus a one-time setup fee of C$499.99 charged with the first payment. The monthly fee covers campaign setup and ongoing management, lead delivery to your inbox and client portal, and a monthly report." },
           { text: "Ad spend is separate and is never billed by Webao. Your ads run in your own ad account, charged by the platform to your own payment card. The minimum ad budget is C$1,500 per month, paid by you directly to the platform." },
           { text: "Webao does not guarantee any number of leads, calls or sales. Advertising results vary. The monthly report shows what your campaigns delivered: leads received, jobs booked, and the cost per booked job." },
-          { text: "You can cancel the Ads Pack with 30 days' notice. Campaigns stop at the end of the notice period, and your ad account and its data stay yours." },
+          { text: "You can cancel the Ads Pack with 90 days' notice. Campaigns stop at the end of the notice period, and your ad account and its data stay yours." },
         ],
       },
     },
