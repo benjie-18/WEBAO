@@ -217,7 +217,7 @@ const en = {
         },
         {
           title: "SEO basics, done properly.",
-          desc: "Clean URLs, sitemap, fast pages, and help setting up your Google Business Profile. Nobody can guarantee rankings, and we won’t pretend otherwise.",
+          desc: "Clean URLs, sitemap, fast pages, and help setting up your Google Business Profile, so local customers can find you when they need a trade.",
         },
         {
           title: "Analytics you can read.",
@@ -272,7 +272,7 @@ const en = {
         },
         {
           q: "Will my site show up on Google?",
-          a: "Yes. That’s the point. Every site ships with the SEO basics done properly: clean titles and descriptions, a sitemap, fast load times, and mobile-friendly pages. We also help set up your Google Business Profile, which is how most local customers find trades. Nobody can promise position #1, and be wary of anyone who does.",
+          a: "Yes. That’s the point. Every site ships with the SEO basics done properly: clean titles and descriptions, a sitemap, fast load times, and mobile-friendly pages. We also help set up your Google Business Profile, which is how most local customers find trades. Slow week? The goal is simple: when someone nearby searches for your trade, your site is ready to be found and to take the enquiry.",
         },
         {
           q: "Can I pause or change things later?",
