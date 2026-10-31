@@ -79,7 +79,7 @@ const families = styleFamilies;
   <div class="shell">
     <div id="demo-grid" class="demo-grid" data-reveal>
       {visibleDemos.map((d, i) => (
-        <a href={liveDemos.has(d.id) ? demoHref(d.id) : "#"} class="demo-card-demo" data-category={d.category} data-search={`${d.name} ${d.category} ${d.city} ${d.tone} ${d.palette} ${d.localizedDescription}`.toLowerCase()} data-reveal style={`--d:${(i%3)*80}ms`} data-demo-id={d.id} data-demo-tone={d.tone} data-demo-family={getDemoFamily(d.id)} data-demo-trade={d.trade ?? ""} data-demo-palette={d.palette} data-live={liveDemos.has(d.id) ? "true" : undefined} aria-label={`${d.name} — ${t.demos.viewDemo.replace(" →", "")}`}>
+        <a href={liveDemos.has(d.id) ? demoHref(d.id) : "#"} class="demo-card-demo" data-category={d.category} data-search={`${d.name} ${d.category} ${d.city} ${d.tone} ${d.palette} ${d.localizedDescription}`.toLowerCase()} data-reveal style={`--d:${(i%3)*80}ms`} data-demo-id={d.id} data-demo-index={i} data-demo-tone={d.tone} data-demo-family={getDemoFamily(d.id)} data-demo-trade={d.trade ?? ""} data-demo-palette={d.palette} data-live={liveDemos.has(d.id) ? "true" : undefined} aria-label={`${d.name} — ${t.demos.viewDemo.replace(" →", "")}`}>
           {liveDemos.has(d.id) ? (
             <div class={`demo-thumb dthumb dthumb-${d.id}`}>
               {d.id === "nora" && (
@@ -514,6 +514,9 @@ const families = styleFamilies;
 <div id="demo-i18n" hidden data-toast-template={t.demos.toast} data-search-count-template={t.demos.searchCount}></div>
 
 <script>
+  import { applyDemoOrderToCatalog, getDemoOrderSeed } from "../../lib/demo-order";
+  import { filterDemoCards } from "../../lib/demo-catalog";
+
   function initDemosPage() {
     const search = document.getElementById('search') as HTMLInputElement | null;
     // Bound guard, on the page's own elements: this init runs immediately
@@ -524,6 +527,10 @@ const families = styleFamilies;
     const guardEl = (search as HTMLElement | null) || document.querySelector('[data-filter]');
     if (guardEl && (guardEl as HTMLElement).dataset.webaoBound) return;
     if (guardEl) (guardEl as HTMLElement).dataset.webaoBound = '1';
+    // Reorder before the card list is captured, so search, filters, the
+    // visible count, and the empty state all operate on the shuffled list.
+    const grid = document.getElementById('demo-grid');
+    if (grid) applyDemoOrderToCatalog(grid, getDemoOrderSeed(window));
     const chips = Array.from(document.querySelectorAll('[data-filter]'));
     const tradeChips = Array.from(document.querySelectorAll('[data-trade-filter]'));
     const cards = Array.from(document.querySelectorAll('[data-category]')) as HTMLElement[];
@@ -554,19 +561,7 @@ const families = styleFamilies;
     }
 
     function apply() {
-      let visible = 0;
-      const q = query.trim().toLowerCase();
-      for (const c of cards) {
-        const family = c.getAttribute('data-demo-family') || '';
-        const trade = c.getAttribute('data-demo-trade') || '';
-        const txt = c.getAttribute('data-search') || '';
-        const matchStyle = activeStyle === 'All' || family === activeStyle;
-        const matchTrade = activeTrade === 'All' || trade === activeTrade;
-        const matchQ = !q || txt.includes(q);
-        const show = matchStyle && matchTrade && matchQ;
-        (c as HTMLElement).style.display = show ? '' : 'none';
-        if (show) visible++;
-      }
+      const visible = filterDemoCards(cards, { style: activeStyle, trade: activeTrade, query });
       if (empty) (empty as HTMLElement).hidden = visible !== 0;
       const count = document.querySelector('[data-count]');
       if (count) count.textContent = countTemplate.replace('{count}', String(visible));

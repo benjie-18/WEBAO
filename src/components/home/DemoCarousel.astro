@@ -8,14 +8,15 @@ const { locale } = Astro.props as Props;
 const t = useTranslations(locale);
 const paths = localizedPaths[locale];
 
-// Same catalog order as /demos, minus hidden duplicates; the two newest
-// sites lead the carousel, then studio-reve, then the rest, nora last.
+// Same visible set as /demos, in canonical catalog order. The static HTML
+// keeps the existing pinned order as the no-JS fallback; the client module
+// replaces it with the shared session shuffle before the carousel initializes.
 const hidden = new Set(["boba-club"]);
+const catalogDemos = getDemos(locale).filter((d) => !hidden.has(d.id));
+const catalogIndex = new Map(catalogDemos.map((d, i) => [d.id, i]));
 const rank = (id: string) =>
   id === "noctua" ? 0 : id === "lisiere" ? 1 : id === "studio-reve" ? 2 : id === "nora" ? 99 : 50;
-const demos = getDemos(locale)
-  .filter((d) => !hidden.has(d.id))
-  .sort((a, b) => rank(a.id) - rank(b.id));
+const demos = catalogDemos.slice().sort((a, b) => rank(a.id) - rank(b.id));
 
 const heading = t.home.proof.heading;
 const sub = t.home.proof.sub;
@@ -64,7 +65,7 @@ const total = String(demos.length).padStart(2, "0");
 
       <div class="proof-track" data-proof-track>
         {demos.map((d, i) => (
-          <article class="proof-panel" data-proof-panel data-demo-id={d.id}>
+          <article class="proof-panel" data-proof-panel data-demo-id={d.id} data-demo-index={catalogIndex.get(d.id)}>
             {i > 0 && <span class="proof-fracture" aria-hidden="true"></span>}
             <a href={`${paths.demos}/${d.id}`} class="proof-shot" aria-label={`${d.name}, ${d.tone}`}>
               <img
@@ -107,12 +108,16 @@ const total = String(demos.length).padStart(2, "0");
 </section>
 
 <script>
+  import { applyDemoOrderToCarousel, getDemoOrderSeed } from "../../lib/demo-order";
+
   function initProof() {
     const root = document.querySelector('[data-proof]') as HTMLElement;
     if (!root || (root as HTMLElement).dataset.init) return;
     (root as HTMLElement).dataset.init = "1";
     const pin = root.querySelector('[data-proof-pin]') as HTMLElement;
     const track = root.querySelector('[data-proof-track]') as HTMLElement;
+    // Reorder before the panel list, counter, progress, and controls are bound.
+    if (track) applyDemoOrderToCarousel(track, getDemoOrderSeed(window));
     const panels = Array.from(track.querySelectorAll('[data-proof-panel]')) as HTMLElement[];
     const prev = root.querySelector('[data-proof-prev]') as HTMLButtonElement;
     const next = root.querySelector('[data-proof-next]') as HTMLButtonElement;

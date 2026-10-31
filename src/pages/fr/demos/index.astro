@@ -9,7 +9,10 @@ const locale = "fr" as const;
 const t = useTranslations(locale);
 
 // ItemList structured data: presents the catalog to search engines as a list
-// of portfolio pieces (rich-result eligible), matching the visible catalog.
+// of portfolio pieces (rich-result eligible) in canonical catalog order.
+// The client-side session shuffle is per visitor and cannot be represented in
+// prerendered SEO data, so this static list intentionally does not match each
+// visitor's shuffled view.
 const visibleDemos = demos.filter((demo) => !HIDDEN_DEMOS.has(demo.id));
 const itemListSchema = JSON.stringify({
   "@context": "https://schema.org",
