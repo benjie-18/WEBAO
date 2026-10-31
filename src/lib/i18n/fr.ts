@@ -220,7 +220,7 @@ const fr = {
         },
         {
           title: "Les bases SEO, bien faites.",
-          desc: "URLs propres, plan de site, pages rapides et aide pour configurer votre fiche d’entreprise Google. Personne ne peut garantir des classements, on ne fera pas semblant.",
+          desc: "URLs propres, plan de site, pages rapides et aide pour configurer votre fiche d’entreprise Google, pour que les clients locaux vous trouvent quand ils ont besoin d’un artisan.",
         },
         {
           title: "De l’analytique que vous comprenez.",
@@ -275,7 +275,7 @@ const fr = {
         },
         {
           q: "Est-ce que mon site va apparaître sur Google ?",
-          a: "Oui. C’est le but. Chaque site est livré avec les bases du référencement : titres et descriptions soignés, plan du site, temps de chargement rapides et pages adaptées au mobile. On configure aussi votre fiche d’établissement Google, qui est la façon dont la plupart des clients locaux trouvent les artisans. Personne ne peut promettre la 1re position, et méfiez-vous de ceux qui le font.",
+          a: "Oui. C’est le but. Chaque site est livré avec les bases du référencement : titres et descriptions soignés, plan du site, temps de chargement rapides et pages adaptées au mobile. On configure aussi votre fiche d’établissement Google, qui est la façon dont la plupart des clients locaux trouvent les artisans. Semaine tranquille? L’objectif est simple : quand quelqu’un près de chez vous cherche votre métier, votre site est prêt à être trouvé et à recevoir la demande.",
         },
         {
           q: "Est-ce que je peux mettre en pause ou changer des choses plus tard ?",
