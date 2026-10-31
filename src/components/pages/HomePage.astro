@@ -23,6 +23,10 @@ const processId = locale === "fr" ? "processus" : "process";
      Entrance is gated on data-hero-enter, fired by the intro handoff
      (or immediately when no intro plays). -->
 <section class="hero grain" id="hero">
+  <!-- No-JS fallback: the lead and CTAs start at opacity 0 and only the
+       entrance script reveals them, so without JS they would stay invisible
+       (BaseLayout's noscript reset covers [data-reveal] only). -->
+  <noscript><style>.hero-lead, .hero-actions { opacity: 1 !important; } .fracture-reveal { clip-path: none !important; }</style></noscript>
   <div class="shell hero-grid">
     <div class="hero-copy">
       <h1 class="hero-title display" data-hero-title>
@@ -125,11 +129,11 @@ const processId = locale === "fr" ? "processus" : "process";
   <div class="pin-wrap" data-process-pin>
     <div class="pin-stage">
       <div class="shell">
-        <div class="journey" data-journey>
+        <div class="journey" data-journey data-day-label={t.home.process.day}>
           <div class="journey-ends mono" aria-hidden="true">
-            <span>DAY 0</span>
-            <span data-day-readout>DAY 0</span>
-            <span>DAY 7</span>
+            <span>{t.home.process.day} 0</span>
+            <span data-day-readout>{t.home.process.day} 0</span>
+            <span>{t.home.process.day} 7</span>
           </div>
           <div class="journey-track">
             <div class="journey-line" aria-hidden="true"></div>
@@ -437,10 +441,15 @@ const processId = locale === "fr" ? "processus" : "process";
   .station-card {
     position: absolute; left: 0; width: min(340px, 78vw);
     opacity: 0; transform: translate(-50%, 18px);
-    transition: opacity .6s var(--ease-out), transform .6s var(--ease-out);
+    /* visibility hides inactive cards from keyboard focus and screen
+       readers too: station 3's card holds a "Send a message" link that
+       must not be reachable while the card is faded out. The .6s delay
+       on hide preserves the fade-out; showing is instant. */
+    visibility: hidden;
+    transition: opacity .6s var(--ease-out), transform .6s var(--ease-out), visibility 0s linear .6s;
     pointer-events: none;
   }
-  .station.is-active .station-card { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+  .station.is-active .station-card { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; visibility: visible; transition: opacity .6s var(--ease-out), transform .6s var(--ease-out), visibility 0s; }
   /* Zigzag: stations 0 and 2 float above the line, station 1 hangs below */
   .station[data-station="0"] .station-card,
   .station[data-station="2"] .station-card { bottom: 52px; }
@@ -477,7 +486,7 @@ const processId = locale === "fr" ? "processus" : "process";
     }
     .station-card, .station.is-active .station-card,
     .station[data-station="0"] .station-card, .station[data-station="2"] .station-card {
-      position: static; width: auto; max-width: 100%; opacity: 1; transform: none; pointer-events: auto;
+      position: static; width: auto; max-width: 100%; opacity: 1; transform: none; pointer-events: auto; visibility: visible;
       overflow-x: clip;
     }
     .station-visual, .mini-card { max-width: 100%; overflow-x: clip; }
@@ -515,7 +524,7 @@ const processId = locale === "fr" ? "processus" : "process";
     .station-node { position: static; transform: none; background: var(--journey-accent); color: #fff; border-color: var(--journey-accent); margin-bottom: 12px; }
     .station-card, .station.is-active .station-card,
     .station[data-station="0"] .station-card, .station[data-station="2"] .station-card {
-      position: static; width: auto; max-width: 560px; opacity: 1; transform: none; pointer-events: auto; transition: none;
+      position: static; width: auto; max-width: 560px; opacity: 1; transform: none; pointer-events: auto; transition: none; visibility: visible;
     }
     .journey-ends [data-day-readout] { display: none; }
   }
@@ -772,12 +781,13 @@ const processId = locale === "fr" ? "processus" : "process";
     if (!wrap || !journey) return;
     const stations = Array.from(journey.querySelectorAll<HTMLElement>('[data-station]'));
     const readout = journey.querySelector('[data-day-readout]') as HTMLElement | null;
+    const dayLabel = journey.dataset.dayLabel ?? 'DAY';
     const narrow = window.matchMedia('(max-width: 860px)');
     if (prefersReduced || narrow.matches || !('requestAnimationFrame' in window)) {
       // Static fallbacks: light every station, fill the crack.
       stations.forEach((s) => s.classList.add('is-active'));
       journey.style.setProperty('--scrub', '1');
-      if (readout) readout.textContent = 'DAY 7';
+      if (readout) readout.textContent = `${dayLabel} 7`;
       return;
     }
 
@@ -830,7 +840,7 @@ const processId = locale === "fr" ? "processus" : "process";
       });
       if (readout) {
         const day = Math.round(progress * 7);
-        const label = `DAY ${day}`;
+        const label = `${dayLabel} ${day}`;
         if (readout.textContent !== label) readout.textContent = label;
       }
     };
@@ -854,7 +864,7 @@ const processId = locale === "fr" ? "processus" : "process";
         window.removeEventListener('scroll', onScroll);
         stations.forEach((s) => s.classList.add('is-active'));
         journey.style.setProperty('--scrub', '1');
-        if (readout) readout.textContent = 'DAY 7';
+        if (readout) readout.textContent = `${dayLabel} 7`;
       }
     };
     narrow.addEventListener('change', onNarrow);
