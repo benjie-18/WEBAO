@@ -414,10 +414,17 @@ test('built pages carry the full SEO head', () => {
   assert.ok(pricing.includes('"url":"https://webao.ca/pricing/"'), 'offer urls match the canonical');
   assert.match(pricing, /"@type":"BreadcrumbList"/);
 
-  // Demos catalog: ItemList of the visible demos.
+  // Demos catalog: ItemList of the visible demos stays in canonical order.
   const catalog = head('demos/index.html');
   assert.match(catalog, /"@type":"ItemList"/);
   assert.match(catalog, /"numberOfItems":45/);
+  const itemListJson = /<script type="application\/ld\+json">(\{"@context":"https:\/\/schema\.org","@type":"ItemList".*?)<\/script>/s.exec(catalog)?.[1];
+  assert.ok(itemListJson, 'catalog ItemList script is present');
+  const itemList = JSON.parse(itemListJson!) as { itemListElement: Array<{ position: number; name: string; url: string }> };
+  assert.equal(itemList.itemListElement[0].name, 'Noctua');
+  assert.equal(itemList.itemListElement[1].name, 'Lisière');
+  assert.equal(itemList.itemListElement[0].url, 'https://webao.ca/demos/noctua/');
+  assert.equal(itemList.itemListElement.every((item, i) => item.position === i + 1), true);
 
   // Sources: breadcrumb wired through the new pageKey.
   const sources = head('sources/index.html');
@@ -548,6 +555,51 @@ test('built success page shows the purchased selection', async () => {
     assert.ok(!copy.includes('$149'), 'no hardcoded $149 without a cart');
   } finally {
     dom?.window.close();
+  }
+});
+
+// The per-visitor shuffle is a client-side enhancement. Built HTML must stay
+// identical for everyone: canonical catalog order, the existing pinned carousel
+// fallback, and canonical data-demo-index values for the shared shuffle input.
+test('built demo surfaces keep cacheable fallback order and canonical shuffle indices', () => {
+  const canonical = [
+    'noctua', 'lisiere', 'brume', 'sahara-sage', 'esquisse', 'tactile', 'prism', 'hexline',
+    'papier-ciseaux', 'finition-r', 'studio-reve', 'sora', 'cyberdoll', 'aeris', 'kanso',
+    'pixelforge', 'toit-fils', 'pouf', 'vhs-dreams', 'atelier-caractere', 'leduc', 'maison-lune',
+    'maximal', 'verte', 'mira', 'lune', 'atelier-nord', 'lattice', 'boise', 'forma', 'nora',
+    'encre-brute', 'debit', 'bec-fin', 'voltige', 'lueur', '21-degres', 'extreme-climat',
+    'confort-76', 'zenith', 'toitures-tempete', 'chantier-brut', 'maison-dore', 'sneaker-pro', 'onde',
+  ];
+  const ids = (html: string, selector: string) => {
+    const dom = new JSDOM(html);
+    const nodes = Array.from(dom.window.document.querySelectorAll(selector));
+    const result = nodes.map((node) => ({
+      id: node.getAttribute('data-demo-id'),
+      index: Number(node.getAttribute('data-demo-index')),
+    }));
+    dom.window.close();
+    return result;
+  };
+  for (const file of ['dist/client/demos/index.html', 'dist/client/fr/demos/index.html']) {
+    const html = readFileSync(file, 'utf-8');
+    const cards = ids(html, '#demo-grid [data-demo-id]');
+    assert.equal(cards.length, 45, file);
+    assert.deepEqual(cards.map((card) => card.id), canonical, `${file} catalog fallback order`);
+    assert.deepEqual(cards.map((card) => card.index), canonical.map((_, i) => i), `${file} canonical indices`);
+    assert.equal(cards.some((card) => card.id === 'boba-club'), false, `${file} hides boba-club`);
+  }
+  for (const file of ['dist/client/index.html', 'dist/client/fr/index.html']) {
+    const html = readFileSync(file, 'utf-8');
+    const panels = ids(html, '[data-proof-track] [data-proof-panel]');
+    assert.equal(panels.length, 45, file);
+    assert.equal(panels[0].id, 'noctua', `${file} pinned first fallback`);
+    assert.equal(panels[1].id, 'lisiere', `${file} pinned second fallback`);
+    assert.equal(panels[2].id, 'studio-reve', `${file} pinned third fallback`);
+    assert.equal(panels[panels.length - 1].id, 'nora', `${file} pinned last fallback`);
+    assert.equal(panels.some((panel) => panel.id === 'boba-club'), false, `${file} hides boba-club`);
+    for (const panel of panels) {
+      assert.equal(panel.index, canonical.indexOf(panel.id!), `${file} canonical index for ${panel.id}`);
+    }
   }
 });
 
