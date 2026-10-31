@@ -1,10 +1,15 @@
 ---
-// Ads Pack card: a standalone service (managed Facebook/Instagram ads),
-// sold on its own or next to a website plan. Monthly only, there is no
-// annual term; the one-time setup fee is added by checkout server-side
-// and is stated on the card so the total is clear before buying.
+// Ads Pack card: a standalone service, sold on its own or next to a website
+// plan. Monthly only, there is no annual term; the one-time setup fee is
+// added by checkout server-side and is stated on the card so the total is
+// clear before buying.
+//
+// Channel picker: one channel (Meta or Google) is the single price; both
+// together are the bundle price. The picker only changes which cart product
+// the button adds (ads-meta / ads-google / ads-both); the Stripe price for
+// a single channel is the same either way, and checkout records the channel
+// from the cart key in metadata[items].
 import { useTranslations, type Locale } from "../../lib/i18n";
-import { priceCentsFor } from "../../lib/cart-catalog";
 import CartButton from "./CartButton.astro";
 
 interface Props {
@@ -14,19 +19,92 @@ interface Props {
 const { locale } = Astro.props as Props;
 const t = useTranslations(locale);
 const a = t.pricing.adsPack;
-const priceCents = priceCentsFor("ads-pack", "month") ?? 0;
+
+const variants = [
+  {
+    id: "meta",
+    product: "ads-meta",
+    label: a.metaLabel,
+    price: a.metaPrice,
+    priceCents: 89999,
+    setup: a.setup,
+    budget: a.budget,
+    include: a.metaInclude,
+    name: `${a.name} (${a.metaLabel})`,
+  },
+  {
+    id: "google",
+    product: "ads-google",
+    label: a.googleLabel,
+    price: a.metaPrice,
+    priceCents: 89999,
+    setup: a.setup,
+    budget: a.budget,
+    include: a.googleInclude,
+    name: `${a.name} (${a.googleLabel})`,
+  },
+  {
+    id: "both",
+    product: "ads-both",
+    label: a.bothLabel,
+    price: a.bothPrice,
+    priceCents: 134999,
+    setup: a.bothSetup,
+    budget: a.bothBudget,
+    include: a.bothInclude,
+    name: `${a.name} (${a.bothLabel})`,
+  },
+] as const;
+const selected = variants[0];
 ---
 
-<div class="bundle-card">
+<div class="bundle-card" data-ads-pack>
   <p class="bc-kicker">{a.eyebrow}</p>
   <div class="bc-name-row">
     <h3 class="bc-name">{a.name}</h3>
-    <CartButton product="ads-pack" name={a.name} priceCents={priceCents} interval="month" type="bundle" />
+    <CartButton product={selected.product} name={selected.name} priceCents={selected.priceCents} interval="month" type="bundle" />
   </div>
-  <p class="bc-price">{a.price}</p>
+  <p class="bc-price" data-ads-price>{selected.price}</p>
+
+  <fieldset class="bc-channels">
+    <legend class="bc-label">{a.channelLabel}</legend>
+    {
+      variants.map((v) => (
+        <label class="bc-channel">
+          <input
+            type="radio"
+            name="ads-channel"
+            value={v.product}
+            data-product={v.product}
+            data-name={v.name}
+            data-price-cents={String(v.priceCents)}
+            data-price={v.price}
+            data-setup={v.setup}
+            data-budget={v.budget}
+            data-include={v.include}
+            checked={v.id === "meta"}
+          />
+          <span>{v.label}</span>
+        </label>
+      ))
+    }
+  </fieldset>
 
   <p class="bc-label">{a.includesLabel}</p>
   <ul class="bc-includes">
+    <li>
+      <svg viewBox="0 0 16 16" aria-hidden="true" class="bc-check">
+        <path
+          d="M3.5 8.2l3.2 3.2 5.8-6.8"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      <span data-ads-include>{selected.include}</span>
+    </li>
     {a.includes.map((inc) => (
       <li>
         <svg viewBox="0 0 16 16" aria-hidden="true" class="bc-check">
@@ -47,14 +125,83 @@ const priceCents = priceCentsFor("ads-pack", "month") ?? 0;
   <dl class="bc-meta">
     <div class="bc-row">
       <dt>{a.setupLabel}</dt>
-      <dd>{a.setup}</dd>
+      <dd data-ads-setup>{selected.setup}</dd>
     </div>
     <div class="bc-row">
       <dt>{a.budgetLabel}</dt>
-      <dd>{a.budget}</dd>
+      <dd data-ads-budget>{selected.budget}</dd>
     </div>
   </dl>
+
+  <p class="bc-note">{a.upgradeNote}</p>
+
+  <div class="bc-gbp">
+    <div>
+      <p class="bc-label">{a.gbpLabel}</p>
+      <p class="bc-gbp-name">{a.gbpName} <span class="mono">{a.gbpPrice}</span></p>
+      <p class="bc-gbp-short">{a.gbpShort}</p>
+    </div>
+    <CartButton product="gbp-revamp" name={a.gbpName} priceCents={14999} interval="one-time" type="addon" />
+  </div>
 </div>
+
+<script>
+  // Channel picker: swap the displayed price/setup/budget/include and the
+  // cart button's product. If an Ads Pack variant is already in the cart,
+  // swap it for the newly picked variant instead of leaving two packs in
+  // the cart (checkout also rejects two variants, as a backstop).
+  function initAdsPack() {
+    var root = document.querySelector("[data-ads-pack]") as HTMLElement | null;
+    if (!root || root.dataset.adsInit === "1") return;
+    root.dataset.adsInit = "1";
+    var priceEl = root.querySelector("[data-ads-price]");
+    var setupEl = root.querySelector("[data-ads-setup]");
+    var budgetEl = root.querySelector("[data-ads-budget]");
+    var includeEl = root.querySelector("[data-ads-include]");
+    var btn = root.querySelector("[data-cart-btn]") as HTMLElement | null;
+    var adsKeys = ["ads-pack-month", "ads-meta-month", "ads-google-month", "ads-both-month"];
+    root.addEventListener("change", function (event) {
+      var input = event.target as HTMLInputElement | null;
+      if (!input || input.name !== "ads-channel" || !input.checked) return;
+      if (priceEl) priceEl.textContent = input.dataset.price || "";
+      if (setupEl) setupEl.textContent = input.dataset.setup || "";
+      if (budgetEl) budgetEl.textContent = input.dataset.budget || "";
+      if (includeEl) includeEl.textContent = input.dataset.include || "";
+      if (btn) {
+        btn.dataset.product = input.dataset.product || "";
+        btn.dataset.name = input.dataset.name || "";
+        btn.dataset.priceCents = input.dataset.priceCents || "";
+        btn.dataset.key = (input.dataset.product || "") + "-month";
+      }
+      try {
+        var raw = window.localStorage.getItem("webao_cart_v1");
+        if (!raw) return;
+        var items = JSON.parse(raw);
+        if (!Array.isArray(items)) return;
+        var had = items.some(function (item) { return item && adsKeys.indexOf(item.key) >= 0; });
+        if (!had) return;
+        var next = items.filter(function (item) { return !item || adsKeys.indexOf(item.key) < 0; });
+        next.push({
+          key: (input.dataset.product || "") + "-month",
+          product: input.dataset.product || "",
+          name: input.dataset.name || "",
+          priceCents: Number(input.dataset.priceCents || 0),
+          interval: "month",
+          type: "bundle",
+        });
+        window.localStorage.setItem("webao_cart_v1", JSON.stringify(next));
+        window.dispatchEvent(new CustomEvent("webao:cart-change", { detail: { items: next } }));
+      } catch (e) {
+        // Cart swap is a convenience; the button still adds the new variant.
+      }
+    });
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initAdsPack);
+  } else {
+    initAdsPack();
+  }
+</script>
 
 <style>
   .bundle-card {
@@ -153,5 +300,54 @@ const priceCents = priceCentsFor("ads-pack", "month") ?? 0;
     margin: 0;
     font-weight: 650;
     text-align: right;
+  }
+  .bc-channels {
+    border: 0;
+    padding: 0;
+    margin: 18px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+  .bc-channels legend {
+    width: 100%;
+  }
+  .bc-channel {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid var(--bc-line);
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 0.88rem;
+    cursor: pointer;
+  }
+  .bc-channel:has(input:checked) {
+    border-color: var(--bc-text);
+    font-weight: 650;
+  }
+  .bc-note {
+    margin: 14px 0 0;
+    font-size: 0.88rem;
+    color: var(--bc-soft);
+  }
+  .bc-gbp {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--bc-line);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .bc-gbp-name {
+    font-weight: 650;
+    margin-top: 6px;
+  }
+  .bc-gbp-short {
+    font-size: 0.88rem;
+    color: var(--bc-soft);
+    margin-top: 4px;
   }
 </style>

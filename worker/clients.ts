@@ -142,7 +142,7 @@ export type AdsStatus = "onboarding" | "setup" | "ready" | "live" | "paused";
 
 export interface AdsState {
   status: AdsStatus;
-  platform: "meta";
+  platform: "meta" | "google" | "both";
   onboarding?: AdsOnboarding;
   onboardingCompletedAt?: number;
   /** The client's own Meta ad account id (act_...), never WEBAO's. */
@@ -152,11 +152,34 @@ export interface AdsState {
 
 /** True when the client's purchases include the Ads Pack. */
 export function hasAdsPack(client: Client): boolean {
-  return (client.items || []).some((k) => k.startsWith("ads-pack"));
+  return (client.items || []).some(
+    (k) =>
+      k.startsWith("ads-pack") ||
+      k.startsWith("ads-meta") ||
+      k.startsWith("ads-google") ||
+      k.startsWith("ads-both"),
+  );
+}
+
+/** Which Ads Pack channel(s) a purchase covers, from its cart keys. */
+export function adsPlatformFromItems(items: string[] | undefined): "meta" | "google" | "both" | undefined {
+  if (!items) return undefined;
+  if (items.some((k) => k.startsWith("ads-both"))) return "both";
+  if (items.some((k) => k.startsWith("ads-google"))) return "google";
+  if (items.some((k) => k.startsWith("ads-pack") || k.startsWith("ads-meta"))) return "meta";
+  return undefined;
 }
 
 /** Minimum monthly ad spend (client's own card) for the Ads Pack. */
 export const ADS_MIN_MONTHLY_BUDGET = 1500;
+export const ADS_MIN_MONTHLY_BUDGET_BOTH = 2500;
+
+/** Minimum client ad spend for this client's pack: C$2,500 for both, else C$1,500. */
+export function adsMinMonthlyBudget(client: Client): number {
+  return client.ads?.platform === "both" || adsPlatformFromItems(client.items) === "both"
+    ? ADS_MIN_MONTHLY_BUDGET_BOTH
+    : ADS_MIN_MONTHLY_BUDGET;
+}
 
 /** An ads onboarding form counts as complete with trade, area, a budget at
  *  or above the minimum, and somewhere to send leads. */
@@ -167,7 +190,7 @@ export function adsOnboardingComplete(client: Client): boolean {
     o.trade?.trim() &&
       o.serviceArea?.trim() &&
       typeof o.monthlyBudget === "number" &&
-      o.monthlyBudget >= ADS_MIN_MONTHLY_BUDGET &&
+      o.monthlyBudget >= adsMinMonthlyBudget(client) &&
       (o.leadEmail?.trim() || o.leadPhone?.trim()) &&
       (o.websiteUrl?.trim() || client.domain),
   );

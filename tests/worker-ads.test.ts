@@ -296,3 +296,71 @@ test('monthly report: standalone ads clients get leads, booked and cost numbers'
     stub.restore();
   }
 });
+
+test('checkout: revamped ads variants map to the right Stripe prices and setup fees', async () => {
+  const original = globalThis.fetch;
+  let captured = '';
+  globalThis.fetch = (async (_input: unknown, init?: { body?: unknown }) => {
+    captured = typeof init?.body === 'string' ? init.body : '';
+    return {
+      ok: true,
+      status: 200,
+      json: async () => ({ client_secret: 'cs_test_x', line_items: { data: [] } }),
+    } as Response;
+  }) as typeof fetch;
+  try {
+    const prices = () =>
+      [...new URLSearchParams(captured).entries()]
+        .filter(([k]) => /^line_items\[\d+\]\[price\]$/.test(k))
+        .map(([, v]) => v);
+    const call = (items: Array<{ key: string }>, env: Record<string, unknown>) =>
+      handleCheckoutSession(
+        new Request('https://webao.ca/api/checkout/session', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json', origin: 'https://webao.ca' },
+          body: JSON.stringify({ email: 'a@b.ca', items }),
+        }),
+        env,
+      );
+
+    // Both channels: bundle monthly plus bundle setup, even with no setup secret.
+    let res = await call([{ key: 'ads-both-month' }], { STRIPE_SECRET_KEY: 'sk_test' });
+    assert.equal(res.status, 200);
+    assert.deepEqual(prices().sort(), [PRICE_MAP['ads-both-month'], 'price_1UWkEvE57vVzxI41jrWbtpuZ'].sort());
+
+    // Single Google channel: single monthly plus the single setup secret.
+    res = await call([{ key: 'ads-google-month' }], {
+      STRIPE_SECRET_KEY: 'sk_test',
+      STRIPE_PRICE_ADS_SETUP: 'price_ads_setup',
+    });
+    assert.equal(res.status, 200);
+    assert.deepEqual(prices().sort(), [PRICE_MAP['ads-google-month'], 'price_ads_setup'].sort());
+
+    // GBP revamp alone: one-time only, no setup fee attached.
+    res = await call([{ key: 'gbp-revamp-one-time' }], { STRIPE_SECRET_KEY: 'sk_test' });
+    assert.equal(res.status, 200);
+    assert.deepEqual(prices(), [PRICE_MAP['gbp-revamp-onetime']]);
+
+    // Two Ads Pack variants in one cart are rejected, not double-billed.
+    res = await call([{ key: 'ads-meta-month' }, { key: 'ads-both-month' }], { STRIPE_SECRET_KEY: 'sk_test' });
+    assert.equal(res.status, 400);
+  } finally {
+    globalThis.fetch = original;
+  }
+});
+
+test('ads platform and minimum budget follow the purchased variant', async () => {
+  const { adsMinMonthlyBudget, adsPlatformFromItems, hasAdsPack } = await import('../worker/clients');
+  assert.equal(adsPlatformFromItems(['ads-meta-month']), 'meta');
+  assert.equal(adsPlatformFromItems(['ads-google-month']), 'google');
+  assert.equal(adsPlatformFromItems(['ads-both-month']), 'both');
+  assert.equal(adsPlatformFromItems(['ads-pack-month']), 'meta');
+  assert.equal(adsPlatformFromItems(['launch-month']), undefined);
+  assert.equal(hasAdsPack({ items: ['ads-google-month'] } as never), true);
+  assert.equal(hasAdsPack({ items: ['gbp-revamp-one-time'] } as never), false);
+  const memory = memoryKV();
+  const both = await createClient(memory.kv, { email: 'both@example.ca', source: 'stripe', items: ['ads-both-month'] });
+  assert.equal(adsMinMonthlyBudget(both), 2500);
+  const single = await createClient(memory.kv, { email: 'single@example.ca', source: 'stripe', items: ['ads-google-month'] });
+  assert.equal(adsMinMonthlyBudget(single), 1500);
+});

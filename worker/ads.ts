@@ -9,7 +9,7 @@
 // is what makes cost-per-booked-job reporting possible later.
 
 import {
-  ADS_MIN_MONTHLY_BUDGET,
+  adsMinMonthlyBudget,
   adsOnboardingComplete,
   getClient,
   hasAdsPack,
@@ -144,9 +144,9 @@ export function adsReadiness(client: Client): ReadinessCheck[] {
     },
     {
       id: "budget",
-      ok: typeof o?.monthlyBudget === "number" && o.monthlyBudget >= ADS_MIN_MONTHLY_BUDGET,
-      labelEn: `Monthly ad budget at least $${ADS_MIN_MONTHLY_BUDGET} on the client's card`,
-      labelFr: `Budget publicitaire mensuel d'au moins ${ADS_MIN_MONTHLY_BUDGET} $ sur la carte du client`,
+      ok: typeof o?.monthlyBudget === "number" && o.monthlyBudget >= adsMinMonthlyBudget(client),
+      labelEn: `Monthly ad budget at least $${adsMinMonthlyBudget(client)} on the client's card`,
+      labelFr: `Budget publicitaire mensuel d'au moins ${adsMinMonthlyBudget(client)} $ sur la carte du client`,
     },
     {
       id: "landing",
@@ -170,7 +170,7 @@ export function adsReady(client: Client): boolean {
 export interface LaunchPacket {
   business: string;
   trade: string;
-  platform: "meta";
+  platform: "meta" | "google" | "both";
   monthlyBudget: number | null;
   dailyBudget: number | null;
   serviceArea: string;
@@ -197,7 +197,7 @@ export function buildLaunchPacket(client: Client): LaunchPacket {
   return {
     business,
     trade: fr ? tpl.labelFr : tpl.labelEn,
-    platform: "meta",
+    platform: client.ads?.platform ?? "meta",
     monthlyBudget: monthly,
     dailyBudget: monthly ? Math.round((monthly / 30) * 100) / 100 : null,
     serviceArea: area,

@@ -34,6 +34,7 @@ import {
   createClient,
   findClientByCustomer,
   findClientByEmail,
+  adsPlatformFromItems,
   hasAdsPack,
   mergeItems,
   saveClient,
@@ -44,7 +45,11 @@ import {
 /** Buying the Ads Pack opens its onboarding track on the client record. */
 function ensureAdsState(client: Client): void {
   if (hasAdsPack(client) && !client.ads) {
-    client.ads = { status: "onboarding", platform: "meta", updatedAt: Date.now() };
+    client.ads = {
+      status: "onboarding",
+      platform: adsPlatformFromItems(client.items) ?? "meta",
+      updatedAt: Date.now(),
+    };
   }
 }
 
