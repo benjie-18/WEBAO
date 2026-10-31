@@ -92,6 +92,10 @@ const demoDescriptions: Record<Locale, Record<string, string>> = {
     "toitures-tempete": "Storm-response roofers. When the sky falls, we're already there.",
     "chantier-brut": "General contractors, no varnish. Raw builds, straight talk.",
     "maison-dore": "Luxury renovations. Art-deco glamour, Gatsby-grade finishes.",
+    "sneaker-pro": "Sneaker e-commerce. Weekly drops, glass panels, midnight launches.",
+    onde: "Premium audio e-commerce. Liquid chrome, adaptive ANC, 45-day trial.",
+    noctua: "Dark-sky lodge. Working orrery, sky planner, telescope nights in Charlevoix.",
+    lisiere: "Handweaving atelier. Draft notation, live loom configurator, warp orders.",
   },
   fr: {
     nora: "Urgence résidentielle + commerciale, répartition 24 h.",
@@ -136,6 +140,10 @@ const demoDescriptions: Record<Locale, Record<string, string>> = {
     "toitures-tempete": "Couvreurs d'intervention tempête. Quand le ciel tombe, on est déjà là.",
     "chantier-brut": "Entrepreneurs généraux, sans vernis. Constructions brutes, franc-parler.",
     "maison-dore": "Rénovations de luxe. Glamour art déco, finitions dignes de Gatsby.",
+    "sneaker-pro": "E-commerce de sneakers. Drops de la semaine, panneaux de verre, lancements à minuit.",
+    onde: "E-commerce audio haut de gamme. Chrome liquide, ANC adaptatif, essai de 45 jours.",
+    noctua: "Auberge du ciel sombre. Orrery, planificateur du ciel et nuits au télescope en Charlevoix.",
+    lisiere: "Atelier de tissage. Pointage de métier, configurateur en direct, commandes de chaîne.",
   },
 };
 

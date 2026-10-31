@@ -1,0 +1,903 @@
+---
+import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
+// Demo microsite: Sneaker Pro · fictional sneaker e-commerce, Montréal QC.
+---
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <DemoSeo demoId="sneaker-pro" locale="en" title="Sneaker Pro — Verified Sneakers, Dropped Weekly · Montréal" description="Sneaker Pro is a fictional Montréal sneaker store: weekly drops, NFC-verified pairs, CloudStep cushioning, 48-hour delivery. Futurist glass e-commerce demo. Fictitious demonstration business." ogImage="https://webao.ca/demos/sneaker-pro/01.jpg" />
+
+  <script is:inline>
+    // Apply the saved theme before first paint to avoid a flash.
+    try {
+      var t = localStorage.getItem("snk-theme");
+      if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --snk-obsidian: #05070a;
+      --snk-panel: #0b0f14;
+      --snk-ink: #eef4f2;
+      --snk-muted: rgba(238, 244, 242, 0.62);
+      --snk-faint: rgba(238, 244, 242, 0.38);
+      --snk-mint: #3df5c0;
+      --snk-violet: #8b7bff;
+      --snk-coral: #ff7a59;
+      --snk-glass: rgba(255, 255, 255, 0.045);
+      --snk-glass-strong: rgba(255, 255, 255, 0.08);
+      --snk-line: rgba(255, 255, 255, 0.1);
+      --snk-line-bright: rgba(61, 245, 192, 0.45);
+      --snk-card: rgba(10, 14, 19, 0.55);
+      --snk-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+      --snk-btn-ink: #04120d;
+    }
+    [data-theme="light"] {
+      --snk-obsidian: #eef2f0;
+      --snk-panel: #ffffff;
+      --snk-ink: #0a0f0d;
+      --snk-muted: rgba(10, 15, 13, 0.64);
+      --snk-faint: rgba(10, 15, 13, 0.42);
+      --snk-mint: #0bb58a;
+      --snk-violet: #5b4bd6;
+      --snk-coral: #e0552f;
+      --snk-glass: rgba(255, 255, 255, 0.55);
+      --snk-glass-strong: rgba(255, 255, 255, 0.8);
+      --snk-line: rgba(8, 16, 13, 0.12);
+      --snk-line-bright: rgba(11, 181, 138, 0.5);
+      --snk-card: rgba(255, 255, 255, 0.62);
+      --snk-shadow: 0 24px 60px rgba(20, 40, 33, 0.14);
+      --snk-btn-ink: #04120d;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--snk-obsidian);
+      color: var(--snk-ink);
+      font-family: "Inter", system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      transition: background 0.4s ease, color 0.4s ease;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; background: none; border: none; color: inherit; }
+    ::selection { background: var(--snk-mint); color: var(--snk-btn-ink); }
+
+    /* Aurora backdrop ---------------------------------------------------- */
+    .snk-aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .snk-aurora i {
+      position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.5;
+      animation: snk-drift 22s ease-in-out infinite alternate;
+    }
+    .snk-aurora i:nth-child(1) { width: 52vw; height: 52vw; top: -18vw; right: -12vw; background: radial-gradient(circle, var(--snk-mint), transparent 68%); opacity: 0.22; }
+    .snk-aurora i:nth-child(2) { width: 44vw; height: 44vw; top: 34vh; left: -16vw; background: radial-gradient(circle, var(--snk-violet), transparent 68%); opacity: 0.2; animation-delay: -8s; }
+    .snk-aurora i:nth-child(3) { width: 30vw; height: 30vw; bottom: -10vw; right: 16vw; background: radial-gradient(circle, var(--snk-coral), transparent 70%); opacity: 0.12; animation-delay: -14s; }
+    [data-theme="light"] .snk-aurora i { opacity: 0.16; }
+    @keyframes snk-drift {
+      from { transform: translate3d(0, 0, 0) scale(1); }
+      to { transform: translate3d(-4vw, 5vh, 0) scale(1.12); }
+    }
+    .snk-grain {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.5;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    .snk-wrap { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .snk-mono { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; }
+
+    /* Nav ---------------------------------------------------------------- */
+    .snk-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      background: color-mix(in srgb, var(--snk-obsidian) 72%, transparent);
+      border-bottom: 1px solid var(--snk-line);
+    }
+    .snk-nav-in { max-width: 1200px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; gap: 28px; }
+    .snk-logo { font-family: "Unbounded", sans-serif; font-weight: 800; font-size: 15px; letter-spacing: 0.04em; display: flex; align-items: center; gap: 8px; }
+    .snk-logo b { width: 9px; height: 9px; border-radius: 50%; background: var(--snk-mint); box-shadow: 0 0 14px var(--snk-mint); }
+    .snk-nav-links { display: flex; gap: 22px; margin-left: auto; align-items: center; }
+    .snk-nav-links a { font-size: 13.5px; font-weight: 500; color: var(--snk-muted); transition: color 0.2s; }
+    .snk-nav-links a:hover { color: var(--snk-ink); }
+    .snk-tools { display: flex; align-items: center; gap: 10px; }
+    .snk-lang { display: inline-flex; border: 1px solid var(--snk-line); border-radius: 99px; overflow: hidden; }
+    .snk-lang a, .snk-lang span { font-family: "JetBrains Mono", monospace; font-size: 10.5px; letter-spacing: 0.08em; padding: 5px 10px; }
+    .snk-lang a { color: var(--snk-faint); }
+    .snk-lang a:hover { color: var(--snk-ink); }
+    .snk-lang span { background: var(--snk-mint); color: var(--snk-btn-ink); font-weight: 600; }
+    .snk-iconbtn {
+      width: 38px; height: 38px; border-radius: 12px; border: 1px solid var(--snk-line);
+      display: inline-flex; align-items: center; justify-content: center; position: relative;
+      background: var(--snk-glass); transition: border-color 0.2s, transform 0.15s;
+    }
+    .snk-iconbtn:hover { border-color: var(--snk-line-bright); }
+    .snk-iconbtn:active { transform: scale(0.94); }
+    .snk-iconbtn svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .snk-iconbtn .snk-sun { display: none; }
+    [data-theme="light"] .snk-iconbtn .snk-moon { display: none; }
+    [data-theme="light"] .snk-iconbtn .snk-sun { display: block; }
+    .snk-bag-count {
+      position: absolute; top: -5px; right: -5px; min-width: 17px; height: 17px; padding: 0 4px;
+      border-radius: 99px; background: var(--snk-mint); color: var(--snk-btn-ink);
+      font-family: "JetBrains Mono", monospace; font-size: 10px; font-weight: 600;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .snk-bag-count.is-bump { animation: snk-bump 0.45s cubic-bezier(0.2, 1.6, 0.4, 1); }
+    @keyframes snk-bump { 0% { transform: scale(1); } 40% { transform: scale(1.45); } 100% { transform: scale(1); } }
+    .snk-burger { display: none; }
+
+    /* Hero ---------------------------------------------------------------- */
+    .snk-hero { padding: 150px 0 40px; }
+    .snk-hero-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 48px; align-items: center; }
+    .snk-drop-pill {
+      display: inline-flex; align-items: center; gap: 9px; padding: 7px 14px;
+      border-radius: 99px; border: 1px solid var(--snk-line-bright);
+      background: var(--snk-glass); backdrop-filter: blur(12px);
+      color: var(--snk-mint);
+    }
+    .snk-drop-pill i { width: 7px; height: 7px; border-radius: 50%; background: var(--snk-mint); box-shadow: 0 0 10px var(--snk-mint); animation: snk-pulse 1.6s ease-in-out infinite; }
+    @keyframes snk-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+    .snk-h1 {
+      font-family: "Unbounded", sans-serif; font-weight: 800;
+      font-size: clamp(2.5rem, 5.6vw, 4.6rem); line-height: 1.02; letter-spacing: -0.02em;
+      margin: 22px 0 20px; text-wrap: balance;
+    }
+    .snk-h1 em {
+      font-style: normal;
+      background: linear-gradient(100deg, var(--snk-mint), var(--snk-violet));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .snk-hero-sub { color: var(--snk-muted); font-size: 17.5px; max-width: 46ch; }
+    .snk-ctas { display: flex; gap: 14px; margin-top: 32px; flex-wrap: wrap; }
+    .snk-btn {
+      display: inline-flex; align-items: center; gap: 9px; padding: 15px 26px;
+      border-radius: 99px; font-weight: 700; font-size: 14.5px; letter-spacing: 0.01em;
+      transition: transform 0.18s, box-shadow 0.25s, border-color 0.2s, background 0.25s;
+    }
+    .snk-btn:active { transform: scale(0.97); }
+    .snk-btn-primary {
+      background: linear-gradient(120deg, var(--snk-mint), #7ef9d9 55%, var(--snk-violet) 130%);
+      color: var(--snk-btn-ink); box-shadow: 0 10px 34px color-mix(in srgb, var(--snk-mint) 35%, transparent);
+    }
+    .snk-btn-primary:hover { box-shadow: 0 14px 44px color-mix(in srgb, var(--snk-mint) 50%, transparent); transform: translateY(-2px); }
+    .snk-btn-ghost { border: 1px solid var(--snk-line); background: var(--snk-glass); backdrop-filter: blur(12px); color: var(--snk-ink); }
+    .snk-btn-ghost:hover { border-color: var(--snk-line-bright); transform: translateY(-2px); }
+    .snk-hero-stats { display: flex; gap: 26px; margin-top: 38px; flex-wrap: wrap; }
+    .snk-hero-stats div { display: flex; flex-direction: column; gap: 2px; }
+    .snk-hero-stats strong { font-family: "Unbounded", sans-serif; font-size: 19px; font-weight: 700; }
+    .snk-hero-stats span { color: var(--snk-faint); font-size: 12px; }
+
+    .snk-hero-visual { position: relative; perspective: 1200px; }
+    .snk-hero-frame {
+      position: relative; border-radius: 26px; overflow: hidden;
+      border: 1px solid var(--snk-line); background: var(--snk-card);
+      box-shadow: var(--snk-shadow);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      transform-style: preserve-3d; transition: transform 0.15s ease-out;
+      animation: snk-float 7s ease-in-out infinite;
+    }
+    @keyframes snk-float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -12px; } }
+    .snk-hero-frame img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+    .snk-hero-tag {
+      position: absolute; left: 16px; bottom: 16px; padding: 9px 14px; border-radius: 14px;
+      background: rgba(5, 7, 10, 0.62); backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.14); color: #eef4f2;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .snk-hero-tag b { color: var(--snk-mint); font-weight: 600; }
+    .snk-hero-chip {
+      position: absolute; top: 18px; right: 18px; padding: 10px 16px; border-radius: 99px;
+      background: rgba(5, 7, 10, 0.55); backdrop-filter: blur(14px);
+      border: 1px solid var(--snk-line-bright); color: var(--snk-mint);
+      font-family: "Unbounded", sans-serif; font-weight: 700; font-size: 13px;
+    }
+
+    /* Marquee ------------------------------------------------------------- */
+    .snk-marquee {
+      margin: 64px 0 0; border-top: 1px solid var(--snk-line); border-bottom: 1px solid var(--snk-line);
+      overflow: hidden; background: var(--snk-glass); backdrop-filter: blur(10px);
+    }
+    .snk-marquee-in { display: flex; width: max-content; animation: snk-scroll 26s linear infinite; }
+    .snk-marquee:hover .snk-marquee-in { animation-play-state: paused; }
+    .snk-marquee span {
+      font-family: "JetBrains Mono", monospace; font-size: 11.5px; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--snk-muted); padding: 13px 0; white-space: nowrap;
+    }
+    .snk-marquee span i { color: var(--snk-mint); font-style: normal; padding: 0 18px; }
+    @keyframes snk-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* Sections ------------------------------------------------------------ */
+    .snk-section { padding: 110px 0 0; }
+    .snk-eyebrow { color: var(--snk-mint); margin-bottom: 16px; }
+    .snk-h2 {
+      font-family: "Unbounded", sans-serif; font-weight: 800;
+      font-size: clamp(1.7rem, 3.4vw, 2.7rem); line-height: 1.08; letter-spacing: -0.015em;
+      max-width: 22ch; text-wrap: balance;
+    }
+    .snk-section-sub { color: var(--snk-muted); margin-top: 14px; max-width: 54ch; }
+
+    /* Reveal on scroll */
+    .snk-reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1); }
+    .snk-reveal.is-in { opacity: 1; transform: none; }
+
+    /* Tech cards */
+    .snk-tech-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 44px; }
+    .snk-card {
+      border: 1px solid var(--snk-line); border-radius: 22px; padding: 26px 22px;
+      background: var(--snk-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1), border-color 0.3s, box-shadow 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .snk-card::after {
+      content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+      background: linear-gradient(140deg, color-mix(in srgb, var(--snk-mint) 12%, transparent), transparent 45%);
+      opacity: 0; transition: opacity 0.35s;
+    }
+    .snk-card:hover { transform: translateY(-7px); border-color: var(--snk-line-bright); box-shadow: var(--snk-shadow); }
+    .snk-card:hover::after { opacity: 1; }
+    .snk-card-ico {
+      width: 46px; height: 46px; border-radius: 15px; margin-bottom: 20px;
+      background: var(--snk-glass-strong); border: 1px solid var(--snk-line);
+      display: flex; align-items: center; justify-content: center; color: var(--snk-mint);
+    }
+    .snk-card-ico svg { width: 21px; height: 21px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+    .snk-card h3 { font-family: "Unbounded", sans-serif; font-size: 15.5px; font-weight: 700; margin-bottom: 10px; letter-spacing: -0.01em; }
+    .snk-card p { color: var(--snk-muted); font-size: 14px; line-height: 1.62; }
+    .snk-card b { color: var(--snk-mint); font-weight: 600; }
+
+    /* Products */
+    .snk-drop-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+    .snk-filters { display: flex; gap: 9px; flex-wrap: wrap; }
+    .snk-chip {
+      padding: 9px 17px; border-radius: 99px; border: 1px solid var(--snk-line);
+      background: var(--snk-glass); font-size: 13px; font-weight: 500; color: var(--snk-muted);
+      transition: all 0.2s;
+    }
+    .snk-chip:hover { border-color: var(--snk-line-bright); color: var(--snk-ink); }
+    .snk-chip[aria-pressed="true"] { background: var(--snk-mint); border-color: var(--snk-mint); color: var(--snk-btn-ink); font-weight: 700; }
+    .snk-products { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; }
+    .snk-product { display: flex; flex-direction: column; }
+    .snk-product[hidden] { display: none; }
+    .snk-product-img {
+      position: relative; border-radius: 22px; overflow: hidden; border: 1px solid var(--snk-line);
+      background: var(--snk-card); aspect-ratio: 4 / 3;
+    }
+    .snk-product-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1); }
+    .snk-product:hover .snk-product-img img { transform: scale(1.06) rotate(-1deg); }
+    .snk-badge {
+      position: absolute; top: 14px; left: 14px; padding: 6px 12px; border-radius: 99px;
+      background: rgba(5, 7, 10, 0.66); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.16);
+      color: #eef4f2; font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: 0.14em;
+    }
+    .snk-badge b { color: var(--snk-mint); font-weight: 600; }
+    .snk-product-body { padding: 18px 6px 0; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+    .snk-product-cat { color: var(--snk-faint); }
+    .snk-product h3 { font-family: "Unbounded", sans-serif; font-size: 17px; font-weight: 700; letter-spacing: -0.01em; }
+    .snk-product p { color: var(--snk-muted); font-size: 13.5px; flex: 1; }
+    .snk-product-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 8px; }
+    .snk-price { font-family: "Unbounded", sans-serif; font-weight: 700; font-size: 18px; }
+    .snk-price s { color: var(--snk-faint); font-size: 13px; font-weight: 400; margin-right: 8px; }
+    .snk-add {
+      padding: 11px 19px; border-radius: 99px; background: var(--snk-mint); color: var(--snk-btn-ink);
+      font-weight: 700; font-size: 13px; transition: transform 0.15s, box-shadow 0.25s;
+      box-shadow: 0 6px 20px color-mix(in srgb, var(--snk-mint) 30%, transparent);
+    }
+    .snk-add:hover { transform: translateY(-2px); box-shadow: 0 10px 28px color-mix(in srgb, var(--snk-mint) 45%, transparent); }
+    .snk-add:active { transform: scale(0.95); }
+
+    /* Social proof */
+    .snk-proof-grid { display: grid; grid-template-columns: 0.9fr 2fr; gap: 22px; margin-top: 44px; align-items: stretch; }
+    .snk-score {
+      border: 1px solid var(--snk-line); border-radius: 22px; padding: 34px 28px;
+      background: var(--snk-card); backdrop-filter: blur(16px);
+      display: flex; flex-direction: column; justify-content: center; gap: 8px;
+    }
+    .snk-score strong { font-family: "Unbounded", sans-serif; font-size: 64px; font-weight: 800; line-height: 1; letter-spacing: -0.03em; }
+    .snk-score .snk-stars { color: var(--snk-mint); font-size: 17px; letter-spacing: 3px; }
+    .snk-score p { color: var(--snk-muted); font-size: 13.5px; }
+    .snk-quotes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .snk-quote {
+      border: 1px solid var(--snk-line); border-radius: 22px; padding: 26px 22px;
+      background: var(--snk-card); backdrop-filter: blur(16px);
+      display: flex; flex-direction: column; gap: 16px;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .snk-quote:hover { transform: translateY(-5px); border-color: var(--snk-line-bright); }
+    .snk-quote p { font-size: 14.5px; line-height: 1.65; flex: 1; }
+    .snk-quote p::before { content: "“"; color: var(--snk-mint); font-family: "Unbounded", sans-serif; font-size: 26px; line-height: 0; vertical-align: -6px; margin-right: 4px; }
+    .snk-who { display: flex; align-items: center; gap: 12px; }
+    .snk-avatar {
+      width: 40px; height: 40px; border-radius: 50%; flex: none;
+      background: linear-gradient(135deg, var(--snk-mint), var(--snk-violet));
+      color: var(--snk-btn-ink); font-family: "Unbounded", sans-serif; font-weight: 700; font-size: 13px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .snk-who b { display: block; font-size: 13.5px; }
+    .snk-who span { color: var(--snk-faint); font-size: 12px; }
+    .snk-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 22px; }
+    .snk-stat {
+      border: 1px solid var(--snk-line); border-radius: 22px; padding: 24px 22px; text-align: center;
+      background: var(--snk-glass); backdrop-filter: blur(14px);
+    }
+    .snk-stat strong { font-family: "Unbounded", sans-serif; font-size: 30px; font-weight: 800; display: block; letter-spacing: -0.02em; }
+    .snk-stat span { color: var(--snk-faint); font-size: 12px; }
+
+    /* CTA */
+    .snk-cta {
+      margin-top: 44px; border-radius: 30px; padding: 60px 48px; text-align: center;
+      border: 1px solid var(--snk-line-bright);
+      background:
+        radial-gradient(60% 120% at 50% -20%, color-mix(in srgb, var(--snk-mint) 16%, transparent), transparent),
+        radial-gradient(50% 100% at 85% 120%, color-mix(in srgb, var(--snk-violet) 18%, transparent), transparent),
+        var(--snk-card);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      box-shadow: var(--snk-shadow);
+    }
+    .snk-cta .snk-h2 { margin: 0 auto; max-width: 26ch; }
+    .snk-cta .snk-section-sub { margin: 14px auto 0; }
+    .snk-form { display: flex; gap: 12px; max-width: 480px; margin: 32px auto 0; }
+    .snk-form input {
+      flex: 1; min-width: 0; padding: 15px 20px; border-radius: 99px; font-size: 14.5px;
+      border: 1px solid var(--snk-line); background: var(--snk-glass-strong); color: var(--snk-ink);
+      outline: none; transition: border-color 0.2s;
+    }
+    .snk-form input::placeholder { color: var(--snk-faint); }
+    .snk-form input:focus { border-color: var(--snk-line-bright); }
+    .snk-form-note { color: var(--snk-faint); font-size: 12px; margin-top: 14px; }
+    .snk-done { margin-top: 30px; font-family: "Unbounded", sans-serif; font-weight: 700; color: var(--snk-mint); font-size: 17px; }
+    .snk-countdown { display: flex; gap: 12px; justify-content: center; margin-top: 30px; }
+    .snk-countdown div {
+      min-width: 74px; padding: 14px 10px; border-radius: 18px;
+      border: 1px solid var(--snk-line); background: var(--snk-glass); backdrop-filter: blur(12px);
+    }
+    .snk-countdown strong { font-family: "Unbounded", sans-serif; font-size: 26px; font-weight: 800; display: block; font-variant-numeric: tabular-nums; }
+    .snk-countdown span { color: var(--snk-faint); font-size: 10.5px; font-family: "JetBrains Mono", monospace; letter-spacing: 0.14em; text-transform: uppercase; }
+
+    /* Footer */
+    .snk-footer { margin-top: 120px; border-top: 1px solid var(--snk-line); padding: 64px 0 40px; background: var(--snk-glass); backdrop-filter: blur(14px); }
+    .snk-foot-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 36px; }
+    .snk-foot-brand p { color: var(--snk-muted); font-size: 13.5px; margin-top: 14px; max-width: 34ch; }
+    .snk-socials { display: flex; gap: 10px; margin-top: 20px; }
+    .snk-socials a {
+      width: 38px; height: 38px; border-radius: 12px; border: 1px solid var(--snk-line);
+      display: flex; align-items: center; justify-content: center; color: var(--snk-muted);
+      transition: color 0.2s, border-color 0.2s, transform 0.2s;
+    }
+    .snk-socials a:hover { color: var(--snk-mint); border-color: var(--snk-line-bright); transform: translateY(-2px); }
+    .snk-socials svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+    .snk-foot-col h4 { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--snk-faint); margin-bottom: 16px; }
+    .snk-foot-col a { display: block; color: var(--snk-muted); font-size: 13.5px; padding: 5px 0; transition: color 0.2s; }
+    .snk-foot-col a:hover { color: var(--snk-mint); }
+    .snk-legal {
+      margin-top: 52px; padding-top: 24px; border-top: 1px solid var(--snk-line);
+      display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap;
+      color: var(--snk-faint); font-size: 12px;
+    }
+
+    /* Toast */
+    .snk-toast {
+      position: fixed; bottom: 26px; left: 50%; transform: translate(-50%, 80px); z-index: 80;
+      padding: 14px 22px; border-radius: 99px; border: 1px solid var(--snk-line-bright);
+      background: color-mix(in srgb, var(--snk-panel) 82%, transparent); backdrop-filter: blur(18px);
+      color: var(--snk-ink); font-size: 14px; font-weight: 600; box-shadow: var(--snk-shadow);
+      opacity: 0; pointer-events: none; transition: transform 0.4s cubic-bezier(0.2, 1.4, 0.4, 1), opacity 0.3s;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .snk-toast i { width: 8px; height: 8px; border-radius: 50%; background: var(--snk-mint); box-shadow: 0 0 10px var(--snk-mint); }
+    .snk-toast.is-show { transform: translate(-50%, 0); opacity: 1; }
+
+    /* Responsive ----------------------------------------------------------- */
+    @media (max-width: 1020px) {
+      .snk-tech-grid { grid-template-columns: repeat(2, 1fr); }
+      .snk-products { grid-template-columns: repeat(2, 1fr); }
+      .snk-proof-grid { grid-template-columns: 1fr; }
+      .snk-quotes { grid-template-columns: 1fr; }
+      .snk-stats { grid-template-columns: repeat(2, 1fr); }
+      .snk-foot-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 780px) {
+      .snk-hero { padding-top: 120px; }
+      .snk-hero-grid { grid-template-columns: 1fr; gap: 40px; }
+      .snk-nav-links {
+        display: none; position: absolute; top: 100%; left: 0; right: 0;
+        flex-direction: column; align-items: stretch; gap: 0;
+        background: color-mix(in srgb, var(--snk-panel) 94%, transparent);
+        backdrop-filter: blur(22px); border-bottom: 1px solid var(--snk-line); padding: 10px 24px 18px;
+      }
+      .snk-nav.is-open .snk-nav-links { display: flex; }
+      .snk-nav-links a { padding: 13px 0; border-bottom: 1px solid var(--snk-line); font-size: 15px; }
+      .snk-nav-links a:last-child { border-bottom: 0; }
+      .snk-burger { display: inline-flex; }
+      .snk-products { grid-template-columns: 1fr; }
+      .snk-tech-grid { grid-template-columns: 1fr; }
+      .snk-cta { padding: 44px 24px; }
+      .snk-form { flex-direction: column; }
+      .snk-form .snk-btn { justify-content: center; }
+      .snk-section { padding-top: 84px; }
+      .snk-foot-grid { grid-template-columns: 1fr; gap: 30px; }
+      .snk-countdown div { min-width: 62px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+      .snk-reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body class="snk-body">
+  <div class="snk-aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="snk-grain" aria-hidden="true"></div>
+
+  <nav class="snk-nav" id="snk-nav" aria-label="Main">
+    <div class="snk-nav-in">
+      <a class="snk-logo" href="#snk-top"><b aria-hidden="true"></b>SNEAKER&nbsp;PRO</a>
+      <div class="snk-nav-links" id="snk-nav-links">
+        <a href="#snk-tech">Technology</a>
+        <a href="#snk-shop">The drop</a>
+        <a href="#snk-reviews">Reviews</a>
+        <a href="#snk-alerts">Drop alerts</a>
+      </div>
+      <div class="snk-tools">
+        <div class="snk-lang" aria-label="Language">
+          <span>EN</span><a href="/fr/demos/sneaker-pro/" hreflang="fr" lang="fr">FR</a>
+        </div>
+        <button class="snk-iconbtn" id="snk-theme" type="button" aria-label="Switch to light mode" aria-pressed="false">
+          <svg class="snk-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="snk-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        </button>
+        <button class="snk-iconbtn" type="button" aria-label="Bag, 0 items" id="snk-bag">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span class="snk-bag-count" id="snk-count">0</span>
+        </button>
+        <button class="snk-iconbtn snk-burger" type="button" id="snk-burger" aria-label="Menu" aria-expanded="false" aria-controls="snk-nav-links">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main id="snk-top">
+    <header class="snk-hero">
+      <div class="snk-wrap snk-hero-grid">
+        <div>
+          <p class="snk-drop-pill snk-mono"><i aria-hidden="true"></i>Drop 07 · live now</p>
+          <h1 class="snk-h1">The future of footwear, <em>on your feet.</em></h1>
+          <p class="snk-hero-sub">Authenticated grails, science-grade cushioning, and 48-hour delivery across Québec. Sneaker Pro is where the hunt ends — and the rotation begins.</p>
+          <div class="snk-ctas">
+            <a class="snk-btn snk-btn-primary" href="#snk-shop">Shop the drop <span aria-hidden="true">→</span></a>
+            <a class="snk-btn snk-btn-ghost" href="#snk-tech">Explore the tech</a>
+          </div>
+          <div class="snk-hero-stats">
+            <div><strong>4.9★</strong><span>2,318 verified reviews</span></div>
+            <div><strong>48h</strong><span>delivery, carbon-neutral</span></div>
+            <div><strong>30-day</strong><span>wear test, no questions</span></div>
+          </div>
+        </div>
+        <div class="snk-hero-visual" id="snk-tilt">
+          <div class="snk-hero-frame" id="snk-frame">
+            <img src="/demos/sneaker-pro/01.jpg" alt="White and mint sneaker floating above a glass pedestal under violet aurora light" width="1536" height="1024" decoding="async" fetchpriority="high" />
+            <span class="snk-hero-chip" aria-hidden="true">$189</span>
+            <div class="snk-hero-tag snk-mono"><b>Aero Pulse 01</b> · Drop 07 exclusive</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="snk-marquee" aria-hidden="true">
+        <div class="snk-marquee-in">
+          <span>New drops every Friday <i>✦</i>NFC-verified authentic <i>✦</i>Free shipping over $150 <i>✦</i>30-day wear test <i>✦</i>Shipped from Montréal <i>✦</i></span>
+          <span>New drops every Friday <i>✦</i>NFC-verified authentic <i>✦</i>Free shipping over $150 <i>✦</i>30-day wear test <i>✦</i>Shipped from Montréal <i>✦</i></span>
+        </div>
+      </div>
+    </header>
+
+    <section class="snk-section" id="snk-tech" aria-labelledby="snk-tech-h">
+      <div class="snk-wrap">
+        <p class="snk-eyebrow snk-mono snk-reveal">Innovation</p>
+        <h2 class="snk-h2 snk-reveal" id="snk-tech-h">Engineered like equipment. Worn like art.</h2>
+        <p class="snk-section-sub snk-reveal">Every pair ships with the same obsession we'd demand ourselves — cushioning you can feel, authenticity you can verify, sizing you never have to guess.</p>
+        <div class="snk-tech-grid">
+          <article class="snk-card snk-reveal">
+            <div class="snk-card-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 22c4-4 8-7.6 8-12a8 8 0 1 0-16 0c0 4.4 4 8 8 12z"/><circle cx="12" cy="10" r="3"/></svg></div>
+            <h3>CloudStep™ foam</h3>
+            <p>Nitrogen-infused midsole returns <b>87% of every stride</b>. Fifteen percent lighter than the industry standard, tested past 800 km.</p>
+          </article>
+          <article class="snk-card snk-reveal">
+            <div class="snk-card-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></div>
+            <h3>NFC Verify</h3>
+            <p>Tap your phone on the tongue tag. <b>Provenance, owner history, and authenticity</b> in 0.3 seconds — no account required.</p>
+          </article>
+          <article class="snk-card snk-reveal">
+            <div class="snk-card-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 12h10"/></svg></div>
+            <h3>FitScan AR</h3>
+            <p>Scan your feet once with the camera. <b>Every size, every brand, mapped</b> — we'll even flag half-size risks before you buy.</p>
+          </article>
+          <article class="snk-card snk-reveal">
+            <div class="snk-card-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+            <h3>48h doorstep</h3>
+            <p>Order Thursday night, lace up Saturday. <b>Carbon-neutral express</b> from our Montréal vault, tracked door to door.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="snk-section" id="snk-shop" aria-labelledby="snk-shop-h">
+      <div class="snk-wrap">
+        <div class="snk-drop-head">
+          <div>
+            <p class="snk-eyebrow snk-mono snk-reveal">This week's drop</p>
+            <h2 class="snk-h2 snk-reveal" id="snk-shop-h">Three silhouettes. Zero filler.</h2>
+          </div>
+          <div class="snk-filters snk-reveal" role="group" aria-label="Filter products">
+            <button class="snk-chip" type="button" data-filter="all" aria-pressed="true">All</button>
+            <button class="snk-chip" type="button" data-filter="running" aria-pressed="false">Running</button>
+            <button class="snk-chip" type="button" data-filter="basketball" aria-pressed="false">Basketball</button>
+            <button class="snk-chip" type="button" data-filter="lifestyle" aria-pressed="false">Lifestyle</button>
+          </div>
+        </div>
+        <div class="snk-products">
+          <article class="snk-product snk-reveal" data-cat="running">
+            <div class="snk-product-img">
+              <img src="/demos/sneaker-pro/02.jpg" alt="Mint and white knit running sneaker on reflective glass, three-quarter view" width="1536" height="1024" loading="lazy" decoding="async" />
+              <span class="snk-badge"><b>NEW</b> · DROP 07</span>
+            </div>
+            <div class="snk-product-body">
+              <p class="snk-product-cat snk-mono">Running · CloudStep</p>
+              <h3>Aero Pulse 01</h3>
+              <p>Mint knit upper on a translucent propulsion pod. The daily trainer that feels like a tempo day.</p>
+              <div class="snk-product-row">
+                <span class="snk-price">$189</span>
+                <button class="snk-add" type="button" data-name="Aero Pulse 01">Add to bag</button>
+              </div>
+            </div>
+          </article>
+          <article class="snk-product snk-reveal" data-cat="basketball">
+            <div class="snk-product-img">
+              <img src="/demos/sneaker-pro/03.jpg" alt="Black and violet high-top basketball sneaker with glossy midsole on dark glass" width="1536" height="1024" loading="lazy" decoding="async" />
+              <span class="snk-badge"><b>LIMITED</b> · 300 PAIRS</span>
+            </div>
+            <div class="snk-product-body">
+              <p class="snk-product-cat snk-mono">Basketball · Court Series</p>
+              <h3>Phantom High</h3>
+              <p>Locked-in ankle wrap, violet sky bridge sole. Built for the blacktop, styled for the train home.</p>
+              <div class="snk-product-row">
+                <span class="snk-price">$215</span>
+                <button class="snk-add" type="button" data-name="Phantom High">Add to bag</button>
+              </div>
+            </div>
+          </article>
+          <article class="snk-product snk-reveal" data-cat="lifestyle">
+            <div class="snk-product-img">
+              <img src="/demos/sneaker-pro/04.jpg" alt="Coral and grey retro lifestyle sneaker with cream midsole, three-quarter rear view" width="1536" height="1024" loading="lazy" decoding="async" />
+              <span class="snk-badge"><b>RESTOCK</b> · CORAL</span>
+            </div>
+            <div class="snk-product-body">
+              <p class="snk-product-cat snk-mono">Lifestyle · Archive</p>
+              <h3>Drift Low '92</h3>
+              <p>Coral suede, gum outsole, zero apologies. The archive runner that sold out three drops straight.</p>
+              <div class="snk-product-row">
+                <span class="snk-price"><s>$165</s>$139</span>
+                <button class="snk-add" type="button" data-name="Drift Low '92">Add to bag</button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="snk-section" id="snk-reviews" aria-labelledby="snk-reviews-h">
+      <div class="snk-wrap">
+        <p class="snk-eyebrow snk-mono snk-reveal">Social proof</p>
+        <h2 class="snk-h2 snk-reveal" id="snk-reviews-h">The verdict is in.</h2>
+        <div class="snk-proof-grid">
+          <div class="snk-score snk-reveal">
+            <strong>4.9</strong>
+            <div class="snk-stars" aria-hidden="true">★★★★★</div>
+            <p>from 2,318 verified purchases — every review tied to a real NFC-registered pair.</p>
+          </div>
+          <div class="snk-quotes">
+            <figure class="snk-quote snk-reveal">
+              <p>Ordered Thursday night, running along the Canal by Saturday. The FitScan sizing is scary accurate.</p>
+              <figcaption class="snk-who">
+                <span class="snk-avatar" aria-hidden="true">MR</span>
+                <span><b>Malik R.</b><span>Montréal · Verified buyer</span></span>
+              </figcaption>
+            </figure>
+            <figure class="snk-quote snk-reveal">
+              <p>Caught the Phantom High drop in forty seconds. Checkout didn't blink, tracking updates every hour. This is how it should work.</p>
+              <figcaption class="snk-who">
+                <span class="snk-avatar" aria-hidden="true">JT</span>
+                <span><b>Julie T.</b><span>Québec City · Verified buyer</span></span>
+              </figcaption>
+            </figure>
+            <figure class="snk-quote snk-reveal">
+              <p>Returned a half-size-off pair — refunded in two days, no interrogation, prepaid label. That's rare anywhere, let alone sneaker culture.</p>
+              <figcaption class="snk-who">
+                <span class="snk-avatar" aria-hidden="true">DP</span>
+                <span><b>Devon P.</b><span>Ottawa · Verified buyer</span></span>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+        <div class="snk-stats">
+          <div class="snk-stat snk-reveal"><strong data-count="12400">0</strong><span>pairs shipped</span></div>
+          <div class="snk-stat snk-reveal"><strong data-count="38">0</strong><span>cities served</span></div>
+          <div class="snk-stat snk-reveal"><strong data-count="92" data-suffix="%">0</strong><span>come back for the next drop</span></div>
+          <div class="snk-stat snk-reveal"><strong data-count="0" data-literal="0.3s">0.3s</strong><span>NFC verification</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="snk-section" id="snk-alerts" aria-labelledby="snk-alerts-h">
+      <div class="snk-wrap">
+        <div class="snk-cta snk-reveal">
+          <p class="snk-eyebrow snk-mono">Never miss a drop</p>
+          <h2 class="snk-h2" id="snk-alerts-h">Drop 08 is loading. Be first in line.</h2>
+          <p class="snk-section-sub">Alerts go out 30 minutes early — the same head start our in-store regulars get.</p>
+          <form class="snk-form" id="snk-alert-form" novalidate>
+            <label class="snk-visually-hidden" for="snk-email" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);">Email address</label>
+            <input id="snk-email" type="email" name="email" placeholder="you@example.com" autocomplete="email" required />
+            <button class="snk-btn snk-btn-primary" type="submit">Get drop alerts</button>
+          </form>
+          <p class="snk-form-note">One email per drop. No noise. Unsubscribe anytime.</p>
+          <p class="snk-done" id="snk-alert-done" hidden>✓ You're on the list. Check your inbox.</p>
+          <div class="snk-countdown" aria-label="Time until drop 08">
+            <div><strong id="snk-dd">00</strong><span>days</span></div>
+            <div><strong id="snk-hh">00</strong><span>hrs</span></div>
+            <div><strong id="snk-mm">00</strong><span>min</span></div>
+            <div><strong id="snk-ss">00</strong><span>sec</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="snk-footer">
+    <div class="snk-wrap">
+      <div class="snk-foot-grid">
+        <div class="snk-foot-brand">
+          <a class="snk-logo" href="#snk-top"><b aria-hidden="true"></b>SNEAKER&nbsp;PRO</a>
+          <p>Verified sneakers, dropped weekly. Vaulted, authenticated, and shipped from Montréal since 2019.</p>
+          <div class="snk-socials">
+            <a href="#snk-top" aria-label="Sneaker Pro on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg></a>
+            <a href="#snk-top" aria-label="Sneaker Pro on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg></a>
+            <a href="#snk-top" aria-label="Sneaker Pro on X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4l16 16M20 4 4 20"/></svg></a>
+          </div>
+        </div>
+        <div class="snk-foot-col">
+          <h4>Shop</h4>
+          <a href="#snk-shop">New drops</a>
+          <a href="#snk-shop">Running</a>
+          <a href="#snk-shop">Basketball</a>
+          <a href="#snk-shop">Lifestyle</a>
+        </div>
+        <div class="snk-foot-col">
+          <h4>Support</h4>
+          <a href="#snk-tech">Size guide</a>
+          <a href="#snk-alerts">Shipping</a>
+          <a href="#snk-reviews">Returns</a>
+          <a href="#snk-tech">Verify your pair</a>
+        </div>
+        <div class="snk-foot-col">
+          <h4>Company</h4>
+          <a href="#snk-top">Our story</a>
+          <a href="#snk-reviews">Vault tours</a>
+          <a href="#snk-alerts">Careers</a>
+          <a href="#snk-alerts">Contact</a>
+        </div>
+      </div>
+      <div class="snk-legal">
+        <span>© 2026 Sneaker Pro — fictitious business created for demonstration purposes.</span>
+        <span>Montréal, QC · Built by <b>WebAO</b></span>
+      </div>
+    </div>
+  </footer>
+
+  <div class="snk-toast" id="snk-toast" role="status" aria-live="polite"><i aria-hidden="true"></i><span id="snk-toast-text"></span></div>
+
+  <EscapeHatch />
+
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var themeBtn = document.getElementById("snk-theme") as HTMLButtonElement | null;
+      var syncTheme = function () {
+        var light = root.getAttribute("data-theme") === "light";
+        if (themeBtn) {
+          themeBtn.setAttribute("aria-pressed", String(light));
+          themeBtn.setAttribute("aria-label", light ? "Switch to dark mode" : "Switch to light mode");
+        }
+      };
+      syncTheme();
+      themeBtn?.addEventListener("click", function () {
+        var next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
+        root.setAttribute("data-theme", next);
+        try { localStorage.setItem("snk-theme", next); } catch (e) {}
+        syncTheme();
+      });
+
+      // Mobile menu
+      var nav = document.getElementById("snk-nav");
+      var burger = document.getElementById("snk-burger") as HTMLButtonElement | null;
+      burger?.addEventListener("click", function () {
+        var open = nav?.classList.toggle("is-open") ?? false;
+        burger?.setAttribute("aria-expanded", String(open));
+      });
+      nav?.querySelectorAll(".snk-nav-links a").forEach(function (link) {
+        link.addEventListener("click", function () {
+          nav?.classList.remove("is-open");
+          burger?.setAttribute("aria-expanded", "false");
+        });
+      });
+
+      // Scroll reveal
+      var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var reveals = document.querySelectorAll(".snk-reveal");
+      if (reduce || !("IntersectionObserver" in window)) {
+        reveals.forEach(function (el) { el.classList.add("is-in"); });
+      } else {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-in");
+              io.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
+        reveals.forEach(function (el) { io.observe(el); });
+      }
+
+      // Hero tilt (pointer only)
+      var tilt = document.getElementById("snk-tilt");
+      var frame = document.getElementById("snk-frame");
+      if (tilt && frame && !reduce && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+        const tiltEl: HTMLElement = tilt;
+        const frameEl: HTMLElement = frame;
+        tiltEl.addEventListener("pointermove", function (e) {
+          var r = tiltEl.getBoundingClientRect();
+          var x = (e.clientX - r.left) / r.width - 0.5;
+          var y = (e.clientY - r.top) / r.height - 0.5;
+          frameEl.style.transform = "rotateY(" + (x * 9) + "deg) rotateX(" + (-y * 9) + "deg)";
+        });
+        tiltEl.addEventListener("pointerleave", function () {
+          frameEl.style.transform = "";
+        });
+      }
+
+      // Product filters
+      var chips = document.querySelectorAll<HTMLButtonElement>(".snk-chip[data-filter]");
+      var products = document.querySelectorAll<HTMLElement>(".snk-product[data-cat]");
+      chips.forEach(function (chip) {
+        chip.addEventListener("click", function () {
+          var f = chip.getAttribute("data-filter") ?? "all";
+          chips.forEach(function (c) { c.setAttribute("aria-pressed", String(c === chip)); });
+          products.forEach(function (p) {
+            p.hidden = f !== "all" && p.getAttribute("data-cat") !== f;
+          });
+        });
+      });
+
+      // Cart badge + toast
+      var count = 0;
+      var countEl = document.getElementById("snk-count");
+      var bagBtn = document.getElementById("snk-bag");
+      var toast = document.getElementById("snk-toast");
+      var toastText = document.getElementById("snk-toast-text");
+      var toastTimer: ReturnType<typeof setTimeout> | undefined;
+      var showToast = function (msg: string) {
+        if (!toast || !toastText) return;
+        var toastEl: HTMLElement = toast;
+        var textEl: HTMLElement = toastText;
+        textEl.textContent = msg;
+        toastEl.classList.add("is-show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () { toastEl.classList.remove("is-show"); }, 2400);
+      };
+      document.querySelectorAll<HTMLButtonElement>(".snk-add").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          count += 1;
+          if (countEl) {
+            countEl.textContent = String(count);
+            countEl.classList.remove("is-bump");
+            void countEl.offsetWidth;
+            countEl.classList.add("is-bump");
+          }
+          bagBtn?.setAttribute("aria-label", "Bag, " + count + (count === 1 ? " item" : " items"));
+          showToast("Added — " + (btn.getAttribute("data-name") ?? "item"));
+        });
+      });
+      bagBtn?.addEventListener("click", function () {
+        showToast(count === 0 ? "Your bag is empty — the drop is waiting." : count + (count === 1 ? " pair" : " pairs") + " in your bag (demo).");
+      });
+
+      // Drop-alert form
+      var form = document.getElementById("snk-alert-form") as HTMLFormElement | null;
+      var done = document.getElementById("snk-alert-done");
+      if (form) {
+        var formEl: HTMLFormElement = form;
+        formEl.addEventListener("submit", function (e) {
+          e.preventDefault();
+          var email = (formEl.querySelector("input") as HTMLInputElement | null)?.value ?? "";
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            showToast("Enter a valid email to get the alert.");
+            return;
+          }
+          formEl.hidden = true;
+          var note = formEl.parentElement?.querySelector<HTMLElement>(".snk-form-note");
+          if (note) note.hidden = true;
+          if (done) done.hidden = false;
+        });
+      }
+
+      // Countdown to the next Friday 10:00 (local time)
+      var dd = document.getElementById("snk-dd");
+      var hh = document.getElementById("snk-hh");
+      var mm = document.getElementById("snk-mm");
+      var ss = document.getElementById("snk-ss");
+      var pad = function (n: number) { return n < 10 ? "0" + n : String(n); };
+      var nextDrop = function () {
+        var now = new Date();
+        var d = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 10, 0, 0, 0);
+        var delta = (5 - d.getDay() + 7) % 7;
+        d.setDate(d.getDate() + delta);
+        if (d.getTime() <= now.getTime()) d.setDate(d.getDate() + 7);
+        return d;
+      };
+      var target = nextDrop();
+      var tick = function () {
+        var ms = Math.max(0, target.getTime() - Date.now());
+        if (ms === 0) { target = nextDrop(); return; }
+        var s = Math.floor(ms / 1000);
+        if (dd) dd.textContent = pad(Math.floor(s / 86400));
+        if (hh) hh.textContent = pad(Math.floor(s / 3600) % 24);
+        if (mm) mm.textContent = pad(Math.floor(s / 60) % 60);
+        if (ss) ss.textContent = pad(s % 60);
+      };
+      tick();
+      setInterval(tick, 1000);
+
+      // Count-up stats
+      var stats = document.querySelectorAll<HTMLElement>("strong[data-count]");
+      var runCount = function (el: HTMLElement) {
+        var literal = el.getAttribute("data-literal");
+        if (literal) { el.textContent = literal; return; }
+        var end = Number(el.getAttribute("data-count") ?? "0");
+        var suffix = el.getAttribute("data-suffix") ?? "";
+        if (reduce) { el.textContent = end.toLocaleString("en-CA") + suffix; return; }
+        var t0 = performance.now();
+        var dur = 1400;
+        var step = function (now: number) {
+          var p = Math.min(1, (now - t0) / dur);
+          var eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(end * eased).toLocaleString("en-CA") + suffix;
+          if (p < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      };
+      if (!("IntersectionObserver" in window)) {
+        stats.forEach(runCount);
+      } else {
+        var sio = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              runCount(entry.target as HTMLElement);
+              sio.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.4 });
+        stats.forEach(function (el) { sio.observe(el); });
+      }
+    })();
+  </script>
+</body>
+</html>

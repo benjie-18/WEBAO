@@ -138,9 +138,15 @@ test('the year range rolls the series up into months', async () => {
 
   const response = await handleAdmin(adminGet('/api/admin/stats?range=year', token), envOf(memory.kv), url('/api/admin/stats?range=year'));
   const stats = await bodyOf(response);
-  assert.equal(stats.labels.length, 13, '365 days span 13 calendar months');
+  // 365 days end-to-end roll up into one bucket per calendar month; the count
+  // depends on where the window sits (12 on a month boundary, 13 otherwise).
+  let expectedMonths = 1;
+  for (let d = addDays(today, -364); d < today; d = addDays(d, 1)) {
+    if (d.slice(0, 7) !== addDays(d, 1).slice(0, 7)) expectedMonths++;
+  }
+  assert.equal(stats.labels.length, expectedMonths, '365 days roll up into one bucket per calendar month');
   assert.equal(stats.labels.at(-1), today.slice(0, 7));
-  assert.equal(stats.views.length, 13);
+  assert.equal(stats.views.length, expectedMonths, 'one view bucket per month');
   assert.equal(stats.views.at(-1), 4);
   assert.equal(stats.visitors.at(-1), 0);
 });
