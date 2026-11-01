@@ -52,6 +52,7 @@ const planCents = (id: PlanId, interval: "month" | "year"): number => priceCents
                   <div class="pcard-name-row">
                     <h3 class="pcard-name">{p.name}</h3>
                     <CartButton
+                      locale={locale}
                       product={def.id}
                       name={p.name}
                       priceCents={planCents(def.id, "month")}

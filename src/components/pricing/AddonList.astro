@@ -92,6 +92,7 @@ const addonPriceCents: Record<string, { cents: number; interval: "month" | "one-
                     <span class="price-roll"><span class="price-roll-inner">{it.price}</span></span>
                   </p>
                   <CartButton
+                    locale={locale}
                     product={id}
                     name={it.name}
                     priceCents={addonPriceCents[id].cents}
@@ -126,6 +127,7 @@ const addonPriceCents: Record<string, { cents: number; interval: "month" | "one-
                     <span class="price-roll"><span class="price-roll-inner">{it.price}</span></span>
                   </p>
                   <CartButton
+                    locale={locale}
                     product={id}
                     name={it.name}
                     priceCents={addonPriceCents[id].cents}

@@ -16,7 +16,13 @@
  * The active key/price shown here is the monthly (base) variant; the client
  * cart layer (`src/lib/cart-ui.ts`) re-derives both from `data-*` at click
  * time and keeps `data-key` in sync for debugging.
+ *
+ * The button's accessible name comes from the locale's cart strings
+ * (`t.cart.add`), so French pages do not announce an English label.
+ * `locale` defaults to English for call sites that do not pass one.
  */
+import { useTranslations, type Locale } from "../../lib/i18n";
+
 interface Props {
   product: string;
   name: string;
@@ -24,11 +30,13 @@ interface Props {
   interval: "month" | "year" | "one-time";
   type: "plan" | "bundle" | "addon";
   yearlyPriceCents?: number;
+  locale?: Locale;
 }
 
-const { product, name, priceCents, interval, type, yearlyPriceCents } = Astro.props as Props;
+const { product, name, priceCents, interval, type, yearlyPriceCents, locale = "en" } = Astro.props as Props;
 const key = `${product}-${interval}`;
 const hasYearly = typeof yearlyPriceCents === "number" && Number.isFinite(yearlyPriceCents);
+const addLabel = useTranslations(locale).cart.add.replace("{name}", name);
 ---
 
 <button
@@ -42,8 +50,8 @@ const hasYearly = typeof yearlyPriceCents === "number" && Number.isFinite(yearly
   data-interval={interval}
   data-type={type}
   data-price-year={hasYearly ? String(yearlyPriceCents) : undefined}
-  aria-label={`Add ${name} to cart`}
-  title={`Add ${name} to cart`}
+  aria-label={addLabel}
+  title={addLabel}
   aria-pressed="false"
 >
   <svg class="cart-btn-icon cart-btn-icon--cart" viewBox="0 0 24 24" fill="none" aria-hidden="true">

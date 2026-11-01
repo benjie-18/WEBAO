@@ -62,7 +62,7 @@ const selected = variants[0];
   <p class="bc-kicker">{a.eyebrow}</p>
   <div class="bc-name-row">
     <h3 class="bc-name">{a.name}</h3>
-    <CartButton product={selected.product} name={selected.name} priceCents={selected.priceCents} interval="month" type="bundle" />
+    <CartButton locale={locale} product={selected.product} name={selected.name} priceCents={selected.priceCents} interval="month" type="bundle" />
   </div>
   <p class="bc-price" data-ads-price>{selected.price}</p>
 
@@ -141,7 +141,7 @@ const selected = variants[0];
       <p class="bc-gbp-name">{a.gbpName} <span class="mono">{a.gbpPrice}</span></p>
       <p class="bc-gbp-short">{a.gbpShort}</p>
     </div>
-    <CartButton product="gbp-revamp" name={a.gbpName} priceCents={14999} interval="one-time" type="addon" />
+    <CartButton locale={locale} product="gbp-revamp" name={a.gbpName} priceCents={14999} interval="one-time" type="addon" />
   </div>
 </div>
 

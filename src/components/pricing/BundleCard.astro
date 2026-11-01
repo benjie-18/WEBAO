@@ -29,6 +29,7 @@ const bundleCents = (id: BundleId, interval: "month" | "year"): number =>
   <div class="bc-name-row">
     <h3 class="bc-name">{b.name}</h3>
     <CartButton
+      locale={locale}
       product={bundleProduct(bundleId)}
       name={b.name}
       priceCents={bundleCents(bundleId, "month")}
