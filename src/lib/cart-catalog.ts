@@ -74,7 +74,6 @@ const catalog = {
   booking: { product: "booking", type: "addon", monthCents: 4999, yearCents: 4999 * TEN_MONTHS },
   review: { product: "review", type: "addon", monthCents: 9999, yearCents: 9999 * TEN_MONTHS },
   ecommerce: { product: "ecommerce", type: "addon", monthCents: 5999, yearCents: 5999 * TEN_MONTHS },
-  bilingual: { product: "bilingual", type: "addon", monthCents: 3499, yearCents: 3499 * TEN_MONTHS },
   aichat: { product: "aichat", type: "addon", monthCents: 9999, yearCents: 9999 * TEN_MONTHS },
   blog: { product: "blog", type: "addon", monthCents: 3499, yearCents: 3499 * TEN_MONTHS },
   email: { product: "email", type: "addon", monthCents: 2999, yearCents: 2999 * TEN_MONTHS },

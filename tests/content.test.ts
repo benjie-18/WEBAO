@@ -107,7 +107,7 @@ test('the bundle and add-on catalogs line up with the dictionaries', () => {
   for (const locale of [en, fr]) {
     assert.deepEqual(Object.keys(locale.pricing.addons.items).sort(), [...addonIds].sort(), 'add-on ids');
   }
-  assert.deepEqual(featuredAddonOrder, ['localseo', 'booking', 'review', 'ecommerce', 'bilingual']);
+  assert.deepEqual(featuredAddonOrder, ['localseo', 'booking', 'review', 'ecommerce']);
 
   const compatKeys = compatibility.map((row) => row.key);
   assert.equal(new Set(compatKeys).size, compatKeys.length, 'no duplicate compatibility rows');

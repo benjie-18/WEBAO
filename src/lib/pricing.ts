@@ -38,6 +38,7 @@ export const plans: PlanDef[] = [
       { key: "f4", note: 6 },
       { key: "f5", note: 7 },
       { key: "f6", note: 8 },
+      { key: "f7", note: 23 },
     ],
   },
   {
@@ -88,14 +89,13 @@ export const bundles: BundleDef[] = [
   { id: "visibility", note: 16, includes: ["i1", "i2"] },
 ];
 
-/** Add-on ids. The first five are the featured/popular group, in the exact
+/** Add-on ids. The first four are the featured/popular group, in the exact
  *  order the brief requires; the rest follow plan order. */
 export const featuredAddonOrder = [
   "localseo",
   "booking",
   "review",
   "ecommerce",
-  "bilingual",
 ] as const;
 
 export const remainingAddonOrder = [
@@ -127,7 +127,6 @@ export const compatibility: CompatRow[] = [
   { key: "aichat", launch: "A", grow: "A", scale: "A" },
   { key: "booking", launch: "A", grow: "A", scale: "I" },
   { key: "blog", note: 22, launch: "A", grow: "A", scale: "A" },
-  { key: "bilingual", launch: "A", grow: "A", scale: "A" },
   { key: "ecommerce", launch: "A", grow: "A", scale: "A" },
   { key: "email", launch: "A", grow: "A", scale: "A" },
   { key: "report", launch: "A", grow: "A", scale: "I" },
@@ -143,8 +142,8 @@ export const compatibility: CompatRow[] = [
 export const termSections = [
   { id: "billing", notes: [1, 2, 3] },
   { id: "plans", notes: [4, 9, 12] },
-  { id: "details", notes: [5, 6, 7, 8, 10, 11, 13, 14] },
+  { id: "details", notes: [5, 6, 7, 8, 10, 11, 13, 14, 23] },
   { id: "bundles", notes: [15, 16, 17] },
   { id: "ads", notes: [30] },
-  { id: "addons", notes: [18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29] },
+  { id: "addons", notes: [18, 19, 20, 21, 22, 24, 25, 26, 27, 28, 29] },
 ] as const;

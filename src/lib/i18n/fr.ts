@@ -331,6 +331,7 @@ const fr = {
           "SEO fondamental",
           "1 heure de mises à jour / mois",
           "Soutien par courriel",
+          "Bilingue EN/FR",
         ],
       },
       grow: {
@@ -451,7 +452,6 @@ const fr = {
         aichat: { name: "Assistant clavardage IA entraîné", price: "C$99.99/mois", note: 20, short: "Un assistant de clavardage formé sur votre entreprise." },
         booking: { name: "Réservation / Planification en ligne", price: "C$49.99/mois", note: 21, short: "Vos clients réservent en ligne." },
         blog: { name: "Blogue et mises à jour", price: "C$34.99/mois", note: 22, short: "" },
-        bilingual: { name: "Bilingue EN/FR", price: "C$34.99/mois", note: 23, short: "" },
         ecommerce: { name: "Commerce électronique simplifié / Liens de paiement", price: "C$59.99/mois", note: 24, short: "Des paiements en ligne simples, sans boutique complète." },
         email: { name: "Marketing par courriel", price: "C$29.99/mois", note: 0, short: "" },
         report: { name: "Rapport de croissance mensuel", price: "C$29.99/mois", note: 11, short: "" },
@@ -479,7 +479,6 @@ const fr = {
         aichat: "Assistant clavardage IA",
         booking: "Réservation en ligne",
         blog: "Blogue et mises à jour",
-        bilingual: "Bilingue EN/FR",
         ecommerce: "Commerce électronique simplifié",
         email: "Marketing par courriel",
         report: "Rapport de croissance mensuel",

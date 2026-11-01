@@ -328,6 +328,7 @@ const en = {
           "Foundational SEO",
           "1 hour of content updates / month",
           "Email support",
+          "Bilingual EN/FR",
         ],
       },
       grow: {
@@ -448,7 +449,6 @@ const en = {
         aichat: { name: "Trained AI Chat Assistant", price: "C$99.99/mo", note: 20, short: "A chat assistant trained on your business." },
         booking: { name: "Online Booking / Scheduling", price: "C$49.99/mo", note: 21, short: "Customers book appointments online." },
         blog: { name: "Blog & Updates", price: "C$34.99/mo", note: 22, short: "" },
-        bilingual: { name: "Bilingual EN/FR", price: "C$34.99/mo", note: 23, short: "" },
         ecommerce: { name: "E-commerce Lite / Payment Links", price: "C$59.99/mo", note: 24, short: "Simple online payments, no full store." },
         email: { name: "Email Marketing", price: "C$29.99/mo", note: 0, short: "" },
         report: { name: "Monthly Growth Report", price: "C$29.99/mo", note: 11, short: "" },
@@ -476,7 +476,6 @@ const en = {
         aichat: "Trained AI Chat",
         booking: "Online Booking",
         blog: "Blog & Updates",
-        bilingual: "Bilingual EN/FR",
         ecommerce: "E-commerce Lite",
         email: "Email Marketing",
         report: "Monthly Growth Report",
