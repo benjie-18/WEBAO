@@ -51,8 +51,6 @@ export const PRICE_MAP: Record<string, string> = {
   "gbp-revamp-onetime": "price_1UWkF9E57vVzxI41yOVeWE6d",
   "aichat-month": "price_1UO3E9E57vVzxI41BTXxcMD6",
   "aichat-year": "price_1UORS1E57vVzxI41852FAJaZ",
-  "bilingual-month": "price_1UO3ELE57vVzxI41ULR08WMo",
-  "bilingual-year": "price_1UORS0E57vVzxI416ovrRT8G",
   "blog-month": "price_1UO3EGE57vVzxI41cXVWgJ1y",
   "blog-year": "price_1UORS3E57vVzxI41kUmsBh6T",
   "booking-month": "price_1UO3EDE57vVzxI41DW2cPjrK",
