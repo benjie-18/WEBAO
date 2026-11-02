@@ -33,7 +33,7 @@ const families = styleFamilies;
         </p>
         <div class="mono" style="margin-top:10px; font-size:11px; color: var(--muted);">{t.demos.hero.countNote}</div>
       </div>
-      <div class="demos-hero-card" aria-hidden="true">
+      <div class="demos-hero-card">
         <div class="demos-hero-preview">
           <div class="mono" style="font-size:10px; opacity:.5;">{t.demos.hero.howTitle}</div>
           <ol class="mono" style="margin-top:12px; display:grid; gap:8px; font-size:12px; line-height:1.5; color: var(--ink-3); list-style: none; padding:0;">
@@ -79,7 +79,7 @@ const families = styleFamilies;
   <div class="shell">
     <div id="demo-grid" class="demo-grid" data-reveal>
       {visibleDemos.map((d, i) => (
-        <a href={liveDemos.has(d.id) ? demoHref(d.id) : "#"} class="demo-card-demo" data-category={d.category} data-search={`${d.name} ${d.category} ${d.city} ${d.tone} ${d.palette} ${d.localizedDescription}`.toLowerCase()} data-reveal style={`--d:${(i%3)*80}ms`} data-demo-id={d.id} data-demo-index={i} data-demo-tone={d.tone} data-demo-family={getDemoFamily(d.id)} data-demo-trade={d.trade ?? ""} data-demo-palette={d.palette} data-live={liveDemos.has(d.id) ? "true" : undefined} aria-label={`${d.name} — ${t.demos.viewDemo.replace(" →", "")}`}>
+        <a href={liveDemos.has(d.id) ? demoHref(d.id) : "#"} class="demo-card-demo" data-category={d.category} data-search={`${d.name} ${d.category} ${d.city} ${d.tone} ${d.palette} ${d.localizedDescription} ${((t.demos.categories as any)[d.category] ?? d.category)} ${d.trade ? ((t.demos.trades as any)[d.trade] ?? d.trade) : ""}`.toLowerCase()} data-reveal style={`--d:${(i%3)*80}ms`} data-demo-id={d.id} data-demo-index={i} data-demo-tone={d.tone} data-demo-family={getDemoFamily(d.id)} data-demo-trade={d.trade ?? ""} data-demo-palette={d.palette} data-live={liveDemos.has(d.id) ? "true" : undefined} aria-label={`${d.name} — ${t.demos.viewDemo.replace(" →", "")}`}>
           {liveDemos.has(d.id) ? (
             <div class={`demo-thumb dthumb dthumb-${d.id}`}>
               {d.id === "nora" && (

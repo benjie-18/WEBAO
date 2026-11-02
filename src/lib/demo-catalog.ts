@@ -12,14 +12,22 @@ export interface DemoCardFilters {
   query: string;
 }
 
+/**
+ * Fold accents so an unaccented query still matches accented card text:
+ * "montreal" finds "Montréal", "editorial" finds "éditorial", and vice versa.
+ */
+function foldAccents(value: string): string {
+  return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
 /** Apply the catalog filters in place and return the visible count. */
 export function filterDemoCards(cards: readonly HTMLElement[], filters: DemoCardFilters): number {
   let visible = 0;
-  const q = filters.query.trim().toLowerCase();
+  const q = foldAccents(filters.query.trim().toLowerCase());
   for (const card of cards) {
     const family = card.getAttribute("data-demo-family") || "";
     const trade = card.getAttribute("data-demo-trade") || "";
-    const text = card.getAttribute("data-search") || "";
+    const text = foldAccents(card.getAttribute("data-search") || "");
     const matchStyle = filters.style === "All" || family === filters.style;
     const matchTrade = filters.trade === "All" || trade === filters.trade;
     const matchQuery = !q || text.includes(q);

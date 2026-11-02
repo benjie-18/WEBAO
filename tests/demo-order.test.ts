@@ -166,6 +166,10 @@ test('filtering and searching a shuffled catalog does not reshuffle it', () => {
     filterDemoCards(cards, { style: filters.style ?? 'All', trade: filters.trade ?? 'All', query: filters.query ?? '' });
 
   assert.equal(visibleAfter({ query: 'plomberie' }) > 0, true);
+  // Accent folding: an unaccented query finds accented card text and vice versa.
+  assert.equal(visibleAfter({ query: 'montreal' }) > 0, true);
+  assert.equal(visibleAfter({ query: 'montréal' }) > 0, true);
+  assert.equal(visibleAfter({ query: 'montreal' }), visibleAfter({ query: 'montréal' }));
   assert.deepEqual(idsOf(Array.from(root.children)), before);
   assert.equal(visibleAfter({ style: 'timeless' }) > 0, true);
   assert.deepEqual(idsOf(Array.from(root.children)), before);
