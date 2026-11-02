@@ -404,7 +404,7 @@ const en = {
     },
     adsPack: {
       eyebrow: "Standalone service",
-      name: "Ads Pack",
+      name: "Ads Packages",
       price: "C$899.99/mo",
       channelLabel: "Choose your channel:",
       metaLabel: "Meta",
@@ -934,13 +934,13 @@ const en = {
         blocks: [{ text: "1 standard custom domain is included. Domain remains registered to the client." }],
       },
       "30": {
-        title: "Ads Pack",
+        title: "Ads Packages",
         blocks: [
           { text: "Managed advertising on Meta, Google, or both: one channel is C$899.99 per month, plus a one-time setup fee of C$499.99 charged with the first payment. Both channels together are C$1,349.99 per month, plus a one-time setup fee of C$749.99. The monthly fee covers campaign setup and ongoing management, lead delivery to your inbox and client portal, and a monthly report. Clients already on one channel can upgrade to both for C$450 more per month, plus a C$250 setup top-up." },
           { text: "Ad spend is separate and is never billed by Webao. Your ads run in your own ad account, charged by the platform to your own payment card. The minimum ad budget is C$1,500 per month for one channel and C$2,500 per month for both channels, with at least C$1,000 per channel, paid by you directly to the platform." },
           { text: "Google Business Profile revamp: C$149.99 one-time for an existing profile only. It covers categories, services, hours, description, photos, a starter post, and a review link. Your profile stays yours." },
           { text: "Webao does not guarantee any number of leads, calls or sales. Advertising results vary. The monthly report shows what your campaigns delivered: leads received, jobs booked, and the cost per booked job." },
-          { text: "You can cancel the Ads Pack with 90 days' notice. Campaigns stop at the end of the notice period, and your ad account and its data stay yours." },
+          { text: "You can cancel Ads Packages with 90 days' notice. Campaigns stop at the end of the notice period, and your ad account and its data stay yours." },
         ],
       },
     },

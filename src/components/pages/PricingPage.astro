@@ -61,15 +61,15 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
   </div>
 </section>
 
-<BundleCarousel locale={locale} />
-
-<!-- Ads Pack: standalone service, sold on its own or next to a plan -->
+<!-- Ads Packages: standalone service, sold on its own or next to a plan -->
 <section class="section ads-section" aria-labelledby="ads-h">
   <div class="shell ads-wrap">
     <h2 id="ads-h" class="visually-hidden">{t.pricing.adsPack.eyebrow}: {t.pricing.adsPack.name}</h2>
     <AdsPackCard locale={locale} />
   </div>
 </section>
+
+<BundleCarousel locale={locale} />
 
 <AddonList locale={locale} />
 
