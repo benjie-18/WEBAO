@@ -178,7 +178,14 @@ const t = useTranslations(locale);
     function applyStoredTheme() {
       var stored = null;
       try { stored = localStorage.getItem(KEY); } catch (e) {}
-      var theme = stored === "dark" || stored === "light" ? stored : currentTheme();
+      // No stored choice: fall back to the OS preference, exactly like the
+      // head init script does on a full page load. The old fallback read
+      // data-theme off the freshly swapped document, which never carries it,
+      // so every OS-dark visitor who never pressed the toggle was flipped
+      // to light on the first client-side navigation (e.g. home -> pricing).
+      var theme = stored === "dark" || stored === "light"
+        ? stored
+        : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
       var html = document.documentElement;
       if (html.getAttribute("data-theme") !== theme) {
         html.setAttribute("data-theme", theme);
