@@ -588,6 +588,7 @@ const fr = {
     notConfigured: "Le paiement n'est pas encore configuré. Écrivez-nous à support@webao.ca pour finaliser votre abonnement.",
     failed: "Le paiement n'a pas pu être chargé. Écrivez-nous à support@webao.ca.",
     couldNotStart: "Impossible de démarrer le paiement. Réessayez ou contactez-nous.",
+    retry: "Réessayer",
     secureLine: "🔒 Chiffré et sécurisé · Propulsé par Stripe ·",
     refundPolicy: "Politique de remboursement",
     questions: "Des questions?",
