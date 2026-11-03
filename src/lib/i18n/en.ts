@@ -582,6 +582,7 @@ const en = {
     notConfigured: "Payment is not configured yet. Please contact us at support@webao.ca to complete your subscription.",
     failed: "Payment could not be loaded. Please contact us at support@webao.ca.",
     couldNotStart: "Could not start checkout. Please try again or contact us.",
+    retry: "Try again",
     secureLine: "🔒 Encrypted & secure · Powered by Stripe ·",
     refundPolicy: "Refund policy",
     questions: "Questions?",
