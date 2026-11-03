@@ -129,8 +129,22 @@ const routes = { start: paths.start, pricing: paths.pricing, locale };
         '</div>';
     }
 
-    function fail(msg) {
-      if (loadingEl) loadingEl.textContent = msg || labels.failed;
+    // A failed payment load used to leave only an error sentence: the
+    // visitor's only move was a manual refresh. Retryable failures (session
+    // creation, Stripe.js load, network) now get a retry button that reloads
+    // the page; non-retryable ones (payment not configured) keep text only.
+    function fail(msg, retry) {
+      if (!loadingEl) return;
+      loadingEl.textContent = msg || labels.failed;
+      if (retry) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn btn--primary';
+        btn.style.marginTop = '12px';
+        btn.textContent = labels.retry;
+        btn.addEventListener('click', () => location.reload());
+        loadingEl.appendChild(btn);
+      }
     }
 
     renderItems(cartItems);
@@ -240,7 +254,7 @@ const routes = { start: paths.start, pricing: paths.pricing, locale };
       .then(async (data) => {
         if (swapped) return;
         if (!data.ok || !data.clientSecret) {
-          fail(data.error || labels.couldNotStart);
+          fail(data.error || labels.couldNotStart, true);
           return;
         }
         // Stripe is the source of truth for what will be charged: when the API
@@ -259,7 +273,7 @@ const routes = { start: paths.start, pricing: paths.pricing, locale };
         try {
           Stripe = await loadStripe();
         } catch (e) {
-          fail(labels.stripeUnavailable);
+          fail(labels.stripeUnavailable, true);
           return;
         }
         if (swapped) return;
@@ -269,7 +283,7 @@ const routes = { start: paths.start, pricing: paths.pricing, locale };
         checkoutInstance = checkout;
         checkout.mount(el || '#stripe-checkout');
       })
-      .catch(() => fail());
+      .catch(() => fail(undefined, true));
 
     // Hide the custom cursor over the Stripe iframe: the iframe captures
     // mouse events, so the custom cursor would freeze at the edge.

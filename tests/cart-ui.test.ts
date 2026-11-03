@@ -229,6 +229,29 @@ test('drawer opens from the header, closes with Escape, the overlay and the clos
   window.close();
 });
 
+test('Escape with the drawer closed does not steal focus back to the opener', async () => {
+  const { doc, window, click, button } = fixture();
+  const openBtn = doc.querySelector<HTMLElement>('[data-cart-open]')!;
+
+  openBtn.focus();
+  click(openBtn);
+  await new Promise((resolve) => setTimeout(resolve, 20));
+  doc.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+  await new Promise((resolve) => setTimeout(resolve, 400));
+  assert.equal(doc.activeElement, openBtn, 'closing returns focus to the opener');
+
+  // Visitor moves on: focus lands on a pricing button.
+  const launchBtn = button('launch')!;
+  launchBtn.focus();
+  assert.equal(doc.activeElement, launchBtn);
+
+  // A later Escape, with the drawer closed, must leave focus alone.
+  doc.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+  await new Promise((resolve) => setTimeout(resolve, 400));
+  assert.equal(doc.activeElement, launchBtn, 'Escape on a closed drawer steals no focus');
+  window.close();
+});
+
 test('removing an item from the drawer updates buttons, badge and total', () => {
   const { doc, click, button, cart, window } = fixture();
   click(button('launch'));

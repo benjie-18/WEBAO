@@ -541,7 +541,16 @@ export function initCart(doc: Document = document): void {
     bound[INIT_FLAG] = true;
     doc.addEventListener("click", (event) => onClick(event, doc));
     doc.addEventListener("keydown", (event) => {
-      if ((event as KeyboardEvent).key === "Escape") closeDrawer(doc);
+      // Only when the drawer is actually open: an unconditional close would
+      // re-run the close path (and its delayed focus return) on every
+      // Escape press, stealing focus back to the old opener long after the
+      // drawer closed, e.g. while the visitor types in a form.
+      if ((event as KeyboardEvent).key === "Escape") {
+        const drawer = drawerEl(doc);
+        // `hidden` flips synchronously in openDrawer; the `is-open` class
+        // only lands on the next animation frame, so it cannot gate this.
+        if (drawer && !drawer.hidden) closeDrawer(doc);
+      }
       if ((event as KeyboardEvent).key === "Tab") trapDrawerTab(event as KeyboardEvent, doc);
     });
     win?.addEventListener(CART_CHANGE_EVENT, () => refresh(doc));
