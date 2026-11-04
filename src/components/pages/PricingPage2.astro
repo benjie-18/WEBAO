@@ -1,0 +1,356 @@
+---
+import { useTranslations, type Locale } from "../../lib/i18n";
+import PlanCards from "../pricing/PlanCards.astro";
+import BundleCarousel from "../pricing/BundleCarousel.astro";
+import AdsPackCard from "../pricing/AdsPackCard.astro";
+import AddonList from "../pricing/AddonList.astro";
+import CompareTable from "../pricing/CompareTable.astro";
+import AiPackCards from "../pricing/AiPackCards.astro";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props as Props;
+const t = useTranslations(locale);
+const a = t.pricing.adsPack;
+const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
+---
+
+<!-- Temporary revamped pricing test page. Same cards, prices and cart
+  wiring as /pricing, plus the proposed AI branch. No description
+  paragraphs: title, service chooser, billing toggle, then cards. -->
+<div data-pricing2>
+  <section class="p2-hero grain">
+    <div class="shell p2-hero-inner">
+      <h1 class="display p2-title">{t.pricing.hero.title}</h1>
+
+      <div class="service-chooser" role="tablist" aria-label="Select your service">
+        <button type="button" class="service-pill" role="tab" id="p2-tab-ads" aria-controls="p2-panel-ads" aria-selected="false" data-service-pill="ads">Ads</button>
+        <button type="button" class="service-pill is-active" role="tab" id="p2-tab-web" aria-controls="p2-panel-web" aria-selected="true" data-service-pill="web">Web</button>
+        <button type="button" class="service-pill" role="tab" id="p2-tab-ai" aria-controls="p2-panel-ai" aria-selected="false" data-service-pill="ai">AI</button>
+      </div>
+
+      <!-- Same billing toggle as /pricing (classes and data attributes
+        live in global.css and cart-ui.ts). It sits under the chooser
+        and still re-prices the cart when switched. -->
+      <div class="billing-toggle-wrap">
+        <div class="billing-toggle" role="group" aria-label={t.cart.billingLegend} data-billing-toggle>
+          <button type="button" class="billing-opt is-active" data-billing-opt="month" aria-pressed="true">
+            {t.cart.billingMonthly}
+          </button>
+          <button type="button" class="billing-opt" data-billing-opt="year" aria-pressed="false">
+            {t.cart.billingYearly}
+            <span class="billing-opt-note">{t.cart.billingYearlyNote}</span>
+          </button>
+        </div>
+        <p class="billing-toggle-hint mono">{t.cart.billingHint}</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="p2-panels">
+    <!-- Web (default): the normal price cards, bundles and add-ons. -->
+    <section class="p2-panel" role="tabpanel" id="p2-panel-web" aria-labelledby="p2-tab-web" data-service-panel="web">
+      <section class="section plans-section">
+        <div class="shell">
+          <h2 id="plans-h" class="visually-hidden">{t.pricing.plansTitle}</h2>
+          <PlanCards locale={locale} />
+        </div>
+      </section>
+      <BundleCarousel locale={locale} />
+      <AddonList locale={locale} />
+      <CompareTable locale={locale} />
+    </section>
+
+    <!-- Ads: one card per channel for a cleaner distinction, then the
+      existing Ads Pack card with its channel picker (customization)
+      and Google Business Profile revamp. Prices come from the same
+      i18n strings as the card, so they cannot drift apart. -->
+    <section class="p2-panel" role="tabpanel" id="p2-panel-ads" aria-labelledby="p2-tab-ads" data-service-panel="ads" hidden>
+      <h2 class="visually-hidden">{a.name}</h2>
+      <div class="shell ads-distinction">
+        <div class="ads-option">
+          <h3>{a.metaLabel}</h3>
+          <p class="ads-option-price">{a.metaPrice}</p>
+          <p>{a.setup}</p>
+          <p>{a.budget}</p>
+        </div>
+        <div class="ads-option">
+          <h3>{a.googleLabel}</h3>
+          <p class="ads-option-price">{a.metaPrice}</p>
+          <p>{a.setup}</p>
+          <p>{a.budget}</p>
+        </div>
+        <div class="ads-option ads-option--both">
+          <h3>{a.bothLabel}</h3>
+          <p class="ads-option-tag">Best value</p>
+          <p class="ads-option-price">{a.bothPrice}</p>
+          <p>{a.bothSetup}</p>
+          <p>{a.bothBudget}</p>
+          <p>Save C$449.99/mo vs two single channels</p>
+        </div>
+      </div>
+      <section class="section ads-section" aria-label={a.name}>
+        <div class="shell ads-wrap">
+          <AdsPackCard locale={locale} />
+        </div>
+      </section>
+    </section>
+
+    <!-- AI: proposed pricing only, no cart checkout yet. -->
+    <section class="p2-panel" role="tabpanel" id="p2-panel-ai" aria-labelledby="p2-tab-ai" data-service-panel="ai" hidden>
+      <h2 class="visually-hidden">AI services</h2>
+      <div class="section">
+        <AiPackCards />
+      </div>
+    </section>
+  </div>
+
+  <section class="terms-band grain" aria-labelledby="terms-h">
+    <div class="shell terms-band-inner">
+      <div>
+        <p class="eyebrow">{t.pricing.hero.eyebrow}</p>
+        <h2 id="terms-h" class="display terms-band-title">{t.pricing.termsCta.title}</h2>
+      </div>
+      <a href={termsPath} class="btn btn--on-dark btn--lg">{t.pricing.termsCta.label}</a>
+    </div>
+  </section>
+</div>
+
+<script>
+  // Service switch: fade the current panel out, then fade the chosen
+  // panel in. No overlap, and instant switching when the visitor
+  // prefers reduced motion.
+  function initPricing2() {
+    var root = document.querySelector("[data-pricing2]");
+    if (!root || root.dataset.p2Init === "1") return;
+    root.dataset.p2Init = "1";
+    var pills = Array.prototype.slice.call(root.querySelectorAll("[data-service-pill]"));
+    var panels = {};
+    Array.prototype.slice.call(root.querySelectorAll("[data-service-panel]")).forEach(function (p) {
+      panels[p.getAttribute("data-service-panel")] = p;
+    });
+    var current = "web";
+    var busy = false;
+    var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    function show(next) {
+      if (next === current || busy) return false;
+      var from = panels[current];
+      var to = panels[next];
+      if (!from || !to) return false;
+      pills.forEach(function (b) {
+        var on = b.getAttribute("data-service-pill") === next;
+        b.classList.toggle("is-active", on);
+        b.setAttribute("aria-selected", on ? "true" : "false");
+      });
+      if (reduced) {
+        from.hidden = true;
+        to.hidden = false;
+        current = next;
+        return true;
+      }
+      busy = true;
+      current = next;
+      from.classList.add("is-leaving");
+      window.setTimeout(function () {
+        from.hidden = true;
+        from.classList.remove("is-leaving");
+        to.hidden = false;
+        to.classList.add("is-entering");
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            to.classList.remove("is-entering");
+            busy = false;
+          });
+        });
+      }, 240);
+      return true;
+    }
+    pills.forEach(function (b) {
+      b.addEventListener("click", function () {
+        show(b.getAttribute("data-service-pill"));
+      });
+    });
+    // Tablist keyboard pattern: arrows move between services, Home/End
+    // jump to the first and last service.
+    var chooser = root.querySelector(".service-chooser");
+    if (chooser) {
+      chooser.addEventListener("keydown", function (event) {
+        var order = ["ads", "web", "ai"];
+        var idx = order.indexOf(current);
+        var next = null;
+        if (event.key === "ArrowRight") next = order[(idx + 1) % order.length];
+        if (event.key === "ArrowLeft") next = order[(idx + order.length - 1) % order.length];
+        if (event.key === "Home") next = order[0];
+        if (event.key === "End") next = order[order.length - 1];
+        if (!next) return;
+        event.preventDefault();
+        if (!show(next)) return;
+        var pill = root.querySelector('[data-service-pill="' + next + '"]');
+        if (pill) pill.focus();
+      });
+    }
+  }
+  initPricing2();
+</script>
+
+<style>
+  .p2-hero {
+    padding-block: clamp(40px, 7vw, 88px) clamp(8px, 2vw, 16px);
+    background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
+    border-bottom: 1px solid var(--line);
+    text-align: center;
+  }
+  .p2-hero-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .p2-title {
+    font-size: clamp(2.6rem, 6vw, 5rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    text-align: center;
+  }
+  .service-chooser {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 28px;
+  }
+  .service-pill {
+    padding: 11px 26px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ink);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 160ms ease, color 160ms ease, border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+  }
+  .service-pill:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+  .service-pill:active {
+    transform: scale(0.97);
+  }
+  .service-pill.is-active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  .service-pill:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .plans-section {
+    padding-top: clamp(8px, 2vw, 16px);
+    overflow-x: clip;
+  }
+  .p2-panel {
+    transition: opacity 240ms ease;
+  }
+  .p2-panel.is-leaving,
+  .p2-panel.is-entering {
+    opacity: 0;
+  }
+  .p2-panel[hidden] {
+    display: none;
+  }
+  /* Description taglines hidden on this revamp; feature lists stay. */
+  .p2-panel :global(.pcard-desc),
+  .p2-panel :global(.addon-short) {
+    display: none;
+  }
+  .ads-wrap {
+    display: flex;
+    justify-content: center;
+  }
+  .ads-distinction {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    padding-top: 32px;
+  }
+  .ads-option {
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 160ms ease, box-shadow 160ms ease;
+  }
+  .ads-option:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(10, 15, 28, 0.08);
+  }
+  .ads-option:active {
+    transform: scale(0.99);
+  }
+  .ads-option p.ads-option-tag {
+    display: inline-block;
+    color: #fff;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 999px;
+    margin: 0 0 8px;
+  }
+  .ads-option--both {
+    border-color: var(--accent);
+  }
+  .ads-option h3 {
+    margin: 0 0 8px;
+  }
+  .ads-option p {
+    margin: 6px 0;
+    color: var(--muted);
+  }
+  .ads-option-price {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .terms-band {
+    background: var(--section-dark-bg);
+    color: var(--section-dark-text);
+    padding-block: clamp(48px, 7vw, 88px);
+  }
+  .terms-band-inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .terms-band .eyebrow {
+    color: rgba(248, 245, 239, 0.5);
+  }
+  .terms-band-title {
+    font-size: clamp(2rem, 4.6vw, 3.4rem);
+    line-height: 0.95;
+    margin-top: 10px;
+  }
+  .btn--lg {
+    padding: 16px 30px;
+    font-size: 1.02rem;
+  }
+  @media (max-width: 640px) {
+    .service-chooser {
+      flex-direction: column;
+      align-items: stretch;
+      width: min(320px, 100%);
+    }
+    .service-pill {
+      text-align: center;
+      width: 100%;
+    }
+    .ads-distinction {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

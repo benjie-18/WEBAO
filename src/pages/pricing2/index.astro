@@ -1,0 +1,21 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PricingPage2 from "../../components/pages/PricingPage2.astro";
+
+const locale = "en" as const;
+
+// Temporary test page only. Not linked from navigation, not in the
+// sitemap, and noindex so it cannot compete with /pricing in search.
+// When this page replaces /pricing, remove noIndex, restore the
+// /pricing title and description, and restore its Product schema.
+---
+
+<BaseLayout
+  title="Pricing test · WEBAO"
+  description="Temporary test version of the WEBAO pricing page, with Web, Ads and AI services."
+  locale={locale}
+  pageKey="pricing"
+  noIndex={true}
+>
+  <PricingPage2 locale={locale} />
+</BaseLayout>
