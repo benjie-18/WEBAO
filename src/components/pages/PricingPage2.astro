@@ -69,19 +69,12 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
       i18n strings as the card, so they cannot drift apart. -->
     <section class="p2-panel" role="tabpanel" id="p2-panel-ads" aria-labelledby="p2-tab-ads" data-service-panel="ads" hidden>
       <h2 class="visually-hidden">{a.name}</h2>
+      <section class="section ads-section" aria-label={a.name}>
+        <div class="shell ads-wrap">
+          <AdsPackCard locale={locale} />
+        </div>
+      </section>
       <div class="shell ads-distinction">
-        <div class="ads-option">
-          <h3>{a.metaLabel}</h3>
-          <p class="ads-option-price">{a.metaPrice}</p>
-          <p>{a.setup}</p>
-          <p>{a.budget}</p>
-        </div>
-        <div class="ads-option">
-          <h3>{a.googleLabel}</h3>
-          <p class="ads-option-price">{a.metaPrice}</p>
-          <p>{a.setup}</p>
-          <p>{a.budget}</p>
-        </div>
         <div class="ads-option ads-option--both">
           <h3>{a.bothLabel}</h3>
           <p class="ads-option-tag">Best value</p>
@@ -90,19 +83,26 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
           <p>{a.bothBudget}</p>
           <p>Save C$449.99/mo vs two single channels</p>
         </div>
-      </div>
-      <section class="section ads-section" aria-label={a.name}>
-        <div class="shell ads-wrap">
-          <AdsPackCard locale={locale} />
+        <div class="ads-option ads-option--meta">
+          <h3>{a.metaLabel}</h3>
+          <p class="ads-option-price">{a.metaPrice}</p>
+          <p>{a.setup}</p>
+          <p>{a.budget}</p>
         </div>
-      </section>
+        <div class="ads-option ads-option--google">
+          <h3>{a.googleLabel}</h3>
+          <p class="ads-option-price">{a.metaPrice}</p>
+          <p>{a.setup}</p>
+          <p>{a.budget}</p>
+        </div>
+      </div>
     </section>
 
-    <!-- AI: proposed pricing only, no cart checkout yet. -->
+    <!-- AI: proposed pricing only, no Stripe checkout wired yet. -->
     <section class="p2-panel" role="tabpanel" id="p2-panel-ai" aria-labelledby="p2-tab-ai" data-service-panel="ai" hidden>
       <h2 class="visually-hidden">AI services</h2>
       <div class="section">
-        <AiPackCards />
+        <AiPackCards locale={locale} />
       </div>
     </section>
   </div>
@@ -118,10 +118,14 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
   </section>
 </div>
 
-<script>
+<script data-astro-rerun>
   // Service switch: fade the current panel out, then fade the chosen
   // panel in. No overlap, and instant switching when the visitor
   // prefers reduced motion.
+  // ClientRouter fix: this script must re-init after a ClientRouter
+  // navigation (for example, backing here from /start). Without
+  // data-astro-rerun and the astro:page-load listener below, the pills
+  // were dead on return: fresh Web-default HTML with no listeners.
   function initPricing2() {
     // Cast to HTMLElement (not Element) so dataset, focus and friends
     // typecheck under `astro check`, like AdsPackCard does. The runtime
@@ -199,6 +203,11 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
     }
   }
   initPricing2();
+  var plFlag = window as unknown as { __webaoPricing2PL?: boolean };
+  if (!plFlag.__webaoPricing2PL) {
+    plFlag.__webaoPricing2PL = true;
+    document.addEventListener("astro:page-load", initPricing2);
+  }
 </script>
 
 <style>
@@ -329,6 +338,26 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
   }
   .ads-option--both {
     border-color: var(--accent);
+    border-top: 3px solid var(--accent);
+  }
+  .ads-option--meta {
+    border-top: 3px solid #1877f2;
+  }
+  .ads-option--google {
+    border-top: 3px solid #1a9e6a;
+  }
+  /* Subtle, satisfying press feedback on every pricing2 action, and a
+     visible focus ring on cart buttons. Fast (120ms) so it never feels
+     laggy, and no bounce or ripple that would get annoying. */
+  .p2-panel :global(.cart-btn) {
+    transition: transform 120ms ease, background 160ms ease, border-color 160ms ease;
+  }
+  .p2-panel :global(.cart-btn:active) {
+    transform: scale(0.88);
+  }
+  .p2-panel :global(.cart-btn:focus-visible) {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
   .ads-option h3 {
     margin: 0 0 8px;

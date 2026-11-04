@@ -1,16 +1,28 @@
 ---
+import CartButton from "./CartButton.astro";
+import type { Locale } from "../../lib/i18n";
+
 // AI service cards for /pricing2 only.
 // Prices are the PROPOSED AI branch prices (2026-11-03), not approved
-// pricing, and there are no Stripe products for AI yet. Buttons link to
-// /start instead of the cart, so nothing on this page can sell AI at
-// these prices until Benji approves them and wires checkout.
+// pricing. Cart buttons are the same component as everywhere else, but
+// checkout has no Stripe products for AI yet (see worker/checkout.ts
+// PRICE_MAP), so AI items added to the cart are skipped at checkout
+// until Benji approves the prices and wires them. The "Proposed
+// pricing" note stays on every AI card for that reason.
 // Reuses the bundle-card classes from the Ads Pack card so the styling
 // matches the current pricing page.
+interface Props {
+  locale?: Locale;
+}
+const { locale = "en" } = Astro.props as Props;
 const services = [
   {
     name: "AI Receptionist",
+    product: "ai-receptionist",
     price: "C$299.99/mo",
+    priceCents: 29999,
     setup: "C$299.99 one-time",
+    accent: "ai--receptionist",
     includes: [
       "Answers calls as your business",
       "Takes messages and callback details",
@@ -19,8 +31,11 @@ const services = [
   },
   {
     name: "AI Website Chat",
+    product: "ai-website-chat",
     price: "C$149.99/mo",
+    priceCents: 14999,
     setup: "C$149.99 one-time",
+    accent: "ai--chat",
     includes: [
       "Chat on your website",
       "Trained on your business",
@@ -28,8 +43,11 @@ const services = [
   },
   {
     name: "AI Follow-up",
+    product: "ai-followup",
     price: "C$99.99/mo",
+    priceCents: 9999,
     setup: "C$99.99 one-time",
+    accent: "ai--followup",
     includes: [
       "Missed-call text-back",
       "Review requests after a job",
@@ -38,13 +56,40 @@ const services = [
 ];
 ---
 
+<div class="ai-pack-wrap">
+  <div class="bundle-card ai-pack-card">
+    <p class="bc-kicker">AI bundle, best value</p>
+    <div class="bc-name-row">
+      <h3 class="bc-name">AI Pack</h3>
+      <CartButton locale={locale} product="ai-pack" name="AI Pack" priceCents={44999} interval="month" type="bundle" />
+    </div>
+    <p class="bc-price">C$449.99/mo</p>
+    <ul class="bc-includes">
+      <li><svg viewBox="0 0 16 16" aria-hidden="true" class="bc-check"><path d="M3.5 8.2l3.2 3.2 5.8-6.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg><span>AI Receptionist</span></li>
+      <li><svg viewBox="0 0 16 16" aria-hidden="true" class="bc-check"><path d="M3.5 8.2l3.2 3.2 5.8-6.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg><span>AI Website Chat</span></li>
+      <li><svg viewBox="0 0 16 16" aria-hidden="true" class="bc-check"><path d="M3.5 8.2l3.2 3.2 5.8-6.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg><span>AI Follow-up</span></li>
+    </ul>
+    <dl class="bc-meta">
+      <div class="bc-row">
+        <dt>Individual value:</dt>
+        <dd>C$549.97/mo</dd>
+      </div>
+      <div class="bc-row">
+        <dt>Monthly saving:</dt>
+        <dd>C$99.98/mo</dd>
+      </div>
+    </dl>
+    <p class="bc-note">Proposed pricing</p>
+  </div>
+</div>
+
 <div class="ai-grid">
   {services.map((s) => (
-    <div class="bundle-card">
+    <div class:list={["bundle-card", s.accent]}>
       <p class="bc-kicker">AI service</p>
       <div class="bc-name-row">
         <h3 class="bc-name">{s.name}</h3>
-        <a class="btn btn--primary" href="/start">Start</a>
+        <CartButton locale={locale} product={s.product} name={s.name} priceCents={s.priceCents} interval="month" type="addon" />
       </div>
       <p class="bc-price">{s.price}</p>
       <ul class="bc-includes">
@@ -61,45 +106,6 @@ const services = [
       <p class="bc-note">Proposed pricing</p>
     </div>
   ))}
-</div>
-
-<div class="ai-pack-wrap">
-  <div class="bundle-card">
-    <p class="bc-kicker">AI bundle, best value</p>
-    <div class="bc-name-row">
-      <h3 class="bc-name">AI Pack</h3>
-      <a class="btn btn--primary" href="/start">Start</a>
-    </div>
-    <p class="bc-price">C$449.99/mo</p>
-    <ul class="bc-includes">
-      <li><svg viewBox="0 0 16 16" aria-hidden="true" class="bc-check"><path d="M3.5 8.2l3.2 3.2 5.8-6.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg><span>AI Receptionist</span></li>
-      <li><svg viewBox="0 0 16 16" aria-hidden="true" class="bc-check"><path d="M3.5 8.2l3.2 3.2 5.8-6.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg><span>AI Website Chat</span></li>
-      <li><svg viewBox="0 0 16 16" aria-hidden="true" class="bc-check"><path d="M3.5 8.2l3.2 3.2 5.8-6.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg><span>AI Follow-up</span></li>
-    </ul>
-    <dl class="bc-meta">
-      <div class="bc-row">
-        <dt>Individual value:</dt>
-        <dd>C$549.97/mo</dd>
-      </div>
-      <div class="bc-row">
-        <dt>Setup:</dt>
-        <dd>C$399.99 one-time</dd>
-      </div>
-      <div class="bc-row">
-        <dt>Separate setups:</dt>
-        <dd>C$549.97 one-time</dd>
-      </div>
-      <div class="bc-row">
-        <dt>Monthly saving:</dt>
-        <dd>C$99.98/mo</dd>
-      </div>
-      <div class="bc-row">
-        <dt>Setup saving:</dt>
-        <dd>C$149.98 one-time</dd>
-      </div>
-    </dl>
-    <p class="bc-note">Proposed pricing</p>
-  </div>
 </div>
 
 <style>
@@ -207,18 +213,45 @@ const services = [
   .ai-pack-wrap .bundle-card:hover {
     transform: translateY(-2px);
   }
+  /* Visual distinction between the three similar AI cards: a coloured
+     top edge and matching kicker, so each service reads at a glance.
+     The pack gets the accent border and a stronger shadow, so it is
+     unmistakably the bundle now that it sits first. */
+  .ai--receptionist {
+    border-top: 3px solid var(--accent);
+  }
+  .ai--receptionist .bc-kicker {
+    color: var(--accent);
+  }
+  .ai--chat {
+    border-top: 3px solid #1877f2;
+  }
+  .ai--chat .bc-kicker {
+    color: #7db4f2;
+  }
+  .ai--followup {
+    border-top: 3px solid #1a9e6a;
+  }
+  .ai--followup .bc-kicker {
+    color: #6cc79f;
+  }
+  .ai-pack-card {
+    border-color: var(--accent);
+    border-top: 3px solid var(--accent);
+    box-shadow: 0 18px 40px rgba(10, 15, 28, 0.22);
+  }
   .ai-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 20px;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px 20px;
+    padding: 0 20px 48px;
   }
   .ai-pack-wrap {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px 48px;
+    padding: 0 20px 24px;
   }
   .ai-pack-wrap .bundle-card {
     max-width: 640px;
