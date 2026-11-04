@@ -57,10 +57,6 @@ const paths = localizedPaths[locale];
           data-validation-error={t.contact.form.validationError}
           data-success={t.contact.form.success}
           data-ready={t.contact.form.ready}
-          data-label-name={locale==="fr" ? "Nom" : "Name"}
-          data-label-email={locale==="fr" ? "Courriel" : "Email"}
-          data-label-message={locale==="fr" ? "Message" : "Message"}
-          data-subject-prefix={locale==="fr" ? "Message du site" : "Website message"}
         >
           <div class="form-head">
             <h2>{t.contact.form.title}</h2>
@@ -132,18 +128,25 @@ const paths = localizedPaths[locale];
     if (form && status && !form.dataset.bound) {
       form.dataset.bound = '1';
       const validationError = form.getAttribute('data-validation-error') || 'Please fill in the required fields with a valid email, and tick the contact checkbox.';
-      const successMsg = form.getAttribute('data-success') || 'Your email app should open with the message ready to send. If nothing opened, just email us directly at contact@webao.ca.';
-      const readyText = form.getAttribute('data-ready') || 'Email ready ✓';
+      const successMsg = form.getAttribute('data-success') || (locale === 'fr'
+        ? 'Message envoyé. On vous répond en un jour ouvrable.'
+        : "Message sent. We'll reply within one business day.");
+      const readyText = form.getAttribute('data-ready') || (locale === 'fr' ? 'Envoyé ✓' : 'Sent ✓');
+      // Same shape as the start page and the worker (EMAIL_RE): an address
+      // like "a@" must fail here with the validation message, not reach the
+      // API and come back as a misleading "could not send" error.
+      const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
       form.addEventListener('submit', (e) => {
         e.preventDefault();
+        if (form.dataset.sending === '1') return;
         const data = new FormData(form as HTMLFormElement);
         const name = String(data.get('name') || '').trim();
         const email = String(data.get('email') || '').trim();
         const message = String(data.get('message') || '').trim();
         let valid = true;
         if (!name || !email || !message) valid = false;
-        if (!email.includes('@')) valid = false;
+        if (!EMAIL_RE.test(email)) valid = false;
         const consent = form.querySelector('.check-row input') as HTMLInputElement | null;
         if (consent && !consent.checked) valid = false;
         if (!valid) {
@@ -151,8 +154,20 @@ const paths = localizedPaths[locale];
           status.textContent = validationError;
           status.classList.remove('form-status--success');
           status.classList.add('form-status--error');
+          // Focus the first field that failed, like the start page does,
+          // instead of leaving focus on the submit button.
+          const firstInvalid = (!name ? form.querySelector('[name="name"]') : null)
+            ?? (!EMAIL_RE.test(email) ? form.querySelector('[name="email"]') : null)
+            ?? (!message ? form.querySelector('[name="message"]') : null)
+            ?? (consent && !consent.checked ? consent : null);
+          (firstInvalid as HTMLElement | null)?.focus();
           return;
         }
+        // In-flight guard: a second click (or Enter) while the request is
+        // pending must not send a duplicate message to the inbox.
+        form.dataset.sending = '1';
+        const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+        if (submitBtn) submitBtn.disabled = true;
         // Send the message to the site inbox (fail-silent is not an option here;
         // show an error if the API is unreachable).
         fetch("/api/forms/submit", {
@@ -179,6 +194,8 @@ const paths = localizedPaths[locale];
             }
           })
           .catch(() => {
+            form.dataset.sending = '0';
+            if (submitBtn) submitBtn.disabled = false;
             status.hidden = false;
             status.textContent = locale === 'fr'
               ? "Envoi impossible pour le moment. Écrivez-nous directement à contact@webao.ca."
