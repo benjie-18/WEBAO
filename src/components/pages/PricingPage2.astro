@@ -173,7 +173,8 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
     }
     pills.forEach(function (b) {
       b.addEventListener("click", function () {
-        show(b.getAttribute("data-service-pill"));
+        var service = b.getAttribute("data-service-pill");
+        if (service) show(service);
       });
     });
     // Tablist keyboard pattern: arrows move between services, Home/End
