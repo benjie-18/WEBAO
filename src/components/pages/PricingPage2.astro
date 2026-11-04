@@ -122,18 +122,23 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
   // panel in. No overlap, and instant switching when the visitor
   // prefers reduced motion.
   function initPricing2() {
-    var root = document.querySelector("[data-pricing2]");
+    // Cast to HTMLElement (not Element) so dataset, focus and friends
+    // typecheck under `astro check`, like AdsPackCard does. The runtime
+    // guard below still handles a missing root.
+    var root = document.querySelector("[data-pricing2]") as HTMLElement;
     if (!root || root.dataset.p2Init === "1") return;
     root.dataset.p2Init = "1";
-    var pills = Array.prototype.slice.call(root.querySelectorAll("[data-service-pill]"));
-    var panels = {};
+    var pills = Array.prototype.slice.call(root.querySelectorAll("[data-service-pill]")) as HTMLElement[];
+    var panels: Record<string, HTMLElement> = {};
     Array.prototype.slice.call(root.querySelectorAll("[data-service-panel]")).forEach(function (p) {
-      panels[p.getAttribute("data-service-panel")] = p;
+      var el = p as HTMLElement;
+      var key = el.getAttribute("data-service-panel");
+      if (key) panels[key] = el;
     });
     var current = "web";
     var busy = false;
     var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    function show(next) {
+    function show(next: string): boolean {
       if (next === current || busy) return false;
       var from = panels[current];
       var to = panels[next];
@@ -173,9 +178,9 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
     });
     // Tablist keyboard pattern: arrows move between services, Home/End
     // jump to the first and last service.
-    var chooser = root.querySelector(".service-chooser");
+    var chooser = root.querySelector(".service-chooser") as HTMLElement | null;
     if (chooser) {
-      chooser.addEventListener("keydown", function (event) {
+      chooser.addEventListener("keydown", function (event: KeyboardEvent) {
         var order = ["ads", "web", "ai"];
         var idx = order.indexOf(current);
         var next = null;
@@ -186,7 +191,7 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
         if (!next) return;
         event.preventDefault();
         if (!show(next)) return;
-        var pill = root.querySelector('[data-service-pill="' + next + '"]');
+        var pill = root.querySelector('[data-service-pill="' + next + '"]') as HTMLElement | null;
         if (pill) pill.focus();
       });
     }
