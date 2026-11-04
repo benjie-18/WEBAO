@@ -55,6 +55,7 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
         <div class="shell">
           <h2 id="plans-h" class="visually-hidden">{t.pricing.plansTitle}</h2>
           <PlanCards locale={locale} />
+          <p class="p2-plan-note">No setup fee on website plans. Cancel with 30 days' notice.</p>
         </div>
       </section>
       <BundleCarousel locale={locale} />
@@ -255,6 +256,26 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
   .plans-section {
     padding-top: clamp(8px, 2vw, 16px);
     overflow-x: clip;
+  }
+  .p2-plan-note {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin: 20px 0 0;
+  }
+  /* Pricing2 only: on desktop, show the three plan cards side by side
+     instead of /pricing's deep overlap, so every price and cart button
+     is visible at rest and the card tops align. /pricing is untouched. */
+  @media (min-width: 820px) {
+    .p2-panel :global(.plan-grid) {
+      --overlap: 0px;
+      gap: 16px;
+      align-items: start;
+    }
+    .p2-panel :global(.pcard-slot--grow .pcard-lift) {
+      transform: none;
+      margin-inline: 0;
+    }
   }
   .p2-panel {
     transition: opacity 240ms ease;
