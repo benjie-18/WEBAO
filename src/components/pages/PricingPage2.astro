@@ -126,24 +126,23 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
   // navigation (for example, backing here from /start). Without
   // data-astro-rerun and the astro:page-load listener below, the pills
   // were dead on return: fresh Web-default HTML with no listeners.
+  // Plain JavaScript on purpose: with data-astro-rerun, astro check
+  // treats this block as JS, and any TypeScript annotation in it fails
+  // the deploy (run 542). The runtime guard below handles a missing root.
   function initPricing2() {
-    // Cast to HTMLElement (not Element) so dataset, focus and friends
-    // typecheck under `astro check`, like AdsPackCard does. The runtime
-    // guard below still handles a missing root.
-    var root = document.querySelector("[data-pricing2]") as HTMLElement;
+    var root = document.querySelector("[data-pricing2]");
     if (!root || root.dataset.p2Init === "1") return;
     root.dataset.p2Init = "1";
-    var pills = Array.prototype.slice.call(root.querySelectorAll("[data-service-pill]")) as HTMLElement[];
-    var panels: Record<string, HTMLElement> = {};
+    var pills = Array.prototype.slice.call(root.querySelectorAll("[data-service-pill]"));
+    var panels = {};
     Array.prototype.slice.call(root.querySelectorAll("[data-service-panel]")).forEach(function (p) {
-      var el = p as HTMLElement;
-      var key = el.getAttribute("data-service-panel");
-      if (key) panels[key] = el;
+      var key = p.getAttribute("data-service-panel");
+      if (key) panels[key] = p;
     });
     var current = "web";
     var busy = false;
     var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    function show(next: string): boolean {
+    function show(next) {
       if (next === current || busy) return false;
       var from = panels[current];
       var to = panels[next];
@@ -184,9 +183,9 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
     });
     // Tablist keyboard pattern: arrows move between services, Home/End
     // jump to the first and last service.
-    var chooser = root.querySelector(".service-chooser") as HTMLElement | null;
+    var chooser = root.querySelector(".service-chooser");
     if (chooser) {
-      chooser.addEventListener("keydown", function (event: KeyboardEvent) {
+      chooser.addEventListener("keydown", function (event) {
         var order = ["ads", "web", "ai"];
         var idx = order.indexOf(current);
         var next = null;
@@ -197,15 +196,14 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
         if (!next) return;
         event.preventDefault();
         if (!show(next)) return;
-        var pill = root.querySelector('[data-service-pill="' + next + '"]') as HTMLElement | null;
+        var pill = root.querySelector('[data-service-pill="' + next + '"]');
         if (pill) pill.focus();
       });
     }
   }
   initPricing2();
-  var plFlag = window as unknown as { __webaoPricing2PL?: boolean };
-  if (!plFlag.__webaoPricing2PL) {
-    plFlag.__webaoPricing2PL = true;
+  if (!window.__webaoPricing2PL) {
+    window.__webaoPricing2PL = true;
     document.addEventListener("astro:page-load", initPricing2);
   }
 </script>
