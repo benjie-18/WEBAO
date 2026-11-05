@@ -16,7 +16,7 @@ const t = useTranslations(locale);
 const ai = t.pricing.ai;
 const services = [
   {
-    name: t.start.aiReceptionist,
+    name: t.start.selection.aiReceptionist,
     product: "ai-receptionist",
     price: ai.receptionistPrice,
     priceCents: 29999,
@@ -25,7 +25,7 @@ const services = [
     includes: ai.receptionistIncludes,
   },
   {
-    name: t.start.aiChat,
+    name: t.start.selection.aiChat,
     product: "ai-website-chat",
     price: ai.chatPrice,
     priceCents: 14999,
@@ -34,7 +34,7 @@ const services = [
     includes: ai.chatIncludes,
   },
   {
-    name: t.start.aiFollowup,
+    name: t.start.selection.aiFollowup,
     product: "ai-followup",
     price: ai.followupPrice,
     priceCents: 9999,
@@ -49,14 +49,14 @@ const services = [
   <div class="bundle-card ai-pack-card">
     <p class="bc-kicker">{ai.packKicker}</p>
     <div class="bc-name-row">
-      <h3 class="bc-name">{t.start.aiPack}</h3>
-      <CartButton locale={locale} product="ai-pack" name={t.start.aiPack} priceCents={44999} interval="month" type="bundle" />
+      <h3 class="bc-name">{t.start.selection.aiPack}</h3>
+      <CartButton locale={locale} product="ai-pack" name={t.start.selection.aiPack} priceCents={44999} interval="month" type="bundle" />
     </div>
     <p class="bc-price">{ai.packPrice}</p>
     <ul class="bc-includes">
-      <li><svg viewBox="0 0 16 16" aria-hidden="true" class="bc-check"><path d="M3.5 8.2l3.2 3.2 5.8-6.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg><span>{t.start.aiReceptionist}</span></li>
-      <li><svg viewBox="0 0 16 16" aria-hidden="true" class="bc-check"><path d="M3.5 8.2l3.2 3.2 5.8-6.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg><span>{t.start.aiChat}</span></li>
-      <li><svg viewBox="0 0 16 16" aria-hidden="true" class="bc-check"><path d="M3.5 8.2l3.2 3.2 5.8-6.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg><span>{t.start.aiFollowup}</span></li>
+      <li><svg viewBox="0 0 16 16" aria-hidden="true" class="bc-check"><path d="M3.5 8.2l3.2 3.2 5.8-6.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg><span>{t.start.selection.aiReceptionist}</span></li>
+      <li><svg viewBox="0 0 16 16" aria-hidden="true" class="bc-check"><path d="M3.5 8.2l3.2 3.2 5.8-6.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg><span>{t.start.selection.aiChat}</span></li>
+      <li><svg viewBox="0 0 16 16" aria-hidden="true" class="bc-check"><path d="M3.5 8.2l3.2 3.2 5.8-6.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg><span>{t.start.selection.aiFollowup}</span></li>
     </ul>
     <dl class="bc-meta">
       <div class="bc-row">
