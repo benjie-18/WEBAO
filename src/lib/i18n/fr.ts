@@ -1422,7 +1422,7 @@ const fr = {
       title: "Audits de site web",
       empty: "Aucun audit pour l’instant. Quand un visiteur lancera l’audit gratuit, le site, son score et ses constats apparaîtront ici.",
       score: "Score",
-      url: "Site",
+      result: "Résultat",
       email: "Courriel",
       at: "Lancé le",
       reportRequested: "Rapport complet demandé",

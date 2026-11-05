@@ -1413,7 +1413,7 @@ const en = {
       title: "Website audits",
       empty: "No audits yet. When a visitor runs the free audit, the site, its score and its findings will appear here.",
       score: "Score",
-      url: "Site",
+      result: "Result",
       email: "Email",
       at: "Run on",
       reportRequested: "Full report requested",

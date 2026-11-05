@@ -1425,6 +1425,11 @@ function initAdmin(): void {
       `<span><b>${esc(A.at)}</b> ${esc(fmtDateTime(item.at))}</span>`,
     ];
     if (item.email) meta.push(`<span><b>${esc(A.email)}</b> ${esc(item.email)}</span>`);
+    // The output audit link is always visible in the card meta, next to
+    // the input URL in the header: every audit is logged with both.
+    meta.push(
+      `<span><b>${esc(A.result)}</b> <a href="/audits/${esc(item.id)}" target="_blank" rel="noopener">/audits/${esc(item.id)}</a></span>`,
+    );
 
     const rows: string[] = [];
     if (item.strengths.length > 0) {
@@ -1436,9 +1441,6 @@ function initAdmin(): void {
       `<div class="ff-row"><dt>${esc(A.findings)}</dt><dd><ul>` +
         item.findings.map((f) => `<li>${esc(f)}</li>`).join("") +
         `</ul></dd></div>`,
-    );
-    rows.push(
-      `<div class="ff-row"><dt>${esc(A.url)}</dt><dd><a href="/audits/${esc(item.id)}" target="_blank" rel="noopener">/audits/${esc(item.id)}</a></dd></div>`,
     );
 
     return (
