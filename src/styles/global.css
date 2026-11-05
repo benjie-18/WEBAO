@@ -796,7 +796,7 @@ html.theming *::after {
 }
 .footer-grid {
   display: grid;
-  grid-template-columns: 1.2fr .8fr .8fr .8fr;
+  grid-template-columns: 1.2fr .7fr .7fr .7fr .7fr;
   gap: 40px;
 }
 .footer-brand p {

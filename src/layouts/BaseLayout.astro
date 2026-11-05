@@ -110,6 +110,12 @@ const navLinks = {
   support: localizedPaths[locale].support,
   home: localizedPaths[locale].home,
   start: localizedPaths[locale].start,
+  portal: localizedPaths[locale].portal,
+  serviceDesign: localizedPaths[locale].serviceDesign,
+  servicePlans: localizedPaths[locale].servicePlans,
+  guideCost: localizedPaths[locale].guideCost,
+  guideBill96: localizedPaths[locale].guideBill96,
+  guideLaw25: localizedPaths[locale].guideLaw25,
   process: locale === "fr" ? "/fr#processus" : "/#process",
 };
 
@@ -453,14 +459,21 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
             <a href={navLinks.pricing}>{t.footer.pricing}</a>
             <a href={navLinks.contact}>{t.footer.contact}</a>
             <a href={navLinks.support}>{t.footer.support}</a>
+            <a href={navLinks.portal}>{t.footer.portal}</a>
             <a href={homeProcessLink}>{t.footer.howItWorks}</a>
           </div>
           <div class="footer-col">
             <h4>{t.footer.services}</h4>
-            <a href={navLinks.pricing}>{t.footer.customSites}</a>
-            <a href={navLinks.pricing}>{t.footer.hostingSsl}</a>
-            <a href={navLinks.pricing}>{t.footer.seoAnalytics}</a>
-            <a href={navLinks.pricing}>{t.footer.ongoingSupport}</a>
+            <a href={navLinks.serviceDesign}>{t.footer.customSites}</a>
+            <a href={navLinks.servicePlans}>{t.footer.monthlyPlans}</a>
+            <a href={navLinks.pricing}>{t.footer.adsPackages}</a>
+            <a href={navLinks.pricing}>{t.footer.aiServices}</a>
+          </div>
+          <div class="footer-col">
+            <h4>{t.footer.guides}</h4>
+            <a href={navLinks.guideCost}>{t.footer.guideCost}</a>
+            <a href={navLinks.guideBill96}>{t.footer.guideBill96}</a>
+            <a href={navLinks.guideLaw25}>{t.footer.guideLaw25}</a>
           </div>
           <div class="footer-col">
             <h4>{t.footer.contactTitle}</h4>

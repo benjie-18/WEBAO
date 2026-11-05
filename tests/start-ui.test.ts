@@ -43,16 +43,40 @@ function fixture(options: FixtureOptions = {}) {
     `<!doctype html><html><body>
       <header><button type="button" data-cart-open><span data-cart-count hidden>0</span></button></header>
       <main>
-        <div data-start data-default-plan="grow" data-label-remove="Remove {name}">
+        <div class="eyebrow" data-start-eyebrow>Start your site</div>
+        <div data-start data-default-plan="grow" data-label-remove="Remove {name}"
+          data-eyebrow-web="Start your site" data-eyebrow-ads="Start your ads"
+          data-eyebrow-ai="Start your AI" data-eyebrow-mixed="Start with WEBAO"
+          data-hint-web="Add-ons only" data-hint-service="No website plan selected."
+          data-label-group-web="Website" data-label-group-ads="Ads" data-label-group-ai="AI">
           <aside>
             <div class="billing-toggle" data-billing-toggle>
               <button type="button" class="billing-opt is-active" data-billing-opt="month" aria-pressed="true">Monthly</button>
               <button type="button" class="billing-opt" data-billing-opt="year" aria-pressed="false">Yearly</button>
             </div>
-            <fieldset>
+            <div data-branch-select>
+              <button type="button" data-branch-toggle="web" aria-pressed="true">Website</button>
+              <button type="button" data-branch-toggle="ads" aria-pressed="false">Ads</button>
+              <button type="button" data-branch-toggle="ai" aria-pressed="false">AI</button>
+            </div>
+            <fieldset data-branch-picker="web">
               <label><input type="radio" name="plan" value="launch" data-name="Launch" /><span data-plan-price></span></label>
               <label><input type="radio" name="plan" value="grow" data-name="Grow" /><span data-plan-price></span></label>
               <label><input type="radio" name="plan" value="scale" data-name="Scale" /><span data-plan-price></span></label>
+              <label><input type="radio" name="plan" value="none" /><span>No website plan</span></label>
+            </fieldset>
+            <fieldset data-branch-picker="ads" hidden>
+              <label><input type="radio" name="ads-channel" value="ads-meta" data-name="Meta" /><span data-ads-price></span></label>
+              <label><input type="radio" name="ads-channel" value="ads-google" data-name="Google" /><span data-ads-price></span></label>
+              <label><input type="radio" name="ads-channel" value="ads-both" data-name="Meta + Google" /><span data-ads-price></span></label>
+              <label><input type="radio" name="ads-channel" value="none" /><span>No Ads Pack</span></label>
+              <label><input type="checkbox" name="gbp" value="gbp-revamp" data-name="Google Business Profile Revamp" /><span data-gbp-price></span></label>
+            </fieldset>
+            <fieldset data-branch-picker="ai" hidden>
+              <label><input type="checkbox" name="ai-service" value="ai-receptionist" data-name="AI Receptionist" /><span data-ai-price></span></label>
+              <label><input type="checkbox" name="ai-service" value="ai-website-chat" data-name="AI Website Chat" /><span data-ai-price></span></label>
+              <label><input type="checkbox" name="ai-service" value="ai-followup" data-name="AI Follow-up" /><span data-ai-price></span></label>
+              <label><input type="checkbox" name="ai-service" value="ai-pack" data-name="AI Pack" /><span data-ai-price></span></label>
             </fieldset>
             <p data-start-no-plan hidden>Add-ons only</p>
             <p data-start-default-note hidden>Grow is pre-selected</p>
@@ -121,12 +145,27 @@ function fixture(options: FixtureOptions = {}) {
     radio(product).checked = true;
     radio(product).dispatchEvent(new window.Event('change', { bubbles: true }));
   };
+  const chip = (branch: string) => doc.querySelector<HTMLButtonElement>(`[data-branch-toggle="${branch}"]`)!;
+  const adsRadio = (product: string) =>
+    doc.querySelector<HTMLInputElement>(`input[name="ads-channel"][value="${product}"]`)!;
+  const aiBox = (product: string) =>
+    doc.querySelector<HTMLInputElement>(`input[name="ai-service"][value="${product}"]`)!;
+  const gbpBox = () => doc.querySelector<HTMLInputElement>('input[name="gbp"]')!;
+  const chooseAds = (product: string) => {
+    adsRadio(product).checked = true;
+    adsRadio(product).dispatchEvent(new window.Event('change', { bubbles: true }));
+  };
+  const toggleBox = (input: HTMLInputElement, on: boolean) => {
+    input.checked = on;
+    input.dispatchEvent(new window.Event('change', { bubbles: true }));
+  };
+  const summary = () => doc.querySelector<HTMLElement>('[data-start-extras-list]')!.textContent ?? '';
   const click = (el: Element | null) => {
     assert.ok(el, 'expected element to click');
     el!.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
   };
   const error = (field: string) => form.querySelector<HTMLElement>(`[data-error="${field}"]`)!;
-  return { dom, window, doc, cart, radio, price, form, fill, submit, choose, click, error, requests, navigations };
+  return { dom, window, doc, cart, radio, price, form, fill, submit, choose, click, error, requests, navigations, chip, adsRadio, aiBox, gbpBox, chooseAds, toggleBox, summary };
 }
 
 const details = { name: 'Ada Lovelace', email: 'ada@example.com', business: 'Analytical Engines' };
@@ -165,7 +204,10 @@ test('a visitor arriving with a cart keeps exactly that cart', () => {
   assert.equal(extras.hidden, false);
   assert.match(extras.textContent ?? '', /Extra Page/);
   assert.match(extras.textContent ?? '', /C\$44\.99 one-time/);
-  assert.equal(extras.querySelector('[data-remove-key]')!.getAttribute('aria-label'), 'Remove Extra Page');
+  assert.equal(
+    extras.querySelector('[data-remove-key="extrapage-one-time"]')!.getAttribute('aria-label'),
+    'Remove Extra Page',
+  );
   assert.equal(doc.querySelector('[data-start-total]')!.textContent, 'C$944.89');
   window.close();
 });
@@ -203,13 +245,15 @@ test('the yearly toggle re-prices the plan options and the selection', () => {
 
 test('removing an add-on from the selection card updates the cart', () => {
   const extra: CartItem = { key: 'extrapage-one-time', product: 'extrapage', name: 'Extra Page', priceCents: 4499, interval: 'one-time', type: 'addon' };
-  const { window, doc, cart, click } = fixture({ cart: [planItem('grow', 'Grow', 'month')!, extra] });
+  const { window, doc, cart, click, summary } = fixture({ cart: [planItem('grow', 'Grow', 'month')!, extra] });
   click(doc.querySelector('[data-remove-key="extrapage-one-time"]'));
   assert.deepEqual(
     cart().map((item) => item.key),
     ['grow-month'],
   );
-  assert.equal(doc.querySelector<HTMLElement>('[data-start-extras]')!.hidden, true);
+  // The summary keeps the plan row; only the add-on is gone.
+  assert.match(summary(), /Grow/);
+  assert.doesNotMatch(summary(), /Extra Page/);
   assert.equal(doc.querySelector('[data-start-total]')!.textContent, 'C$149.99');
   window.close();
 });
@@ -292,7 +336,7 @@ test('add-ons without a plan can continue, with a hint', () => {
     ['extrapage-one-time'],
   );
   assert.equal(doc.querySelector<HTMLElement>('[data-start-no-plan]')!.hidden, false);
-  assert.equal(doc.querySelectorAll<HTMLInputElement>('input[name="plan"]:checked').length, 0);
+  assert.equal(doc.querySelector<HTMLInputElement>('input[name="plan"][value="none"]')!.checked, true);
   fill(details);
   submit();
   assert.deepEqual(navigations, ['/checkout']);
@@ -304,7 +348,7 @@ test('an emptied cart blocks the hand-off until something is selected again', ()
   // Remove the seeded plan through the layout's drawer.
   click(doc.querySelector('[data-cart-items] [data-remove-key="grow-month"]'));
   assert.equal(window.localStorage.getItem(STORAGE_KEY), '[]');
-  assert.equal(doc.querySelectorAll<HTMLInputElement>('input[name="plan"]:checked').length, 0);
+  assert.equal(doc.querySelector<HTMLInputElement>('input[name="plan"][value="none"]')!.checked, true);
 
   fill(details);
   submit();
@@ -339,6 +383,126 @@ test('the page survives a ClientRouter navigation without double-binding', () =>
   fill(details);
   submit();
   assert.equal(requests.length, 1);
+  assert.deepEqual(navigations, ['/checkout']);
+  window.close();
+});
+
+test('an Ads channel can be added on the start page and replaces the previous channel', () => {
+  const { window, doc, cart, chip, click, chooseAds, summary } = fixture();
+  assert.equal(chip('ads').getAttribute('aria-pressed'), 'false');
+  assert.equal(doc.querySelector<HTMLElement>('[data-branch-picker="ads"]')!.hidden, true);
+  click(chip('ads'));
+  assert.equal(chip('ads').getAttribute('aria-pressed'), 'true');
+  assert.equal(doc.querySelector<HTMLElement>('[data-branch-picker="ads"]')!.hidden, false);
+
+  chooseAds('ads-meta');
+  assert.deepEqual(
+    cart().map((item) => item.key),
+    ['grow-month', 'ads-meta-month'],
+  );
+  assert.match(summary(), /Ads/);
+  assert.match(summary(), /Meta/);
+  assert.equal(doc.querySelector('[data-start-total]')!.textContent, 'C$1,049.98');
+
+  chooseAds('ads-both');
+  assert.deepEqual(
+    cart().map((item) => item.key),
+    ['grow-month', 'ads-both-month'],
+  );
+  assert.equal(doc.querySelector('[data-start-total]')!.textContent, 'C$1,499.98');
+  window.close();
+});
+
+test('the GBP revamp toggles on and off', () => {
+  const { window, cart, chip, click, toggleBox, gbpBox } = fixture();
+  click(chip('ads'));
+  toggleBox(gbpBox(), true);
+  assert.deepEqual(
+    cart().map((item) => item.key),
+    ['grow-month', 'gbp-revamp-one-time'],
+  );
+  toggleBox(gbpBox(), false);
+  assert.deepEqual(
+    cart().map((item) => item.key),
+    ['grow-month'],
+  );
+  window.close();
+});
+
+test('AI services can be added, and the Pack excludes the individuals', () => {
+  const { window, cart, chip, click, toggleBox, aiBox } = fixture();
+  click(chip('ai'));
+  toggleBox(aiBox('ai-receptionist'), true);
+  toggleBox(aiBox('ai-followup'), true);
+  assert.deepEqual(
+    cart().map((item) => item.key),
+    ['grow-month', 'ai-receptionist-month', 'ai-followup-month'],
+  );
+  toggleBox(aiBox('ai-pack'), true);
+  assert.deepEqual(
+    cart().map((item) => item.key),
+    ['grow-month', 'ai-pack-month'],
+  );
+  toggleBox(aiBox('ai-followup'), true);
+  assert.deepEqual(
+    cart().map((item) => item.key),
+    ['grow-month', 'ai-followup-month'],
+  );
+  window.close();
+});
+
+test('the summary groups products by branch, in Website, Ads, AI order', () => {
+  const { window, summary } = fixture({
+    cart: [
+      { key: 'ai-followup-month', product: 'ai-followup', name: 'AI Follow-up', priceCents: 9999, interval: 'month', type: 'addon' },
+      { key: 'ads-meta-month', product: 'ads-meta', name: 'Meta', priceCents: 89999, interval: 'month', type: 'bundle' },
+      planItem('grow', 'Grow', 'month')!,
+    ],
+  });
+  const text = summary();
+  assert.ok(text.indexOf('Website') < text.indexOf('Grow'));
+  assert.ok(text.indexOf('Grow') < text.indexOf('Ads'));
+  assert.ok(text.indexOf('Ads') < text.indexOf('Meta'));
+  assert.ok(text.indexOf('Meta') < text.indexOf('AI'));
+  assert.ok(text.indexOf('AI') < text.indexOf('AI Follow-up'));
+  window.close();
+});
+
+test('the eyebrow and the no-plan hint follow the branches in the cart', () => {
+  const aiOnly = fixture({
+    cart: [
+      { key: 'ai-receptionist-month', product: 'ai-receptionist', name: 'AI Receptionist', priceCents: 29999, interval: 'month', type: 'addon' },
+    ],
+  });
+  assert.equal(aiOnly.doc.querySelector('[data-start-eyebrow]')!.textContent, 'Start your AI');
+  assert.equal(aiOnly.doc.querySelector<HTMLElement>('[data-start-no-plan]')!.hidden, false);
+  assert.equal(aiOnly.doc.querySelector<HTMLElement>('[data-start-no-plan]')!.textContent, 'No website plan selected.');
+  aiOnly.window.close();
+
+  const mixed = fixture({
+    cart: [
+      planItem('grow', 'Grow', 'month')!,
+      { key: 'ads-meta-month', product: 'ads-meta', name: 'Meta', priceCents: 89999, interval: 'month', type: 'bundle' },
+    ],
+  });
+  assert.equal(mixed.doc.querySelector('[data-start-eyebrow]')!.textContent, 'Start with WEBAO');
+  mixed.window.close();
+});
+
+test('an AI-only order can drop the seeded plan and still reach checkout', () => {
+  const { window, doc, cart, chip, click, toggleBox, aiBox, fill, submit, navigations } = fixture();
+  const none = doc.querySelector<HTMLInputElement>('input[name="plan"][value="none"]')!;
+  none.checked = true;
+  none.dispatchEvent(new window.Event('change', { bubbles: true }));
+  assert.deepEqual(cart(), []);
+  click(chip('ai'));
+  toggleBox(aiBox('ai-receptionist'), true);
+  assert.deepEqual(
+    cart().map((item) => item.key),
+    ['ai-receptionist-month'],
+  );
+  fill(details);
+  submit();
   assert.deepEqual(navigations, ['/checkout']);
   window.close();
 });
