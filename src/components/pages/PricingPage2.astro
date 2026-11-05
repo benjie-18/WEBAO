@@ -75,7 +75,7 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
         </div>
       </section>
       <div class="shell ads-distinction">
-        <div class="ads-option ads-option--both">
+        <div class="ads-option ads-option--both" data-ads-option="both" role="button" tabindex="0" aria-pressed="false">
           <h3>{a.bothLabel}</h3>
           <p class="ads-option-tag">Best value</p>
           <p class="ads-option-price">{a.bothPrice}</p>
@@ -83,13 +83,13 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
           <p>{a.bothBudget}</p>
           <p>Save C$449.99/mo vs two single channels</p>
         </div>
-        <div class="ads-option ads-option--meta">
+        <div class="ads-option ads-option--meta" data-ads-option="meta" role="button" tabindex="0" aria-pressed="true">
           <h3>{a.metaLabel}</h3>
           <p class="ads-option-price">{a.metaPrice}</p>
           <p>{a.setup}</p>
           <p>{a.budget}</p>
         </div>
-        <div class="ads-option ads-option--google">
+        <div class="ads-option ads-option--google" data-ads-option="google" role="button" tabindex="0" aria-pressed="false">
           <h3>{a.googleLabel}</h3>
           <p class="ads-option-price">{a.metaPrice}</p>
           <p>{a.setup}</p>
@@ -181,6 +181,73 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
         if (service) show(service);
       });
     });
+    // Ads selection: the option boxes were static, the only picker was
+    // the radio pills inside the Ads card. Make the boxes select the
+    // channel themselves, and keep them in sync with the card picker.
+    // This also updates the card price, setup, budget, include text and
+    // cart button directly, so it works even if the card's own script
+    // did not re-init after a ClientRouter navigation.
+    var adsPack = document.querySelector("[data-ads-pack]");
+    var adsOptions = Array.prototype.slice.call(root.querySelectorAll("[data-ads-option]"));
+    function syncAdsOptions() {
+      if (!adsPack) return;
+      var checked = adsPack.querySelector('input[name="ads-channel"]:checked');
+      var product = checked ? checked.getAttribute("value") || "" : "";
+      adsOptions.forEach(function (opt) {
+        var key = opt.getAttribute("data-ads-option");
+        var on = product === "ads-" + key;
+        opt.classList.toggle("is-selected", on);
+        opt.setAttribute("aria-pressed", on ? "true" : "false");
+      });
+    }
+    function selectAdsChannel(key) {
+      if (!adsPack) return;
+      var input = adsPack.querySelector('input[name="ads-channel"][value="ads-' + key + '"]');
+      if (!input) return;
+      if (input.checked) {
+        syncAdsOptions();
+        return;
+      }
+      input.checked = true;
+      // Update the card display and cart button, mirroring the card's
+      // own change handler, then let that handler run too if present.
+      var priceEl = adsPack.querySelector("[data-ads-price]");
+      var setupEl = adsPack.querySelector("[data-ads-setup]");
+      var budgetEl = adsPack.querySelector("[data-ads-budget]");
+      var includeEl = adsPack.querySelector("[data-ads-include]");
+      var btn = adsPack.querySelector("[data-cart-btn]");
+      if (priceEl) priceEl.textContent = input.getAttribute("data-price") || "";
+      if (setupEl) setupEl.textContent = input.getAttribute("data-setup") || "";
+      if (budgetEl) budgetEl.textContent = input.getAttribute("data-budget") || "";
+      if (includeEl) includeEl.textContent = input.getAttribute("data-include") || "";
+      if (btn) {
+        btn.setAttribute("data-product", input.getAttribute("data-product") || "");
+        btn.setAttribute("data-name", input.getAttribute("data-name") || "");
+        btn.setAttribute("data-price-cents", input.getAttribute("data-price-cents") || "");
+        btn.setAttribute("data-key", (input.getAttribute("data-product") || "") + "-month");
+      }
+      try {
+        input.dispatchEvent(new Event("change", { bubbles: true }));
+      } catch (e) {}
+      syncAdsOptions();
+    }
+    adsOptions.forEach(function (opt) {
+      opt.addEventListener("click", function () {
+        var key = opt.getAttribute("data-ads-option");
+        if (key) selectAdsChannel(key);
+      });
+      opt.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          var key = opt.getAttribute("data-ads-option");
+          if (key) selectAdsChannel(key);
+        }
+      });
+    });
+    if (adsPack) {
+      adsPack.addEventListener("change", syncAdsOptions);
+      syncAdsOptions();
+    }
     // Tablist keyboard pattern: arrows move between services, Home/End
     // jump to the first and last service.
     var chooser = root.querySelector(".service-chooser");
@@ -316,13 +383,6 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
     text-align: center;
     transition: transform 160ms ease, box-shadow 160ms ease;
   }
-  .ads-option:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 24px rgba(10, 15, 28, 0.08);
-  }
-  .ads-option:active {
-    transform: scale(0.99);
-  }
   .ads-option p.ads-option-tag {
     display: inline-block;
     color: #fff;
@@ -334,15 +394,72 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
     border-radius: 999px;
     margin: 0 0 8px;
   }
+  /* Bundle cards: BundleCard defines no .bc-name-row rule at all, so
+     the title took the full width and the cart button dropped below
+     it, on desktop and mobile alike. Pricing2 only: put the button
+     back on the right of the title. */
+  .p2-panel :global(.bc-name-row) {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .p2-panel :global(.bc-name) {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  /* Ads options: pronounced side borders in their own colour, plus a
+     subtle glow in the same colour. The selected option glows harder. */
+  .ads-option {
+    cursor: pointer;
+    position: relative;
+  }
   .ads-option--both {
-    border-color: var(--accent);
-    border-top: 3px solid var(--accent);
+    --opt-accent: var(--accent);
+    border: 1.5px solid var(--opt-accent);
+    border-top: 3px solid var(--opt-accent);
+    box-shadow: 0 0 24px color-mix(in srgb, var(--opt-accent) 20%, transparent);
   }
   .ads-option--meta {
-    border-top: 3px solid #1877f2;
+    --opt-accent: #1877f2;
+    border: 1.5px solid var(--opt-accent);
+    border-top: 3px solid var(--opt-accent);
+    box-shadow: 0 0 24px color-mix(in srgb, var(--opt-accent) 20%, transparent);
   }
   .ads-option--google {
-    border-top: 3px solid #1a9e6a;
+    --opt-accent: #1a9e6a;
+    border: 1.5px solid var(--opt-accent);
+    border-top: 3px solid var(--opt-accent);
+    box-shadow: 0 0 24px color-mix(in srgb, var(--opt-accent) 20%, transparent);
+  }
+  .ads-option:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(10, 15, 28, 0.08), 0 0 24px color-mix(in srgb, var(--opt-accent) 25%, transparent);
+  }
+  .ads-option:active {
+    transform: scale(0.99);
+  }
+  .ads-option:focus-visible {
+    outline: 2px solid var(--opt-accent);
+    outline-offset: 2px;
+  }
+  /* No border-width change on selection: that would shift the layout
+     by half a pixel. The stronger glow plus the Selected pill below
+     carry the state instead. */
+  .ads-option.is-selected {
+    box-shadow: 0 0 32px color-mix(in srgb, var(--opt-accent) 38%, transparent);
+  }
+  .ads-option.is-selected::after {
+    content: "Selected";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--opt-accent);
+    color: #fff;
   }
   /* Subtle, satisfying press feedback on every pricing2 action, and a
      visible focus ring on cart buttons. Fast (120ms) so it never feels
