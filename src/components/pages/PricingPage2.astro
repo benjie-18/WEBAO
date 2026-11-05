@@ -395,13 +395,27 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
     filter: drop-shadow(0 0 80px var(--pglow)) drop-shadow(0 26px 90px var(--pglow));
   }
   /* Grow's face is already at full brightness at rest, so unlike the
-     side cards it cannot brighten by swapping dim for full on hover.
-     Brighten the card itself on hover, plus a stronger red wash, so
-     the glow suffuses the card face the way Launch's blue and
-     Scale's purple do. */
-  .p2-panel :global(.pcard-slot--grow:hover .pcard),
-  .p2-panel :global(.pcard-slot--grow:focus-within .pcard) {
-    filter: brightness(1.25) saturate(1.2);
+     side cards it cannot brighten by swapping dim for full on hover:
+     a brightness filter on its dark-red face stayed dark red, and
+     the earlier wash was too subtle. So Grow gets a separate bright
+     red glow layer that fades in on hover (opacity transition, the
+     same mechanism the side cards use for dim-to-full), sitting
+     above the card background and below the card text. */
+  .p2-panel :global(.pcard-slot--grow .pcard::after) {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 380ms var(--ease-out-expo);
+    background:
+      radial-gradient(120% 90% at 50% 0%, rgba(255, 255, 255, 0.28) 0%, transparent 55%),
+      linear-gradient(165deg, rgba(255, 80, 60, 0.65) 0%, rgba(255, 80, 60, 0.25) 55%, transparent 100%);
+  }
+  .p2-panel :global(.pcard-slot--grow:hover .pcard::after),
+  .p2-panel :global(.pcard-slot--grow:focus-within .pcard::after) {
+    opacity: 1;
   }
   .p2-panel :global(.pcard-slot--grow:hover .pcard-bg--full),
   .p2-panel :global(.pcard-slot--grow:focus-within .pcard-bg--full) {
