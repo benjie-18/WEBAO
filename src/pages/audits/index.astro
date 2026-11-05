@@ -15,6 +15,7 @@ import StarMark from "../../components/ui/StarMark.astro";
   <div class="audit-result-loading" data-audit-result-loading>
     <span class="audit-loading-star" data-audit-result-star aria-hidden="true"><StarMark /></span>
     <p id="audit-status" aria-live="polite">Loading your audit…</p>
+    <p class="audit-result-action" data-audit-result-action hidden><a href="/audit" data-audit-result-action-link>Run a new audit</a></p>
   </div>
 
   <div data-audit-result-page hidden>
@@ -166,9 +167,19 @@ import StarMark from "../../components/ui/StarMark.astro";
       const star = document.querySelector("[data-audit-result-star]");
       const parts = window.location.pathname.split("/").filter(Boolean);
       const id = parts.length >= 2 && parts[0] === "audits" ? parts[1] : "";
+      const action = document.querySelector("[data-audit-result-action]");
+      const actionLink = document.querySelector("[data-audit-result-action-link]") as HTMLAnchorElement | null;
+      function showAction(s: (typeof STR)[Lang]): void {
+        if (action) (action as HTMLElement).hidden = false;
+        if (actionLink) {
+          actionLink.textContent = s.backLink;
+          actionLink.href = s.backHref;
+        }
+      }
       if (!id) {
         if (star) (star as HTMLElement).hidden = true;
         if (status) status.textContent = STR.en.noId;
+        showAction(STR.en);
         return;
       }
       try {
@@ -269,6 +280,7 @@ import StarMark from "../../components/ui/StarMark.astro";
       } catch (err) {
         if (star) (star as HTMLElement).hidden = true;
         if (status) status.textContent = STR.en.notFound;
+        showAction(STR.en);
       }
     }
 
@@ -452,7 +464,14 @@ import StarMark from "../../components/ui/StarMark.astro";
       padding-block: clamp(64px, 12vw, 140px);
       color: var(--muted);
     }
-    .audit-result-loading[hidden] { display: none; }
+    .audit-result-action {
+      margin: 0;
+    }
+    .audit-result-action[hidden] { display: none; }
+    .audit-result-action a {
+      color: var(--accent-text);
+      font-weight: 600;
+    }
     .audit-loading-star {
       width: clamp(96px, 18vw, 140px);
       height: clamp(96px, 18vw, 140px);

@@ -20,7 +20,7 @@ import StarMark from "../../components/ui/StarMark.astro";
         </div>
         <p class="audit-sub">Entrez le site web de votre entreprise. Vous obtenez un score instantané et les premières choses à corriger, gratuitement, sans obligation.</p>
         <form id="audit-form" class="audit-form" novalidate>
-          <label class="visually-hidden" for="audit-url">Your website</label>
+          <label class="visually-hidden" for="audit-url">Votre site web</label>
           <input id="audit-url" name="url" type="text" inputmode="url" autocomplete="url" placeholder="webao.ca" required />
           <button type="submit" class="btn btn--primary btn--lg">Lancer mon audit gratuit</button>
         </form>
@@ -156,18 +156,22 @@ import StarMark from "../../components/ui/StarMark.astro";
             return res.json().then(function (data) { return { res: res, data: data }; });
           })
           .then(function (pair) {
-            if (!pair.res.ok || !pair.data.resultUrl) throw new Error((pair.data && pair.data.error) || "Audit failed");
+            if (!pair.res.ok || !pair.data.resultUrl) {
+              var err = new Error((pair.data && pair.data.error) || "Audit failed");
+              err.status = pair.res.status;
+              throw err;
+            }
             stopFakeBar();
             fill.style.width = "100%";
             window.setTimeout(function () { window.location.href = pair.data.resultUrl; }, 350);
           })
-          .catch(function () {
+          .catch(function (err) {
             stopFakeBar();
             busy = false;
             loading.hidden = true;
             page.hidden = false;
             fill.style.width = "0%";
-            if (status) status.textContent = "L'audit n'a pas abouti. Vérifiez l'URL et réessayez.";
+            if (status) status.textContent = err && err.status === 503 ? "Le service d'audit est temporairement indisponible. Veuillez réessayer dans quelques instants." : "L'audit n'a pas abouti. Vérifiez l'URL et réessayez.";
             input.focus();
           });
       });

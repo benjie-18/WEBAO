@@ -154,18 +154,22 @@ import StarMark from "../components/ui/StarMark.astro";
             return res.json().then(function (data) { return { res: res, data: data }; });
           })
           .then(function (pair) {
-            if (!pair.res.ok || !pair.data.resultUrl) throw new Error((pair.data && pair.data.error) || "Audit failed");
+            if (!pair.res.ok || !pair.data.resultUrl) {
+              var err = new Error((pair.data && pair.data.error) || "Audit failed");
+              err.status = pair.res.status;
+              throw err;
+            }
             stopFakeBar();
             fill.style.width = "100%";
             window.setTimeout(function () { window.location.href = pair.data.resultUrl; }, 350);
           })
-          .catch(function () {
+          .catch(function (err) {
             stopFakeBar();
             busy = false;
             loading.hidden = true;
             page.hidden = false;
             fill.style.width = "0%";
-            if (status) status.textContent = "That audit did not run. Check the URL and try again.";
+            if (status) status.textContent = err && err.status === 503 ? "The audit service is temporarily unavailable. Please try again shortly." : "That audit did not run. Check the URL and try again.";
             input.focus();
           });
       });
