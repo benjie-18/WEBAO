@@ -1,21 +1,21 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import PricingPage2 from "../../components/pages/PricingPage2.astro";
+import PricingPage from "../../components/pages/PricingPage.astro";
 
 const locale = "en" as const;
 
+// The previous /pricing page, now at /pricing2 after the swap.
 // Temporary test page only. Not linked from navigation, not in the
 // sitemap, and noindex so it cannot compete with /pricing in search.
-// When this page replaces /pricing, remove noIndex, restore the
-// /pricing title and description, and restore its Product schema.
+// No Product schema here: that lives on /pricing now.
 ---
 
 <BaseLayout
-  title="Pricing test · WEBAO"
-  description="Temporary test version of the WEBAO pricing page, with Web, Ads and AI services."
+  title="Pricing (previous version) · WEBAO"
+  description="Previous version of the WEBAO pricing page, kept as a test page."
   locale={locale}
   pageKey="pricing"
   noIndex={true}
 >
-  <PricingPage2 locale={locale} />
+  <PricingPage locale={locale} />
 </BaseLayout>

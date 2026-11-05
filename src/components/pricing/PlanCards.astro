@@ -175,20 +175,9 @@ const planCents = (id: PlanId, interval: "month" | "year"): number => priceCents
     transform: translateY(-22px);
     margin-inline: calc(var(--overlap) * -1);
   }
-  /* Side cards rise in front of the middle card on hover / keyboard focus. */
-  .pcard-slot--launch:hover,
-  .pcard-slot--launch:focus-within,
-  .pcard-slot--scale:hover,
-  .pcard-slot--scale:focus-within {
-    z-index: 3;
-  }
-  .pcard-slot--launch:hover .pcard-lift,
-  .pcard-slot--launch:focus-within .pcard-lift,
-  .pcard-slot--scale:hover .pcard-lift,
-  .pcard-slot--scale:focus-within .pcard-lift {
-    transform: translateY(-30px) scale(1.06);
-    will-change: transform;
-  }
+  /* Side cards stay static on hover / keyboard focus: no lift, no scale,
+     no z-index jump. Only their background brightens and their glow
+     appears (below), like the middle card. */
 
   /* Glow lives on the unclipped wrapper: drop-shadow follows the squircle
      silhouette, which box-shadow cannot do under clip-path. */
@@ -246,17 +235,21 @@ const planCents = (id: PlanId, interval: "month" | "year"): number => priceCents
       radial-gradient(120% 90% at 50% 0%, rgba(255, 255, 255, 0.10) 0%, transparent 55%),
       linear-gradient(165deg, var(--pbg) 0%, color-mix(in srgb, var(--pbg) 66%, black) 100%);
   }
-  /* Middle card always at full strength; side cards brighten on hover. */
-  .pcard-slot--grow .pcard-bg--dim { opacity: 0; }
-  .pcard-slot--grow .pcard-bg--full { opacity: 1; }
+  /* All three cards sit at dim strength at rest and brighten to full on
+     hover / keyboard focus, Grow included: its red face is darker until
+     hovered, then exactly as bright as before. */
   .pcard-slot--launch:hover .pcard-bg--dim,
   .pcard-slot--launch:focus-within .pcard-bg--dim,
+  .pcard-slot--grow:hover .pcard-bg--dim,
+  .pcard-slot--grow:focus-within .pcard-bg--dim,
   .pcard-slot--scale:hover .pcard-bg--dim,
   .pcard-slot--scale:focus-within .pcard-bg--dim {
     opacity: 0;
   }
   .pcard-slot--launch:hover .pcard-bg--full,
   .pcard-slot--launch:focus-within .pcard-bg--full,
+  .pcard-slot--grow:hover .pcard-bg--full,
+  .pcard-slot--grow:focus-within .pcard-bg--full,
   .pcard-slot--scale:hover .pcard-bg--full,
   .pcard-slot--scale:focus-within .pcard-bg--full {
     opacity: 1;
@@ -398,12 +391,6 @@ const planCents = (id: PlanId, interval: "month" | "year"): number => priceCents
     .pcard-slot--grow .pcard-lift {
       transform: translateY(-14px);
     }
-    .pcard-slot--launch:hover .pcard-lift,
-    .pcard-slot--launch:focus-within .pcard-lift,
-    .pcard-slot--scale:hover .pcard-lift,
-    .pcard-slot--scale:focus-within .pcard-lift {
-      transform: translateY(-20px) scale(1.045);
-    }
     .pcard-content {
       padding: 26px 32px;
     }
@@ -465,12 +452,6 @@ const planCents = (id: PlanId, interval: "month" | "year"): number => priceCents
       transition: none;
     }
     .pcard-slot--grow .pcard-lift {
-      transform: none;
-    }
-    .pcard-slot--launch:hover .pcard-lift,
-    .pcard-slot--launch:focus-within .pcard-lift,
-    .pcard-slot--scale:hover .pcard-lift,
-    .pcard-slot--scale:focus-within .pcard-lift {
       transform: none;
     }
   }

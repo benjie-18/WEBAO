@@ -1,10 +1,14 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import PricingPage from "../../components/pages/PricingPage.astro";
+import PricingPage2 from "../../components/pages/PricingPage2.astro";
 import { useTranslations } from "../../lib/i18n";
 
 const locale = "en" as const;
 const t = useTranslations(locale);
+
+// The revamped pricing page (formerly /pricing2) is now the live
+// /pricing page: indexed, with the /pricing title and description and
+// the Product schema. The previous /pricing page now lives at /pricing2.
 
 // Product + Offer structured data: lets Google show price/currency in results.
 const productSchema = JSON.stringify({
@@ -44,5 +48,5 @@ const productSchema = JSON.stringify({
 
 <BaseLayout title={t.meta.pricing.title} description={t.meta.pricing.description} locale={locale} pageKey="pricing">
   <script slot="head" type="application/ld+json" set:html={productSchema} />
-  <PricingPage locale={locale} />
+  <PricingPage2 locale={locale} />
 </BaseLayout>

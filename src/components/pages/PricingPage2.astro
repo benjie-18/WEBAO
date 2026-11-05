@@ -16,9 +16,10 @@ const a = t.pricing.adsPack;
 const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
 ---
 
-<!-- Temporary revamped pricing test page. Same cards, prices and cart
-  wiring as /pricing, plus the AI branch. No description
-  paragraphs: title, service chooser, billing toggle, then cards. -->
+<!-- The live pricing page (formerly the /pricing2 test page). Same cards,
+  prices and cart wiring as the previous /pricing page, plus the AI
+  branch. No description paragraphs: title, service chooser, billing
+  toggle, then cards. -->
 <div data-pricing2>
   <section class="p2-hero grain">
     <div class="shell p2-hero-inner">
@@ -402,16 +403,13 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
   [data-pricing2] {
     padding-bottom: 32px;
   }
-  /* Web plan cards, pricing2 only: Grow's hover glow now matches the
-     other two cards exactly (0 26px 70px), instead of its stronger
-     0 30px 80px. The hover lift ("jump") is subtler for all three
-     cards: -12px and 1.02 scale instead of -30px and 1.06. The glow
-     itself is unchanged for Launch and Scale. */
-  /* Grow glow, pricing2 only: the single halo read weaker than the
-     side cards, because Grow is already at full brightness at rest
-     while the side cards brighten on hover. So Grow gets a double
-     halo plus a glow wash across the card face itself on hover, not
-     just around the edges. */
+  /* Web plan cards, pricing2 only: Grow's hover glow is a single halo
+     like the others, at a lower alpha: red reads far brighter than blue
+     at the same alpha, and the extra inner halo plus 0.45 red measured
+     99.2% pink in the strip above the card. Side cards stay static on
+     hover (no lift, no scale): only their background brightens and
+     their glow appears. Grow is dim at rest like the others and
+     brightens to full on hover, so its hover face is unchanged. */
   .p2-panel :global(.pcard-slot--grow:hover .pcard-glow),
   .p2-panel :global(.pcard-slot--grow:focus-within .pcard-glow) {
     filter: drop-shadow(0 26px 70px rgba(255, 80, 60, 0.28));
@@ -449,12 +447,6 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
       radial-gradient(90% 70% at 50% 35%, color-mix(in srgb, var(--pglow) 22%, transparent) 0%, transparent 70%),
       radial-gradient(120% 90% at 50% 0%, rgba(255, 255, 255, 0.10) 0%, transparent 55%),
       linear-gradient(165deg, var(--pbg) 0%, color-mix(in srgb, var(--pbg) 66%, black) 100%);
-  }
-  .p2-panel :global(.pcard-slot--launch:hover .pcard-lift),
-  .p2-panel :global(.pcard-slot--launch:focus-within .pcard-lift),
-  .p2-panel :global(.pcard-slot--scale:hover .pcard-lift),
-  .p2-panel :global(.pcard-slot--scale:focus-within .pcard-lift) {
-    transform: translateY(-12px) scale(1.02);
   }
   .p2-panel {
     transition: opacity 240ms ease;
