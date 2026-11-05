@@ -54,7 +54,7 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
       <section class="section plans-section">
         <div class="shell">
           <h2 id="plans-h" class="visually-hidden">{t.pricing.plansTitle}</h2>
-          <PlanCards locale={locale} />
+          <PlanCards locale={locale} badgeAbove />
           <p class="p2-plan-note">No setup fee on website plans. Cancel with 30 days' notice.</p>
         </div>
       </section>
@@ -75,6 +75,12 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
         </div>
       </section>
       <div class="shell ads-distinction">
+        <div class="ads-option ads-option--meta" data-ads-option="meta" role="button" tabindex="0" aria-pressed="true">
+          <h3>{a.metaLabel}</h3>
+          <p class="ads-option-price">{a.metaPrice}</p>
+          <p>{a.setup}</p>
+          <p>{a.budget}</p>
+        </div>
         <div class="ads-option ads-option--both" data-ads-option="both" role="button" tabindex="0" aria-pressed="false">
           <h3>{a.bothLabel}</h3>
           <p class="ads-option-tag">Best value</p>
@@ -82,12 +88,6 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
           <p>{a.bothSetup}</p>
           <p>{a.bothBudget}</p>
           <p>Save C$449.99/mo vs two single channels</p>
-        </div>
-        <div class="ads-option ads-option--meta" data-ads-option="meta" role="button" tabindex="0" aria-pressed="true">
-          <h3>{a.metaLabel}</h3>
-          <p class="ads-option-price">{a.metaPrice}</p>
-          <p>{a.setup}</p>
-          <p>{a.budget}</p>
         </div>
         <div class="ads-option ads-option--google" data-ads-option="google" role="button" tabindex="0" aria-pressed="false">
           <h3>{a.googleLabel}</h3>
@@ -350,6 +350,30 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
       transform: none;
       margin-inline: 0;
     }
+  }
+  /* Bottom breathing room: the white (light theme) / dark (dark theme)
+     area behind the cards gets a clear gap before the dark terms band
+     and the footer, so the last cards never look like they touch them. */
+  .p2-panels {
+    padding-bottom: 56px;
+  }
+  [data-pricing2] {
+    padding-bottom: 64px;
+  }
+  /* Web plan cards, pricing2 only: Grow's hover glow now matches the
+     other two cards exactly (0 26px 70px), instead of its stronger
+     0 30px 80px. The hover lift ("jump") is subtler for all three
+     cards: -12px and 1.02 scale instead of -30px and 1.06. The glow
+     itself is unchanged for Launch and Scale. */
+  .p2-panel :global(.pcard-slot--grow:hover .pcard-glow),
+  .p2-panel :global(.pcard-slot--grow:focus-within .pcard-glow) {
+    filter: drop-shadow(0 26px 70px var(--pglow));
+  }
+  .p2-panel :global(.pcard-slot--launch:hover .pcard-lift),
+  .p2-panel :global(.pcard-slot--launch:focus-within .pcard-lift),
+  .p2-panel :global(.pcard-slot--scale:hover .pcard-lift),
+  .p2-panel :global(.pcard-slot--scale:focus-within .pcard-lift) {
+    transform: translateY(-12px) scale(1.02);
   }
   .p2-panel {
     transition: opacity 240ms ease;

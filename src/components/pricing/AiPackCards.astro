@@ -217,8 +217,10 @@ const services = [
      side border in the card's own colour, a matching kicker, and a
      subtle glow in the same colour. The pack used to share
      Receptionist's red; it now gets gold, so the two are unmistakable. */
+  /* Explicit red: var(--accent) renders blue on this site, which made
+     Receptionist identical to Chat's blue. Do not use --accent here. */
   .ai--receptionist {
-    --ai-accent: var(--accent);
+    --ai-accent: #e5484d;
     border: 1.5px solid var(--ai-accent);
     border-top: 3px solid var(--ai-accent);
     box-shadow: 0 0 28px color-mix(in srgb, var(--ai-accent) 24%, transparent), 0 18px 40px rgba(10, 15, 28, 0.22);

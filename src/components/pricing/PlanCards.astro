@@ -7,8 +7,12 @@ import CartButton from "./CartButton.astro";
 
 interface Props {
   locale: Locale;
+  /* Pricing2 only: when true, the plan badge (e.g. "Most Popular") is
+     rendered above the card instead of inside it. /pricing passes
+     nothing, so its layout is untouched. */
+  badgeAbove?: boolean;
 }
-const { locale } = Astro.props as Props;
+const { locale, badgeAbove = false } = Astro.props as Props;
 const t = useTranslations(locale);
 const tp = t.pricing.plans;
 
@@ -39,6 +43,9 @@ const planCents = (id: PlanId, interval: "month" | "year"): number => priceCents
     const p = planData[def.id];
     return (
       <div class:list={["pcard-slot", `pcard-slot--${def.id}`]} role="listitem" data-reveal>
+        {badgeAbove && p.badge !== "" && (
+          <span class="pcard-badge pcard-badge--above">{p.badge}</span>
+        )}
         <div class="pcard-lift">
           <div class="pcard-glow">
             <div class="pcard-frame squircle">
@@ -46,7 +53,7 @@ const planCents = (id: PlanId, interval: "month" | "year"): number => priceCents
                 <div class="pcard-bg pcard-bg--dim" aria-hidden="true" />
                 <div class="pcard-bg pcard-bg--full" aria-hidden="true" />
                 <div class="pcard-content">
-                  {p.badge !== "" && (
+                  {!badgeAbove && p.badge !== "" && (
                     <span class="pcard-badge">{p.badge}</span>
                   )}
                   <div class="pcard-name-row">
@@ -269,6 +276,19 @@ const planCents = (id: PlanId, interval: "month" | "year"): number => priceCents
     padding: clamp(30px, 4vw, 46px) clamp(36px, 5.5vw, 58px);
   }
 
+  /* Above-card badge: anchored to the slot (position: relative), so it
+     floats over the card's top edge instead of sitting inside the card.
+     The card itself is clipped by its squircle, so the badge must live
+     outside the card, at slot level. */
+  .pcard-badge--above {
+    position: absolute;
+    top: -13px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 4;
+    margin-bottom: 0;
+    white-space: nowrap;
+  }
   .pcard-badge {
     align-self: flex-start;
     font-family: var(--font-mono);
