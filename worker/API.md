@@ -30,10 +30,13 @@ Same rate limit as pageview.
 ### `POST /api/track/heartbeat`
 Body: `{ sid, path, durationMs, final? }`
 → `{ "ok": true }`. Records time-on-page for the most recent visit of `path`
-(monotonic — the stored value never shrinks). Send every ~60s and on
+(monotonic — the stored value never shrinks). Send every ~5 min and on
 `visibilitychange`/`pagehide`; pass `final: true` for those last-chance sends —
-periodic beats are coalesced server-side (persisted at most every 2 min) to
+periodic beats are coalesced server-side (persisted at most every 5 min) to
 stay inside the KV daily write budget, while final beats always persist.
+No per-IP rate limit on this route: beats are identified by the session id
+and already self-limit to one write per 5 min (pageview/click keep the
+120 req/min limit).
 
 ## Forms (public)
 

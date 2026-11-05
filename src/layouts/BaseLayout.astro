@@ -265,11 +265,13 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
             if (document.visibilityState === "hidden") heartbeat(true, true);
           });
           window.addEventListener("pagehide", function () { heartbeat(true, true); });
-          // Periodic heartbeat while the page stays open (backend keeps the max,
-          // coalescing writes to stay inside the KV daily write budget).
+          // Periodic heartbeat while the page stays open: every 5 minutes,
+          // matching the server's persist window, so a beat is never wasted
+          // on a coalesced write (see worker/track.ts). The final beats
+          // above always persist, so time-on-page stays exact.
           window.setInterval(function () {
             if (document.visibilityState === "visible") heartbeat(false, false);
-          }, 60000);
+          }, 300000);
 
           if (document.readyState !== "loading") pageview();
           else document.addEventListener("DOMContentLoaded", pageview, { once: true });

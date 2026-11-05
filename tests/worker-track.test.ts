@@ -1,5 +1,6 @@
 // Visitor tracking endpoints: session lifecycle, input validation, the
-// same-origin + rate-limit gate, coalesced heartbeats and tracking opt-out.
+// same-origin + rate-limit gate (pageview/click), origin-only heartbeats,
+// coalesced heartbeats and tracking opt-out.
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { handleClick, handleHeartbeat, handlePageview } from '../worker/track';
@@ -149,17 +150,21 @@ test('tracking can be switched off from the admin config', async () => {
   assert.equal(memory.store.has(viewKey('/pricing')), false);
 });
 
-test('the shared gate requires a same-origin request and throttles per IP', async () => {
-  for (const path of ['/api/track/pageview', '/api/track/click', '/api/track/heartbeat']) {
+test('pageview and click share the origin + throttle gate; heartbeat is origin-only', async () => {
+  const handlers = [
+    [handlePageview, pageview],
+    [handleClick, click],
+    [handleHeartbeat, heartbeat],
+  ] as const;
+  for (const [handler, makeRequest] of handlers) {
     const memory = memoryKV();
     const body = { sid: SID, path: '/pricing' };
-    const request = apiRequest(path, body, { origin: null });
-    const response = await handlePageview(request, envOf(memory.kv));
-    assert.equal(response.status, 403, path);
+    const response = await handler(makeRequest(body, { origin: null }), envOf(memory.kv));
+    assert.equal(response.status, 403);
     assert.deepEqual(await bodyOf(response), { ok: false, error: 'Forbidden origin' });
 
-    const evil = await handlePageview(apiRequest(path, body, { origin: 'https://evil.example' }), envOf(memory.kv));
-    assert.equal(evil.status, 403, path);
+    const evil = await handler(makeRequest(body, { origin: 'https://evil.example' }), envOf(memory.kv));
+    assert.equal(evil.status, 403);
   }
 
   const memory = memoryKV({ 'rl:track:203.0.113.9': { c: 120, r: Date.now() + 60_000 } });
@@ -172,6 +177,28 @@ test('the shared gate requires a same-origin request and throttles per IP', asyn
   const other = memoryKV({ 'rl:track:203.0.113.9': { c: 120, r: Date.now() + 60_000 } });
   const allowed = await handlePageview(pageview({ sid: SID, path: '/pricing' }, { ip: '198.51.100.4' }), envOf(other.kv));
   assert.equal(allowed.status, 200);
+
+  // Heartbeat skips the throttle write: a saturated rate-limit record must
+  // not 429 it, and the record itself must be untouched. (Throttling every
+  // heartbeat was a KV write per beat and exhausted the daily write budget.)
+  const seeded = memoryKV({
+    'rl:track:203.0.113.9': { c: 120, r: Date.now() + 60_000 },
+    [`session:${SID}`]: {
+      ip: '203.0.113.9',
+      country: 'CA',
+      ua: '',
+      device: 'desktop',
+      browser: 'other',
+      startedAt: Date.now() - 10_000,
+      lastSeenAt: Date.now() - 301_000,
+      pages: [{ path: '/pricing', at: Date.now() - 10_000, durationMs: 0 }],
+      clicks: [],
+    },
+  });
+  const before = seeded.store.get('rl:track:203.0.113.9');
+  const beat = await handleHeartbeat(heartbeat({ sid: SID, path: '/pricing', durationMs: 1000 }), envOf(seeded.kv));
+  assert.equal(beat.status, 200);
+  assert.equal(seeded.store.get('rl:track:203.0.113.9'), before, 'throttle record untouched');
 });
 
 test('clicks attach to an existing session only, with clamped labels', async () => {
@@ -225,7 +252,7 @@ test('heartbeats coalesce, persist on final, and never shrink a duration', async
   const sessionWrites = () => memory.puts.filter((key) => key.startsWith('session:')).length;
   const putsAfterPageview = sessionWrites();
 
-  // A periodic heartbeat within 120 s of the last write is acknowledged but
+  // A periodic heartbeat within 300 s of the last write is acknowledged but
   // not persisted (the KV write budget is the reason).
   const coalesced = await handleHeartbeat(heartbeat({ sid: SID, path: '/pricing', durationMs: 30_000 }), envOf(memory.kv));
   assert.equal(coalesced.status, 200);
@@ -247,7 +274,7 @@ test('heartbeats coalesce, persist on final, and never shrink a duration', async
 
   // Non-final persists once the coalescing window has passed.
   const session = sessionOf(memory.store);
-  session.lastSeenAt = Date.now() - 121_000;
+  session.lastSeenAt = Date.now() - 301_000;
   memory.store.set(`session:${SID}`, JSON.stringify(session));
   await handleHeartbeat(heartbeat({ sid: SID, path: '/pricing', durationMs: 90_000 }), envOf(memory.kv));
   assert.equal(sessionOf(memory.store).pages[0].durationMs, 90_000);
