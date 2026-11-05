@@ -109,6 +109,22 @@ test('POST /api/audit scores a good page and stores the result', async () => {
   }
 });
 
+test('POST /api/audit serves our own site from ASSETS, not the network', async () => {
+  // A Worker cannot fetch its own origin: the subrequest routes back into
+  // this worker and never returns, so the fallback must use env.ASSETS.
+  const memory = memoryKV();
+  const assets = {
+    fetch: async () => new Response(GOOD_HTML, { status: 200, headers: { 'content-type': 'text/html' } }),
+  };
+  const env = envOf(memory.kv, { ASSETS: assets });
+  const res = await handleAudit(apiRequest('/api/audit', { url: 'https://webao.ca/', lang: 'en' }), env);
+  assert.equal(res.status, 200);
+  const data = await bodyOf(res) as { ok: boolean; score: number; partial: boolean };
+  assert.equal(data.ok, true);
+  assert.equal(data.score, 100);
+  assert.equal(data.partial, true); // no PageSpeed key, fallback path
+});
+
 test('POST /api/audit via PageSpeed drops passing checks from findings', async () => {
   const psiPayload = {
     lighthouseResult: {

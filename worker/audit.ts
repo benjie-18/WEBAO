@@ -284,25 +284,36 @@ export function runBasicChecks(
   return { score: Math.max(0, score), findings, checks };
 }
 
+/** Hosts served by this worker itself. A Worker cannot fetch its own origin
+ * over the network (the subrequest routes back into this worker and never
+ * returns), so the fallback serves our own pages straight from the ASSETS
+ * binding instead. */
+const OWN_HOSTS = new Set(["webao.ca", "www.webao.ca", "webao.bnji.net"]);
+
 async function fetchHomepage(
   rawUrl: string,
+  env: Env,
 ): Promise<{ html: string; finalUrl: string; fetchMs: number }> {
   const started = Date.now();
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 10_000);
   let res: Response;
   try {
-    res = await fetch(rawUrl, {
-      signal: controller.signal,
-      redirect: "follow",
-      headers: { "User-Agent": "WEBAO-Audit/1.0 (+https://webao.ca/audit)" },
-    });
+    if (OWN_HOSTS.has(new URL(rawUrl).hostname)) {
+      res = await env.ASSETS.fetch(new Request(rawUrl, { signal: controller.signal }));
+    } else {
+      res = await fetch(rawUrl, {
+        signal: controller.signal,
+        redirect: "follow",
+        headers: { "User-Agent": "WEBAO-Audit/1.0 (+https://webao.ca/audit)" },
+      });
+    }
   } finally {
     clearTimeout(timeout);
   }
   if (!res.ok) throw new Error(`Homepage ${res.status}`);
   const text = await res.text();
-  return { html: text.slice(0, 2_000_000), finalUrl: res.url, fetchMs: Date.now() - started };
+  return { html: text.slice(0, 2_000_000), finalUrl: res.url || rawUrl, fetchMs: Date.now() - started };
 }
 
 function newAuditId(): string {
@@ -373,7 +384,7 @@ export async function handleAudit(req: Request, env: Env): Promise<Response> {
 
   if (partial) {
     try {
-      const page = await fetchHomepage(rawUrl);
+      const page = await fetchHomepage(rawUrl, env);
       const basic = runBasicChecks(page.html, page.finalUrl, page.fetchMs, lang);
       score = basic.score;
       findings = basic.findings;
