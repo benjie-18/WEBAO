@@ -3,12 +3,9 @@ import CartButton from "./CartButton.astro";
 import type { Locale } from "../../lib/i18n";
 
 // AI service cards for /pricing2 only.
-// Prices are the PROPOSED AI branch prices (2026-11-03), not approved
-// pricing. Cart buttons are the same component as everywhere else, but
-// checkout has no Stripe products for AI yet (see worker/checkout.ts
-// PRICE_MAP), so AI items added to the cart are skipped at checkout
-// until Benji approves the prices and wires them. The "Proposed
-// pricing" note stays on every AI card for that reason.
+// AI branch prices, live since the checkout wiring (Stripe prices in
+// worker/checkout.ts PRICE_MAP, setup fees added server-side there).
+// Cart buttons are the same component as everywhere else.
 // Reuses the bundle-card classes from the Ads Pack card so the styling
 // matches the current pricing page.
 interface Props {
@@ -79,7 +76,6 @@ const services = [
         <dd>C$99.98/mo</dd>
       </div>
     </dl>
-    <p class="bc-note">Proposed pricing</p>
   </div>
 </div>
 
@@ -103,8 +99,7 @@ const services = [
           <dd>{s.setup}</dd>
         </div>
       </dl>
-      <p class="bc-note">Proposed pricing</p>
-    </div>
+      </div>
   ))}
 </div>
 

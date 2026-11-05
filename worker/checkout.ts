@@ -79,6 +79,14 @@ export const PRICE_MAP: Record<string, string> = {
   "scale-month": "price_1UO3DtE57vVzxI41h8bSDqZd",
   "scale-year": "price_1UU1M8E57vVzxI419tR3a3Gy",
   "visibility-pack-month": "price_1UO3DzE57vVzxI4199bDK2uj",
+  // AI services, monthly only. Setup fees are NOT in this map: the
+  // parity test requires every map key to be a catalog key, and setups
+  // are not catalog items. They ride along server-side below, following
+  // the Ads Pack setup pattern.
+  "ai-receptionist-month": "price_1UYFX9E57vVzxI41tORfQmiE",
+  "ai-website-chat-month": "price_1UYFXFE57vVzxI41HANoOHoh",
+  "ai-followup-month": "price_1UYFXJE57vVzxI41rtocXmsu",
+  "ai-pack-month": "price_1UYFXOE57vVzxI41aR00rKZe",
   "visibility-pack-year": "price_1UORRqE57vVzxI41BDPCliaR",
 };
 
@@ -115,6 +123,16 @@ export function intervalOf(key: string): LineInterval {
 const ADS_MONTHLY_KEYS = ["ads-pack-month", "ads-meta-month", "ads-google-month", "ads-both-month"];
 /** Both-channels setup price (Stripe), used when no bundle-setup secret is set. */
 const ADS_BUNDLE_SETUP_PRICE = "price_1UWkEvE57vVzxI41jrWbtpuZ";
+/** AI services: monthly cart key -> one-time setup price (Stripe).
+ *  Kept out of PRICE_MAP on purpose (see the comment above): setups are
+ *  added server-side and can never be bought on their own. */
+const AI_SETUPS: Array<{ monthly: string; setupKey: string; setupPriceId: string }> = [
+  { monthly: "ai-receptionist-month", setupKey: "ai-receptionist-setup-onetime", setupPriceId: "price_1UYFXDE57vVzxI41cwShDW7k" },
+  { monthly: "ai-website-chat-month", setupKey: "ai-website-chat-setup-onetime", setupPriceId: "price_1UYFXIE57vVzxI41pREjaFlg" },
+  { monthly: "ai-followup-month", setupKey: "ai-followup-setup-onetime", setupPriceId: "price_1UYFXNE57vVzxI417TlokH2v" },
+  { monthly: "ai-pack-month", setupKey: "ai-pack-setup-onetime", setupPriceId: "price_1UYFXSE57vVzxI41Qx20HwYn" },
+];
+const AI_INDIVIDUAL_KEYS = ["ai-receptionist-month", "ai-website-chat-month", "ai-followup-month"];
 
 export async function handleCheckoutSession(req: Request, env: Env): Promise<Response> {
   if (!originAllowed(req, true, env)) return err("Forbidden origin", 403);
@@ -212,6 +230,28 @@ export async function handleCheckoutSession(req: Request, env: Env): Promise<Res
     return err("The Ads Pack setup fee cannot be bought on its own", 400);
   }
 
+  // AI Pack already includes all three individual AI services, so buying
+  // it together with any of them would double-bill the same service.
+  if (
+    lineItems.some((item) => item.key === "ai-pack-month") &&
+    lineItems.some((item) => AI_INDIVIDUAL_KEYS.includes(item.key))
+  ) {
+    return err(
+      "The AI Pack already includes AI Receptionist, AI Website Chat and AI Follow-up. Buy the pack on its own, or the individual services on their own.",
+      400,
+    );
+  }
+
+  // An AI setup fee cannot be bought on its own, same rule as Ads.
+  for (const setup of AI_SETUPS) {
+    if (
+      lineItems.some((item) => item.key === setup.setupKey) &&
+      !lineItems.some((item) => item.key === setup.monthly)
+    ) {
+      return err("An AI setup fee cannot be bought on its own", 400);
+    }
+  }
+
   // Checkout refuses sessions mixing several billing intervals, so reject
   // instead of letting Stripe return an opaque error.
   const recurring = lineItems.filter((item) => item.interval !== "one-time");
@@ -249,6 +289,22 @@ export async function handleCheckoutSession(req: Request, env: Env): Promise<Res
       priceId: env.STRIPE_PRICE_ADS_SETUP,
       interval: "one-time",
     });
+  }
+  // AI services: the one-time setup fee rides along automatically,
+  // added server-side so it cannot be removed from the cart, following
+  // the Ads Pack pattern. The pack carries the bundle setup fee, never
+  // the three individual setup fees.
+  for (const setup of AI_SETUPS) {
+    if (
+      lineItems.some((item) => item.key === setup.monthly) &&
+      !lineItems.some((item) => item.key === setup.setupKey)
+    ) {
+      lineItems.push({
+        key: setup.setupKey,
+        priceId: setup.setupPriceId,
+        interval: "one-time",
+      });
+    }
   }
   if (
     lineItems.filter((item) => item.interval !== "one-time").length > MAX_RECURRING_ITEMS ||

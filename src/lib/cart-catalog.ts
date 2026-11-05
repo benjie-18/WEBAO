@@ -69,6 +69,14 @@ const catalog = {
   // Google Business Profile revamp: one-time, sold on its own or with a pack.
   "gbp-revamp": { product: "gbp-revamp", type: "addon", oneTimeCents: 14999 },
 
+  /* ── AI services (monthly only, like the Ads Pack). The one-time setup
+     fee is not sold here: checkout adds it server-side, see
+     worker/checkout.ts, following the Ads Pack setup pattern. */
+  "ai-receptionist": { product: "ai-receptionist", type: "addon", monthCents: 29999 },
+  "ai-website-chat": { product: "ai-website-chat", type: "addon", monthCents: 14999 },
+  "ai-followup": { product: "ai-followup", type: "addon", monthCents: 9999 },
+  "ai-pack": { product: "ai-pack", type: "bundle", monthCents: 44999 },
+
   /* ── Add-ons (featured group first, then the rest) ───────────────────── */
   localseo: { product: "localseo", type: "addon", monthCents: 15999, yearCents: 15999 * TEN_MONTHS },
   booking: { product: "booking", type: "addon", monthCents: 4999, yearCents: 4999 * TEN_MONTHS },
