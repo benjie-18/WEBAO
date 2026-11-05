@@ -176,6 +176,21 @@ test('the terms page anchors match the NoteRef link format', () => {
   assert.match(termsPage, /terms\.notes/, 'the terms page reads the shared note dictionary');
 });
 
+test('the terms search message templates sit before the search script', () => {
+  // The search script queries these spans at init; on a direct page load it
+  // runs while the page is still parsing, so spans below the script are
+  // null and the result count, prev/next navigation and screen-reader
+  // announcements break (filtering still works, which hides the bug).
+  const termsPage = read('src/components/pages/TermsPage.astro');
+  const scriptAt = termsPage.indexOf('<script data-astro-rerun>');
+  assert.ok(scriptAt > 0, 'the terms page has a rerun search script');
+  for (const attr of ['data-search-msg-count', 'data-search-msg-count-pl', 'data-search-msg-announced', 'data-search-msg-none']) {
+    const at = termsPage.indexOf(attr);
+    assert.ok(at > 0, `${attr} template exists`);
+    assert.ok(at < scriptAt, `${attr} template sits before the search script`);
+  }
+});
+
 test('the image provenance list is well-formed and matches the catalog', () => {
   const sources = JSON.parse(read('src/lib/sources.json')) as Array<{
     demo: string;

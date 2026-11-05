@@ -603,6 +603,15 @@ const search = terms.search;
   }
 </style>
 
+<!-- Localized templates for the JS (kept out of the visible UI).
+     These must sit above the search script: the script queries them at
+     init, and on a direct page load it runs while the page is still
+     parsing, so anything below it does not exist yet. -->
+<span hidden data-search-msg-count>{search.results}</span>
+<span hidden data-search-msg-count-pl>{search.resultsPlural}</span>
+<span hidden data-search-msg-announced>{search.announced}</span>
+<span hidden data-search-msg-none>{search.announcedNone}</span>
+
 <script data-astro-rerun>
   function initTermsPage() {
     var bar = document.querySelector("[data-search-bar]");
@@ -869,9 +878,3 @@ const search = terms.search;
     document.addEventListener("astro:page-load", initTermsPage);
   }
 </script>
-
-<!-- Localized templates for the JS (kept out of the visible UI) -->
-<span hidden data-search-msg-count>{search.results}</span>
-<span hidden data-search-msg-count-pl>{search.resultsPlural}</span>
-<span hidden data-search-msg-announced>{search.announced}</span>
-<span hidden data-search-msg-none>{search.announcedNone}</span>
