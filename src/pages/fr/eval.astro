@@ -69,7 +69,7 @@ import StarMark from "../../components/ui/StarMark.astro";
     <div class="audit-loading-inner">
       <span class="audit-loading-glow" aria-hidden="true"></span>
       <span class="audit-loading-star" aria-hidden="true"><StarMark /></span>
-      <div class="audit-loading-bar" role="progressbar" aria-label="Audit en cours">
+      <div class="audit-loading-bar" data-audit-bar role="progressbar" aria-label="Audit en cours">
         <div class="audit-loading-fill" data-audit-fill></div>
       </div>
       <p class="audit-loading-status" data-audit-loading-status aria-live="polite">Audit en cours…</p>
@@ -94,15 +94,16 @@ import StarMark from "../../components/ui/StarMark.astro";
       var input = document.getElementById("audit-url");
       var status = document.getElementById("audit-status");
       var fill = document.querySelector("[data-audit-fill]");
+      var bar = document.querySelector("[data-audit-bar]");
       var loadStatus = document.querySelector("[data-audit-loading-status]");
-      if (!form || !input || !page || !loading || !fill) return;
+      if (!form || !input || !page || !loading || !fill || !bar) return;
       if (form.dataset.auditInit === "1") return;
       form.dataset.auditInit = "1";
       // Reset in case the visitor came back here from the result page:
       // the static HTML starts clean, but a restored page may not.
       page.hidden = false;
       loading.hidden = true;
-      fill.style.width = "0%";
+      setProgress(0);
       // The status lines never repeat: the four expected ones play first,
       // in order, then the funny ones take over if the audit drags on.
       // When the list runs out the timer stops on the last line.
@@ -124,9 +125,15 @@ import StarMark from "../../components/ui/StarMark.astro";
       var stageTimer = null;
       var progress = 0;
       var busy = false;
+      // The fill width and the shimmer clip move together, so the
+      // highlight never jumps when the bar steps forward.
+      function setProgress(p) {
+        fill.style.width = p + "%";
+        bar.style.setProperty("--fill", p + "%");
+      }
       function startFakeBar() {
         progress = 4;
-        fill.style.width = progress + "%";
+        setProgress(progress);
         var line = 0;
         if (loadStatus) loadStatus.textContent = lines[0];
         // Unpredictable steps at unpredictable intervals, shrinking as
@@ -134,7 +141,7 @@ import StarMark from "../../components/ui/StarMark.astro";
         var tick = function () {
           var step = (2 + Math.random() * 7) * (1 - progress / 110);
           progress = Math.min(92, progress + step);
-          fill.style.width = progress + "%";
+          setProgress(progress);
           timer = window.setTimeout(tick, 180 + Math.random() * 380);
         };
         timer = window.setTimeout(tick, 180 + Math.random() * 380);
@@ -180,7 +187,7 @@ import StarMark from "../../components/ui/StarMark.astro";
               throw err;
             }
             stopFakeBar();
-            fill.style.width = "100%";
+            setProgress(100);
             window.setTimeout(function () { window.location.href = pair.data.resultUrl; }, 350);
           })
           .catch(function (err) {
@@ -188,7 +195,7 @@ import StarMark from "../../components/ui/StarMark.astro";
             busy = false;
             loading.hidden = true;
             page.hidden = false;
-            fill.style.width = "0%";
+            setProgress(0);
             if (status) status.textContent = err && err.status === 503 ? "Le service d'audit est temporairement indisponible. Veuillez réessayer dans quelques instants." : "L'audit n'a pas abouti. Vérifiez l'URL et réessayez.";
             input.focus();
           });
@@ -427,30 +434,43 @@ import StarMark from "../../components/ui/StarMark.astro";
       50% { transform: rotate(360deg); animation-timing-function: linear; }
       100% { transform: rotate(360deg); }
     }
+    /* The shimmer lives on the bar, not on the fill: the bar's width
+       never changes, so the sweep stays smooth while the fill steps
+       forward underneath it. It is clipped to the filled part with
+       --fill, a registered custom property, so the clip edge glides
+       in sync with the fill instead of jumping on each tick. */
+    @property --fill {
+      syntax: "<percentage>";
+      inherits: false;
+      initial-value: 0%;
+    }
     .audit-loading-bar {
+      position: relative;
       width: min(480px, 80vw);
       height: 10px;
       margin-top: 36px;
       border-radius: 999px;
       background: var(--line);
       overflow: hidden;
+      --fill: 0%;
+      transition: --fill 240ms ease;
     }
-    .audit-loading-fill {
-      position: relative;
-      height: 100%;
-      width: 0%;
-      border-radius: inherit;
-      background: linear-gradient(90deg, var(--accent), var(--accent-mid));
-      transition: width 240ms ease;
-      overflow: hidden;
-    }
-    .audit-loading-fill::after {
+    .audit-loading-bar::after {
       content: "";
       position: absolute;
       inset: 0;
       background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
       transform: translateX(-100%);
       animation: audit-bar-shimmer 1.8s linear infinite;
+      clip-path: inset(0 calc(100% - var(--fill)) 0 0);
+      pointer-events: none;
+    }
+    .audit-loading-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--accent-mid));
+      transition: width 240ms ease;
     }
     @keyframes audit-bar-shimmer {
       to { transform: translateX(100%); }
@@ -466,7 +486,7 @@ import StarMark from "../../components/ui/StarMark.astro";
       .audit-orb,
       .audit-sparkle,
       .audit-loading-glow,
-      .audit-loading-fill::after { animation: none; }
+      .audit-loading-bar::after { animation: none; }
       .audit-sparkle { opacity: 0.5; }
     }
   </style>
