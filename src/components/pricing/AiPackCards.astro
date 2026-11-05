@@ -1,8 +1,8 @@
 ---
 import CartButton from "./CartButton.astro";
-import type { Locale } from "../../lib/i18n";
+import { useTranslations, type Locale } from "../../lib/i18n";
 
-// AI service cards for /pricing2 only.
+// AI service cards for the revamped pricing page.
 // AI branch prices, live since the checkout wiring (Stripe prices in
 // worker/checkout.ts PRICE_MAP, setup fees added server-side there).
 // Cart buttons are the same component as everywhere else.
@@ -12,68 +12,60 @@ interface Props {
   locale?: Locale;
 }
 const { locale = "en" } = Astro.props as Props;
+const t = useTranslations(locale);
+const ai = t.pricing.ai;
 const services = [
   {
-    name: "AI Receptionist",
+    name: t.cart.aiReceptionist,
     product: "ai-receptionist",
-    price: "C$299.99/mo",
+    price: ai.receptionistPrice,
     priceCents: 29999,
-    setup: "C$299.99 one-time",
+    setup: ai.receptionistSetup,
     accent: "ai--receptionist",
-    includes: [
-      "Answers calls as your business",
-      "Takes messages and callback details",
-      "500 minutes per month, fair use",
-    ],
+    includes: ai.receptionistIncludes,
   },
   {
-    name: "AI Website Chat",
+    name: t.cart.aiChat,
     product: "ai-website-chat",
-    price: "C$149.99/mo",
+    price: ai.chatPrice,
     priceCents: 14999,
-    setup: "C$149.99 one-time",
+    setup: ai.chatSetup,
     accent: "ai--chat",
-    includes: [
-      "Chat on your website",
-      "Trained on your business",
-    ],
+    includes: ai.chatIncludes,
   },
   {
-    name: "AI Follow-up",
+    name: t.cart.aiFollowup,
     product: "ai-followup",
-    price: "C$99.99/mo",
+    price: ai.followupPrice,
     priceCents: 9999,
-    setup: "C$99.99 one-time",
+    setup: ai.followupSetup,
     accent: "ai--followup",
-    includes: [
-      "Missed-call text-back",
-      "Review requests after a job",
-    ],
+    includes: ai.followupIncludes,
   },
 ];
 ---
 
 <div class="ai-pack-wrap">
   <div class="bundle-card ai-pack-card">
-    <p class="bc-kicker">AI bundle, best value</p>
+    <p class="bc-kicker">{ai.packKicker}</p>
     <div class="bc-name-row">
-      <h3 class="bc-name">AI Pack</h3>
-      <CartButton locale={locale} product="ai-pack" name="AI Pack" priceCents={44999} interval="month" type="bundle" />
+      <h3 class="bc-name">{t.cart.aiPack}</h3>
+      <CartButton locale={locale} product="ai-pack" name={t.cart.aiPack} priceCents={44999} interval="month" type="bundle" />
     </div>
-    <p class="bc-price">C$449.99/mo</p>
+    <p class="bc-price">{ai.packPrice}</p>
     <ul class="bc-includes">
-      <li><svg viewBox="0 0 16 16" aria-hidden="true" class="bc-check"><path d="M3.5 8.2l3.2 3.2 5.8-6.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg><span>AI Receptionist</span></li>
-      <li><svg viewBox="0 0 16 16" aria-hidden="true" class="bc-check"><path d="M3.5 8.2l3.2 3.2 5.8-6.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg><span>AI Website Chat</span></li>
-      <li><svg viewBox="0 0 16 16" aria-hidden="true" class="bc-check"><path d="M3.5 8.2l3.2 3.2 5.8-6.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg><span>AI Follow-up</span></li>
+      <li><svg viewBox="0 0 16 16" aria-hidden="true" class="bc-check"><path d="M3.5 8.2l3.2 3.2 5.8-6.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg><span>{t.cart.aiReceptionist}</span></li>
+      <li><svg viewBox="0 0 16 16" aria-hidden="true" class="bc-check"><path d="M3.5 8.2l3.2 3.2 5.8-6.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg><span>{t.cart.aiChat}</span></li>
+      <li><svg viewBox="0 0 16 16" aria-hidden="true" class="bc-check"><path d="M3.5 8.2l3.2 3.2 5.8-6.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg><span>{t.cart.aiFollowup}</span></li>
     </ul>
     <dl class="bc-meta">
       <div class="bc-row">
-        <dt>Individual value:</dt>
-        <dd>C$549.97/mo</dd>
+        <dt>{ai.individualValue}</dt>
+        <dd>{ai.packIndividualValue}</dd>
       </div>
       <div class="bc-row">
-        <dt>Monthly saving:</dt>
-        <dd>C$99.98/mo</dd>
+        <dt>{ai.monthlySaving}</dt>
+        <dd>{ai.packMonthlySaving}</dd>
       </div>
     </dl>
   </div>
@@ -82,7 +74,7 @@ const services = [
 <div class="ai-grid">
   {services.map((s) => (
     <div class:list={["bundle-card", s.accent]}>
-      <p class="bc-kicker">AI service</p>
+      <p class="bc-kicker">{ai.serviceKicker}</p>
       <div class="bc-name-row">
         <h3 class="bc-name">{s.name}</h3>
         <CartButton locale={locale} product={s.product} name={s.name} priceCents={s.priceCents} interval="month" type="addon" />
@@ -95,7 +87,7 @@ const services = [
       </ul>
       <dl class="bc-meta">
         <div class="bc-row">
-          <dt>Setup:</dt>
+          <dt>{ai.setupLabel}</dt>
           <dd>{s.setup}</dd>
         </div>
       </dl>
