@@ -56,6 +56,23 @@ interface PsiResponse {
   };
 }
 
+export function normalizeAuditUrl(raw: string): string | null {
+  const value = raw.trim();
+  if (!value) return null;
+  // Bare domains work too: "webao.ca", "www.webao.ca" and
+  // "webao.ca/pricing" all become https:// URLs. A scheme, when given,
+  // is kept as-is (http stays http).
+  let candidate = value;
+  if (/^[a-z][a-z0-9+.-]*:\/\//i.test(candidate)) {
+    // Already has a scheme.
+  } else if (candidate.startsWith("//")) {
+    candidate = `https:${candidate}`;
+  } else {
+    candidate = `https://${candidate}`;
+  }
+  return isPublicHttpUrl(candidate) ? candidate : null;
+}
+
 function isPublicHttpUrl(raw: string): boolean {
   let u: URL;
   try {
@@ -337,7 +354,8 @@ export async function handleAudit(req: Request, env: Env): Promise<Response> {
     return err("Invalid JSON", 400);
   }
   const rawUrl = typeof body?.url === "string" ? body.url.trim() : "";
-  if (!isPublicHttpUrl(rawUrl)) return err("Provide a public http(s) URL.", 400);
+  const url = normalizeAuditUrl(rawUrl);
+  if (!url) return err("Provide a public http(s) URL.", 400);
   const lang = body?.lang === "fr" ? "fr" : "en";
 
   // Rate limit: 5 audits per IP per hour. A KV write failure here fails
@@ -366,7 +384,7 @@ export async function handleAudit(req: Request, env: Env): Promise<Response> {
 
   if (env.PAGESPEED_API_KEY) {
     try {
-      const psi = await runPageSpeed(rawUrl, env.PAGESPEED_API_KEY, lang);
+      const psi = await runPageSpeed(url, env.PAGESPEED_API_KEY, lang);
       categories = psi.categories;
       score = scoreFromCategories(categories);
       findings = psi.findings;
@@ -384,7 +402,7 @@ export async function handleAudit(req: Request, env: Env): Promise<Response> {
 
   if (partial) {
     try {
-      const page = await fetchHomepage(rawUrl, env);
+      const page = await fetchHomepage(url, env);
       const basic = runBasicChecks(page.html, page.finalUrl, page.fetchMs, lang);
       score = basic.score;
       findings = basic.findings;
@@ -397,7 +415,7 @@ export async function handleAudit(req: Request, env: Env): Promise<Response> {
 
   const record: AuditRecord = {
     id: newAuditId(),
-    url: rawUrl,
+    url,
     score,
     findings,
     strengths,

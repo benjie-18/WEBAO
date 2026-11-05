@@ -68,7 +68,10 @@ for the lead jobs to send from contact@webao.ca.
 ### `POST /api/audit`
 Body: `{ url, lang?: "en" | "fr" }`. `url` must be a public http(s) URL
 (SSRF guard: localhost, private ranges, link-local, and URLs with
-credentials are rejected). Rate limit: 5 audits per IP per hour (429
+credentials are rejected). A bare domain works too: `webao.ca`,
+`www.webao.ca` and `webao.ca/pricing` are normalized to `https://…`
+before validation; an explicit scheme is kept as-is. The stored record
+keeps the normalized URL. Rate limit: 5 audits per IP per hour (429
 beyond that). KV writes per audit: 1 rate-limit write + 1 result write +
 1 index write.
 → `{ "ok": true, "id": "<ts>:<rand>", "url", "score", "findings": [string],

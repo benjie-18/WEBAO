@@ -5,31 +5,67 @@
 // and the script below loads the audit from GET /api/audit/<id>.
 // The audit record carries its lang, so the shell renders in the language
 // the audit was run in. Noindex: result URLs are personal, not for search.
+// Styled like the pricing page: grain hero, big display score, bordered
+// cards, dark band for the report form.
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import StarMark from "../../components/ui/StarMark.astro";
 ---
 
 <BaseLayout title="Your website audit · Webao" description="The result of your free WEBAO website audit." locale="en" noIndex>
-  <main>
+  <div class="audit-result-loading" data-audit-result-loading>
+    <span class="audit-loading-star" data-audit-result-star aria-hidden="true"><StarMark /></span>
     <p id="audit-status" aria-live="polite">Loading your audit…</p>
-    <section id="audit-result" hidden>
-      <h1 id="audit-title">Your website audit</h1>
-      <p><span id="audit-url"></span></p>
-      <h2><span id="audit-score-label">Your score:</span> <span id="audit-score"></span>/100</h2>
-      <p id="audit-partial" hidden></p>
-      <h3 id="audit-strengths-title" hidden>What works</h3>
-      <ul id="audit-strengths" hidden></ul>
-      <h3 id="audit-findings-title">What to fix first</h3>
-      <ul id="audit-findings"></ul>
-      <form id="report-form">
-        <p id="audit-report-prompt">Want the full report by email?</p>
-        <label for="report-email" id="audit-report-label">Business email</label>
-        <input id="report-email" name="email" type="email" placeholder="you@yourbusiness.com" required />
-        <button type="submit" id="audit-report-button">Send me the full report</button>
-      </form>
-      <p id="report-status" aria-live="polite"></p>
-      <p><a href="/audit" id="audit-back-link">Run another audit</a></p>
+  </div>
+
+  <div data-audit-result-page hidden>
+    <section class="audit-hero grain">
+      <div class="shell audit-hero-inner">
+        <h1 id="audit-title" class="visually-hidden">Your website audit</h1>
+        <p class="eyebrow" id="audit-eyebrow">Your website audit</p>
+        <p class="audit-result-url mono" id="audit-url"></p>
+        <div class="audit-score-wrap">
+          <span class="display audit-score" id="audit-score">–</span><span class="display audit-score-of">/100</span>
+        </div>
+        <p class="audit-verdict" id="audit-verdict"></p>
+        <p class="audit-partial" id="audit-partial" hidden></p>
+      </div>
     </section>
-  </main>
+
+    <section class="section">
+      <div class="shell">
+        <div class="audit-cats" id="audit-cats"></div>
+        <div class="audit-cards">
+          <div class="audit-card" id="audit-strengths-card" hidden>
+            <h2 id="audit-strengths-title">What works</h2>
+            <ul id="audit-strengths" class="audit-list audit-list--good"></ul>
+          </div>
+          <div class="audit-card">
+            <h2 id="audit-findings-title">What to fix first</h2>
+            <ul id="audit-findings" class="audit-list audit-list--fix"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="audit-band grain">
+      <div class="shell audit-band-inner">
+        <div>
+          <p class="eyebrow audit-band-eyebrow" id="audit-report-eyebrow">Full report</p>
+          <h2 class="display audit-band-title" id="audit-report-title">Want the full report?</h2>
+          <p class="audit-report-sub" id="audit-report-sub">Leave your business email and we will send the complete report, with every finding explained.</p>
+        </div>
+        <form id="report-form" class="audit-report-form" novalidate>
+          <label class="visually-hidden" for="report-email" id="audit-report-label">Business email</label>
+          <input id="report-email" name="email" type="email" placeholder="you@yourbusiness.com" required />
+          <button type="submit" class="btn btn--on-dark btn--lg" id="audit-report-button">Send me the full report</button>
+        </form>
+      </div>
+      <p id="report-status" class="audit-report-status shell" aria-live="polite"></p>
+    </section>
+
+    <p class="shell audit-back"><a href="/audit" id="audit-back-link">Run another audit</a></p>
+  </div>
+
   <script>
     const STR = {
       en: {
@@ -37,11 +73,20 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
         notFound: "That audit was not found. It may have expired. Run a new audit to get a fresh result.",
         noId: "No audit here. Run a free audit to get your score.",
         title: "Your website audit",
-        scoreLabel: "Your score:",
         partial: "The full speed test was unavailable, so this score covers the basics only.",
         strengthsTitle: "What works",
         findingsTitle: "What to fix first",
-        reportPrompt: "Want the full report by email?",
+        verdictExcellent: "Excellent",
+        verdictGood: "Good, with room to improve",
+        verdictWork: "Needs work",
+        verdictUrgent: "Needs urgent work",
+        catPerformance: "Performance",
+        catAccessibility: "Accessibility",
+        catBestPractices: "Best practices",
+        catSeo: "SEO",
+        reportEyebrow: "Full report",
+        reportTitle: "Want the full report?",
+        reportSub: "Leave your business email and we will send the complete report, with every finding explained.",
         reportLabel: "Business email",
         reportButton: "Send me the full report",
         sending: "Sending…",
@@ -55,11 +100,20 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
         notFound: "Cet audit est introuvable. Il a peut-être expiré. Lancez un nouvel audit pour un résultat frais.",
         noId: "Aucun audit ici. Lancez un audit gratuit pour obtenir votre score.",
         title: "Votre audit de site web",
-        scoreLabel: "Votre score :",
         partial: "Le test de vitesse complet n'était pas disponible, donc ce score couvre seulement les bases.",
         strengthsTitle: "Ce qui fonctionne",
         findingsTitle: "Quoi corriger en premier",
-        reportPrompt: "Vous voulez le rapport complet par courriel?",
+        verdictExcellent: "Excellent",
+        verdictGood: "Bon, avec de la marge",
+        verdictWork: "À améliorer",
+        verdictUrgent: "À corriger d'urgence",
+        catPerformance: "Performance",
+        catAccessibility: "Accessibilité",
+        catBestPractices: "Bonnes pratiques",
+        catSeo: "Référencement",
+        reportEyebrow: "Rapport complet",
+        reportTitle: "Vous voulez le rapport complet?",
+        reportSub: "Laissez votre courriel professionnel et nous vous enverrons le rapport complet, avec chaque point expliqué.",
         reportLabel: "Courriel professionnel",
         reportButton: "Envoyez-moi le rapport complet",
         sending: "Envoi…",
@@ -92,12 +146,28 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
       }
     }
 
+    function verdictFor(score: number, s: (typeof STR)[Lang]): string {
+      if (score >= 90) return s.verdictExcellent;
+      if (score >= 70) return s.verdictGood;
+      if (score >= 50) return s.verdictWork;
+      return s.verdictUrgent;
+    }
+
+    function bandFor(score: number): "good" | "mid" | "low" {
+      if (score >= 80) return "good";
+      if (score >= 50) return "mid";
+      return "low";
+    }
+
     async function main(): Promise<void> {
+      const loading = document.querySelector("[data-audit-result-loading]");
+      const page = document.querySelector("[data-audit-result-page]");
       const status = el("audit-status");
-      const result = el("audit-result");
+      const star = document.querySelector("[data-audit-result-star]");
       const parts = window.location.pathname.split("/").filter(Boolean);
       const id = parts.length >= 2 && parts[0] === "audits" ? parts[1] : "";
       if (!id) {
+        if (star) (star as HTMLElement).hidden = true;
         if (status) status.textContent = STR.en.noId;
         return;
       }
@@ -107,24 +177,53 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
         if (!res.ok) throw new Error((data as { error?: string }).error || "Audit failed");
         const audit = (data as { audit: {
           url: string; score: number; findings: string[]; strengths: string[];
-          partial: boolean; lang: Lang;
+          categories: Record<string, number>; partial: boolean; lang: Lang;
         } }).audit;
         const lang: Lang = audit.lang === "fr" ? "fr" : "en";
         const s = STR[lang];
         setText("audit-title", s.title);
+        setText("audit-eyebrow", s.title);
         setText("audit-url", audit.url);
-        setText("audit-score-label", s.scoreLabel);
-        setText("audit-score", String(audit.score));
+        const scoreEl = el("audit-score");
+        if (scoreEl) {
+          scoreEl.textContent = String(audit.score);
+          scoreEl.classList.add("audit-score--" + bandFor(audit.score));
+        }
+        setText("audit-verdict", verdictFor(audit.score, s));
         const partial = el("audit-partial");
         if (partial) {
           partial.hidden = !audit.partial;
           if (audit.partial) partial.textContent = s.partial;
         }
+        const cats = el("audit-cats");
+        if (cats) {
+          cats.innerHTML = "";
+          const labels: Record<string, string> = {
+            performance: s.catPerformance,
+            accessibility: s.catAccessibility,
+            "best-practices": s.catBestPractices,
+            seo: s.catSeo,
+          };
+          for (const [key, value] of Object.entries(audit.categories ?? {})) {
+            if (typeof value !== "number" || !labels[key]) continue;
+            const chip = document.createElement("span");
+            chip.className = "audit-cat";
+            const name = document.createElement("span");
+            name.textContent = labels[key];
+            const num = document.createElement("b");
+            num.className = "mono";
+            num.textContent = String(Math.round(value * 100));
+            chip.appendChild(name);
+            chip.appendChild(num);
+            cats.appendChild(chip);
+          }
+          (cats as HTMLElement).hidden = cats.childElementCount === 0;
+        }
         const strengthsTitle = el("audit-strengths-title");
         const strengths = el("audit-strengths");
-        if (strengthsTitle && strengths) {
-          strengthsTitle.hidden = audit.strengths.length === 0;
-          strengths.hidden = audit.strengths.length === 0;
+        const strengthsCard = el("audit-strengths-card");
+        if (strengthsTitle && strengths && strengthsCard) {
+          strengthsCard.hidden = audit.strengths.length === 0;
           if (audit.strengths.length > 0) {
             strengthsTitle.textContent = s.strengthsTitle;
             fillList("audit-strengths", audit.strengths);
@@ -132,7 +231,9 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
         }
         setText("audit-findings-title", s.findingsTitle);
         fillList("audit-findings", audit.findings);
-        setText("audit-report-prompt", s.reportPrompt);
+        setText("audit-report-eyebrow", s.reportEyebrow);
+        setText("audit-report-title", s.reportTitle);
+        setText("audit-report-sub", s.reportSub);
         setText("audit-report-label", s.reportLabel);
         setText("audit-report-button", s.reportButton);
         const back = el("audit-back-link") as HTMLAnchorElement | null;
@@ -140,8 +241,8 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
           back.textContent = s.backLink;
           back.href = s.backHref;
         }
-        if (status) status.textContent = "";
-        if (result) result.hidden = false;
+        if (loading) (loading as HTMLElement).hidden = true;
+        if (page) (page as HTMLElement).hidden = false;
 
         const form = el("report-form") as HTMLFormElement | null;
         if (form) {
@@ -166,10 +267,206 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
           });
         }
       } catch (err) {
+        if (star) (star as HTMLElement).hidden = true;
         if (status) status.textContent = STR.en.notFound;
       }
     }
 
     void main();
   </script>
+
+  <style>
+    .audit-hero {
+      position: relative;
+      overflow: clip;
+      padding-block: clamp(40px, 7vw, 88px) clamp(32px, 5vw, 64px);
+      background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
+      border-bottom: 1px solid var(--line);
+      text-align: center;
+    }
+    .audit-hero-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .audit-result-url {
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+      overflow-wrap: anywhere;
+    }
+    .audit-score-wrap {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      margin-top: 8px;
+    }
+    .audit-score {
+      font-size: clamp(4rem, 14vw, 8rem);
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+    }
+    .audit-score--good { color: var(--success); }
+    .audit-score--mid { color: var(--ink); }
+    .audit-score--low { color: var(--accent-text); }
+    .audit-score-of {
+      font-size: clamp(1.6rem, 4vw, 2.6rem);
+      color: var(--muted);
+      margin-left: 6px;
+    }
+    .audit-verdict {
+      margin: 16px 0 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    .audit-partial {
+      display: inline-block;
+      margin: 18px 0 0;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent-soft-text);
+      font-size: 0.85rem;
+    }
+    .audit-partial[hidden] { display: none; }
+    .audit-cats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 28px;
+    }
+    .audit-cats[hidden] { display: none; }
+    .audit-cat {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--card-bg);
+      font-size: 0.9rem;
+    }
+    .audit-cat b { font-weight: 600; }
+    .audit-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 640px) {
+      .audit-cards { grid-template-columns: 1fr; }
+    }
+    .audit-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 24px;
+      background: var(--card-bg);
+    }
+    .audit-card h2 { margin: 0; font-size: 1.25rem; }
+    .audit-list {
+      list-style: none;
+      margin: 8px 0 0;
+      padding: 0;
+    }
+    .audit-list li {
+      position: relative;
+      padding: 12px 0 12px 28px;
+      border-top: 1px solid var(--line);
+      line-height: 1.5;
+    }
+    .audit-list li:first-child { border-top: none; }
+    .audit-list li::before {
+      position: absolute;
+      left: 2px;
+      top: 12px;
+      font-weight: 700;
+    }
+    .audit-list--good li::before { content: "✓"; color: var(--success); }
+    .audit-list--fix li::before { content: "→"; color: var(--accent-text); }
+    .audit-band {
+      background: var(--section-dark-bg);
+      color: var(--section-dark-text);
+      padding-block: clamp(48px, 7vw, 88px);
+    }
+    .audit-band-inner {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .audit-band-eyebrow { color: rgba(248, 245, 239, 0.5); }
+    .audit-band-title {
+      font-size: clamp(2rem, 4.6vw, 3.4rem);
+      line-height: 0.95;
+      margin-top: 10px;
+    }
+    .audit-report-sub {
+      margin: 14px 0 0;
+      max-width: 520px;
+      color: var(--section-dark-soft);
+      line-height: 1.55;
+    }
+    .audit-report-form {
+      display: flex;
+      gap: 10px;
+      width: min(560px, 100%);
+    }
+    .audit-report-form input {
+      flex: 1 1 auto;
+      min-width: 0;
+      padding: 14px 18px;
+      border: 1px solid rgba(248, 245, 239, 0.16);
+      border-radius: 999px;
+      background: rgba(248, 245, 239, 0.08);
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--section-dark-text);
+    }
+    .audit-report-form input::placeholder { color: var(--section-dark-soft); }
+    .audit-report-form input:focus {
+      outline: none;
+      border-color: rgba(248, 245, 239, 0.5);
+      box-shadow: 0 0 0 3px rgba(248, 245, 239, 0.12);
+    }
+    @media (max-width: 640px) {
+      .audit-report-form { flex-direction: column; }
+      .audit-report-form .btn { width: 100%; }
+    }
+    .audit-report-status {
+      margin-top: 20px;
+      color: var(--section-dark-soft);
+      text-align: center;
+    }
+    .audit-back {
+      padding-block: 28px;
+      text-align: center;
+    }
+    .audit-back a { color: var(--muted); }
+    /* Loading state: same spinning star as the landing pages. */
+    .audit-result-loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      padding-block: clamp(64px, 12vw, 140px);
+      color: var(--muted);
+    }
+    .audit-result-loading[hidden] { display: none; }
+    .audit-loading-star {
+      width: clamp(96px, 18vw, 140px);
+      height: clamp(96px, 18vw, 140px);
+      color: var(--accent);
+      animation: audit-star-spin 1.5s infinite;
+    }
+    .audit-loading-star :global(svg) { width: 100%; height: 100%; display: block; overflow: visible; }
+    @keyframes audit-star-spin {
+      0% { transform: rotate(0deg); animation-timing-function: var(--ease-out-expo); }
+      50% { transform: rotate(360deg); animation-timing-function: linear; }
+      100% { transform: rotate(360deg); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .audit-loading-star { animation: none; }
+    }
+  </style>
 </BaseLayout>

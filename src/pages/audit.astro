@@ -1,97 +1,368 @@
 ---
 // WEBAO audit page (EN) — free website audit landing page.
 // Live at /audit. FR version: src/pages/fr/eval.astro, same structure,
-// French copy throughout. Results live at /audits/<id> (see
-// src/pages/audits/index.astro). Copy is inline so this page needs no
-// new i18n keys beyond the audit PageKey (title/description here).
+// French copy throughout. On submit the page is replaced by the star
+// loading screen and the visitor is redirected to /audits/<id> when the
+// audit finishes. The report form lives on the results page.
 import BaseLayout from "../layouts/BaseLayout.astro";
+import StarMark from "../components/ui/StarMark.astro";
 ---
 
 <BaseLayout title="Free website audit · Webao" description="See how your business website scores, and what to fix first. Free, no obligation." locale="en" pageKey="audit">
-  <main>
-    <h1>Free website audit</h1>
-    <p>Enter your business website. You get an instant score and the first things to fix, free, no obligation.</p>
-    <form id="audit-form">
-      <label for="audit-url">Your website</label>
-      <input id="audit-url" name="url" type="url" placeholder="https://example.com" required />
-      <button type="submit">Run my free audit</button>
-    </form>
-    <p id="audit-status" aria-live="polite"></p>
-    <section id="audit-result" hidden>
-      <h2>Your score: <span id="audit-score"></span>/100</h2>
-      <ul id="audit-findings"></ul>
-      <p><a id="audit-result-link" href="#">See your full result</a></p>
-      <form id="report-form">
-        <p>Want the full report by email?</p>
-        <label for="report-email">Business email</label>
-        <input id="report-email" name="email" type="email" placeholder="you@yourbusiness.com" required />
-        <button type="submit">Send me the full report</button>
-      </form>
-      <p id="report-status" aria-live="polite"></p>
+  <div data-audit-page>
+    <section class="audit-hero grain">
+      <div class="shell audit-hero-inner">
+        <div class="audit-title-row">
+          <span class="audit-hero-star audit-hero-star--left" aria-hidden="true"><StarMark /></span>
+          <h1 class="display audit-title">Free website audit</h1>
+          <span class="audit-hero-star audit-hero-star--right" aria-hidden="true"><StarMark /></span>
+        </div>
+        <p class="audit-sub">Enter your business website. You get an instant score and the first things to fix, free, no obligation.</p>
+        <form id="audit-form" class="audit-form" novalidate>
+          <label class="visually-hidden" for="audit-url">Your website</label>
+          <input id="audit-url" name="url" type="text" inputmode="url" autocomplete="url" placeholder="webao.ca" required />
+          <button type="submit" class="btn btn--primary btn--lg">Run my free audit</button>
+        </form>
+        <p id="audit-status" class="audit-status" aria-live="polite"></p>
+        <p class="audit-note">We check speed, accessibility, best practices and search visibility with an independent speed test, plus the basics (HTTPS, mobile setup, title and description) when that test is unavailable. We do not log in anywhere, and we never share your result.</p>
+      </div>
     </section>
-    <p><small>We check speed, accessibility, best practices and search visibility with an independent speed test, plus the basics (HTTPS, mobile setup, title and description) when that test is unavailable. We do not log in anywhere, and we never share your result.</small></p>
-  </main>
-  <script>
-    // Minimal client script. The worker does the real work; this only
-    // posts the URL, renders the score, and posts the email for the report.
-    // No tracking, no third-party scripts.
-    const form = document.getElementById("audit-form") as HTMLFormElement | null;
-    const status = document.getElementById("audit-status");
-    const result = document.getElementById("audit-result");
-    const urlInput = document.getElementById("audit-url") as HTMLInputElement | null;
-    const scoreNode = document.getElementById("audit-score");
-    const findingsList = document.getElementById("audit-findings");
-    const resultLink = document.getElementById("audit-result-link") as HTMLAnchorElement | null;
-    const reportForm = document.getElementById("report-form") as HTMLFormElement | null;
-    const emailInput = document.getElementById("report-email") as HTMLInputElement | null;
-    const reportStatus = document.getElementById("report-status");
-    let lastAudit: { id: string; url: string; score: number; findings: string[] } | null = null;
-    if (form) form.addEventListener("submit", async (e: SubmitEvent) => {
-      e.preventDefault();
-      if (status) status.textContent = "Running your audit…";
-      if (result) result.hidden = true;
-      const url = urlInput ? urlInput.value.trim() : "";
-      try {
-        const res = await fetch("/api/audit", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ url, lang: "en" }),
-        });
-        const data = await res.json() as { ok?: boolean; error?: string; id?: string; url?: string; score?: number; findings?: string[]; resultUrl?: string };
-        if (!res.ok) throw new Error(data.error || "Audit failed");
-        lastAudit = { id: data.id ?? "", url: data.url ?? url, score: data.score ?? 0, findings: data.findings ?? [] };
-        if (scoreNode) scoreNode.textContent = String(lastAudit.score);
-        if (findingsList) {
-          findingsList.innerHTML = "";
-          for (const f of lastAudit.findings) {
-            const li = document.createElement("li");
-            li.textContent = f;
-            findingsList.appendChild(li);
-          }
+
+    <section class="section">
+      <div class="shell audit-checks">
+        <div class="audit-check">
+          <h2>Speed</h2>
+          <p class="mono">Load time on mobile</p>
+        </div>
+        <div class="audit-check">
+          <h2>Accessibility</h2>
+          <p class="mono">Usable by everyone</p>
+        </div>
+        <div class="audit-check">
+          <h2>Search visibility</h2>
+          <p class="mono">How search engines see it</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="audit-band grain" aria-labelledby="audit-band-h">
+      <div class="shell audit-band-inner">
+        <div>
+          <p class="eyebrow audit-band-eyebrow">Next step</p>
+          <h2 id="audit-band-h" class="display audit-band-title">Want us to fix it?</h2>
+        </div>
+        <a href="/start" class="btn btn--on-dark btn--lg">Start a project</a>
+      </div>
+    </section>
+  </div>
+
+  <!-- Loading screen: replaces the whole page while the audit runs. The
+    star spins 360 degrees in 0.75s on an exponential curve, holds still
+    for 0.75s, then repeats. The bar is a fake progress bar: it advances
+    in unpredictable steps that shrink as it fills and never passes 92%
+    until the real result arrives, so the wait always feels alive. -->
+  <div class="audit-loading" data-audit-loading hidden>
+    <div class="audit-loading-inner">
+      <span class="audit-loading-star" aria-hidden="true"><StarMark /></span>
+      <div class="audit-loading-bar" role="progressbar" aria-label="Audit in progress">
+        <div class="audit-loading-fill" data-audit-fill></div>
+      </div>
+      <p class="audit-loading-status" data-audit-loading-status aria-live="polite">Running your audit…</p>
+    </div>
+  </div>
+
+  <script data-astro-rerun>
+    // Plain JavaScript on purpose: with data-astro-rerun, astro check
+    // treats this block as JS, and any TypeScript annotation in it fails
+    // the deploy. Same pattern as the pricing page script.
+    function normalizeAuditUrl(raw) {
+      var value = (raw || "").trim();
+      if (!value) return "";
+      if (/^[a-z][a-z0-9+.-]*:\/\//i.test(value)) return value;
+      if (value.indexOf("//") === 0) return "https:" + value;
+      return "https://" + value;
+    }
+    function initAudit() {
+      var page = document.querySelector("[data-audit-page]");
+      var loading = document.querySelector("[data-audit-loading]");
+      var form = document.getElementById("audit-form");
+      var input = document.getElementById("audit-url");
+      var status = document.getElementById("audit-status");
+      var fill = document.querySelector("[data-audit-fill]");
+      var loadStatus = document.querySelector("[data-audit-loading-status]");
+      if (!form || !input || !page || !loading || !fill) return;
+      if (form.dataset.auditInit === "1") return;
+      form.dataset.auditInit = "1";
+      // Reset in case the visitor came back here from the result page:
+      // the static HTML starts clean, but a restored page may not.
+      page.hidden = false;
+      loading.hidden = true;
+      fill.style.width = "0%";
+      var stages = [
+        "Running the speed test…",
+        "Checking accessibility…",
+        "Checking search visibility…",
+        "Putting your score together…",
+      ];
+      var timer = null;
+      var stageTimer = null;
+      var progress = 0;
+      var busy = false;
+      function startFakeBar() {
+        progress = 4;
+        fill.style.width = progress + "%";
+        var stage = 0;
+        if (loadStatus) loadStatus.textContent = stages[0];
+        // Unpredictable steps at unpredictable intervals, shrinking as
+        // the bar fills, capped at 92% until the real result lands.
+        var tick = function () {
+          var step = (2 + Math.random() * 7) * (1 - progress / 110);
+          progress = Math.min(92, progress + step);
+          fill.style.width = progress + "%";
+          timer = window.setTimeout(tick, 180 + Math.random() * 380);
+        };
+        timer = window.setTimeout(tick, 180 + Math.random() * 380);
+        stageTimer = window.setInterval(function () {
+          stage = (stage + 1) % stages.length;
+          if (loadStatus) loadStatus.textContent = stages[stage];
+        }, 2600);
+      }
+      function stopFakeBar() {
+        window.clearTimeout(timer);
+        window.clearInterval(stageTimer);
+      }
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        if (busy) return;
+        var url = normalizeAuditUrl(input.value);
+        if (!url) {
+          if (status) status.textContent = "Enter your website address, for example webao.ca.";
+          input.focus();
+          return;
         }
-        if (resultLink && data.resultUrl) resultLink.href = data.resultUrl;
-        if (result) result.hidden = false;
+        busy = true;
         if (status) status.textContent = "";
-      } catch (err) {
-        if (status) status.textContent = "That audit did not run. Check the URL and try again.";
-      }
-    });
-    if (reportForm) reportForm.addEventListener("submit", async (e: SubmitEvent) => {
-      e.preventDefault();
-      const email = emailInput ? emailInput.value.trim() : "";
-      if (reportStatus) reportStatus.textContent = "Sending…";
-      try {
-        const res = await fetch("/api/audit/report", {
+        page.hidden = true;
+        loading.hidden = false;
+        startFakeBar();
+        fetch("/api/audit", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ id: lastAudit?.id, url: lastAudit?.url, score: lastAudit?.score, findings: lastAudit?.findings, email }),
-        });
-        const data = await res.json() as { ok?: boolean; error?: string };
-        if (!res.ok) throw new Error(data.error || "Report request failed");
-        if (reportStatus) reportStatus.textContent = "Done. Check your inbox for the full report.";
-      } catch (err) {
-        if (reportStatus) reportStatus.textContent = "That did not go through. Try again, or contact us directly.";
-      }
-    });
+          body: JSON.stringify({ url: url, lang: "en" }),
+        })
+          .then(function (res) {
+            return res.json().then(function (data) { return { res: res, data: data }; });
+          })
+          .then(function (pair) {
+            if (!pair.res.ok || !pair.data.resultUrl) throw new Error((pair.data && pair.data.error) || "Audit failed");
+            stopFakeBar();
+            fill.style.width = "100%";
+            window.setTimeout(function () { window.location.href = pair.data.resultUrl; }, 350);
+          })
+          .catch(function () {
+            stopFakeBar();
+            busy = false;
+            loading.hidden = true;
+            page.hidden = false;
+            fill.style.width = "0%";
+            if (status) status.textContent = "That audit did not run. Check the URL and try again.";
+            input.focus();
+          });
+      });
+    }
+    initAudit();
+    if (!window.__webaoAuditPL) {
+      window.__webaoAuditPL = true;
+      document.addEventListener("astro:page-load", initAudit);
+    }
   </script>
+
+  <style>
+    .audit-hero {
+      position: relative;
+      overflow: clip;
+      padding-block: clamp(40px, 7vw, 88px) clamp(32px, 5vw, 64px);
+      background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
+      border-bottom: 1px solid var(--line);
+      text-align: center;
+    }
+    .audit-hero-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .audit-title-row {
+      position: relative;
+      display: flex;
+      align-items: center;
+      align-self: stretch;
+      justify-content: center;
+    }
+    .audit-title {
+      font-size: clamp(2.6rem, 6vw, 5rem);
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      text-align: center;
+    }
+    /* Same star as the pricing hero: ink on the left, accent on the
+       right, shifted about 40% off the screen edge. The hero clips
+       the overflow, so no horizontal scroll. */
+    .audit-hero-star {
+      --star: clamp(120px, 16vw, 200px);
+      position: absolute;
+      top: 50%;
+      width: var(--star);
+      height: var(--star);
+      pointer-events: none;
+    }
+    .audit-hero-star :global(svg) { width: 100%; height: 100%; display: block; overflow: visible; }
+    .audit-hero-star--left { left: calc((100% - 100vw) / 2 - var(--star) * 0.4); color: var(--ink); opacity: 0.9; transform: translateY(-50%) rotate(-18deg); }
+    .audit-hero-star--right { right: calc((100% - 100vw) / 2 - var(--star) * 0.4); color: var(--accent-mid); transform: translateY(-50%) rotate(22deg); }
+    @media (max-width: 640px) {
+      .audit-hero-star { --star: 80px; }
+    }
+    .audit-sub {
+      max-width: 560px;
+      margin: 20px auto 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.5;
+    }
+    .audit-form {
+      display: flex;
+      gap: 10px;
+      width: min(640px, 100%);
+      margin: 28px auto 0;
+    }
+    .audit-form input {
+      flex: 1 1 auto;
+      min-width: 0;
+      padding: 14px 18px;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      background: var(--card-bg);
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--ink);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .audit-form input:focus {
+      outline: none;
+      border-color: var(--ink);
+      box-shadow: 0 0 0 3px var(--focus-ring);
+    }
+    .audit-form input::placeholder { color: var(--muted); }
+    @media (max-width: 640px) {
+      .audit-form { flex-direction: column; }
+      .audit-form .btn { width: 100%; }
+    }
+    .audit-status {
+      min-height: 1.5em;
+      margin: 14px 0 0;
+      color: var(--error-text);
+      font-size: 0.95rem;
+    }
+    .audit-note {
+      max-width: 640px;
+      margin: 24px auto 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.55;
+    }
+    .audit-checks {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      padding-block: clamp(32px, 5vw, 56px);
+    }
+    .audit-check {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 24px 20px;
+      text-align: center;
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+    .audit-check:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(10, 15, 28, 0.08);
+    }
+    .audit-check h2 { margin: 0 0 6px; font-size: 1.15rem; }
+    .audit-check p { margin: 0; color: var(--muted); font-size: 0.85rem; }
+    @media (max-width: 640px) {
+      .audit-checks { grid-template-columns: 1fr; }
+    }
+    .audit-band {
+      background: var(--section-dark-bg);
+      color: var(--section-dark-text);
+      padding-block: clamp(48px, 7vw, 88px);
+    }
+    .audit-band-inner {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .audit-band-eyebrow { color: rgba(248, 245, 239, 0.5); }
+    .audit-band-title {
+      font-size: clamp(2rem, 4.6vw, 3.4rem);
+      line-height: 0.95;
+      margin-top: 10px;
+    }
+    /* Loading screen: covers the whole viewport, paper gradient, star
+       above the bar. The star spins 360 degrees in 0.75s on the
+       exponential curve, then holds still for 0.75s: one 1.5s cycle. */
+    .audit-loading {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
+    }
+    .audit-loading[hidden] { display: none; }
+    .audit-loading-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px;
+    }
+    .audit-loading-star {
+      width: clamp(96px, 18vw, 140px);
+      height: clamp(96px, 18vw, 140px);
+      color: var(--accent);
+      animation: audit-star-spin 1.5s infinite;
+    }
+    .audit-loading-star :global(svg) { width: 100%; height: 100%; display: block; overflow: visible; }
+    @keyframes audit-star-spin {
+      0% { transform: rotate(0deg); animation-timing-function: var(--ease-out-expo); }
+      50% { transform: rotate(360deg); animation-timing-function: linear; }
+      100% { transform: rotate(360deg); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .audit-loading-star { animation: none; }
+    }
+    .audit-loading-bar {
+      width: min(480px, 80vw);
+      height: 10px;
+      margin-top: 36px;
+      border-radius: 999px;
+      background: var(--line);
+      overflow: hidden;
+    }
+    .audit-loading-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--accent-mid));
+      transition: width 240ms ease;
+    }
+    .audit-loading-status {
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+      text-align: center;
+    }
+  </style>
 </BaseLayout>

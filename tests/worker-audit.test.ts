@@ -8,6 +8,7 @@ import {
   handleAudit,
   handleAuditGet,
   handleAuditReport,
+  normalizeAuditUrl,
   runBasicChecks,
   scoreFromCategories,
   type AuditRecord,
@@ -83,6 +84,42 @@ test('POST /api/audit rejects bad input', async () => {
   assert.equal(local.status, 400);
   const privateIp = await handleAudit(apiRequest('/api/audit', { url: 'http://192.168.1.1/' }), env);
   assert.equal(privateIp.status, 400);
+});
+
+test('normalizeAuditUrl accepts bare domains and keeps explicit schemes', () => {
+  assert.equal(normalizeAuditUrl('webao.ca'), 'https://webao.ca');
+  assert.equal(normalizeAuditUrl('www.webao.ca'), 'https://www.webao.ca');
+  assert.equal(normalizeAuditUrl('webao.ca/pricing?x=1'), 'https://webao.ca/pricing?x=1');
+  assert.equal(normalizeAuditUrl('//webao.ca'), 'https://webao.ca');
+  assert.equal(normalizeAuditUrl('https://webao.ca'), 'https://webao.ca');
+  assert.equal(normalizeAuditUrl('http://example.com'), 'http://example.com');
+  assert.equal(normalizeAuditUrl('  webao.ca  '), 'https://webao.ca');
+  assert.equal(normalizeAuditUrl(''), null);
+  assert.equal(normalizeAuditUrl('   '), null);
+  assert.equal(normalizeAuditUrl('localhost'), null);
+  assert.equal(normalizeAuditUrl('192.168.1.1'), null);
+  assert.equal(normalizeAuditUrl('ftp://example.com'), null);
+  assert.equal(normalizeAuditUrl('https://user:pass@example.com'), null);
+});
+
+test('POST /api/audit accepts a bare domain and stores the normalized URL', async () => {
+  const restore = stubHomepage(GOOD_HTML);
+  try {
+    const memory = memoryKV();
+    const env = envOf(memory.kv);
+    const res = await handleAudit(apiRequest('/api/audit', { url: 'example.com', lang: 'en' }), env);
+    assert.equal(res.status, 200);
+    const data = await bodyOf(res) as { ok: boolean; id: string; url: string; score: number; partial: boolean };
+    assert.equal(data.ok, true);
+    assert.equal(data.url, 'https://example.com');
+    assert.equal(data.score, 100);
+    assert.equal(data.partial, true);
+    const stored = await memory.kv.get(`audit:${data.id}`, { type: 'json' }) as AuditRecord | null;
+    assert.ok(stored);
+    assert.equal(stored.url, 'https://example.com');
+  } finally {
+    restore();
+  }
 });
 
 test('POST /api/audit scores a good page and stores the result', async () => {
