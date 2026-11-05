@@ -288,6 +288,12 @@ const planCents = (id: PlanId, interval: "month" | "year"): number => priceCents
     z-index: 4;
     margin-bottom: 0;
     white-space: nowrap;
+    /* Opaque card-colour background: the in-card badge is translucent
+       white on a dark card, which reads as white on white once the
+       badge floats above the card over the light page background. */
+    background: var(--pbg);
+    border-color: var(--pbg);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
   }
   .pcard-badge {
     align-self: flex-start;

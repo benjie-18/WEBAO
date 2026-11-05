@@ -997,6 +997,7 @@ const en = {
       ready: "Sent ✓",
     },
     info: {
+      faqTitle: "Questions",
       reply: {
         title: "How we reply",
         desc: "Our reply includes:",

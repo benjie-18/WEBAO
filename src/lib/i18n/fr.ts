@@ -1004,6 +1004,7 @@ const fr = {
       ready: "Envoyé ✓",
     },
     info: {
+      faqTitle: "Questions fréquentes",
       reply: {
         title: "Comment on répond",
         desc: "Notre réponse comprend :",
