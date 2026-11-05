@@ -52,6 +52,41 @@ email copy to the WEBAO inbox via the `EMAIL` send_email binding
 Throttled to 10 submissions/min per IP (429 beyond that).
 → `{ "ok": true, "id": "<ts>:<rand>" }` (400 with an error message otherwise).
 
+## Free audit (public)
+
+The free website audit at /audit (EN) and /fr/eval (FR). Results live at
+/audits/<id>. Scoring uses the PageSpeed Insights API (Lighthouse, run by
+Google) with the PAGESPEED_API_KEY worker secret, mobile strategy, all four
+categories. Score out of 100 is a weighted average: performance 0.5,
+accessibility 0.2, best practices 0.15, SEO 0.15, renormalized over the
+categories actually returned. If PageSpeed is unavailable or too slow (25s
+timeout), the worker falls back to hand-rolled basic checks (HTTPS, title,
+meta description, viewport, footer year, size, fetch time) and marks the
+result partial. The worker never sends email; report requests are stored
+for the lead jobs to send from contact@webao.ca.
+
+### `POST /api/audit`
+Body: `{ url, lang?: "en" | "fr" }`. `url` must be a public http(s) URL
+(SSRF guard: localhost, private ranges, link-local, and URLs with
+credentials are rejected). Rate limit: 5 audits per IP per hour (429
+beyond that). KV writes per audit: 1 rate-limit write + 1 result write +
+1 index write.
+→ `{ "ok": true, "id": "<ts>:<rand>", "url", "score", "findings": [string],
+"strengths": [string], "categories": { performance?, accessibility?,
+"best-practices"?, seo? }, "partial": boolean, "resultUrl": "/audits/<id>" }`.
+
+### `GET /api/audit/:id`
+`:id` is the `<ts>:<rand>` part from the audit response. Returns the stored
+audit record. → `{ "ok": true, "audit": { id, url, score, findings,
+strengths, categories, partial, lang, at, email?, reportRequestedAt? } }`
+(404 when unknown).
+
+### `POST /api/audit/report`
+Body: `{ id, email }` (or `{ url, score, findings, email }` without an id,
+for a standalone report request). Attaches the business email to the audit
+record so the lead jobs can send the full report. The worker does not send
+the email itself. → `{ "ok": true }` (404 when the id is unknown).
+
 ## Outreach lead tracking
 
 Who was emailed, who clicked, who replied. Records live in KV as `lead:<id>`
@@ -228,6 +263,14 @@ Newest-first by registration order. Same pagination rules as forms.
 
 ### `DELETE /api/admin/leads/:id`
 `:id` is the `ld_…` lead id. Removes the record and its index entry.
+→ `{ "ok": true }`.
+
+### `GET /api/admin/audits?limit=50&cursor=`
+→ `{ "ok": true, "items": [{ id, url, score, findings, strengths, categories, partial, lang, at, email?, reportRequestedAt? }], "nextCursor": "50" | null }`
+Newest-first. Same pagination rules as forms.
+
+### `DELETE /api/admin/audits/:id`
+`:id` is the `<ts>:<rand>` part after `audit:`. Removes the record and its index entry.
 → `{ "ok": true }`.
 
 ### `GET /api/admin/clients?limit=50&cursor=`
@@ -412,6 +455,9 @@ and revokes all other admin tokens (the caller stays logged in).
 | `forms:index` | JSON array of form keys, newest-first, cap 1000 (index trim only; records are never deleted) |
 | `lead:<ld_id>` | outreach lead object (sent/clicks/replies) |
 | `leads:index` | JSON array of lead keys, newest-first, cap 5000 (index trim only; records are never deleted) |
+| `audit:<ts>:<rand>` | free-audit record `{ id, url, score, findings, strengths, categories, partial, lang, at, email?, reportRequestedAt? }` |
+| `audit:index` | JSON array of audit keys, newest-first, cap 1000 (index trim only; records are never deleted) |
+| `audit:ratelimit:<ip>` | audit count for the current hour window (TTL 3600s, sliding) |
 | `client:<cl_id>` | client record (stage, billing status, Stripe ids, items) |
 | `clients:index` | JSON array of client keys, newest-first, cap 1000 (index trim only; records are never deleted) |
 | `client-customer:<cus_id>` | client key for a Stripe customer id |

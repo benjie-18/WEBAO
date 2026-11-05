@@ -25,6 +25,11 @@ const en = {
       description:
         "For existing WEBAO clients: changes, add-ons, billing and support. Email support@webao.ca or use the form.",
     },
+    audit: {
+      title: "Free website audit · Webao",
+      description:
+        "See how your business website scores, and what to fix first. Free, no obligation.",
+    },
     demos: {
       title: "Website Design Examples · 45 Demos for Local Businesses | WEBAO",
       description:
@@ -1297,6 +1302,7 @@ const en = {
       stats: "Stats",
       forms: "Forms",
       outreach: "Outreach",
+      audits: "Audits",
       clients: "Clients",
       config: "Config",
     },
@@ -1402,6 +1408,28 @@ const en = {
         pricing: "Pricing",
         start: "Get started",
       },
+    },
+    audits: {
+      title: "Website audits",
+      empty: "No audits yet. When a visitor runs the free audit, the site, its score and its findings will appear here.",
+      score: "Score",
+      url: "Site",
+      email: "Email",
+      at: "Run on",
+      reportRequested: "Full report requested",
+      noEmail: "No email left",
+      partial: "Basic check only (speed test unavailable)",
+      strengths: "What works",
+      findings: "Findings",
+      details: "Details",
+      hideDetails: "Hide details",
+      delete: "Delete",
+      deleteConfirm: "Delete this audit permanently?",
+      deleted: "Audit deleted.",
+      deleteError: "Couldn’t delete the audit.",
+      loadMore: "Load more",
+      loadError: "Couldn’t load audits.",
+      retry: "Retry",
     },
     clients: {
       empty: "No clients yet. A completed checkout creates a client record here.",

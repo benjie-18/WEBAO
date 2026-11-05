@@ -38,7 +38,7 @@ test('the sitemap is served as cacheable XML', async () => {
 test('the sitemap lists every locale page, the standalone pages and every visible demo', async () => {
   const { locs } = await sitemap();
   const expected =
-    16 * 2 + // home, pricing, contact, demos, start, terms, refunds, support, privacy + 4 service pages + 3 guide pages × en/fr
+    17 * 2 + // home, pricing, contact, demos, start, audit, terms, refunds, support, privacy + 4 service pages + 3 guide pages × en/fr
     2 + // /sources, /fr/sources
     (demos.length - 1) * 2; // every demo except the hidden one, × en/fr
   assert.equal(locs.length, expected, `${locs.length} urls`);
@@ -51,6 +51,8 @@ test('the sitemap lists every locale page, the standalone pages and every visibl
     `${SITE}/fr/contact/`,
     `${SITE}/start/`,
     `${SITE}/fr/commencer/`,
+    `${SITE}/audit/`,
+    `${SITE}/fr/eval/`,
     `${SITE}/terms/`,
     `${SITE}/fr/conditions/`,
     `${SITE}/refunds/`,
@@ -162,7 +164,7 @@ test('the sitemap declares the image namespace and lists demo lead images', asyn
   }
   // The escaped ampersand in "Sahara & Sage" must survive as &amp; in the XML.
   assert.ok(body.includes('<image:title>Sahara &amp; Sage</image:title>'));
-  const expectedUrls = 16 * 2 + 2 + (demos.length - 1) * 2; // locale pages + /sources pair + visible demos
+  const expectedUrls = 17 * 2 + 2 + (demos.length - 1) * 2; // locale pages + /sources pair + visible demos
   assert.ok(locs.length === expectedUrls, 'image entries do not add url entries');
 });
 

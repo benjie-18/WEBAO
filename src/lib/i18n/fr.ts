@@ -28,6 +28,11 @@ const fr = {
       description:
         "Pour les clients WEBAO : modifications, modules, facturation et soutien. Écrivez à support@webao.ca ou utilisez le formulaire.",
     },
+    audit: {
+      title: "Audit gratuit de site web · Webao",
+      description:
+        "Voyez comment votre site web se classe, et quoi corriger en premier. Gratuit, sans obligation.",
+    },
     demos: {
       title: "Exemples de sites web · 45 démos pour entreprises locales | WEBAO",
       description:
@@ -1306,6 +1311,7 @@ const fr = {
       stats: "Stats",
       forms: "Formulaires",
       outreach: "Prospection",
+      audits: "Audits",
       clients: "Clients",
       config: "Réglages",
     },
@@ -1411,6 +1417,28 @@ const fr = {
         pricing: "Tarifs",
         start: "Démarrer",
       },
+    },
+    audits: {
+      title: "Audits de site web",
+      empty: "Aucun audit pour l’instant. Quand un visiteur lancera l’audit gratuit, le site, son score et ses constats apparaîtront ici.",
+      score: "Score",
+      url: "Site",
+      email: "Courriel",
+      at: "Lancé le",
+      reportRequested: "Rapport complet demandé",
+      noEmail: "Aucun courriel laissé",
+      partial: "Contrôle de base seulement (test de vitesse indisponible)",
+      strengths: "Ce qui fonctionne",
+      findings: "Constats",
+      details: "Détails",
+      hideDetails: "Masquer les détails",
+      delete: "Supprimer",
+      deleteConfirm: "Supprimer définitivement cet audit ?",
+      deleted: "Audit supprimé.",
+      deleteError: "Impossible de supprimer l’audit.",
+      loadMore: "Charger plus",
+      loadError: "Impossible de charger les audits.",
+      retry: "Réessayer",
     },
     clients: {
       empty: "Aucun client pour le moment. Un paiement complété crée un dossier client ici.",

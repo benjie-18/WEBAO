@@ -1,0 +1,97 @@
+---
+// WEBAO audit page (EN) — free website audit landing page.
+// Live at /audit. FR version: src/pages/fr/eval.astro, same structure,
+// French copy throughout. Results live at /audits/<id> (see
+// src/pages/audits/index.astro). Copy is inline so this page needs no
+// new i18n keys beyond the audit PageKey (title/description here).
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Free website audit · Webao" description="See how your business website scores, and what to fix first. Free, no obligation." locale="en" pageKey="audit">
+  <main>
+    <h1>Free website audit</h1>
+    <p>Enter your business website. You get an instant score and the first things to fix, free, no obligation.</p>
+    <form id="audit-form">
+      <label for="audit-url">Your website</label>
+      <input id="audit-url" name="url" type="url" placeholder="https://example.com" required />
+      <button type="submit">Run my free audit</button>
+    </form>
+    <p id="audit-status" aria-live="polite"></p>
+    <section id="audit-result" hidden>
+      <h2>Your score: <span id="audit-score"></span>/100</h2>
+      <ul id="audit-findings"></ul>
+      <p><a id="audit-result-link" href="#">See your full result</a></p>
+      <form id="report-form">
+        <p>Want the full report by email?</p>
+        <label for="report-email">Business email</label>
+        <input id="report-email" name="email" type="email" placeholder="you@yourbusiness.com" required />
+        <button type="submit">Send me the full report</button>
+      </form>
+      <p id="report-status" aria-live="polite"></p>
+    </section>
+    <p><small>We check speed, accessibility, best practices and search visibility with an independent speed test, plus the basics (HTTPS, mobile setup, title and description) when that test is unavailable. We do not log in anywhere, and we never share your result.</small></p>
+  </main>
+  <script>
+    // Minimal client script. The worker does the real work; this only
+    // posts the URL, renders the score, and posts the email for the report.
+    // No tracking, no third-party scripts.
+    const form = document.getElementById("audit-form") as HTMLFormElement | null;
+    const status = document.getElementById("audit-status");
+    const result = document.getElementById("audit-result");
+    const urlInput = document.getElementById("audit-url") as HTMLInputElement | null;
+    const scoreNode = document.getElementById("audit-score");
+    const findingsList = document.getElementById("audit-findings");
+    const resultLink = document.getElementById("audit-result-link") as HTMLAnchorElement | null;
+    const reportForm = document.getElementById("report-form") as HTMLFormElement | null;
+    const emailInput = document.getElementById("report-email") as HTMLInputElement | null;
+    const reportStatus = document.getElementById("report-status");
+    let lastAudit: { id: string; url: string; score: number; findings: string[] } | null = null;
+    if (form) form.addEventListener("submit", async (e: SubmitEvent) => {
+      e.preventDefault();
+      if (status) status.textContent = "Running your audit…";
+      if (result) result.hidden = true;
+      const url = urlInput ? urlInput.value.trim() : "";
+      try {
+        const res = await fetch("/api/audit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url, lang: "en" }),
+        });
+        const data = await res.json() as { ok?: boolean; error?: string; id?: string; url?: string; score?: number; findings?: string[]; resultUrl?: string };
+        if (!res.ok) throw new Error(data.error || "Audit failed");
+        lastAudit = { id: data.id ?? "", url: data.url ?? url, score: data.score ?? 0, findings: data.findings ?? [] };
+        if (scoreNode) scoreNode.textContent = String(lastAudit.score);
+        if (findingsList) {
+          findingsList.innerHTML = "";
+          for (const f of lastAudit.findings) {
+            const li = document.createElement("li");
+            li.textContent = f;
+            findingsList.appendChild(li);
+          }
+        }
+        if (resultLink && data.resultUrl) resultLink.href = data.resultUrl;
+        if (result) result.hidden = false;
+        if (status) status.textContent = "";
+      } catch (err) {
+        if (status) status.textContent = "That audit did not run. Check the URL and try again.";
+      }
+    });
+    if (reportForm) reportForm.addEventListener("submit", async (e: SubmitEvent) => {
+      e.preventDefault();
+      const email = emailInput ? emailInput.value.trim() : "";
+      if (reportStatus) reportStatus.textContent = "Sending…";
+      try {
+        const res = await fetch("/api/audit/report", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: lastAudit?.id, url: lastAudit?.url, score: lastAudit?.score, findings: lastAudit?.findings, email }),
+        });
+        const data = await res.json() as { ok?: boolean; error?: string };
+        if (!res.ok) throw new Error(data.error || "Report request failed");
+        if (reportStatus) reportStatus.textContent = "Done. Check your inbox for the full report.";
+      } catch (err) {
+        if (reportStatus) reportStatus.textContent = "That did not go through. Try again, or contact us directly.";
+      }
+    });
+  </script>
+</BaseLayout>

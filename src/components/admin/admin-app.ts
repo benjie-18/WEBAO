@@ -1,7 +1,8 @@
 // WEBAO admin panel client app.
-// Login gate + three tabs (Stats / Forms / Config) talking to the Worker API
-// described in worker/API.md. All user-controlled strings are HTML-escaped
-// before rendering. Auth token lives in sessionStorage (never in the URL).
+// Login gate + six tabs (Stats / Forms / Outreach / Audits / Clients / Config)
+// talking to the Worker API described in worker/API.md. All user-controlled
+// strings are HTML-escaped before rendering. Auth token lives in
+// sessionStorage (never in the URL).
 
 import { donutSegments, donutSlicePath, niceCeil } from "./chart-math";
 
@@ -317,7 +318,7 @@ function initAdmin(): void {
 
   /* ── Tabs ── */
   let activeTab = "";
-  const tabLoaded: Record<string, boolean> = { stats: false, forms: false, leads: false, clients: false, config: false };
+  const tabLoaded: Record<string, boolean> = { stats: false, forms: false, leads: false, audits: false, clients: false, config: false };
 
   function activateTab(name: string, force = false): void {
     if (!force && name === activeTab) return;
@@ -338,6 +339,7 @@ function initAdmin(): void {
       if (name === "stats") void loadStats();
       else if (name === "forms") void loadForms(true);
       else if (name === "leads") void loadLeads(true);
+      else if (name === "audits") void loadAudits(true);
       else if (name === "clients") void loadClients(true);
       else if (name === "config") void loadConfig();
     }
@@ -1384,6 +1386,125 @@ function initAdmin(): void {
     }
   }
 
+  /* ── Audits tab ── */
+  interface AuditItem {
+    id: string;
+    url: string;
+    score: number;
+    findings: string[];
+    strengths: string[];
+    categories: Record<string, number>;
+    partial: boolean;
+    lang: string;
+    at: number;
+    email?: string;
+    reportRequestedAt?: number;
+  }
+
+  interface AuditsResponse {
+    ok: boolean;
+    items: AuditItem[];
+    nextCursor: string | null;
+  }
+
+  let auditsCursor: string | null = null;
+
+  function auditCard(item: AuditItem): string {
+    const A = I18N.audits as Dict;
+    const badges: string[] = [
+      `<span class="form-badge">${esc(A.score)} ${item.score}/100</span>`,
+    ];
+    if (item.partial)
+      badges.push(`<span class="form-badge form-badge--warn">${esc(A.partial)}</span>`);
+    if (item.reportRequestedAt)
+      badges.push(`<span class="form-badge">${esc(A.reportRequested)}</span>`);
+    else if (!item.email)
+      badges.push(`<span class="form-badge">${esc(A.noEmail)}</span>`);
+
+    const meta: string[] = [
+      `<span><b>${esc(A.at)}</b> ${esc(fmtDateTime(item.at))}</span>`,
+    ];
+    if (item.email) meta.push(`<span><b>${esc(A.email)}</b> ${esc(item.email)}</span>`);
+
+    const rows: string[] = [];
+    if (item.strengths.length > 0) {
+      rows.push(
+        `<div class="ff-row"><dt>${esc(A.strengths)}</dt><dd>${item.strengths.map((s) => esc(s)).join("<br>")}</dd></div>`,
+      );
+    }
+    rows.push(
+      `<div class="ff-row"><dt>${esc(A.findings)}</dt><dd><ul>` +
+        item.findings.map((f) => `<li>${esc(f)}</li>`).join("") +
+        `</ul></dd></div>`,
+    );
+    rows.push(
+      `<div class="ff-row"><dt>${esc(A.url)}</dt><dd><a href="/audits/${esc(item.id)}" target="_blank" rel="noopener">/audits/${esc(item.id)}</a></dd></div>`,
+    );
+
+    return (
+      `<article class="form-card" data-audit-id="${esc(item.id)}">` +
+      `<div class="form-card-head"><div><strong>${esc(item.url)}</strong>` +
+      (item.email ? `<span class="mono">${esc(item.email)}</span>` : "") +
+      `</div><div class="lead-badges">${badges.join("")}</div></div>` +
+      `<div class="form-meta">${meta.join("")}</div>` +
+      `<div class="form-actions">` +
+      `<button type="button" class="admin-ghost-btn" data-audit-expand>${esc(A.details)}</button>` +
+      `<button type="button" class="admin-ghost-btn" data-audit-delete>${esc(A.delete)}</button>` +
+      `</div>` +
+      `<dl class="form-fields" data-audit-fields hidden>${rows.join("")}</dl>` +
+      `</article>`
+    );
+  }
+
+  async function loadAudits(reset: boolean): Promise<void> {
+    const list = qq("[data-audits-list]");
+    const more = qq<HTMLButtonElement>("[data-audits-more]");
+    if (!list || !more) return;
+    if (reset) {
+      list.innerHTML = "";
+      auditsCursor = null;
+    }
+    more.hidden = true;
+    try {
+      const data = (await api(
+        `/api/admin/audits?limit=50${auditsCursor ? `&cursor=${encodeURIComponent(auditsCursor)}` : ""}`,
+      )) as unknown as AuditsResponse;
+      if (reset && data.items.length === 0) {
+        list.innerHTML = `<div class="admin-empty">${esc(I18N.audits.empty)}</div>`;
+        return;
+      }
+      for (const item of data.items) list.insertAdjacentHTML("beforeend", auditCard(item));
+      auditsCursor = data.nextCursor;
+      more.hidden = !auditsCursor;
+    } catch (e) {
+      if (e instanceof ExpiredSession) return;
+      if (reset) {
+        list.innerHTML =
+          `<div class="admin-retry"><p>${esc(I18N.audits.loadError)}</p>` +
+          `<button type="button" class="admin-ghost-btn" data-audits-retry>${esc(I18N.audits.retry)}</button></div>`;
+      } else {
+        toast(String(I18N.audits.loadError), "err");
+      }
+    }
+  }
+
+  async function deleteAudit(btn: HTMLElement): Promise<void> {
+    const card = btn.closest("[data-audit-id]") as HTMLElement | null;
+    const id = card?.dataset.auditId;
+    if (!card || !id) return;
+    if (!window.confirm(String(I18N.audits.deleteConfirm))) return;
+    btn.setAttribute("disabled", "");
+    try {
+      await api(`/api/admin/audits/${encodeURIComponent(id)}`, { method: "DELETE" });
+      card.remove();
+      toast(String(I18N.audits.deleted), "ok");
+    } catch (e) {
+      if (e instanceof ExpiredSession) return;
+      btn.removeAttribute("disabled");
+      toast(String(I18N.audits.deleteError), "err");
+    }
+  }
+
   /* ── Config tab ── */
   async function loadConfig(): Promise<void> {
     const errEl = qq("[data-settings-error]");
@@ -1612,6 +1733,7 @@ function initAdmin(): void {
 
   qq("[data-forms-more]")?.addEventListener("click", () => void loadForms(false));
   qq("[data-leads-more]")?.addEventListener("click", () => void loadLeads(false));
+  qq("[data-audits-more]")?.addEventListener("click", () => void loadAudits(false));
   qq("[data-clients-more]")?.addEventListener("click", () => void loadClients(false));
   qq("[data-clients-create-test]")?.addEventListener("click", () => void createTestClient());
   qq<HTMLFormElement>("[data-settings-form]")?.addEventListener("submit", (e) => void onSettingsSubmit(e));
@@ -1655,6 +1777,10 @@ function initAdmin(): void {
     }
     if (t.closest("[data-leads-retry]")) {
       void loadLeads(true);
+      return;
+    }
+    if (t.closest("[data-audits-retry]")) {
+      void loadAudits(true);
       return;
     }
     if (t.closest("[data-clients-retry]")) {
@@ -1717,6 +1843,20 @@ function initAdmin(): void {
     }
     const leadDel = t.closest("[data-lead-delete]") as HTMLElement | null;
     if (leadDel) void deleteLead(leadDel);
+    const auditExpand = t.closest("[data-audit-expand]") as HTMLElement | null;
+    if (auditExpand) {
+      const card = auditExpand.closest("[data-audit-id]");
+      const fields = card?.querySelector("[data-audit-fields]") as HTMLElement | null;
+      if (fields) {
+        fields.hidden = !fields.hidden;
+        auditExpand.textContent = fields.hidden
+          ? String(I18N.audits.details)
+          : String(I18N.audits.hideDetails);
+      }
+      return;
+    }
+    const auditDel = t.closest("[data-audit-delete]") as HTMLElement | null;
+    if (auditDel) void deleteAudit(auditDel);
     const expand = t.closest("[data-expand]") as HTMLElement | null;
     if (expand) {
       const card = expand.closest("[data-form-id]");

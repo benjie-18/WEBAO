@@ -1,5 +1,5 @@
 ---
-// WEBAO admin panel — login gate + Stats / Forms / Config tabs.
+// WEBAO admin panel — login gate + Stats / Forms / Outreach / Audits / Clients / Config tabs.
 // Rendered statically (login card + tab structure are in the HTML); the
 // client app in ./admin-app.ts hydrates behavior and fetches data.
 import { useTranslations, type Locale } from "../../lib/i18n";
@@ -74,6 +74,10 @@ const a = t.admin;
         type="button" role="tab" id="admin-tab-leads" aria-controls="admin-panel-leads"
         aria-selected="false" tabindex="-1" data-tab="leads" class="admin-tab"
       >{a.tabs.outreach}</button>
+      <button
+        type="button" role="tab" id="admin-tab-audits" aria-controls="admin-panel-audits"
+        aria-selected="false" tabindex="-1" data-tab="audits" class="admin-tab"
+      >{a.tabs.audits}</button>
       <button
         type="button" role="tab" id="admin-tab-clients" aria-controls="admin-panel-clients"
         aria-selected="false" tabindex="-1" data-tab="clients" class="admin-tab"
@@ -178,7 +182,18 @@ const a = t.admin;
       </div>
     </section>
 
-    <!-- Tab 4 · Clients -->
+    <!-- Tab 4 · Audits -->
+    <section
+      id="admin-panel-audits" role="tabpanel" aria-labelledby="admin-tab-audits"
+      data-panel="audits" class="admin-panel" hidden
+    >
+      <div class="admin-forms-list" data-audits-list></div>
+      <div class="admin-center">
+        <button type="button" class="admin-ghost-btn" data-audits-more hidden>{a.audits.loadMore}</button>
+      </div>
+    </section>
+
+    <!-- Tab 5 · Clients -->
     <section
       id="admin-panel-clients" role="tabpanel" aria-labelledby="admin-tab-clients"
       data-panel="clients" class="admin-panel" hidden
@@ -192,7 +207,7 @@ const a = t.admin;
       </div>
     </section>
 
-    <!-- Tab 5 · Config -->
+    <!-- Tab 6 · Config -->
     <section
       id="admin-panel-config" role="tabpanel" aria-labelledby="admin-tab-config"
       data-panel="config" class="admin-panel" hidden

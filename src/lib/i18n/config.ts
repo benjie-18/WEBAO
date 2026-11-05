@@ -2,7 +2,7 @@ export const locales = ["en", "fr"] as const;
 export type Locale = typeof locales[number];
 export const defaultLocale: Locale = "en";
 
-export type PageKey = "home" | "pricing" | "contact" | "demos" | "notfound" | "start" | "terms" | "refunds" | "sources" | "support" | "privacy" | "portal" | "serviceDesign" | "servicePlans" | "serviceHosting" | "serviceMontreal" | "guideCost" | "guideBill96" | "guideLaw25";
+export type PageKey = "home" | "pricing" | "contact" | "demos" | "notfound" | "start" | "terms" | "refunds" | "sources" | "support" | "privacy" | "portal" | "serviceDesign" | "servicePlans" | "serviceHosting" | "serviceMontreal" | "guideCost" | "guideBill96" | "guideLaw25" | "audit";
 
 export const localizedPaths: Record<Locale, Record<PageKey, string>> = {
   en: {
@@ -12,6 +12,7 @@ export const localizedPaths: Record<Locale, Record<PageKey, string>> = {
     demos: "/demos",
     notfound: "/404",
     start: "/start",
+    audit: "/audit",
     terms: "/terms",
     privacy: "/privacy",
     refunds: "/refunds",
@@ -33,6 +34,7 @@ export const localizedPaths: Record<Locale, Record<PageKey, string>> = {
     demos: "/fr/demos",
     notfound: "/fr/404",
     start: "/fr/commencer",
+    audit: "/fr/eval",
     terms: "/fr/conditions",
     privacy: "/fr/confidentialite",
     refunds: "/fr/remboursements",

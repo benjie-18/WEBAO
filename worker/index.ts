@@ -4,6 +4,7 @@
 
 import { handlePageview, handleClick, handleHeartbeat } from "./track";
 import { handleFormSubmit } from "./forms";
+import { handleAudit, handleAuditGet, handleAuditReport } from "./audit";
 import { handleGo, handleLeadRegister, handleLeadReply } from "./leads";
 import { handleAdmin } from "./admin";
 import { handleCheckoutSession } from "./checkout";
@@ -38,6 +39,9 @@ async function routeApi(req: Request, env: Env): Promise<Response> {
   if (p === "/api/forms/submit" && req.method === "POST") return handleFormSubmit(req, env);
   if (p === "/api/leads/register" && req.method === "POST") return handleLeadRegister(req, env);
   if (p === "/api/leads/reply" && req.method === "POST") return handleLeadReply(req, env);
+  if (p === "/api/audit" && req.method === "POST") return handleAudit(req, env);
+  if (p === "/api/audit/report" && req.method === "POST") return handleAuditReport(req, env);
+  if (p.startsWith("/api/audit/") && req.method === "GET") return handleAuditGet(req, env, p);
   if (p === "/api/checkout/session" && req.method === "POST") return handleCheckoutSession(req, env);
   if (p === "/api/stripe/webhook" && req.method === "POST") return handleStripeWebhook(req, env);
   if (p === "/api/portal/request-link" && req.method === "POST") return handlePortalRequestLink(req, env);
@@ -121,6 +125,20 @@ export default {
     // handleGo never throws for logging problems, a sent link must not break.
     if (url.pathname.startsWith("/go/")) {
       return handleGo(request, env, url);
+    }
+
+    // Audit results: /audits/<id> is not a prerendered page (the site is
+    // a static build), so serve the static results shell at /audits/
+    // for any /audits/<id> URL. The shell loads the audit from
+    // GET /api/audit/<id> and renders it client-side.
+    const auditMatch = /^\/audits\/([A-Za-z0-9:_.-]+)$/.exec(url.pathname);
+    if (auditMatch && (request.method === "GET" || request.method === "HEAD")) {
+      const shellUrl = new URL("/audits/", url);
+      const shell = await env.ASSETS.fetch(new Request(shellUrl.toString(), request));
+      if (request.method === "HEAD") {
+        return new Response(null, { status: shell.status, headers: shell.headers });
+      }
+      return shell;
     }
 
     if (url.pathname.startsWith("/api/")) {

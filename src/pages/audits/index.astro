@@ -1,0 +1,175 @@
+---
+// WEBAO audit result page (shell) — renders one stored audit at /audits/<id>.
+// The site is a static build, so there is no per-id prerendered page: the
+// worker rewrites /audits/<id> to this shell (see worker/ROUTE-PATCH.txt)
+// and the script below loads the audit from GET /api/audit/<id>.
+// The audit record carries its lang, so the shell renders in the language
+// the audit was run in. Noindex: result URLs are personal, not for search.
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Your website audit · Webao" description="The result of your free WEBAO website audit." locale="en" noIndex>
+  <main>
+    <p id="audit-status" aria-live="polite">Loading your audit…</p>
+    <section id="audit-result" hidden>
+      <h1 id="audit-title">Your website audit</h1>
+      <p><span id="audit-url"></span></p>
+      <h2><span id="audit-score-label">Your score:</span> <span id="audit-score"></span>/100</h2>
+      <p id="audit-partial" hidden></p>
+      <h3 id="audit-strengths-title" hidden>What works</h3>
+      <ul id="audit-strengths" hidden></ul>
+      <h3 id="audit-findings-title">What to fix first</h3>
+      <ul id="audit-findings"></ul>
+      <form id="report-form">
+        <p id="audit-report-prompt">Want the full report by email?</p>
+        <label for="report-email" id="audit-report-label">Business email</label>
+        <input id="report-email" name="email" type="email" placeholder="you@yourbusiness.com" required />
+        <button type="submit" id="audit-report-button">Send me the full report</button>
+      </form>
+      <p id="report-status" aria-live="polite"></p>
+      <p><a href="/audit" id="audit-back-link">Run another audit</a></p>
+    </section>
+  </main>
+  <script>
+    const STR = {
+      en: {
+        loading: "Loading your audit…",
+        notFound: "That audit was not found. It may have expired. Run a new audit to get a fresh result.",
+        noId: "No audit here. Run a free audit to get your score.",
+        title: "Your website audit",
+        scoreLabel: "Your score:",
+        partial: "The full speed test was unavailable, so this score covers the basics only.",
+        strengthsTitle: "What works",
+        findingsTitle: "What to fix first",
+        reportPrompt: "Want the full report by email?",
+        reportLabel: "Business email",
+        reportButton: "Send me the full report",
+        sending: "Sending…",
+        done: "Done. Check your inbox for the full report.",
+        failed: "That did not go through. Try again, or contact us directly.",
+        backLink: "Run another audit",
+        backHref: "/audit",
+      },
+      fr: {
+        loading: "Chargement de votre audit…",
+        notFound: "Cet audit est introuvable. Il a peut-être expiré. Lancez un nouvel audit pour un résultat frais.",
+        noId: "Aucun audit ici. Lancez un audit gratuit pour obtenir votre score.",
+        title: "Votre audit de site web",
+        scoreLabel: "Votre score :",
+        partial: "Le test de vitesse complet n'était pas disponible, donc ce score couvre seulement les bases.",
+        strengthsTitle: "Ce qui fonctionne",
+        findingsTitle: "Quoi corriger en premier",
+        reportPrompt: "Vous voulez le rapport complet par courriel?",
+        reportLabel: "Courriel professionnel",
+        reportButton: "Envoyez-moi le rapport complet",
+        sending: "Envoi…",
+        done: "C'est fait. Vérifiez votre boîte de réception pour le rapport complet.",
+        failed: "Ça n'a pas fonctionné. Réessayez, ou contactez-nous directement.",
+        backLink: "Lancer un autre audit",
+        backHref: "/fr/eval",
+      },
+    } as const;
+
+    type Lang = keyof typeof STR;
+
+    function el(id: string): HTMLElement | null {
+      return document.getElementById(id);
+    }
+
+    function setText(id: string, value: string): void {
+      const node = el(id);
+      if (node) node.textContent = value;
+    }
+
+    function fillList(id: string, items: string[]): void {
+      const list = el(id);
+      if (!list) return;
+      list.innerHTML = "";
+      for (const item of items) {
+        const li = document.createElement("li");
+        li.textContent = item;
+        list.appendChild(li);
+      }
+    }
+
+    async function main(): Promise<void> {
+      const status = el("audit-status");
+      const result = el("audit-result");
+      const parts = window.location.pathname.split("/").filter(Boolean);
+      const id = parts.length >= 2 && parts[0] === "audits" ? parts[1] : "";
+      if (!id) {
+        if (status) status.textContent = STR.en.noId;
+        return;
+      }
+      try {
+        const res = await fetch("/api/audit/" + encodeURIComponent(id));
+        const data = await res.json();
+        if (!res.ok) throw new Error((data as { error?: string }).error || "Audit failed");
+        const audit = (data as { audit: {
+          url: string; score: number; findings: string[]; strengths: string[];
+          partial: boolean; lang: Lang;
+        } }).audit;
+        const lang: Lang = audit.lang === "fr" ? "fr" : "en";
+        const s = STR[lang];
+        setText("audit-title", s.title);
+        setText("audit-url", audit.url);
+        setText("audit-score-label", s.scoreLabel);
+        setText("audit-score", String(audit.score));
+        const partial = el("audit-partial");
+        if (partial) {
+          partial.hidden = !audit.partial;
+          if (audit.partial) partial.textContent = s.partial;
+        }
+        const strengthsTitle = el("audit-strengths-title");
+        const strengths = el("audit-strengths");
+        if (strengthsTitle && strengths) {
+          strengthsTitle.hidden = audit.strengths.length === 0;
+          strengths.hidden = audit.strengths.length === 0;
+          if (audit.strengths.length > 0) {
+            strengthsTitle.textContent = s.strengthsTitle;
+            fillList("audit-strengths", audit.strengths);
+          }
+        }
+        setText("audit-findings-title", s.findingsTitle);
+        fillList("audit-findings", audit.findings);
+        setText("audit-report-prompt", s.reportPrompt);
+        setText("audit-report-label", s.reportLabel);
+        setText("audit-report-button", s.reportButton);
+        const back = el("audit-back-link") as HTMLAnchorElement | null;
+        if (back) {
+          back.textContent = s.backLink;
+          back.href = s.backHref;
+        }
+        if (status) status.textContent = "";
+        if (result) result.hidden = false;
+
+        const form = el("report-form") as HTMLFormElement | null;
+        if (form) {
+          form.addEventListener("submit", async (e: SubmitEvent) => {
+            e.preventDefault();
+            const input = el("report-email") as HTMLInputElement | null;
+            const email = input ? input.value.trim() : "";
+            const reportStatus = el("report-status");
+            if (reportStatus) reportStatus.textContent = s.sending;
+            try {
+              const r = await fetch("/api/audit/report", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id, email }),
+              });
+              const d = await r.json();
+              if (!r.ok) throw new Error((d as { error?: string }).error || "Report request failed");
+              if (reportStatus) reportStatus.textContent = s.done;
+            } catch (err) {
+              if (reportStatus) reportStatus.textContent = s.failed;
+            }
+          });
+        }
+      } catch (err) {
+        if (status) status.textContent = STR.en.notFound;
+      }
+    }
+
+    void main();
+  </script>
+</BaseLayout>

@@ -82,4 +82,6 @@ interface Env {
   SMTP2GO_API_KEY?: string;
   /** Shared secret for internal cron-called endpoints (secret). */
   INTERNAL_CRON_SECRET?: string;
+  /** PageSpeed Insights API key for the free audit funnel (secret). */
+  PAGESPEED_API_KEY?: string;
 }

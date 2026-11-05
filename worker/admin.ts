@@ -83,6 +83,9 @@ export async function handleAdmin(req: Request, env: Env, url: URL): Promise<Res
   if (path === "/api/admin/forms" && req.method === "GET") return handleFormsList(kv, url);
   if (path.startsWith("/api/admin/forms/") && req.method === "DELETE")
     return handleFormDelete(kv, path);
+  if (path === "/api/admin/audits" && req.method === "GET") return handleAuditsList(kv, url);
+  if (path.startsWith("/api/admin/audits/") && req.method === "DELETE")
+    return handleAuditDelete(kv, path);
   if (path === "/api/admin/charts" && req.method === "GET") return handleCharts(kv, url);
   if (path === "/api/admin/leads" && req.method === "GET") return handleLeadsList(kv, url);
   if (path.startsWith("/api/admin/leads/") && req.method === "DELETE")
@@ -301,6 +304,57 @@ async function handleFormDelete(kv: KVNamespace, path: string): Promise<Response
   const index = (await getJson<string[]>(kv, FORMS_INDEX)) || [];
   const next = index.filter((k) => k !== key);
   if (next.length !== index.length) await putJson(kv, FORMS_INDEX, next);
+  return json({ ok: true });
+}
+
+// Audits: free-audit results stored by worker/audit.ts
+// ---------------------------------------------------------------------------
+
+const AUDITS_INDEX = "audit:index";
+
+/** GET /api/admin/audits?limit=50&cursor= — newest-first, cursor-paginated. */
+async function handleAuditsList(kv: KVNamespace, url: URL): Promise<Response> {
+  const rawLimit = parseInt(url.searchParams.get("limit") || "50", 10);
+  const limit = Math.min(Math.max(isNaN(rawLimit) ? 50 : rawLimit, 1), 100);
+  const rawCursor = parseInt(url.searchParams.get("cursor") || "0", 10);
+  const cursor = Math.max(isNaN(rawCursor) ? 0 : rawCursor, 0);
+
+  const index = (await getJson<string[]>(kv, AUDITS_INDEX)) || [];
+  const slice = index.slice(cursor, cursor + limit);
+  const items = (
+    await batch(slice, 25, async (key) => {
+      const rec = await getJson<Record<string, unknown>>(kv, key);
+      return rec ? { id: key.slice("audit:".length), ...rec } : null;
+    })
+  ).filter((x): x is Record<string, unknown> & { id: string } => x !== null);
+
+  return json({
+    ok: true,
+    items,
+    nextCursor: cursor + limit < index.length ? String(cursor + limit) : null,
+  });
+}
+
+/** DELETE /api/admin/audits/:id — id is "<ts>:<rand>" (the part after "audit:"). */
+async function handleAuditDelete(kv: KVNamespace, path: string): Promise<Response> {
+  const m = /^\/api\/admin\/audits\/([^/]+)$/.exec(path);
+  if (!m) return err("Invalid id", 400);
+  // The frontend sends encodeURIComponent(id), so the captured id is still
+  // percent-encoded here (URL.pathname does not decode %3A). Decode it before
+  // rebuilding the KV key; otherwise we delete a non-existent key, drop
+  // nothing from the index, and the audit silently survives.
+  let id: string;
+  try {
+    id = decodeURIComponent(m[1]);
+  } catch {
+    return err("Invalid id", 400);
+  }
+  if (!/^[\w:.-]+$/.test(id) || id.length > 64) return err("Invalid id", 400);
+  const key = "audit:" + id;
+  await deleteKey(kv, key);
+  const index = (await getJson<string[]>(kv, AUDITS_INDEX)) || [];
+  const next = index.filter((k) => k !== key);
+  if (next.length !== index.length) await putJson(kv, AUDITS_INDEX, next);
   return json({ ok: true });
 }
 
