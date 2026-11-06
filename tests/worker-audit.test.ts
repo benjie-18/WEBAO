@@ -376,7 +376,13 @@ test('full audit below 94 with no findings shows blank filler codes', async () =
     // Perfect PageSpeed scores deflate to 68–80, below 94, with no
     // real findings: the card must still show something to fix.
     assert.ok(data.audit.score < 94);
-    assert.deepEqual(data.audit.findingCodes, ["WA-0100", "WA-0101", "WA-0102"]);
+    // The fillers are drawn at random from a non-sequential pool, so
+    // assert on the shape, not the exact codes: 3 distinct codes
+    // from the WA-01XX pool, each with blank finding text.
+    const pool = ["WA-0114", "WA-0123", "WA-0131", "WA-0142", "WA-0156", "WA-0168"];
+    assert.equal(data.audit.findingCodes.length, 3);
+    assert.equal(new Set(data.audit.findingCodes).size, 3);
+    for (const code of data.audit.findingCodes) assert.ok(pool.includes(code), `unexpected filler code ${code}`);
     // Filler findings are blank in the record: the admin panel shows
     // them as blank placeholders, the visitor sees only the code.
     assert.deepEqual(data.audit.findings, ["", "", ""]);

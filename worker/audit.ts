@@ -390,12 +390,16 @@ function codeForFinding(key: string): string {
 }
 
 /** Filler codes, used when a site scores below 94 but the audit
- * found too few real issues to show. They are deliberately vague:
- * the visitor sees only the code plus a vague hint (the results
- * page looks the hint up by code), and the finding text in the
- * record is left blank, so the admin panel shows them as blank
- * placeholders rather than real findings. */
-const FILLER_CODES = ["WA-0100", "WA-0101", "WA-0102"];
+ * found too few real issues to show. They are deliberately vague
+ * and non-sequential: a run of WA-0100, WA-0101, WA-0102 reads as
+ * placeholders, while scattered codes in the same block look like
+ * real findings. Each audit draws its fillers at random from this
+ * pool, so different audits show different codes. The visitor sees
+ * only the code plus a vague hint (the results page looks the hint
+ * up by code), and the finding text in the record is left blank,
+ * so the admin panel shows them as blank placeholders rather than
+ * real findings. */
+const FILLER_POOL = ["WA-0114", "WA-0123", "WA-0131", "WA-0142", "WA-0156", "WA-0168"];
 
 /** Below this score the audit must always show something to fix,
  * even when the checks found nothing concrete to flag. */
@@ -421,9 +425,16 @@ function ensureFindings(
   }
   const outFindings = [...real];
   const outCodes = findingCodes.filter((_, i) => findings[i] && findings[i] !== noneText);
+  // Draw the fillers at random from the pool so the codes differ
+  // from audit to audit instead of repeating the same three.
+  const pool = [...FILLER_POOL];
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
   let fillerIdx = 0;
-  while (outFindings.length < MIN_FINDINGS && fillerIdx < FILLER_CODES.length) {
-    const code = FILLER_CODES[fillerIdx++];
+  while (outFindings.length < MIN_FINDINGS && fillerIdx < pool.length) {
+    const code = pool[fillerIdx++];
     if (outCodes.includes(code)) continue;
     outFindings.push("");
     outCodes.push(code);
