@@ -127,13 +127,14 @@ export default {
       return handleGo(request, env, url);
     }
 
-    // Audit results: /audits/<id> is not a prerendered page (the site is
-    // a static build), so serve the static results shell at /audits/
+    // Audit results: /audits/<id> (and /fr/audits/<id>) is not a
+    // prerendered page (the site is a static build), so serve the static
+    // results shell at /audits/ (or the French shell at /fr/audits/)
     // for any /audits/<id> URL. The shell loads the audit from
     // GET /api/audit/<id> and renders it client-side.
-    const auditMatch = /^\/audits\/([A-Za-z0-9:_.-]+)$/.exec(url.pathname);
+    const auditMatch = /^\/(?:fr\/)?audits\/([A-Za-z0-9:_.-]+)$/.exec(url.pathname);
     if (auditMatch && (request.method === "GET" || request.method === "HEAD")) {
-      const shellUrl = new URL("/audits/", url);
+      const shellUrl = new URL(url.pathname.startsWith("/fr/") ? "/fr/audits/" : "/audits/", url);
       const shell = await env.ASSETS.fetch(new Request(shellUrl.toString(), request));
       if (request.method === "HEAD") {
         return new Response(null, { status: shell.status, headers: shell.headers });

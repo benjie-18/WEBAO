@@ -146,6 +146,25 @@ test('POST /api/audit scores a good page and stores the result', async () => {
   }
 });
 
+test('POST /api/audit returns the French results URL for a French audit', async () => {
+  const memory = memoryKV();
+  const kv = memory.kv;
+  const env = envOf(kv);
+  const restore = stubHomepage(GOOD_HTML);
+  try {
+    const res = await handleAudit(apiRequest('/api/audit', { url: 'https://example.com/', lang: 'fr' }), env);
+    assert.equal(res.status, 200);
+    const data = await bodyOf(res) as { ok: boolean; id: string; resultUrl: string };
+    assert.equal(data.ok, true);
+    assert.equal(data.resultUrl, `/fr/audits/${data.id}`);
+    const stored = await kv.get(`audit:${data.id}`, { type: 'json' }) as AuditRecord | null;
+    assert.ok(stored);
+    assert.equal(stored.lang, 'fr');
+  } finally {
+    restore();
+  }
+});
+
 test('POST /api/audit serves our own site from ASSETS, not the network', async () => {
   // A Worker cannot fetch its own origin: the subrequest routes back into
   // this worker and never returns, so the fallback must use env.ASSETS.

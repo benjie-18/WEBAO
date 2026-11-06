@@ -101,13 +101,21 @@ import StarMark from "../components/ui/StarMark.astro";
       page.hidden = false;
       loading.hidden = true;
       fill.style.width = "0%";
-      // The status lines never repeat: the four expected ones play first,
-      // in order, then the funny ones take over if the audit drags on.
-      // When the list runs out the timer stops on the last line.
+      // The status lines never repeat: the expected ones play first, in
+      // order, covering about 26 seconds (the current audit time while
+      // the speed test is slow), then the funny ones take over only if
+      // the audit drags on past that. When the list runs out the timer
+      // stops on the last line.
       var lines = [
         "Running the speed test…",
         "Checking accessibility…",
         "Checking search visibility…",
+        "Measuring load time…",
+        "Checking the mobile display…",
+        "Reading the speed details…",
+        "Checking images and files…",
+        "Reviewing headings and links…",
+        "Checking the page structure…",
         "Putting your score together…",
         "Polishing the pixels…",
         "Asking the server nicely…",

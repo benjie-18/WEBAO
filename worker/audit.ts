@@ -434,7 +434,7 @@ export async function handleAudit(req: Request, env: Env): Promise<Response> {
     strengths: record.strengths,
     categories: record.categories,
     partial: record.partial,
-    resultUrl: `/audits/${record.id}`,
+    resultUrl: lang === "fr" ? `/fr/audits/${record.id}` : `/audits/${record.id}`,
   });
 }
 

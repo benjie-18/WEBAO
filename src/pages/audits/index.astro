@@ -165,8 +165,10 @@ import StarMark from "../../components/ui/StarMark.astro";
       const page = document.querySelector("[data-audit-result-page]");
       const status = el("audit-status");
       const star = document.querySelector("[data-audit-result-star]");
+      // The id is the segment after "audits", in /audits/<id> and /fr/audits/<id>.
       const parts = window.location.pathname.split("/").filter(Boolean);
-      const id = parts.length >= 2 && parts[0] === "audits" ? parts[1] : "";
+      const auditIdx = parts.indexOf("audits");
+      const id = auditIdx >= 0 && parts.length > auditIdx + 1 ? parts[auditIdx + 1] : "";
       const action = document.querySelector("[data-audit-result-action]");
       const actionLink = document.querySelector("[data-audit-result-action-link]") as HTMLAnchorElement | null;
       function showAction(s: (typeof STR)[Lang]): void {
@@ -464,6 +466,11 @@ import StarMark from "../../components/ui/StarMark.astro";
       padding-block: clamp(64px, 12vw, 140px);
       color: var(--muted);
     }
+    /* display:flex above beats the [hidden] attribute's display:none,
+       so hide it explicitly once the result renders. Without this the
+       loading block stays visible above the result and pushes the score
+       below the fold. */
+    .audit-result-loading[hidden] { display: none; }
     .audit-result-action {
       margin: 0;
     }

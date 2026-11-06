@@ -3,7 +3,7 @@
 // Live at /fr/eval. Version anglaise : src/pages/audit.astro, même
 // structure, texte anglais. À l'envoi, la page est remplacée par
 // l'écran de chargement avec l'étoile, puis le visiteur est redirigé
-// vers /audits/<id> quand l'audit est terminé. Le formulaire de
+// vers /fr/audits/<id> quand l'audit est terminé. Le formulaire de
 // rapport est sur la page de résultats.
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import StarMark from "../../components/ui/StarMark.astro";
@@ -103,13 +103,21 @@ import StarMark from "../../components/ui/StarMark.astro";
       page.hidden = false;
       loading.hidden = true;
       fill.style.width = "0%";
-      // The status lines never repeat: the four expected ones play first,
-      // in order, then the funny ones take over if the audit drags on.
-      // When the list runs out the timer stops on the last line.
+      // The status lines never repeat: the expected ones play first, in
+      // order, covering about 26 seconds (the current audit time while
+      // the speed test is slow), then the funny ones take over only if
+      // the audit drags on past that. When the list runs out the timer
+      // stops on the last line.
       var lines = [
         "Test de vitesse en cours…",
         "Vérification de l'accessibilité…",
         "Vérification de la visibilité…",
+        "Mesure du temps de chargement…",
+        "Vérification de l'affichage mobile…",
+        "Lecture des détails de vitesse…",
+        "Vérification des images et des fichiers…",
+        "Révision des titres et des liens…",
+        "Vérification de la structure de la page…",
         "Préparation de votre score…",
         "On polit les pixels…",
         "On demande gentiment au serveur…",
