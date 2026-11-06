@@ -213,6 +213,27 @@ async function runPageSpeed(
       a.displayValue ? `${a.title ?? ""} (${a.displayValue})`.trim() : (a.title ?? ""),
     );
   }
+  // When no specific opportunity is worth flagging but the page is
+  // still slow, the findings card would otherwise read "no major
+  // problems" next to a mediocre score. Fall back to the slowest
+  // headline metrics (their titles come back in the audit's
+  // language, like the opportunity titles).
+  if (findings.length === 0) {
+    const slowMetricIds = [
+      "largest-contentful-paint",
+      "speed-index",
+      "first-contentful-paint",
+      "total-blocking-time",
+      "cumulative-layout-shift",
+    ];
+    for (const auditId of slowMetricIds) {
+      const a = audits[auditId];
+      if (a && typeof a.score === "number" && a.score < 0.9 && a.displayValue) {
+        findings.push(`${a.title ?? ""} (${a.displayValue})`.trim());
+      }
+      if (findings.length >= 3) break;
+    }
+  }
   // The headline timings, for the stats row on the results page.
   // Only audits with a display value are kept.
   const metricIds: Record<string, string> = {
