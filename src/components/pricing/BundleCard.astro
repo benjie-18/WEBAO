@@ -113,6 +113,10 @@ const bundleCents = (id: BundleId, interval: "month" | "year"): number =>
      inside a preserve-3d context (the scroll carousel). */
   .bundle-card--spatial {
     transform-style: preserve-3d;
+    /* The carousel slot is wider than the card (560px vs 400px max):
+       centre the card in it, otherwise it sits left of centre and
+       exposes the back card's edge. */
+    margin-inline: auto;
   }
   .bundle-card--spatial .bc-group--head {
     transform: translateZ(48px);

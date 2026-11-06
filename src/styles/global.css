@@ -36,7 +36,15 @@ html {
 body {
   min-height: 100vh;
   line-height: 1.5;
-  overflow-x: hidden;
+  /* overflow-x: clip, NOT hidden: hidden makes body a scroll container
+     of its own, and position: sticky then sticks relative to the body
+     (which never scrolls) instead of the viewport — every sticky stage
+     on the site silently stops sticking (bundles carousel, homepage
+     journey scrub, contact/start/terms sidebars). clip still clips
+     overflowing content with no scrollbar, but creates no scroll
+     container, so sticky works. The html rule above stays hidden: it
+     propagates to the viewport and keeps the horizontal-scroll guard. */
+  overflow-x: clip;
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-sans);

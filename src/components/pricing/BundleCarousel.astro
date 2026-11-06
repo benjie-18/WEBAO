@@ -185,6 +185,10 @@ const names = bundles.map((bd) => tb[bd.id].name);
     width: min(560px, 88vw);
     translate: -50% -50%;
     transform-style: preserve-3d;
+    /* Hide the card's back face: without this, the card swung to the
+       back shows its content mirrored (reversed text) around the front
+       card's edges at rest. */
+    backface-visibility: hidden;
     /* Short viewports (landscape phones): shrink cards to fit instead of
        clipping them. `scale` composes with the JS-driven transform. */
     scale: min(1, calc((100svh - 100px) / 560px));
