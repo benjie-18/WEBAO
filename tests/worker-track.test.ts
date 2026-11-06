@@ -62,11 +62,11 @@ test('a pageview creates the session, appends the visit and counts the view', as
   assert.ok(session.startedAt <= session.lastSeenAt);
 
   assert.equal(memory.store.get(viewKey('/pricing')), '1');
-  assert.equal(memory.store.get(`views:${DAY}:__all`), '1');
+  assert.equal(memory.store.get(`views:${DAY}:__all`), undefined, 'no __all counter is written');
   assert.equal(memory.ttls.get(`session:${SID}`), 90 * 24 * 3600);
-  // The gate used the KV binding it was handed (regression: it once referenced
-  // a free `env` variable, which crashed every tracking call at runtime).
-  assert.equal(JSON.parse(memory.store.get('rl:track:203.0.113.7') ?? '{}').c, 1);
+  // No KV throttle write on a tracking call: rate limiting lives at
+  // the edge, so a pageview writes no rl: record.
+  assert.equal([...memory.store.keys()].filter((k) => k.startsWith('rl:')).length, 0);
 });
 
 test('repeat pageviews append and update without resetting the session', async () => {
@@ -85,7 +85,7 @@ test('repeat pageviews append and update without resetting the session', async (
   assert.equal(second.theme, 'system');
   assert.equal(memory.store.get(viewKey('/')), '1');
   assert.equal(memory.store.get(viewKey('/pricing')), '1');
-  assert.equal(memory.store.get(`views:${DAY}:__all`), '2');
+  assert.equal(memory.store.get(`views:${DAY}:__all`), undefined, 'no __all counter is written');
 });
 
 test('pageview validation rejects bad sessions and paths before writing', async () => {
@@ -150,7 +150,7 @@ test('tracking can be switched off from the admin config', async () => {
   assert.equal(memory.store.has(viewKey('/pricing')), false);
 });
 
-test('pageview and click share the origin + throttle gate; heartbeat is origin-only', async () => {
+test('pageview, click and heartbeat share the origin-only gate; no KV throttle write', async () => {
   const handlers = [
     [handlePageview, pageview],
     [handleClick, click],
@@ -167,38 +167,15 @@ test('pageview and click share the origin + throttle gate; heartbeat is origin-o
     assert.equal(evil.status, 403);
   }
 
+  // The KV throttle is gone (every check was a KV write per request):
+  // a saturated rate-limit record must not 429 a pageview, and no
+  // throttle record is written. Rate limiting belongs at the edge.
   const memory = memoryKV({ 'rl:track:203.0.113.9': { c: 120, r: Date.now() + 60_000 } });
-  const limited = await handlePageview(pageview({ sid: SID, path: '/pricing' }), envOf(memory.kv));
-  assert.equal(limited.status, 429);
-  assert.deepEqual(await bodyOf(limited), { ok: false, error: 'Rate limited' });
-  assert.equal(memory.store.has(`session:${SID}`), false);
-
-  // A different IP is unaffected.
-  const other = memoryKV({ 'rl:track:203.0.113.9': { c: 120, r: Date.now() + 60_000 } });
-  const allowed = await handlePageview(pageview({ sid: SID, path: '/pricing' }, { ip: '198.51.100.4' }), envOf(other.kv));
+  const before = memory.store.get('rl:track:203.0.113.9');
+  const allowed = await handlePageview(pageview({ sid: SID, path: '/pricing' }), envOf(memory.kv));
   assert.equal(allowed.status, 200);
-
-  // Heartbeat skips the throttle write: a saturated rate-limit record must
-  // not 429 it, and the record itself must be untouched. (Throttling every
-  // heartbeat was a KV write per beat and exhausted the daily write budget.)
-  const seeded = memoryKV({
-    'rl:track:203.0.113.9': { c: 120, r: Date.now() + 60_000 },
-    [`session:${SID}`]: {
-      ip: '203.0.113.9',
-      country: 'CA',
-      ua: '',
-      device: 'desktop',
-      browser: 'other',
-      startedAt: Date.now() - 10_000,
-      lastSeenAt: Date.now() - 301_000,
-      pages: [{ path: '/pricing', at: Date.now() - 10_000, durationMs: 0 }],
-      clicks: [],
-    },
-  });
-  const before = seeded.store.get('rl:track:203.0.113.9');
-  const beat = await handleHeartbeat(heartbeat({ sid: SID, path: '/pricing', durationMs: 1000 }), envOf(seeded.kv));
-  assert.equal(beat.status, 200);
-  assert.equal(seeded.store.get('rl:track:203.0.113.9'), before, 'throttle record untouched');
+  assert.equal(memory.store.get('rl:track:203.0.113.9'), before, 'record untouched');
+  assert.equal([...memory.store.keys()].filter((k) => k.startsWith('rl:track:')).length, 1, 'no new throttle record');
 });
 
 test('clicks attach to an existing session only, with clamped labels', async () => {

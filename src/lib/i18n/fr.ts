@@ -1321,6 +1321,7 @@ const fr = {
     logout: "Se déconnecter",
     tabs: {
       stats: "Stats",
+      visitors: "Visiteurs",
       forms: "Formulaires",
       outreach: "Prospection",
       audits: "Audits",
@@ -1490,6 +1491,20 @@ const fr = {
         "WA-0156": "Vide. Constat fictif, affiché quand un site a moins de 94 mais qu'aucun vrai problème n'a été trouvé.",
         "WA-0168": "Vide. Constat fictif, affiché quand un site a moins de 94 mais qu'aucun vrai problème n'a été trouvé.",
       },
+    },
+    visitors: {
+      title: "Visiteurs",
+      empty: "Aucun visiteur pour l’instant. Quand quelqu’un parcourra le site, ses pages et ses clics apparaîtront ici, du plus récent au plus ancien.",
+      loadError: "Impossible de charger les visiteurs.",
+      retry: "Réessayer",
+      started: "Première visite",
+      lastSeen: "Dernière visite",
+      pages: "pages",
+      clicks: "clics",
+      viewed: "Page vue",
+      clicked: "Clic",
+      spent: "passé",
+      from: "depuis",
     },
     coupons: {
       title: "Coupons",

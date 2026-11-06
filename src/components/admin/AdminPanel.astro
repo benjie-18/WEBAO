@@ -67,6 +67,10 @@ const a = t.admin;
         aria-selected="true" data-tab="stats" class="admin-tab is-active"
       >{a.tabs.stats}</button>
       <button
+        type="button" role="tab" id="admin-tab-visitors" aria-controls="admin-panel-visitors"
+        aria-selected="false" tabindex="-1" data-tab="visitors" class="admin-tab"
+      >{a.tabs.visitors}</button>
+      <button
         type="button" role="tab" id="admin-tab-forms" aria-controls="admin-panel-forms"
         aria-selected="false" tabindex="-1" data-tab="forms" class="admin-tab"
       >{a.tabs.forms}</button>
@@ -140,7 +144,15 @@ const a = t.admin;
       </div>
     </section>
 
-    <!-- Tab 2 · Forms -->
+    <!-- Tab 2 · Visitors (per-visitor pageviews + clicks, newest first) -->
+    <section
+      id="admin-panel-visitors" role="tabpanel" aria-labelledby="admin-tab-visitors"
+      data-panel="visitors" class="admin-panel" hidden
+    >
+      <div class="admin-forms-list" data-visitors-list></div>
+    </section>
+
+    <!-- Tab 3 · Forms -->
     <section
       id="admin-panel-forms" role="tabpanel" aria-labelledby="admin-tab-forms"
       data-panel="forms" class="admin-panel" hidden
@@ -515,6 +527,11 @@ const a = t.admin;
 
   /* Forms */
   .admin-forms-list { display: grid; gap: 12px; }
+  /* Visitors tab: one expandable card per visitor, timeline of their actions. */
+  details.admin-card summary { cursor: pointer; font-weight: 600; }
+  .admin-card-meta { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 10px 0 4px; font-size: 13px; color: var(--muted); }
+  .admin-timeline { margin: 10px 0 0; padding-left: 18px; display: grid; gap: 4px; font-size: 13px; }
+  .admin-timeline li::marker { color: var(--muted); }
   /* Finding-code legend on the Audits tab: collapsed by default. */
   .admin-codes { margin-bottom: 16px; border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; background: var(--card-bg); }
   .admin-codes summary { cursor: pointer; font-weight: 600; }

@@ -1,8 +1,8 @@
 // WEBAO admin panel client app.
-// Login gate + six tabs (Stats / Forms / Outreach / Audits / Clients / Config)
-// talking to the Worker API described in worker/API.md. All user-controlled
-// strings are HTML-escaped before rendering. Auth token lives in
-// sessionStorage (never in the URL).
+// Login gate + tabs (Stats / Visitors / Forms / Outreach / Audits / Coupons /
+// Clients / Config) talking to the Worker API described in worker/API.md.
+// All user-controlled strings are HTML-escaped before rendering. Auth token
+// lives in sessionStorage (never in the URL).
 
 import { donutSegments, donutSlicePath, niceCeil } from "./chart-math";
 
@@ -318,7 +318,7 @@ function initAdmin(): void {
 
   /* ── Tabs ── */
   let activeTab = "";
-  const tabLoaded: Record<string, boolean> = { stats: false, forms: false, leads: false, audits: false, clients: false, config: false };
+  const tabLoaded: Record<string, boolean> = { stats: false, visitors: false, forms: false, leads: false, audits: false, clients: false, config: false };
 
   function activateTab(name: string, force = false): void {
     if (!force && name === activeTab) return;
@@ -337,6 +337,7 @@ function initAdmin(): void {
     if (!tabLoaded[name]) {
       tabLoaded[name] = true;
       if (name === "stats") void loadStats();
+      else if (name === "visitors") void loadVisitors();
       else if (name === "forms") void loadForms(true);
       else if (name === "leads") void loadLeads(true);
       else if (name === "audits") void loadAudits(true);
@@ -1403,6 +1404,24 @@ function initAdmin(): void {
     reportRequestedAt?: number;
   }
 
+  interface VisitorItem {
+    sid: string;
+    startedAt: number;
+    lastSeenAt: number;
+    device: string;
+    browser: string;
+    country: string;
+    city?: string;
+    ip: string;
+    pages: { path: string; at: number; durationMs: number; referrer?: string }[];
+    clicks: { path: string; kind: string; label: string; at: number }[];
+  }
+
+  interface VisitorsResponse {
+    ok: boolean;
+    items: VisitorItem[];
+  }
+
   interface AuditsResponse {
     ok: boolean;
     items: AuditItem[];
@@ -1518,6 +1537,67 @@ function initAdmin(): void {
       if (e instanceof ExpiredSession) return;
       btn.removeAttribute("disabled");
       toast(String(I18N.audits.deleteError), "err");
+    }
+  }
+
+  /* ── Visitors tab ── */
+  function visitorCard(item: VisitorItem): string {
+    const V = I18N.visitors as Dict;
+    // One timeline per visitor: pageviews + clicks merged by time, so the
+    // visitor's path through the site reads top to bottom.
+    type Ev =
+      | { at: number; kind: "page"; path: string; durationMs: number; referrer?: string }
+      | { at: number; kind: "click"; path: string; label: string; clickKind: string };
+    const events: Ev[] = [
+      ...item.pages.map((p): Ev => ({ at: p.at, kind: "page", path: p.path, durationMs: p.durationMs, referrer: p.referrer })),
+      ...item.clicks.map((c): Ev => ({ at: c.at, kind: "click", path: c.path, label: c.label, clickKind: c.kind })),
+    ].sort((a, b) => a.at - b.at);
+    const rows = events
+      .map((e) => {
+        if (e.kind === "page") {
+          const secs = Math.round(e.durationMs / 1000);
+          const dur = secs > 0 ? ` · ${esc(V.spent)} ${secs}s` : "";
+          const ref = e.referrer ? ` · ${esc(V.from)} ${esc(e.referrer)}` : "";
+          return `<li><span class="mono">${esc(fmtDateTime(e.at))}</span> — <b>${esc(V.viewed)}</b> ${esc(e.path)}${dur}${ref}</li>`;
+        }
+        const label = e.label ? ` “${esc(e.label)}”` : "";
+        return `<li><span class="mono">${esc(fmtDateTime(e.at))}</span> — <b>${esc(V.clicked)}</b> ${esc(e.clickKind)}${label} · ${esc(e.path)}</li>`;
+      })
+      .join("");
+    const where = [item.city, item.country].filter(Boolean).join(", ");
+    const meta: string[] = [
+      `<span><b>${esc(V.started)}</b> ${esc(fmtDateTime(item.startedAt))}</span>`,
+      `<span><b>${esc(V.lastSeen)}</b> ${esc(fmtDateTime(item.lastSeenAt))}</span>`,
+      `<span>${esc(item.device)} · ${esc(item.browser)}</span>`,
+    ];
+    if (where) meta.push(`<span>${esc(where)}</span>`);
+    meta.push(`<span class="mono">${esc(item.ip)}</span>`);
+    return (
+      `<details class="admin-card" data-visitor-id="${esc(item.sid)}">` +
+      `<summary><b>${esc(item.device)} · ${esc(item.browser)}</b> — ${esc(where || item.country)} · ` +
+      `${item.pages.length} ${esc(V.pages)} · ${item.clicks.length} ${esc(V.clicks)}</summary>` +
+      `<div class="admin-card-meta">${meta.join("")}</div>` +
+      (rows ? `<ul class="admin-timeline">${rows}</ul>` : "") +
+      `</details>`
+    );
+  }
+
+  async function loadVisitors(): Promise<void> {
+    const list = qq("[data-visitors-list]");
+    if (!list) return;
+    list.innerHTML = `<p class="admin-loading">${esc(I18N.stats.loading)}</p>`;
+    try {
+      const data = (await api(`/api/admin/visitors?limit=50`)) as unknown as VisitorsResponse;
+      if (data.items.length === 0) {
+        list.innerHTML = `<div class="admin-empty">${esc(I18N.visitors.empty)}</div>`;
+        return;
+      }
+      list.innerHTML = data.items.map((item) => visitorCard(item)).join("");
+    } catch (e) {
+      if (e instanceof ExpiredSession) return;
+      list.innerHTML =
+        `<div class="admin-retry"><p>${esc(I18N.visitors.loadError)}</p>` +
+        `<button type="button" class="admin-ghost-btn" data-visitors-retry>${esc(I18N.visitors.retry)}</button></div>`;
     }
   }
 
@@ -1797,6 +1877,10 @@ function initAdmin(): void {
     }
     if (t.closest("[data-audits-retry]")) {
       void loadAudits(true);
+      return;
+    }
+    if (t.closest("[data-visitors-retry]")) {
+      void loadVisitors();
       return;
     }
     if (t.closest("[data-clients-retry]")) {

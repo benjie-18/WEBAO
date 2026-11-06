@@ -1312,6 +1312,7 @@ const en = {
     logout: "Log out",
     tabs: {
       stats: "Stats",
+      visitors: "Visitors",
       forms: "Forms",
       outreach: "Outreach",
       audits: "Audits",
@@ -1481,6 +1482,20 @@ const en = {
         "WA-0156": "Blank. Placeholder finding, shown when a site scores below 94 but no real issue was found.",
         "WA-0168": "Blank. Placeholder finding, shown when a site scores below 94 but no real issue was found.",
       },
+    },
+    visitors: {
+      title: "Visitors",
+      empty: "No visitors yet. When someone browses the site, their pages and clicks will appear here, newest first.",
+      loadError: "Couldn’t load visitors.",
+      retry: "Retry",
+      started: "First seen",
+      lastSeen: "Last seen",
+      pages: "pages",
+      clicks: "clicks",
+      viewed: "Viewed",
+      clicked: "Clicked",
+      spent: "spent",
+      from: "from",
     },
     coupons: {
       title: "Coupons",

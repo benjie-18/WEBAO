@@ -194,6 +194,11 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
           var startTs = 0;
           var curPath = "";
           var lastPv = "";
+          var finalSent = false;
+          // A final heartbeat was already sent for the current view:
+          // hide + pagehide both fire when a tab closes, and each would
+          // cost a KV write for the same visit. Reset when the tab is
+          // shown again or a new page is viewed.
 
           function post(url, body, useBeacon) {
             try {
@@ -216,6 +221,7 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
             if (key === lastPv) return;
             lastPv = key;
             startTs = Date.now();
+            finalSent = false;
             curPath = location.pathname;
             var body = { sid: sid, path: curPath };
             if (document.referrer) body.referrer = document.referrer;
@@ -229,6 +235,11 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
 
           function heartbeat(useBeacon, isFinal) {
             if (!startTs) return;
+            // One final beat per view: hide + pagehide both fire on close.
+            if (isFinal) {
+              if (finalSent) return;
+              finalSent = true;
+            }
             post(
               "/api/track/heartbeat",
               { sid: sid, path: curPath, durationMs: Date.now() - startTs, final: !!isFinal },
@@ -272,15 +283,15 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
           document.addEventListener("astro:before-preparation", function () { heartbeat(true, true); });
           document.addEventListener("visibilitychange", function () {
             if (document.visibilityState === "hidden") heartbeat(true, true);
+            else finalSent = false;
           });
           window.addEventListener("pagehide", function () { heartbeat(true, true); });
-          // Periodic heartbeat while the page stays open: every 5 minutes,
-          // matching the server's persist window, so a beat is never wasted
-          // on a coalesced write (see worker/track.ts). The final beats
-          // above always persist, so time-on-page stays exact.
-          window.setInterval(function () {
-            if (document.visibilityState === "visible") heartbeat(false, false);
-          }, 300000);
+          // No periodic heartbeat: the final beats above already send the
+          // total time on the page (durationMs is measured from the
+          // pageview, and the server keeps the largest value), so a beat
+          // every few minutes would only re-send intermediate totals
+          // nobody reads, at one KV write per open tab per beat. The
+          // final beat on hide / close / navigation is the only one kept.
 
           if (document.readyState !== "loading") pageview();
           else document.addEventListener("DOMContentLoaded", pageview, { once: true });

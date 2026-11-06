@@ -2,7 +2,7 @@
 // Sessions live 90 days in KV; per-day pageview counters aggregate into stats.
 
 import { getJson, putJson, incrCounter } from "./kv";
-import { getSettings, throttle } from "./auth";
+import { getSettings } from "./auth";
 import {
   clientIp,
   clientCountry,
@@ -20,8 +20,13 @@ import {
 const SESSION_TTL = 90 * 24 * 3600; // 90 days, in seconds
 const MAX_PAGES = 100; // cap stored page visits per session
 const MAX_CLICKS = 200; // cap stored click events per session
-// Periodic heartbeats persist at most once per window (matches the client
-// send interval). Final beats always persist, so durations stay exact.
+// Only final heartbeats arrive now (the client sends one on hide /
+// close / navigation, never periodically): each carries the total
+// time on the page since the pageview, and the server keeps the
+// largest value, so time-on-page stays exact with one write per
+// visit. The client dedupes its own final beats (hide + pagehide
+// can both fire for one close); the coalesce window below is kept
+// for non-final beats and still lets every final beat persist.
 const HEARTBEAT_COALESCE_MS = 300_000; // 5 min
 
 export interface PageVisit {
@@ -57,22 +62,20 @@ function validSid(sid: unknown): sid is string {
   return typeof sid === "string" && /^[A-Za-z0-9-]{8,64}$/.test(sid);
 }
 
-/** Shared gate for pageview/click: same-origin + 120 req/min per IP. */
-async function gate(req: Request, env: Env): Promise<Response | null> {
-  if (!originAllowed(req, true, env)) return err("Forbidden origin", 403);
-  if (!(await throttle(env.WEBAO_KV, "track", clientIp(req), 120))) return err("Rate limited", 429);
-  return null;
-}
-
 /**
- * Heartbeat gate: same-origin only, no rate-limit write. Every throttle
- * check is a KV write, and heartbeats arrive every few minutes from every
- * open tab — throttling them burned the daily KV write budget (1,000/day
- * on the free plan) and took down lead tracking with it. A heartbeat
- * cannot mint a write on its own: it only persists an existing session,
- * at most once per HEARTBEAT_COALESCE_MS, and the session id is an
- * unguessable uuid, so a blind flood costs reads only (100k/day) and
- * writes nothing.
+ * Shared gate for pageview/click/heartbeat: same-origin only, no
+ * rate-limit write. Every throttle check is a KV write, and these
+ * endpoints are hit on every pageview and click — throttling them
+ * burned the daily KV write budget (1,000/day on the free plan).
+ * Rate limiting belongs at the edge (a Cloudflare rate-limit rule
+ * on /api/track/*, 120/min per IP); the in-worker KV throttle was
+ * removed so a tracking call costs no write of its own. Note the
+ * trade-off: a pageview still mints a session for any valid-format
+ * sid, so a determined flood could burn session + counter writes
+ * with no per-IP cap until an edge rule is in place. The heartbeat
+ * cannot mint a write on its own (unknown session 404s), and the
+ * session id is an unguessable uuid, so a blind flood of heartbeats
+ * costs reads only (100k/day) and writes nothing.
  */
 function originGate(req: Request, env: Env): Response | null {
   if (!originAllowed(req, true, env)) return err("Forbidden origin", 403);
@@ -91,7 +94,7 @@ interface PageviewBody {
 /** POST /api/track/pageview — create/touch a session, count the view. */
 export async function handlePageview(req: Request, env: Env): Promise<Response> {
   const kv = env.WEBAO_KV;
-  const denied = await gate(req, env);
+  const denied = originGate(req, env);
   if (denied) return denied;
 
   let body: PageviewBody;
@@ -140,11 +143,13 @@ export async function handlePageview(req: Request, env: Env): Promise<Response> 
   if (s.pages.length > MAX_PAGES) s.pages = s.pages.slice(-MAX_PAGES);
   await putJson(kv, key, s, SESSION_TTL);
 
-  // Per-day counters; the stats endpoint aggregates these for week/month/year.
+  // Per-day counter; the stats endpoint aggregates these for week/month/year.
+  // (The old views:<day>:__all total is gone: the stats page sums the
+  // per-path counters instead and filters __all out, so it was a write
+  // nobody read.)
   const day = dayKey(now);
   const enc = encodeURIComponent(path);
   await incrCounter(kv, `views:${day}:${enc}`);
-  await incrCounter(kv, `views:${day}:__all`);
 
   return json({ ok: true });
 }
@@ -159,7 +164,7 @@ interface ClickBody {
 /** POST /api/track/click — append a click event to the session. */
 export async function handleClick(req: Request, env: Env): Promise<Response> {
   const kv = env.WEBAO_KV;
-  const denied = await gate(req, env);
+  const denied = originGate(req, env);
   if (denied) return denied;
 
   let body: ClickBody;

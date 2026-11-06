@@ -252,6 +252,11 @@ buckets. `visitors` counts distinct sessions by `startedAt`; devices/countries a
 aggregated over sessions in range. `topPages` is always the global top 10 for the
 range (not filtered by `page`).
 
+### `GET /api/admin/visitors?limit=50`
+→ `{ "ok": true, "items": [{ sid, startedAt, lastSeenAt, device, browser, country, city?, ip, pages: [{ path, at, durationMs, referrer? }], clicks: [{ path, kind, label, at }] }] }`
+Most recently active sessions first. `limit` clamped to 1–100. Powers the admin
+Visitors tab: each visitor's pageviews + clicks merged into one timeline.
+
 ### `GET /api/admin/forms?limit=50&cursor=`
 → `{ "ok": true, "items": [{ id, form, fields, ip, country, ua, at }], "nextCursor": "50" | null }`
 Newest-first. `limit` clamped to 1–100. Pass `nextCursor` back as `cursor` for the

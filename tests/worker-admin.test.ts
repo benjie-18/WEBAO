@@ -168,6 +168,49 @@ test('a malformed view key does not take stats down', async () => {
   ]);
 });
 
+test('the visitors list returns each session with its pages and clicks, newest first', async () => {
+  const memory = memoryKV();
+  const token = await authed(memory);
+  const now = Date.now();
+  const older = JSON.stringify({
+    ip: '203.0.113.1', country: 'CA', city: 'Montreal', ua: '', device: 'mobile', browser: 'safari',
+    startedAt: now - 3600_000, lastSeenAt: now - 1800_000,
+    pages: [{ path: '/', at: now - 3600_000, durationMs: 5000 }],
+    clicks: [{ path: '/', kind: 'link', label: 'Pricing', at: now - 3500_000 }],
+  });
+  const newer = JSON.stringify({
+    ip: '198.51.100.2', country: 'US', ua: '', device: 'desktop', browser: 'chrome',
+    startedAt: now - 600_000, lastSeenAt: now - 60_000,
+    pages: [
+      { path: '/', at: now - 600_000, durationMs: 30000 },
+      { path: '/pricing', at: now - 570_000, durationMs: 120000, referrer: 'https://google.com/' },
+    ],
+    clicks: [],
+  });
+  memory.store.set('session:aaa-older', older);
+  memory.store.set('session:zzz-newer', newer);
+  memory.store.set('session:broken', 'not-json');
+
+  const denied = await handleAdmin(adminGet('/api/admin/visitors'), envOf(memory.kv), url('/api/admin/visitors'));
+  assert.equal(denied.status, 401, 'Bearer <redacted> required');
+
+  const response = await handleAdmin(adminGet('/api/admin/visitors', token), envOf(memory.kv), url('/api/admin/visitors'));
+  assert.equal(response.status, 200);
+  const body = await bodyOf(response);
+  assert.equal(body.ok, true);
+  assert.equal(body.items.length, 2, 'the broken session value is skipped');
+  assert.equal(body.items[0].sid, 'zzz-newer', 'most recently active first');
+  assert.equal(body.items[0].pages.length, 2);
+  assert.equal(body.items[0].pages[1].path, '/pricing');
+  assert.equal(body.items[0].pages[1].referrer, 'https://google.com/');
+  assert.equal(body.items[1].sid, 'aaa-older');
+  assert.equal(body.items[1].clicks.length, 1);
+  assert.equal(body.items[1].clicks[0].label, 'Pricing');
+
+  const one = await handleAdmin(adminGet('/api/admin/visitors?limit=1', token), envOf(memory.kv), url('/api/admin/visitors?limit=1'));
+  assert.equal((await bodyOf(one)).items.length, 1, 'limit is honoured');
+});
+
 test('the forms list clamps its limit, paginates and filters by type', async () => {
   const memory = memoryKV();
   const token = await authed(memory);

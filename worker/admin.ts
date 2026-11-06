@@ -80,6 +80,7 @@ export async function handleAdmin(req: Request, env: Env, url: URL): Promise<Res
   if (req.method === "GET" && !originAllowed(req, false, env)) return err("Forbidden origin", 403);
 
   if (path === "/api/admin/stats" && req.method === "GET") return handleStats(kv, url);
+  if (path === "/api/admin/visitors" && req.method === "GET") return handleVisitorsList(kv, url);
   if (path === "/api/admin/forms" && req.method === "GET") return handleFormsList(kv, url);
   if (path.startsWith("/api/admin/forms/") && req.method === "DELETE")
     return handleFormDelete(kv, path);
@@ -247,6 +248,52 @@ async function handleStats(kv: KVNamespace, url: URL): Promise<Response> {
     devices,
     countries,
   });
+}
+
+// ---------------------------------------------------------------------------
+// Visitors — per-visitor pageviews + clicks, newest first
+// ---------------------------------------------------------------------------
+
+export interface VisitorItem {
+  sid: string;
+  startedAt: number;
+  lastSeenAt: number;
+  device: Session["device"];
+  browser: string;
+  country: string;
+  city?: string;
+  ip: string;
+  pages: { path: string; at: number; durationMs: number; referrer?: string }[];
+  clicks: { path: string; kind: string; label: string; at: number }[];
+}
+
+/** GET /api/admin/visitors?limit=50 — most recently active sessions first. */
+async function handleVisitorsList(kv: KVNamespace, url: URL): Promise<Response> {
+  const rawLimit = parseInt(url.searchParams.get("limit") || "50", 10);
+  const limit = Math.min(Math.max(isNaN(rawLimit) ? 50 : rawLimit, 1), 100);
+
+  const keys = await listAllKeys(kv, "session:", 20000);
+  const sessions = (
+    await batch(keys, 50, async (k) => {
+      const s = await getJson<Session>(kv, k);
+      return s ? { sid: k.slice("session:".length), s } : null;
+    })
+  ).filter((x): x is { sid: string; s: Session } => !!x && typeof x.s.startedAt === "number");
+  sessions.sort((a, b) => (b.s.lastSeenAt || b.s.startedAt) - (a.s.lastSeenAt || a.s.startedAt));
+
+  const items: VisitorItem[] = sessions.slice(0, limit).map(({ sid, s }) => ({
+    sid,
+    startedAt: s.startedAt,
+    lastSeenAt: s.lastSeenAt || s.startedAt,
+    device: s.device,
+    browser: s.browser,
+    country: s.country,
+    city: s.city,
+    ip: s.ip,
+    pages: s.pages || [],
+    clicks: s.clicks || [],
+  }));
+  return json({ ok: true, items });
 }
 
 // ---------------------------------------------------------------------------
