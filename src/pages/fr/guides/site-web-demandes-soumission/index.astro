@@ -1,0 +1,114 @@
+---
+import GuidePage from "../../../../components/pages/GuidePage.astro";
+
+const locale = "fr" as const;
+---
+
+<GuidePage
+  locale={locale}
+  pageKey="guideQuoteRequests"
+  title="Un site web qui apporte des demandes de soumission | WEBAO"
+  description="Ce qui pousse un visiteur à demander une soumission au lieu de quitter le site, pour les métiers et les entreprises de services locales."
+  eyebrow="Guides"
+  heading="Un site web qui apporte des demandes de soumission"
+  intro="Pour une entreprise de métiers ou de services locaux, un site web a un travail principal : transformer un visiteur en demande de soumission. Ce guide explique ce qui pousse un visiteur à demander une soumission au lieu de partir, et ce qu'il faut mettre sur le site pour que cela arrive plus souvent."
+  answerLine="Un visiteur demande une soumission quand le site répond vite à trois questions : ce que vous faites, où vous travaillez, et comment vous joindre."
+  sections={[
+    {
+      heading: "Les trois questions que chaque visiteur se pose",
+      body: "Un visiteur décide en quelques secondes s'il reste ou s'il part. Le site devrait répondre à ces trois questions dès le premier écran, en mots simples, sans laisser deviner.",
+      subsections: [
+        {
+          heading: "Ce que vous faites",
+          body: "Dites ce que vous faites en mots simples, avec une liste de vos services. Un visiteur ne devrait pas avoir à lire un long paragraphe pour savoir si vous faites le travail dont il a besoin.",
+        },
+        {
+          heading: "Où vous travaillez",
+          body: "Nommez votre zone de service et les villes où vous travaillez. Un visiteur hors de votre zone devrait le savoir tout de suite, et un visiteur dans votre zone devrait être certain que vous vous déplacez chez lui.",
+        },
+        {
+          heading: "Comment vous joindre",
+          body: "Rendez l'appel facile et la demande de soumission facile. Un bouton d'appel et un formulaire de soumission devraient être faciles à trouver sur chaque page, y compris sur un téléphone.",
+        },
+      ],
+    },
+    {
+      heading: "Le formulaire de soumission",
+      body: "Le formulaire est l'endroit où une visite devient une demande. Gardez-le court pour que les gens le terminent.",
+      items: [
+        "Demandez un nom et un numéro de téléphone, pour pouvoir répondre.",
+        "Demandez quel service est nécessaire.",
+        "Demandez une courte description du travail.",
+        "Gardez le formulaire court. Chaque champ supplémentaire est une raison d'arrêter et de partir.",
+      ],
+    },
+    {
+      heading: "Photos et preuves de travail",
+      body: "Les photos montrent ce que les mots ne peuvent pas montrer. Montrez des photos de vrais travaux que vous avez faits, avant et après quand vous en avez. Montrez seulement des photos de la propriété d'un client avec la permission de ce client.",
+      items: [
+        "Des photos de vrais travaux, pas des photos d'archives du travail de quelqu'un d'autre.",
+        "Des photos avant et après quand vous en avez.",
+        "Des photos de l'équipe au travail, pour que les visiteurs sachent qui se présentera.",
+      ],
+    },
+    {
+      heading: "Réservation et extras",
+      body: "Certains visiteurs préfèrent réserver plutôt que demander une soumission. Deux modules complémentaires couvrent cela, en dollars canadiens :",
+      items: [
+        "Module Réservation en ligne, 49,99 $ CA/mois : les clients réservent des rendez-vous en ligne.",
+        "Module Photo jointe à la soumission, 9,99 $ CA/mois, Launch seulement : permet aux clients de joindre une photo à une demande de soumission.",
+      ],
+    },
+    {
+      heading: "Ce qui se passe après une demande",
+      body: "Une demande de soumission n'est utile que si elle parvient à l'entreprise et reçoit une réponse.",
+      items: [
+        "La demande parvient à l'entreprise pour qu'elle puisse répondre.",
+        "Répondez vite, pendant que le travail est encore frais dans l'esprit du visiteur. Un visiteur qui attend peut demander à quelqu'un d'autre.",
+        "Demandez les détails nécessaires pour établir le prix du travail, comme l'ampleur du travail, l'endroit, et toute photo utile.",
+      ],
+    },
+    {
+      heading: "Comment commencer",
+      items: [
+        "Allez à /fr/commencer et décrivez l'entreprise, les services, et la zone de service.",
+        "Dites pour quels services vous voulez que les visiteurs demandent une soumission, et ce que votre formulaire de soumission devrait demander.",
+        "Webao construit le site sur mesure, puis s'en occupe dans le cadre du forfait.",
+      ],
+    },
+  ]}
+  faqs={[
+    {
+      q: "Que devrait demander un formulaire de soumission?",
+      a: "Un nom, un numéro de téléphone, le service nécessaire, et une courte description du travail. Gardez-le court pour que les gens le terminent. Chaque champ supplémentaire est une raison d'arrêter et de partir.",
+    },
+    {
+      q: "Ai-je besoin de photos sur mon site?",
+      a: "Les photos aident, car elles montrent ce que les mots ne peuvent pas montrer. Montrez des photos de vrais travaux que vous avez faits, avant et après quand vous en avez. Montrez seulement des photos de la propriété d'un client avec la permission de ce client.",
+    },
+    {
+      q: "Les clients peuvent-ils réserver en ligne au lieu de demander une soumission?",
+      a: "Oui. Le module Réservation en ligne coûte 49,99 $ CA/mois et permet aux clients de réserver des rendez-vous en ligne. Le module Photo jointe à la soumission coûte 9,99 $ CA/mois, Launch seulement, et permet aux clients de joindre une photo à une demande de soumission.",
+    },
+    {
+      q: "À quelle vitesse devrais-je répondre à une demande de soumission?",
+      a: "Répondez rapidement, pendant que le travail est encore frais dans l'esprit du visiteur. Un visiteur qui attend peut demander à quelqu'un d'autre, alors ne laissez pas une demande sans réponse.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Autres guides"
+  siblings={[
+    { href: "/fr/guides/preparer-votre-site-web/", label: "Quoi préparer avant la construction de votre site web", note: "Une liste pratique pour qu'une petite entreprise commence sans délai." },
+    { href: "/fr/guides/bases-seo-pme/", label: "Bases du SEO pour une petite entreprise", note: "Ce que le SEO de base couvre sur un site Webao, et ce que le propriétaire doit fournir." },
+  ]}
+  startLabel="Commencer votre site"
+  emailLabel="Courriel contact@webao.ca"
+  articleSchema={{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: "Un site web qui apporte des demandes de soumission",
+    description: "Ce qui pousse un visiteur à demander une soumission au lieu de quitter le site, pour les métiers et les entreprises de services locales.",
+    author: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    inLanguage: "fr-CA",
+  }}
+/>

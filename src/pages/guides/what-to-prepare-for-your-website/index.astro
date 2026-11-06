@@ -1,0 +1,114 @@
+---
+import GuidePage from "../../../components/pages/GuidePage.astro";
+
+const locale = "en" as const;
+---
+
+<GuidePage
+  locale={locale}
+  pageKey="guidePrepare"
+  title="What to prepare before your website is built | WEBAO"
+  description="A practical checklist for a small business getting ready for a custom website: what to send, what photos and words to prepare, and what happens next."
+  eyebrow="Guides"
+  heading="What to prepare before your website is built"
+  intro="A practical checklist so a small business can start without delays. Gather the items below, send them in, and Webao can get started on your site."
+  answerLine="Most sites launch in 2 to 3 weeks from complete materials."
+  sections={[
+    {
+      heading: "The short checklist",
+      body: "These are the materials Webao needs to start building your site. You do not need a finished text for every page, just the facts below, in your own words.",
+      items: [
+        "Business name",
+        "Services list",
+        "Service area and cities served",
+        "Hours",
+        "Phone and email",
+        "Logo, if you have one",
+        "Photos of your work",
+        "Your services in your own words, in English and French where needed",
+      ],
+    },
+    {
+      heading: "Photos",
+      body: "Photos show what your business really does. A couple of photos of real work, your team, and your premises, if you have them, are enough to start.",
+      items: [
+        "A couple of photos of real work",
+        "Photos of your team, if you have them",
+        "Photos of your premises, if you have them",
+        "Only photos you own or have the right to use",
+      ],
+    },
+    {
+      heading: "Words and prices",
+      body: "Write your services the way you say them to customers. Plain words from the business itself read better than polished marketing text, and they help the site answer the questions customers actually ask.",
+      items: [
+        "Write services the way you say them to customers",
+        "Include prices only if you want them shown on the site",
+      ],
+    },
+    {
+      heading: "What happens after you send it",
+      body: "Once your materials are in, Webao replies with two demo directions as a style direction only. Client sites are custom builds, never template clones, and you see a private preview of your own site within a few days.",
+      items: [
+        "Webao replies with two demo directions as a style direction only",
+        "Client sites are custom builds, never template clones",
+        "You see a private preview within a few days",
+        "One revision round",
+      ],
+    },
+    {
+      heading: "Website plans reminder",
+      body: "Website plans, in Canadian dollars. The plan covers the build and the ongoing running of the site in one monthly payment.",
+      items: [
+        "Launch C$89.99 per month",
+        "Grow C$149.99 per month",
+        "Scale C$349.99 per month",
+        "Annual billing is 2 months free",
+        "Initial term 6 months, then month to month, with 30 days notice",
+        "No setup fee for website plans",
+        "Plans include domain, hosting, SSL, mobile friendly design, contact form, basic SEO, and content updates",
+      ],
+    },
+    {
+      heading: "How to start",
+      items: [
+        "Go to /start and describe the business and the site you need.",
+        "Send the materials from the checklist above, or tell Webao what you have ready so far.",
+      ],
+    },
+  ]}
+  faqs={[
+    {
+      q: "What do I need to send to start?",
+      a: "Your business name, services list, service area and cities served, hours, phone and email, logo if you have one, photos of your work, and your services in your own words, in English and French where needed.",
+    },
+    {
+      q: "Do I need a logo or professional photos?",
+      a: "No. A logo helps if you have one, but it is not required. A couple of photos of real work, your team, and your premises, if you have them, are enough to start, as long as they are photos you own or have the right to use.",
+    },
+    {
+      q: "How long does it take?",
+      a: "Most sites launch in 2 to 3 weeks from complete materials. You see a private preview within a few days, with one revision round.",
+    },
+    {
+      q: "Will my site be a template?",
+      a: "No. Client sites are custom builds, never template clones. Webao replies with two demo directions as a style direction only, and your site is built for your business.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other guides"
+  siblings={[
+    { href: "/guides/website-cost-canada/", label: "How much does a website cost in Canada?", note: "How website pricing works, and what Webao charges, with no invented ranges." },
+    { href: "/guides/when-to-redesign-your-website/", label: "When to redesign your website", note: "The signs a site needs a refresh, and the difference between a refresh and a rebuild." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  articleSchema={{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: "What to prepare before your website is built",
+    description: "A practical checklist for a small business getting ready for a custom website: what to send, what photos and words to prepare, and what happens next.",
+    author: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    inLanguage: "en-CA",
+  }}
+/>

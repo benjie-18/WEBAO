@@ -2,7 +2,7 @@ export const locales = ["en", "fr"] as const;
 export type Locale = typeof locales[number];
 export const defaultLocale: Locale = "en";
 
-export type PageKey = "home" | "pricing" | "contact" | "demos" | "notfound" | "start" | "terms" | "refunds" | "sources" | "support" | "privacy" | "portal" | "serviceDesign" | "servicePlans" | "serviceHosting" | "serviceMontreal" | "guideCost" | "guideBill96" | "guideLaw25" | "audit";
+export type PageKey = "home" | "pricing" | "contact" | "demos" | "notfound" | "start" | "terms" | "refunds" | "sources" | "support" | "privacy" | "portal" | "serviceDesign" | "servicePlans" | "serviceHosting" | "serviceMontreal" | "guideCost" | "guideBill96" | "guideLaw25" | "guideIndex" | "guideSeo" | "guideAdsChannels" | "guideAiReceptionist" | "guidePrepare" | "guideQuoteRequests" | "guideRedesign" | "audit";
 
 export const localizedPaths: Record<Locale, Record<PageKey, string>> = {
   en: {
@@ -26,6 +26,13 @@ export const localizedPaths: Record<Locale, Record<PageKey, string>> = {
     guideCost: "/guides/website-cost-canada",
     guideBill96: "/guides/quebec-bill-96-website",
     guideLaw25: "/guides/quebec-law-25-website",
+    guideIndex: "/guides",
+    guideSeo: "/guides/small-business-seo-basics",
+    guideAdsChannels: "/guides/meta-vs-google-ads-small-business",
+    guideAiReceptionist: "/guides/ai-receptionist-small-business",
+    guidePrepare: "/guides/what-to-prepare-for-your-website",
+    guideQuoteRequests: "/guides/website-that-brings-quote-requests",
+    guideRedesign: "/guides/when-to-redesign-your-website",
   },
   fr: {
     home: "/fr",
@@ -48,6 +55,13 @@ export const localizedPaths: Record<Locale, Record<PageKey, string>> = {
     guideCost: "/fr/guides/cout-site-web-canada",
     guideBill96: "/fr/guides/loi-96-site-web-quebec",
     guideLaw25: "/fr/guides/loi-25-site-web-quebec",
+    guideIndex: "/fr/guides",
+    guideSeo: "/fr/guides/bases-seo-pme",
+    guideAdsChannels: "/fr/guides/meta-ou-google-ads-pme",
+    guideAiReceptionist: "/fr/guides/receptionniste-ia-pme",
+    guidePrepare: "/fr/guides/preparer-votre-site-web",
+    guideQuoteRequests: "/fr/guides/site-web-demandes-soumission",
+    guideRedesign: "/fr/guides/quand-refaire-votre-site-web",
   },
 };
 

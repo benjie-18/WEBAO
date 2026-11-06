@@ -38,7 +38,7 @@ test('the sitemap is served as cacheable XML', async () => {
 test('the sitemap lists every locale page, the standalone pages and every visible demo', async () => {
   const { locs } = await sitemap();
   const expected =
-    17 * 2 + // home, pricing, contact, demos, start, audit, terms, refunds, support, privacy + 4 service pages + 3 guide pages × en/fr
+    24 * 2 + // home, pricing, contact, demos, start, audit, terms, refunds, support, privacy + 4 service pages + 3 guide pages + guides index + 6 new guide pages × en/fr
     2 + // /sources, /fr/sources
     (demos.length - 1) * 2; // every demo except the hidden one, × en/fr
   assert.equal(locs.length, expected, `${locs.length} urls`);
@@ -77,6 +77,20 @@ test('the sitemap lists every locale page, the standalone pages and every visibl
     `${SITE}/fr/guides/loi-96-site-web-quebec/`,
     `${SITE}/guides/quebec-law-25-website/`,
     `${SITE}/fr/guides/loi-25-site-web-quebec/`,
+    `${SITE}/guides/`,
+    `${SITE}/fr/guides/`,
+    `${SITE}/guides/small-business-seo-basics/`,
+    `${SITE}/fr/guides/bases-seo-pme/`,
+    `${SITE}/guides/meta-vs-google-ads-small-business/`,
+    `${SITE}/fr/guides/meta-ou-google-ads-pme/`,
+    `${SITE}/guides/ai-receptionist-small-business/`,
+    `${SITE}/fr/guides/receptionniste-ia-pme/`,
+    `${SITE}/guides/what-to-prepare-for-your-website/`,
+    `${SITE}/fr/guides/preparer-votre-site-web/`,
+    `${SITE}/guides/website-that-brings-quote-requests/`,
+    `${SITE}/fr/guides/site-web-demandes-soumission/`,
+    `${SITE}/guides/when-to-redesign-your-website/`,
+    `${SITE}/fr/guides/quand-refaire-votre-site-web/`,
     `${SITE}/sources/`,
     `${SITE}/fr/sources/`,
     `${SITE}/demos/nora/`,
@@ -164,7 +178,7 @@ test('the sitemap declares the image namespace and lists demo lead images', asyn
   }
   // The escaped ampersand in "Sahara & Sage" must survive as &amp; in the XML.
   assert.ok(body.includes('<image:title>Sahara &amp; Sage</image:title>'));
-  const expectedUrls = 17 * 2 + 2 + (demos.length - 1) * 2; // locale pages + /sources pair + visible demos
+  const expectedUrls = 24 * 2 + 2 + (demos.length - 1) * 2; // locale pages + /sources pair + visible demos
   assert.ok(locs.length === expectedUrls, 'image entries do not add url entries');
 });
 

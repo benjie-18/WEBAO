@@ -69,6 +69,7 @@ const en = {
     howItWorks: "How it works",
     portal: "Client portal",
     guides: "Guides",
+    guidesIndex: "All guides",
     guideCost: "How much does a website cost in Canada?",
     guideBill96: "Quebec Bill 96 and your website",
     guideLaw25: "Quebec Law 25 and your website",

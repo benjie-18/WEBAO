@@ -1,0 +1,98 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+
+const locale = "fr" as const;
+
+const guides = [
+  {
+    href: "/fr/guides/cout-site-web-canada/",
+    label: "Combien coûte un site web au Canada ?",
+    note: "Le fonctionnement des prix pour un site web, et ce que Webao facture, sans fourchette inventée.",
+  },
+  {
+    href: "/fr/guides/loi-96-site-web-quebec/",
+    label: "Loi 96 du Québec : les bases du français pour le site web d'une petite entreprise",
+    note: "La règle de base du français pour un site web destiné aux clients du Québec, en langage simple.",
+  },
+  {
+    href: "/fr/guides/loi-25-site-web-quebec/",
+    label: "Loi 25 du Québec : les bases de la confidentialité pour le site web d'une petite entreprise",
+    note: "Les bases de la confidentialité pour un site qui recueille des renseignements personnels de personnes au Québec.",
+  },
+  {
+    href: "/fr/guides/bases-seo-pme/",
+    label: "Bases du SEO pour une petite entreprise",
+    note: "Ce que le SEO de base couvre sur un site Webao, et ce que le propriétaire doit fournir.",
+  },
+  {
+    href: "/fr/guides/meta-ou-google-ads-pme/",
+    label: "Publicité Meta ou Google pour une petite entreprise ?",
+    note: "Les deux canaux publicitaires gérés par Webao, et comment choisir entre les deux.",
+  },
+  {
+    href: "/fr/guides/receptionniste-ia-pme/",
+    label: "Réceptionniste IA pour une petite entreprise",
+    note: "Ce que la réceptionniste IA répond, ce qu'elle coûte, et ce que votre entreprise doit fournir.",
+  },
+  {
+    href: "/fr/guides/preparer-votre-site-web/",
+    label: "Quoi préparer avant la construction de votre site web",
+    note: "Une liste pratique pour qu'une petite entreprise commence sans délai.",
+  },
+  {
+    href: "/fr/guides/site-web-demandes-soumission/",
+    label: "Un site web qui apporte des demandes de soumission",
+    note: "Ce qui pousse un visiteur à demander une soumission au lieu de partir.",
+  },
+  {
+    href: "/fr/guides/quand-refaire-votre-site-web/",
+    label: "Quand refaire votre site web",
+    note: "Les signes qu'un site a besoin d'une refonte, et la différence entre une refonte et une reconstruction.",
+  },
+];
+
+const itemListSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "Guides",
+  numberOfItems: guides.length,
+  itemListElement: guides.map((guide, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: guide.label,
+    url: `https://webao.ca${guide.href}`,
+  })),
+});
+---
+
+<BaseLayout
+  title="Guides pour les sites web de petites entreprises | WEBAO"
+  description="Des guides simples pour les propriétaires de petites entreprises au Canada : coût d'un site web, règles du Québec sur la langue et la confidentialité, SEO, publicité, services IA, et quoi préparer avant la construction d'un site."
+  locale={locale}
+  pageKey="guideIndex"
+>
+  <script is:inline type="application/ld+json" set:html={itemListSchema} />
+
+  <section class="section">
+    <div class="shell" style="max-width: 860px;">
+      <div class="eyebrow">Guides</div>
+      <h1 class="display" style="font-size: clamp(2.2rem, 5vw, 3.8rem); line-height:.95; margin-top:12px;">Guides</h1>
+      <p class="prose" style="margin-top:14px; max-width: 62ch;">Des guides simples pour les propriétaires de petites entreprises au Canada. Aucune moyenne du marché, aucun prix de concurrent, aucune fourchette inventée. Les seuls prix concrets dans ces guides sont ceux de Webao.</p>
+
+      <div style="margin-top: 44px; display:grid; gap: 16px;">
+        {guides.map((guide) => (
+          <div class="info-card">
+            <h2><a href={guide.href} style="color: inherit; text-decoration: underline; text-underline-offset:3px;">{guide.label}</a></h2>
+            <p>{guide.note}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .info-card { background: var(--card-bg); border:1px solid var(--line); border-radius:16px; padding:20px 22px; box-shadow: var(--shadow-sm); }
+    .info-card h2 { font-size:1.15rem; letter-spacing:-0.01em; margin:0 0 10px; }
+    .info-card p { margin-top:8px; font-size:14px; color: var(--muted); line-height:1.6; }
+  </style>
+</BaseLayout>

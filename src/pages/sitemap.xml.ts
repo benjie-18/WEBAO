@@ -26,6 +26,13 @@ const pagesByLocale: Record<Locale, { key: keyof typeof localizedPaths.en; chang
     { key: "guideCost", changefreq: "monthly", priority: "0.8" },
     { key: "guideBill96", changefreq: "monthly", priority: "0.8" },
     { key: "guideLaw25", changefreq: "monthly", priority: "0.8" },
+    { key: "guideIndex", changefreq: "monthly", priority: "0.8" },
+    { key: "guideSeo", changefreq: "monthly", priority: "0.8" },
+    { key: "guideAdsChannels", changefreq: "monthly", priority: "0.8" },
+    { key: "guideAiReceptionist", changefreq: "monthly", priority: "0.8" },
+    { key: "guidePrepare", changefreq: "monthly", priority: "0.8" },
+    { key: "guideQuoteRequests", changefreq: "monthly", priority: "0.8" },
+    { key: "guideRedesign", changefreq: "monthly", priority: "0.8" },
   ],
   fr: [
     { key: "home", changefreq: "weekly", priority: "1.0" },
@@ -45,6 +52,13 @@ const pagesByLocale: Record<Locale, { key: keyof typeof localizedPaths.en; chang
     { key: "guideCost", changefreq: "monthly", priority: "0.8" },
     { key: "guideBill96", changefreq: "monthly", priority: "0.8" },
     { key: "guideLaw25", changefreq: "monthly", priority: "0.8" },
+    { key: "guideIndex", changefreq: "monthly", priority: "0.8" },
+    { key: "guideSeo", changefreq: "monthly", priority: "0.8" },
+    { key: "guideAdsChannels", changefreq: "monthly", priority: "0.8" },
+    { key: "guideAiReceptionist", changefreq: "monthly", priority: "0.8" },
+    { key: "guidePrepare", changefreq: "monthly", priority: "0.8" },
+    { key: "guideQuoteRequests", changefreq: "monthly", priority: "0.8" },
+    { key: "guideRedesign", changefreq: "monthly", priority: "0.8" },
   ],
 };
 

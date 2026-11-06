@@ -1,0 +1,98 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const locale = "en" as const;
+
+const guides = [
+  {
+    href: "/guides/website-cost-canada/",
+    label: "How much does a website cost in Canada?",
+    note: "How website pricing works, and what Webao charges, with no invented ranges.",
+  },
+  {
+    href: "/guides/quebec-bill-96-website/",
+    label: "Quebec Bill 96: French language basics for a small business website",
+    note: "The basic French language rule for a website aimed at Quebec customers, in plain language.",
+  },
+  {
+    href: "/guides/quebec-law-25-website/",
+    label: "Quebec Law 25: privacy basics for a small business website",
+    note: "The privacy basics for a site that collects personal information from people in Quebec.",
+  },
+  {
+    href: "/guides/small-business-seo-basics/",
+    label: "Small business SEO basics",
+    note: "What basic SEO covers on a Webao site, and what the owner still needs to provide.",
+  },
+  {
+    href: "/guides/meta-vs-google-ads-small-business/",
+    label: "Meta ads or Google ads for a small business?",
+    note: "The two advertising channels Webao manages, and how to choose between them.",
+  },
+  {
+    href: "/guides/ai-receptionist-small-business/",
+    label: "AI Receptionist for a small business",
+    note: "What the AI Receptionist answers, what it costs, and what your business needs to provide.",
+  },
+  {
+    href: "/guides/what-to-prepare-for-your-website/",
+    label: "What to prepare before your website is built",
+    note: "A practical checklist so a small business can start without delays.",
+  },
+  {
+    href: "/guides/website-that-brings-quote-requests/",
+    label: "A website that brings in quote requests",
+    note: "What makes a visitor ask for a quote instead of leaving.",
+  },
+  {
+    href: "/guides/when-to-redesign-your-website/",
+    label: "When to redesign your website",
+    note: "The signs a site needs a refresh, and the difference between a refresh and a rebuild.",
+  },
+];
+
+const itemListSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "Guides",
+  numberOfItems: guides.length,
+  itemListElement: guides.map((guide, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: guide.label,
+    url: `https://webao.ca${guide.href}`,
+  })),
+});
+---
+
+<BaseLayout
+  title="Guides for small business websites | WEBAO"
+  description="Plain guides for small business owners in Canada: website cost, Quebec language and privacy rules, SEO, ads, AI services, and what to prepare before a site is built."
+  locale={locale}
+  pageKey="guideIndex"
+>
+  <script is:inline type="application/ld+json" set:html={itemListSchema} />
+
+  <section class="section">
+    <div class="shell" style="max-width: 860px;">
+      <div class="eyebrow">Guides</div>
+      <h1 class="display" style="font-size: clamp(2.2rem, 5vw, 3.8rem); line-height:.95; margin-top:12px;">Guides</h1>
+      <p class="prose" style="margin-top:14px; max-width: 62ch;">Plain guides for small business owners in Canada. No market averages, no competitor prices, and no invented ranges. The only concrete prices in these guides are Webao's own prices.</p>
+
+      <div style="margin-top: 44px; display:grid; gap: 16px;">
+        {guides.map((guide) => (
+          <div class="info-card">
+            <h2><a href={guide.href} style="color: inherit; text-decoration: underline; text-underline-offset:3px;">{guide.label}</a></h2>
+            <p>{guide.note}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .info-card { background: var(--card-bg); border:1px solid var(--line); border-radius:16px; padding:20px 22px; box-shadow: var(--shadow-sm); }
+    .info-card h2 { font-size:1.15rem; letter-spacing:-0.01em; margin:0 0 10px; }
+    .info-card p { margin-top:8px; font-size:14px; color: var(--muted); line-height:1.6; }
+  </style>
+</BaseLayout>

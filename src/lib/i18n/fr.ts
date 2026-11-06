@@ -72,6 +72,7 @@ const fr = {
     howItWorks: "Fonctionnement",
     portal: "Portail client",
     guides: "Guides",
+    guidesIndex: "Tous les guides",
     guideCost: "Combien coûte un site web au Canada ?",
     guideBill96: "La loi 96 du Québec et votre site web",
     guideLaw25: "La loi 25 du Québec et votre site web",

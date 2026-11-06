@@ -1,0 +1,113 @@
+---
+import GuidePage from "../../../components/pages/GuidePage.astro";
+
+const locale = "en" as const;
+---
+
+<GuidePage
+  locale={locale}
+  pageKey="guideAdsChannels"
+  title="Meta ads or Google ads for a small business? | WEBAO"
+  description="Meta ads or Google ads for a small business: what each channel is, what the Ads Packages cost, and how to choose between them."
+  eyebrow="Guides"
+  heading="Meta ads or Google ads for a small business?"
+  intro="Webao manages two advertising channels for small businesses: Meta and Google. Both are offered under the same service, the Ads Packages. This guide explains what each channel is, what the service costs, and how to think about choosing between them."
+  answerLine="One channel is C$899.99 per month plus a C$499.99 one-time setup fee. Both channels together are C$1,349.99 per month plus a C$749.99 one-time setup fee."
+  sections={[
+    {
+      heading: "The two channels, in plain language",
+      body: "Meta and Google reach people in different moments. Neither is a website, and neither replaces one. Both send interested people toward the business.",
+      subsections: [
+        {
+          heading: "Meta",
+          body: "Campaigns on Facebook and Instagram. People see the ads while they browse their feed, so the ads reach people who may not have searched for the service yet.",
+        },
+        {
+          heading: "Google",
+          body: "Campaigns on Google Search. People see the ads when they search for something, so the ads reach people who are already looking for a service.",
+        },
+      ],
+    },
+    {
+      heading: "What the Ads Pack includes",
+      body: "The Ads Packages fee covers the management of the campaigns, not the ad spend. The service includes:",
+      items: [
+        "Leads sent to your inbox",
+        "Leads shown in your client portal",
+        "A monthly report covering leads, booked jobs, and cost per booked job",
+      ],
+    },
+    {
+      heading: "Ad spend, separate from the fee",
+      body: "Ad spend is the money paid to the advertising platform to show the ads. It is separate from the Ads Packages fee, and it goes to the advertising platform, not to Webao.",
+      items: [
+        "One channel: client ad spend from C$1,500 per month, paid on the client's own card and ad account",
+        "Both channels: client ad spend from C$2,500 per month, at least C$1,000 per channel",
+        "Ad spend is paid on the client's own card, so the client keeps control of the ad account",
+      ],
+    },
+    {
+      heading: "Upgrade to both channels",
+      body: "A business already on one channel can upgrade to both channels for C$450 more per month, plus a C$250 setup top-up.",
+    },
+    {
+      heading: "What it does not promise",
+      items: [
+        "No guaranteed leads, calls, or sales.",
+        "Advertising can bring enquiries, but it cannot promise how many, or that they will become paying jobs.",
+      ],
+    },
+    {
+      heading: "How to choose",
+      body: "There is no single right answer. These questions help a business think about which channel fits how its customers find it.",
+      items: [
+        "Do customers search for your service by name when they need it?",
+        "Or do they discover it while browsing, before they knew they needed it?",
+        "Do you want to reach people who are already looking, or people who have not looked yet?",
+        "The answers point toward one channel or the other. Starting with one channel and adding the second later is also possible.",
+      ],
+    },
+    {
+      heading: "How to start",
+      items: [
+        "Go to /start and say what you sell and where you serve.",
+        "Pick one channel, or both, and Webao sets up the campaigns.",
+        "Ad spend is paid on your own card and ad account, separate from the Ads Packages fee.",
+      ],
+    },
+  ]}
+  faqs={[
+    {
+      q: "What do the Ads Packages cost?",
+      a: "One channel is C$899.99 per month plus a C$499.99 one-time setup fee. Both channels together are C$1,349.99 per month plus a C$749.99 one-time setup fee. Ad spend is separate, from C$1,500 per month for one channel, or from C$2,500 per month for both channels.",
+    },
+    {
+      q: "What is ad spend, and who pays it?",
+      a: "Ad spend is the money paid to the advertising platform to show the ads. The client pays it on their own card and ad account. It goes to the advertising platform, not to Webao, and it is separate from the Ads Packages fee.",
+    },
+    {
+      q: "Can I start with one channel and add the second later?",
+      a: "Yes. A business already on one channel can upgrade to both channels for C$450 more per month, plus a C$250 setup top-up.",
+    },
+    {
+      q: "Do ads guarantee leads?",
+      a: "No. Advertising can bring enquiries, but it cannot promise how many, or that they will become paying jobs. No leads, calls, or sales are guaranteed.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other guides"
+  siblings={[
+    { href: "/guides/small-business-seo-basics/", label: "Small business SEO basics", note: "What basic SEO covers on a Webao site, and what the owner still needs to provide." },
+    { href: "/guides/ai-receptionist-small-business/", label: "AI Receptionist for a small business", note: "What the AI Receptionist answers, what it costs, and what your business needs to provide." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  articleSchema={{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: "Meta ads or Google ads for a small business?",
+    description: "Meta ads or Google ads for a small business: what each channel is, what the Ads Packages cost, and how to choose between them.",
+    author: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    inLanguage: "en-CA",
+  }}
+/>

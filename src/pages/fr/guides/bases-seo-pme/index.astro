@@ -1,0 +1,112 @@
+---
+import GuidePage from "../../../../components/pages/GuidePage.astro";
+
+const locale = "fr" as const;
+---
+
+<GuidePage
+  locale={locale}
+  pageKey="guideSeo"
+  title="Bases du SEO pour une petite entreprise | WEBAO"
+  description="Ce que le SEO de base couvre sur un site Webao, ce qu'il ne couvre pas, et ce que le propriétaire doit fournir."
+  eyebrow="Guides"
+  heading="Bases du SEO pour une petite entreprise"
+  intro="Le SEO de base est le travail qui rend un site web lisible par les moteurs de recherche. Sur un site Webao, il couvre les bases techniques de chaque page. Le propriétaire doit encore fournir les renseignements sur l'entreprise elle-même : ce qu'elle vend, où elle offre ses services et comment la joindre."
+  answerLine="Le SEO de base rend un site lisible par les moteurs de recherche. Il ne garantit pas un classement."
+  sections={[
+    {
+      heading: "Ce que le SEO de base inclut",
+      body: "Chaque forfait de site web de Webao inclut le SEO de base. Il couvre les bases techniques qui aident les moteurs de recherche à lire et à comprendre une page.",
+      items: [
+        "Titres et descriptions pour chaque page",
+        "Design adapté aux mobiles",
+        "Un plan du site, pour que les moteurs de recherche puissent trouver les pages",
+        "Une structure de base du site, avec des pages organisées par service",
+        "Coordonnées et zone de service affichées sur la page",
+      ],
+    },
+    {
+      heading: "Ce que le SEO de base n'inclut pas",
+      items: [
+        "Aucune garantie de classement. Le SEO de base ne promet aucune position sur Google, ni sur aucun autre moteur de recherche.",
+        "Aucune publicité payante. La publicité est un service séparé, sous le Pack publicitaire.",
+        "Aucun contenu continu sauf arrangement. Les nouvelles pages et la rédaction régulière ne font pas partie du SEO de base.",
+      ],
+    },
+    {
+      heading: "Ce que le propriétaire fournit",
+      body: "Les moteurs de recherche ne peuvent montrer que ce que le site dit. Le propriétaire fournit les renseignements sur l'entreprise sur lesquels le SEO de base est construit.",
+      items: [
+        "Une liste de services",
+        "Les villes ou la zone desservie",
+        "Des photos de l'entreprise et de son travail",
+        "Les heures d'ouverture",
+        "Les coordonnées",
+        "Des textes en français et en anglais au besoin",
+      ],
+    },
+    {
+      heading: "Refonte de la fiche Google Business Profile",
+      body: "La refonte de la fiche Google Business Profile est un ajout payé une seule fois, pour une entreprise qui a déjà une fiche Google Business Profile. Elle coûte 149,99 $ CA, payés une seule fois. La fiche reste la vôtre, et la refonte ne comporte aucune garantie de classement.",
+      items: [
+        "Catégories",
+        "Services",
+        "Heures d'ouverture",
+        "Description",
+        "Photos",
+        "Une première publication",
+        "Un lien d'avis",
+      ],
+    },
+    {
+      heading: "Options continues",
+      body: "Pour une entreprise qui veut un travail continu après le lancement, deux ajouts sont offerts.",
+      items: [
+        "Ajout Gestion du SEO local : 159,99 $ CA/mois",
+        "Ajout Moteur de génération d'avis : 99,99 $ CA/mois, avec des demandes d'avis automatiques après chaque travail",
+      ],
+    },
+    {
+      heading: "Comment commencer",
+      items: [
+        "Allez à /fr/commencer et dites ce que vous vendez et où vous offrez vos services.",
+        "Webao construit le site avec le SEO de base inclus dans le forfait.",
+        "Ajoutez la refonte de la fiche Google Business Profile ou un ajout continu si vous le souhaitez.",
+      ],
+    },
+  ]}
+  faqs={[
+    {
+      q: "Que comprend le SEO de base?",
+      a: "Le SEO de base sur un site Webao couvre les titres et descriptions de page, le design adapté aux mobiles, un plan du site, une structure de base du site, ainsi que les coordonnées et la zone de service sur la page. Il est inclus dans chaque forfait de site web.",
+    },
+    {
+      q: "Est-ce que le SEO de base me placera en premier sur Google?",
+      a: "Non. Le SEO de base rend un site lisible par les moteurs de recherche. Il ne garantit pas un classement, et aucune position sur Google n'est promise.",
+    },
+    {
+      q: "Que dois-je fournir?",
+      a: "Une liste de services, les villes ou la zone desservie, des photos, les heures d'ouverture, les coordonnées, et des textes en français et en anglais au besoin. Les moteurs de recherche ne peuvent montrer que ce que le site dit sur l'entreprise.",
+    },
+    {
+      q: "Quelle est la différence entre la refonte de la fiche Google Business Profile et la Gestion du SEO local?",
+      a: "La refonte de la fiche Google Business Profile est un ajout payé une seule fois, 149,99 $ CA, pour une entreprise qui a déjà une fiche Google Business Profile. Elle couvre les catégories, les services, les heures, la description, les photos, une première publication et un lien d'avis, et la fiche reste la vôtre. La Gestion du SEO local est un ajout continu à 159,99 $ CA/mois pour le travail après le lancement.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Autres guides"
+  siblings={[
+    { href: "/fr/guides/cout-site-web-canada/", label: "Combien coûte un site web au Canada ?", note: "Le fonctionnement des prix pour un site web, et ce que Webao facture, sans fourchette inventée." },
+    { href: "/fr/guides/meta-ou-google-ads-pme/", label: "Publicité Meta ou Google pour une petite entreprise ?", note: "Les deux canaux publicitaires gérés par Webao, et comment choisir entre les deux." },
+  ]}
+  startLabel="Commencer votre site"
+  emailLabel="Courriel contact@webao.ca"
+  articleSchema={{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: "Bases du SEO pour une petite entreprise",
+    description: "Ce que le SEO de base couvre sur un site Webao, ce qu'il ne couvre pas, et ce que le propriétaire doit fournir.",
+    author: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    inLanguage: "fr-CA",
+  }}
+/>

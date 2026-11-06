@@ -84,6 +84,7 @@ const crumbLabels: Record<string, string> = {
   portal: locale === "fr" ? "Portail client" : "Client portal",
   sources: "Sources",
   refunds: locale === "fr" ? "Remboursements" : "Refunds",
+  guideIndex: "Guides",
 };
 const crumbName = pageKey ? crumbLabels[pageKey] : undefined;
 const breadcrumbSchema = crumbName
@@ -116,6 +117,7 @@ const navLinks = {
   guideCost: localizedPaths[locale].guideCost,
   guideBill96: localizedPaths[locale].guideBill96,
   guideLaw25: localizedPaths[locale].guideLaw25,
+  guideIndex: localizedPaths[locale].guideIndex,
   process: locale === "fr" ? "/fr#processus" : "/#process",
 };
 
@@ -471,6 +473,7 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
           </div>
           <div class="footer-col">
             <h4>{t.footer.guides}</h4>
+            <a href={navLinks.guideIndex}>{t.footer.guidesIndex}</a>
             <a href={navLinks.guideCost}>{t.footer.guideCost}</a>
             <a href={navLinks.guideBill96}>{t.footer.guideBill96}</a>
             <a href={navLinks.guideLaw25}>{t.footer.guideLaw25}</a>

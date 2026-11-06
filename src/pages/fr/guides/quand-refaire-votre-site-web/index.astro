@@ -1,0 +1,110 @@
+---
+import GuidePage from "../../../../components/pages/GuidePage.astro";
+
+const locale = "fr" as const;
+---
+
+<GuidePage
+  locale={locale}
+  pageKey="guideRedesign"
+  title="Quand refaire votre site web | WEBAO"
+  description="Les signes qu'un site de petite entreprise a besoin d'une mise à jour, et la différence entre une mise à jour et une reconstruction."
+  eyebrow="Guides"
+  heading="Quand refaire votre site web"
+  intro="Un site web devrait correspondre à l'entreprise qu'il représente. Quand les deux s'éloignent, le site commence à travailler contre vous : il montre la mauvaise offre, envoie les visiteurs au mauvais endroit, ou rend un simple appel plus difficile qu'il ne devrait l'être. Ce guide couvre les signes qu'un site de petite entreprise a besoin d'une mise à jour, et la différence entre une mise à jour et une reconstruction."
+  answerLine="Refaites le site quand il ne correspond plus à l'entreprise : mauvais services, mauvais prix, mauvaises coordonnées, ou un site difficile à utiliser sur un téléphone."
+  sections={[
+    {
+      heading: "Les signes que c'est le moment",
+      body: "Un seul de ces signes est une raison de regarder le site à nouveau. Plusieurs ensemble signifient que le site ne correspond plus à l'entreprise.",
+      items: [
+        "Les services, les prix, les heures, ou les coordonnées ne sont plus à jour.",
+        "Le site est difficile à lire ou à utiliser sur un téléphone.",
+        "Les clients ne peuvent pas facilement appeler, réserver, ou demander une soumission.",
+        "Le site est dans une seule langue alors que vos clients en utilisent deux.",
+        "Vous évitez d'y envoyer les gens.",
+      ],
+    },
+    {
+      heading: "Mise à jour ou reconstruction",
+      body: "Une mise à jour et une reconstruction ne sont pas le même travail, et le bon choix dépend de l'écart entre le site et l'entreprise.",
+      subsections: [
+        {
+          heading: "Une mise à jour",
+          body: "Une mise à jour renouvelle le contenu, les photos, et la mise en page sur la structure existante. Elle convient quand le site est en grande partie bon et que seulement certaines parties sont dépassées.",
+        },
+        {
+          heading: "Une reconstruction",
+          body: "Une reconstruction part de l'entreprise actuelle, pas de l'ancien site. Elle convient quand l'offre, le public, ou la façon dont les clients vous contactent a changé. Webao construit des sites sur mesure, et les démos sont seulement une direction de style, jamais une copie de modèle.",
+        },
+      ],
+    },
+    {
+      heading: "Ce qu'une refonte conserve",
+      body: "Une refonte ne veut pas dire repartir de zéro. Ce qui appartient encore à l'entreprise reste à l'entreprise.",
+      items: [
+        "Votre domaine appartient à l'entreprise.",
+        "Votre contenu et vos photos sont repris quand ils sont encore exacts.",
+        "Vos coordonnées, votre zone de service, et vos services sont repris une fois vérifiés et corrigés.",
+      ],
+    },
+    {
+      heading: "Ce que cela coûte",
+      body: "Une refonte est un forfait de site web, facturé comme un nouveau site, en dollars canadiens :",
+      items: [
+        "Launch : 89,99 $ CA/mois",
+        "Grow : 149,99 $ CA/mois",
+        "Scale : 349,99 $ CA/mois",
+        "La facturation annuelle donne 2 mois gratuits.",
+        "Durée initiale : 6 mois, puis de mois en mois, avec un préavis de 30 jours.",
+        "Aucun frais d'installation pour les forfaits de site web.",
+      ],
+    },
+    {
+      heading: "Délais",
+      body: "La plupart des sites sont lancés en 2 à 3 semaines à partir de documents complets. Une refonte avance au même rythme : le principal délai vient habituellement de l'attente du contenu exact, des photos, et des décisions sur ce qui doit changer.",
+    },
+    {
+      heading: "Comment commencer",
+      items: [
+        "Allez à /fr/commencer et dites ce qui ne va pas avec le site actuel et ce qui devrait changer.",
+        "Partagez l'adresse du site actuel, pour que le nouveau site soit planifié à partir de l'entreprise actuelle.",
+        "Webao construit le site sur mesure, puis s'en occupe dans le cadre du forfait.",
+      ],
+    },
+  ]}
+  faqs={[
+    {
+      q: "Comment savoir si j'ai besoin d'une mise à jour ou d'une reconstruction?",
+      a: "Une mise à jour convient quand le site est en grande partie bon et que seulement certaines parties sont dépassées, comme les prix, les photos, ou la mise en page. Une reconstruction convient quand l'offre, le public, ou la façon dont les clients vous contactent a changé. Une reconstruction part de l'entreprise actuelle, pas de l'ancien site.",
+    },
+    {
+      q: "Est-ce que je garde mon nom de domaine?",
+      a: "Oui. Votre domaine appartient à l'entreprise, et il reste à vous pendant une refonte.",
+    },
+    {
+      q: "Combien de temps prend une refonte?",
+      a: "La plupart des sites sont lancés en 2 à 3 semaines à partir de documents complets. Le principal délai vient habituellement de l'attente du contenu exact, des photos, et des décisions sur ce qui doit changer.",
+    },
+    {
+      q: "Mon site sera-t-il un modèle?",
+      a: "Non. Webao construit des sites sur mesure, et les démos sont seulement une direction de style, jamais une copie de modèle. Une reconstruction part de l'entreprise actuelle, pas de l'ancien site ni d'une démo.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Autres guides"
+  siblings={[
+    { href: "/fr/guides/preparer-votre-site-web/", label: "Quoi préparer avant la construction de votre site web", note: "Une liste pratique pour qu'une petite entreprise commence sans délai." },
+    { href: "/fr/guides/cout-site-web-canada/", label: "Combien coûte un site web au Canada ?", note: "Le fonctionnement des prix pour un site web, et ce que Webao facture, sans fourchette inventée." },
+  ]}
+  startLabel="Commencer votre site"
+  emailLabel="Courriel contact@webao.ca"
+  articleSchema={{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: "Quand refaire votre site web",
+    description: "Les signes qu'un site de petite entreprise a besoin d'une mise à jour, et la différence entre une mise à jour et une reconstruction.",
+    author: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    inLanguage: "fr-CA",
+  }}
+/>

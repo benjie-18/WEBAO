@@ -1,0 +1,114 @@
+---
+import GuidePage from "../../../components/pages/GuidePage.astro";
+
+const locale = "en" as const;
+---
+
+<GuidePage
+  locale={locale}
+  pageKey="guideQuoteRequests"
+  title="A website that brings in quote requests | WEBAO"
+  description="What makes a visitor ask for a quote instead of leaving, for trades and local service businesses."
+  eyebrow="Guides"
+  heading="A website that brings in quote requests"
+  intro="For a trades or local service business, a website has one main job: turn a visitor into a quote request. This guide explains what makes a visitor ask for a quote instead of leaving, and what to put on the site so that happens more often."
+  answerLine="A visitor asks for a quote when the site answers three questions fast: what you do, where you work, and how to reach you."
+  sections={[
+    {
+      heading: "The three questions every visitor asks",
+      body: "A visitor decides in seconds whether to stay or leave. The site should answer these three questions on the first screen, in plain words, with no guessing.",
+      subsections: [
+        {
+          heading: "What you do",
+          body: "Say what you do in plain words, with a list of your services. A visitor should not have to read a long paragraph to work out whether you do the job they need.",
+        },
+        {
+          heading: "Where you work",
+          body: "Name your service area and the cities you work in. A visitor outside your area should know right away, and a visitor inside it should feel sure you come to them.",
+        },
+        {
+          heading: "How to reach you",
+          body: "Make it easy to call and easy to ask for a quote. A click to call button and a quote form should be easy to find on every page, including on a phone.",
+        },
+      ],
+    },
+    {
+      heading: "The quote form",
+      body: "The form is where a visit becomes a request. Keep it short so people finish it.",
+      items: [
+        "Ask for a name and a phone number, so you can reply.",
+        "Ask what service is needed.",
+        "Ask for a short description of the job.",
+        "Keep the form short. Every extra field is a reason to stop and leave.",
+      ],
+    },
+    {
+      heading: "Photos and proof of work",
+      body: "Photos show what words cannot. Show photos of real jobs you have done, before and after where you have them. Only show photos of a customer's property with that customer's permission.",
+      items: [
+        "Photos of real jobs, not stock photos of someone else's work.",
+        "Before and after photos where you have them.",
+        "Photos of the team doing the work, so visitors know who will show up.",
+      ],
+    },
+    {
+      heading: "Booking and extras",
+      body: "Some visitors would rather book than ask for a quote. Two add-ons cover that, in Canadian dollars:",
+      items: [
+        "Online Booking add-on C$49.99 per month: customers book appointments online.",
+        "Quote Photo Upload add-on C$9.99 per month, Launch only: lets customers attach a photo to a quote request.",
+      ],
+    },
+    {
+      heading: "What happens after a request",
+      body: "A quote request is only useful if it reaches the business and gets a reply.",
+      items: [
+        "The request reaches the business so it can reply.",
+        "Reply fast, while the job is still fresh in the visitor's mind. A visitor who waits may ask someone else.",
+        "Ask for the details you need to price the job, such as the size of the work, the location, and any photos.",
+      ],
+    },
+    {
+      heading: "How to start",
+      items: [
+        "Go to /start and describe the business, the services, and the service area.",
+        "Say which services you want visitors to ask about, and what your quote form should ask for.",
+        "Webao builds the custom site, then looks after it under the plan.",
+      ],
+    },
+  ]}
+  faqs={[
+    {
+      q: "What should a quote form ask for?",
+      a: "A name, a phone number, the service needed, and a short description of the job. Keep it short so people finish it. Every extra field is a reason to stop and leave.",
+    },
+    {
+      q: "Do I need photos on my site?",
+      a: "Photos help, because they show what words cannot. Show photos of real jobs you have done, before and after where you have them. Only show photos of a customer's property with that customer's permission.",
+    },
+    {
+      q: "Can customers book online instead of asking for a quote?",
+      a: "Yes. The Online Booking add-on costs C$49.99 per month and lets customers book appointments online. The Quote Photo Upload add-on costs C$9.99 per month, Launch only, and lets customers attach a photo to a quote request.",
+    },
+    {
+      q: "How fast should I reply to a quote request?",
+      a: "Reply promptly, while the job is still fresh in the visitor's mind. A visitor who waits may ask someone else, so do not leave a request sitting unanswered.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other guides"
+  siblings={[
+    { href: "/guides/what-to-prepare-for-your-website/", label: "What to prepare before your website is built", note: "A practical checklist so a small business can start without delays." },
+    { href: "/guides/small-business-seo-basics/", label: "Small business SEO basics", note: "What basic SEO covers on a Webao site, and what the owner still needs to provide." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  articleSchema={{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: "A website that brings in quote requests",
+    description: "What makes a visitor ask for a quote instead of leaving, for trades and local service businesses.",
+    author: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    inLanguage: "en-CA",
+  }}
+/>

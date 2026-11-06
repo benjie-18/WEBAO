@@ -1,0 +1,113 @@
+---
+import GuidePage from "../../../../components/pages/GuidePage.astro";
+
+const locale = "fr" as const;
+---
+
+<GuidePage
+  locale={locale}
+  pageKey="guideAdsChannels"
+  title="Publicité Meta ou Google pour une petite entreprise ? | WEBAO"
+  description="Publicité Meta ou Google pour une petite entreprise : ce que chaque canal offre, ce que le Pack publicitaire coûte, et comment choisir entre les deux."
+  eyebrow="Guides"
+  heading="Publicité Meta ou Google pour une petite entreprise ?"
+  intro="Webao gère deux canaux publicitaires pour les petites entreprises : Meta et Google. Les deux sont offerts dans le même service, le Pack publicitaire. Ce guide explique ce que chaque canal offre, ce que le service coûte, et comment réfléchir au choix entre les deux."
+  answerLine="Un canal coûte 899,99 $ CA/mois plus des frais d'installation uniques de 499,99 $ CA. Les deux canaux ensemble coûtent 1 349,99 $ CA/mois plus des frais d'installation uniques de 749,99 $ CA."
+  sections={[
+    {
+      heading: "Les deux canaux, en langage simple",
+      body: "Meta et Google rejoignent les gens à des moments différents. Ni l'un ni l'autre n'est un site web, et ni l'un ni l'autre ne le remplace. Les deux dirigent les personnes intéressées vers l'entreprise.",
+      subsections: [
+        {
+          heading: "Meta",
+          body: "Des campagnes sur Facebook et Instagram. Les gens voient les publicités pendant qu'ils parcourent leur fil d'actualité, donc les publicités rejoignent des gens qui n'ont peut-être pas encore cherché le service.",
+        },
+        {
+          heading: "Google",
+          body: "Des campagnes sur la recherche Google. Les gens voient les publicités quand ils font une recherche, donc les publicités rejoignent des gens qui cherchent déjà un service.",
+        },
+      ],
+    },
+    {
+      heading: "Ce que le Pack publicitaire inclut",
+      body: "Les frais du Pack publicitaire couvrent la gestion des campagnes, pas les dépenses publicitaires. Le service inclut :",
+      items: [
+        "Les prospects envoyés dans votre boîte de réception",
+        "Les prospects affichés dans votre portail client",
+        "Un rapport mensuel couvrant les prospects, les travaux réservés et le coût par travail réservé",
+      ],
+    },
+    {
+      heading: "Les dépenses publicitaires, séparées des frais",
+      body: "Les dépenses publicitaires sont l'argent payé à la plateforme publicitaire pour diffuser les publicités. Elles sont séparées des frais du Pack publicitaire, et elles vont à la plateforme publicitaire, pas à Webao.",
+      items: [
+        "Un canal : dépenses publicitaires du client à partir de 1 500 $ CA/mois, payées sur la carte du client et son compte publicitaire",
+        "Les deux canaux : dépenses publicitaires du client à partir de 2 500 $ CA/mois, au moins 1 000 $ CA par canal",
+        "Les dépenses publicitaires sont payées sur la carte du client, donc le client garde le contrôle de son compte publicitaire",
+      ],
+    },
+    {
+      heading: "Passer aux deux canaux",
+      body: "Une entreprise déjà sur un canal peut passer aux deux canaux pour 450 $ CA/mois de plus, plus un supplément unique de 250 $ CA pour l'installation.",
+    },
+    {
+      heading: "Ce qui n'est pas promis",
+      items: [
+        "Aucun prospect, appel ou vente n'est garanti.",
+        "La publicité peut apporter des demandes, mais elle ne peut pas promettre combien, ni qu'elles deviendront des travaux payants.",
+      ],
+    },
+    {
+      heading: "Comment choisir",
+      body: "Il n'y a pas une seule bonne réponse. Ces questions aident une entreprise à réfléchir au canal qui convient à la façon dont ses clients la trouvent.",
+      items: [
+        "Est-ce que les clients cherchent votre service par son nom quand ils en ont besoin?",
+        "Ou est-ce qu'ils le découvrent en naviguant, avant de savoir qu'ils en ont besoin?",
+        "Voulez-vous rejoindre des gens qui cherchent déjà, ou des gens qui n'ont pas encore cherché?",
+        "Les réponses orientent vers un canal ou l'autre. Commencer avec un canal et ajouter le deuxième plus tard est aussi possible.",
+      ],
+    },
+    {
+      heading: "Comment commencer",
+      items: [
+        "Allez à /fr/commencer et dites ce que vous vendez et où vous offrez vos services.",
+        "Choisissez un canal, ou les deux, et Webao met en place les campagnes.",
+        "Les dépenses publicitaires sont payées sur votre propre carte et votre compte publicitaire, séparément des frais du Pack publicitaire.",
+      ],
+    },
+  ]}
+  faqs={[
+    {
+      q: "Combien coûte le Pack publicitaire?",
+      a: "Un canal coûte 899,99 $ CA/mois plus des frais d'installation uniques de 499,99 $ CA. Les deux canaux ensemble coûtent 1 349,99 $ CA/mois plus des frais d'installation uniques de 749,99 $ CA. Les dépenses publicitaires sont séparées, à partir de 1 500 $ CA/mois pour un canal, ou à partir de 2 500 $ CA/mois pour les deux canaux.",
+    },
+    {
+      q: "Que sont les dépenses publicitaires, et qui les paie?",
+      a: "Les dépenses publicitaires sont l'argent payé à la plateforme publicitaire pour diffuser les publicités. Le client les paie sur sa propre carte et son compte publicitaire. Elles vont à la plateforme publicitaire, pas à Webao, et elles sont séparées des frais du Pack publicitaire.",
+    },
+    {
+      q: "Puis-je commencer avec un canal et ajouter le deuxième plus tard?",
+      a: "Oui. Une entreprise déjà sur un canal peut passer aux deux canaux pour 450 $ CA/mois de plus, plus un supplément unique de 250 $ CA pour l'installation.",
+    },
+    {
+      q: "Est-ce que la publicité garantit des prospects?",
+      a: "Non. La publicité peut apporter des demandes, mais elle ne peut pas promettre combien, ni qu'elles deviendront des travaux payants. Aucun prospect, appel ou vente n'est garanti.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Autres guides"
+  siblings={[
+    { href: "/fr/guides/bases-seo-pme/", label: "Bases du SEO pour une petite entreprise", note: "Ce que le SEO de base couvre sur un site Webao, et ce que le propriétaire doit fournir." },
+    { href: "/fr/guides/receptionniste-ia-pme/", label: "Réceptionniste IA pour une petite entreprise", note: "Ce que la réceptionniste IA répond, ce qu'elle coûte, et ce que votre entreprise doit fournir." },
+  ]}
+  startLabel="Commencer votre site"
+  emailLabel="Courriel contact@webao.ca"
+  articleSchema={{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: "Publicité Meta ou Google pour une petite entreprise ?",
+    description: "Publicité Meta ou Google pour une petite entreprise : ce que chaque canal offre, ce que le Pack publicitaire coûte, et comment choisir entre les deux.",
+    author: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    inLanguage: "fr-CA",
+  }}
+/>

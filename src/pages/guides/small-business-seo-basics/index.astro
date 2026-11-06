@@ -1,0 +1,112 @@
+---
+import GuidePage from "../../../components/pages/GuidePage.astro";
+
+const locale = "en" as const;
+---
+
+<GuidePage
+  locale={locale}
+  pageKey="guideSeo"
+  title="Small business SEO basics | WEBAO"
+  description="What basic SEO covers on a Webao site, what it does not cover, and what the owner still needs to provide."
+  eyebrow="Guides"
+  heading="Small business SEO basics"
+  intro="Basic SEO is the work that makes a website readable by search engines. On a Webao site, it covers the technical basics of each page. The owner still needs to provide the information about the business itself: what it sells, where it serves, and how to reach it."
+  answerLine="Basic SEO makes a site readable by search engines. It does not guarantee a ranking."
+  sections={[
+    {
+      heading: "What basic SEO includes",
+      body: "Every Webao website plan includes basic SEO. It covers the technical basics that help search engines read and understand a page.",
+      items: [
+        "Page titles and descriptions for each page",
+        "Mobile friendly design",
+        "A sitemap, so search engines can find the pages",
+        "Basic site structure, with pages organized by service",
+        "Contact details and service area shown on the page",
+      ],
+    },
+    {
+      heading: "What basic SEO does not include",
+      items: [
+        "No ranking guarantee. Basic SEO does not promise a position on Google, or any other search engine.",
+        "No paid ads. Advertising is a separate service, under Ads Packages.",
+        "No ongoing content unless arranged. New pages and regular writing are not part of basic SEO.",
+      ],
+    },
+    {
+      heading: "What the owner provides",
+      body: "Search engines can only show what the site says. The owner provides the business information that basic SEO is built on.",
+      items: [
+        "A list of services",
+        "The cities or area served",
+        "Photos of the business and its work",
+        "Opening hours",
+        "Contact details",
+        "French and English text where needed",
+      ],
+    },
+    {
+      heading: "Google Business Profile revamp",
+      body: "The Google Business Profile revamp is a one time add-on for a business that already has a Google Business Profile. It costs C$149.99 one time. The profile stays yours, and the revamp carries no ranking guarantee.",
+      items: [
+        "Categories",
+        "Services",
+        "Hours",
+        "Description",
+        "Photos",
+        "A starter post",
+        "A review link",
+      ],
+    },
+    {
+      heading: "Ongoing options",
+      body: "For a business that wants ongoing work after launch, two add-ons are available.",
+      items: [
+        "Local SEO Management add-on: C$159.99 per month",
+        "Review Generation Engine add-on: C$99.99 per month, with automatic review requests after each job",
+      ],
+    },
+    {
+      heading: "How to start",
+      items: [
+        "Go to /start and say what you sell and where you serve.",
+        "Webao builds the site with basic SEO included in the plan.",
+        "Add the Google Business Profile revamp or an ongoing add-on if you want it.",
+      ],
+    },
+  ]}
+  faqs={[
+    {
+      q: "What does basic SEO include?",
+      a: "Basic SEO on a Webao site covers page titles and descriptions, mobile friendly design, a sitemap, basic site structure, and contact details and service area on the page. It is included in every website plan.",
+    },
+    {
+      q: "Will basic SEO put me first on Google?",
+      a: "No. Basic SEO makes a site readable by search engines. It does not guarantee a ranking, and no position on Google is promised.",
+    },
+    {
+      q: "What do I need to provide?",
+      a: "A list of services, the cities or area you serve, photos, opening hours, contact details, and French and English text where needed. Search engines can only show what the site says about the business.",
+    },
+    {
+      q: "What is the difference between the Google Business Profile revamp and Local SEO Management?",
+      a: "The Google Business Profile revamp is a one time add-on, C$149.99, for a business that already has a Google Business Profile. It covers categories, services, hours, description, photos, a starter post, and a review link, and the profile stays yours. Local SEO Management is an ongoing add-on at C$159.99 per month for work after launch.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other guides"
+  siblings={[
+    { href: "/guides/website-cost-canada/", label: "How much does a website cost in Canada?", note: "How website pricing works, and what Webao charges, with no invented ranges." },
+    { href: "/guides/meta-vs-google-ads-small-business/", label: "Meta ads or Google ads for a small business?", note: "The two advertising channels Webao manages, and how to choose between them." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  articleSchema={{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: "Small business SEO basics",
+    description: "What basic SEO covers on a Webao site, what it does not cover, and what the owner still needs to provide.",
+    author: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    inLanguage: "en-CA",
+  }}
+/>

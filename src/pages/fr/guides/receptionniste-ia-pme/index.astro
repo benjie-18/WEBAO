@@ -1,0 +1,118 @@
+---
+import GuidePage from "../../../../components/pages/GuidePage.astro";
+
+const locale = "fr" as const;
+---
+
+<GuidePage
+  locale={locale}
+  pageKey="guideAiReceptionist"
+  title="Réceptionniste IA pour une petite entreprise | WEBAO"
+  description="Ce que la réceptionniste IA, le clavardage de site web et le suivi IA de Webao font pour une petite entreprise qui manque des appels, et ce que chaque service coûte."
+  eyebrow="Guides"
+  heading="Réceptionniste IA pour une petite entreprise"
+  intro="Une explication simple des services d'IA de Webao pour une petite entreprise qui manque des appels. L'IA répond au nom de votre entreprise, à partir des informations fournies par votre entreprise, pour qu'un appelant obtienne une réponse au lieu du silence."
+  answerLine="La réceptionniste IA coûte 299,99 $ CA/mois plus des frais d'installation uniques de 299,99 $ CA."
+  sections={[
+    {
+      heading: "Ce que fait la réceptionniste IA",
+      body: "La réceptionniste IA répond aux appels au nom de votre entreprise quand vous ne pouvez pas décrocher. Elle prend les messages et les coordonnées de rappel, pour que vous puissiez rappeler plus tard avec le nom de l'appelant et la raison de son appel en main.",
+      items: [
+        "Répond aux appels au nom de votre entreprise",
+        "Prend les messages et les coordonnées de rappel",
+        "500 minutes par mois, utilisation équitable",
+        "299,99 $ CA/mois plus des frais d'installation uniques de 299,99 $ CA",
+      ],
+    },
+    {
+      heading: "Clavardage IA de site web",
+      body: "Le clavardage IA de site web est un clavardage sur votre site web, formé sur votre entreprise. Un visiteur pose une question dans le clavardage, et le clavardage répond à partir des informations fournies par votre entreprise.",
+      items: [
+        "Clavardage sur votre site web",
+        "Formé sur votre entreprise",
+        "149,99 $ CA/mois plus des frais d'installation uniques de 149,99 $ CA",
+      ],
+    },
+    {
+      heading: "Suivi IA",
+      body: "Le suivi IA communique après un appel manqué ou un travail terminé. Il envoie un texto de rappel après un appel manqué, et il peut envoyer des demandes d'avis après un travail.",
+      items: [
+        "Texto de rappel après un appel manqué",
+        "Demandes d'avis après un travail",
+        "99,99 $ CA/mois plus des frais d'installation uniques de 99,99 $ CA",
+      ],
+    },
+    {
+      heading: "Le Pack IA",
+      body: "Le Pack IA regroupe les trois services d'IA en un seul forfait, pour une petite entreprise qui veut la réceptionniste, le clavardage de site web et le suivi en même temps.",
+      items: [
+        "Réceptionniste IA, clavardage IA de site web et suivi IA ensemble",
+        "449,99 $ CA/mois",
+        "Valeur individuelle de 549,97 $ CA/mois",
+        "Économie de 99,98 $ CA/mois",
+      ],
+    },
+    {
+      heading: "Ce que votre entreprise doit fournir",
+      body: "L'IA peut seulement répondre à partir de ce que votre entreprise lui donne. Avant son lancement, votre entreprise fournit les faits qu'elle doit utiliser quand elle parle aux clients.",
+      items: [
+        "Liste des services",
+        "Heures d'ouverture",
+        "Zone de service",
+        "Numéro de téléphone",
+        "La façon dont vous voulez que les réservations et les demandes de soumission soient traitées",
+        "Les réponses aux questions que les clients posent le plus souvent",
+      ],
+    },
+    {
+      heading: "Ce qu'elle ne fait pas",
+      body: "L'IA répond à partir des informations fournies par votre entreprise. Elle n'invente pas de services ni de prix qui ne lui ont jamais été donnés, et le propriétaire de l'entreprise demeure responsable des informations qui lui sont fournies.",
+      items: [
+        "Elle répond à partir des informations fournies par votre entreprise",
+        "Elle n'invente pas de services ni de prix",
+        "Le propriétaire de l'entreprise demeure responsable des informations qui lui sont fournies",
+      ],
+    },
+    {
+      heading: "Comment commencer",
+      items: [
+        "Allez à /fr/commencer et dites quel service d'IA vous voulez.",
+        "Fournissez les informations énumérées ci-dessus, pour que l'IA réponde au nom de votre entreprise.",
+      ],
+    },
+  ]}
+  faqs={[
+    {
+      q: "Combien coûte la réceptionniste IA?",
+      a: "La réceptionniste IA coûte 299,99 $ CA/mois plus des frais d'installation uniques de 299,99 $ CA. Elle répond aux appels au nom de votre entreprise, prend les messages et les coordonnées de rappel, et inclut 500 minutes par mois, utilisation équitable.",
+    },
+    {
+      q: "Quelle est la différence entre la réceptionniste, le clavardage de site web et le suivi?",
+      a: "La réceptionniste répond aux appels au nom de votre entreprise et prend les messages et les coordonnées de rappel. Le clavardage de site web est un clavardage sur votre site web, formé sur votre entreprise, qui répond aux questions des visiteurs. Le suivi envoie un texto de rappel après un appel manqué et des demandes d'avis après un travail.",
+    },
+    {
+      q: "Que comprend le Pack IA, et combien fait-il économiser?",
+      a: "Le Pack IA comprend la réceptionniste IA, le clavardage IA de site web et le suivi IA ensemble, pour 449,99 $ CA/mois. La valeur individuelle est de 549,97 $ CA/mois, donc le Pack fait économiser 99,98 $ CA/mois.",
+    },
+    {
+      q: "Quelles informations mon entreprise doit-elle fournir?",
+      a: "Votre liste des services, vos heures d'ouverture, votre zone de service, votre numéro de téléphone, la façon dont vous voulez que les réservations et les demandes de soumission soient traitées, et les réponses aux questions que les clients posent le plus souvent. L'IA répond à partir de ces informations.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Autres guides"
+  siblings={[
+    { href: "/fr/guides/meta-ou-google-ads-pme/", label: "Publicité Meta ou Google pour une petite entreprise ?", note: "Les deux canaux publicitaires gérés par Webao, et comment choisir entre les deux." },
+    { href: "/fr/guides/site-web-demandes-soumission/", label: "Un site web qui apporte des demandes de soumission", note: "Ce qui pousse un visiteur à demander une soumission au lieu de partir." },
+  ]}
+  startLabel="Commencer votre site"
+  emailLabel="Courriel contact@webao.ca"
+  articleSchema={{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: "Réceptionniste IA pour une petite entreprise",
+    description: "Ce que la réceptionniste IA, le clavardage de site web et le suivi IA de Webao font pour une petite entreprise qui manque des appels, et ce que chaque service coûte.",
+    author: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    inLanguage: "fr-CA",
+  }}
+/>

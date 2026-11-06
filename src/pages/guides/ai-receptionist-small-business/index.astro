@@ -1,0 +1,118 @@
+---
+import GuidePage from "../../../components/pages/GuidePage.astro";
+
+const locale = "en" as const;
+---
+
+<GuidePage
+  locale={locale}
+  pageKey="guideAiReceptionist"
+  title="AI Receptionist for a small business | WEBAO"
+  description="What Webao's AI Receptionist, Website Chat, and Follow-up do for a small business that misses calls, and what each service costs."
+  eyebrow="Guides"
+  heading="AI Receptionist for a small business"
+  intro="A plain explanation of Webao's AI services for a small business that misses calls. The AI answers as your business, using the information your business provides, so a caller gets a reply instead of silence."
+  answerLine="AI Receptionist is C$299.99 per month plus a C$299.99 one-time setup fee."
+  sections={[
+    {
+      heading: "What the AI Receptionist does",
+      body: "The AI Receptionist answers calls as your business when you cannot pick up. It takes messages and callback details, so you can return the call later with the caller's name and reason for calling in hand.",
+      items: [
+        "Answers calls as your business",
+        "Takes messages and callback details",
+        "500 minutes per month, fair use",
+        "C$299.99 per month plus a C$299.99 one-time setup fee",
+      ],
+    },
+    {
+      heading: "AI Website Chat",
+      body: "AI Website Chat is a chat on your website, trained on your business. A visitor asks a question in the chat, and the chat answers from the information your business provided.",
+      items: [
+        "Chat on your website",
+        "Trained on your business",
+        "C$149.99 per month plus a C$149.99 one-time setup fee",
+      ],
+    },
+    {
+      heading: "AI Follow-up",
+      body: "AI Follow-up reaches out after a missed call or a finished job. It sends a missed-call text-back, and it can send review requests after a job.",
+      items: [
+        "Missed-call text-back",
+        "Review requests after a job",
+        "C$99.99 per month plus a C$99.99 one-time setup fee",
+      ],
+    },
+    {
+      heading: "The AI Pack",
+      body: "The AI Pack brings all three AI services together in one plan, for a small business that wants the Receptionist, the Website Chat, and Follow-up at the same time.",
+      items: [
+        "AI Receptionist, AI Website Chat, and AI Follow-up together",
+        "C$449.99 per month",
+        "Individual value C$549.97 per month",
+        "Saving C$99.98 per month",
+      ],
+    },
+    {
+      heading: "What your business needs to provide",
+      body: "The AI can only answer from what your business gives it. Before it starts, your business provides the facts it should use when it talks to customers.",
+      items: [
+        "Services list",
+        "Hours",
+        "Service area",
+        "Phone number",
+        "How you want bookings and quote requests handled",
+        "The answers to the questions customers ask most",
+      ],
+    },
+    {
+      heading: "What it does not do",
+      body: "The AI answers from the information your business provides. It does not invent services or prices that were never given to it, and the business owner stays responsible for the information it is given.",
+      items: [
+        "It answers from the information your business provides",
+        "It does not invent services or prices",
+        "The business owner stays responsible for the information it is given",
+      ],
+    },
+    {
+      heading: "How to start",
+      items: [
+        "Go to /start and say which AI service you want.",
+        "Provide the information listed above, so the AI answers as your business.",
+      ],
+    },
+  ]}
+  faqs={[
+    {
+      q: "What does the AI Receptionist cost?",
+      a: "AI Receptionist is C$299.99 per month plus a C$299.99 one-time setup fee. It answers calls as your business, takes messages and callback details, and includes 500 minutes per month, fair use.",
+    },
+    {
+      q: "What is the difference between the Receptionist, the Website Chat, and Follow-up?",
+      a: "The Receptionist answers calls as your business and takes messages and callback details. The Website Chat is a chat on your website, trained on your business, that answers visitor questions. Follow-up sends a missed-call text-back and review requests after a job.",
+    },
+    {
+      q: "What does the AI Pack include, and what does it save?",
+      a: "The AI Pack includes the AI Receptionist, the AI Website Chat, and AI Follow-up together, for C$449.99 per month. The individual value is C$549.97 per month, so the Pack saves C$99.98 per month.",
+    },
+    {
+      q: "What information does my business need to provide?",
+      a: "Your services list, hours, service area, phone number, how you want bookings and quote requests handled, and the answers to the questions customers ask most. The AI answers from that information.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other guides"
+  siblings={[
+    { href: "/guides/meta-vs-google-ads-small-business/", label: "Meta ads or Google ads for a small business?", note: "The two advertising channels Webao manages, and how to choose between them." },
+    { href: "/guides/website-that-brings-quote-requests/", label: "A website that brings in quote requests", note: "What makes a visitor ask for a quote instead of leaving." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  articleSchema={{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: "AI Receptionist for a small business",
+    description: "What Webao's AI Receptionist, Website Chat, and Follow-up do for a small business that misses calls, and what each service costs.",
+    author: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    inLanguage: "en-CA",
+  }}
+/>

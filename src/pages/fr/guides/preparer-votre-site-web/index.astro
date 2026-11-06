@@ -1,0 +1,114 @@
+---
+import GuidePage from "../../../../components/pages/GuidePage.astro";
+
+const locale = "fr" as const;
+---
+
+<GuidePage
+  locale={locale}
+  pageKey="guidePrepare"
+  title="Quoi préparer avant la construction de votre site web | WEBAO"
+  description="Une liste de vérification pratique pour une petite entreprise qui se prépare pour un site web sur mesure : quoi envoyer, quelles photos et quels textes préparer, et ce qui se passe ensuite."
+  eyebrow="Guides"
+  heading="Quoi préparer avant la construction de votre site web"
+  intro="Une liste de vérification pratique pour qu'une petite entreprise puisse commencer sans délai. Rassemblez les éléments ci-dessous, envoyez-les, et Webao peut commencer votre site."
+  answerLine="La plupart des sites sont lancés en 2 à 3 semaines à partir de la réception des documents complets."
+  sections={[
+    {
+      heading: "La courte liste de vérification",
+      body: "Voici les documents dont Webao a besoin pour commencer la construction de votre site. Vous n'avez pas besoin d'un texte fini pour chaque page, seulement les faits ci-dessous, dans vos propres mots.",
+      items: [
+        "Nom de l'entreprise",
+        "Liste des services",
+        "Zone de service et villes desservies",
+        "Heures d'ouverture",
+        "Téléphone et courriel",
+        "Logo, si vous en avez un",
+        "Photos de votre travail",
+        "Vos services dans vos propres mots, en français et en anglais au besoin",
+      ],
+    },
+    {
+      heading: "Photos",
+      body: "Les photos montrent ce que votre entreprise fait vraiment. Quelques photos de travaux réels, de votre équipe et de vos locaux, si vous en avez, suffisent pour commencer.",
+      items: [
+        "Quelques photos de travaux réels",
+        "Photos de votre équipe, si vous en avez",
+        "Photos de vos locaux, si vous en avez",
+        "Seulement des photos que vous possédez ou que vous avez le droit d'utiliser",
+      ],
+    },
+    {
+      heading: "Textes et prix",
+      body: "Écrivez vos services comme vous les dites à vos clients. Des mots simples, venus de l'entreprise elle-même, se lisent mieux qu'un texte publicitaire soigné, et ils aident le site à répondre aux questions que les clients posent vraiment.",
+      items: [
+        "Écrivez les services comme vous les dites à vos clients",
+        "Incluez les prix seulement si vous voulez qu'ils soient affichés sur le site",
+      ],
+    },
+    {
+      heading: "Ce qui se passe après l'envoi",
+      body: "Une fois vos documents reçus, Webao répond avec deux directions de démonstration, comme direction de style seulement. Les sites des clients sont des constructions sur mesure, jamais des copies de modèles, et vous voyez un aperçu privé de votre propre site en quelques jours.",
+      items: [
+        "Webao répond avec deux directions de démonstration, comme direction de style seulement",
+        "Les sites des clients sont des constructions sur mesure, jamais des copies de modèles",
+        "Vous voyez un aperçu privé en quelques jours",
+        "Une ronde de révision",
+      ],
+    },
+    {
+      heading: "Rappel des forfaits de site web",
+      body: "Forfaits de site web, en dollars canadiens. Le forfait couvre la construction et le fonctionnement courant du site en un seul paiement mensuel.",
+      items: [
+        "Launch 89,99 $ CA/mois",
+        "Grow 149,99 $ CA/mois",
+        "Scale 349,99 $ CA/mois",
+        "La facturation annuelle donne 2 mois gratuits",
+        "Durée initiale de 6 mois, puis de mois en mois, avec un préavis de 30 jours",
+        "Aucun frais d'installation pour les forfaits de site web",
+        "Les forfaits incluent le domaine, l'hébergement, le SSL, un design adapté aux mobiles, un formulaire de contact, le SEO de base et des mises à jour de contenu",
+      ],
+    },
+    {
+      heading: "Comment commencer",
+      items: [
+        "Allez à /fr/commencer et décrivez l'entreprise et le site dont vous avez besoin.",
+        "Envoyez les documents de la liste de vérification ci-dessus, ou dites à Webao ce que vous avez de prêt jusqu'ici.",
+      ],
+    },
+  ]}
+  faqs={[
+    {
+      q: "Que dois-je envoyer pour commencer?",
+      a: "Le nom de votre entreprise, la liste des services, la zone de service et les villes desservies, les heures d'ouverture, le téléphone et le courriel, le logo si vous en avez un, des photos de votre travail, et vos services dans vos propres mots, en français et en anglais au besoin.",
+    },
+    {
+      q: "Ai-je besoin d'un logo ou de photos professionnelles?",
+      a: "Non. Un logo aide si vous en avez un, mais il n'est pas obligatoire. Quelques photos de travaux réels, de votre équipe et de vos locaux, si vous en avez, suffisent pour commencer, tant qu'il s'agit de photos que vous possédez ou que vous avez le droit d'utiliser.",
+    },
+    {
+      q: "Combien de temps cela prend-il?",
+      a: "La plupart des sites sont lancés en 2 à 3 semaines à partir de la réception des documents complets. Vous voyez un aperçu privé en quelques jours, avec une ronde de révision.",
+    },
+    {
+      q: "Mon site sera-t-il un modèle?",
+      a: "Non. Les sites des clients sont des constructions sur mesure, jamais des copies de modèles. Webao répond avec deux directions de démonstration, comme direction de style seulement, et votre site est construit pour votre entreprise.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Autres guides"
+  siblings={[
+    { href: "/fr/guides/cout-site-web-canada/", label: "Combien coûte un site web au Canada ?", note: "Le fonctionnement des prix pour un site web, et ce que Webao facture, sans fourchette inventée." },
+    { href: "/fr/guides/quand-refaire-votre-site-web/", label: "Quand refaire votre site web", note: "Les signes qu'un site a besoin d'une refonte, et la différence entre une refonte et une reconstruction." },
+  ]}
+  startLabel="Commencer votre site"
+  emailLabel="Courriel contact@webao.ca"
+  articleSchema={{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: "Quoi préparer avant la construction de votre site web",
+    description: "Une liste de vérification pratique pour une petite entreprise qui se prépare pour un site web sur mesure : quoi envoyer, quelles photos et quels textes préparer, et ce qui se passe ensuite.",
+    author: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    inLanguage: "fr-CA",
+  }}
+/>

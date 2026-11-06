@@ -1,0 +1,110 @@
+---
+import GuidePage from "../../../components/pages/GuidePage.astro";
+
+const locale = "en" as const;
+---
+
+<GuidePage
+  locale={locale}
+  pageKey="guideRedesign"
+  title="When to redesign your website | WEBAO"
+  description="The signs a small business site needs a refresh, and the difference between a refresh and a rebuild."
+  eyebrow="Guides"
+  heading="When to redesign your website"
+  intro="A website should match the business it represents. When the two drift apart, the site starts working against you: it shows the wrong offer, sends visitors to the wrong place, or makes a simple call harder than it should be. This guide covers the signs a small business site needs a refresh, and the difference between a refresh and a rebuild."
+  answerLine="Redesign when the site no longer matches the business: wrong services, wrong prices, wrong contact details, or a site that is hard to use on a phone."
+  sections={[
+    {
+      heading: "Signs it is time",
+      body: "Any one of these is a reason to look at the site again. Several together mean the site no longer matches the business.",
+      items: [
+        "Services, prices, hours, or contact details are out of date.",
+        "The site is hard to read or use on a phone.",
+        "Customers cannot easily call, book, or ask for a quote.",
+        "The site is in one language while your customers use two.",
+        "You avoid sending people to it.",
+      ],
+    },
+    {
+      heading: "Refresh or rebuild",
+      body: "A refresh and a rebuild are not the same job, and the right one depends on how far the site has drifted from the business.",
+      subsections: [
+        {
+          heading: "A refresh",
+          body: "A refresh updates content, photos, and layout on the existing structure. It fits when the site is mostly right and only parts of it are out of date.",
+        },
+        {
+          heading: "A rebuild",
+          body: "A rebuild starts from the current business, not from the old site. It fits when the offer, the audience, or the way customers contact you has changed. Webao builds custom sites, and demos are only a style direction, never a template clone.",
+        },
+      ],
+    },
+    {
+      heading: "What a redesign keeps",
+      body: "A redesign does not mean starting from nothing. What still belongs to the business stays with the business.",
+      items: [
+        "Your domain belongs to the business.",
+        "Your content and photos carry over where they are still accurate.",
+        "Your contact details, service area, and services carry over once they are checked and corrected.",
+      ],
+    },
+    {
+      heading: "What it costs",
+      body: "A redesign is a website plan, priced the same as a new site, in Canadian dollars:",
+      items: [
+        "Launch: C$89.99 per month",
+        "Grow: C$149.99 per month",
+        "Scale: C$349.99 per month",
+        "Annual billing is 2 months free.",
+        "Initial term: 6 months, then month to month, with 30 days notice.",
+        "No setup fee for website plans.",
+      ],
+    },
+    {
+      heading: "Timing",
+      body: "Most sites launch in 2 to 3 weeks from complete materials. A redesign moves at the same pace: the main delay is usually waiting on correct content, photos, and decisions about what should change.",
+    },
+    {
+      heading: "How to start",
+      items: [
+        "Go to /start and say what is wrong with the current site and what should change.",
+        "Share the current site address, so the new site can be planned from the current business.",
+        "Webao builds the custom site, then looks after it under the plan.",
+      ],
+    },
+  ]}
+  faqs={[
+    {
+      q: "How do I know if I need a refresh or a rebuild?",
+      a: "A refresh fits when the site is mostly right and only parts of it are out of date, such as prices, photos, or layout. A rebuild fits when the offer, the audience, or the way customers contact you has changed. A rebuild starts from the current business, not from the old site.",
+    },
+    {
+      q: "Do I keep my domain name?",
+      a: "Yes. Your domain belongs to the business, and it stays yours through a redesign.",
+    },
+    {
+      q: "How long does a redesign take?",
+      a: "Most sites launch in 2 to 3 weeks from complete materials. The main delay is usually waiting on correct content, photos, and decisions about what should change.",
+    },
+    {
+      q: "Will my site be a template?",
+      a: "No. Webao builds custom sites, and demos are only a style direction, never a template clone. A rebuild starts from the current business, not from the old site or from a demo.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other guides"
+  siblings={[
+    { href: "/guides/what-to-prepare-for-your-website/", label: "What to prepare before your website is built", note: "A practical checklist so a small business can start without delays." },
+    { href: "/guides/website-cost-canada/", label: "How much does a website cost in Canada?", note: "How website pricing works, and what Webao charges, with no invented ranges." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  articleSchema={{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: "When to redesign your website",
+    description: "The signs a small business site needs a refresh, and the difference between a refresh and a rebuild.",
+    author: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    inLanguage: "en-CA",
+  }}
+/>
