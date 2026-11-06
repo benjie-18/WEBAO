@@ -1419,6 +1419,7 @@ const en = {
       reportRequested: "Full report requested",
       noEmail: "No email left",
       partial: "Basic check only (speed test unavailable)",
+      running: "Full audit running",
       strengths: "What works",
       findings: "Findings",
       details: "Details",

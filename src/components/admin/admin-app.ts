@@ -1395,6 +1395,7 @@ function initAdmin(): void {
     strengths: string[];
     categories: Record<string, number>;
     partial: boolean;
+    pending: boolean;
     lang: string;
     at: number;
     email?: string;
@@ -1416,6 +1417,8 @@ function initAdmin(): void {
     ];
     if (item.partial)
       badges.push(`<span class="form-badge form-badge--warn">${esc(A.partial)}</span>`);
+    if (item.pending)
+      badges.push(`<span class="form-badge form-badge--warn">${esc(A.running)}</span>`);
     if (item.reportRequestedAt)
       badges.push(`<span class="form-badge">${esc(A.reportRequested)}</span>`);
     else if (!item.email)

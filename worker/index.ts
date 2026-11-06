@@ -4,7 +4,7 @@
 
 import { handlePageview, handleClick, handleHeartbeat } from "./track";
 import { handleFormSubmit } from "./forms";
-import { handleAudit, handleAuditGet, handleAuditReport } from "./audit";
+import { handleAudit, handleAuditFull, handleAuditGet, handleAuditReport } from "./audit";
 import { handleGo, handleLeadRegister, handleLeadReply } from "./leads";
 import { handleAdmin } from "./admin";
 import { handleCheckoutSession } from "./checkout";
@@ -41,6 +41,7 @@ async function routeApi(req: Request, env: Env): Promise<Response> {
   if (p === "/api/leads/reply" && req.method === "POST") return handleLeadReply(req, env);
   if (p === "/api/audit" && req.method === "POST") return handleAudit(req, env);
   if (p === "/api/audit/report" && req.method === "POST") return handleAuditReport(req, env);
+  if (p.startsWith("/api/audit/") && p.endsWith("/full") && req.method === "POST") return handleAuditFull(req, env, p);
   if (p.startsWith("/api/audit/") && req.method === "GET") return handleAuditGet(req, env, p);
   if (p === "/api/checkout/session" && req.method === "POST") return handleCheckoutSession(req, env);
   if (p === "/api/stripe/webhook" && req.method === "POST") return handleStripeWebhook(req, env);

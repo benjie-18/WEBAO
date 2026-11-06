@@ -18,6 +18,11 @@ import StarMark from "../../../components/ui/StarMark.astro";
   </div>
 
   <div data-audit-result-page hidden>
+    <div class="audit-pending-strip" data-audit-pending-strip hidden>
+      <p class="audit-pending-countdown" id="audit-countdown" aria-live="polite"></p>
+      <div class="audit-pending-bar" aria-hidden="true"><span class="audit-pending-fill" data-audit-pending-fill></span></div>
+    </div>
+
     <section class="audit-hero grain">
       <div class="shell audit-hero-inner">
         <h1 id="audit-title" class="visually-hidden">Votre audit de site web</h1>
@@ -64,6 +69,8 @@ import StarMark from "../../../components/ui/StarMark.astro";
     </section>
 
     <p class="shell audit-back"><a href="/fr/eval" id="audit-back-link">Lancer un autre audit</a></p>
+
+    <p class="shell audit-estimate-note" id="audit-estimate-note" hidden>Les valeurs affichées dans le rapport initial sont seulement des estimations et peuvent ne pas refléter les résultats finaux.</p>
   </div>
 
   <script>
@@ -89,6 +96,8 @@ import StarMark from "../../../components/ui/StarMark.astro";
         reportSub: "Leave your business email and we will send the complete report, with every finding explained.",
         reportLabel: "Business email",
         reportButton: "Send me the full report",
+        countdown: "Full audit in ~",
+        almostThere: "Almost there…",
         sending: "Sending…",
         done: "Done. Check your inbox for the full report.",
         failed: "That did not go through. Try again, or contact us directly.",
@@ -116,6 +125,8 @@ import StarMark from "../../../components/ui/StarMark.astro";
         reportSub: "Laissez votre courriel professionnel et nous vous enverrons le rapport complet, avec chaque point expliqué.",
         reportLabel: "Courriel professionnel",
         reportButton: "Envoyez-moi le rapport complet",
+        countdown: "Audit complet dans ~",
+        almostThere: "Presque terminé…",
         sending: "Envoi…",
         done: "C'est fait. Vérifiez votre boîte de réception pour le rapport complet.",
         failed: "Ça n'a pas fonctionné. Réessayez, ou contactez-nous directement.",
@@ -159,6 +170,114 @@ import StarMark from "../../../components/ui/StarMark.astro";
       return "low";
     }
 
+    type Audit = {
+      url: string; score: number; findings: string[]; strengths: string[];
+      categories: Record<string, number>; partial: boolean; pending: boolean; lang: Lang;
+    };
+
+    /** Ask the worker to run the full PageSpeed audit for this id and
+     * hold the request open until it lands (up to ~2 minutes). If
+     * another run is already in flight, poll the record until it is
+     * no longer pending. Throws when the full audit never lands. */
+    async function runFullAudit(id: string): Promise<Audit> {
+      const controller = new AbortController();
+      const timeout = window.setTimeout(() => controller.abort(), 135_000);
+      try {
+        const res = await fetch("/api/audit/" + encodeURIComponent(id) + "/full", {
+          method: "POST",
+          signal: controller.signal,
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error((data as { error?: string }).error || "Full audit failed");
+        if ((data as { running?: boolean }).running) {
+          const deadline = Date.now() + 150_000;
+          while (Date.now() < deadline) {
+            await new Promise((r) => window.setTimeout(r, 5000));
+            const g = await fetch("/api/audit/" + encodeURIComponent(id));
+            const gd = await g.json();
+            const polled = (gd as { audit?: Audit }).audit;
+            if (g.ok && polled && !polled.pending) return polled;
+          }
+          throw new Error("Full audit timed out");
+        }
+        return (data as { audit: Audit }).audit;
+      } finally {
+        window.clearTimeout(timeout);
+      }
+    }
+
+    /** Fill the full result in over the initial estimate: show the new
+     * categories and findings at once, count the score up, then swap
+     * the verdict and its colour. */
+    function applyFull(full: Audit, s: (typeof STR)[Lang]): void {
+      const scoreEl = el("audit-score");
+      const from = scoreEl ? parseInt(scoreEl.textContent || "0", 10) || 0 : 0;
+      const to = full.score;
+      const cats = el("audit-cats");
+      if (cats) {
+        cats.innerHTML = "";
+        const labels: Record<string, string> = {
+          performance: s.catPerformance,
+          accessibility: s.catAccessibility,
+          "best-practices": s.catBestPractices,
+          seo: s.catSeo,
+        };
+        for (const [key, value] of Object.entries(full.categories ?? {})) {
+          if (typeof value !== "number" || !labels[key]) continue;
+          const chip = document.createElement("span");
+          chip.className = "audit-cat";
+          const name = document.createElement("span");
+          name.textContent = labels[key];
+          const num = document.createElement("b");
+          num.className = "mono";
+          num.textContent = String(Math.round(value * 100));
+          chip.appendChild(name);
+          chip.appendChild(num);
+          cats.appendChild(chip);
+        }
+        (cats as HTMLElement).hidden = cats.childElementCount === 0;
+      }
+      const strengthsTitle = el("audit-strengths-title");
+      const strengths = el("audit-strengths");
+      const strengthsCard = el("audit-strengths-card");
+      if (strengthsTitle && strengths && strengthsCard) {
+        strengthsCard.hidden = full.strengths.length === 0;
+        if (full.strengths.length > 0) {
+          strengthsTitle.textContent = s.strengthsTitle;
+          fillList("audit-strengths", full.strengths);
+        }
+      }
+      setText("audit-findings-title", s.findingsTitle);
+      fillList("audit-findings", full.findings);
+      const partial = el("audit-partial");
+      if (partial) {
+        partial.hidden = !full.partial;
+        if (full.partial) partial.textContent = s.partial;
+      }
+      const note = el("audit-estimate-note");
+      if (note) note.hidden = !full.partial;
+      const finish = (): void => {
+        if (scoreEl) {
+          scoreEl.classList.remove("audit-score--good", "audit-score--mid", "audit-score--low");
+          scoreEl.classList.add("audit-score--" + bandFor(to));
+        }
+        setText("audit-verdict", verdictFor(to, s));
+      };
+      if (from === to) {
+        finish();
+        return;
+      }
+      const start = performance.now();
+      const dur = 900;
+      const step = (now: number): void => {
+        const p = Math.min(1, (now - start) / dur);
+        if (scoreEl) scoreEl.textContent = String(Math.round(from + (to - from) * p));
+        if (p < 1) requestAnimationFrame(step);
+        else finish();
+      };
+      requestAnimationFrame(step);
+    }
+
     async function main(): Promise<void> {
       const loading = document.querySelector("[data-audit-result-loading]");
       const page = document.querySelector("[data-audit-result-page]");
@@ -189,7 +308,7 @@ import StarMark from "../../../components/ui/StarMark.astro";
         if (!res.ok) throw new Error((data as { error?: string }).error || "Audit failed");
         const audit = (data as { audit: {
           url: string; score: number; findings: string[]; strengths: string[];
-          categories: Record<string, number>; partial: boolean; lang: Lang;
+          categories: Record<string, number>; partial: boolean; pending: boolean; lang: Lang;
         } }).audit;
         const lang: Lang = audit.lang === "fr" ? "fr" : "en";
         const s = STR[lang];
@@ -207,6 +326,10 @@ import StarMark from "../../../components/ui/StarMark.astro";
           partial.hidden = !audit.partial;
           if (audit.partial) partial.textContent = s.partial;
         }
+        // The initial report's values are estimates: say so in small
+        // print at the bottom of the page while the record is partial.
+        const note = el("audit-estimate-note");
+        if (note) note.hidden = !audit.partial;
         const cats = el("audit-cats");
         if (cats) {
           cats.innerHTML = "";
@@ -277,6 +400,39 @@ import StarMark from "../../../components/ui/StarMark.astro";
               if (reportStatus) reportStatus.textContent = s.failed;
             }
           });
+        }
+
+        // The full audit is still running: show the countdown and the
+        // subtle bar, trigger it, and fill the result in when it lands.
+        // If it never lands, the initial estimate stays as it is.
+        if (audit.pending) {
+          const strip = document.querySelector("[data-audit-pending-strip]");
+          const countdownEl = el("audit-countdown");
+          const fillEl = document.querySelector("[data-audit-pending-fill]") as HTMLElement | null;
+          if (strip) (strip as HTMLElement).hidden = false;
+          const ESTIMATE_MS = 120_000;
+          const startedAt = Date.now();
+          const fmt = (ms: number): string => {
+            const total = Math.max(0, Math.ceil(ms / 1000));
+            return Math.floor(total / 60) + ":" + String(total % 60).padStart(2, "0");
+          };
+          const tick = (): void => {
+            const elapsed = Date.now() - startedAt;
+            const remaining = ESTIMATE_MS - elapsed;
+            if (countdownEl) countdownEl.textContent = remaining > 0 ? s.countdown + " " + fmt(remaining) : s.almostThere;
+            if (fillEl) fillEl.style.width = Math.min(100, (elapsed / ESTIMATE_MS) * 100) + "%";
+          };
+          tick();
+          const timer = window.setInterval(tick, 1000);
+          try {
+            const full = await runFullAudit(id);
+            if (full && !full.pending) applyFull(full, s);
+          } catch {
+            // The full audit never landed: keep the initial estimate.
+          } finally {
+            window.clearInterval(timer);
+            if (strip) (strip as HTMLElement).hidden = true;
+          }
         }
       } catch (err) {
         if (star) (star as HTMLElement).hidden = true;
@@ -456,6 +612,43 @@ import StarMark from "../../../components/ui/StarMark.astro";
       text-align: center;
     }
     .audit-back a { color: var(--muted); }
+    .audit-estimate-note {
+      margin: 0;
+      padding-bottom: 28px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-align: center;
+    }
+    .audit-estimate-note[hidden] { display: none; }
+    /* Pending strip: the full audit is still running. A small countdown
+       and a subtle gradient bar, like the one on the loading screen. */
+    .audit-pending-strip {
+      padding: 18px 0 0;
+      text-align: center;
+    }
+    .audit-pending-strip[hidden] { display: none; }
+    .audit-pending-countdown {
+      margin: 0;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+    .audit-pending-bar {
+      width: min(480px, 80vw);
+      height: 4px;
+      margin: 10px auto 0;
+      border-radius: 999px;
+      background: var(--line);
+      overflow: clip;
+    }
+    .audit-pending-fill {
+      display: block;
+      height: 100%;
+      width: 0;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-mid));
+      transition: width 1s linear;
+    }
     /* Loading state: same spinning star as the landing pages. */
     .audit-result-loading {
       display: flex;

@@ -1428,6 +1428,7 @@ const fr = {
       reportRequested: "Rapport complet demandé",
       noEmail: "Aucun courriel laissé",
       partial: "Contrôle de base seulement (test de vitesse indisponible)",
+      running: "Audit complet en cours",
       strengths: "Ce qui fonctionne",
       findings: "Constats",
       details: "Détails",

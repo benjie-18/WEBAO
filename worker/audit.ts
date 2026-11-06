@@ -1,18 +1,26 @@
 // WEBAO audit worker endpoint — free website audit (Channel E).
-// Phase 1 scoring uses the PageSpeed Insights API (Lighthouse, run by
-// Google) with env.PAGESPEED_API_KEY. If PageSpeed is unavailable or too
-// slow, the audit falls back to the hand-rolled basic checks below and
-// marks the result partial, so a visitor always gets an answer.
+// The first pass (POST /api/audit) runs the hand-rolled basic checks
+// and returns an initial estimate right away: the basic score scaled
+// to a 0–60 ceiling, marked partial and pending. The full audit runs
+// on demand (POST /api/audit/:id/full) with the PageSpeed Insights
+// API (Lighthouse, run by Google) using env.PAGESPEED_API_KEY, which
+// takes 60–120s; when it lands the record is updated in place and
+// the results page fills in. If PageSpeed is unavailable or too slow
+// even then, the initial estimate stands and the result stays partial,
+// so a visitor always gets an answer.
 // Routes (see worker/ROUTE-PATCH.txt): POST /api/audit,
-// GET /api/audit/:id, POST /api/audit/report. Results are stored in
-// WEBAO_KV under audit:<ts>:<rand> with a newest-first audit:index
-// (capped at 1000) for the admin Audits tab.
+// GET /api/audit/:id, POST /api/audit/:id/full, POST /api/audit/report.
+// Results are stored in WEBAO_KV under audit:<ts>:<rand> with a
+// newest-first audit:index (capped at 1000) for the admin Audits tab.
 
 import { getJson, putJson, KvWriteError } from "./kv";
 import { json, err, clientIp } from "./util";
 
 const PSI_ENDPOINT = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed";
-const PSI_TIMEOUT_MS = 25_000;
+// The full audit waits up to 2 minutes for PageSpeed: direct calls
+// measured 66s and 115s for webao.ca (2026-11-05), and PageSpeed
+// sometimes exceeds 120s. The first pass never calls PageSpeed.
+const PSI_FULL_TIMEOUT_MS = 120_000;
 const AUDIT_INDEX = "audit:index";
 const MAX_INDEX = 1000;
 const RATE_LIMIT_PER_HOUR = 5;
@@ -32,6 +40,8 @@ export interface AuditRecord {
   strengths: string[];
   categories: Record<string, number>;
   partial: boolean;
+  /** True while the full (PageSpeed) audit has not landed yet. */
+  pending: boolean;
   lang: "en" | "fr";
   at: number;
   email?: string;
@@ -117,6 +127,15 @@ export function scoreFromCategories(categories: Record<string, number>): number 
   return Math.round((weighted / weightSum) * 100);
 }
 
+/** Initial estimate from the basic-checks score (0–100): scaled to a
+ * 0–60 ceiling. The basic checks are the easiest things to pass, so a
+ * raw basic score would read near 100 for most sites; the estimate
+ * stays low on purpose, and the full audit replaces it. The results
+ * page discloses that initial values are only estimates. */
+export function provisionalScore(basicScore: number): number {
+  return Math.min(60, Math.max(0, Math.round(basicScore * 0.6)));
+}
+
 const CATEGORY_LABELS: Record<string, { en: string; fr: string }> = {
   performance: { en: "Speed", fr: "Vitesse" },
   accessibility: { en: "Accessibility", fr: "Accessibilité" },
@@ -156,7 +175,7 @@ async function runPageSpeed(
     "&locale=" + (lang === "fr" ? "fr" : "en") +
     "&key=" + encodeURIComponent(key);
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), PSI_TIMEOUT_MS);
+  const timeout = setTimeout(() => controller.abort(), PSI_FULL_TIMEOUT_MS);
   let res: Response;
   try {
     res = await fetch(endpoint, {
@@ -337,8 +356,12 @@ function newAuditId(): string {
   return `${Date.now()}:${Math.random().toString(36).slice(2, 8)}`;
 }
 
-async function storeAudit(kv: KVNamespace, record: AuditRecord): Promise<void> {
+async function putAudit(kv: KVNamespace, record: AuditRecord): Promise<void> {
   await putJson(kv, `audit:${record.id}`, record);
+}
+
+async function storeAudit(kv: KVNamespace, record: AuditRecord): Promise<void> {
+  await putAudit(kv, record);
   const index = (await getJson<string[]>(kv, AUDIT_INDEX)) || [];
   index.unshift(`audit:${record.id}`);
   if (index.length > MAX_INDEX) index.splice(MAX_INDEX);
@@ -376,51 +399,29 @@ export async function handleAudit(req: Request, env: Env): Promise<Response> {
     return err("Too many audits. Try again later.", 429);
   }
 
-  let score = 0;
-  let findings: string[] = [];
-  let strengths: string[] = [];
-  let categories: Record<string, number> = {};
-  let partial = false;
-
-  if (env.PAGESPEED_API_KEY) {
-    try {
-      const psi = await runPageSpeed(url, env.PAGESPEED_API_KEY, lang);
-      categories = psi.categories;
-      score = scoreFromCategories(categories);
-      findings = psi.findings;
-      strengths = strengthsFromCategories(categories, lang);
-      if (findings.length === 0) {
-        findings.push(tr("none", lang));
-      }
-    } catch {
-      partial = true;
-      findings = [];
-    }
-  } else {
-    partial = true;
+  // First pass: basic checks only, no PageSpeed call. PageSpeed takes
+  // 60–120s, so the full audit runs separately (handleAuditFull) and
+  // fills the record in. The initial estimate is the basic score
+  // scaled to a 0–60 ceiling, marked partial and pending; the results
+  // page discloses that initial values are only estimates.
+  let page: { html: string; finalUrl: string; fetchMs: number };
+  try {
+    page = await fetchHomepage(url, env);
+  } catch {
+    return err("That site could not be reached.", 502);
   }
-
-  if (partial) {
-    try {
-      const page = await fetchHomepage(url, env);
-      const basic = runBasicChecks(page.html, page.finalUrl, page.fetchMs, lang);
-      score = basic.score;
-      findings = basic.findings;
-      categories = {};
-    } catch {
-      return err("That site could not be reached.", 502);
-    }
-    findings.unshift(tr("partialNote", lang));
-  }
+  const basic = runBasicChecks(page.html, page.finalUrl, page.fetchMs, lang);
+  const findings = [tr("partialNote", lang), ...basic.findings];
 
   const record: AuditRecord = {
     id: newAuditId(),
     url,
-    score,
+    score: provisionalScore(basic.score),
     findings,
-    strengths,
-    categories,
-    partial,
+    strengths: [],
+    categories: {},
+    partial: true,
+    pending: true,
     lang,
     at: Date.now(),
   };
@@ -434,8 +435,62 @@ export async function handleAudit(req: Request, env: Env): Promise<Response> {
     strengths: record.strengths,
     categories: record.categories,
     partial: record.partial,
+    pending: record.pending,
     resultUrl: lang === "fr" ? `/fr/audits/${record.id}` : `/audits/${record.id}`,
   });
+}
+
+/** POST /api/audit/:id/full — run the full PageSpeed audit for a
+ * record created by the first pass, and update it in place. The
+ * results page calls this once the initial estimate is on screen and
+ * holds the request open while PageSpeed runs (up to 2 minutes).
+ * A lock key stops a second run for the same id while one is in
+ * flight (e.g. the visitor refreshes): the second call gets
+ * { running: true } and the page polls GET until pending is false.
+ * If PageSpeed fails or times out, the record keeps the initial
+ * estimate and pending is cleared, so the page stops waiting. */
+export async function handleAuditFull(req: Request, env: Env, path: string): Promise<Response> {
+  if (req.method !== "POST") return err("Method not allowed", 405);
+  const m = /^\/api\/audit\/([^/]+)\/full$/.exec(path);
+  if (!m) return err("Invalid id", 400);
+  let id: string;
+  try {
+    id = decodeURIComponent(m[1]);
+  } catch {
+    return err("Invalid id", 400);
+  }
+  if (!/^[\w:.-]+$/.test(id) || id.length > 64) return err("Invalid id", 400);
+  const record = await getJson<AuditRecord>(env.WEBAO_KV, `audit:${id}`);
+  if (!record) return err("Audit not found", 404);
+  if (!record.pending) return json({ ok: true, audit: record });
+  const lockKey = `audit:full:${id}`;
+  const locked = await getJson<string>(env.WEBAO_KV, lockKey);
+  if (locked) return json({ ok: true, running: true });
+  try {
+    await putJson(env.WEBAO_KV, lockKey, "1", 180);
+  } catch (e) {
+    if (!(e instanceof KvWriteError)) throw e;
+    // The lock could not be written (KV unavailable): run anyway,
+    // a duplicate run is harmless.
+  }
+  if (!env.PAGESPEED_API_KEY) {
+    record.pending = false;
+    await putAudit(env.WEBAO_KV, record);
+    return json({ ok: true, audit: record });
+  }
+  try {
+    const psi = await runPageSpeed(record.url, env.PAGESPEED_API_KEY, record.lang);
+    record.categories = psi.categories;
+    record.score = scoreFromCategories(psi.categories);
+    record.findings = psi.findings.length > 0 ? psi.findings : [tr("none", record.lang)];
+    record.strengths = strengthsFromCategories(psi.categories, record.lang);
+    record.partial = false;
+  } catch {
+    // PageSpeed failed or timed out: keep the initial estimate.
+  }
+  record.pending = false;
+  await putAudit(env.WEBAO_KV, record);
+  return json({ ok: true, audit: record });
 }
 
 export async function handleAuditGet(req: Request, env: Env, path: string): Promise<Response> {
@@ -486,6 +541,7 @@ export async function handleAuditReport(req: Request, env: Env): Promise<Respons
       strengths: [],
       categories: {},
       partial: true,
+      pending: false,
       lang: body?.lang === "fr" ? "fr" : "en",
       at: Date.now(),
       email,

@@ -6,14 +6,17 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   handleAudit,
+  handleAuditFull,
   handleAuditGet,
   handleAuditReport,
   normalizeAuditUrl,
+  provisionalScore,
   runBasicChecks,
   scoreFromCategories,
   type AuditRecord,
 } from '../worker/audit';
 import { apiGet, apiRequest, bodyOf, envOf, memoryKV } from './helpers';
+import { putJson } from '../worker/kv';
 
 const GOOD_HTML =
   '<!doctype html><html><head><title>Example Plumbing</title>' +
@@ -102,6 +105,13 @@ test('normalizeAuditUrl accepts bare domains and keeps explicit schemes', () => 
   assert.equal(normalizeAuditUrl('https://user:pass@example.com'), null);
 });
 
+test('provisionalScore scales a basic score to a 0–60 ceiling', () => {
+  assert.equal(provisionalScore(100), 60);
+  assert.equal(provisionalScore(70), 42);
+  assert.equal(provisionalScore(20), 12);
+  assert.equal(provisionalScore(0), 0);
+});
+
 test('POST /api/audit accepts a bare domain and stores the normalized URL', async () => {
   const restore = stubHomepage(GOOD_HTML);
   try {
@@ -109,11 +119,12 @@ test('POST /api/audit accepts a bare domain and stores the normalized URL', asyn
     const env = envOf(memory.kv);
     const res = await handleAudit(apiRequest('/api/audit', { url: 'example.com', lang: 'en' }), env);
     assert.equal(res.status, 200);
-    const data = await bodyOf(res) as { ok: boolean; id: string; url: string; score: number; partial: boolean };
+    const data = await bodyOf(res) as { ok: boolean; id: string; url: string; score: number; partial: boolean; pending: boolean };
     assert.equal(data.ok, true);
     assert.equal(data.url, 'https://example.com');
-    assert.equal(data.score, 100);
+    assert.equal(data.score, 60); // initial estimate: basic 100 scaled to a 0–60 ceiling
     assert.equal(data.partial, true);
+    assert.equal(data.pending, true);
     const stored = await memory.kv.get(`audit:${data.id}`, { type: 'json' }) as AuditRecord | null;
     assert.ok(stored);
     assert.equal(stored.url, 'https://example.com');
@@ -130,15 +141,17 @@ test('POST /api/audit scores a good page and stores the result', async () => {
   try {
     const res = await handleAudit(apiRequest('/api/audit', { url: 'https://example.com/', lang: 'en' }), env);
     assert.equal(res.status, 200);
-    const data = await bodyOf(res) as { ok: boolean; id: string; score: number; resultUrl: string; partial: boolean };
+    const data = await bodyOf(res) as { ok: boolean; id: string; score: number; resultUrl: string; partial: boolean; pending: boolean };
     assert.equal(data.ok, true);
-    assert.equal(data.score, 100);
-    assert.equal(data.partial, true); // no PageSpeed key, fallback path
+    assert.equal(data.score, 60); // initial estimate, not the full audit
+    assert.equal(data.partial, true); // no PageSpeed call on the first pass
+    assert.equal(data.pending, true);
     assert.equal(data.resultUrl, `/audits/${data.id}`);
     const stored = await kv.get(`audit:${data.id}`, { type: 'json' }) as AuditRecord | null;
     assert.ok(stored);
     assert.equal(stored.url, 'https://example.com/');
-    assert.equal(stored.score, 100);
+    assert.equal(stored.score, 60);
+    assert.equal(stored.pending, true);
     const index = await kv.get('audit:index', { type: 'json' }) as string[] | null;
     assert.deepEqual(index, [`audit:${data.id}`]);
   } finally {
@@ -154,9 +167,10 @@ test('POST /api/audit returns the French results URL for a French audit', async 
   try {
     const res = await handleAudit(apiRequest('/api/audit', { url: 'https://example.com/', lang: 'fr' }), env);
     assert.equal(res.status, 200);
-    const data = await bodyOf(res) as { ok: boolean; id: string; resultUrl: string };
+    const data = await bodyOf(res) as { ok: boolean; id: string; resultUrl: string; pending: boolean };
     assert.equal(data.ok, true);
     assert.equal(data.resultUrl, `/fr/audits/${data.id}`);
+    assert.equal(data.pending, true);
     const stored = await kv.get(`audit:${data.id}`, { type: 'json' }) as AuditRecord | null;
     assert.ok(stored);
     assert.equal(stored.lang, 'fr');
@@ -175,13 +189,14 @@ test('POST /api/audit serves our own site from ASSETS, not the network', async (
   const env = envOf(memory.kv, { ASSETS: assets });
   const res = await handleAudit(apiRequest('/api/audit', { url: 'https://webao.ca/', lang: 'en' }), env);
   assert.equal(res.status, 200);
-  const data = await bodyOf(res) as { ok: boolean; score: number; partial: boolean };
+  const data = await bodyOf(res) as { ok: boolean; score: number; partial: boolean; pending: boolean };
   assert.equal(data.ok, true);
-  assert.equal(data.score, 100);
-  assert.equal(data.partial, true); // no PageSpeed key, fallback path
+  assert.equal(data.score, 60); // initial estimate from the basic checks
+  assert.equal(data.partial, true);
+  assert.equal(data.pending, true);
 });
 
-test('POST /api/audit via PageSpeed drops passing checks from findings', async () => {
+test('POST /api/audit/:id/full fills the record from PageSpeed and drops passing checks', async () => {
   const psiPayload = {
     lighthouseResult: {
       categories: {
@@ -215,14 +230,104 @@ test('POST /api/audit via PageSpeed drops passing checks from findings', async (
   }) as typeof fetch;
   try {
     const memory = memoryKV();
+    const kv = memory.kv;
     const env = envOf(memory.kv, { PAGESPEED_API_KEY: 'test-key' });
-    const res = await handleAudit(apiRequest('/api/audit', { url: 'https://example.com/', lang: 'en' }), env);
+    const first = await handleAudit(apiRequest('/api/audit', { url: 'https://example.com/', lang: 'en' }), env);
+    assert.equal(first.status, 200);
+    const created = await bodyOf(first) as { id: string; score: number; pending: boolean };
+    assert.equal(created.score, 60); // initial estimate first
+    assert.equal(created.pending, true);
+    const res = await handleAuditFull(
+      apiRequest(`/api/audit/${encodeURIComponent(created.id)}/full`, {}),
+      env,
+      `/api/audit/${created.id}/full`,
+    );
     assert.equal(res.status, 200);
-    const data = await bodyOf(res) as { score: number; findings: string[]; partial: boolean };
-    assert.equal(data.score, 91);
-    assert.equal(data.partial, false);
-    assert.ok(data.findings.some((f) => f.includes('Reduce unused JavaScript')));
-    assert.ok(!data.findings.some((f) => f.includes('server response')));
+    const data = await bodyOf(res) as { ok: boolean; audit: AuditRecord };
+    assert.equal(data.ok, true);
+    assert.equal(data.audit.score, 91);
+    assert.equal(data.audit.partial, false);
+    assert.equal(data.audit.pending, false);
+    assert.ok(data.audit.findings.some((f) => f.includes('Reduce unused JavaScript')));
+    assert.ok(!data.audit.findings.some((f) => f.includes('server response')));
+    const stored = await kv.get(`audit:${created.id}`, { type: 'json' }) as AuditRecord | null;
+    assert.ok(stored);
+    assert.equal(stored.score, 91);
+    assert.equal(stored.pending, false);
+    // A second full call is a no-op once the record is complete.
+    const again = await handleAuditFull(
+      apiRequest(`/api/audit/${encodeURIComponent(created.id)}/full`, {}),
+      env,
+      `/api/audit/${created.id}/full`,
+    );
+    assert.equal(again.status, 200);
+    const againData = await bodyOf(again) as { ok: boolean; audit: AuditRecord };
+    assert.equal(againData.audit.score, 91);
+  } finally {
+    globalThis.fetch = original;
+  }
+});
+
+test('POST /api/audit/:id/full returns 404 for an unknown id', async () => {
+  const memory = memoryKV();
+  const env = envOf(memory.kv, { PAGESPEED_API_KEY: 'test-key' });
+  const res = await handleAuditFull(
+    apiRequest('/api/audit/1%3Anope/full', {}),
+    env,
+    '/api/audit/1%3Anope/full',
+  );
+  assert.equal(res.status, 404);
+});
+
+test('POST /api/audit/:id/full returns running when a run is already in flight', async () => {
+  const memory = memoryKV();
+  const kv = memory.kv;
+  const env = envOf(memory.kv, { PAGESPEED_API_KEY: 'test-key' });
+  const restore = stubHomepage(GOOD_HTML);
+  try {
+    const first = await handleAudit(apiRequest('/api/audit', { url: 'https://example.com/', lang: 'en' }), env);
+    const created = await bodyOf(first) as { id: string };
+    await putJson(kv, `audit:full:${created.id}`, '1', 180);
+    const res = await handleAuditFull(
+      apiRequest(`/api/audit/${encodeURIComponent(created.id)}/full`, {}),
+      env,
+      `/api/audit/${created.id}/full`,
+    );
+    assert.equal(res.status, 200);
+    const data = await bodyOf(res) as { ok: boolean; running: boolean };
+    assert.equal(data.ok, true);
+    assert.equal(data.running, true);
+  } finally {
+    restore();
+  }
+});
+
+test('POST /api/audit/:id/full keeps the initial estimate when PageSpeed fails', async () => {
+  const original = globalThis.fetch;
+  globalThis.fetch = (async (input: RequestInfo | URL) => {
+    if (String(input).includes('pagespeedonline')) {
+      return { ok: false, status: 500, json: async () => ({}) } as unknown as Response;
+    }
+    return { ok: true, status: 200, url: 'https://example.com/', text: async () => GOOD_HTML } as unknown as Response;
+  }) as typeof fetch;
+  try {
+    const memory = memoryKV();
+    const kv = memory.kv;
+    const env = envOf(memory.kv, { PAGESPEED_API_KEY: 'test-key' });
+    const first = await handleAudit(apiRequest('/api/audit', { url: 'https://example.com/', lang: 'en' }), env);
+    const created = await bodyOf(first) as { id: string; score: number };
+    assert.equal(created.score, 60);
+    const res = await handleAuditFull(
+      apiRequest(`/api/audit/${encodeURIComponent(created.id)}/full`, {}),
+      env,
+      `/api/audit/${created.id}/full`,
+    );
+    assert.equal(res.status, 200);
+    const data = await bodyOf(res) as { ok: boolean; audit: AuditRecord };
+    assert.equal(data.ok, true);
+    assert.equal(data.audit.score, 60); // initial estimate stands
+    assert.equal(data.audit.partial, true);
+    assert.equal(data.audit.pending, false); // stops waiting
   } finally {
     globalThis.fetch = original;
   }
@@ -260,6 +365,7 @@ test('GET /api/audit/:id returns a stored audit, 404 when missing', async () => 
     strengths: [],
     categories: { performance: 0.8 },
     partial: false,
+    pending: false,
     lang: 'en',
     at: 1762456789000,
   };
@@ -291,6 +397,7 @@ test('POST /api/audit/report attaches the email to the audit', async () => {
     strengths: [],
     categories: { performance: 0.8 },
     partial: false,
+    pending: false,
     lang: 'en',
     at: 1762456789000,
   };

@@ -169,6 +169,7 @@ import StarMark from "../../components/ui/StarMark.astro";
           return;
         }
         busy = true;
+        var submittedAt = Date.now();
         if (status) status.textContent = "";
         page.hidden = true;
         loading.hidden = false;
@@ -189,7 +190,13 @@ import StarMark from "../../components/ui/StarMark.astro";
             }
             stopFakeBar();
             fill.style.width = "100%";
-            window.setTimeout(function () { window.location.href = pair.data.resultUrl; }, 350);
+            // The first result lands after ~15s: the provisional audit is
+            // ready fast, but the loading screen stays up for at least
+            // 15s so the visitor sees the checks run. Errors redirect
+            // never; they show immediately (see the catch below).
+            var elapsed = Date.now() - submittedAt;
+            var wait = Math.max(350, 15000 - elapsed);
+            window.setTimeout(function () { window.location.href = pair.data.resultUrl; }, wait);
           })
           .catch(function (err) {
             stopFakeBar();
