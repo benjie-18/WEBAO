@@ -191,6 +191,22 @@ test('the terms search message templates sit before the search script', () => {
   }
 });
 
+test('the support form validates like the contact form', () => {
+  // Same three guards the contact page has: a real email regex (not a bare
+  // '@' check), an in-flight guard against double submits, and focus to the
+  // first invalid field. The category select also starts on an empty
+  // placeholder instead of silently defaulting to Billing.
+  const supportPage = read('src/components/pages/SupportPage.astro');
+  assert.ok(supportPage.includes('EMAIL_RE.test(email)'), 'the support form uses the shared email regex');
+  assert.equal(supportPage.includes("email.includes('@')"), false, 'the support form does not use a bare @ check');
+  assert.ok(supportPage.includes("dataset.sending === '1'"), 'the support form has an in-flight guard');
+  assert.ok(supportPage.includes('firstInvalid'), 'the support form focuses the first invalid field');
+  assert.ok(supportPage.includes('<option value="" disabled selected>'), 'the category select starts on an empty placeholder');
+  assert.notEqual(en.support.form.categoryPlaceholder.trim(), '', 'the category placeholder exists in English');
+  assert.notEqual(fr.support.form.categoryPlaceholder.trim(), '', 'the category placeholder exists in French');
+  assert.notEqual(en.support.form.categoryPlaceholder, fr.support.form.categoryPlaceholder, 'the category placeholder is translated');
+});
+
 test('the image provenance list is well-formed and matches the catalog', () => {
   const sources = JSON.parse(read('src/lib/sources.json')) as Array<{
     demo: string;

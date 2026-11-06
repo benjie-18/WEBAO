@@ -71,6 +71,7 @@ const categoryIds = ["billing", "changes", "addons", "issue", "other"] as const;
 
           <label>{s.form.category}
             <select name="category" required>
+              <option value="" disabled selected>{s.form.categoryPlaceholder}</option>
               {categoryIds.map(id => <option value={id}>{s.form.categories[id]}</option>)}
             </select>
           </label>
@@ -182,9 +183,14 @@ const categoryIds = ["billing", "changes", "addons", "issue", "other"] as const;
       const successMsg = form.getAttribute('data-success') || 'Request sent. We will reply within one business day.';
       const readyText = form.getAttribute('data-ready') || 'Sent ✓';
       const errorFallback = form.getAttribute('data-error-fallback') || 'Could not send right now. Email us directly at support@webao.ca.';
+      // Same shape as the contact/start pages and the worker (EMAIL_RE): an
+      // address like "a@" must fail here with the validation message, not
+      // reach the API and come back as a misleading "could not send" error.
+      const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
       form.addEventListener('submit', (e) => {
         e.preventDefault();
+        if (form.dataset.sending === '1') return;
         const data = new FormData(form as HTMLFormElement);
         const name = String(data.get('name') || '').trim();
         const email = String(data.get('email') || '').trim();
@@ -193,7 +199,7 @@ const categoryIds = ["billing", "changes", "addons", "issue", "other"] as const;
         const message = String(data.get('message') || '').trim();
         let valid = true;
         if (!name || !email || !category || !subject || !message) valid = false;
-        if (!email.includes('@')) valid = false;
+        if (!EMAIL_RE.test(email)) valid = false;
         const consent = form.querySelector('.check-row input') as HTMLInputElement | null;
         if (consent && !consent.checked) valid = false;
         if (!valid) {
@@ -201,8 +207,22 @@ const categoryIds = ["billing", "changes", "addons", "issue", "other"] as const;
           status.textContent = validationError;
           status.classList.remove('form-status--success');
           status.classList.add('form-status--error');
+          // Focus the first field that failed, like the contact page does,
+          // instead of leaving focus on the submit button.
+          const firstInvalid = (!name ? form.querySelector('[name="name"]') : null)
+            ?? (!EMAIL_RE.test(email) ? form.querySelector('[name="email"]') : null)
+            ?? (!category ? form.querySelector('[name="category"]') : null)
+            ?? (!subject ? form.querySelector('[name="subject"]') : null)
+            ?? (!message ? form.querySelector('[name="message"]') : null)
+            ?? (consent && !consent.checked ? consent : null);
+          (firstInvalid as HTMLElement | null)?.focus();
           return;
         }
+        // In-flight guard: a second click (or Enter) while the request is
+        // pending must not send a duplicate request to the inbox.
+        form.dataset.sending = '1';
+        const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+        if (submitBtn) submitBtn.disabled = true;
         fetch("/api/forms/submit", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -227,6 +247,8 @@ const categoryIds = ["billing", "changes", "addons", "issue", "other"] as const;
             }
           })
           .catch(() => {
+            form.dataset.sending = '0';
+            if (submitBtn) submitBtn.disabled = false;
             status.hidden = false;
             status.textContent = errorFallback;
             status.classList.remove('form-status--success');
