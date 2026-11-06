@@ -332,6 +332,54 @@ test('full audit with no opportunities falls back to the slowest metric', async 
   }
 });
 
+test('full audit fallback localizes the slow-metric name in French', async () => {
+  const psiPayload = {
+    lighthouseResult: {
+      categories: {
+        performance: { score: 0.75 },
+        accessibility: { score: 1 },
+        'best-practices': { score: 0.96 },
+        seo: { score: 1 },
+      },
+      audits: {
+        'largest-contentful-paint': { title: 'Largest Contentful Paint', displayValue: '7,8 s', score: 0.5 },
+        'cumulative-layout-shift': { title: 'Cumulative Layout Shift', displayValue: '0', score: 1 },
+        'first-contentful-paint': { title: 'First Contentful Paint', displayValue: '1,7 s', score: 0.9 },
+        'total-blocking-time': { title: 'Total Blocking Time', displayValue: '0 ms', score: 1 },
+        'speed-index': { title: 'Speed Index', displayValue: '1,8 s', score: 0.8 },
+      },
+    },
+  };
+  const original = globalThis.fetch;
+  globalThis.fetch = (async (input: RequestInfo | URL) => {
+    if (String(input).includes('pagespeedonline')) {
+      return { ok: true, status: 200, json: async () => psiPayload } as unknown as Response;
+    }
+    return { ok: true, status: 200, url: 'https://example.com/', text: async () => GOOD_HTML } as unknown as Response;
+  }) as typeof fetch;
+  try {
+    const memory = memoryKV();
+    const env = envOf(memory.kv, { PAGESPEED_API_KEY: 'test-key' });
+    const first = await handleAudit(apiRequest('/api/audit', { url: 'https://example.com/', lang: 'fr' }), env);
+    const created = await bodyOf(first) as { id: string };
+    const res = await handleAuditFull(
+      apiRequest(`/api/audit/${encodeURIComponent(created.id)}/full`, {}),
+      env,
+      `/api/audit/${created.id}/full`,
+    );
+    assert.equal(res.status, 200);
+    const data = await bodyOf(res) as { audit: AuditRecord };
+    assert.equal(data.audit.partial, false);
+    // PageSpeed returns the metric title in English even with
+    // locale=fr, so the fallback must use the French name.
+    assert.ok(data.audit.findings.some((f) => f.includes('Plus grand élément affiché')));
+    assert.ok(data.audit.findings.some((f) => f.includes('7,8 s')));
+    assert.ok(!data.audit.findings.some((f) => f.includes('Largest Contentful Paint')));
+  } finally {
+    globalThis.fetch = original;
+  }
+});
+
 test('POST /api/audit/:id/full returns 404 for an unknown id', async () => {
   const memory = memoryKV();
   const env = envOf(memory.kv, { PAGESPEED_API_KEY: 'test-key' });

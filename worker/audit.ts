@@ -216,20 +216,21 @@ async function runPageSpeed(
   // When no specific opportunity is worth flagging but the page is
   // still slow, the findings card would otherwise read "no major
   // problems" next to a mediocre score. Fall back to the slowest
-  // headline metrics (their titles come back in the audit's
-  // language, like the opportunity titles).
+  // headline metrics. PageSpeed returns these metric titles in
+  // English even with locale=fr, so the names are localized here
+  // (they match the stats grid labels on the results page).
   if (findings.length === 0) {
-    const slowMetricIds = [
-      "largest-contentful-paint",
-      "speed-index",
-      "first-contentful-paint",
-      "total-blocking-time",
-      "cumulative-layout-shift",
-    ];
-    for (const auditId of slowMetricIds) {
+    const slowMetricIds: Record<string, { en: string; fr: string }> = {
+      "largest-contentful-paint": { en: "Largest Contentful Paint", fr: "Plus grand élément affiché" },
+      "speed-index": { en: "Speed Index", fr: "Indice de vitesse" },
+      "first-contentful-paint": { en: "First Contentful Paint", fr: "Premier élément affiché" },
+      "total-blocking-time": { en: "Total Blocking Time", fr: "Temps de blocage" },
+      "cumulative-layout-shift": { en: "Cumulative Layout Shift", fr: "Décalage de mise en page" },
+    };
+    for (const [auditId, names] of Object.entries(slowMetricIds)) {
       const a = audits[auditId];
       if (a && typeof a.score === "number" && a.score < 0.9 && a.displayValue) {
-        findings.push(`${a.title ?? ""} (${a.displayValue})`.trim());
+        findings.push(`${names[lang]} (${a.displayValue})`.trim());
       }
       if (findings.length >= 3) break;
     }
