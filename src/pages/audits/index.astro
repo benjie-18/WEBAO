@@ -40,7 +40,8 @@ import StarMark from "../../components/ui/StarMark.astro";
 
     <section class="section">
       <div class="shell">
-        <div class="audit-cats" id="audit-cats"></div>
+        <div class="audit-bars" id="audit-cats"></div>
+        <div class="audit-stats" id="audit-stats" hidden></div>
         <div class="audit-cards">
           <div class="audit-card" id="audit-strengths-card" hidden>
             <h2 id="audit-strengths-title">What works</h2>
@@ -93,6 +94,11 @@ import StarMark from "../../components/ui/StarMark.astro";
         catAccessibility: "Accessibility",
         catBestPractices: "Best practices",
         catSeo: "SEO",
+        metricLcp: "Largest contentful paint",
+        metricCls: "Layout shift",
+        metricFcp: "First contentful paint",
+        metricTbt: "Blocking time",
+        metricSpeed: "Speed index",
         reportEyebrow: "Full report",
         reportTitle: "Want the full report?",
         reportSub: "Leave your business email and we will send the complete report, with every finding explained.",
@@ -124,6 +130,11 @@ import StarMark from "../../components/ui/StarMark.astro";
         catAccessibility: "Accessibilité",
         catBestPractices: "Bonnes pratiques",
         catSeo: "Référencement",
+        metricLcp: "Plus grand élément affiché",
+        metricCls: "Décalage de mise en page",
+        metricFcp: "Premier élément affiché",
+        metricTbt: "Temps de blocage",
+        metricSpeed: "Indice de vitesse",
         reportEyebrow: "Rapport complet",
         reportTitle: "Vous voulez le rapport complet?",
         reportSub: "Laissez votre courriel professionnel et nous vous enverrons le rapport complet, avec chaque point expliqué.",
@@ -178,7 +189,8 @@ import StarMark from "../../components/ui/StarMark.astro";
 
     type Audit = {
       url: string; score: number; findings: string[]; strengths: string[];
-      categories: Record<string, number>; partial: boolean; pending: boolean; lang: Lang; at: number;
+      categories: Record<string, number>; metrics: Record<string, string>;
+      partial: boolean; pending: boolean; lang: Lang; at: number;
     };
 
     /** Count the big score from one value to another over ~0.9s. A
@@ -204,36 +216,113 @@ import StarMark from "../../components/ui/StarMark.astro";
       requestAnimationFrame(step);
     }
 
-    /** Ask the worker to run the full PageSpeed audit for this id and
-     * hold the request open until it lands (up to ~3 minutes: the
-     * worker's PageSpeed budget is 180s). If another run is already in
-     * flight, poll the record until it is no longer pending. Throws
-     * when the full audit never lands. */
+    /** Trigger the full PageSpeed audit and poll the record until it
+     * lands. The /full call returns at once (the run continues on the
+     * server), so no long-lived request has to survive for the result
+     * to arrive: the page picks it up by polling GET. If the record
+     * is still pending after a while, the trigger is sent again.
+     * Throws when it never lands. */
     async function runFullAudit(id: string): Promise<Audit> {
-      const controller = new AbortController();
-      const timeout = window.setTimeout(() => controller.abort(), 200_000);
-      try {
-        const res = await fetch("/api/audit/" + encodeURIComponent(id) + "/full", {
-          method: "POST",
-          signal: controller.signal,
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error((data as { error?: string }).error || "Full audit failed");
-        if ((data as { running?: boolean }).running) {
-          const deadline = Date.now() + 300_000;
-          while (Date.now() < deadline) {
-            await new Promise((r) => window.setTimeout(r, 5000));
-            const g = await fetch("/api/audit/" + encodeURIComponent(id));
+      const deadline = Date.now() + 600_000;
+      let lastTrigger = 0;
+      while (Date.now() < deadline) {
+        if (Date.now() - lastTrigger > 120_000) {
+          try {
+            const res = await fetch("/api/audit/" + encodeURIComponent(id) + "/full", { method: "POST" });
+            const data = await res.json();
+            const triggered = (data as { audit?: Audit }).audit;
+            if (res.ok && triggered && !triggered.pending) return triggered;
+            lastTrigger = Date.now();
+          } catch {
+            // Trigger failed; keep polling, the server may still be running.
+          }
+        }
+        await new Promise((r) => window.setTimeout(r, 5000));
+        try {
+          const g = await fetch("/api/audit/" + encodeURIComponent(id));
+          if (g.ok) {
             const gd = await g.json();
             const polled = (gd as { audit?: Audit }).audit;
-            if (g.ok && polled && !polled.pending) return polled;
+            if (polled && !polled.pending) return polled;
           }
-          throw new Error("Full audit timed out");
+        } catch {
+          // Keep polling.
         }
-        return (data as { audit: Audit }).audit;
-      } finally {
-        window.clearTimeout(timeout);
       }
+      throw new Error("Full audit timed out");
+    }
+
+    /** Render the category scores as bars (label, track, number).
+     * The rows are built by script, so their styles are global (see
+     * the :global rules below): Astro's scoped styles do not reach
+     * elements created in JavaScript, which left the old pills
+     * unstyled and the scores running together. */
+    function renderCategories(cats: Record<string, number> | undefined, s: (typeof STR)[Lang]): void {
+      const container = el("audit-cats");
+      if (!container) return;
+      container.innerHTML = "";
+      const labels: Record<string, string> = {
+        performance: s.catPerformance,
+        accessibility: s.catAccessibility,
+        "best-practices": s.catBestPractices,
+        seo: s.catSeo,
+      };
+      for (const [key, value] of Object.entries(cats ?? {})) {
+        if (typeof value !== "number" || !labels[key]) continue;
+        const pct = Math.round(value * 100);
+        const row = document.createElement("div");
+        row.className = "audit-bar-row";
+        const head = document.createElement("div");
+        head.className = "audit-bar-head";
+        const name = document.createElement("span");
+        name.textContent = labels[key];
+        const num = document.createElement("b");
+        num.className = "mono";
+        num.textContent = String(pct);
+        head.appendChild(name);
+        head.appendChild(num);
+        const track = document.createElement("div");
+        track.className = "audit-bar-track";
+        const fill = document.createElement("span");
+        fill.className = "audit-bar-fill audit-bar-fill--" + bandFor(pct);
+        fill.style.width = pct + "%";
+        track.appendChild(fill);
+        row.appendChild(head);
+        row.appendChild(track);
+        container.appendChild(row);
+      }
+      (container as HTMLElement).hidden = container.childElementCount === 0;
+    }
+
+    /** Render the headline timings as a stats grid. Hidden while the
+     * record has no metrics (the estimate has none). */
+    function renderStats(metrics: Record<string, string> | undefined, s: (typeof STR)[Lang]): void {
+      const container = el("audit-stats");
+      if (!container) return;
+      container.innerHTML = "";
+      const labels: Record<string, string> = {
+        lcp: s.metricLcp,
+        cls: s.metricCls,
+        fcp: s.metricFcp,
+        tbt: s.metricTbt,
+        speed: s.metricSpeed,
+      };
+      const order = ["lcp", "fcp", "speed", "cls", "tbt"];
+      for (const key of order) {
+        const value = metrics?.[key];
+        if (!value || !labels[key]) continue;
+        const cell = document.createElement("div");
+        cell.className = "audit-stat";
+        const num = document.createElement("b");
+        num.className = "mono";
+        num.textContent = value;
+        const label = document.createElement("span");
+        label.textContent = labels[key];
+        cell.appendChild(num);
+        cell.appendChild(label);
+        container.appendChild(cell);
+      }
+      (container as HTMLElement).hidden = container.childElementCount === 0;
     }
 
     /** Fill the full result in over the initial estimate: show the new
@@ -243,30 +332,8 @@ import StarMark from "../../components/ui/StarMark.astro";
       const scoreEl = el("audit-score");
       const from = scoreEl ? parseInt(scoreEl.textContent || "0", 10) || 0 : 0;
       const to = full.score;
-      const cats = el("audit-cats");
-      if (cats) {
-        cats.innerHTML = "";
-        const labels: Record<string, string> = {
-          performance: s.catPerformance,
-          accessibility: s.catAccessibility,
-          "best-practices": s.catBestPractices,
-          seo: s.catSeo,
-        };
-        for (const [key, value] of Object.entries(full.categories ?? {})) {
-          if (typeof value !== "number" || !labels[key]) continue;
-          const chip = document.createElement("span");
-          chip.className = "audit-cat";
-          const name = document.createElement("span");
-          name.textContent = labels[key];
-          const num = document.createElement("b");
-          num.className = "mono";
-          num.textContent = String(Math.round(value * 100));
-          chip.appendChild(name);
-          chip.appendChild(num);
-          cats.appendChild(chip);
-        }
-        (cats as HTMLElement).hidden = cats.childElementCount === 0;
-      }
+      renderCategories(full.categories, s);
+      renderStats(full.metrics, s);
       const strengthsTitle = el("audit-strengths-title");
       const strengths = el("audit-strengths");
       const strengthsCard = el("audit-strengths-card");
@@ -326,7 +393,8 @@ import StarMark from "../../components/ui/StarMark.astro";
         if (!res.ok) throw new Error((data as { error?: string }).error || "Audit failed");
         const audit = (data as { audit: {
           url: string; score: number; findings: string[]; strengths: string[];
-          categories: Record<string, number>; partial: boolean; pending: boolean; lang: Lang; at: number;
+          categories: Record<string, number>; metrics: Record<string, string>;
+          partial: boolean; pending: boolean; lang: Lang; at: number;
         } }).audit;
         const lang: Lang = audit.lang === "fr" ? "fr" : "en";
         const s = STR[lang];
@@ -354,30 +422,8 @@ import StarMark from "../../components/ui/StarMark.astro";
         // print at the bottom of the page while the record is partial.
         const note = el("audit-estimate-note");
         if (note) note.hidden = !audit.partial;
-        const cats = el("audit-cats");
-        if (cats) {
-          cats.innerHTML = "";
-          const labels: Record<string, string> = {
-            performance: s.catPerformance,
-            accessibility: s.catAccessibility,
-            "best-practices": s.catBestPractices,
-            seo: s.catSeo,
-          };
-          for (const [key, value] of Object.entries(audit.categories ?? {})) {
-            if (typeof value !== "number" || !labels[key]) continue;
-            const chip = document.createElement("span");
-            chip.className = "audit-cat";
-            const name = document.createElement("span");
-            name.textContent = labels[key];
-            const num = document.createElement("b");
-            num.className = "mono";
-            num.textContent = String(Math.round(value * 100));
-            chip.appendChild(name);
-            chip.appendChild(num);
-            cats.appendChild(chip);
-          }
-          (cats as HTMLElement).hidden = cats.childElementCount === 0;
-        }
+        renderCategories(audit.categories, s);
+        renderStats(audit.metrics, s);
         const strengthsTitle = el("audit-strengths-title");
         const strengths = el("audit-strengths");
         const strengthsCard = el("audit-strengths-card");
@@ -558,25 +604,61 @@ import StarMark from "../../components/ui/StarMark.astro";
       font-size: 0.85rem;
     }
     .audit-partial[hidden] { display: none; }
-    .audit-cats {
+    .audit-bars {
       display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 560px;
+      margin: 0 auto 28px;
+    }
+    .audit-bars[hidden] { display: none; }
+    /* The bar rows are built by script, so their styles are global:
+       Astro's scoped styles do not reach elements created in
+       JavaScript, which is why the old category pills rendered
+       unstyled with the scores running together. */
+    :global(.audit-bar-row) { display: block; }
+    :global(.audit-bar-head) {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+    :global(.audit-bar-head b) { font-weight: 600; }
+    :global(.audit-bar-track) {
+      height: 8px;
+      margin-top: 6px;
+      border-radius: 999px;
+      background: var(--line);
+      overflow: clip;
+    }
+    :global(.audit-bar-fill) {
+      display: block;
+      height: 100%;
+      border-radius: 999px;
+      transition: width 0.9s ease;
+    }
+    :global(.audit-bar-fill--good) { background: var(--success); }
+    :global(.audit-bar-fill--mid) { background: var(--accent-mid); }
+    :global(.audit-bar-fill--low) { background: var(--accent-text); }
+    .audit-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
       margin-bottom: 28px;
     }
-    .audit-cats[hidden] { display: none; }
-    .audit-cat {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
+    .audit-stats[hidden] { display: none; }
+    :global(.audit-stat) {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 14px 16px;
       border: 1px solid var(--line);
-      border-radius: 999px;
+      border-radius: 12px;
       background: var(--card-bg);
-      font-size: 0.9rem;
     }
-    .audit-cat b { font-weight: 600; }
+    :global(.audit-stat b) { font-size: 1.35rem; font-weight: 600; }
+    :global(.audit-stat span) { font-size: 0.8rem; color: var(--muted); }
     .audit-cards {
       display: grid;
       grid-template-columns: 1fr 1fr;

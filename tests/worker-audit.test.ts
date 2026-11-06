@@ -221,6 +221,11 @@ test('POST /api/audit/:id/full fills the record from PageSpeed and drops passing
           score: 0.5,
           details: { type: 'opportunity' },
         },
+        'largest-contentful-paint': { title: 'Largest Contentful Paint', displayValue: '7.2 s', score: 0.5 },
+        'cumulative-layout-shift': { title: 'Cumulative Layout Shift', displayValue: '0', score: 1 },
+        'first-contentful-paint': { title: 'First Contentful Paint', displayValue: '1.7 s', score: 0.9 },
+        'total-blocking-time': { title: 'Total Blocking Time', displayValue: '0 ms', score: 1 },
+        'speed-index': { title: 'Speed Index', displayValue: '2.1 s', score: 0.8 },
       },
     },
   };
@@ -253,6 +258,11 @@ test('POST /api/audit/:id/full fills the record from PageSpeed and drops passing
     assert.equal(data.audit.pending, false);
     assert.ok(data.audit.findings.some((f) => f.includes('Reduce unused JavaScript')));
     assert.ok(!data.audit.findings.some((f) => f.includes('server response')));
+    assert.equal(data.audit.metrics.lcp, '7.2 s');
+    assert.equal(data.audit.metrics.cls, '0');
+    assert.equal(data.audit.metrics.fcp, '1.7 s');
+    assert.equal(data.audit.metrics.tbt, '0 ms');
+    assert.equal(data.audit.metrics.speed, '2.1 s');
     const stored = await kv.get(`audit:${created.id}`, { type: 'json' }) as AuditRecord | null;
     assert.ok(stored);
     assert.equal(stored.score, 91);
@@ -266,6 +276,55 @@ test('POST /api/audit/:id/full fills the record from PageSpeed and drops passing
     assert.equal(again.status, 200);
     const againData = await bodyOf(again) as { ok: boolean; audit: AuditRecord };
     assert.equal(againData.audit.score, 91);
+  } finally {
+    globalThis.fetch = original;
+  }
+});
+
+test('POST /api/audit/:id/full with waitUntil returns at once and fills the record in the background', async () => {
+  const psiPayload = {
+    lighthouseResult: {
+      categories: {
+        performance: { score: 0.9 },
+        accessibility: { score: 0.9 },
+        'best-practices': { score: 0.9 },
+        seo: { score: 0.9 },
+      },
+      audits: {},
+    },
+  };
+  const original = globalThis.fetch;
+  globalThis.fetch = (async (input: RequestInfo | URL) => {
+    if (String(input).includes('pagespeedonline')) {
+      return { ok: true, status: 200, json: async () => psiPayload } as unknown as Response;
+    }
+    return { ok: true, status: 200, url: 'https://example.com/', text: async () => GOOD_HTML } as unknown as Response;
+  }) as typeof fetch;
+  try {
+    const memory = memoryKV();
+    const kv = memory.kv;
+    const env = envOf(memory.kv, { PAGESPEED_API_KEY: 'test-key' });
+    const first = await handleAudit(apiRequest('/api/audit', { url: 'https://example.com/', lang: 'en' }), env);
+    const created = await bodyOf(first) as { id: string };
+    const background: Promise<unknown>[] = [];
+    const ctx = { waitUntil: (p: Promise<unknown>) => { background.push(p); } } as unknown as ExecutionContext;
+    const res = await handleAuditFull(
+      apiRequest(`/api/audit/${encodeURIComponent(created.id)}/full`, {}),
+      env,
+      `/api/audit/${created.id}/full`,
+      ctx,
+    );
+    assert.equal(res.status, 200);
+    const data = await bodyOf(res) as { ok: boolean; running: boolean };
+    assert.equal(data.ok, true);
+    assert.equal(data.running, true); // returns at once, run continues behind
+    assert.equal(background.length, 1);
+    await background[0];
+    const stored = await kv.get(`audit:${created.id}`, { type: 'json' }) as AuditRecord | null;
+    assert.ok(stored);
+    assert.equal(stored.score, 90);
+    assert.equal(stored.partial, false);
+    assert.equal(stored.pending, false);
   } finally {
     globalThis.fetch = original;
   }
@@ -367,6 +426,7 @@ test('GET /api/audit/:id returns a stored audit, 404 when missing', async () => 
     findings: ['Slow to load.'],
     strengths: [],
     categories: { performance: 0.8 },
+    metrics: {},
     partial: false,
     pending: false,
     lang: 'en',
@@ -399,6 +459,7 @@ test('POST /api/audit/report attaches the email to the audit', async () => {
     findings: ['Slow to load.'],
     strengths: [],
     categories: { performance: 0.8 },
+    metrics: {},
     partial: false,
     pending: false,
     lang: 'en',

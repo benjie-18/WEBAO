@@ -39,6 +39,9 @@ export interface AuditRecord {
   findings: string[];
   strengths: string[];
   categories: Record<string, number>;
+  /** Key Lighthouse timings from the full audit (LCP, CLS, …), as
+   * display strings. Empty until the full audit lands. */
+  metrics: Record<string, string>;
   partial: boolean;
   /** True while the full (PageSpeed) audit has not landed yet. */
   pending: boolean;
@@ -168,7 +171,7 @@ async function runPageSpeed(
   target: string,
   key: string,
   lang: "en" | "fr",
-): Promise<{ categories: Record<string, number>; findings: string[] }> {
+): Promise<{ categories: Record<string, number>; findings: string[]; metrics: Record<string, string> }> {
   const endpoint =
     PSI_ENDPOINT +
     "?url=" + encodeURIComponent(target) +
@@ -210,7 +213,21 @@ async function runPageSpeed(
       a.displayValue ? `${a.title ?? ""} (${a.displayValue})`.trim() : (a.title ?? ""),
     );
   }
-  return { categories, findings: findings.filter(Boolean) };
+  // The headline timings, for the stats row on the results page.
+  // Only audits with a display value are kept.
+  const metricIds: Record<string, string> = {
+    "largest-contentful-paint": "lcp",
+    "cumulative-layout-shift": "cls",
+    "first-contentful-paint": "fcp",
+    "total-blocking-time": "tbt",
+    "speed-index": "speed",
+  };
+  const metrics: Record<string, string> = {};
+  for (const [auditId, key] of Object.entries(metricIds)) {
+    const value = audits[auditId]?.displayValue;
+    if (value) metrics[key] = value;
+  }
+  return { categories, findings: findings.filter(Boolean), metrics };
 }
 
 // --- Hand-rolled fallback checks (used when PageSpeed is unavailable) ---
@@ -248,8 +265,8 @@ const FALLBACK_STRINGS: Record<
     fr: "La page d'accueil est lente à charger. Les pages lentes perdent des visiteurs avant même qu'ils lisent quoi que ce soit.",
   },
   none: {
-    en: "No major problems found in this quick check. The full report covers the details worth polishing next.",
-    fr: "Aucun problème majeur dans ce contrôle rapide. Le rapport complet couvre les détails à peaufiner.",
+    en: "No major problems found.",
+    fr: "Aucun problème majeur trouvé.",
   },
   partialNote: {
     en: "The full speed test was unavailable, so this score covers the basics only.",
@@ -423,6 +440,7 @@ export async function handleAudit(req: Request, env: Env): Promise<Response> {
     findings,
     strengths: [],
     categories: {},
+    metrics: {},
     partial: true,
     pending: true,
     lang,
@@ -452,7 +470,12 @@ export async function handleAudit(req: Request, env: Env): Promise<Response> {
  * { running: true } and the page polls GET until pending is false.
  * If PageSpeed fails or times out, the record keeps the initial
  * estimate and pending is cleared, so the page stops waiting. */
-export async function handleAuditFull(req: Request, env: Env, path: string): Promise<Response> {
+export async function handleAuditFull(
+  req: Request,
+  env: Env,
+  path: string,
+  ctx?: ExecutionContext,
+): Promise<Response> {
   if (req.method !== "POST") return err("Method not allowed", 405);
   const m = /^\/api\/audit\/([^/]+)\/full$/.exec(path);
   if (!m) return err("Invalid id", 400);
@@ -481,18 +504,33 @@ export async function handleAuditFull(req: Request, env: Env, path: string): Pro
     await putAudit(env.WEBAO_KV, record);
     return json({ ok: true, audit: record });
   }
-  try {
-    const psi = await runPageSpeed(record.url, env.PAGESPEED_API_KEY, record.lang);
-    record.categories = psi.categories;
-    record.score = scoreFromCategories(psi.categories);
-    record.findings = psi.findings.length > 0 ? psi.findings : [tr("none", record.lang)];
-    record.strengths = strengthsFromCategories(psi.categories, record.lang);
-    record.partial = false;
-  } catch {
-    // PageSpeed failed or timed out: keep the initial estimate.
+  // The full audit runs in the background and the call returns at
+  // once: holding the request open for the whole PageSpeed run
+  // (60–180s) proved fragile — the visitor's page never saw the
+  // result land. The results page polls GET until the record is
+  // no longer pending. waitUntil keeps the run alive after the
+  // response; without it (tests, other runtimes) the run is awaited
+  // inline so the response still carries the full record.
+  const run = async (): Promise<void> => {
+    try {
+      const psi = await runPageSpeed(record.url, env.PAGESPEED_API_KEY as string, record.lang);
+      record.categories = psi.categories;
+      record.score = scoreFromCategories(psi.categories);
+      record.findings = psi.findings.length > 0 ? psi.findings : [tr("none", record.lang)];
+      record.strengths = strengthsFromCategories(psi.categories, record.lang);
+      record.metrics = psi.metrics;
+      record.partial = false;
+    } catch {
+      // PageSpeed failed or timed out: keep the initial estimate.
+    }
+    record.pending = false;
+    await putAudit(env.WEBAO_KV, record);
+  };
+  if (ctx && typeof ctx.waitUntil === "function") {
+    ctx.waitUntil(run());
+    return json({ ok: true, running: true });
   }
-  record.pending = false;
-  await putAudit(env.WEBAO_KV, record);
+  await run();
   return json({ ok: true, audit: record });
 }
 
@@ -543,6 +581,7 @@ export async function handleAuditReport(req: Request, env: Env): Promise<Respons
       findings: Array.isArray(body?.findings) ? (body.findings as string[]) : [],
       strengths: [],
       categories: {},
+      metrics: {},
       partial: true,
       pending: false,
       lang: body?.lang === "fr" ? "fr" : "en",
