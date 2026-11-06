@@ -1134,6 +1134,7 @@ const fr = {
       email: "Courriel",
       emailPlaceholder: "vous@votreentreprise.ca",
       category: "Catégorie",
+      categoryPlaceholder: "Choisir une catégorie",
       categories: {
         billing: "Facturation",
         changes: "Modifications à mon site",
