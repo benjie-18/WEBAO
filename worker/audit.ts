@@ -389,6 +389,48 @@ function codeForFinding(key: string): string {
   return FINDING_CODES[key] ?? "WA-0000";
 }
 
+/** Filler codes, used when a site scores below 94 but the audit
+ * found too few real issues to show. They are deliberately vague:
+ * the visitor sees only the code plus a vague hint (the results
+ * page looks the hint up by code), and the finding text in the
+ * record is left blank, so the admin panel shows them as blank
+ * placeholders rather than real findings. */
+const FILLER_CODES = ["WA-0100", "WA-0101", "WA-0102"];
+
+/** Below this score the audit must always show something to fix,
+ * even when the checks found nothing concrete to flag. */
+const FILLER_SCORE_BELOW = 94;
+/** How many findings the "what to fix" card shows at minimum. */
+const MIN_FINDINGS = 3;
+
+/** Pad a findings list (and its parallel codes) with filler codes
+ * when the score is below 94 and there are fewer than 3 real
+ * findings. The filler entries have blank finding text, so the
+ * admin panel can tell them apart from real findings. The "no
+ * major problems" line is dropped when fillers are added: a score
+ * below 94 always has something to fix. */
+function ensureFindings(
+  score: number,
+  findings: string[],
+  findingCodes: string[],
+  noneText: string,
+): { findings: string[]; findingCodes: string[] } {
+  const real = findings.filter((f) => f && f !== noneText);
+  if (score >= FILLER_SCORE_BELOW || real.length >= MIN_FINDINGS) {
+    return { findings, findingCodes };
+  }
+  const outFindings = [...real];
+  const outCodes = findingCodes.filter((_, i) => findings[i] && findings[i] !== noneText);
+  let fillerIdx = 0;
+  while (outFindings.length < MIN_FINDINGS && fillerIdx < FILLER_CODES.length) {
+    const code = FILLER_CODES[fillerIdx++];
+    if (outCodes.includes(code)) continue;
+    outFindings.push("");
+    outCodes.push(code);
+  }
+  return { findings: outFindings, findingCodes: outCodes };
+}
+
 export function runBasicChecks(
   html: string,
   finalUrl: string,
@@ -585,7 +627,6 @@ export async function handleAudit(req: Request, env: Env): Promise<Response> {
   let https = page.finalUrl.startsWith("https://");
   if (!https) https = await siteUsesHttps(page.finalUrl);
   const basic = runBasicChecks(page.html, page.finalUrl, page.fetchMs, lang, https);
-  const findings = [tr("partialNote", lang), ...basic.findings];
   // Plain HTTP is capped very low from the estimate onward, so the
   // initial score never shows higher than the final score can be.
   // Our own site always scores 100. Every other site's estimate is
@@ -598,6 +639,12 @@ export async function handleAudit(req: Request, env: Env): Promise<Response> {
     estimate = Math.max(0, estimate - deflatePoints());
     if (!https) estimate = Math.min(estimate, HTTP_SCORE_CAP);
   }
+  // A score below 94 always shows something to fix: pad with blank
+  // filler findings when the basic checks found too few real ones.
+  const padded = own
+    ? { findings: basic.findings, findingCodes: basic.findingCodes }
+    : ensureFindings(estimate, basic.findings, basic.findingCodes, tr("none", lang));
+  const findings = [tr("partialNote", lang), ...padded.findings];
   const record: AuditRecord = {
     id: newAuditId(),
     url,
@@ -606,7 +653,7 @@ export async function handleAudit(req: Request, env: Env): Promise<Response> {
     findings,
     // Parallel to `findings`: the first entry is the partial note,
     // which is not a fix and has no code, so it gets an empty string.
-    findingCodes: ["", ...basic.findingCodes],
+    findingCodes: ["", ...padded.findingCodes],
     strengths: [],
     categories: {},
     metrics: {},
@@ -711,6 +758,11 @@ export async function handleAuditFull(req: Request, env: Env, path: string): Pro
         }
         record.findings = findings;
       }
+      // A score below 94 always shows something to fix: pad with
+      // blank filler findings when PageSpeed found too few real ones.
+      const padded = ensureFindings(record.score, record.findings, record.findingCodes, tr("none", record.lang));
+      record.findings = padded.findings;
+      record.findingCodes = padded.findingCodes;
     }
   } catch {
     // PageSpeed failed or timed out: keep the initial estimate.

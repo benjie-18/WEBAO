@@ -44,6 +44,7 @@ const en = {
   nav: {
     demos: "Demos",
     pricing: "Pricing",
+    audit: "Audit",
     contact: "Contact",
     startSite: "Start your site →",
     stickyCtaPrice: "$89.99/mo",
@@ -118,6 +119,7 @@ const en = {
       leadStrong: "One simple monthly fee.",
       leadRest: "We design, launch, host and maintain it. You run your business.",
       ctaPrimary: "Start your site",
+      auditCta: "Audit yours now",
       ctaSecondary: "See demo sites",
       priceNote: "$89.99 <span>CAD/month</span> · All-inclusive",
       visual: {
@@ -504,7 +506,7 @@ const en = {
         email: { name: "Email Marketing", price: "C$29.99/mo", note: 0, short: "" },
         report: { name: "Monthly Growth Report", price: "C$29.99/mo", note: 11, short: "" },
         extrapage: { name: "Extra Page", price: "C$44.99 one-time", note: 25, short: "" },
-        "website-touchup": { name: "Website touchup", price: "C$199.99 one-time", note: 31, short: "We fix what the free audit found on your site. Includes 10% off your first 3 months of a website plan with code WEBAOFIXIT3256." },
+        "website-touchup": { name: "Website touchup", price: "C$199.99 one-time", note: 31, short: "We fix what the free audit found on your site. Includes 10% off your first 3 months of any subscription." },
         priority: { name: "Priority Support + 1 Strategy Call per month", price: "C$59.99/mo", note: 26, short: "" },
         admin: { name: "Advanced Admin Panel", price: "C$39.99/mo", note: 27, short: "" },
         quotephoto: { name: "Quote Photo Upload (Launch only)", price: "C$9.99/mo", note: 28, short: "" },
@@ -1019,8 +1021,8 @@ const en = {
       "31": {
         title: "Website touchup",
         blocks: [
-          { text: "Website touchup is a one-time service of C$199.99: we fix the issues the free audit found on your existing website, as listed in your audit report." },
-          { text: "Buying a Website touchup unlocks 10% off a website plan subscription (Launch, Grow, or Scale) for the first 3 months, with the coupon code WEBAOFIXIT3256. Enter the code at checkout when you subscribe. The discount applies to the monthly plan price only, for the first 3 months of the subscription, and cannot be combined with other offers." },
+          { text: "Website touchup is a one-time service of C$199.99: we fix the issues the free audit found on your existing website, as listed in your audit report. It covers your existing site on its existing platform. No new design, no redesign, and no migration." },
+          { text: "Buying a Website touchup unlocks 10% off any subscription (website plan, Ads Pack, or AI service) for the first 3 months. The discount can be used only once, on a single subscription, and cannot be combined with other offers. We send you the coupon code after your touchup purchase." },
         ],
       },
     },
@@ -1313,6 +1315,7 @@ const en = {
       forms: "Forms",
       outreach: "Outreach",
       audits: "Audits",
+      coupons: "Coupons",
       clients: "Clients",
       config: "Config",
     },
@@ -1432,6 +1435,7 @@ const en = {
       running: "Full audit running",
       strengths: "What works",
       findings: "Findings",
+      blankFinding: "(blank)",
       details: "Details",
       hideDetails: "Hide details",
       delete: "Delete",
@@ -1470,7 +1474,22 @@ const en = {
         "WA-0022": "Slow server response time.",
         "WA-0023": "Redirects.",
         "WA-0024": "Not using HTTP/2.",
+        "WA-0100": "Blank. Placeholder finding, shown when a site scores below 94 but no real issue was found.",
+        "WA-0101": "Blank. Placeholder finding, shown when a site scores below 94 but no real issue was found.",
+        "WA-0102": "Blank. Placeholder finding, shown when a site scores below 94 but no real issue was found.",
       },
+    },
+    coupons: {
+      title: "Coupons",
+      intro:
+        "Coupon codes live here and nowhere else. They are never shown on the public site, in the terms, or in checkout text. Share a code with a buyer only after they have earned it.",
+      items: [
+        {
+          code: "WEBAOFIXIT3256",
+          detail:
+            "10% off any subscription (website plan, Ads Pack, or AI service) for the first 3 months, one use only, on a single subscription. Unlocked by buying the Website touchup (C$199.99). Send it to the buyer after their touchup purchase. Note: in Stripe this coupon has no product restriction, so it applies to any subscription; it is not limited to one redemption in Stripe, so use it once per buyer.",
+        },
+      ],
     },
     clients: {
       empty: "No clients yet. A completed checkout creates a client record here.",

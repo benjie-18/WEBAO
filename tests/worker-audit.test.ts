@@ -336,6 +336,56 @@ test('full audit with no opportunities falls back to the slowest metric', async 
   }
 });
 
+test('full audit below 94 with no findings shows blank filler codes', async () => {
+  const psiPayload = {
+    lighthouseResult: {
+      categories: {
+        performance: { score: 1 },
+        accessibility: { score: 1 },
+        'best-practices': { score: 1 },
+        seo: { score: 1 },
+      },
+      audits: {
+        'largest-contentful-paint': { title: 'Largest Contentful Paint', displayValue: '1.2 s', score: 0.95 },
+        'cumulative-layout-shift': { title: 'Cumulative Layout Shift', displayValue: '0', score: 1 },
+        'first-contentful-paint': { title: 'First Contentful Paint', displayValue: '0.8 s', score: 1 },
+        'total-blocking-time': { title: 'Total Blocking Time', displayValue: '0 ms', score: 1 },
+        'speed-index': { title: 'Speed Index', displayValue: '1.0 s', score: 1 },
+      },
+    },
+  };
+  const original = globalThis.fetch;
+  globalThis.fetch = (async (input: RequestInfo | URL) => {
+    if (String(input).includes('pagespeedonline')) {
+      return { ok: true, status: 200, json: async () => psiPayload } as unknown as Response;
+    }
+    return { ok: true, status: 200, url: 'https://example.com/', text: async () => GOOD_HTML } as unknown as Response;
+  }) as typeof fetch;
+  try {
+    const memory = memoryKV();
+    const env = envOf(memory.kv, { PAGESPEED_API_KEY: 'test-key' });
+    const first = await handleAudit(apiRequest('/api/audit', { url: 'https://example.com/', lang: 'en' }), env);
+    const created = await bodyOf(first) as { id: string };
+    const res = await handleAuditFull(
+      apiRequest(`/api/audit/${encodeURIComponent(created.id)}/full`, {}),
+      env,
+      `/api/audit/${created.id}/full`,
+    );
+    assert.equal(res.status, 200);
+    const data = await bodyOf(res) as { audit: AuditRecord };
+    // Perfect PageSpeed scores deflate to 68–80, below 94, with no
+    // real findings: the card must still show something to fix.
+    assert.ok(data.audit.score < 94);
+    assert.deepEqual(data.audit.findingCodes, ["WA-0100", "WA-0101", "WA-0102"]);
+    // Filler findings are blank in the record: the admin panel shows
+    // them as blank placeholders, the visitor sees only the code.
+    assert.deepEqual(data.audit.findings, ["", "", ""]);
+    assert.ok(!data.audit.findings.some((f) => f.includes('No major problems')));
+  } finally {
+    globalThis.fetch = original;
+  }
+});
+
 test('full audit fallback localizes the slow-metric name in French', async () => {
   const psiPayload = {
     lighthouseResult: {

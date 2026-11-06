@@ -91,6 +91,36 @@ import StarMark from "../../../components/ui/StarMark.astro";
         noIssues: "No issues found.",
         getStarted: "Get started",
         getStartedHref: "/start",
+        findingHints: {
+          "WA-0000": "Something on this page needs a closer look.",
+          "WA-0001": "How your site connects to visitors needs attention.",
+          "WA-0002": "Search engines aren't getting a clear picture of this page.",
+          "WA-0003": "How this page shows up in search results could be stronger.",
+          "WA-0004": "Something about how this page fits on a phone needs a look.",
+          "WA-0005": "A small detail on the page makes the business look out of date.",
+          "WA-0006": "This page carries more weight than it needs to.",
+          "WA-0007": "This page takes longer to appear than visitors expect.",
+          "WA-0008": "The main content of this page is slow to show up.",
+          "WA-0009": "This page doesn't feel as fast as it should.",
+          "WA-0010": "The first thing visitors see takes a moment too long.",
+          "WA-0011": "Something is holding this page back while it loads.",
+          "WA-0012": "Parts of this page shift around as it loads.",
+          "WA-0013": "Something is delaying how this page first appears.",
+          "WA-0014": "Images on this page aren't adapting the way they should.",
+          "WA-0015": "Some images are loading before anyone sees them.",
+          "WA-0016": "There's extra weight in how this page is styled.",
+          "WA-0017": "There's extra weight in how this page behaves.",
+          "WA-0018": "Some of the styling on this page isn't being used.",
+          "WA-0019": "Some of the code on this page isn't being used.",
+          "WA-0020": "Images here could be served in a better format.",
+          "WA-0021": "This page could be delivered more efficiently.",
+          "WA-0022": "The server behind this page is slower than it should be.",
+          "WA-0023": "Visitors are being sent through extra steps to reach this page.",
+          "WA-0024": "How this page is delivered could be more modern.",
+          "WA-0100": "Something in how this page is put together needs a closer look.",
+          "WA-0101": "A detail on this page isn't quite where it should be.",
+          "WA-0102": "There's room to make this page work harder for the business.",
+        },
         verdictExcellent: "Excellent",
         verdictGood: "Good, with room to improve",
         verdictWork: "Needs work",
@@ -131,6 +161,36 @@ import StarMark from "../../../components/ui/StarMark.astro";
         noIssues: "Aucun problème trouvé.",
         getStarted: "Commencer",
         getStartedHref: "/fr/commencer",
+        findingHints: {
+          "WA-0000": "Quelque chose sur cette page mérite un regard plus attentif.",
+          "WA-0001": "La façon dont votre site se connecte aux visiteurs mérite attention.",
+          "WA-0002": "Les moteurs de recherche n'ont pas une image claire de cette page.",
+          "WA-0003": "La façon dont cette page apparaît dans les résultats pourrait être meilleure.",
+          "WA-0004": "Quelque chose dans l'affichage de cette page sur téléphone mérite un regard.",
+          "WA-0005": "Un petit détail de la page donne l'impression que l'entreprise n'est plus à jour.",
+          "WA-0006": "Cette page porte plus de poids qu'il n'en faut.",
+          "WA-0007": "Cette page met plus de temps à apparaître que les visiteurs ne s'y attendent.",
+          "WA-0008": "Le contenu principal de cette page est lent à s'afficher.",
+          "WA-0009": "Cette page ne semble pas aussi rapide qu'elle devrait l'être.",
+          "WA-0010": "La première chose que voient les visiteurs prend un moment de trop.",
+          "WA-0011": "Quelque chose retient cette page pendant son chargement.",
+          "WA-0012": "Des parties de cette page bougent pendant son chargement.",
+          "WA-0013": "Quelque chose retarde la première apparition de cette page.",
+          "WA-0014": "Les images de cette page ne s'adaptent pas comme elles devraient.",
+          "WA-0015": "Certaines images se chargent avant que quelqu'un les voie.",
+          "WA-0016": "Il y a du poids superflu dans la mise en forme de cette page.",
+          "WA-0017": "Il y a du poids superflu dans le comportement de cette page.",
+          "WA-0018": "Une partie de la mise en forme de cette page n'est pas utilisée.",
+          "WA-0019": "Une partie du code de cette page n'est pas utilisée.",
+          "WA-0020": "Les images ici pourraient être servies dans un meilleur format.",
+          "WA-0021": "Cette page pourrait être livrée plus efficacement.",
+          "WA-0022": "Le serveur derrière cette page est plus lent qu'il ne devrait l'être.",
+          "WA-0023": "Les visiteurs passent par des étapes supplémentaires pour atteindre cette page.",
+          "WA-0024": "La façon dont cette page est livrée pourrait être plus moderne.",
+          "WA-0100": "Quelque chose dans la construction de cette page mérite un regard plus attentif.",
+          "WA-0101": "Un détail de cette page n'est pas tout à fait à sa place.",
+          "WA-0102": "Il y a de la place pour faire travailler cette page davantage pour l'entreprise.",
+        },
         verdictExcellent: "Excellent",
         verdictGood: "Bon, avec de la marge",
         verdictWork: "À améliorer",
@@ -202,14 +262,37 @@ import StarMark from "../../../components/ui/StarMark.astro";
       partial: boolean; pending: boolean; lang: Lang; at: number;
     };
 
-    /** The "what to fix" card shows only the finding codes, never the
-     * finding text: the visitor sees a reference, the real finding
-     * stays in the admin panel. When nothing needs fixing, say so.
-     * The partial note carries an empty code and is skipped. */
+    /** The "what to fix" card shows each finding as its WA code plus
+     * a vague hint: enough for the visitor to know we know what's
+     * wrong, never enough to act on it without us. The real finding
+     * text stays in the record for the admin panel. When nothing
+     * needs fixing, say so. The partial note carries an empty code
+     * and is skipped. */
     function renderFindings(audit: Audit, s: (typeof STR)[Lang]): void {
+      const list = el("audit-findings");
+      if (!list) return;
+      list.innerHTML = "";
       const codes = (audit.findingCodes ?? []).filter((c) => c);
-      if (codes.length > 0) fillList("audit-findings", codes);
-      else fillList("audit-findings", [s.noIssues]);
+      const hints = (s as { findingHints?: Record<string, string> }).findingHints ?? {};
+      const fallback = hints["WA-0000"] ?? "";
+      if (codes.length === 0) {
+        const li = document.createElement("li");
+        li.textContent = s.noIssues;
+        list.appendChild(li);
+        return;
+      }
+      for (const code of codes) {
+        const li = document.createElement("li");
+        const codeEl = document.createElement("span");
+        codeEl.className = "mono audit-finding-code";
+        codeEl.textContent = code;
+        const hint = document.createElement("span");
+        hint.className = "audit-finding-hint";
+        hint.textContent = hints[code] ?? fallback;
+        li.appendChild(codeEl);
+        li.appendChild(hint);
+        list.appendChild(li);
+      }
     }
 
     /** Count the big score from one value to another over ~0.9s. A
@@ -566,6 +649,16 @@ import StarMark from "../../../components/ui/StarMark.astro";
     }
 
     void main();
+
+    // Revisiting a completed audit must show the result, not the
+    // loading state forever. When the browser restores this page
+    // from its back/forward cache, the script does not run again, so
+    // a page left while it was loading stays stuck on "Loading your
+    // audit". Reloading on a cached restore re-runs the load and
+    // renders the stored result.
+    window.addEventListener("pageshow", (event: PageTransitionEvent) => {
+      if (event.persisted) window.location.reload();
+    });
   </script>
 
   <style>
@@ -618,6 +711,18 @@ import StarMark from "../../../components/ui/StarMark.astro";
       font-size: 0.92rem;
       color: var(--muted);
       line-height: 1.5;
+    }
+    /* Each finding is a code plus a vague hint: the code stands out,
+       the hint reads as ordinary text beside it. */
+    :global(.audit-finding-code) {
+      font-weight: 700;
+      color: var(--ink);
+    }
+    :global(.audit-finding-hint) {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 0.92rem;
     }
     .audit-verdict {
       margin: 16px 0 0;

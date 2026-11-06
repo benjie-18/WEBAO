@@ -107,6 +107,7 @@ const breadcrumbSchema = crumbName
 const navLinks = {
   demos: localizedPaths[locale].demos,
   pricing: localizedPaths[locale].pricing,
+  audit: localizedPaths[locale].audit,
   contact: localizedPaths[locale].contact,
   support: localizedPaths[locale].support,
   home: localizedPaths[locale].home,
@@ -369,6 +370,7 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
           <nav class="nav" aria-label={locale==="fr" ? "Principal" : "Primary"}>
             <a href={navLinks.demos}>{t.nav.demos}</a>
             <a href={navLinks.pricing}>{t.nav.pricing}</a>
+            <a href={navLinks.audit}>{t.nav.audit}</a>
             <a href={navLinks.contact}>{t.nav.contact}</a>
             <a href={navLinks.pricing} class="cta" data-track="cta" data-track-label={t.nav.startSite} data-start-cta>{t.nav.startSite}</a>
           </nav>
@@ -404,6 +406,7 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
     <div id="mobile-panel" class="mobile-panel" hidden>
       <a href={navLinks.demos}>{t.nav.demos} <span aria-hidden="true">→</span></a>
       <a href={navLinks.pricing}>{t.nav.pricing} <span aria-hidden="true">→</span></a>
+      <a href={navLinks.audit}>{t.nav.audit} <span aria-hidden="true">→</span></a>
       <a href={navLinks.contact}>{t.nav.contact} <span aria-hidden="true">→</span></a>
       <a
         href={navLinks.pricing}
@@ -459,6 +462,7 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
             <h4>{t.footer.studio}</h4>
             <a href={navLinks.demos}>{t.footer.demoCatalog}</a>
             <a href={navLinks.pricing}>{t.footer.pricing}</a>
+            <a href={navLinks.audit}>{t.nav.audit}</a>
             <a href={navLinks.contact}>{t.footer.contact}</a>
             <a href={navLinks.support}>{t.footer.support}</a>
             <a href={navLinks.portal}>{t.footer.portal}</a>

@@ -79,6 +79,10 @@ const a = t.admin;
         aria-selected="false" tabindex="-1" data-tab="audits" class="admin-tab"
       >{a.tabs.audits}</button>
       <button
+        type="button" role="tab" id="admin-tab-coupons" aria-controls="admin-panel-coupons"
+        aria-selected="false" tabindex="-1" data-tab="coupons" class="admin-tab"
+      >{a.tabs.coupons}</button>
+      <button
         type="button" role="tab" id="admin-tab-clients" aria-controls="admin-panel-clients"
         aria-selected="false" tabindex="-1" data-tab="clients" class="admin-tab"
       >{a.tabs.clients}</button>
@@ -202,7 +206,23 @@ const a = t.admin;
       </div>
     </section>
 
-    <!-- Tab 5 · Clients -->
+    <!-- Tab 5 · Coupons (admin-only: coupon codes are never shown on the public site) -->
+    <section
+      id="admin-panel-coupons" role="tabpanel" aria-labelledby="admin-tab-coupons"
+      data-panel="coupons" class="admin-panel" hidden
+    >
+      <div class="admin-card">
+        <h2>{a.coupons.title}</h2>
+        <p>{a.coupons.intro}</p>
+        <dl>
+          {a.coupons.items.map((item) => (
+            <div class="ff-row"><dt class="mono">{item.code}</dt><dd>{item.detail}</dd></div>
+          ))}
+        </dl>
+      </div>
+    </section>
+
+    <!-- Tab 6 · Clients -->
     <section
       id="admin-panel-clients" role="tabpanel" aria-labelledby="admin-tab-clients"
       data-panel="clients" class="admin-panel" hidden

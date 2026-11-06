@@ -15,7 +15,7 @@ html {
   scrollbar-gutter: stable;
   scrollbar-width: thin;
   scrollbar-color: var(--line-strong) transparent;
-  overflow-x: clip; /* safety net alongside body: never allow horizontal page scroll */
+  overflow-x: hidden; /* safety net alongside body: never allow horizontal page scroll. hidden, not clip: iOS Safari honors hidden when sizing its layout viewport, while clip is ignored on older iOS and does not stop the viewport expanding to fit wide content. */
 }
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -36,7 +36,7 @@ html {
 body {
   min-height: 100vh;
   line-height: 1.5;
-  overflow-x: clip;
+  overflow-x: hidden;
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-sans);

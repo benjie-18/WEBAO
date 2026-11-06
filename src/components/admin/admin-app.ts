@@ -1448,8 +1448,10 @@ function initAdmin(): void {
             const code = item.findingCodes?.[i];
             // The visitor page shows only the code; the admin sees the
             // real finding next to its code, so a code a visitor
-            // quotes can be matched here.
-            return `<li>${code ? `<span class="mono">${esc(code)}</span> — ` : ""}${esc(f)}</li>`;
+            // quotes can be matched here. A blank finding is a
+            // placeholder (score below 94, no real issue found).
+            const text = f ? esc(f) : `<i>${esc(A.blankFinding)}</i>`;
+            return `<li>${code ? `<span class="mono">${esc(code)}</span> — ` : ""}${text}</li>`;
           })
           .join("") +
         `</ul></dd></div>`,

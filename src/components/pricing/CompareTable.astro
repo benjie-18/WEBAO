@@ -157,8 +157,20 @@ const compatRows = compatibility.map((c) => ({
   .compare-section {
     padding-block: clamp(48px, 8vw, 110px);
     /* Containment boundary: nothing in this section may ever widen the
-       page on mobile (prevents the iOS "zoomed out" layout-viewport bug). */
-    overflow-x: clip;
+       page on mobile (prevents the iOS "zoomed out" layout-viewport bug).
+       hidden, not clip: iOS Safari sizes its layout viewport from the
+       page's scrollable overflow and honors overflow hidden for that,
+       while clip is ignored on older iOS and not honored by the
+       viewport sizing. */
+    overflow-x: hidden;
+  }
+  /* The shell clips the table's overflow too, so the section itself
+     never reports scrollable overflow beyond the viewport: the wide
+     table (min-width 600px on mobile) otherwise leaks into the
+     shell/section scroll widths and iOS expands the layout viewport
+     to fit it. The table still scrolls inside .table-scroll. */
+  .compare-section .shell {
+    overflow-x: hidden;
   }
   .compare-title {
     font-size: clamp(2.2rem, 5vw, 4rem);
@@ -190,6 +202,17 @@ const compatRows = compatibility.map((c) => ({
 
   .table-scroll {
     margin-top: 24px;
+    /* Explicit width + min-width 0: the scroll container is exactly the
+       shell width and can never be sized by its (600px) table content.
+       The table scrolls inside this box; it must never widen the page.
+       position relative: the table cells hold absolutely positioned
+       .visually-hidden spans, and a static scroll container does not
+       contain those, so they leaked to the document (scrollWidth 563)
+       and iOS expanded the viewport to fit them. Relative makes this
+       box their containing block, so the overflow clips here. */
+    position: relative;
+    width: 100%;
+    min-width: 0;
     max-width: 100%;
     overflow-x: auto;
     border: 1px solid var(--line);

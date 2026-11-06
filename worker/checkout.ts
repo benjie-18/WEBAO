@@ -336,9 +336,9 @@ export async function handleCheckoutSession(req: Request, env: Env): Promise<Res
   const params = new URLSearchParams();
   params.set("ui_mode", "embedded_page");
   params.set("mode", mode);
-  // Let the buyer enter a coupon code at checkout, e.g. WEBAOFIXIT3256
-  // (10% off a website plan for the first 3 months, unlocked by buying
-  // the Website touchup).
+  // Let the buyer enter a coupon code at checkout (e.g. the touchup
+  // coupon: 10% off any subscription for the first 3 months, one use
+  // only, unlocked by buying the Website touchup).
   params.set("allow_promotion_codes", "true");
 
   lineItems.forEach((item, index) => {
