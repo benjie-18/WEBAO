@@ -470,12 +470,7 @@ export async function handleAudit(req: Request, env: Env): Promise<Response> {
  * { running: true } and the page polls GET until pending is false.
  * If PageSpeed fails or times out, the record keeps the initial
  * estimate and pending is cleared, so the page stops waiting. */
-export async function handleAuditFull(
-  req: Request,
-  env: Env,
-  path: string,
-  ctx?: ExecutionContext,
-): Promise<Response> {
+export async function handleAuditFull(req: Request, env: Env, path: string): Promise<Response> {
   if (req.method !== "POST") return err("Method not allowed", 405);
   const m = /^\/api\/audit\/([^/]+)\/full$/.exec(path);
   if (!m) return err("Invalid id", 400);
@@ -504,33 +499,25 @@ export async function handleAuditFull(
     await putAudit(env.WEBAO_KV, record);
     return json({ ok: true, audit: record });
   }
-  // The full audit runs in the background and the call returns at
-  // once: holding the request open for the whole PageSpeed run
-  // (60–180s) proved fragile — the visitor's page never saw the
-  // result land. The results page polls GET until the record is
-  // no longer pending. waitUntil keeps the run alive after the
-  // response; without it (tests, other runtimes) the run is awaited
-  // inline so the response still carries the full record.
-  const run = async (): Promise<void> => {
-    try {
-      const psi = await runPageSpeed(record.url, env.PAGESPEED_API_KEY as string, record.lang);
-      record.categories = psi.categories;
-      record.score = scoreFromCategories(psi.categories);
-      record.findings = psi.findings.length > 0 ? psi.findings : [tr("none", record.lang)];
-      record.strengths = strengthsFromCategories(psi.categories, record.lang);
-      record.metrics = psi.metrics;
-      record.partial = false;
-    } catch {
-      // PageSpeed failed or timed out: keep the initial estimate.
-    }
-    record.pending = false;
-    await putAudit(env.WEBAO_KV, record);
-  };
-  if (ctx && typeof ctx.waitUntil === "function") {
-    ctx.waitUntil(run());
-    return json({ ok: true, running: true });
+  // Synchronous: the run is awaited inline and the response carries
+  // the full record. A background run (ctx.waitUntil) was tried and
+  // abandoned: the worker is reclaimed after the response, so a
+  // ~60s PageSpeed run started that way never stores its result.
+  // The results page holds this call open (200s) and retries it,
+  // which is what landed the full audit in the live check.
+  try {
+    const psi = await runPageSpeed(record.url, env.PAGESPEED_API_KEY, record.lang);
+    record.categories = psi.categories;
+    record.score = scoreFromCategories(psi.categories);
+    record.findings = psi.findings.length > 0 ? psi.findings : [tr("none", record.lang)];
+    record.strengths = strengthsFromCategories(psi.categories, record.lang);
+    record.metrics = psi.metrics;
+    record.partial = false;
+  } catch {
+    // PageSpeed failed or timed out: keep the initial estimate.
   }
-  await run();
+  record.pending = false;
+  await putAudit(env.WEBAO_KV, record);
   return json({ ok: true, audit: record });
 }
 

@@ -216,40 +216,36 @@ import StarMark from "../../components/ui/StarMark.astro";
       requestAnimationFrame(step);
     }
 
-    /** Trigger the full PageSpeed audit and poll the record until it
-     * lands. The /full call returns at once (the run continues on the
-     * server), so no long-lived request has to survive for the result
-     * to arrive: the page picks it up by polling GET. If the record
-     * is still pending after a while, the trigger is sent again.
-     * Throws when it never lands. */
+    /** Ask the worker to run the full PageSpeed audit for this id and
+     * hold the request open until it lands (up to ~3 minutes: the
+     * worker's PageSpeed budget is 180s). If another run is already in
+     * flight, poll the record until it is no longer pending. Throws
+     * when the full audit never lands. */
     async function runFullAudit(id: string): Promise<Audit> {
-      const deadline = Date.now() + 600_000;
-      let lastTrigger = 0;
-      while (Date.now() < deadline) {
-        if (Date.now() - lastTrigger > 120_000) {
-          try {
-            const res = await fetch("/api/audit/" + encodeURIComponent(id) + "/full", { method: "POST" });
-            const data = await res.json();
-            const triggered = (data as { audit?: Audit }).audit;
-            if (res.ok && triggered && !triggered.pending) return triggered;
-            lastTrigger = Date.now();
-          } catch {
-            // Trigger failed; keep polling, the server may still be running.
-          }
-        }
-        await new Promise((r) => window.setTimeout(r, 5000));
-        try {
-          const g = await fetch("/api/audit/" + encodeURIComponent(id));
-          if (g.ok) {
+      const controller = new AbortController();
+      const timeout = window.setTimeout(() => controller.abort(), 200_000);
+      try {
+        const res = await fetch("/api/audit/" + encodeURIComponent(id) + "/full", {
+          method: "POST",
+          signal: controller.signal,
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error((data as { error?: string }).error || "Full audit failed");
+        if ((data as { running?: boolean }).running) {
+          const deadline = Date.now() + 300_000;
+          while (Date.now() < deadline) {
+            await new Promise((r) => window.setTimeout(r, 5000));
+            const g = await fetch("/api/audit/" + encodeURIComponent(id));
             const gd = await g.json();
             const polled = (gd as { audit?: Audit }).audit;
-            if (polled && !polled.pending) return polled;
+            if (g.ok && polled && !polled.pending) return polled;
           }
-        } catch {
-          // Keep polling.
+          throw new Error("Full audit timed out");
         }
+        return (data as { audit: Audit }).audit;
+      } finally {
+        window.clearTimeout(timeout);
       }
-      throw new Error("Full audit timed out");
     }
 
     /** Render the category scores as bars (label, track, number).
@@ -755,7 +751,7 @@ import StarMark from "../../components/ui/StarMark.astro";
     }
     .audit-back a { color: var(--muted); }
     .audit-estimate-note {
-      margin: 0;
+      margin: 0 auto;
       padding-bottom: 28px;
       font-size: 0.4rem;
       color: var(--muted);

@@ -29,7 +29,7 @@ import { handleAbandonedFollowups } from "./recovery";
 import { json } from "./util";
 import { KvWriteError } from "./kv";
 
-async function routeApi(req: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+async function routeApi(req: Request, env: Env): Promise<Response> {
   const url = new URL(req.url);
   const p = url.pathname;
 
@@ -41,7 +41,7 @@ async function routeApi(req: Request, env: Env, ctx: ExecutionContext): Promise<
   if (p === "/api/leads/reply" && req.method === "POST") return handleLeadReply(req, env);
   if (p === "/api/audit" && req.method === "POST") return handleAudit(req, env);
   if (p === "/api/audit/report" && req.method === "POST") return handleAuditReport(req, env);
-  if (p.startsWith("/api/audit/") && p.endsWith("/full") && req.method === "POST") return handleAuditFull(req, env, p, ctx);
+  if (p.startsWith("/api/audit/") && p.endsWith("/full") && req.method === "POST") return handleAuditFull(req, env, p);
   if (p.startsWith("/api/audit/") && req.method === "GET") return handleAuditGet(req, env, p);
   if (p === "/api/checkout/session" && req.method === "POST") return handleCheckoutSession(req, env);
   if (p === "/api/stripe/webhook" && req.method === "POST") return handleStripeWebhook(req, env);
@@ -145,7 +145,7 @@ export default {
 
     if (url.pathname.startsWith("/api/")) {
       try {
-        return await routeApi(request, env, ctx);
+        return await routeApi(request, env);
       } catch (e) {
         if (e instanceof KvWriteError) {
           // Storage writes are unavailable (e.g. the daily KV write quota is
