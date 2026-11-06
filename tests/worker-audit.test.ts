@@ -105,11 +105,14 @@ test('normalizeAuditUrl accepts bare domains and keeps explicit schemes', () => 
   assert.equal(normalizeAuditUrl('https://user:pass@example.com'), null);
 });
 
-test('provisionalScore scales a basic score to a 0–60 ceiling', () => {
-  assert.equal(provisionalScore(100), 60);
-  assert.equal(provisionalScore(70), 42);
-  assert.equal(provisionalScore(20), 12);
-  assert.equal(provisionalScore(0), 0);
+test('provisionalScore is a weighted random draw, 0–60, biased toward the top', () => {
+  assert.equal(provisionalScore(0), 0); // a site with nothing passing caps at 0
+  const draws: number[] = [];
+  for (let i = 0; i < 500; i++) draws.push(provisionalScore(100));
+  assert.ok(draws.every((d) => d >= 0 && d <= 60));
+  assert.ok(new Set(draws).size > 10); // varies, never a fixed number
+  const mean = draws.reduce((a, b) => a + b, 0) / draws.length;
+  assert.ok(mean >= 30 && mean <= 50); // weighted toward 40–60, mean ~40
 });
 
 test('POST /api/audit accepts a bare domain and stores the normalized URL', async () => {
@@ -122,7 +125,7 @@ test('POST /api/audit accepts a bare domain and stores the normalized URL', asyn
     const data = await bodyOf(res) as { ok: boolean; id: string; url: string; score: number; partial: boolean; pending: boolean };
     assert.equal(data.ok, true);
     assert.equal(data.url, 'https://example.com');
-    assert.equal(data.score, 60); // initial estimate: basic 100 scaled to a 0–60 ceiling
+    assert.ok(data.score >= 0 && data.score <= 60); // weighted random initial estimate
     assert.equal(data.partial, true);
     assert.equal(data.pending, true);
     const stored = await memory.kv.get(`audit:${data.id}`, { type: 'json' }) as AuditRecord | null;
@@ -143,14 +146,14 @@ test('POST /api/audit scores a good page and stores the result', async () => {
     assert.equal(res.status, 200);
     const data = await bodyOf(res) as { ok: boolean; id: string; score: number; resultUrl: string; partial: boolean; pending: boolean };
     assert.equal(data.ok, true);
-    assert.equal(data.score, 60); // initial estimate, not the full audit
+    assert.ok(data.score >= 0 && data.score <= 60); // weighted random initial estimate
     assert.equal(data.partial, true); // no PageSpeed call on the first pass
     assert.equal(data.pending, true);
     assert.equal(data.resultUrl, `/audits/${data.id}`);
     const stored = await kv.get(`audit:${data.id}`, { type: 'json' }) as AuditRecord | null;
     assert.ok(stored);
     assert.equal(stored.url, 'https://example.com/');
-    assert.equal(stored.score, 60);
+    assert.ok(stored.score >= 0 && stored.score <= 60);
     assert.equal(stored.pending, true);
     const index = await kv.get('audit:index', { type: 'json' }) as string[] | null;
     assert.deepEqual(index, [`audit:${data.id}`]);
@@ -191,7 +194,7 @@ test('POST /api/audit serves our own site from ASSETS, not the network', async (
   assert.equal(res.status, 200);
   const data = await bodyOf(res) as { ok: boolean; score: number; partial: boolean; pending: boolean };
   assert.equal(data.ok, true);
-  assert.equal(data.score, 60); // initial estimate from the basic checks
+  assert.ok(data.score >= 0 && data.score <= 60); // weighted random initial estimate
   assert.equal(data.partial, true);
   assert.equal(data.pending, true);
 });
@@ -235,7 +238,7 @@ test('POST /api/audit/:id/full fills the record from PageSpeed and drops passing
     const first = await handleAudit(apiRequest('/api/audit', { url: 'https://example.com/', lang: 'en' }), env);
     assert.equal(first.status, 200);
     const created = await bodyOf(first) as { id: string; score: number; pending: boolean };
-    assert.equal(created.score, 60); // initial estimate first
+    assert.ok(created.score >= 0 && created.score <= 60); // weighted random initial estimate first
     assert.equal(created.pending, true);
     const res = await handleAuditFull(
       apiRequest(`/api/audit/${encodeURIComponent(created.id)}/full`, {}),
@@ -316,7 +319,7 @@ test('POST /api/audit/:id/full keeps the initial estimate when PageSpeed fails',
     const env = envOf(memory.kv, { PAGESPEED_API_KEY: 'test-key' });
     const first = await handleAudit(apiRequest('/api/audit', { url: 'https://example.com/', lang: 'en' }), env);
     const created = await bodyOf(first) as { id: string; score: number };
-    assert.equal(created.score, 60);
+    assert.ok(created.score >= 0 && created.score <= 60);
     const res = await handleAuditFull(
       apiRequest(`/api/audit/${encodeURIComponent(created.id)}/full`, {}),
       env,
@@ -325,7 +328,7 @@ test('POST /api/audit/:id/full keeps the initial estimate when PageSpeed fails',
     assert.equal(res.status, 200);
     const data = await bodyOf(res) as { ok: boolean; audit: AuditRecord };
     assert.equal(data.ok, true);
-    assert.equal(data.audit.score, 60); // initial estimate stands
+    assert.equal(data.audit.score, created.score); // initial estimate stands
     assert.equal(data.audit.partial, true);
     assert.equal(data.audit.pending, false); // stops waiting
   } finally {

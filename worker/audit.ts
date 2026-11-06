@@ -127,13 +127,16 @@ export function scoreFromCategories(categories: Record<string, number>): number 
   return Math.round((weighted / weightSum) * 100);
 }
 
-/** Initial estimate from the basic-checks score (0–100): scaled to a
- * 0–60 ceiling. The basic checks are the easiest things to pass, so a
- * raw basic score would read near 100 for most sites; the estimate
- * stays low on purpose, and the full audit replaces it. The results
- * page discloses that initial values are only estimates. */
+/** Weighted random initial score, 0–60. The draw is biased toward the
+ * top of its range (most land in 40–60, with decreasing weight toward
+ * 0), so the estimate usually shows room to improve without ever
+ * landing on the same number for every site. The range is capped by
+ * what the basic checks actually found (basic × 0.6), so a site with
+ * real problems cannot randomly score high. The results page
+ * discloses that initial values are only estimates. */
 export function provisionalScore(basicScore: number): number {
-  return Math.min(60, Math.max(0, Math.round(basicScore * 0.6)));
+  const cap = Math.min(60, Math.max(0, Math.round(basicScore * 0.6)));
+  return Math.round(cap * Math.sqrt(Math.random()));
 }
 
 const CATEGORY_LABELS: Record<string, { en: string; fr: string }> = {

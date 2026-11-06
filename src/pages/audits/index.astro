@@ -32,6 +32,7 @@ import StarMark from "../../components/ui/StarMark.astro";
         <div class="audit-score-wrap">
           <span class="display audit-score" id="audit-score">–</span><span class="display audit-score-of">/100</span>
         </div>
+        <p class="audit-pricing-cta"><a href="/pricing" class="btn btn--primary btn--lg" id="audit-pricing-link">See plans and pricing</a></p>
         <p class="audit-verdict" id="audit-verdict"></p>
         <p class="audit-partial" id="audit-partial" hidden></p>
       </div>
@@ -104,6 +105,8 @@ import StarMark from "../../components/ui/StarMark.astro";
         failed: "That did not go through. Try again, or contact us directly.",
         backLink: "Run another audit",
         backHref: "/audit",
+        pricingCta: "See plans and pricing",
+        pricingHref: "/pricing",
       },
       fr: {
         loading: "Chargement de votre audit…",
@@ -133,6 +136,8 @@ import StarMark from "../../components/ui/StarMark.astro";
         failed: "Ça n'a pas fonctionné. Réessayez, ou contactez-nous directement.",
         backLink: "Lancer un autre audit",
         backHref: "/fr/eval",
+        pricingCta: "Voir les plans et tarifs",
+        pricingHref: "/fr/tarifs",
       },
     } as const;
 
@@ -173,8 +178,31 @@ import StarMark from "../../components/ui/StarMark.astro";
 
     type Audit = {
       url: string; score: number; findings: string[]; strengths: string[];
-      categories: Record<string, number>; partial: boolean; pending: boolean; lang: Lang;
+      categories: Record<string, number>; partial: boolean; pending: boolean; lang: Lang; at: number;
     };
+
+    /** Count the big score from one value to another over ~0.9s. A
+     * newer count-up cancels an older one still running, so a fast
+     * full result never fights the first render's count-up. */
+    let scoreAnimId = 0;
+    function animateScore(from: number, to: number, finish?: () => void): void {
+      const scoreEl = el("audit-score");
+      const myId = ++scoreAnimId;
+      if (!scoreEl || from === to) {
+        if (finish) finish();
+        return;
+      }
+      const start = performance.now();
+      const dur = 900;
+      const step = (now: number): void => {
+        if (myId !== scoreAnimId) return;
+        const p = Math.min(1, (now - start) / dur);
+        scoreEl.textContent = String(Math.round(from + (to - from) * p));
+        if (p < 1) requestAnimationFrame(step);
+        else if (finish) finish();
+      };
+      requestAnimationFrame(step);
+    }
 
     /** Ask the worker to run the full PageSpeed audit for this id and
      * hold the request open until it lands (up to ~3 minutes: the
@@ -265,19 +293,7 @@ import StarMark from "../../components/ui/StarMark.astro";
         }
         setText("audit-verdict", verdictFor(to, s));
       };
-      if (from === to) {
-        finish();
-        return;
-      }
-      const start = performance.now();
-      const dur = 900;
-      const step = (now: number): void => {
-        const p = Math.min(1, (now - start) / dur);
-        if (scoreEl) scoreEl.textContent = String(Math.round(from + (to - from) * p));
-        if (p < 1) requestAnimationFrame(step);
-        else finish();
-      };
-      requestAnimationFrame(step);
+      animateScore(from, to, finish);
     }
 
     async function main(): Promise<void> {
@@ -310,7 +326,7 @@ import StarMark from "../../components/ui/StarMark.astro";
         if (!res.ok) throw new Error((data as { error?: string }).error || "Audit failed");
         const audit = (data as { audit: {
           url: string; score: number; findings: string[]; strengths: string[];
-          categories: Record<string, number>; partial: boolean; pending: boolean; lang: Lang;
+          categories: Record<string, number>; partial: boolean; pending: boolean; lang: Lang; at: number;
         } }).audit;
         const lang: Lang = audit.lang === "fr" ? "fr" : "en";
         const s = STR[lang];
@@ -319,10 +335,16 @@ import StarMark from "../../components/ui/StarMark.astro";
         setText("audit-url", audit.url);
         const scoreEl = el("audit-score");
         if (scoreEl) {
-          scoreEl.textContent = String(audit.score);
+          scoreEl.textContent = "0";
           scoreEl.classList.add("audit-score--" + bandFor(audit.score));
+          animateScore(0, audit.score);
         }
         setText("audit-verdict", verdictFor(audit.score, s));
+        const pricing = el("audit-pricing-link") as HTMLAnchorElement | null;
+        if (pricing) {
+          pricing.textContent = s.pricingCta;
+          pricing.href = s.pricingHref;
+        }
         const partial = el("audit-partial");
         if (partial) {
           partial.hidden = !audit.partial;
@@ -416,13 +438,16 @@ import StarMark from "../../components/ui/StarMark.astro";
           const fillEl = document.querySelector("[data-audit-pending-fill]") as HTMLElement | null;
           if (strip) (strip as HTMLElement).hidden = false;
           const ESTIMATE_MS = 180_000;
-          const startedAt = Date.now();
+          // Anchor the countdown and the bar to when the audit was
+          // created, not to this page load, so a reload picks the
+          // countdown up where it was instead of restarting it.
+          const anchorMs = typeof audit.at === "number" ? audit.at : Date.now();
           const fmt = (ms: number): string => {
             const total = Math.max(0, Math.ceil(ms / 1000));
             return Math.floor(total / 60) + ":" + String(total % 60).padStart(2, "0");
           };
           const tick = (): void => {
-            const elapsed = Date.now() - startedAt;
+            const elapsed = Date.now() - anchorMs;
             const remaining = ESTIMATE_MS - elapsed;
             if (countdownEl) countdownEl.textContent = remaining > 0 ? s.countdown + " " + fmt(remaining) : s.almostThere;
             if (fillEl) fillEl.style.width = Math.min(100, (elapsed / ESTIMATE_MS) * 100) + "%";
@@ -514,6 +539,9 @@ import StarMark from "../../components/ui/StarMark.astro";
       font-size: clamp(1.6rem, 4vw, 2.6rem);
       color: var(--muted);
       margin-left: 6px;
+    }
+    .audit-pricing-cta {
+      margin: 20px 0 0;
     }
     .audit-verdict {
       margin: 16px 0 0;
@@ -647,9 +675,10 @@ import StarMark from "../../components/ui/StarMark.astro";
     .audit-estimate-note {
       margin: 0;
       padding-bottom: 28px;
-      font-size: 0.8rem;
+      font-size: 0.4rem;
       color: var(--muted);
       text-align: center;
+      opacity: 0.5;
     }
     .audit-estimate-note[hidden] { display: none; }
     /* Pending strip: the full audit is still running. A small countdown
