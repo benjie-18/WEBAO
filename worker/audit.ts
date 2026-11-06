@@ -20,7 +20,7 @@ const PSI_ENDPOINT = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed
 // The full audit waits up to 2 minutes for PageSpeed: direct calls
 // measured 66s and 115s for webao.ca (2026-11-05), and PageSpeed
 // sometimes exceeds 120s. The first pass never calls PageSpeed.
-const PSI_FULL_TIMEOUT_MS = 120_000;
+const PSI_FULL_TIMEOUT_MS = 180_000;
 const AUDIT_INDEX = "audit:index";
 const MAX_INDEX = 1000;
 const RATE_LIMIT_PER_HOUR = 5;
@@ -467,7 +467,7 @@ export async function handleAuditFull(req: Request, env: Env, path: string): Pro
   const locked = await getJson<string>(env.WEBAO_KV, lockKey);
   if (locked) return json({ ok: true, running: true });
   try {
-    await putJson(env.WEBAO_KV, lockKey, "1", 180);
+    await putJson(env.WEBAO_KV, lockKey, "1", 240);
   } catch (e) {
     if (!(e instanceof KvWriteError)) throw e;
     // The lock could not be written (KV unavailable): run anyway,

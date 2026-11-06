@@ -176,12 +176,13 @@ import StarMark from "../../../components/ui/StarMark.astro";
     };
 
     /** Ask the worker to run the full PageSpeed audit for this id and
-     * hold the request open until it lands (up to ~2 minutes). If
-     * another run is already in flight, poll the record until it is
-     * no longer pending. Throws when the full audit never lands. */
+     * hold the request open until it lands (up to ~3 minutes: the
+     * worker's PageSpeed budget is 180s). If another run is already in
+     * flight, poll the record until it is no longer pending. Throws
+     * when the full audit never lands. */
     async function runFullAudit(id: string): Promise<Audit> {
       const controller = new AbortController();
-      const timeout = window.setTimeout(() => controller.abort(), 135_000);
+      const timeout = window.setTimeout(() => controller.abort(), 200_000);
       try {
         const res = await fetch("/api/audit/" + encodeURIComponent(id) + "/full", {
           method: "POST",
@@ -190,7 +191,7 @@ import StarMark from "../../../components/ui/StarMark.astro";
         const data = await res.json();
         if (!res.ok) throw new Error((data as { error?: string }).error || "Full audit failed");
         if ((data as { running?: boolean }).running) {
-          const deadline = Date.now() + 150_000;
+          const deadline = Date.now() + 300_000;
           while (Date.now() < deadline) {
             await new Promise((r) => window.setTimeout(r, 5000));
             const g = await fetch("/api/audit/" + encodeURIComponent(id));
@@ -404,13 +405,16 @@ import StarMark from "../../../components/ui/StarMark.astro";
 
         // The full audit is still running: show the countdown and the
         // subtle bar, trigger it, and fill the result in when it lands.
-        // If it never lands, the initial estimate stays as it is.
+        // A single slow PageSpeed run must not strand the page: if one
+        // /full call fails or the record is still pending, poll the
+        // record and try again, for up to 10 minutes. If it never
+        // lands, the initial estimate stays as it is.
         if (audit.pending) {
           const strip = document.querySelector("[data-audit-pending-strip]");
           const countdownEl = el("audit-countdown");
           const fillEl = document.querySelector("[data-audit-pending-fill]") as HTMLElement | null;
           if (strip) (strip as HTMLElement).hidden = false;
-          const ESTIMATE_MS = 120_000;
+          const ESTIMATE_MS = 180_000;
           const startedAt = Date.now();
           const fmt = (ms: number): string => {
             const total = Math.max(0, Math.ceil(ms / 1000));
@@ -425,10 +429,37 @@ import StarMark from "../../../components/ui/StarMark.astro";
           tick();
           const timer = window.setInterval(tick, 1000);
           try {
-            const full = await runFullAudit(id);
-            if (full && !full.pending) applyFull(full, s);
-          } catch {
-            // The full audit never landed: keep the initial estimate.
+            const deadline = Date.now() + 600_000;
+            let full: Audit | null = null;
+            while (!full && Date.now() < deadline) {
+              try {
+                const rec = await runFullAudit(id);
+                if (rec && !rec.pending) full = rec;
+              } catch {
+                // The /full call failed or timed out: fall through to polling.
+              }
+              if (full) break;
+              // Poll the record for a minute: a server-side run may
+              // still be finishing (the lock stops a duplicate run
+              // while it is).
+              const pollUntil = Date.now() + 60_000;
+              while (!full && Date.now() < pollUntil && Date.now() < deadline) {
+                await new Promise((r) => window.setTimeout(r, 5000));
+                try {
+                  const g = await fetch("/api/audit/" + encodeURIComponent(id));
+                  if (g.ok) {
+                    const gd = await g.json();
+                    const polled = (gd as { audit?: Audit }).audit;
+                    if (polled && !polled.pending) full = polled;
+                  }
+                } catch {
+                  // Keep polling.
+                }
+              }
+              // Still pending: loop and call /full again. By now the
+              // server-side lock has expired, so a dead run is retried.
+            }
+            if (full) applyFull(full, s);
           } finally {
             window.clearInterval(timer);
             if (strip) (strip as HTMLElement).hidden = true;
