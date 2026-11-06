@@ -1127,6 +1127,7 @@ const en = {
       email: "Email",
       emailPlaceholder: "you@yourbusiness.ca",
       category: "Category",
+      categoryPlaceholder: "Select a category",
       categories: {
         billing: "Billing",
         changes: "Changes to my site",
