@@ -225,7 +225,7 @@ test('Stripe errors are surfaced, not swallowed', async () => {
   }
 });
 
-test('rate limiting applies when KV is bound', async () => {
+test('checkout is not throttled in-worker (edge rule owns it)', async () => {
   const puts: string[] = [];
   const kv = {
     get: async () => null,
@@ -235,13 +235,14 @@ test('rate limiting applies when KV is bound', async () => {
   };
   const allowed = await call({ items: [{ key: 'launch-month' }] }, { env: { WEBAO_KV: kv } });
   assert.equal(allowed.status, 200);
-  assert.equal(puts.length, 1);
-  assert.match(puts[0], /^rl:checkout:/);
+  // No KV throttle write: every check was a KV write per request, and the
+  // edge rate-limit rule on /api/checkout/* is the per-IP cap now.
+  assert.equal(puts.length, 0);
 
-  const limited = await call({ items: [{ key: 'launch-month' }] }, {
-    // KV returns parsed JSON for `get(key, { type: 'json' })`.
+  const saturated = await call({ items: [{ key: 'launch-month' }] }, {
+    // A saturated rl: record must not 429 a checkout: the KV throttle is gone.
     env: { WEBAO_KV: { ...kv, get: async () => ({ c: 10, r: Date.now() + 30_000 }) } },
   });
-  assert.equal(limited.status, 429);
-  assert.equal(limited.calls.length, 0);
+  assert.equal(saturated.status, 200);
+  assert.equal(saturated.calls.length, 1);
 });

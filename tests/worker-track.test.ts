@@ -35,7 +35,7 @@ type Session = {
 const sessionOf = (store: Map<string, string>, sid = SID): Session =>
   JSON.parse(store.get(`session:${sid}`) ?? 'null');
 
-test('a pageview creates the session, appends the visit and counts the view', async () => {
+test('a pageview creates the session and appends the visit (no counter write)', async () => {
   const memory = memoryKV();
   const response = await handlePageview(
     pageview(
@@ -61,9 +61,11 @@ test('a pageview creates the session, appends the visit and counts the view', as
   );
   assert.ok(session.startedAt <= session.lastSeenAt);
 
-  assert.equal(memory.store.get(viewKey('/pricing')), '1');
-  assert.equal(memory.store.get(`views:${DAY}:__all`), undefined, 'no __all counter is written');
-  assert.equal(memory.ttls.get(`session:${SID}`), 90 * 24 * 3600);
+  // No per-path counter write: views are derived from the sessions, so a
+  // pageview writes the session only.
+  assert.equal(memory.store.get(viewKey('/pricing')), undefined, 'no views: counter is written');
+  assert.equal(memory.puts.filter((k) => k.startsWith('views:')).length, 0);
+  assert.equal(memory.ttls.get(`session:${SID}`), 365 * 24 * 3600);
   // No KV throttle write on a tracking call: rate limiting lives at
   // the edge, so a pageview writes no rl: record.
   assert.equal([...memory.store.keys()].filter((k) => k.startsWith('rl:')).length, 0);
@@ -83,9 +85,72 @@ test('repeat pageviews append and update without resetting the session', async (
   assert.deepEqual(second.pages.map((p) => p.path), ['/', '/pricing']);
   assert.equal(second.locale, 'french-t', 'clamped to 8 chars');
   assert.equal(second.theme, 'system');
-  assert.equal(memory.store.get(viewKey('/')), '1');
-  assert.equal(memory.store.get(viewKey('/pricing')), '1');
-  assert.equal(memory.store.get(`views:${DAY}:__all`), undefined, 'no __all counter is written');
+  // No per-path counter writes on repeat pageviews either.
+  assert.equal(memory.store.get(viewKey('/')), undefined);
+  assert.equal(memory.store.get(viewKey('/pricing')), undefined);
+  assert.equal(memory.puts.filter((k) => k.startsWith('views:')).length, 0);
+});
+
+test('a pageview records the previous page duration and flushed clicks', async () => {
+  const memory = memoryKV();
+  await handlePageview(pageview({ sid: SID, path: '/pricing' }), envOf(memory.kv));
+  const putsAfterFirst = memory.puts.filter((k) => k.startsWith('session:')).length;
+
+  // Client-router navigation: the next pageview carries the previous
+  // page's duration plus the clicks buffered since the last flush.
+  const response = await handlePageview(
+    pageview({
+      sid: SID,
+      path: '/contact',
+      prevPath: '/pricing',
+      prevDurationMs: 7_000,
+      clicks: [
+        { path: '/pricing', kind: 'cta', label: 'Get started' },
+        { path: '/pricing', kind: 'link', label: 'x'.repeat(300) },
+        { path: 'not-a-path', kind: 'click', label: 'dropped' },
+      ],
+    }),
+    envOf(memory.kv),
+  );
+  assert.equal(response.status, 200);
+  const session = sessionOf(memory.store);
+  assert.equal(session.pages[0].durationMs, 7_000, 'previous page duration recorded');
+  assert.equal(session.pages[1].path, '/contact');
+  assert.equal(session.clicks.length, 2, 'invalid click dropped, valid ones kept');
+  assert.equal(session.clicks[0].kind, 'cta');
+  assert.equal(session.clicks[1].label.length, 120, 'label clamped');
+  assert.equal(
+    memory.puts.filter((k) => k.startsWith('session:')).length,
+    putsAfterFirst + 1,
+    'one session write for the whole piggyback',
+  );
+});
+
+test('a final heartbeat flushes buffered clicks in the same write', async () => {
+  const memory = memoryKV();
+  await handlePageview(pageview({ sid: SID, path: '/pricing' }), envOf(memory.kv));
+  const putsAfterPageview = memory.puts.filter((k) => k.startsWith('session:')).length;
+
+  const response = await handleHeartbeat(
+    heartbeat({
+      sid: SID,
+      path: '/pricing',
+      durationMs: 12_000,
+      final: true,
+      clicks: [{ path: '/pricing', kind: 'cta', label: 'Buy' }],
+    }),
+    envOf(memory.kv),
+  );
+  assert.equal(response.status, 200);
+  const session = sessionOf(memory.store);
+  assert.equal(session.pages[0].durationMs, 12_000);
+  assert.equal(session.clicks.length, 1);
+  assert.equal(session.clicks[0].label, 'Buy');
+  assert.equal(
+    memory.puts.filter((k) => k.startsWith('session:')).length,
+    putsAfterPageview + 1,
+    'one session write for duration + clicks',
+  );
 });
 
 test('pageview validation rejects bad sessions and paths before writing', async () => {

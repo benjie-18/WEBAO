@@ -1,16 +1,12 @@
 // Public form submissions (pricing + contact + support).
-// Stored as form:<ts>:<rand> with a newest-first index capped at 1000 entries
-// (listings only; records are never deleted on eviction).
+// Stored as form:<ts>:<rand>; the admin Forms tab lists them by the
+// "form:" prefix (newest first, by the timestamp in the key).
 // Support and contact submissions also send a best-effort email copy to the
 // WEBAO inbox via the send_email binding; the KV record stays the source of truth.
 
-import { getJson, putJson } from "./kv";
-import { throttle } from "./auth";
+import { putJson } from "./kv";
 import { buildInboxEmail, INBOX_ADDRESS } from "./mailer";
 import { EMAIL_RE, clientIp, clientCountry, readJson, json, err, originAllowed, uuid } from "./util";
-
-const INDEX_KEY = "forms:index";
-const MAX_INDEX = 1000;
 
 export interface FormSubmission {
   form: "pricing" | "contact" | "support";
@@ -118,12 +114,10 @@ interface SubmitBody {
 /** POST /api/forms/submit — validate and store a form submission. */
 export async function handleFormSubmit(req: Request, env: Env): Promise<Response> {
   if (!originAllowed(req, true, env)) return err("Forbidden origin", 403);
-  // The one public write endpoint that had no throttle: without it, a
-  // scripted caller could exhaust the daily KV write quota (which 503s
-  // the whole API) and flood the inbox. 10/min per IP, like checkout.
-  if (!(await throttle(env.WEBAO_KV, "forms", clientIp(req), 10))) {
-    return err("Too many requests", 429);
-  }
+  // No in-worker throttle here: every throttle check is a KV write, and
+  // this endpoint is public. The edge rate-limit rule ("WEBAO track rate
+  // limit") covers /api/forms/* at 20 requests per 10 s per IP, which is
+  // the per-IP cap for form submissions.
   const kv = env.WEBAO_KV;
 
   let body: SubmitBody;
@@ -164,13 +158,9 @@ export async function handleFormSubmit(req: Request, env: Env): Promise<Response
   };
   await putJson(kv, key, submission);
 
-  // Newest-first index; trimming it only bounds listings. Records are
-  // never deleted on eviction (pricing submissions have no inbox copy, so
-  // the old code lost them entirely past the cap).
-  const index = (await getJson<string[]>(kv, INDEX_KEY)) || [];
-  index.unshift(key);
-  if (index.length > MAX_INDEX) index.splice(MAX_INDEX);
-  await putJson(kv, INDEX_KEY, index);
+  // No index key: the admin Forms tab lists submissions by the "form:"
+  // prefix instead, so storing a submission costs exactly one write.
+  // (The old forms:index key is an inert leftover.)
 
   if (body.form === "support" || body.form === "contact") await notifyByEmail(env, submission);
 

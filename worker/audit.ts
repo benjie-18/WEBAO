@@ -21,8 +21,6 @@ const PSI_ENDPOINT = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed
 // measured 66s and 115s for webao.ca (2026-11-05), and PageSpeed
 // sometimes exceeds 120s. The first pass never calls PageSpeed.
 const PSI_FULL_TIMEOUT_MS = 180_000;
-const AUDIT_INDEX = "audit:index";
-const MAX_INDEX = 1000;
 const RATE_LIMIT_PER_HOUR = 5;
 // A site served over plain HTTP is a fundamental security and SEO
 // failure: its score is capped here, in the estimate and in the
@@ -583,11 +581,10 @@ async function putAudit(kv: KVNamespace, record: AuditRecord): Promise<void> {
 }
 
 async function storeAudit(kv: KVNamespace, record: AuditRecord): Promise<void> {
+  // No index key: the admin Audits tab lists records by the "audit:"
+  // prefix instead, so storing an audit costs exactly one write.
+  // (The old audit:index key is an inert leftover.)
   await putAudit(kv, record);
-  const index = (await getJson<string[]>(kv, AUDIT_INDEX)) || [];
-  index.unshift(`audit:${record.id}`);
-  if (index.length > MAX_INDEX) index.splice(MAX_INDEX);
-  await putJson(kv, AUDIT_INDEX, index);
 }
 
 export async function handleAudit(req: Request, env: Env): Promise<Response> {

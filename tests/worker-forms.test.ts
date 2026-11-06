@@ -1,5 +1,6 @@
-// Public form submissions: validation, field sanitation, storage shape and
-// the newest-first index cap that keeps KV from growing without bound.
+// Public form submissions: validation, field sanitation and storage shape.
+// Listings derive from the form: prefix (newest first); no index key is
+// kept, so a submission costs exactly one KV write.
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { handleFormSubmit } from '../worker/forms';
@@ -13,7 +14,7 @@ const pricingForm = {
   fields: { name: 'Dana', email: 'dana@example.ca', message: 'I want the Grow plan', 'Phone number': '613-555-0100' },
 };
 
-test('a pricing submission is stored, indexed and echoed with its id', async () => {
+test('a pricing submission is stored and echoed with its id (no index write)', async () => {
   const memory = memoryKV();
   const response = await handleFormSubmit(
     submit(pricingForm, { ip: '203.0.113.7', headers: { 'user-agent': 'Test/1.0', 'cf-ipcountry': 'ca' } }),
@@ -32,7 +33,10 @@ test('a pricing submission is stored, indexed and echoed with its id', async () 
   assert.equal(stored.country, 'CA');
   assert.equal(stored.ua, 'Test/1.0');
   assert.ok(typeof stored.at === 'number');
-  assert.deepEqual(JSON.parse(memory.store.get('forms:index') ?? '[]'), [key]);
+  // No index key: the admin list derives from the form: prefix, so a
+  // submission costs exactly one write.
+  assert.equal(memory.store.has('forms:index'), false);
+  assert.deepEqual(memory.puts, [key]);
 });
 
 test('a support submission is stored with its category, subject and description', async () => {
@@ -83,13 +87,16 @@ test('a contact submission is stored even when the email copy cannot be sent', a
   assert.equal(stored.form, 'contact');
 });
 
-test('the index is newest-first', async () => {
+test('two submissions are both stored, with no index key', async () => {
   const memory = memoryKV();
   const first = await bodyOf(await handleFormSubmit(submit(pricingForm), envOf(memory.kv)));
   const second = await bodyOf(
     await handleFormSubmit(submit({ form: 'contact', fields: { name: 'Sam', message: 'Bonjour' } }), envOf(memory.kv)),
   );
-  assert.deepEqual(JSON.parse(memory.store.get('forms:index') ?? '[]'), [`form:${second.id}`, `form:${first.id}`]);
+  assert.equal(memory.store.has(`form:${first.id}`), true);
+  assert.equal(memory.store.has(`form:${second.id}`), true);
+  assert.equal(memory.store.has('forms:index'), false);
+  assert.equal(memory.puts.length, 2);
 });
 
 test('required fields follow the form type', async () => {
@@ -211,23 +218,19 @@ test('requests are gated by origin and content type', async () => {
   assert.deepEqual(await bodyOf(response), { ok: false, error: 'Expected application/json' });
 });
 
-test('the index is capped at 1000 but evicted submissions are kept', async () => {
+test('old submissions are never deleted by a new one', async () => {
   const memory = memoryKV();
   const oldKeys = Array.from({ length: 1000 }, (_, i) => `form:${1000 + i}:old${String(i).padStart(13, '0')}`);
-  memory.store.set('forms:index', JSON.stringify(oldKeys));
-  for (const key of oldKeys) memory.store.set(key, JSON.stringify({ form: 'contact', fields: { name: 'old' } }));
+  for (const key of oldKeys)
+    memory.store.set(key, JSON.stringify({ form: 'contact', fields: { name: 'old' }, at: 1 }));
 
   await handleFormSubmit(submit({ form: 'contact', fields: { name: 'Sam', message: 'hi' } }), envOf(memory.kv));
 
-  const index = JSON.parse(memory.store.get('forms:index') ?? '[]');
-  assert.equal(index.length, 1000);
-  assert.equal(index[0].startsWith('form:'), true);
-  assert.equal(index[1], oldKeys[0], 'the newest old entries survive');
-  assert.equal(index[999], oldKeys[998], 'the oldest old entry is pushed out of the listing');
-  // The record itself survives: trimming bounds listings only (pricing
-  // submissions have no inbox copy, so deleting them lost them entirely).
-  assert.equal(memory.store.has(oldKeys[999]), true, 'the evicted submission is kept');
-  assert.equal(memory.deletes.includes(oldKeys[999]), false);
+  // No index key is written, and no old record is deleted: listings cap
+  // at 1000 keys on read, records are never evicted on write.
+  assert.equal(memory.store.has('forms:index'), false);
+  assert.equal(memory.deletes.length, 0);
+  for (const key of oldKeys) assert.equal(memory.store.has(key), true);
 });
 
 test('submissions include the visitor metadata the admin panel shows', async () => {
@@ -239,8 +242,8 @@ test('submissions include the visitor metadata the admin panel shows', async () 
     }),
     envOf(memory.kv),
   );
-  const index = JSON.parse(memory.store.get('forms:index') ?? '[]');
-  const stored = JSON.parse(memory.store.get(index[0]) ?? 'null');
+  const key = memory.puts[0];
+  const stored = JSON.parse(memory.store.get(key) ?? 'null');
   assert.equal(stored.ip, '198.51.100.9');
   assert.equal(stored.country, 'FR');
   assert.equal(stored.ua, 'UA/1');

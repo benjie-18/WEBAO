@@ -13,8 +13,7 @@
 //  2. mode must be "subscription" as soon as one recurring price is present,
 //     and "payment" when the cart is one-time only.
 
-import { EMAIL_RE, json, err, originAllowed, clientIp } from "./util";
-import { throttle } from "./auth";
+import { EMAIL_RE, json, err, originAllowed } from "./util";
 
 type Env = {
   STRIPE_SECRET_KEY?: string;
@@ -318,13 +317,11 @@ export async function handleCheckoutSession(req: Request, env: Env): Promise<Res
     return json({ ok: false, error: "Checkout not configured" }, 503);
   }
 
-  // Rate-limit session creation per IP (abuse would clutter the Stripe dashboard).
-  if (env.WEBAO_KV) {
-    const ip = clientIp(req);
-    if (!(await throttle(env.WEBAO_KV, "checkout", ip, 10))) {
-      return err("Too many requests", 429);
-    }
-  }
+  // No in-worker throttle here: every throttle check is a KV write.
+  // The edge rate-limit rule ("WEBAO track rate limit") covers
+  // /api/checkout/* at 20 requests per 10 s per IP, which is the
+  // per-IP cap for session creation (abuse would otherwise clutter
+  // the Stripe dashboard).
 
   const url = new URL(req.url);
   const origin = `${url.protocol}//${url.host}`;

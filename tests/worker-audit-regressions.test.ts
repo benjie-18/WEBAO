@@ -260,21 +260,18 @@ test('audit M2: a conflicting domain change leaves the old mapping and the old d
 // M3: index-cap eviction trims the index but never deletes records
 // ---------------------------------------------------------------------------
 
-test('audit M3: over-cap lead registrations keep the oldest record', async () => {
+test('audit M3: a new lead registration never deletes older records', async () => {
   const seed: Record<string, unknown> = {};
-  const keys: string[] = [];
   for (let i = 0; i < 5001; i++) {
-    const k = `lead:${String(i).padStart(4, '0')}`;
-    keys.push(k);
-    seed[k] = { id: String(i).padStart(4, '0'), business: `Co ${i}`, email: `co${i}@example.ca`, replies: [] };
+    seed[`lead:${String(i).padStart(4, '0')}`] = { id: String(i).padStart(4, '0'), business: `Co ${i}`, email: `co${i}@example.ca`, replies: [] };
   }
-  seed['leads:index'] = keys;
   const memory = memoryKV(seed);
   const res = await handleLeadRegister(apiRequest('/api/leads/register', { business: 'New Co', email: 'new@example.ca' }), envOf(memory.kv, {}));
   assert.equal(res.status, 200);
-  assert.ok(memory.store.has('lead:0000'), 'oldest record survives the index trim');
-  assert.ok(memory.store.has('lead:5000'), 'record trimmed from the index survives too');
-  assert.equal((JSON.parse(memory.store.get('leads:index')!) as string[]).length, 5000);
+  assert.ok(memory.store.has('lead:0000'), 'oldest record survives');
+  assert.ok(memory.store.has('lead:5000'), 'record at the old cap survives too');
+  assert.equal(memory.store.has('leads:index'), false, 'no index key is written');
+  assert.equal(memory.deletes.length, 0, 'nothing is deleted');
 });
 
 test('audit M3: over-cap client creation keeps the oldest record', async () => {
@@ -307,17 +304,21 @@ test('audit M3: over-cap form submissions keep the oldest record', async () => {
 });
 
 // ---------------------------------------------------------------------------
-// M4: the public forms endpoint is throttled like every other write
+// M4: the public forms endpoint is rate-limited at the edge, not by a KV
+// throttle (every throttle check was a KV write per request)
 // ---------------------------------------------------------------------------
 
-test('audit M4: the 11th form submission in a minute answers 429', async () => {
+test('audit M4: form submissions are not throttled in-worker', async () => {
   const memory = memoryKV();
   const env = envOf(memory.kv, {});
   let last: Response | null = null;
   for (let i = 0; i < 11; i++) {
     last = await handleFormSubmit(apiRequest('/api/forms/submit', { form: 'contact', fields: { name: 'Sam', message: 'hi' } }), env);
   }
-  assert.equal(last!.status, 429);
+  // The KV throttle is gone: the edge rate-limit rule on /api/forms/* is
+  // the per-IP cap now, so rapid submissions all succeed in-worker.
+  assert.equal(last!.status, 200);
+  assert.equal(memory.puts.filter((k) => k.startsWith('rl:')).length, 0, 'no throttle record is written');
 });
 
 // ---------------------------------------------------------------------------

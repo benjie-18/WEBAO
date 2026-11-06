@@ -195,10 +195,17 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
           var curPath = "";
           var lastPv = "";
           var finalSent = false;
+          var clickBuffer = [];
+          var pendingPrev = null;
           // A final heartbeat was already sent for the current view:
           // hide + pagehide both fire when a tab closes, and each would
           // cost a KV write for the same visit. Reset when the tab is
           // shown again or a new page is viewed.
+          // Clicks are buffered and flushed with the next pageview or
+          // final heartbeat instead of one POST per click (one KV write
+          // per click). pendingPrev carries the page being left when the
+          // client router navigates, so its time-on-page rides along
+          // with the next pageview instead of a separate heartbeat.
 
           function post(url, body, useBeacon) {
             try {
@@ -230,6 +237,18 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
             if (lang) body.locale = lang;
             var theme = document.documentElement.getAttribute("data-theme");
             if (theme) body.theme = theme;
+            // Piggyback: the page just left (client-router nav) and any
+            // clicks buffered since the last flush ride along, so this
+            // one request carries what used to cost extra writes.
+            if (pendingPrev) {
+              body.prevPath = pendingPrev.path;
+              body.prevDurationMs = pendingPrev.durationMs;
+              pendingPrev = null;
+            }
+            if (clickBuffer.length) {
+              body.clicks = clickBuffer;
+              clickBuffer = [];
+            }
             post("/api/track/pageview", body, false);
           }
 
@@ -240,11 +259,14 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
               if (finalSent) return;
               finalSent = true;
             }
-            post(
-              "/api/track/heartbeat",
-              { sid: sid, path: curPath, durationMs: Date.now() - startTs, final: !!isFinal },
-              useBeacon
-            );
+            var body = { sid: sid, path: curPath, durationMs: Date.now() - startTs, final: !!isFinal };
+            // Flush any clicks buffered since the last pageview: they
+            // ride along with this beat instead of costing a write each.
+            if (clickBuffer.length) {
+              body.clicks = clickBuffer;
+              clickBuffer = [];
+            }
+            post("/api/track/heartbeat", body, useBeacon);
           }
 
           // Click tracking: kind comes from the closest [data-track], otherwise
@@ -270,17 +292,28 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
                 label = el.textContent || el.getAttribute("aria-label") || "";
               }
               label = String(label).replace(/\s+/g, " ").trim().slice(0, 120);
-              post(
-                "/api/track/click",
-                { sid: sid, path: curPath || location.pathname, kind: kind || "click", label: label },
-                false
-              );
+              // Buffer the click: it is flushed with the next pageview
+              // or final heartbeat instead of costing a KV write each.
+              clickBuffer.push({
+                path: curPath || location.pathname,
+                kind: kind || "click",
+                label: label,
+                at: Date.now(),
+              });
+              if (clickBuffer.length > 200) clickBuffer = clickBuffer.slice(-200);
             } catch (err) {}
           }, { passive: true, capture: true });
 
           document.addEventListener("astro:page-load", pageview);
-          // Client-router navigation away: flush time-on-page before the DOM swaps.
-          document.addEventListener("astro:before-preparation", function () { heartbeat(true, true); });
+          // Client-router navigation away: stash time-on-page for the
+          // next pageview instead of sending a heartbeat. The next
+          // pageview carries the previous page's duration (and any
+          // buffered clicks) in the same request, so navigating costs
+          // no extra KV write. A real close still sends a final beat.
+          document.addEventListener("astro:before-preparation", function () {
+            if (!startTs || !curPath) return;
+            pendingPrev = { path: curPath, durationMs: Date.now() - startTs };
+          });
           document.addEventListener("visibilitychange", function () {
             if (document.visibilityState === "hidden") heartbeat(true, true);
             else finalSent = false;
@@ -291,7 +324,8 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
           // pageview, and the server keeps the largest value), so a beat
           // every few minutes would only re-send intermediate totals
           // nobody reads, at one KV write per open tab per beat. The
-          // final beat on hide / close / navigation is the only one kept.
+          // final beat on hide / close is the only one kept; client-
+          // router navigations piggyback on the next pageview instead.
 
           if (document.readyState !== "loading") pageview();
           else document.addEventListener("DOMContentLoaded", pageview, { once: true });

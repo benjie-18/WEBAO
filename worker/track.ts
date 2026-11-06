@@ -1,7 +1,8 @@
 // Visitor tracking: pageviews, clicks, heartbeats.
-// Sessions live 90 days in KV; per-day pageview counters aggregate into stats.
+// Sessions live 365 days in KV; the admin stats endpoint derives views
+// from the sessions themselves (path + timestamp per page).
 
-import { getJson, putJson, incrCounter } from "./kv";
+import { getJson, putJson } from "./kv";
 import { getSettings } from "./auth";
 import {
   clientIp,
@@ -14,10 +15,9 @@ import {
   json,
   err,
   originAllowed,
-  dayKey,
 } from "./util";
 
-const SESSION_TTL = 90 * 24 * 3600; // 90 days, in seconds
+const SESSION_TTL = 365 * 24 * 3600; // 365 days, in seconds
 const MAX_PAGES = 100; // cap stored page visits per session
 const MAX_CLICKS = 200; // cap stored click events per session
 // Only final heartbeats arrive now (the client sends one on hide /
@@ -67,15 +67,16 @@ function validSid(sid: unknown): sid is string {
  * rate-limit write. Every throttle check is a KV write, and these
  * endpoints are hit on every pageview and click — throttling them
  * burned the daily KV write budget (1,000/day on the free plan).
- * Rate limiting belongs at the edge (a Cloudflare rate-limit rule
- * on /api/track/*, 120/min per IP); the in-worker KV throttle was
- * removed so a tracking call costs no write of its own. Note the
- * trade-off: a pageview still mints a session for any valid-format
- * sid, so a determined flood could burn session + counter writes
- * with no per-IP cap until an edge rule is in place. The heartbeat
- * cannot mint a write on its own (unknown session 404s), and the
- * session id is an unguessable uuid, so a blind flood of heartbeats
- * costs reads only (100k/day) and writes nothing.
+ * Rate limiting lives at the edge (the Cloudflare rate-limit rule
+ * "WEBAO track rate limit" on /api/track/*, 20 requests per 10 s
+ * per IP); the in-worker KV throttle was removed so a tracking call
+ * costs no write of its own. Note the trade-off: a pageview still
+ * mints a session for any valid-format sid, so a determined flood
+ * could burn session writes — the edge rule is the per-IP cap that
+ * keeps that in check. The heartbeat cannot mint a write on its own
+ * (unknown session 404s), and the session id is an unguessable uuid,
+ * so a blind flood of heartbeats costs reads only (100k/day) and
+ * writes nothing.
  */
 function originGate(req: Request, env: Env): Response | null {
   if (!originAllowed(req, true, env)) return err("Forbidden origin", 403);
@@ -89,6 +90,32 @@ interface PageviewBody {
   screen?: unknown;
   locale?: unknown;
   theme?: unknown;
+  /** Page just left (client-router nav): its final time-on-page rides along. */
+  prevPath?: unknown;
+  prevDurationMs?: unknown;
+  /** Clicks buffered since the last flush; ride along, no extra write. */
+  clicks?: unknown;
+}
+
+/** Append buffered click events (from a pageview or heartbeat flush). */
+function appendClicks(s: Session, raw: unknown): void {
+  if (!Array.isArray(raw)) return;
+  for (const c of raw) {
+    if (!c || typeof c !== "object") continue;
+    const path = sanitizePath((c as { path?: unknown }).path);
+    if (!path) continue;
+    const at =
+      typeof (c as { at?: unknown }).at === "number"
+        ? Math.floor((c as { at: number }).at)
+        : Date.now();
+    s.clicks.push({
+      path,
+      kind: clampStr((c as { kind?: unknown }).kind, 32) || "click",
+      label: clampStr((c as { label?: unknown }).label, 120),
+      at,
+    });
+  }
+  if (s.clicks.length > MAX_CLICKS) s.clicks = s.clicks.slice(-MAX_CLICKS);
 }
 
 /** POST /api/track/pageview — create/touch a session, count the view. */
@@ -134,6 +161,23 @@ export async function handlePageview(req: Request, env: Env): Promise<Response> 
   s.lastSeenAt = now;
   if (body.locale) s.locale = clampStr(body.locale, 8);
   if (body.theme) s.theme = clampStr(body.theme, 8);
+  // Piggybacked from the page just left (client-router navigation):
+  // record its final time-on-page, and flush any clicks buffered
+  // since the last write. All of it rides on this pageview's single
+  // session rewrite — no extra write.
+  if (typeof body.prevPath === "string" && typeof body.prevDurationMs === "number") {
+    const prevPath = sanitizePath(body.prevPath);
+    const prevMs = Math.min(Math.max(Math.floor(body.prevDurationMs), 0), 24 * 3600 * 1000);
+    if (prevPath) {
+      for (let i = s.pages.length - 1; i >= 0; i--) {
+        if (s.pages[i].path === prevPath) {
+          s.pages[i].durationMs = Math.max(s.pages[i].durationMs, prevMs);
+          break;
+        }
+      }
+    }
+  }
+  appendClicks(s, body.clicks);
   s.pages.push({
     path,
     at: now,
@@ -143,14 +187,12 @@ export async function handlePageview(req: Request, env: Env): Promise<Response> 
   if (s.pages.length > MAX_PAGES) s.pages = s.pages.slice(-MAX_PAGES);
   await putJson(kv, key, s, SESSION_TTL);
 
-  // Per-day counter; the stats endpoint aggregates these for week/month/year.
-  // (The old views:<day>:__all total is gone: the stats page sums the
-  // per-path counters instead and filters __all out, so it was a write
-  // nobody read.)
-  const day = dayKey(now);
-  const enc = encodeURIComponent(path);
-  await incrCounter(kv, `views:${day}:${enc}`);
-
+  // No per-path counter write: the admin stats endpoint derives views
+  // from the sessions themselves (each page carries its path and
+  // timestamp), so a pageview costs exactly one write — the session
+  // rewrite above. The old views:<day>:<path> keys are inert leftovers;
+  // deleting them would cost a write per key, so they stay until they
+  // are cleaned up out of band, if ever.
   return json({ ok: true });
 }
 
@@ -200,6 +242,8 @@ interface HeartbeatBody {
   durationMs?: unknown;
   /** True for the final heartbeat (pagehide / tab hidden / navigation away). */
   final?: unknown;
+  /** Clicks buffered since the last flush; ride along, no extra write. */
+  clicks?: unknown;
 }
 
 /** POST /api/track/heartbeat — record time spent on the current page. */
@@ -232,8 +276,12 @@ export async function handleHeartbeat(req: Request, env: Env): Promise<Response>
   // burns the KV daily write budget fast (1,000 writes/day on the free
   // plan). Persist at most once per HEARTBEAT_COALESCE_MS; the final
   // heartbeat (pagehide / tab hidden) always persists so durations stay exact.
+  // A beat carrying flushed clicks always persists — dropping it would
+  // lose the clicks the client already cleared from its buffer.
   const isFinal = body.final === true;
-  if (!isFinal && now - s.lastSeenAt < HEARTBEAT_COALESCE_MS) return json({ ok: true });
+  const hasClicks = Array.isArray(body.clicks) && body.clicks.length > 0;
+  if (!isFinal && !hasClicks && now - s.lastSeenAt < HEARTBEAT_COALESCE_MS)
+    return json({ ok: true });
 
   // Update the most recent visit of this path (monotonic — never shrink).
   for (let i = s.pages.length - 1; i >= 0; i--) {
@@ -242,6 +290,7 @@ export async function handleHeartbeat(req: Request, env: Env): Promise<Response>
       break;
     }
   }
+  appendClicks(s, body.clicks);
   s.lastSeenAt = now;
   await putJson(kv, key, s, SESSION_TTL);
   return json({ ok: true });

@@ -30,7 +30,7 @@ async function registerOne(memory: ReturnType<typeof memoryKV>, body: Record<str
   return bodyOf(res);
 }
 
-test('register stores the lead, indexes it and returns tracked links', async () => {
+test('register stores the lead and returns tracked links (no index write)', async () => {
   const memory = memoryKV();
   const body = await registerOne(memory);
   assert.match(body.id, /^ld_[a-f0-9]{24}$/);
@@ -44,7 +44,10 @@ test('register stores the lead, indexes it and returns tracked links', async () 
   assert.equal(stored.city, 'Varennes');
   assert.equal(stored.clickCount, 0);
   assert.deepEqual(stored.clicks, []);
-  assert.deepEqual(JSON.parse(memory.store.get('leads:index') ?? '[]'), [`lead:${body.id}`]);
+  // No index key: the admin list derives from the lead: prefix, so a
+  // register costs exactly one write.
+  assert.equal(memory.store.has('leads:index'), false);
+  assert.deepEqual(memory.puts, [`lead:${body.id}`]);
 });
 
 test('register is idempotent for a caller-supplied id', async () => {
@@ -54,7 +57,9 @@ test('register is idempotent for a caller-supplied id', async () => {
   assert.equal(first.id, id);
   const second = await bodyOf(await handleLeadRegister(register({ ...leadBody, id }), envOf(memory.kv)));
   assert.equal(second.existing, true);
-  assert.deepEqual(JSON.parse(memory.store.get('leads:index') ?? '[]'), [`lead:${id}`]);
+  // Idempotent re-register writes nothing new and keeps one record.
+  assert.equal(memory.store.has('leads:index'), false);
+  assert.deepEqual(memory.puts, [`lead:${id}`]);
 });
 
 test('register validates business, email and id', async () => {

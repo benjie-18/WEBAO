@@ -155,8 +155,10 @@ test('POST /api/audit scores a good page and stores the result', async () => {
     assert.equal(stored.url, 'https://example.com/');
     assert.ok(stored.score >= 0 && stored.score <= 60);
     assert.equal(stored.pending, true);
-    const index = await kv.get('audit:index', { type: 'json' }) as string[] | null;
-    assert.deepEqual(index, [`audit:${data.id}`]);
+    // No index key: the admin list derives from the audit: prefix, so
+    // storing an audit costs one write (plus the ratelimit write).
+    assert.equal(await kv.get('audit:index', { type: 'json' }), null, 'no index key is written');
+    assert.equal(memory.puts.includes('audit:index'), false);
   } finally {
     restore();
   }

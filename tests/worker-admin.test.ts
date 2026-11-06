@@ -96,13 +96,23 @@ test('stats validate their inputs and aggregate the seeded KV', async () => {
 
   const today = dayKey();
   const yesterday = addDays(today, -1);
-  memory.store.set(`views:${today}:${encodeURIComponent('/pricing')}`, '5');
-  memory.store.set(`views:${today}:${encodeURIComponent('/contact')}`, '2');
-  memory.store.set(`views:${today}:__all`, '999', );
-  memory.store.set(`views:${yesterday}:${encodeURIComponent('/contact')}`, '1');
-  memory.store.set(`views:${yesterday}:__all`, '1');
-  memory.store.set('session:one', session('mobile', 'ca'));
-  memory.store.set('session:two', session('desktop', 'US'));
+  const todayTs = Date.parse(today + 'T12:00:00Z');
+  const yesterdayTs = Date.parse(yesterday + 'T12:00:00Z');
+  const page = (path: string, at: number) => ({ path, at, durationMs: 0 });
+  // Views are derived from the sessions (path + timestamp per page), not
+  // from counter keys: one session with 5 pricing + 2 contact views today
+  // and 1 contact view yesterday, plus a second visitor with no pages.
+  const one = JSON.parse(session('mobile', 'ca', todayTs));
+  one.pages = [
+    ...Array.from({ length: 5 }, () => page('/pricing', todayTs)),
+    ...Array.from({ length: 2 }, () => page('/contact', todayTs)),
+    page('/contact', yesterdayTs),
+  ];
+  memory.store.set('session:one', JSON.stringify(one));
+  memory.store.set('session:two', session('desktop', 'US', todayTs));
+  // Stale views: counter keys are inert leftovers and must be ignored.
+  memory.store.set(`views:${today}:${encodeURIComponent('/pricing')}`, '999');
+  memory.store.set(`views:${today}:__all`, '999');
 
   const response = await handleAdmin(adminGet('/api/admin/stats?range=week', token), envOf(memory.kv), url('/api/admin/stats?range=week'));
   assert.equal(response.status, 200);
@@ -111,7 +121,7 @@ test('stats validate their inputs and aggregate the seeded KV', async () => {
   assert.equal(stats.range, 'week');
   assert.equal(stats.labels.length, 7);
   assert.equal(stats.labels.at(-1), today);
-  assert.equal(stats.views.at(-1), 7, 'today = all path counters, the __all key is not double counted');
+  assert.equal(stats.views.at(-1), 7, 'today = all stored pages, the stale counter keys are ignored');
   assert.equal(stats.views.at(-2), 1, 'yesterday');
   assert.equal(stats.visitors.at(-1), 2);
   assert.deepEqual(stats.topPages, [
@@ -134,7 +144,11 @@ test('the year range rolls the series up into months', async () => {
   const memory = memoryKV();
   const token = await authed(memory);
   const today = dayKey();
-  memory.store.set(`views:${today}:${encodeURIComponent('/pricing')}`, '4');
+  const todayTs = Date.parse(today + 'T12:00:00Z');
+  // A returning visitor: session started long ago, 4 pricing views today.
+  const old = JSON.parse(session('desktop', 'CA', todayTs - 400 * 24 * 3600 * 1000));
+  old.pages = Array.from({ length: 4 }, () => ({ path: '/pricing', at: todayTs, durationMs: 0 }));
+  memory.store.set('session:old', JSON.stringify(old));
 
   const response = await handleAdmin(adminGet('/api/admin/stats?range=year', token), envOf(memory.kv), url('/api/admin/stats?range=year'));
   const stats = await bodyOf(response);
@@ -151,21 +165,27 @@ test('the year range rolls the series up into months', async () => {
   assert.equal(stats.visitors.at(-1), 0);
 });
 
-test('a malformed view key does not take stats down', async () => {
+test('a malformed session page does not take stats down', async () => {
   const memory = memoryKV();
   const token = await authed(memory);
   const today = dayKey();
+  const todayTs = Date.parse(today + 'T12:00:00Z');
+  const s = JSON.parse(session('mobile', 'ca', todayTs));
+  s.pages = [
+    { path: '/pricing', at: todayTs, durationMs: 0 },
+    { path: 42, at: todayTs, durationMs: 0 },
+    { at: todayTs, durationMs: 0 },
+    { path: '/contact', durationMs: 0 },
+  ];
+  memory.store.set('session:one', JSON.stringify(s));
+  // A stale views: key is ignored, not read.
   memory.store.set(`views:${today}:%E0%A4%A`, '2');
-  memory.store.set(`views:${today}:${encodeURIComponent('/pricing')}`, '1');
 
   const response = await handleAdmin(adminGet('/api/admin/stats?range=day', token), envOf(memory.kv), url('/api/admin/stats?range=day'));
   assert.equal(response.status, 200);
   const stats = await bodyOf(response);
-  assert.deepEqual(stats.views, [3]);
-  assert.deepEqual(stats.topPages, [
-    { path: '%E0%A4%A', views: 2 },
-    { path: '/pricing', views: 1 },
-  ]);
+  assert.deepEqual(stats.views, [1]);
+  assert.deepEqual(stats.topPages, [{ path: '/pricing', views: 1 }]);
 });
 
 test('the visitors list returns each session with its pages and clicks, newest first', async () => {
@@ -214,32 +234,31 @@ test('the visitors list returns each session with its pages and clicks, newest f
 test('the forms list clamps its limit, paginates and filters by type', async () => {
   const memory = memoryKV();
   const token = await authed(memory);
-  const keys = ['form:1:a', 'form:2:b', 'form:3:c', 'form:4:missing'];
-  memory.store.set('forms:index', JSON.stringify(keys));
   memory.store.set('form:1:a', JSON.stringify({ form: 'pricing', fields: { name: 'A' }, at: 1 }));
   memory.store.set('form:2:b', JSON.stringify({ form: 'contact', fields: { name: 'B' }, at: 2 }));
   memory.store.set('form:3:c', JSON.stringify({ form: 'contact', fields: { name: 'C' }, at: 3 }));
 
+  // Newest first (by `at`): 3:c, 2:b, 1:a.
   const first = await bodyOf(await handleAdmin(adminGet('/api/admin/forms?limit=2', token), envOf(memory.kv), url('/api/admin/forms?limit=2')));
-  assert.deepEqual(first.items.map((item: { id: string }) => item.id), ['1:a', '2:b']);
+  assert.deepEqual(first.items.map((item: { id: string }) => item.id), ['3:c', '2:b']);
   assert.equal(first.nextCursor, '2');
 
   const second = await bodyOf(await handleAdmin(adminGet('/api/admin/forms?limit=2&cursor=2', token), envOf(memory.kv), url('/api/admin/forms?limit=2&cursor=2')));
-  assert.deepEqual(second.items.map((item: { id: string }) => item.id), ['3:c'], 'missing records are skipped');
+  assert.deepEqual(second.items.map((item: { id: string }) => item.id), ['1:a']);
   assert.equal(second.nextCursor, null);
 
   const contacts = await bodyOf(await handleAdmin(adminGet('/api/admin/forms?type=contact', token), envOf(memory.kv), url('/api/admin/forms?type=contact')));
-  assert.deepEqual(contacts.items.map((item: { id: string }) => item.id), ['2:b', '3:c']);
+  assert.deepEqual(contacts.items.map((item: { id: string }) => item.id), ['3:c', '2:b']);
 
   const clamped = await bodyOf(await handleAdmin(adminGet('/api/admin/forms?limit=500', token), envOf(memory.kv), url('/api/admin/forms?limit=500')));
   assert.equal(clamped.items.length, 3, 'limit is clamped but harmless here');
 });
 
-test('deleting a form decodes the id and updates the index', async () => {
+test('deleting a form decodes the id and removes the record', async () => {
   const memory = memoryKV();
   const token = await authed(memory);
-  memory.store.set('forms:index', JSON.stringify(['form:1:a', 'form:2:b']));
-  memory.store.set('form:1:a', JSON.stringify({ form: 'contact', fields: { name: 'A' } }));
+  memory.store.set('form:1:a', JSON.stringify({ form: 'contact', fields: { name: 'A' }, at: 1 }));
+  memory.store.set('form:2:b', JSON.stringify({ form: 'contact', fields: { name: 'B' }, at: 2 }));
 
   const response = await handleAdmin(
     adminDelete(`/api/admin/forms/${encodeURIComponent('1:a')}`, token),
@@ -249,7 +268,10 @@ test('deleting a form decodes the id and updates the index', async () => {
   assert.equal(response.status, 200);
   assert.deepEqual(await bodyOf(response), { ok: true });
   assert.equal(memory.store.has('form:1:a'), false);
-  assert.deepEqual(JSON.parse(memory.store.get('forms:index') ?? '[]'), ['form:2:b']);
+  // No index key is rewritten: the list derives from the form: prefix.
+  assert.equal(memory.store.has('forms:index'), false);
+  const list = await bodyOf(await handleAdmin(adminGet('/api/admin/forms', token), envOf(memory.kv), url('/api/admin/forms')));
+  assert.deepEqual(list.items.map((item: { id: string }) => item.id), ['2:b']);
 
   for (const bad of ['%3Cscript%3E', 'a'.repeat(65), 'has%20space']) {
     const rejected = await handleAdmin(adminDelete(`/api/admin/forms/${bad}`, token), envOf(memory.kv), url(`/api/admin/forms/${bad}`));

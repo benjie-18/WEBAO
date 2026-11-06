@@ -456,9 +456,8 @@ and revokes all other admin tokens (the caller stays logged in).
 |---|---|
 | `config:auth` | `{ passwordHash }` — SHA-256 hex |
 | `config:settings` | `{ defaultTheme, trackingEnabled }` |
-| `session:<uuid>` | session object (TTL 90 days) |
-| `views:<yyyy-mm-dd>:<urlenc-path>` | integer pageview counter |
-| `views:<yyyy-mm-dd>:__all` | integer total counter for the day |
+| `session:<uuid>` | session object (TTL 365 days) |
+| `views:<yyyy-mm-dd>:<urlenc-path>` | legacy integer pageview counter — no longer written; stats derive from sessions |
 | `form:<ts>:<rand>` | form submission object |
 | `forms:index` | JSON array of form keys, newest-first, cap 1000 (index trim only; records are never deleted) |
 | `lead:<ld_id>` | outreach lead object (sent/clicks/replies) |

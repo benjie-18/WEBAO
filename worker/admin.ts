@@ -28,7 +28,7 @@ import {
   isMonthKey,
 } from "./util";
 import type { Session } from "./track";
-import { handleLeadsList, handleLeadDelete, LEADS_INDEX, type Lead } from "./leads";
+import { handleLeadsList, handleLeadDelete, type Lead } from "./leads";
 import {
   CLIENTS_INDEX,
   createClient,
@@ -48,8 +48,6 @@ import { getBuildState, publishBuild, runBuild, type BuildState } from "./builds
 import { listAbandoned } from "./recovery";
 import { buildLaunchPacket, recordAdsSpend } from "./ads";
 import { clampStr } from "./util";
-
-const FORMS_INDEX = "forms:index";
 
 export async function handleAdmin(req: Request, env: Env, url: URL): Promise<Response> {
   const kv = env.WEBAO_KV;
@@ -128,11 +126,6 @@ function rangeDays(range: RangeName, today: string): string[] {
   return out;
 }
 
-interface DayCounts {
-  day: string;
-  counts: { path: string; n: number }[];
-}
-
 /**
  * GET /api/admin/stats?range=day|week|month|year&page=<path|all>
  * views/visitors series, top pages, device + country breakdowns.
@@ -153,45 +146,42 @@ async function handleStats(kv: KVNamespace, url: URL): Promise<Response> {
 
   const today = dayKey();
   const days = rangeDays(range, today);
+  const daySet = new Set(days);
 
-  // --- 1. Views: per-day per-path counts from the daily view keys ---
-  const dayData: DayCounts[] = await batch(days, 25, async (day) => {
-    const keys = await listAllKeys(kv, `views:${day}:`, 5000);
-    const counts = await batch(keys, 50, async (k) => {
-      const encPath = k.slice(`views:${day}:`.length);
-      if (encPath === "__all") return { path: "__all", n: 0 };
-      // A malformed escape in a stored key must not take the whole stats
-      // endpoint down; fall back to the raw key segment.
-      let path = encPath;
-      try {
-        path = decodeURIComponent(encPath);
-      } catch {
-        /* keep the raw segment */
-      }
-      const v = await kv.get(k);
-      return { path, n: v ? parseInt(v, 10) || 0 : 0 };
-    });
-    return { day, counts: counts.filter((c) => c.path !== "__all") };
-  });
-
-  const perPath = new Map<string, number>();
-  const viewsByDay = new Map<string, number>();
-  for (const { day, counts } of dayData) {
-    let dayTotal = 0;
-    for (const { path, n } of counts) {
-      perPath.set(path, (perPath.get(path) || 0) + n);
-      if (!pageFilter || path === pageFilter) dayTotal += n;
-    }
-    viewsByDay.set(day, dayTotal);
-  }
-
-  // --- 2. Visitors/devices/countries: scan sessions by startedAt ---
+  // --- 1. Sessions: one scan feeds both views and visitors ---
+  // Views used to come from per-day per-path counter keys
+  // (views:<day>:<path>), one KV write per pageview. The counters are
+  // gone: every pageview is already stored in its session (path +
+  // timestamp), so views are derived from the sessions themselves and
+  // a pageview costs exactly one write. Trade-off: sessions expire
+  // after 365 days and keep only the last 100 pages, so derived views
+  // undercount very old or very long sessions where the counters
+  // never decayed. Old views: keys are inert leftovers.
   const startTs = Date.parse(days[0] + "T00:00:00Z");
   const endTs = Date.parse(today + "T00:00:00Z") + 24 * 3600 * 1000;
   const sessionKeys = await listAllKeys(kv, "session:", 20000);
-  const sessions = (
-    await batch(sessionKeys, 50, (k) => getJson<Session>(kv, k))
-  ).filter((s): s is Session => !!s && s.startedAt >= startTs && s.startedAt < endTs);
+  const allSessions = (await batch(sessionKeys, 50, (k) => getJson<Session>(kv, k))).filter(
+    (s): s is Session => !!s,
+  );
+
+  // Views: bucket every stored page by the day it happened, so a
+  // session that started before the range still contributes the pages
+  // it served inside the range.
+  const perPath = new Map<string, number>();
+  const viewsByDay = new Map<string, number>();
+  for (const s of allSessions) {
+    for (const p of s.pages || []) {
+      if (typeof p.at !== "number" || typeof p.path !== "string") continue;
+      const d = dayKey(p.at);
+      if (!daySet.has(d)) continue;
+      perPath.set(p.path, (perPath.get(p.path) || 0) + 1);
+      if (!pageFilter || p.path === pageFilter) viewsByDay.set(d, (viewsByDay.get(d) || 0) + 1);
+    }
+  }
+  for (const d of days) if (!viewsByDay.has(d)) viewsByDay.set(d, 0);
+
+  // --- 2. Visitors/devices/countries: sessions started in the range ---
+  const sessions = allSessions.filter((s) => s.startedAt >= startTs && s.startedAt < endTs);
 
   const visitorsByDay = new Map<string, number>();
   const devices = { mobile: 0, tablet: 0, desktop: 0 };
@@ -308,26 +298,29 @@ async function handleFormsList(kv: KVNamespace, url: URL): Promise<Response> {
   const cursor = Math.max(isNaN(rawCursor) ? 0 : rawCursor, 0);
   const typeFilter = url.searchParams.get("type");
 
-  const index = (await getJson<string[]>(kv, FORMS_INDEX)) || [];
-  // Fetch a wider slice when filtering, since we filter after fetch
-  const fetchLimit = typeFilter ? limit * 4 : limit;
-  const slice = index.slice(cursor, cursor + fetchLimit);
+  // No index key: list the form: records and sort newest-first by `at`
+  // (form ids start with the submission timestamp, so key order is
+  // chronological too, but the record timestamp is the authority).
+  const keys = await listAllKeys(kv, "form:", 1000);
   let items = (
-    await batch(slice, 25, async (key) => {
+    await batch(keys, 25, async (key) => {
       const rec = await getJson<Record<string, unknown>>(kv, key);
       return rec ? { id: key.slice("form:".length), ...rec } : null;
     })
   ).filter((x): x is Record<string, unknown> & { id: string } => x !== null);
+  items.sort(
+    (a, b) =>
+      (Number(b.at) || 0) - (Number(a.at) || 0) || (a.id < b.id ? 1 : a.id > b.id ? -1 : 0),
+  );
 
   if (typeFilter) {
     items = items.filter((item) => (item as { form?: string }).form === typeFilter);
-    items = items.slice(0, limit);
   }
 
   return json({
     ok: true,
-    items,
-    nextCursor: cursor + fetchLimit < index.length ? String(cursor + fetchLimit) : null,
+    items: items.slice(cursor, cursor + limit),
+    nextCursor: cursor + limit < items.length ? String(cursor + limit) : null,
   });
 }
 
@@ -348,16 +341,11 @@ async function handleFormDelete(kv: KVNamespace, path: string): Promise<Response
   if (!/^[\w:.-]+$/.test(id) || id.length > 64) return err("Invalid id", 400);
   const key = "form:" + id;
   await deleteKey(kv, key);
-  const index = (await getJson<string[]>(kv, FORMS_INDEX)) || [];
-  const next = index.filter((k) => k !== key);
-  if (next.length !== index.length) await putJson(kv, FORMS_INDEX, next);
   return json({ ok: true });
 }
 
 // Audits: free-audit results stored by worker/audit.ts
 // ---------------------------------------------------------------------------
-
-const AUDITS_INDEX = "audit:index";
 
 /** GET /api/admin/audits?limit=50&cursor= — newest-first, cursor-paginated. */
 async function handleAuditsList(kv: KVNamespace, url: URL): Promise<Response> {
@@ -366,19 +354,27 @@ async function handleAuditsList(kv: KVNamespace, url: URL): Promise<Response> {
   const rawCursor = parseInt(url.searchParams.get("cursor") || "0", 10);
   const cursor = Math.max(isNaN(rawCursor) ? 0 : rawCursor, 0);
 
-  const index = (await getJson<string[]>(kv, AUDITS_INDEX)) || [];
-  const slice = index.slice(cursor, cursor + limit);
+  // No index key: list the audit: records and sort newest-first by `at`.
+  // Only record keys match /^audit:\d+:/ — the ratelimit counters
+  // (audit:ratelimit:<ip>), the /full lock keys (audit:full:<id>) and the
+  // old audit:index key are excluded by the pattern.
+  const keys = (await listAllKeys(kv, "audit:", 1000)).filter((k) => /^audit:\d+:/.test(k));
   const items = (
-    await batch(slice, 25, async (key) => {
+    await batch(keys, 25, async (key) => {
       const rec = await getJson<Record<string, unknown>>(kv, key);
       return rec ? { id: key.slice("audit:".length), ...rec } : null;
     })
-  ).filter((x): x is Record<string, unknown> & { id: string } => x !== null);
+  )
+    .filter((x): x is Record<string, unknown> & { id: string } => x !== null)
+    .sort(
+      (a, b) =>
+        (Number(b.at) || 0) - (Number(a.at) || 0) || (a.id < b.id ? 1 : a.id > b.id ? -1 : 0),
+    );
 
   return json({
     ok: true,
-    items,
-    nextCursor: cursor + limit < index.length ? String(cursor + limit) : null,
+    items: items.slice(cursor, cursor + limit),
+    nextCursor: cursor + limit < items.length ? String(cursor + limit) : null,
   });
 }
 
@@ -399,9 +395,6 @@ async function handleAuditDelete(kv: KVNamespace, path: string): Promise<Respons
   if (!/^[\w:.-]+$/.test(id) || id.length > 64) return err("Invalid id", 400);
   const key = "audit:" + id;
   await deleteKey(kv, key);
-  const index = (await getJson<string[]>(kv, AUDITS_INDEX)) || [];
-  const next = index.filter((k) => k !== key);
-  if (next.length !== index.length) await putJson(kv, AUDITS_INDEX, next);
   return json({ ok: true });
 }
 
@@ -451,10 +444,10 @@ async function handleCharts(kv: KVNamespace, url: URL): Promise<Response> {
     if (i !== undefined) arr[i] += 1;
   };
 
-  // --- Forms: totals + per-type series from the submissions index ---
+  // --- Forms: totals + per-type series from the submissions ---
   const formsTotal = series();
   const formsByType = { contact: series(), support: series(), pricing: series() };
-  const formKeys = (await getJson<string[]>(kv, FORMS_INDEX)) || [];
+  const formKeys = await listAllKeys(kv, "form:", 1000);
   const formRecs = await batch(formKeys.slice(0, 1000), 25, (k) =>
     getJson<{ form?: string; at?: number }>(kv, k),
   );
@@ -471,7 +464,7 @@ async function handleCharts(kv: KVNamespace, url: URL): Promise<Response> {
   const leadsReplied = series();
   const leadStages = { replied: 0, clicked: 0, none: 0, optout: 0, bounced: 0 };
   const clickDests = { demos: 0, home: 0, pricing: 0, start: 0 };
-  const leadKeys = (await getJson<string[]>(kv, LEADS_INDEX)) || [];
+  const leadKeys = await listAllKeys(kv, "lead:", 5000);
   const leadRecs = await batch(leadKeys.slice(0, 1000), 25, (k) => getJson<Lead>(kv, k));
   for (const lead of leadRecs) {
     if (!lead) continue;

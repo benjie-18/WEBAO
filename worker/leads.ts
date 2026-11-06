@@ -8,22 +8,20 @@
 // back with POST /api/leads/reply (by lead id, else by sender email) by
 // whatever reads the WEBAO inbox, e.g. the daily inbox report job.
 //
-// Records live in KV as lead:<id> with a newest-first leads:index capped at
-// 5000 entries. Trimming the index only bounds listings: records are never
-// deleted on eviction (the old code destroyed click/reply history once the
-// cap filled, about 24 days in at full outreach tilt). Lead ids are 24
+// Records live in KV as lead:<id>; the admin lists them by the "lead:"
+// prefix (newest first by sentAt, capped at 5000). No index key is kept:
+// rewriting one on every register cost a KV write per send. Lead ids are 24
 // random hex chars minted by the sender (or here, when omitted), so a
 // tracked link is unguessable and only the recipient and the sender know it.
 //
-// Ingest posture matches /api/forms/submit (same-origin gate + per-IP
-// throttle). When the LEADS_INGEST_KEY secret is set on the worker, register
+// Ingest posture matches /api/forms/submit (same-origin gate + the edge
+// rate-limit rule on /api/leads/*, /go/*, /api/forms/* and
+// /api/checkout/*). When the LEADS_INGEST_KEY secret is set on the worker, register
 // and reply additionally require it in the x-ingest-key header; set the same
 // key on the sender side to harden the endpoints.
 
-import { getJson, putJson, deleteKey } from "./kv";
-import { throttle } from "./auth";
+import { getJson, putJson, deleteKey, listAllKeys } from "./kv";
 import {
-  clientIp,
   clientCountry,
   clampStr,
   readJson,
@@ -36,8 +34,7 @@ import {
   EMAIL_RE,
 } from "./util";
 
-export const LEADS_INDEX = "leads:index";
-const MAX_INDEX = 5000;
+const MAX_LISTED = 5000;
 const MAX_CLICKS = 100;
 const MAX_REPLIES = 50;
 
@@ -101,8 +98,7 @@ function isDest(v: string | null): v is LeadDest {
  * Shared ingest gate for register/reply. Returns a Response to send back when
  * the request is denied, or null when it may proceed.
  */
-async function ingestGate(req: Request, env: Env, scope: string): Promise<Response | null> {
-  const kv = env.WEBAO_KV;
+async function ingestGate(req: Request, env: Env): Promise<Response | null> {
   const ingestKey = env.LEADS_INGEST_KEY;
   if (ingestKey) {
     const given = req.headers.get("x-ingest-key") || "";
@@ -110,7 +106,10 @@ async function ingestGate(req: Request, env: Env, scope: string): Promise<Respon
   } else if (!originAllowed(req, true, env)) {
     return err("Forbidden origin", 403);
   }
-  if (!(await throttle(kv, scope, clientIp(req), 20))) return err("Rate limited", 429);
+  // No in-worker throttle here: every throttle check is a KV write, and
+  // register/reply are hit on every outreach send. The edge rate-limit
+  // rule ("WEBAO track rate limit") covers /api/leads/* at 20 requests
+  // per 10 s per IP, which is the per-IP cap for these endpoints.
   return null;
 }
 
@@ -137,7 +136,7 @@ interface RegisterBody {
 
 /** POST /api/leads/register — record a sent outreach email, mint its links. */
 export async function handleLeadRegister(req: Request, env: Env): Promise<Response> {
-  const denied = await ingestGate(req, env, "leads-register");
+  const denied = await ingestGate(req, env);
   if (denied) return denied;
   const kv = env.WEBAO_KV;
 
@@ -185,12 +184,9 @@ export async function handleLeadRegister(req: Request, env: Env): Promise<Respon
   const key = "lead:" + id;
   await putJson(kv, key, lead);
 
-  const index = (await getJson<string[]>(kv, LEADS_INDEX)) || [];
-  index.unshift(key);
-  // Trimming bounds listings only; evicted records stay in KV (see header).
-  if (index.length > MAX_INDEX) index.splice(MAX_INDEX);
-  await putJson(kv, LEADS_INDEX, index);
-
+  // No index key: the admin Leads tab lists records by the "lead:"
+  // prefix instead, so registering a send costs exactly one write.
+  // (The old leads:index key is an inert leftover.)
   return json({ ok: true, id, links, replyTo });
 }
 
@@ -208,10 +204,12 @@ export async function handleGo(req: Request, env: Env, url: URL): Promise<Respon
   if (!m) return redirect();
 
   // Logging is best-effort: a KV problem must never break a link that is
-  // already sitting in someone's inbox.
+  // already sitting in someone's inbox. No in-worker throttle here:
+  // every throttle check is a KV write, doubling the cost of a click.
+  // The edge rate-limit rule ("WEBAO track rate limit") covers /go/*
+  // at 20 requests per 10 s per IP, which is the per-IP cap here.
   try {
     const kv = env.WEBAO_KV;
-    if (!(await throttle(kv, "go", clientIp(req), 120))) return redirect();
     const key = "lead:" + m[1];
     const lead = await getJson<Lead>(kv, key);
     if (!lead) return redirect();
@@ -244,7 +242,7 @@ interface ReplyBody {
 
 /** POST /api/leads/reply — match an inbox reply/opt-out/bounce to its lead. */
 export async function handleLeadReply(req: Request, env: Env): Promise<Response> {
-  const denied = await ingestGate(req, env, "leads-reply");
+  const denied = await ingestGate(req, env);
   if (denied) return denied;
   const kv = env.WEBAO_KV;
 
@@ -267,8 +265,10 @@ export async function handleLeadReply(req: Request, env: Env): Promise<Response>
   if (!lead) {
     const email = clampStr(body.email || body.from, 160).trim().toLowerCase();
     if (!EMAIL_RE.test(email)) return err("leadId or a valid email is required");
-    const index = (await getJson<string[]>(kv, LEADS_INDEX)) || [];
-    const records = await batch(index.slice(0, MAX_INDEX), 25, (k) => getJson<Lead>(kv, k));
+    // No index key: list the lead: records (newest first) and match by email.
+    const keys = await listAllKeys(kv, "lead:", MAX_LISTED);
+    const records = await batch(keys, 25, (k) => getJson<Lead>(kv, k));
+    records.sort((a, b) => (b?.sentAt || 0) - (a?.sentAt || 0));
     lead = records.find((r): r is Lead => !!r && r.email === email) || null;
   }
   if (!lead) return json({ ok: true, matched: false });
@@ -299,19 +299,24 @@ export async function handleLeadsList(kv: KVNamespace, url: URL): Promise<Respon
   const rawCursor = parseInt(url.searchParams.get("cursor") || "0", 10);
   const cursor = Math.max(isNaN(rawCursor) ? 0 : rawCursor, 0);
 
-  const index = (await getJson<string[]>(kv, LEADS_INDEX)) || [];
-  const slice = index.slice(cursor, cursor + limit);
-  const items = (
-    await batch(slice, 25, async (key) => {
+  // No index key: list the lead: records and sort newest-first by sentAt
+  // (lead ids are random hex, so key order is not chronological).
+  const keys = await listAllKeys(kv, "lead:", MAX_LISTED);
+  const records = (
+    await batch(keys, 25, async (key) => {
       const rec = await getJson<Lead>(kv, key);
       return rec ? { ...rec } : null;
     })
   ).filter((x): x is Lead => x !== null);
+  records.sort(
+    (a, b) => (b.sentAt || 0) - (a.sentAt || 0) || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0),
+  );
+  const items = records.slice(cursor, cursor + limit);
 
   return json({
     ok: true,
     items,
-    nextCursor: cursor + limit < index.length ? String(cursor + limit) : null,
+    nextCursor: cursor + limit < records.length ? String(cursor + limit) : null,
   });
 }
 
@@ -328,8 +333,5 @@ export async function handleLeadDelete(kv: KVNamespace, path: string): Promise<R
   if (!LEAD_ID_RE.test(id)) return err("Invalid id", 400);
   const key = "lead:" + id;
   await deleteKey(kv, key);
-  const index = (await getJson<string[]>(kv, LEADS_INDEX)) || [];
-  const next = index.filter((k) => k !== key);
-  if (next.length !== index.length) await putJson(kv, LEADS_INDEX, next);
   return json({ ok: true });
 }
