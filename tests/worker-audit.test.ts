@@ -380,6 +380,74 @@ test('full audit fallback localizes the slow-metric name in French', async () =>
   }
 });
 
+test('plain-http site estimate is capped very low and records https false', async () => {
+  const memory = memoryKV();
+  const env = envOf(memory.kv);
+  const restore = stubHomepage(GOOD_HTML, 'http://example.com/');
+  try {
+    const res = await handleAudit(apiRequest('/api/audit', { url: 'http://example.com/', lang: 'en' }), env);
+    assert.equal(res.status, 200);
+    const data = await bodyOf(res) as { id: string; score: number };
+    // GOOD_HTML passes every basic check except HTTPS (-20), so the
+    // uncapped estimate could reach 48; the http cap holds it at 30.
+    assert.ok(data.score <= 30);
+    const stored = await memory.kv.get(`audit:${data.id}`, { type: 'json' }) as AuditRecord | null;
+    assert.ok(stored);
+    assert.equal(stored.https, false);
+    assert.ok(stored.findings.some((f) => f.includes('HTTPS')));
+  } finally {
+    restore();
+  }
+});
+
+test('plain-http site full audit is capped very low with HTTPS first', async () => {
+  const psiPayload = {
+    lighthouseResult: {
+      categories: {
+        performance: { score: 0.9 },
+        accessibility: { score: 1 },
+        'best-practices': { score: 0.9 },
+        seo: { score: 1 },
+      },
+      audits: {
+        'largest-contentful-paint': { title: 'Largest Contentful Paint', displayValue: '1.2 s', score: 0.95 },
+        'cumulative-layout-shift': { title: 'Cumulative Layout Shift', displayValue: '0', score: 1 },
+        'first-contentful-paint': { title: 'First Contentful Paint', displayValue: '0.8 s', score: 0.95 },
+        'total-blocking-time': { title: 'Total Blocking Time', displayValue: '0 ms', score: 1 },
+        'speed-index': { title: 'Speed Index', displayValue: '1.0 s', score: 0.95 },
+      },
+    },
+  };
+  const original = globalThis.fetch;
+  globalThis.fetch = (async (input: RequestInfo | URL) => {
+    if (String(input).includes('pagespeedonline')) {
+      return { ok: true, status: 200, json: async () => psiPayload } as unknown as Response;
+    }
+    return { ok: true, status: 200, url: 'http://example.com/', text: async () => GOOD_HTML } as unknown as Response;
+  }) as typeof fetch;
+  try {
+    const memory = memoryKV();
+    const env = envOf(memory.kv, { PAGESPEED_API_KEY: 'test-key' });
+    const first = await handleAudit(apiRequest('/api/audit', { url: 'http://example.com/', lang: 'en' }), env);
+    const created = await bodyOf(first) as { id: string };
+    const res = await handleAuditFull(
+      apiRequest(`/api/audit/${encodeURIComponent(created.id)}/full`, {}),
+      env,
+      `/api/audit/${created.id}/full`,
+    );
+    assert.equal(res.status, 200);
+    const data = await bodyOf(res) as { audit: AuditRecord };
+    // PSI alone would score this site ~94; no HTTPS caps it at 30.
+    assert.ok(data.audit.score <= 30);
+    assert.equal(data.audit.partial, false);
+    assert.equal(data.audit.pending, false);
+    assert.ok(data.audit.findings[0].includes('HTTPS'));
+    assert.ok(!data.audit.findings.some((f) => f.includes('No major problems')));
+  } finally {
+    globalThis.fetch = original;
+  }
+});
+
 test('POST /api/audit/:id/full returns 404 for an unknown id', async () => {
   const memory = memoryKV();
   const env = envOf(memory.kv, { PAGESPEED_API_KEY: 'test-key' });

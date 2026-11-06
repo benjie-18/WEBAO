@@ -24,6 +24,10 @@ const PSI_FULL_TIMEOUT_MS = 180_000;
 const AUDIT_INDEX = "audit:index";
 const MAX_INDEX = 1000;
 const RATE_LIMIT_PER_HOUR = 5;
+// A site served over plain HTTP is a fundamental security and SEO
+// failure: its score is capped here, in the estimate and in the
+// full audit, whatever PageSpeed says.
+const HTTP_SCORE_CAP = 30;
 
 const CATEGORY_WEIGHTS: Record<string, number> = {
   performance: 0.5,
@@ -35,6 +39,10 @@ const CATEGORY_WEIGHTS: Record<string, number> = {
 export interface AuditRecord {
   id: string;
   url: string;
+  /** True when the audited page was served over HTTPS (after any
+   * redirects). False for plain-http sites, which are capped at a
+   * very low score. Absent on records created before this field. */
+  https?: boolean;
   score: number;
   findings: string[];
   strengths: string[];
@@ -454,11 +462,15 @@ export async function handleAudit(req: Request, env: Env): Promise<Response> {
   }
   const basic = runBasicChecks(page.html, page.finalUrl, page.fetchMs, lang);
   const findings = [tr("partialNote", lang), ...basic.findings];
-
+  // Plain HTTP is capped very low from the estimate onward, so the
+  // initial score never shows higher than the final score can be.
+  const https = page.finalUrl.startsWith("https://");
+  const estimate = provisionalScore(basic.score);
   const record: AuditRecord = {
     id: newAuditId(),
     url,
-    score: provisionalScore(basic.score),
+    https,
+    score: https ? estimate : Math.min(estimate, HTTP_SCORE_CAP),
     findings,
     strengths: [],
     categories: {},
@@ -535,6 +547,17 @@ export async function handleAuditFull(req: Request, env: Env, path: string): Pro
     record.strengths = strengthsFromCategories(psi.categories, record.lang);
     record.metrics = psi.metrics;
     record.partial = false;
+    // A site served over plain HTTP is a fundamental security and
+    // SEO failure: cap the score very low and make the missing HTTPS
+    // the first thing to fix, whatever PageSpeed says. The "no major
+    // problems" line is dropped: missing HTTPS is a major problem.
+    if (record.https === false) {
+      record.score = Math.min(record.score, HTTP_SCORE_CAP);
+      const noHttps = tr("noHttps", record.lang);
+      const findings = record.findings.filter((f) => f !== tr("none", record.lang));
+      if (!findings.includes(noHttps)) findings.unshift(noHttps);
+      record.findings = findings;
+    }
   } catch {
     // PageSpeed failed or timed out: keep the initial estimate.
   }
