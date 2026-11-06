@@ -3,7 +3,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 
 const locale = "fr" as const;
 const title = "Politique de remboursement · WEBAO";
-const description = "Politique de remboursement de WEBAO : remboursement des frais de conception, conditions d'annulation de l'abonnement.";
+const description = "Politique de remboursement de WEBAO : conditions d'annulation de l'abonnement.";
 ---
 
 <BaseLayout title={title} description={description} locale={locale} pageKey="refunds">
@@ -12,31 +12,19 @@ const description = "Politique de remboursement de WEBAO : remboursement des fra
       <div class="eyebrow">Politique</div>
       <h1 class="display" style="font-size: clamp(2rem, 5vw, 3.6rem); line-height:.92; margin-top:12px;">Politique de remboursement</h1>
       <p class="prose" style="margin-top:14px; max-width: 60ch;">
-        Simple et clair. Si vous changez d'idée au début, vous êtes remboursé.
-        Une fois le travail commencé, les frais de conception couvrent le
-        travail personnalisé déjà effectué.
+        Simple et clair. Les forfaits site web n'ont aucuns frais de conception,
+        il n'y a donc rien à rembourser à ce chapitre. Les abonnements mensuels
+        sont payés d'avance, sans remboursement pour la période de facturation
+        en cours.
       </p>
 
       <div style="margin-top: 36px; display:grid; gap: 20px;">
         <div style="border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
-          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 12px;">Frais de conception (149 $)</h2>
+          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 12px;">Abonnement mensuel (89,99 $–349,99 $/mois, selon votre forfait)</h2>
           <p class="prose" style="font-size:14px; margin:0;">
-            Remboursement complet si vous en faites la demande <strong>dans les 48 heures suivant le paiement</strong>,
-            ou <strong>avant le début des travaux sur votre site</strong>, selon la première éventualité.
-          </p>
-          <p class="prose" style="font-size:14px; margin:12px 0 0; color: var(--muted);">
-            Une fois les travaux commencés, les frais de conception ne sont pas
-            remboursables. Chaque site est construit à partir de zéro pour votre
-            entreprise, et ce travail ne peut pas être défait.
-          </p>
-        </div>
-
-        <div style="border:1px solid var(--line); border-radius:16px; padding:24px; background: var(--card-bg);">
-          <h2 style="font-size:17px; letter-spacing:-0.01em; margin:0 0 12px;">Abonnement mensuel (29 $/mois)</h2>
-          <p class="prose" style="font-size:14px; margin:0;">
-            Annulez en tout temps. Il n'y a <strong>aucun remboursement pour la période de facturation en cours</strong>,
-            mais votre site reste en ligne jusqu'à la fin de la période que vous
-            avez payée. Aucuns frais d'annulation, aucun préavis requis.
+            Annulez avec un préavis de 30 jours. <strong>Aucun remboursement pour la période de facturation en cours</strong>,
+            mais votre site reste en ligne jusqu'à la fin de la période payée.
+            Aucuns frais d'annulation.
           </p>
         </div>
 
@@ -52,7 +40,7 @@ const description = "Politique de remboursement de WEBAO : remboursement des fra
       </div>
 
       <p class="mono" style="margin-top:28px; font-size:11px; color: var(--muted);">
-        Dernière mise à jour : octobre 2026. WEBAO se réserve le droit de mettre
+        Dernière mise à jour : novembre 2026. WEBAO se réserve le droit de mettre
         à jour cette politique; la version en vigueur au moment de votre achat
         s'applique.
       </p>
