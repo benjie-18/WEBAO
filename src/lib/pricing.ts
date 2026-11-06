@@ -104,6 +104,7 @@ export const remainingAddonOrder = [
   "email",
   "report",
   "extrapage",
+  "website-touchup",
   "priority",
   "admin",
   "quotephoto",
@@ -131,6 +132,7 @@ export const compatibility: CompatRow[] = [
   { key: "email", launch: "A", grow: "A", scale: "A" },
   { key: "report", launch: "A", grow: "A", scale: "I" },
   { key: "extrapage", note: 25, launch: "A", grow: "A", scale: "A" },
+  { key: "website-touchup", note: 31, launch: "A", grow: "A", scale: "A" },
   { key: "priority", note: 26, launch: "A", grow: "A", scale: "A" },
   { key: "admin", note: 27, launch: "N", grow: "A", scale: "A" },
   { key: "quotephoto", note: 28, launch: "A", grow: "I", scale: "I" },
@@ -145,5 +147,5 @@ export const termSections = [
   { id: "details", notes: [5, 6, 7, 8, 10, 11, 13, 14, 23] },
   { id: "bundles", notes: [15, 16, 17] },
   { id: "ads", notes: [30] },
-  { id: "addons", notes: [18, 19, 20, 21, 22, 24, 25, 26, 27, 28, 29] },
+  { id: "addons", notes: [18, 19, 20, 21, 22, 24, 25, 26, 27, 28, 29, 31] },
 ] as const;

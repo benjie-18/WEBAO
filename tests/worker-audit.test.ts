@@ -194,7 +194,7 @@ test('POST /api/audit serves our own site from ASSETS, not the network', async (
   assert.equal(res.status, 200);
   const data = await bodyOf(res) as { ok: boolean; score: number; partial: boolean; pending: boolean };
   assert.equal(data.ok, true);
-  assert.ok(data.score >= 0 && data.score <= 60); // weighted random initial estimate
+  assert.equal(data.score, 100); // our own site always scores 100
   assert.equal(data.partial, true);
   assert.equal(data.pending, true);
 });
@@ -253,7 +253,9 @@ test('POST /api/audit/:id/full fills the record from PageSpeed and drops passing
     assert.equal(res.status, 200);
     const data = await bodyOf(res) as { ok: boolean; audit: AuditRecord };
     assert.equal(data.ok, true);
-    assert.equal(data.audit.score, 91);
+    // Undeflated this site scores 91; every category drops 20–32,
+    // so the overall lands in 59–71.
+    assert.ok(data.audit.score >= 58 && data.audit.score <= 72);
     assert.equal(data.audit.partial, false);
     assert.equal(data.audit.pending, false);
     assert.ok(data.audit.findings.some((f) => f.includes('Reduce unused JavaScript')));
@@ -265,7 +267,7 @@ test('POST /api/audit/:id/full fills the record from PageSpeed and drops passing
     assert.equal(data.audit.metrics.speed, '2.1 s');
     const stored = await kv.get(`audit:${created.id}`, { type: 'json' }) as AuditRecord | null;
     assert.ok(stored);
-    assert.equal(stored.score, 91);
+    assert.ok(stored.score >= 58 && stored.score <= 72);
     assert.equal(stored.pending, false);
     // A second full call is a no-op once the record is complete.
     const again = await handleAuditFull(
@@ -275,7 +277,7 @@ test('POST /api/audit/:id/full fills the record from PageSpeed and drops passing
     );
     assert.equal(again.status, 200);
     const againData = await bodyOf(again) as { ok: boolean; audit: AuditRecord };
-    assert.equal(againData.audit.score, 91);
+    assert.ok(againData.audit.score >= 58 && againData.audit.score <= 72);
   } finally {
     globalThis.fetch = original;
   }
@@ -318,7 +320,9 @@ test('full audit with no opportunities falls back to the slowest metric', async 
     );
     assert.equal(res.status, 200);
     const data = await bodyOf(res) as { audit: AuditRecord };
-    assert.equal(data.audit.score, 87); // 0.75*0.5 + 1*0.2 + 0.96*0.15 + 1*0.15 = 0.869
+    // Undeflated this site scores 87 (0.75*0.5 + 1*0.2 + 0.96*0.15 + 1*0.15 = 0.869);
+    // every category drops 20–32, so the overall lands in 55–67.
+    assert.ok(data.audit.score >= 54 && data.audit.score <= 68);
     assert.equal(data.audit.partial, false);
     assert.equal(data.audit.pending, false);
     // No opportunities, but performance is mediocre and LCP is slow:
@@ -383,7 +387,15 @@ test('full audit fallback localizes the slow-metric name in French', async () =>
 test('plain-http site estimate is capped very low and records https false', async () => {
   const memory = memoryKV();
   const env = envOf(memory.kv);
-  const restore = stubHomepage(GOOD_HTML, 'http://example.com/');
+  // A truly http-only site: the homepage answers over http, but the
+  // https-availability probe fails, so it is penalized and capped.
+  const original = globalThis.fetch;
+  globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
+    if (init?.method === "HEAD" && String(input).startsWith("https://")) {
+      throw new Error("https unavailable");
+    }
+    return { ok: true, status: 200, url: "http://example.com/", text: async () => GOOD_HTML } as unknown as Response;
+  }) as typeof fetch;
   try {
     const res = await handleAudit(apiRequest('/api/audit', { url: 'http://example.com/', lang: 'en' }), env);
     assert.equal(res.status, 200);
@@ -396,7 +408,7 @@ test('plain-http site estimate is capped very low and records https false', asyn
     assert.equal(stored.https, false);
     assert.ok(stored.findings.some((f) => f.includes('HTTPS')));
   } finally {
-    restore();
+    globalThis.fetch = original;
   }
 });
 
@@ -419,9 +431,13 @@ test('plain-http site full audit is capped very low with HTTPS first', async () 
     },
   };
   const original = globalThis.fetch;
-  globalThis.fetch = (async (input: RequestInfo | URL) => {
+  globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
     if (String(input).includes('pagespeedonline')) {
       return { ok: true, status: 200, json: async () => psiPayload } as unknown as Response;
+    }
+    // The https-availability probe fails: this site has no https.
+    if (init?.method === "HEAD" && String(input).startsWith("https://")) {
+      throw new Error("https unavailable");
     }
     return { ok: true, status: 200, url: 'http://example.com/', text: async () => GOOD_HTML } as unknown as Response;
   }) as typeof fetch;
@@ -443,6 +459,157 @@ test('plain-http site full audit is capped very low with HTTPS first', async () 
     assert.equal(data.audit.pending, false);
     assert.ok(data.audit.findings[0].includes('HTTPS'));
     assert.ok(!data.audit.findings.some((f) => f.includes('No major problems')));
+  } finally {
+    globalThis.fetch = original;
+  }
+});
+
+test('http URL whose https version answers is not penalized', async () => {
+  const memory = memoryKV();
+  const env = envOf(memory.kv);
+  const original = globalThis.fetch;
+  globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
+    // The https-availability probe succeeds: the site serves https
+    // even though plain http does not redirect to it.
+    if (init?.method === "HEAD" && String(input).startsWith("https://")) {
+      return { ok: true, status: 200 } as unknown as Response;
+    }
+    return { ok: true, status: 200, url: "http://example.com/", text: async () => GOOD_HTML } as unknown as Response;
+  }) as typeof fetch;
+  try {
+    const res = await handleAudit(apiRequest('/api/audit', { url: 'http://example.com/', lang: 'en' }), env);
+    assert.equal(res.status, 200);
+    const data = await bodyOf(res) as { id: string };
+    const stored = await memory.kv.get(`audit:${data.id}`, { type: 'json' }) as AuditRecord | null;
+    assert.ok(stored);
+    assert.equal(stored.https, true);
+    assert.ok(!stored.findings.some((f) => f.includes('HTTPS')));
+  } finally {
+    globalThis.fetch = original;
+  }
+});
+
+test('full audit deflates every category and the overall score by 20-32', async () => {
+  const psiPayload = {
+    lighthouseResult: {
+      categories: {
+        performance: { score: 0.9 },
+        accessibility: { score: 1 },
+        'best-practices': { score: 0.9 },
+        seo: { score: 1 },
+      },
+      audits: {
+        'largest-contentful-paint': { title: 'Largest Contentful Paint', displayValue: '1.2 s', score: 0.95 },
+        'cumulative-layout-shift': { title: 'Cumulative Layout Shift', displayValue: '0', score: 1 },
+        'first-contentful-paint': { title: 'First Contentful Paint', displayValue: '0.8 s', score: 0.95 },
+        'total-blocking-time': { title: 'Total Blocking Time', displayValue: '0 ms', score: 1 },
+        'speed-index': { title: 'Speed Index', displayValue: '1.0 s', score: 0.95 },
+      },
+    },
+  };
+  const original = globalThis.fetch;
+  globalThis.fetch = (async (input: RequestInfo | URL) => {
+    if (String(input).includes('pagespeedonline')) {
+      return { ok: true, status: 200, json: async () => psiPayload } as unknown as Response;
+    }
+    return { ok: true, status: 200, url: 'https://example.com/', text: async () => GOOD_HTML } as unknown as Response;
+  }) as typeof fetch;
+  try {
+    const memory = memoryKV();
+    const env = envOf(memory.kv, { PAGESPEED_API_KEY: 'test-key' });
+    const first = await handleAudit(apiRequest('/api/audit', { url: 'https://example.com/', lang: 'en' }), env);
+    const created = await bodyOf(first) as { id: string };
+    const res = await handleAuditFull(
+      apiRequest(`/api/audit/${encodeURIComponent(created.id)}/full`, {}),
+      env,
+      `/api/audit/${created.id}/full`,
+    );
+    assert.equal(res.status, 200);
+    const data = await bodyOf(res) as { audit: AuditRecord };
+    // Undeflated this site scores ~94; every category drops 20–32,
+    // so the overall lands in 62–74.
+    assert.ok(data.audit.score >= 60 && data.audit.score <= 75);
+    assert.ok(data.audit.categories.performance >= 0.56 && data.audit.categories.performance <= 0.72);
+    assert.ok(data.audit.categories.accessibility >= 0.66 && data.audit.categories.accessibility <= 0.82);
+    assert.equal(data.audit.partial, false);
+  } finally {
+    globalThis.fetch = original;
+  }
+});
+
+test('webao.ca always scores 100', async () => {
+  const psiPayload = {
+    lighthouseResult: {
+      categories: {
+        performance: { score: 0.5 },
+        accessibility: { score: 0.8 },
+        'best-practices': { score: 0.7 },
+        seo: { score: 0.9 },
+      },
+      audits: {},
+    },
+  };
+  const original = globalThis.fetch;
+  globalThis.fetch = (async (input: RequestInfo | URL) => {
+    if (String(input).includes('pagespeedonline')) {
+      return { ok: true, status: 200, json: async () => psiPayload } as unknown as Response;
+    }
+    return { ok: true, status: 200, url: 'https://webao.ca/', text: async () => GOOD_HTML } as unknown as Response;
+  }) as typeof fetch;
+  try {
+    const memory = memoryKV();
+    // Our own pages are served from ASSETS, not the network.
+    const assets = {
+      fetch: async () => new Response(GOOD_HTML, { status: 200, headers: { 'content-type': 'text/html' } }),
+    };
+    const env = envOf(memory.kv, { PAGESPEED_API_KEY: 'test-key', ASSETS: assets });
+    const first = await handleAudit(apiRequest('/api/audit', { url: 'https://webao.ca/', lang: 'en' }), env);
+    const created = await bodyOf(first) as { id: string; score: number };
+    assert.equal(created.score, 100);
+    const res = await handleAuditFull(
+      apiRequest(`/api/audit/${encodeURIComponent(created.id)}/full`, {}),
+      env,
+      `/api/audit/${created.id}/full`,
+    );
+    assert.equal(res.status, 200);
+    const data = await bodyOf(res) as { audit: AuditRecord };
+    assert.equal(data.audit.score, 100);
+    assert.deepEqual(data.audit.categories, {
+      performance: 1,
+      accessibility: 1,
+      'best-practices': 1,
+      seo: 1,
+    });
+    assert.ok(data.audit.findings.some((f) => f.includes('No major problems')));
+  } finally {
+    globalThis.fetch = original;
+  }
+});
+
+test('findings carry codes for the visitor page, real text stays in the record', async () => {
+  const memory = memoryKV();
+  const env = envOf(memory.kv);
+  const original = globalThis.fetch;
+  const bareHtml = '<html><head></head><body></body></html>';
+  globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
+    if (init?.method === "HEAD" && String(input).startsWith("https://")) {
+      throw new Error("https unavailable");
+    }
+    return { ok: true, status: 200, url: "http://example.com/", text: async () => bareHtml } as unknown as Response;
+  }) as typeof fetch;
+  try {
+    const res = await handleAudit(apiRequest('/api/audit', { url: 'http://example.com/', lang: 'en' }), env);
+    assert.equal(res.status, 200);
+    const data = await bodyOf(res) as { id: string };
+    const stored = await memory.kv.get(`audit:${data.id}`, { type: 'json' }) as AuditRecord | null;
+    assert.ok(stored);
+    // Bare page over http: no HTTPS, no title, no description,
+    // no viewport — codes in the same order as the findings, after
+    // the empty code for the partial note.
+    assert.deepEqual(stored.findingCodes, ["", "WA-0001", "WA-0002", "WA-0003", "WA-0004"]);
+    // The real text is still in the record for the admin panel.
+    assert.ok(stored.findings.some((f) => f.includes('HTTPS')));
+    assert.ok(stored.findings.some((f) => f.includes('meta description')));
   } finally {
     globalThis.fetch = original;
   }

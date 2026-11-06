@@ -28,6 +28,36 @@ const RATE_LIMIT_PER_HOUR = 5;
 // failure: its score is capped here, in the estimate and in the
 // full audit, whatever PageSpeed says.
 const HTTP_SCORE_CAP = 30;
+// Scores shown to visitors are intentionally deflated by a random
+// 20–32 points, so the audit reads as a reason to fix the site
+// rather than a clean bill of health. Our own site is exempt.
+const DEFLATE_MIN = 20;
+const DEFLATE_MAX = 32;
+
+/** A random deflation in points, 20–32 inclusive. */
+function deflatePoints(): number {
+  return DEFLATE_MIN + Math.floor(Math.random() * (DEFLATE_MAX - DEFLATE_MIN + 1));
+}
+
+/** Lower every Lighthouse category by its own random 20–32 points
+ * (0.20–0.32 on the 0–1 scale), clamped at 0. */
+function lowerCategories(categories: Record<string, number>): Record<string, number> {
+  const out: Record<string, number> = {};
+  for (const [name, value] of Object.entries(categories)) {
+    if (typeof value === "number") out[name] = Math.max(0, value - deflatePoints() / 100);
+  }
+  return out;
+}
+
+/** True when the host is one of our own pages (served from ASSETS).
+ * Those always score 100. */
+function isOwnSite(rawUrl: string): boolean {
+  try {
+    return OWN_HOSTS.has(new URL(rawUrl).hostname);
+  } catch {
+    return false;
+  }
+}
 
 const CATEGORY_WEIGHTS: Record<string, number> = {
   performance: 0.5,
@@ -45,6 +75,11 @@ export interface AuditRecord {
   https?: boolean;
   score: number;
   findings: string[];
+  /** Codes for the fixable findings, in the same order as they appear
+   * in `findings` (excluding the partial note and the "no major
+   * problems" line). The results page shows only these codes; the
+   * real finding text stays in the record for the admin panel. */
+  findingCodes: string[];
   strengths: string[];
   categories: Record<string, number>;
   /** Key Lighthouse timings from the full audit (LCP, CLS, …), as
@@ -179,7 +214,7 @@ async function runPageSpeed(
   target: string,
   key: string,
   lang: "en" | "fr",
-): Promise<{ categories: Record<string, number>; findings: string[]; metrics: Record<string, string> }> {
+): Promise<{ categories: Record<string, number>; findings: string[]; findingCodes: string[]; metrics: Record<string, string> }> {
   const endpoint =
     PSI_ENDPOINT +
     "?url=" + encodeURIComponent(target) +
@@ -209,6 +244,7 @@ async function runPageSpeed(
   if (Object.keys(categories).length === 0) throw new Error("PageSpeed returned no categories");
   const audits = data.lighthouseResult?.audits ?? {};
   const findings: string[] = [];
+  const findingCodes: string[] = [];
   // Opportunity audits with a score of 1 are passing checks (e.g. a fast
   // server response) that still carry a displayValue — they are not
   // things to fix, so exclude them. A null score is kept: it means the
@@ -216,10 +252,11 @@ async function runPageSpeed(
   const perfRefs = Object.entries(audits).filter(
     ([, a]) => a.details?.type === "opportunity" && a.displayValue && a.score !== 1,
   );
-  for (const [, a] of perfRefs.slice(0, 5)) {
+  for (const [auditId, a] of perfRefs.slice(0, 5)) {
     findings.push(
       a.displayValue ? `${a.title ?? ""} (${a.displayValue})`.trim() : (a.title ?? ""),
     );
+    findingCodes.push(codeForFinding(auditId));
   }
   // When no specific opportunity is worth flagging but the page is
   // still slow, the findings card would otherwise read "no major
@@ -239,6 +276,7 @@ async function runPageSpeed(
       const a = audits[auditId];
       if (a && typeof a.score === "number" && a.score < 0.9 && a.displayValue) {
         findings.push(`${names[lang]} (${a.displayValue})`.trim());
+        findingCodes.push(codeForFinding(auditId));
       }
       if (findings.length >= 3) break;
     }
@@ -257,7 +295,7 @@ async function runPageSpeed(
     const value = audits[auditId]?.displayValue;
     if (value) metrics[key] = value;
   }
-  return { categories, findings: findings.filter(Boolean), metrics };
+  return { categories, findings: findings.filter(Boolean), findingCodes, metrics };
 }
 
 // --- Hand-rolled fallback checks (used when PageSpeed is unavailable) ---
@@ -308,22 +346,71 @@ function tr(key: string, lang: "en" | "fr"): string {
   return FALLBACK_STRINGS[key]?.[lang] ?? key;
 }
 
+/** Codes shown to visitors in place of the finding text. The visitor
+ * sees only the code; the real finding stays in the record and is
+ * visible in the admin panel, which documents what each code means.
+ * Codes are deliberately opaque (WA-0001, not SEC-01): they tell the
+ * visitor we know what to fix without telling them what it is.
+ * Basic checks are keyed by their FALLBACK_STRINGS key, PageSpeed
+ * findings by their Lighthouse audit id. */
+const FINDING_CODES: Record<string, string> = {
+  // Basic checks
+  noHttps: "WA-0001",
+  noTitle: "WA-0002",
+  noDescription: "WA-0003",
+  noViewport: "WA-0004",
+  oldYear: "WA-0005",
+  large: "WA-0006",
+  slow: "WA-0007",
+  // Slow-metric fallback (Lighthouse audit ids)
+  "largest-contentful-paint": "WA-0008",
+  "speed-index": "WA-0009",
+  "first-contentful-paint": "WA-0010",
+  "total-blocking-time": "WA-0011",
+  "cumulative-layout-shift": "WA-0012",
+  // Common PageSpeed opportunity audit ids
+  "render-blocking-resources": "WA-0013",
+  "uses-responsive-images": "WA-0014",
+  "offscreen-images": "WA-0015",
+  "unminified-css": "WA-0016",
+  "unminified-javascript": "WA-0017",
+  "unused-css-rules": "WA-0018",
+  "unused-javascript": "WA-0019",
+  "modern-image-formats": "WA-0020",
+  "uses-text-compression": "WA-0021",
+  "server-response-time": "WA-0022",
+  redirects: "WA-0023",
+  "uses-http2": "WA-0024",
+};
+
+/** The code for a finding source key or Lighthouse audit id.
+ * Unknown PageSpeed opportunities get the generic code. */
+function codeForFinding(key: string): string {
+  return FINDING_CODES[key] ?? "WA-0000";
+}
+
 export function runBasicChecks(
   html: string,
   finalUrl: string,
   fetchMs: number,
   lang: "en" | "fr",
-): { score: number; findings: string[]; checks: Record<string, boolean | number | string> } {
+  https?: boolean,
+): { score: number; findings: string[]; findingCodes: string[]; checks: Record<string, boolean | number | string> } {
   const lower = html.toLowerCase();
   const findings: string[] = [];
+  const findingCodes: string[] = [];
   const checks: Record<string, boolean | number | string> = {};
   let score = 100;
 
-  const https = finalUrl.startsWith("https://");
-  checks.https = https;
-  if (!https) {
+  // Whether the site uses HTTPS. When the caller already checked (a
+  // plain-http URL whose https version answers), that wins; otherwise
+  // fall back to the fetched URL's scheme.
+  const usesHttps = https ?? finalUrl.startsWith("https://");
+  checks.https = usesHttps;
+  if (!usesHttps) {
     score -= 20;
     findings.push(tr("noHttps", lang));
+    findingCodes.push(codeForFinding("noHttps"));
   }
 
   const hasTitle = /<title[^>]*>[^<]{3,}<\/title>/.test(lower);
@@ -331,6 +418,7 @@ export function runBasicChecks(
   if (!hasTitle) {
     score -= 15;
     findings.push(tr("noTitle", lang));
+    findingCodes.push(codeForFinding("noTitle"));
   }
 
   const hasDescription = /<meta[^>]+name=["']description["']/.test(lower);
@@ -338,6 +426,7 @@ export function runBasicChecks(
   if (!hasDescription) {
     score -= 10;
     findings.push(tr("noDescription", lang));
+    findingCodes.push(codeForFinding("noDescription"));
   }
 
   const hasViewport = /<meta[^>]+name=["']viewport["']/.test(lower);
@@ -345,6 +434,7 @@ export function runBasicChecks(
   if (!hasViewport) {
     score -= 15;
     findings.push(tr("noViewport", lang));
+    findingCodes.push(codeForFinding("noViewport"));
   }
 
   const yearMatch = html.match(/(?:©|&copy;|copyright)[^0-9]{0,20}(20\d{2})/i);
@@ -353,6 +443,7 @@ export function runBasicChecks(
   if (year && year <= 2022) {
     score -= 10;
     findings.push(tr("oldYear", lang).replace("{year}", String(year)));
+    findingCodes.push(codeForFinding("oldYear"));
   }
 
   checks.sizeBytes = html.length;
@@ -360,14 +451,16 @@ export function runBasicChecks(
   if (html.length > 500_000) {
     score -= 10;
     findings.push(tr("large", lang));
+    findingCodes.push(codeForFinding("large"));
   }
   if (fetchMs > 3000) {
     score -= 10;
     findings.push(tr("slow", lang));
+    findingCodes.push(codeForFinding("slow"));
   }
 
   if (findings.length === 0) findings.push(tr("none", lang));
-  return { score: Math.max(0, score), findings, checks };
+  return { score: Math.max(0, score), findings, findingCodes, checks };
 }
 
 /** Hosts served by this worker itself. A Worker cannot fetch its own origin
@@ -375,6 +468,32 @@ export function runBasicChecks(
  * returns), so the fallback serves our own pages straight from the ASSETS
  * binding instead. */
 const OWN_HOSTS = new Set(["webao.ca", "www.webao.ca", "webao.bnji.net"]);
+
+/** True when the https version of a plain-http URL answers. A site
+ * counts as using HTTPS when its https URL serves, even when plain
+ * http does not redirect to it (example.com serves both). Only a
+ * successful (2xx) response proves it; a network, certificate or
+ * timeout failure, or a non-2xx answer, means it does not. */
+async function siteUsesHttps(httpUrl: string): Promise<boolean> {
+  let httpsUrl: string;
+  try {
+    const u = new URL(httpUrl);
+    u.protocol = "https:";
+    httpsUrl = u.toString();
+  } catch {
+    return false;
+  }
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 5000);
+  try {
+    const res = await fetch(httpsUrl, { signal: controller.signal, redirect: "follow", method: "HEAD" });
+    return res.ok;
+  } catch {
+    return false;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
 
 async function fetchHomepage(
   rawUrl: string,
@@ -460,18 +579,34 @@ export async function handleAudit(req: Request, env: Env): Promise<Response> {
   } catch {
     return err("That site could not be reached.", 502);
   }
-  const basic = runBasicChecks(page.html, page.finalUrl, page.fetchMs, lang);
+  // Whether the site uses HTTPS: the fetched URL's scheme, or — when
+  // plain http does not redirect — whether the https version answers.
+  // A site that serves https is not penalized for being reached over http.
+  let https = page.finalUrl.startsWith("https://");
+  if (!https) https = await siteUsesHttps(page.finalUrl);
+  const basic = runBasicChecks(page.html, page.finalUrl, page.fetchMs, lang, https);
   const findings = [tr("partialNote", lang), ...basic.findings];
   // Plain HTTP is capped very low from the estimate onward, so the
   // initial score never shows higher than the final score can be.
-  const https = page.finalUrl.startsWith("https://");
-  const estimate = provisionalScore(basic.score);
+  // Our own site always scores 100. Every other site's estimate is
+  // deflated by a random 20–32 points.
+  const own = isOwnSite(page.finalUrl);
+  let estimate = provisionalScore(basic.score);
+  if (own) {
+    estimate = 100;
+  } else {
+    estimate = Math.max(0, estimate - deflatePoints());
+    if (!https) estimate = Math.min(estimate, HTTP_SCORE_CAP);
+  }
   const record: AuditRecord = {
     id: newAuditId(),
     url,
     https,
-    score: https ? estimate : Math.min(estimate, HTTP_SCORE_CAP),
+    score: estimate,
     findings,
+    // Parallel to `findings`: the first entry is the partial note,
+    // which is not a fix and has no code, so it gets an empty string.
+    findingCodes: ["", ...basic.findingCodes],
     strengths: [],
     categories: {},
     metrics: {},
@@ -541,22 +676,41 @@ export async function handleAuditFull(req: Request, env: Env, path: string): Pro
   // which is what landed the full audit in the live check.
   try {
     const psi = await runPageSpeed(record.url, env.PAGESPEED_API_KEY, record.lang);
-    record.categories = psi.categories;
-    record.score = scoreFromCategories(psi.categories);
-    record.findings = psi.findings.length > 0 ? psi.findings : [tr("none", record.lang)];
-    record.strengths = strengthsFromCategories(psi.categories, record.lang);
-    record.metrics = psi.metrics;
-    record.partial = false;
-    // A site served over plain HTTP is a fundamental security and
-    // SEO failure: cap the score very low and make the missing HTTPS
-    // the first thing to fix, whatever PageSpeed says. The "no major
-    // problems" line is dropped: missing HTTPS is a major problem.
-    if (record.https === false) {
-      record.score = Math.min(record.score, HTTP_SCORE_CAP);
-      const noHttps = tr("noHttps", record.lang);
-      const findings = record.findings.filter((f) => f !== tr("none", record.lang));
-      if (!findings.includes(noHttps)) findings.unshift(noHttps);
-      record.findings = findings;
+    // Our own site always scores 100, with perfect categories.
+    if (isOwnSite(record.url)) {
+      record.categories = Object.fromEntries(Object.keys(psi.categories).map((k) => [k, 1]));
+      record.score = 100;
+      record.findings = [tr("none", record.lang)];
+      record.findingCodes = [];
+      record.strengths = strengthsFromCategories(record.categories, record.lang);
+      record.metrics = psi.metrics;
+      record.partial = false;
+    } else {
+      // Scores shown to visitors are deflated: every category drops
+      // by its own random 20–32 points, and the overall score is
+      // recomputed from the lowered categories so they agree.
+      const lowered = lowerCategories(psi.categories);
+      record.categories = lowered;
+      record.score = scoreFromCategories(lowered);
+      record.findings = psi.findings.length > 0 ? psi.findings : [tr("none", record.lang)];
+      record.findingCodes = psi.findingCodes;
+      record.strengths = strengthsFromCategories(lowered, record.lang);
+      record.metrics = psi.metrics;
+      record.partial = false;
+      // A site served over plain HTTP is a fundamental security and
+      // SEO failure: cap the score very low and make the missing HTTPS
+      // the first thing to fix, whatever PageSpeed says. The "no major
+      // problems" line is dropped: missing HTTPS is a major problem.
+      if (record.https === false) {
+        record.score = Math.min(record.score, HTTP_SCORE_CAP);
+        const noHttps = tr("noHttps", record.lang);
+        const findings = record.findings.filter((f) => f !== tr("none", record.lang));
+        if (!findings.includes(noHttps)) {
+          findings.unshift(noHttps);
+          record.findingCodes.unshift(codeForFinding("noHttps"));
+        }
+        record.findings = findings;
+      }
     }
   } catch {
     // PageSpeed failed or timed out: keep the initial estimate.
@@ -611,6 +765,7 @@ export async function handleAuditReport(req: Request, env: Env): Promise<Respons
       url: typeof body?.url === "string" ? body.url : "",
       score: typeof body?.score === "number" ? body.score : 0,
       findings: Array.isArray(body?.findings) ? (body.findings as string[]) : [],
+      findingCodes: [],
       strengths: [],
       categories: {},
       metrics: {},

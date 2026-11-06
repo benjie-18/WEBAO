@@ -140,8 +140,8 @@ test('every footnote reference resolves to a terms note in both languages', () =
   const sectionNotes = termSections.flatMap((section) => [...section.notes]);
   assert.deepEqual(
     [...sectionNotes].sort((a, b) => a - b),
-    Array.from({ length: 30 }, (_, i) => i + 1),
-    'the six sections cover notes 1..30 exactly once',
+    Array.from({ length: 31 }, (_, i) => i + 1),
+    'the six sections cover notes 1..31 exactly once',
   );
   for (const note of referenced) {
     assert.ok(sectionNotes.includes(note), `note ${note} belongs to a section`);
@@ -150,7 +150,7 @@ test('every footnote reference resolves to a terms note in both languages', () =
 
 test('terms notes have the same structure in both languages', () => {
   const noteIds = Object.keys(en.terms.notes).map(Number).sort((a, b) => a - b);
-  assert.deepEqual(noteIds, Array.from({ length: 30 }, (_, i) => i + 1));
+  assert.deepEqual(noteIds, Array.from({ length: 31 }, (_, i) => i + 1));
   assert.deepEqual(Object.keys(fr.terms.notes).map(Number).sort((a, b) => a - b), noteIds);
   for (const id of noteIds) {
     const english = en.terms.notes[String(id)];

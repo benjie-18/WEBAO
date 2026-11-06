@@ -32,7 +32,7 @@ import StarMark from "../../components/ui/StarMark.astro";
         <div class="audit-score-wrap">
           <span class="display audit-score" id="audit-score">–</span><span class="display audit-score-of">/100</span>
         </div>
-        <p class="audit-pricing-cta"><a href="/pricing" class="btn btn--primary btn--lg" id="audit-pricing-link">See plans and pricing</a></p>
+        <p class="audit-pricing-cta"><a href="/pricing" class="btn btn--primary btn--lg" id="audit-pricing-link">Fix site now</a></p>
         <p class="audit-verdict" id="audit-verdict"></p>
         <p class="audit-partial" id="audit-partial" hidden></p>
       </div>
@@ -49,7 +49,9 @@ import StarMark from "../../components/ui/StarMark.astro";
           </div>
           <div class="audit-card">
             <h2 id="audit-findings-title">What to fix first</h2>
+            <p class="audit-findings-note" id="audit-findings-note">Our team knows what each reference means and how to fix it.</p>
             <ul id="audit-findings" class="audit-list audit-list--fix"></ul>
+            <p class="audit-fix-cta"><a href="/start" class="btn btn--primary" id="audit-fix-start">Get started</a></p>
           </div>
         </div>
       </div>
@@ -86,6 +88,10 @@ import StarMark from "../../components/ui/StarMark.astro";
         partial: "The full speed test was unavailable, so this score covers the basics only.",
         strengthsTitle: "What works",
         findingsTitle: "What to fix first",
+        findingsNote: "Our team knows what each reference means and how to fix it.",
+        noIssues: "No issues found.",
+        getStarted: "Get started",
+        getStartedHref: "/start",
         verdictExcellent: "Excellent",
         verdictGood: "Good, with room to improve",
         verdictWork: "Needs work",
@@ -111,7 +117,7 @@ import StarMark from "../../components/ui/StarMark.astro";
         failed: "That did not go through. Try again, or contact us directly.",
         backLink: "Run another audit",
         backHref: "/audit",
-        pricingCta: "See plans and pricing",
+        pricingCta: "Fix site now",
         pricingHref: "/pricing",
       },
       fr: {
@@ -122,6 +128,10 @@ import StarMark from "../../components/ui/StarMark.astro";
         partial: "Le test de vitesse complet n'était pas disponible, donc ce score couvre seulement les bases.",
         strengthsTitle: "Ce qui fonctionne",
         findingsTitle: "Quoi corriger en premier",
+        findingsNote: "Notre équipe sait ce que chaque référence veut dire et comment la corriger.",
+        noIssues: "Aucun problème trouvé.",
+        getStarted: "Commencer",
+        getStartedHref: "/fr/commencer",
         verdictExcellent: "Excellent",
         verdictGood: "Bon, avec de la marge",
         verdictWork: "À améliorer",
@@ -147,7 +157,7 @@ import StarMark from "../../components/ui/StarMark.astro";
         failed: "Ça n'a pas fonctionné. Réessayez, ou contactez-nous directement.",
         backLink: "Lancer un autre audit",
         backHref: "/fr/eval",
-        pricingCta: "Voir les plans et tarifs",
+        pricingCta: "Corriger mon site",
         pricingHref: "/fr/tarifs",
       },
     } as const;
@@ -188,10 +198,20 @@ import StarMark from "../../components/ui/StarMark.astro";
     }
 
     type Audit = {
-      url: string; score: number; findings: string[]; strengths: string[];
+      url: string; score: number; findings: string[]; findingCodes: string[]; strengths: string[];
       categories: Record<string, number>; metrics: Record<string, string>;
       partial: boolean; pending: boolean; lang: Lang; at: number;
     };
+
+    /** The "what to fix" card shows only the finding codes, never the
+     * finding text: the visitor sees a reference, the real finding
+     * stays in the admin panel. When nothing needs fixing, say so.
+     * The partial note carries an empty code and is skipped. */
+    function renderFindings(audit: Audit, s: (typeof STR)[Lang]): void {
+      const codes = (audit.findingCodes ?? []).filter((c) => c);
+      if (codes.length > 0) fillList("audit-findings", codes);
+      else fillList("audit-findings", [s.noIssues]);
+    }
 
     /** Count the big score from one value to another over ~0.9s. A
      * newer count-up cancels an older one still running, so a fast
@@ -341,7 +361,7 @@ import StarMark from "../../components/ui/StarMark.astro";
         }
       }
       setText("audit-findings-title", s.findingsTitle);
-      fillList("audit-findings", full.findings);
+      renderFindings(full, s);
       const partial = el("audit-partial");
       if (partial) {
         partial.hidden = !full.partial;
@@ -388,7 +408,7 @@ import StarMark from "../../components/ui/StarMark.astro";
         const data = await res.json();
         if (!res.ok) throw new Error((data as { error?: string }).error || "Audit failed");
         const audit = (data as { audit: {
-          url: string; score: number; findings: string[]; strengths: string[];
+          url: string; score: number; findings: string[]; findingCodes: string[]; strengths: string[];
           categories: Record<string, number>; metrics: Record<string, string>;
           partial: boolean; pending: boolean; lang: Lang; at: number;
         } }).audit;
@@ -431,7 +451,13 @@ import StarMark from "../../components/ui/StarMark.astro";
           }
         }
         setText("audit-findings-title", s.findingsTitle);
-        fillList("audit-findings", audit.findings);
+        setText("audit-findings-note", s.findingsNote);
+        renderFindings(audit, s);
+        const fixStart = el("audit-fix-start") as HTMLAnchorElement | null;
+        if (fixStart) {
+          fixStart.textContent = s.getStarted;
+          fixStart.href = s.getStartedHref;
+        }
         setText("audit-report-eyebrow", s.reportEyebrow);
         setText("audit-report-title", s.reportTitle);
         setText("audit-report-sub", s.reportSub);
@@ -584,6 +610,15 @@ import StarMark from "../../components/ui/StarMark.astro";
     }
     .audit-pricing-cta {
       margin: 20px 0 0;
+    }
+    .audit-fix-cta {
+      margin: 18px 0 0;
+    }
+    .audit-findings-note {
+      margin: 8px 0 0;
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.5;
     }
     .audit-verdict {
       margin: 16px 0 0;

@@ -187,6 +187,15 @@ const a = t.admin;
       id="admin-panel-audits" role="tabpanel" aria-labelledby="admin-tab-audits"
       data-panel="audits" class="admin-panel" hidden
     >
+      <details class="admin-codes">
+        <summary>{a.audits.codesTitle}</summary>
+        <p>{a.audits.codesIntro}</p>
+        <dl>
+          {Object.entries(a.audits.codes).map(([code, meaning]) => (
+            <div class="ff-row"><dt class="mono">{code}</dt><dd>{meaning}</dd></div>
+          ))}
+        </dl>
+      </details>
       <div class="admin-forms-list" data-audits-list></div>
       <div class="admin-center">
         <button type="button" class="admin-ghost-btn" data-audits-more hidden>{a.audits.loadMore}</button>
@@ -486,6 +495,13 @@ const a = t.admin;
 
   /* Forms */
   .admin-forms-list { display: grid; gap: 12px; }
+  /* Finding-code legend on the Audits tab: collapsed by default. */
+  .admin-codes { margin-bottom: 16px; border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; background: var(--card-bg); }
+  .admin-codes summary { cursor: pointer; font-weight: 600; }
+  .admin-codes p { margin: 8px 0 0; font-size: 13px; color: var(--muted); }
+  .admin-codes dl { margin: 10px 0 0; display: grid; gap: 4px; }
+  .admin-codes .ff-row { display: grid; grid-template-columns: 90px 1fr; gap: 10px; font-size: 13px; }
+  .admin-codes dd { margin: 0; }
   .form-card { background: var(--card-bg); border: 1px solid var(--line); border-radius: 14px; padding: 16px; box-shadow: var(--shadow-sm); display: grid; gap: 10px; animation: adminFadeIn .4s ease backwards; transition: box-shadow .3s ease, border-color .3s ease; }
   .form-card:nth-child(2) { animation-delay: .05s; }
   .form-card:nth-child(3) { animation-delay: .1s; }

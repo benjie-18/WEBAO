@@ -49,6 +49,7 @@ export const PRICE_MAP: Record<string, string> = {
   "ads-google-month": "price_1UTsvJE57vVzxI41esicPXuU",
   "ads-both-month": "price_1UWkEsE57vVzxI41TxD7CIV8",
   "gbp-revamp-onetime": "price_1UWkF9E57vVzxI41yOVeWE6d",
+  "website-touchup-onetime": "price_1UYeOrE57vVzxI41H43kyjyk",
   "aichat-month": "price_1UO3E9E57vVzxI41BTXxcMD6",
   "aichat-year": "price_1UORS1E57vVzxI41852FAJaZ",
   "blog-month": "price_1UO3EGE57vVzxI41cXVWgJ1y",
@@ -335,6 +336,10 @@ export async function handleCheckoutSession(req: Request, env: Env): Promise<Res
   const params = new URLSearchParams();
   params.set("ui_mode", "embedded_page");
   params.set("mode", mode);
+  // Let the buyer enter a coupon code at checkout, e.g. WEBAOFIXIT3256
+  // (10% off a website plan for the first 3 months, unlocked by buying
+  // the Website touchup).
+  params.set("allow_promotion_codes", "true");
 
   lineItems.forEach((item, index) => {
     params.set(`line_items[${index}][price]`, item.priceId);

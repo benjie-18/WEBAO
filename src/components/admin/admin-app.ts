@@ -1392,6 +1392,7 @@ function initAdmin(): void {
     url: string;
     score: number;
     findings: string[];
+    findingCodes?: string[];
     strengths: string[];
     categories: Record<string, number>;
     partial: boolean;
@@ -1442,7 +1443,15 @@ function initAdmin(): void {
     }
     rows.push(
       `<div class="ff-row"><dt>${esc(A.findings)}</dt><dd><ul>` +
-        item.findings.map((f) => `<li>${esc(f)}</li>`).join("") +
+        item.findings
+          .map((f, i) => {
+            const code = item.findingCodes?.[i];
+            // The visitor page shows only the code; the admin sees the
+            // real finding next to its code, so a code a visitor
+            // quotes can be matched here.
+            return `<li>${code ? `<span class="mono">${esc(code)}</span> — ` : ""}${esc(f)}</li>`;
+          })
+          .join("") +
         `</ul></dd></div>`,
     );
 

@@ -68,6 +68,10 @@ const catalog = {
   "ads-both": { product: "ads-both", type: "bundle", monthCents: 134999 },
   // Google Business Profile revamp: one-time, sold on its own or with a pack.
   "gbp-revamp": { product: "gbp-revamp", type: "addon", oneTimeCents: 14999 },
+  // Website touchup: one-time, we fix what the free audit found on the
+  // buyer's site. Buying it unlocks 10% off a website plan for the first
+  // 3 months, with the coupon code WEBAOFIXIT3256 (see terms).
+  "website-touchup": { product: "website-touchup", type: "addon", oneTimeCents: 19999 },
 
   /* ── AI services (monthly only, like the Ads Pack). The one-time setup
      fee is not sold here: checkout adds it server-side, see
