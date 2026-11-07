@@ -242,3 +242,33 @@ test('French strings are not left in English for the plan names', () => {
     assert.notEqual(english, french, `${english} is translated`);
   }
 });
+
+test('the service pages use the pricing SEO term and agree in French', () => {
+  // The pricing page names the Launch SEO feature "Foundational SEO" /
+  // "SEO fondamental"; the service pages drifted to "Basic SEO" /
+  // "Référencement de base". The FR small-business page also had an
+  // agreement slip: "mises à jour ... sont inclus" instead of "incluses".
+  assert.ok(en.pricing.plans.launch.features.includes('Foundational SEO'), 'pricing EN calls it Foundational SEO');
+  assert.ok(fr.pricing.plans.launch.features.includes('SEO fondamental'), 'pricing FR calls it SEO fondamental');
+  const enServices = [
+    'src/pages/services/montreal-web-design/index.astro',
+    'src/pages/services/small-business-website-design/index.astro',
+  ];
+  const frServices = [
+    'src/pages/fr/services/conception-site-web-montreal/index.astro',
+    'src/pages/fr/services/conception-site-web-pme/index.astro',
+    'src/pages/fr/services/forfaits-mensuels-site-web/index.astro',
+  ];
+  for (const path of enServices) {
+    const page = read(path);
+    assert.ok(page.includes('Foundational SEO'), `${path} uses the pricing term`);
+    assert.equal(page.includes('Basic SEO') || page.includes('basic SEO'), false, `${path} has no "Basic SEO" left`);
+  }
+  for (const path of frServices) {
+    const page = read(path);
+    assert.ok(page.includes('SEO fondamental'), `${path} uses the pricing term`);
+    assert.equal(page.includes('Référencement de base') || page.includes('référencement de base'), false, `${path} has no "Référencement de base" left`);
+  }
+  const frPme = read('src/pages/fr/services/conception-site-web-pme/index.astro');
+  assert.ok(frPme.includes('sont incluses dans le frais mensuel'), 'the FR small-business FAQ agrees "mises à jour" with "incluses"');
+});
