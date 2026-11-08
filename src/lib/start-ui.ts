@@ -296,7 +296,12 @@ export function selectPlan(doc: Document, product: string, name: string): void {
   if (!item) return;
   // A plan switch can strand add-ons (included on the new plan, or not
   // available on it): the guard pops the conflict up instead of switching.
-  if (!guardPlanChange(doc, getCart(win), item)) return;
+  // When it blocks, re-sync the radios: the browser already ticked the
+  // new plan, and nothing else will untick it.
+  if (!guardPlanChange(doc, getCart(win), item)) {
+    renderStart(doc);
+    return;
+  }
   const others = getCart(win).filter((entry) => entry.type !== "plan");
   setCart(win, [...convertItemsToBilling(others, billing), item]);
 }
@@ -314,8 +319,12 @@ export function selectAdsChannel(doc: Document, product: string | null, name: st
   if (!item) return;
   // Picking a channel can clash with the Starter test (one Ads option at
   // a time) or with a yearly cart (channels are monthly only): the guard
-  // pops the conflict up instead of swapping.
-  if (!guardAdd(doc, rest, item)) return;
+  // pops the conflict up instead of swapping. When it blocks, re-sync the
+  // radios: the browser already ticked the new channel.
+  if (!guardAdd(doc, rest, item)) {
+    renderStart(doc);
+    return;
+  }
   setCart(win, [...rest, item]);
 }
 
@@ -348,7 +357,12 @@ export function toggleAiService(doc: Document, product: string, name: string, on
   }
   const item = serviceItem(product, name, billing);
   if (!item) return;
-  if (!guardAdd(doc, rest, item)) return;
+  // When the guard blocks, re-sync the checkboxes: the browser already
+  // ticked the box, and nothing else will untick it.
+  if (!guardAdd(doc, rest, item)) {
+    renderStart(doc);
+    return;
+  }
   setCart(win, [...rest, item]);
 }
 

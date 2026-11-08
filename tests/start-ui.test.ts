@@ -537,6 +537,60 @@ test('AI services can be added, and the Pack asks before replacing the individua
   window.close();
 });
 
+test('dismissing the AI Pack popup unticks its checkbox', () => {
+  const { window, cart, chip, click, toggleBox, aiBox, conflict, conflictButtons, clickConflictButton } = fixture();
+  click(chip('ai'));
+  toggleBox(aiBox('ai-receptionist'), true);
+  toggleBox(aiBox('ai-followup'), true);
+  toggleBox(aiBox('ai-pack'), true);
+  assert.equal(conflict().hidden, false);
+  clickConflictButton("Don't add it");
+  assert.equal(conflict().hidden, true);
+  // The browser had already ticked the Pack box; the cart never changed,
+  // so the checkbox must snap back to the cart.
+  assert.equal(aiBox('ai-pack').checked, false);
+  assert.equal(aiBox('ai-receptionist').checked, true);
+  assert.equal(aiBox('ai-followup').checked, true);
+  assert.deepEqual(
+    cart().map((item) => item.key),
+    ['grow-month', 'ai-receptionist-month', 'ai-followup-month'],
+  );
+  window.close();
+});
+
+test('dismissing a blocked plan switch keeps the old plan ticked', () => {
+  const extra: CartItem = { key: 'review-month', product: 'review', name: 'Review Generation Engine', priceCents: 9999, interval: 'month', type: 'addon' };
+  const { window, cart, radio, choose, conflict, clickConflictButton } = fixture({ cart: [planItem('grow', 'Grow', 'month')!, extra] });
+  choose('scale');
+  assert.equal(conflict().hidden, false);
+  clickConflictButton('Keep Grow');
+  assert.equal(radio('grow').checked, true);
+  assert.equal(radio('scale').checked, false);
+  assert.deepEqual(
+    cart().map((item) => item.key),
+    ['grow-month', 'review-month'],
+  );
+  window.close();
+});
+
+test('dismissing a blocked channel pick keeps the channel radios as they were', () => {
+  const starter: CartItem = { key: 'ads-starter-month', product: 'ads-starter', name: 'Starter test', priceCents: 49999, interval: 'month', type: 'addon' };
+  const { window, cart, chip, click, chooseAds, adsRadio, conflict, clickConflictButton } = fixture({
+    cart: [planItem('grow', 'Grow', 'month')!, starter],
+  });
+  click(chip('ads'));
+  chooseAds('ads-meta');
+  assert.equal(conflict().hidden, false);
+  clickConflictButton("Don't add it");
+  assert.equal(adsRadio('ads-meta').checked, false);
+  assert.equal(adsRadio('none').checked, true);
+  assert.deepEqual(
+    cart().map((item) => item.key),
+    ['grow-month', 'ads-starter-month'],
+  );
+  window.close();
+});
+
 test('the yearly toggle is blocked while a monthly-only AI service is in the cart', () => {
   const { window, doc, cart, chip, click, toggleBox, aiBox, conflict, conflictMessage, conflictButtons, clickConflictButton } = fixture();
   click(chip('ai'));
