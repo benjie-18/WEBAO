@@ -133,6 +133,12 @@ const selected = variants[0];
     </div>
   </dl>
 
+  <div class="bc-starter" data-ads-starter>
+    <p class="bc-label">{a.starterTitle}</p>
+    <p class="bc-starter-body">{a.starterBody}</p>
+    <a class="bc-starter-link" href={locale === "fr" ? "/fr/contact" : "/contact"}>{a.starterLink}</a>
+  </div>
+
   <p class="bc-note">{a.upgradeNote}</p>
 
   <div class="bc-gbp">
@@ -159,7 +165,15 @@ const selected = variants[0];
     var budgetEl = root.querySelector("[data-ads-budget]");
     var includeEl = root.querySelector("[data-ads-include]");
     var btn = root.querySelector("[data-cart-btn]") as HTMLElement | null;
+    var starterEl = root.querySelector("[data-ads-starter]") as HTMLElement | null;
     var adsKeys = ["ads-pack-month", "ads-meta-month", "ads-google-month", "ads-both-month"];
+    // Starter test is Meta-only: show it for Meta, hide it for Google/Both.
+    function syncStarter(product: string) {
+      if (!starterEl) return;
+      starterEl.hidden = product !== "ads-meta";
+    }
+    var checkedInput = root.querySelector('input[name="ads-channel"]:checked') as HTMLInputElement | null;
+    if (checkedInput) syncStarter(checkedInput.dataset.product || "");
     root.addEventListener("change", function (event) {
       var input = event.target as HTMLInputElement | null;
       if (!input || input.name !== "ads-channel" || !input.checked) return;
@@ -167,6 +181,7 @@ const selected = variants[0];
       if (setupEl) setupEl.textContent = input.dataset.setup || "";
       if (budgetEl) budgetEl.textContent = input.dataset.budget || "";
       if (includeEl) includeEl.textContent = input.dataset.include || "";
+      syncStarter(input.dataset.product || "");
       if (btn) {
         btn.dataset.product = input.dataset.product || "";
         btn.dataset.name = input.dataset.name || "";
@@ -331,6 +346,30 @@ const selected = variants[0];
     margin: 14px 0 0;
     font-size: 0.88rem;
     color: var(--bc-soft);
+  }
+  .bc-starter {
+    margin-top: 18px;
+    padding: 16px;
+    border: 1px solid var(--bc-line);
+    border-radius: 16px;
+  }
+  .bc-starter[hidden] {
+    display: none;
+  }
+  .bc-starter .bc-label {
+    margin-top: 0;
+  }
+  .bc-starter-body {
+    margin-top: 6px;
+    font-size: 0.88rem;
+    color: var(--bc-soft);
+  }
+  .bc-starter-link {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 0.88rem;
+    font-weight: 650;
+    color: var(--bc-text);
   }
   .bc-gbp {
     margin-top: 18px;

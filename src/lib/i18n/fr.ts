@@ -443,6 +443,9 @@ const fr = {
       budget: "À partir de C$1,500/mois, sur votre propre carte et votre compte publicitaire",
       bothBudget: "À partir de C$2,500/mois, au moins C$1,000 par canal, sur votre propre carte et votre compte publicitaire",
       upgradeNote: "Déjà sur un canal ? Passez aux deux pour C$450/mois de plus, plus un supplément de mise en place de C$250.",
+      starterTitle: "Test de départ (Meta seulement)",
+      starterBody: "Essayez Meta d'abord avec un budget plus bas : C$499.99/mois plus C$349.99 de mise en place, dépenses publicitaires à partir de C$750/mois. Test de 90 jours, une campagne, puis passez au tarif normal ou arrêtez.",
+      starterLink: "Demander le test de départ",
       gbpLabel: "Ajoutez une refonte de fiche d’entreprise Google :",
       gbpName: "Refonte de fiche d’entreprise Google",
       gbpPrice: "C$149.99 unique",
@@ -1018,7 +1021,7 @@ const fr = {
         title: "Ads Packages",
         blocks: [
           { text: "Publicité gérée sur Meta, Google, ou les deux : un canal coûte C$899.99 par mois, plus des frais de mise en place uniques de C$499.99 facturés avec le premier paiement. Les deux canaux ensemble coûtent C$1,349.99 par mois, plus des frais de mise en place uniques de C$749.99. Les frais mensuels couvrent la création et la gestion continue des campagnes, l'envoi des demandes à votre courriel et dans votre portail client, et un rapport mensuel. Les clients déjà sur un canal peuvent passer aux deux pour C$450 de plus par mois, plus un supplément de mise en place de C$250." },
-          { text: "Le budget publicitaire est distinct et n'est jamais facturé par Webao. Vos annonces roulent dans votre propre compte publicitaire, facturé par la plateforme à votre propre carte de paiement. Le budget publicitaire minimum est de C$1,500 par mois pour un canal et de C$2,500 par mois pour les deux canaux, avec au moins C$1,000 par canal, payé par vous directement à la plateforme." },
+          { text: "Le budget publicitaire est distinct et n'est jamais facturé par Webao. Vos annonces roulent dans votre propre compte publicitaire, facturé par la plateforme à votre propre carte de paiement. Le budget publicitaire minimum est de C$1,500 par mois pour un canal et de C$2,500 par mois pour les deux canaux, avec au moins C$1,000 par canal, payé par vous directement à la plateforme. Exception : un test de départ Meta seulement est possible à C$499.99 par mois plus C$349.99 de mise en place unique, avec un budget publicitaire à partir de C$750 par mois, pendant 90 jours." },
           { text: "Refonte de fiche d’entreprise Google : C$149.99 unique pour une fiche existante seulement. Elle couvre les catégories, les services, les heures, la description, les photos, une publication de départ et un lien d’avis. Votre fiche reste la vôtre." },
           { text: "Webao ne garantit aucun nombre de demandes, d'appels ou de ventes. Les résultats publicitaires varient. Le rapport mensuel montre ce que vos campagnes ont livré : demandes reçues, travaux réservés et coût par travail réservé." },
           { text: "Vous pouvez annuler Ads Packages avec un préavis de 90 jours. Les campagnes arrêtent à la fin de la période de préavis, et votre compte publicitaire ainsi que ses données restent les vôtres." },
