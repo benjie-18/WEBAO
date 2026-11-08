@@ -28,6 +28,15 @@ import { convertItemsToBilling, type Billing } from "./cart-catalog";
 /** localStorage key holding the active billing term. */
 export const BILLING_KEY = "webao_billing_v1";
 
+/**
+ * Event fired on the window after the billing term changes, even when no
+ * cart item was re-priced (empty cart included). Listeners that depend on
+ * the term itself, e.g. the Ads Starter card hiding on yearly, must use
+ * this: reading the stored term from a document click listener runs before
+ * applyBilling writes it, so it sees the old term.
+ */
+export const BILLING_CHANGE_EVENT = "webao:billing-change";
+
 const INIT_FLAG = "__webaoCartUiBound";
 
 /** Pending auto-disarm for the drawer's "empty cart" confirm state. */
@@ -452,6 +461,14 @@ export function applyBilling(doc: Document, billing: Billing): void {
   );
   if (changed) setCart(win, converted);
   else refresh(doc);
+  // Broadcast the term change in every case, after the new term is stored.
+  // setCart above only fires the cart-change event when items actually
+  // convert, so with an empty cart nothing told term-dependent UI (the Ads
+  // Starter card) to re-check, and it stayed stuck on the old term.
+  if (!win) return;
+  const EventCtor = (win as unknown as { CustomEvent?: typeof CustomEvent }).CustomEvent;
+  if (!EventCtor) return;
+  win.dispatchEvent(new EventCtor(BILLING_CHANGE_EVENT, { detail: { billing } }));
 }
 
 /* ── wiring ───────────────────────────────────────────────────────────── */

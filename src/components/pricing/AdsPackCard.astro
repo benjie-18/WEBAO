@@ -223,20 +223,26 @@ const selected = variants[0];
         // Cart swap is a convenience; the button still adds the new variant.
       }
     });
-    // Re-check the Starter when the billing term changes: the toggle lives
-    // outside this card, so listen on the document (toggle click) and on the
-    // cart change event the toggle fires when it re-prices the cart.
-    // Bound once per document; the handler re-queries the live card.
+    // Re-check the Starter when the billing term changes. The toggle lives
+    // outside this card; its handler (cart-ui applyBilling) dispatches
+    // webao:billing-change after storing the new term, so this always reads
+    // the new value. A document click listener cannot do that: this card's
+    // script registers before cart-ui's, so the click handler runs before
+    // the toggle writes and reads the old term, which left the card visible
+    // on Yearly and hidden again on Monthly until a reload. A storage
+    // listener covers a term change from another tab. The cart-change event
+    // is not used: it only fires when cart items actually convert, never
+    // with an empty cart. Bound once per document; the handler re-queries
+    // the live card.
     var docState = document as unknown as Record<string, unknown>;
     if (!docState.__webaoStarterBillingBound) {
       docState.__webaoStarterBillingBound = true;
-      document.addEventListener("click", function (event) {
-        var target = event.target as HTMLElement | null;
-        if (!target || !target.closest || !target.closest("[data-billing-opt]")) return;
+      window.addEventListener("webao:billing-change", function () {
         var checked = document.querySelector('input[name="ads-channel"]:checked') as HTMLInputElement | null;
         if (checked) syncStarter(checked.dataset.product || "");
       });
-      window.addEventListener("webao:cart-change", function () {
+      window.addEventListener("storage", function (event) {
+        if (event.key !== "webao_billing_v1") return;
         var checked = document.querySelector('input[name="ads-channel"]:checked') as HTMLInputElement | null;
         if (checked) syncStarter(checked.dataset.product || "");
       });

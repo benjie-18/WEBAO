@@ -401,6 +401,24 @@ test('billing changes only touch recurring items', () => {
   window.close();
 });
 
+test('billing changes broadcast even when no cart item is re-priced', () => {
+  const { doc, window, click } = fixture();
+  const seen: string[] = [];
+  window.addEventListener('webao:billing-change', (event) => {
+    seen.push(((event as CustomEvent).detail as { billing: string }).billing);
+  });
+  // Empty cart: the old code only broadcast when items converted, so
+  // term-dependent UI (the Ads Starter card) never re-checked and stayed
+  // stuck on the old term until a reload.
+  click(doc.querySelector('[data-billing-opt="year"]'));
+  assert.deepEqual(seen, ['year']);
+  assert.equal(window.localStorage.getItem(BILLING_KEY), 'year');
+  click(doc.querySelector('[data-billing-opt="month"]'));
+  assert.deepEqual(seen, ['year', 'month']);
+  assert.equal(window.localStorage.getItem(BILLING_KEY), 'month');
+  window.close();
+});
+
 test('drawer focus: opening moves focus inside, Tab is trapped, closing returns focus', async () => {
   const { doc, window, click } = fixture();
   const openBtn = doc.querySelector<HTMLElement>('[data-cart-open]')!;

@@ -533,8 +533,9 @@ export function initStart(doc: Document = document, options: StartOptions = {}):
     });
 
     // The billing toggle is handled by cart-ui (same hooks as the pricing
-    // page); it only broadcasts a change when cart items were re-priced, so
-    // re-render the plan prices on the next tick in every case.
+    // page); it broadcasts webao:billing-change on every term change, and
+    // the next-tick re-render below is kept so the plan prices follow even
+    // if that broadcast is ever missed.
     doc.addEventListener("click", (event) => {
       const chip = closestElement(event.target, "[data-branch-toggle]") as HTMLButtonElement | null;
       if (chip && rootEl(doc)) {
