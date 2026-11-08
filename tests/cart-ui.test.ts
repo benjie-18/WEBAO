@@ -45,7 +45,7 @@ function quietConsole() {
 }
 
 /** Mirrors BaseLayout's header button, drawer and the pricing page buttons. */
-function fixture(options: { french?: boolean } = {}) {
+function fixture(options: { french?: boolean; cart?: CartItem[] } = {}) {
   const attrs = options.french
     ? drawerAttrs({
         'data-suffix-month': '/mois',
@@ -72,6 +72,16 @@ function fixture(options: { french?: boolean } = {}) {
           data-name="Launch" data-price-cents="8999" data-interval="month" data-type="plan" data-price-year="89990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="grow-month" data-product="grow"
           data-name="Grow" data-price-cents="14999" data-interval="month" data-type="plan" data-price-year="149990"></button>
+        <button type="button" class="cart-btn" data-cart-btn data-key="scale-month" data-product="scale"
+          data-name="Scale" data-price-cents="34999" data-interval="month" data-type="plan" data-price-year="349990"></button>
+        <button type="button" class="cart-btn" data-cart-btn data-key="quotephoto-month" data-product="quotephoto"
+          data-name="Quote Photo Upload" data-price-cents="999" data-interval="month" data-type="addon" data-price-year="9990"></button>
+        <button type="button" class="cart-btn" data-cart-btn data-key="ads-pack-month" data-product="ads-pack"
+          data-name="Ads Pack" data-price-cents="89999" data-interval="month" data-type="addon"></button>
+        <button type="button" class="cart-btn" data-cart-btn data-key="ads-meta-month" data-product="ads-meta"
+          data-name="Meta" data-price-cents="89999" data-interval="month" data-type="addon"></button>
+        <button type="button" class="cart-btn" data-cart-btn data-key="ads-starter-month" data-product="ads-starter"
+          data-name="Starter test" data-price-cents="49999" data-interval="month" data-type="addon"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="review-month" data-product="review"
           data-name="Review Generation Engine" data-price-cents="9999" data-interval="month" data-type="addon" data-price-year="99990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="extrapage-one-time" data-product="extrapage"
@@ -92,6 +102,33 @@ function fixture(options: { french?: boolean } = {}) {
           <a href="/checkout" class="cart-drawer-checkout" data-cart-checkout aria-disabled="true">Checkout</a>
         </div>
       </aside>
+      <div class="cart-conflict-overlay" data-cart-conflict-overlay hidden></div>
+      <div class="cart-conflict" data-cart-conflict role="dialog" aria-modal="true" hidden
+        data-title="That doesn't go together"
+        data-msg-included="{item} is already included in {plan}."
+        data-msg-not-available="{item} isn't available with {plan}."
+        data-msg-bundle-component="{bundle} already includes {item}."
+        data-msg-bundle-overlap="{first} and {second} both include the Review Generation Engine."
+        data-msg-ads-two="You can only have one Ads option at a time."
+        data-msg-ai-pack="The AI Pack already includes {item}."
+        data-msg-monthly-only-add="{item} is monthly only, but your cart is yearly."
+        data-msg-yearly-blocked="Yearly billing isn't available with {items}. They're monthly only."
+        data-msg-plan-switch="Switching to {plan} doesn't work with {items}."
+        data-msg-mixed="Monthly and yearly items can't be paid together. Pick one billing term in your cart."
+        data-fix-remove="Remove {item}"
+        data-fix-replace="Replace {old} with {new}"
+        data-fix-switch-plan="Switch to {plan} and add it"
+        data-fix-switch-monthly="Switch everything to monthly"
+        data-fix-switch-yearly="Remove {items} and switch to yearly"
+        data-fix-switch-remove="Switch and remove {items}"
+        data-keep-plan="Keep {plan}"
+        data-keep-as-is="Keep as is"
+        data-dont-add="Don't add it">
+        <h2 data-cart-conflict-title></h2>
+        <p data-cart-conflict-message></p>
+        <div data-cart-conflict-actions></div>
+        <button type="button" data-cart-conflict-close aria-label="Close cart">×</button>
+      </div>
     </body></html>`,
     {
       url: 'https://webao.ca/pricing',
@@ -101,6 +138,7 @@ function fixture(options: { french?: boolean } = {}) {
     },
   );
   const doc = dom.window.document;
+  if (options.cart) dom.window.localStorage.setItem(STORAGE_KEY, JSON.stringify(options.cart));
   initCart(doc);
   const cart = () => JSON.parse(dom.window.localStorage.getItem(STORAGE_KEY) ?? '[]') as CartItem[];
   const click = (el: Element | null) => {
@@ -110,7 +148,18 @@ function fixture(options: { french?: boolean } = {}) {
     return event;
   };
   const button = (product: string) => doc.querySelector<HTMLElement>(`[data-cart-btn][data-product="${product}"]`);
-  return { dom, doc, window: dom.window, cart, click, button, close: () => dom.window.close() };
+  const conflict = () => doc.querySelector<HTMLElement>('[data-cart-conflict]')!;
+  const conflictMessage = () =>
+    doc.querySelector<HTMLElement>('[data-cart-conflict-message]')!.textContent ?? '';
+  const conflictButtons = () =>
+    [...doc.querySelectorAll<HTMLElement>('[data-cart-conflict-actions] button')].map((b) => b.textContent ?? '');
+  const clickConflictButton = (label: string) => {
+    const btn = [...doc.querySelectorAll<HTMLElement>('[data-cart-conflict-actions] button')].find(
+      (b) => b.textContent === label,
+    );
+    click(btn ?? null);
+  };
+  return { dom, doc, window: dom.window, cart, click, button, conflict, conflictMessage, conflictButtons, clickConflictButton, close: () => dom.window.close() };
 }
 
 test('an empty cart renders the localized empty state', () => {
@@ -446,5 +495,107 @@ test('drawer focus: opening moves focus inside, Tab is trapped, closing returns 
   // With the drawer closed, Tab is untouched by the trap.
   tab();
   assert.equal(doc.activeElement, openBtn);
+  window.close();
+});
+
+// ---------------------------------------------------------------------------
+// Cart conflicts: the popup blocks the impossible combination and offers a
+// fix that runs the change in one tap.
+// ---------------------------------------------------------------------------
+
+test('an add-on already included in the plan shows the popup and is not added', () => {
+  const { cart, click, button, conflict, conflictMessage, conflictButtons, clickConflictButton, window } = fixture();
+  click(button('grow'));
+  click(button('quotephoto'));
+  assert.equal(conflict().hidden, false);
+  assert.equal(conflictMessage(), 'Quote Photo Upload is already included in Grow.');
+  assert.deepEqual(conflictButtons(), ['Keep Grow']);
+  assert.deepEqual(cart().map((i) => i.key), ['grow-month']);
+  clickConflictButton('Keep Grow');
+  assert.equal(conflict().hidden, true);
+  assert.deepEqual(cart().map((i) => i.key), ['grow-month']);
+  window.close();
+});
+
+test('a second Ads option shows the popup and the fix swaps it in', () => {
+  const { cart, click, button, conflict, conflictMessage, conflictButtons, clickConflictButton, window } = fixture();
+  click(button('ads-pack'));
+  click(button('ads-meta'));
+  assert.equal(conflict().hidden, false);
+  assert.equal(conflictMessage(), 'You can only have one Ads option at a time.');
+  assert.deepEqual(conflictButtons(), ['Replace Ads Pack with Meta', "Don't add it"]);
+  assert.deepEqual(cart().map((i) => i.key), ['ads-pack-month']);
+  clickConflictButton('Replace Ads Pack with Meta');
+  assert.equal(conflict().hidden, true);
+  assert.deepEqual(cart().map((i) => i.key), ['ads-meta-month']);
+  window.close();
+});
+
+test('switching to a plan that excludes a cart add-on offers to remove it', () => {
+  const { cart, click, button, conflict, conflictMessage, conflictButtons, clickConflictButton, window } = fixture();
+  click(button('grow'));
+  click(button('review'));
+  click(button('scale'));
+  assert.equal(conflict().hidden, false);
+  assert.equal(conflictMessage(), "Switching to Scale doesn't work with Review Generation Engine.");
+  assert.deepEqual(conflictButtons(), ['Switch and remove Review Generation Engine', 'Keep Grow']);
+  assert.deepEqual(cart().map((i) => i.key), ['grow-month', 'review-month']);
+  clickConflictButton('Switch and remove Review Generation Engine');
+  assert.deepEqual(cart().map((i) => i.key), ['scale-month']);
+  window.close();
+});
+
+test('yearly billing with a monthly-only item offers to drop it and switch', () => {
+  const { cart, click, button, doc, conflict, conflictMessage, conflictButtons, clickConflictButton, window } = fixture();
+  click(button('grow'));
+  click(button('ads-starter'));
+  click(doc.querySelector('[data-billing-opt="year"]'));
+  assert.equal(conflict().hidden, false);
+  assert.equal(conflictMessage(), "Yearly billing isn't available with Starter test. They're monthly only.");
+  assert.deepEqual(conflictButtons(), ['Remove Starter test and switch to yearly', 'Keep as is']);
+  assert.deepEqual(cart().map((i) => i.key), ['grow-month', 'ads-starter-month']);
+  assert.equal(window.localStorage.getItem(BILLING_KEY), null);
+  clickConflictButton('Remove Starter test and switch to yearly');
+  assert.deepEqual(cart().map((i) => i.key), ['grow-year']);
+  assert.equal(window.localStorage.getItem(BILLING_KEY), 'year');
+  window.close();
+});
+
+test('yearly billing with only monthly-only items offers nothing but staying monthly', () => {
+  const { cart, click, button, doc, conflict, conflictMessage, conflictButtons, window } = fixture();
+  click(button('ads-starter'));
+  click(doc.querySelector('[data-billing-opt="year"]'));
+  assert.equal(conflict().hidden, false);
+  assert.equal(conflictMessage(), "Yearly billing isn't available with Starter test. They're monthly only.");
+  assert.deepEqual(conflictButtons(), ['Keep as is']);
+  assert.deepEqual(cart().map((i) => i.key), ['ads-starter-month']);
+  assert.equal(window.localStorage.getItem(BILLING_KEY), null);
+  window.close();
+});
+
+test('a stale conflicting cart is caught at checkout and the fix removes the extra item', () => {
+  const { cart, click, doc, conflict, conflictMessage, conflictButtons, clickConflictButton, window } = fixture({
+    cart: [
+      { key: cartKey('grow', 'month'), product: 'grow', name: 'Grow', priceCents: 14999, interval: 'month', type: 'plan' },
+      { key: cartKey('quotephoto', 'month'), product: 'quotephoto', name: 'Quote Photo Upload', priceCents: 999, interval: 'month', type: 'addon' },
+    ],
+  });
+  click(doc.querySelector('[data-cart-checkout]'));
+  assert.equal(conflict().hidden, false);
+  assert.equal(conflictMessage(), 'Quote Photo Upload is already included in Grow.');
+  assert.deepEqual(conflictButtons(), ['Remove Quote Photo Upload', 'Keep as is']);
+  clickConflictButton('Remove Quote Photo Upload');
+  assert.deepEqual(cart().map((i) => i.key), ['grow-month']);
+  window.close();
+});
+
+test('a product removed from the catalog is dropped from a stored cart on load', () => {
+  const { cart, window } = fixture({
+    cart: [
+      { key: 'ai-website-chat-month', product: 'ai-website-chat', name: 'AI Website Chat', priceCents: 14999, interval: 'month', type: 'addon' },
+      { key: cartKey('grow', 'month'), product: 'grow', name: 'Grow', priceCents: 14999, interval: 'month', type: 'plan' },
+    ],
+  });
+  assert.deepEqual(cart().map((i) => i.key), ['grow-month']);
   window.close();
 });

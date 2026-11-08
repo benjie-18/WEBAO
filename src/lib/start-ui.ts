@@ -25,7 +25,7 @@
 
 import { CART_CHANGE_EVENT, STORAGE_KEY, cartKey, type CartItem } from "./cart";
 import { baseInterval, cartProducts, convertItemsToBilling, intervalFor, priceCentsFor, supportsBilling, type Billing } from "./cart-catalog";
-import { BILLING_KEY, formatMoney, getCart, intervalSuffix, moneyFormat, readBilling, setCart } from "./cart-ui";
+import { BILLING_KEY, formatMoney, getCart, guardAdd, guardCheckout, guardPlanChange, intervalSuffix, moneyFormat, readBilling, setCart } from "./cart-ui";
 
 /** sessionStorage key shared with the checkout page. */
 export const CUSTOMER_KEY = "webao-checkout";
@@ -119,7 +119,7 @@ const ADS_CHANNELS = ["ads-meta", "ads-google", "ads-both", "ads-pack"];
  *  picking a channel on /start must never swap it out for a Core pack. */
 const ADS_PRODUCTS = new Set([...ADS_CHANNELS, "ads-starter", "gbp-revamp"]);
 /** AI services and the AI Pack (mutually exclusive, like the pricing page). */
-const AI_PRODUCTS = new Set(["ai-receptionist", "ai-website-chat", "ai-followup", "ai-pack"]);
+const AI_PRODUCTS = new Set(["ai-receptionist", "aichat", "ai-followup", "ai-pack"]);
 
 /** Which branch a product belongs to. Unknown keys fall back to Website,
  *  the historical behaviour for website add-ons and bundles. */
@@ -294,6 +294,9 @@ export function selectPlan(doc: Document, product: string, name: string): void {
   }
   const item = planItem(product, name, billing);
   if (!item) return;
+  // A plan switch can strand add-ons (included on the new plan, or not
+  // available on it): the guard pops the conflict up instead of switching.
+  if (!guardPlanChange(doc, getCart(win), item)) return;
   const others = getCart(win).filter((entry) => entry.type !== "plan");
   setCart(win, [...convertItemsToBilling(others, billing), item]);
 }
@@ -309,6 +312,10 @@ export function selectAdsChannel(doc: Document, product: string | null, name: st
   }
   const item = serviceItem(product, name, billing);
   if (!item) return;
+  // Picking a channel can clash with the Starter test (one Ads option at
+  // a time) or with a yearly cart (channels are monthly only): the guard
+  // pops the conflict up instead of swapping.
+  if (!guardAdd(doc, rest, item)) return;
   setCart(win, [...rest, item]);
 }
 
@@ -328,20 +335,20 @@ export function toggleGbp(doc: Document, name: string, on: boolean): void {
 
 /**
  * Toggle an AI service. The AI Pack and the individual services exclude
- * each other, the same guard as the pricing page.
+ * each other: the guard pops the conflict up with the fix, instead of
+ * silently dropping the other side.
  */
 export function toggleAiService(doc: Document, product: string, name: string, on: boolean): void {
   const win = doc.defaultView;
   const billing = readBilling(win);
-  let rest = getCart(win).filter((entry) => entry.product !== product);
+  const rest = getCart(win).filter((entry) => entry.product !== product);
   if (!on) {
     setCart(win, rest);
     return;
   }
-  if (product === "ai-pack") rest = rest.filter((entry) => !AI_PRODUCTS.has(entry.product));
-  else rest = rest.filter((entry) => entry.product !== "ai-pack");
   const item = serviceItem(product, name, billing);
   if (!item) return;
+  if (!guardAdd(doc, rest, item)) return;
   setCart(win, [...rest, item]);
 }
 
@@ -459,6 +466,9 @@ export function submitStart(doc: Document, form: HTMLFormElement, navigate: Navi
     first?.focus();
     return false;
   }
+  // A stale cart can hold a combination the guards now prevent: catch it
+  // here instead of letting it fail at payment.
+  if (!guardCheckout(doc)) return false;
 
   writeCustomer(win, details);
   notifyOwner(doc, details, cart);

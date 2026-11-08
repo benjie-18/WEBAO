@@ -461,8 +461,8 @@ const en = {
     ai: {
       packKicker: "AI bundle, best value",
       packPrice: "C$449.99/mo",
-      packIndividualValue: "C$549.97/mo",
-      packMonthlySaving: "C$99.98/mo",
+      packIndividualValue: "C$499.97/mo",
+      packMonthlySaving: "C$49.98/mo",
       serviceKicker: "AI service",
       individualValue: "Individual value:",
       monthlySaving: "Monthly saving:",
@@ -474,18 +474,22 @@ const en = {
         "Takes messages and callback details",
         "500 minutes per month, fair use",
       ],
-      chatPrice: "C$149.99/mo",
-      chatSetup: "C$149.99 one-time",
+      chatPrice: "C$99.99/mo",
+      chatSetup: "No setup fee",
+      // Merged with the Trained AI Chat Assistant add-on: one product,
+      // so this lists the same trained-chat features as terms note 20.
       chatIncludes: [
-        "Chat on your website",
-        "Trained on your business",
+        "Business-specific FAQs",
+        "25+ common questions and answers",
+        "Services and basic business information",
+        "Lead qualification and capture",
+        "Booking integration where supported",
       ],
       followupPrice: "C$99.99/mo",
       followupSetup: "C$99.99 one-time",
-      followupIncludes: [
-        "Missed-call text-back",
-        "Review requests after a job",
-      ],
+      // Missed-call text-back only: the review-request bullet was
+      // removed, that job belongs to the Review Generation Engine.
+      followupIncludes: ["Missed-call text-back"],
     },
     popularStrip: {
       label: "Popular add-on:",
@@ -581,6 +585,29 @@ const en = {
     checkoutEmpty: "No items in cart.",
     checkoutEmptyCta: "Browse pricing →",
     checkoutMixed: "Monthly and yearly items can't be paid together. Pick one billing term in your cart.",
+    // Conflict popup: shown when a combination can't be bought together.
+    // Short on purpose: one line of why, then a button that fixes it.
+    conflict: {
+      title: "That doesn't go together",
+      included: "{item} is already included in {plan}.",
+      notAvailable: "{item} isn't available with {plan}.",
+      bundleComponent: "{bundle} already includes {item}.",
+      bundleOverlap: "{first} and {second} both include the Review Generation Engine.",
+      adsTwo: "You can only have one Ads option at a time.",
+      aiPack: "The AI Pack already includes {item}.",
+      monthlyOnlyAdd: "{item} is monthly only, but your cart is yearly.",
+      yearlyBlocked: "Yearly billing isn't available with {items}. They're monthly only.",
+      planSwitch: "Switching to {plan} doesn't work with {items}.",
+      fixRemove: "Remove {item}",
+      fixReplace: "Replace {old} with {new}",
+      fixSwitchPlan: "Switch to {plan} and add it",
+      fixSwitchMonthly: "Switch everything to monthly",
+      fixSwitchYearly: "Remove {items} and switch to yearly",
+      fixSwitchRemove: "Switch and remove {items}",
+      keepPlan: "Keep {plan}",
+      keepAsIs: "Keep as is",
+      dontAdd: "Don't add it",
+    },
   },
 
   // The purchase funnel: /start collects the customer's details and confirms
@@ -625,7 +652,7 @@ const en = {
       adsNone: "No Ads Pack",
       aiLegend: "AI services",
       aiReceptionist: "AI Receptionist",
-      aiChat: "AI Website Chat",
+      aiChat: "Trained AI Chat Assistant",
       aiFollowup: "AI Follow-up",
       aiPack: "AI Pack",
       summaryTitle: "Summary",
@@ -1024,7 +1051,7 @@ const en = {
         title: "Website touchup",
         blocks: [
           { text: "Website touchup is a one-time service of C$199.99: we fix the issues the free audit found on your existing website, as listed in your audit report. It covers your existing site on its existing platform. No new design, no redesign, and no migration." },
-          { text: "Buying a Website touchup unlocks 10% off any subscription (website plan, Ads Pack, or AI service) for the first 3 months. The discount can be used only once, on a single subscription, and cannot be combined with other offers. We send you the coupon code after your touchup purchase." },
+          { text: "Buying a Website touchup unlocks 10% off any subscription (website plan, Ads Pack, or AI service) for the first 3 months. The discount can be used only once, on a single subscription, and cannot be combined with other offers. Buy the touchup together with a subscription and the discount is applied automatically at checkout; buy it on its own and we send you the coupon code after your purchase." },
         ],
       },
     },
@@ -1508,7 +1535,7 @@ const en = {
         {
           code: "WEBAOFIXIT3256",
           detail:
-            "10% off any subscription (website plan, Ads Pack, or AI service) for the first 3 months, one use only, on a single subscription. Unlocked by buying the Website touchup (C$199.99). Send it to the buyer after their touchup purchase. Note: in Stripe this coupon has no product restriction, so it applies to any subscription; it is not limited to one redemption in Stripe, so use it once per buyer.",
+            "10% off any subscription (website plan, Ads Pack, or AI service) for the first 3 months, one use only, on a single subscription. Unlocked by buying the Website touchup (C$199.99). Send it to the buyer after their touchup purchase, unless they bought the touchup together with a subscription: then the 10% was already applied automatically at checkout (see the order's touchup_discount metadata) and the code must not be sent. Note: in Stripe this coupon has no product restriction, so it applies to any subscription; it is not limited to one redemption in Stripe, so use it once per buyer.",
         },
       ],
     },

@@ -41,7 +41,7 @@ const adsRows = [
 const gbpPrice = `${formatMoney(priceCentsFor("gbp-revamp", "one-time") ?? 0, fmt)}${t.cart.suffixOneTime}`;
 const aiRows = [
   { id: "ai-receptionist", name: t.start.selection.aiReceptionist },
-  { id: "ai-website-chat", name: t.start.selection.aiChat },
+  { id: "aichat", name: t.start.selection.aiChat },
   { id: "ai-followup", name: t.start.selection.aiFollowup },
   { id: "ai-pack", name: t.start.selection.aiPack },
 ].map((row) => ({ ...row, price: `${formatMoney(priceCentsFor(row.id, "month") ?? 0, fmt)}${t.cart.suffixMonth}` }));

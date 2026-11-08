@@ -125,10 +125,11 @@ test('yearly items resolve to their own prices', async () => {
 
 test('a yearly plan replaces the monthly one, never mixed', async () => {
   // The cart cannot hold both (the client converts on toggle); if a client
-  // still sends both, the API refuses instead of letting Stripe fail.
+  // still sends both, the API refuses instead of letting Stripe fail. The
+  // same plan twice is caught as two plans before the interval check.
   const { status, json, calls } = await call({ items: [{ key: 'launch-month' }, { key: 'launch-year' }] });
   assert.equal(status, 400);
-  assert.match(String(json.error), /Monthly and yearly/);
+  assert.match(String(json.error), /Only one website plan/);
   assert.equal(calls.length, 0, 'Stripe is not called with an impossible cart');
 });
 
@@ -245,4 +246,85 @@ test('checkout is not throttled in-worker (edge rule owns it)', async () => {
   });
   assert.equal(saturated.status, 200);
   assert.equal(saturated.calls.length, 1);
+});
+
+// ---------------------------------------------------------------------------
+// Cart conflicts: the server is the backstop for crafted requests — the UI
+// guards stop these combinations from being added, but a request sent
+// directly must be rejected before Stripe is ever called.
+// ---------------------------------------------------------------------------
+
+const CONFLICT_CARTS: Array<{ items: string[]; error: string }> = [
+  {
+    items: ['grow-month', 'quotephoto-month'],
+    error: 'Quote Photo Upload is already included in Grow.',
+  },
+  {
+    items: ['launch-month', 'admin-month'],
+    error: "Advanced Admin Panel isn't available with Launch.",
+  },
+  {
+    items: ['scale-month', 'lead-pack-month'],
+    error: "Lead Pack isn't available with Scale.",
+  },
+  {
+    items: ['grow-month', 'lead-pack-month', 'review-month'],
+    error: 'Lead Pack already includes Review Generation Engine.',
+  },
+  {
+    items: ['grow-month', 'lead-pack-month', 'visibility-pack-month'],
+    error: 'Lead Pack and Visibility Pack both include the Review Generation Engine.',
+  },
+  {
+    items: ['launch-month', 'grow-month'],
+    error: 'Only one website plan can be bought at a time.',
+  },
+  {
+    items: ['ads-starter-month', 'ads-meta-month'],
+    error: 'Choose one Ads Pack option: Meta, Google, both together, or the Starter test. Buying two Ads options together is not allowed.',
+  },
+  {
+    items: ['ai-pack-month', 'aichat-month'],
+    error: 'The AI Pack already includes AI Receptionist, Trained AI Chat Assistant and AI Follow-up. Buy the pack on its own, or the individual services on their own.',
+  },
+  {
+    items: ['grow-year', 'ads-meta-month'],
+    error: "Monthly and yearly items can't be paid in the same checkout. Choose one billing term in your cart.",
+  },
+];
+
+for (const { items, error } of CONFLICT_CARTS) {
+  test(`checkout rejects a conflicting cart: ${items.join(' + ')}`, async () => {
+    const { status, json, calls } = await call({
+      email: 'client@example.ca',
+      items: items.map((key) => ({ key })),
+    });
+    assert.equal(status, 400);
+    assert.equal(json.error, error);
+    assert.equal(calls.length, 0, 'no Stripe call is made for a rejected cart');
+  });
+}
+
+test('checkout applies the touchup discount automatically when touchup shares a cart with a subscription', async () => {
+  const { status, calls } = await call({
+    email: 'client@example.ca',
+    items: [{ key: 'website-touchup-onetime' }, { key: 'grow-month' }],
+  });
+  assert.equal(status, 200);
+  const [session] = calls;
+  assert.equal(session.params.get('discounts[0][coupon]'), 'WEBAOFIXIT3256');
+  assert.equal(session.params.get('allow_promotion_codes'), 'false');
+  assert.equal(session.params.get('metadata[touchup_discount]'), 'auto');
+});
+
+test('checkout does not apply the touchup discount without a subscription in the cart', async () => {
+  const { status, calls } = await call({
+    email: 'client@example.ca',
+    items: [{ key: 'website-touchup-onetime' }],
+  });
+  assert.equal(status, 200);
+  const [session] = calls;
+  assert.equal(session.params.get('discounts[0][coupon]'), null);
+  assert.equal(session.params.get('allow_promotion_codes'), 'true');
+  assert.equal(session.params.get('metadata[touchup_discount]'), null);
 });

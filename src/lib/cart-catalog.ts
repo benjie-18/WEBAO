@@ -81,9 +81,10 @@ const catalog = {
 
   /* ── AI services (monthly only, like the Ads Pack). The one-time setup
      fee is not sold here: checkout adds it server-side, see
-     worker/checkout.ts, following the Ads Pack setup pattern. */
+     worker/checkout.ts, following the Ads Pack setup pattern. The chat
+     service is the Trained AI Chat Assistant (aichat, in the add-ons
+     below): one product, C$99.99/mo, yearly available, no setup fee. */
   "ai-receptionist": { product: "ai-receptionist", type: "addon", monthCents: 29999 },
-  "ai-website-chat": { product: "ai-website-chat", type: "addon", monthCents: 14999 },
   "ai-followup": { product: "ai-followup", type: "addon", monthCents: 9999 },
   "ai-pack": { product: "ai-pack", type: "bundle", monthCents: 44999 },
 

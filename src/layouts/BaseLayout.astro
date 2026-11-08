@@ -906,6 +906,48 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
       </div>
     </aside>
 
+    <!-- Cart conflict popup. Hidden until cart-ui.ts shows it: one short
+         line explaining why a combination can't be bought, plus buttons
+         that fix it. Strings travel as data-* attributes like the drawer. -->
+    <div class="cart-conflict-overlay" data-cart-conflict-overlay hidden></div>
+    <div
+      class="cart-conflict"
+      data-cart-conflict
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="cart-conflict-title"
+      hidden
+      data-title={t.cart.conflict.title}
+      data-msg-included={t.cart.conflict.included}
+      data-msg-not-available={t.cart.conflict.notAvailable}
+      data-msg-bundle-component={t.cart.conflict.bundleComponent}
+      data-msg-bundle-overlap={t.cart.conflict.bundleOverlap}
+      data-msg-ads-two={t.cart.conflict.adsTwo}
+      data-msg-ai-pack={t.cart.conflict.aiPack}
+      data-msg-monthly-only-add={t.cart.conflict.monthlyOnlyAdd}
+      data-msg-yearly-blocked={t.cart.conflict.yearlyBlocked}
+      data-msg-plan-switch={t.cart.conflict.planSwitch}
+      data-msg-mixed={t.cart.checkoutMixed}
+      data-fix-remove={t.cart.conflict.fixRemove}
+      data-fix-replace={t.cart.conflict.fixReplace}
+      data-fix-switch-plan={t.cart.conflict.fixSwitchPlan}
+      data-fix-switch-monthly={t.cart.conflict.fixSwitchMonthly}
+      data-fix-switch-yearly={t.cart.conflict.fixSwitchYearly}
+      data-fix-switch-remove={t.cart.conflict.fixSwitchRemove}
+      data-keep-plan={t.cart.conflict.keepPlan}
+      data-keep-as-is={t.cart.conflict.keepAsIs}
+      data-dont-add={t.cart.conflict.dontAdd}
+    >
+      <h2 class="cart-conflict-title" id="cart-conflict-title" data-cart-conflict-title></h2>
+      <p class="cart-conflict-message" data-cart-conflict-message></p>
+      <div class="cart-conflict-actions" data-cart-conflict-actions></div>
+      <button type="button" class="cart-conflict-close" data-cart-conflict-close aria-label={t.cart.close}>
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
     <style>
       .header-cart-btn {
         position: relative;
@@ -1130,6 +1172,68 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
         background: var(--paper);
         color: #ff3b30;
         border-color: #ff3b30;
+      }
+      /* Cart conflict popup: centred dialog above everything else. The
+         action buttons are injected by cart-ui.ts, so :global() required. */
+      .cart-conflict-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 100;
+      }
+      .cart-conflict-overlay[hidden],
+      .cart-conflict[hidden] {
+        display: none;
+      }
+      .cart-conflict {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: min(440px, calc(100vw - 40px));
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        padding: 24px;
+        z-index: 101;
+        box-shadow: 0 24px 64px rgba(0, 0, 0, 0.25);
+      }
+      .cart-conflict-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin: 0 32px 8px 0;
+      }
+      .cart-conflict-message {
+        margin: 0 0 20px;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+      .cart-conflict-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      :global(.cart-conflict-actions .btn) {
+        justify-content: center;
+      }
+      .cart-conflict-close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 1px solid var(--line);
+        background: transparent;
+        color: var(--ink);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .cart-conflict-close svg {
+        width: 14px;
+        height: 14px;
       }
     </style>
     <script>

@@ -23,7 +23,15 @@ import {
   type CartInterval,
   type CartItem,
 } from "./cart";
-import { convertItemsToBilling, type Billing } from "./cart-catalog";
+import { cartProducts, convertItemsToBilling, priceCentsFor, type Billing } from "./cart-catalog";
+import {
+  conflictsForAdding,
+  findConflicts,
+  monthlyOnlyInCart,
+  type CartConflict,
+  type RuleItem,
+} from "./cart-rules";
+import { compatibility } from "./pricing";
 
 /** localStorage key holding the active billing term. */
 export const BILLING_KEY = "webao_billing_v1";
@@ -154,6 +162,419 @@ function label(doc: Document, name: string, fallback: string): string {
   return data[name] ?? fallback;
 }
 
+function fill(template: string | undefined, vars: Record<string, string>): string {
+  let out = template ?? "";
+  for (const [key, value] of Object.entries(vars)) out = out.split(`{${key}}`).join(value);
+  return out;
+}
+
+// ---------------------------------------------------------------------------
+// Cart conflicts: the popup and the guards.
+// ---------------------------------------------------------------------------
+
+/** Products with a monthly price and no yearly price (Ads, AI services). */
+export function monthlyOnlySet(): Set<string> {
+  return new Set(
+    Object.values(cartProducts)
+      .filter((p) => p.monthCents !== undefined && p.yearCents === undefined)
+      .map((p) => p.product),
+  );
+}
+
+function toRuleItem(item: CartItem): RuleItem {
+  return { product: item.product, interval: item.interval, type: item.type };
+}
+
+function toRuleItems(items: CartItem[]): RuleItem[] {
+  return items.map(toRuleItem);
+}
+
+/** Display names for products, from the cart (or the product id as a fallback). */
+function namesOf(items: CartItem[], products: string[]): string {
+  return products.map((product) => items.find((i) => i.product === product)?.name ?? product).join(", ");
+}
+
+function conflictEl(doc: Document): HTMLElement | null {
+  return doc.querySelector<HTMLElement>("[data-cart-conflict]");
+}
+
+function conflictOverlayEl(doc: Document): HTMLElement | null {
+  return doc.querySelector<HTMLElement>("[data-cart-conflict-overlay]");
+}
+
+function conflictData(doc: Document): Record<string, string | undefined> {
+  return ((conflictEl(doc)?.dataset ?? {}) as Record<string, string | undefined>);
+}
+
+let conflictOpener: HTMLElement | null = null;
+
+export interface ConflictAction {
+  label: string;
+  primary?: boolean;
+  apply: () => void;
+}
+
+/**
+ * Show the conflict popup: one short line of why, then buttons that fix
+ * it. Returns true when the attempted action must not proceed: either
+ * the popup is shown (the fix runs from its buttons) or the dialog is
+ * missing, in which case blocking is the safe choice. The dialog is
+ * rendered by BaseLayout on every page, so the missing case never
+ * happens in production. Closing the popup changes nothing.
+ */
+export function showConflict(doc: Document, message: string, actions: ConflictAction[]): boolean {
+  const dialog = conflictEl(doc);
+  const overlay = conflictOverlayEl(doc);
+  if (!dialog || !overlay) return true;
+  const data = conflictData(doc);
+  const title = dialog.querySelector<HTMLElement>("[data-cart-conflict-title]");
+  const body = dialog.querySelector<HTMLElement>("[data-cart-conflict-message]");
+  const box = dialog.querySelector<HTMLElement>("[data-cart-conflict-actions]");
+  if (!title || !body || !box) return true;
+  conflictOpener = (doc.activeElement as HTMLElement | null) ?? null;
+  title.textContent = data.title ?? "That doesn't go together";
+  body.textContent = message;
+  box.innerHTML = "";
+  for (const action of actions) {
+    const btn = doc.createElement("button");
+    btn.type = "button";
+    btn.className = action.primary ? "btn btn--primary" : "btn btn--ghost";
+    btn.textContent = action.label;
+    btn.addEventListener("click", () => {
+      closeConflict(doc);
+      action.apply();
+    });
+    box.appendChild(btn);
+  }
+  overlay.hidden = false;
+  dialog.hidden = false;
+  const first = box.querySelector<HTMLElement>("button");
+  if (first) first.focus();
+  return true;
+}
+
+export function closeConflict(doc: Document): void {
+  const dialog = conflictEl(doc);
+  const overlay = conflictOverlayEl(doc);
+  if (dialog) dialog.hidden = true;
+  if (overlay) overlay.hidden = true;
+  if (conflictOpener && doc.contains(conflictOpener)) conflictOpener.focus();
+  conflictOpener = null;
+}
+
+export function isConflictOpen(doc: Document): boolean {
+  const dialog = conflictEl(doc);
+  return !!dialog && !dialog.hidden;
+}
+
+/** One short message for a bare conflict (stale carts reaching checkout). */
+export function conflictMessage(doc: Document, conflict: CartConflict, items: CartItem[]): string {
+  const data = conflictData(doc);
+  switch (conflict.kind) {
+    case "included":
+      return fill(data.msgIncluded, { item: namesOf(items, [conflict.component ?? ""]), plan: namesOf(items, [conflict.plan ?? ""]) });
+    case "not-available":
+      return fill(data.msgNotAvailable, { item: namesOf(items, [conflict.component ?? ""]), plan: namesOf(items, [conflict.plan ?? ""]) });
+    case "bundle-component":
+      return fill(data.msgBundleComponent, {
+        bundle: namesOf(items, [conflict.bundle ?? ""]),
+        item: namesOf(items, [conflict.component ?? ""]),
+      });
+    case "bundle-overlap":
+      return fill(data.msgBundleOverlap, {
+        first: namesOf(items, [conflict.products[0] ?? ""]),
+        second: namesOf(items, [conflict.products[1] ?? ""]),
+      });
+    case "ads-two":
+      return data.msgAdsTwo ?? "";
+    case "ai-pack":
+      return fill(data.msgAiPack, { item: namesOf(items, conflict.products.filter((p) => p !== "ai-pack")) });
+    case "mixed-intervals":
+      return data.msgMixed ?? "";
+    case "two-plans":
+      return data.msgMixed ?? "";
+  }
+}
+
+/** Apply a conflict's automated fix to the cart (remove, or re-bill monthly). */
+export function applyConflictFix(win: Window | null, items: CartItem[], conflict: CartConflict): CartItem[] {
+  if (conflict.fix && "convertTo" in conflict.fix) {
+    return convertItemsToBilling(items, conflict.fix.convertTo);
+  }
+  const remove = conflict.fix && "remove" in conflict.fix ? conflict.fix.remove : [];
+  return items.filter((item) => !remove.includes(item.product));
+}
+
+/**
+ * Guard a cart that is about to be paid for (drawer checkout, /start
+ * submit). Returns true when the cart is clean; otherwise shows the
+ * popup for the first conflict, with its automated fix, and returns
+ * false.
+ */
+export function guardCheckout(doc: Document): boolean {
+  const win = doc.defaultView;
+  const cart = getCart(win);
+  const conflicts = findConflicts(toRuleItems(cart));
+  if (conflicts.length === 0) return true;
+  const conflict = conflicts[0];
+  const data = conflictData(doc);
+  const message = conflictMessage(doc, conflict, cart);
+  const actions: ConflictAction[] = [];
+  if (conflict.fix && "convertTo" in conflict.fix) {
+    actions.push({
+      label: data.fixSwitchMonthly ?? "Switch everything to monthly",
+      primary: true,
+      apply: () => setCart(win, applyConflictFix(win, cart, conflict)),
+    });
+  } else {
+    const remove = conflict.fix && "remove" in conflict.fix ? conflict.fix.remove : [];
+    actions.push({
+      label: fill(data.fixRemove, { item: namesOf(cart, remove) }),
+      primary: true,
+      apply: () => setCart(win, applyConflictFix(win, cart, conflict)),
+    });
+  }
+  actions.push({ label: data.keepAsIs ?? "Keep as is", apply: () => {} });
+  return !showConflict(doc, message, actions);
+}
+
+/**
+ * Cheapest plan (by monthly price) where `product` is a plain add-on
+ * (matrix "A"), closest in price to `fromPlan`. Used for the
+ * "Switch to Grow and add it" fix.
+ */
+function altPlanFor(product: string, fromPlan?: string): string | undefined {
+  const rowKey = product === "lead-pack" ? "leadpack" : product === "visibility-pack" ? "vispack" : product;
+  const row = compatibility.find((r) => r.key === rowKey);
+  if (!row) return undefined;
+  const fromPrice = fromPlan ? cartProducts[fromPlan]?.monthCents ?? 0 : 0;
+  const available = (["launch", "grow", "scale"] as const)
+    .filter((planId) => row[planId] === "A")
+    .map((planId) => ({ planId, diff: Math.abs((cartProducts[planId]?.monthCents ?? 0) - fromPrice) }))
+    .sort((a, b) => a.diff - b.diff);
+  return available[0]?.planId;
+}
+
+/**
+ * Guard adding `candidate` to `cart`. Returns true when the add may
+ * proceed; otherwise shows the popup with the fix and returns false.
+ * `planItemFor` resolves a plan product to its cart item (the pricing
+ * page reads it off the plan button); without it, fixes that need a
+ * plan switch are not offered.
+ */
+export function guardAdd(
+  doc: Document,
+  cart: CartItem[],
+  candidate: CartItem,
+  planItemFor?: (product: string) => CartItem | null,
+): boolean {
+  const win = doc.defaultView;
+  const conflicts = conflictsForAdding(toRuleItems(cart), toRuleItem(candidate));
+  if (conflicts.length === 0) return true;
+  const data = conflictData(doc);
+  const conflict = conflicts[0];
+  const plan = cart.find((i) => i.type === "plan");
+  const name = candidate.name;
+  const removeProducts = (products: string[]) => cart.filter((i) => !products.includes(i.product));
+  const dismiss = { label: data.dontAdd ?? "Don't add it", apply: () => {} };
+
+  switch (conflict.kind) {
+    case "included": {
+      return !showConflict(doc, fill(data.msgIncluded, { item: name, plan: plan?.name ?? "" }), [
+        { label: fill(data.keepPlan, { plan: plan?.name ?? "" }), primary: true, apply: () => {} },
+      ]);
+    }
+    case "not-available": {
+      const alt = altPlanFor(conflict.component ?? "", plan?.product);
+      const altItem = alt && plan && planItemFor ? planItemFor(alt) : null;
+      const actions: ConflictAction[] = [];
+      if (altItem && plan) {
+        // Only offer the switch when nothing else in the cart would
+        // break under the new plan; otherwise stay with "don't add".
+        const next = [...removeProducts([plan.product]), altItem, candidate];
+        if (findConflicts(toRuleItems(next)).length === 0) {
+          actions.push({
+            label: fill(data.fixSwitchPlan, { plan: altItem.name }),
+            primary: true,
+            apply: () => setCart(win, next),
+          });
+        }
+      }
+      actions.push(dismiss);
+      return !showConflict(doc, fill(data.msgNotAvailable, { item: name, plan: plan?.name ?? "" }), actions);
+    }
+    case "bundle-component": {
+      if (candidate.product === conflict.bundle) {
+        // Adding the bundle: replace the component already in the cart.
+        return !showConflict(
+          doc,
+          fill(data.msgBundleComponent, { bundle: name, item: namesOf(cart, [conflict.component ?? ""]) }),
+          [
+            {
+              label: fill(data.fixReplace, { old: namesOf(cart, [conflict.component ?? ""]), new: name }),
+              primary: true,
+              apply: () => setCart(win, [...removeProducts([conflict.component ?? ""]), candidate]),
+            },
+            dismiss,
+          ],
+        );
+      }
+      // Adding a component the bundle already includes: keep the bundle.
+      return !showConflict(
+        doc,
+        fill(data.msgBundleComponent, { bundle: namesOf(cart, [conflict.bundle ?? ""]), item: name }),
+        [{ label: data.keepAsIs ?? "Keep as is", primary: true, apply: () => {} }],
+      );
+    }
+    case "bundle-overlap": {
+      const existing = conflict.products.find((p) => p !== candidate.product) ?? "";
+      return !showConflict(
+        doc,
+        fill(data.msgBundleOverlap, { first: namesOf(cart, [existing]), second: name }),
+        [
+          {
+            label: fill(data.fixReplace, { old: namesOf(cart, [existing]), new: name }),
+            primary: true,
+            apply: () => setCart(win, [...removeProducts([existing]), candidate]),
+          },
+          dismiss,
+        ],
+      );
+    }
+    case "ads-two": {
+      const existing = conflict.products.find((p) => p !== candidate.product) ?? "";
+      return !showConflict(doc, data.msgAdsTwo ?? "", [
+        {
+          label: fill(data.fixReplace, { old: namesOf(cart, [existing]), new: name }),
+          primary: true,
+          apply: () => setCart(win, [...removeProducts(conflict.products.filter((p) => p !== candidate.product)), candidate]),
+        },
+        dismiss,
+      ]);
+    }
+    case "ai-pack": {
+      if (candidate.product === "ai-pack") {
+        const individuals = conflict.products.filter((p) => p !== "ai-pack");
+        return !showConflict(doc, fill(data.msgAiPack, { item: namesOf(cart, individuals) }), [
+          {
+            label: fill(data.fixReplace, { old: namesOf(cart, individuals), new: name }),
+            primary: true,
+            apply: () => setCart(win, [...removeProducts(individuals), candidate]),
+          },
+          dismiss,
+        ]);
+      }
+      return !showConflict(doc, fill(data.msgAiPack, { item: name }), [
+        {
+          label: fill(data.fixReplace, { old: namesOf(cart, ["ai-pack"]), new: name }),
+          primary: true,
+          apply: () => setCart(win, [...removeProducts(["ai-pack"]), candidate]),
+        },
+        dismiss,
+      ]);
+    }
+    case "mixed-intervals": {
+      return !showConflict(
+        doc,
+        candidate.interval === "month" && candidate.product !== plan?.product
+          ? fill(data.msgMonthlyOnlyAdd, { item: name })
+          : (data.msgMixed ?? ""),
+        [
+          {
+            label: data.fixSwitchMonthly ?? "Switch everything to monthly",
+            primary: true,
+            apply: () => {
+              const monthly = convertItemsToBilling(cart, "month");
+              const candidateMonth =
+                candidate.interval === "month"
+                  ? candidate
+                  : {
+                      ...candidate,
+                      key: cartKey(candidate.product, "month"),
+                      interval: "month" as const,
+                      priceCents: priceCentsFor(candidate.product, "month") ?? candidate.priceCents,
+                    };
+              setCart(win, [...monthly, candidateMonth]);
+            },
+          },
+          dismiss,
+        ],
+      );
+    }
+    case "two-plans":
+      // Unreachable through the UI: adding a plan replaces the old one.
+      return true;
+  }
+}
+
+/**
+ * Guard switching to `newPlan`. Returns true when the switch may
+ * proceed; otherwise shows the popup and returns false.
+ */
+export function guardPlanChange(doc: Document, cart: CartItem[], newPlan: CartItem): boolean {
+  const win = doc.defaultView;
+  const conflicts = conflictsForAdding(toRuleItems(cart), toRuleItem(newPlan));
+  if (conflicts.length === 0) return true;
+  const data = conflictData(doc);
+  const oldPlan = cart.find((i) => i.type === "plan");
+  const remove: string[] = [];
+  for (const conflict of conflicts) {
+    if (conflict.fix && "remove" in conflict.fix) remove.push(...conflict.fix.remove);
+    if (conflict.kind === "mixed-intervals") {
+      remove.push(...monthlyOnlyInCart(toRuleItems(cart), monthlyOnlySet()));
+    }
+  }
+  const offending = [...new Set(remove)];
+  const message =
+    conflicts.every((c) => c.kind === "mixed-intervals")
+      ? fill(data.msgYearlyBlocked, { items: namesOf(cart, offending) })
+      : fill(data.msgPlanSwitch, { plan: newPlan.name, items: namesOf(cart, offending) });
+  const apply = () => {
+    const kept = cart.filter((i) => i.type !== "plan" && !offending.includes(i.product));
+    setCart(win, [...kept, newPlan]);
+  };
+  return !showConflict(doc, message, [
+    { label: fill(data.fixSwitchRemove, { items: namesOf(cart, offending) }), primary: true, apply },
+    {
+      label: oldPlan ? fill(data.keepPlan, { plan: oldPlan.name }) : (data.keepAsIs ?? "Keep as is"),
+      apply: () => {},
+    },
+  ]);
+}
+
+/**
+ * Guard switching the billing term to `billing`. Yearly is unavailable
+ * while the cart holds monthly-only products. Returns true when the
+ * switch may proceed; otherwise shows the popup and returns false.
+ */
+export function guardBillingChange(doc: Document, billing: Billing): boolean {
+  if (billing !== "year") return true;
+  const win = doc.defaultView;
+  const cart = getCart(win);
+  const monthly = monthlyOnlyInCart(toRuleItems(cart), monthlyOnlySet());
+  if (monthly.length === 0) return true;
+  const data = conflictData(doc);
+  const names = namesOf(cart, monthly);
+  const message = fill(data.msgYearlyBlocked, { items: names });
+  if (monthly.length === cart.length) {
+    // Removing them would empty the cart: only offer to stay monthly.
+    return !showConflict(doc, message, [
+      { label: data.keepAsIs ?? "Keep as is", primary: true, apply: () => {} },
+    ]);
+  }
+  return !showConflict(doc, message, [
+    {
+      label: fill(data.fixSwitchYearly, { items: names }),
+      primary: true,
+      apply: () => {
+        setCart(win, cart.filter((i) => !monthly.includes(i.product)));
+        applyBilling(doc, "year");
+      },
+    },
+    { label: data.keepAsIs ?? "Keep as is", apply: () => {} },
+  ]);
+}
+
 function escapeHtml(value: string): string {
   return value
     .replace(/&/g, "&amp;")
@@ -220,13 +641,33 @@ export function toggleFromButton(btn: HTMLElement, doc: Document): void {
     return;
   }
 
+  const candidate: CartItem = { key, ...info };
+  if (info.type === "plan") {
+    // A plan switch goes through the plan guard: it can strand add-ons
+    // (included on the new plan, or not available on it).
+    if (!guardPlanChange(doc, cart, candidate)) return;
+    let next = cart.filter((item) => item.type !== "plan");
+    if (isRecurring(info.interval)) next = convertItemsToBilling(next, info.interval as Billing);
+    next.push(candidate);
+    setCart(win, next);
+    return;
+  }
+
+  // Every other add goes through the conflict guard. The "switch plan
+  // and add it" fix reads the plan off its pricing-page button.
+  const planItemFor = (product: string): CartItem | null => {
+    const planBtn = doc.querySelector<HTMLElement>(`[data-cart-btn][data-product="${product}"]`);
+    if (!planBtn) return null;
+    const planInfo = buttonInfo(planBtn, readBilling(win));
+    if (!planInfo) return null;
+    return { key: cartKey(planInfo.product, planInfo.interval), ...planInfo };
+  };
+  if (!guardAdd(doc, cart, candidate, planItemFor)) return;
   let next = cart.filter((item) => item.key !== key);
-  // Only one plan at a time (adding a plan replaces the previous plan).
-  if (info.type === "plan") next = next.filter((item) => item.type !== "plan");
   // Stripe cannot bill monthly and yearly prices in the same session, so the
   // cart always keeps a single term.
   if (isRecurring(info.interval)) next = convertItemsToBilling(next, info.interval as Billing);
-  next.push({ key, ...info });
+  next.push(candidate);
   setCart(win, next);
 }
 
@@ -445,6 +886,30 @@ function trapDrawerTab(event: KeyboardEvent, doc: Document): void {
   }
 }
 
+/** Same trap for the conflict popup, which sits above the drawer. */
+function trapConflictTab(event: KeyboardEvent, doc: Document): void {
+  const dialog = conflictEl(doc);
+  if (!dialog || dialog.hidden) return;
+  const focusables = Array.from(
+    dialog.querySelectorAll<HTMLElement>('button:not([disabled]), [tabindex]:not([tabindex="-1"])'),
+  ).filter((el) => !el.hasAttribute("hidden"));
+  if (focusables.length === 0) return;
+  const active = doc.activeElement as HTMLElement | null;
+  const first = focusables[0];
+  const last = focusables[focusables.length - 1];
+  if (event.shiftKey) {
+    if (active === first || !dialog.contains(active)) {
+      event.preventDefault();
+      last.focus();
+    }
+  } else {
+    if (active === last || !dialog.contains(active)) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+}
+
 function requestFrame(fn: () => void): void {
   if (typeof requestAnimationFrame === "function") requestAnimationFrame(() => fn());
   else setTimeout(fn, 0);
@@ -521,7 +986,10 @@ function onClick(event: Event, doc: Document): void {
   const billingBtn = closestElement(event.target, "[data-billing-opt]");
   if (billingBtn) {
     event.preventDefault();
-    applyBilling(doc, billingBtn.dataset.billingOpt === "year" ? "year" : "month");
+    // Yearly is unavailable while the cart holds monthly-only products:
+    // the guard pops the conflict up instead of switching.
+    const billing = billingBtn.dataset.billingOpt === "year" ? "year" : "month";
+    if (guardBillingChange(doc, billing)) applyBilling(doc, billing);
     return;
   }
 
@@ -537,10 +1005,27 @@ function onClick(event: Event, doc: Document): void {
     return;
   }
 
+  if (closestElement(event.target, "[data-cart-conflict-close]") || closestElement(event.target, "[data-cart-conflict-overlay]")) {
+    event.preventDefault();
+    closeConflict(doc);
+    return;
+  }
+
   // Empty cart: keep the visitor on the page instead of opening an empty
   // Stripe session.
-  if (closestElement(event.target, "[data-cart-checkout]") && getCart(win).length === 0) {
-    event.preventDefault();
+  const checkoutBtn = closestElement(event.target, "[data-cart-checkout]");
+  if (checkoutBtn) {
+    const cart = getCart(win);
+    if (cart.length === 0) {
+      event.preventDefault();
+      return;
+    }
+    // A stale cart can hold a combination the guards now prevent: catch
+    // it here instead of letting it fail at payment.
+    if (!guardCheckout(doc)) {
+      event.preventDefault();
+      return;
+    }
   }
 }
 
@@ -563,12 +1048,19 @@ export function initCart(doc: Document = document): void {
       // Escape press, stealing focus back to the old opener long after the
       // drawer closed, e.g. while the visitor types in a form.
       if ((event as KeyboardEvent).key === "Escape") {
+        if (isConflictOpen(doc)) {
+          closeConflict(doc);
+          return;
+        }
         const drawer = drawerEl(doc);
         // `hidden` flips synchronously in openDrawer; the `is-open` class
         // only lands on the next animation frame, so it cannot gate this.
         if (drawer && !drawer.hidden) closeDrawer(doc);
       }
-      if ((event as KeyboardEvent).key === "Tab") trapDrawerTab(event as KeyboardEvent, doc);
+      if ((event as KeyboardEvent).key === "Tab") {
+        if (isConflictOpen(doc)) trapConflictTab(event as KeyboardEvent, doc);
+        else trapDrawerTab(event as KeyboardEvent, doc);
+      }
     });
     win?.addEventListener(CART_CHANGE_EVENT, () => refresh(doc));
     // Keep multiple tabs in sync.
@@ -584,5 +1076,10 @@ export function initCart(doc: Document = document): void {
       doc.addEventListener("DOMContentLoaded", () => refresh(doc), { once: true });
     }
   }
+  // Products removed from the catalog (e.g. the merged AI Website Chat)
+  // can linger in an old cart: drop them so they can never reach payment.
+  const stored = getCart(win);
+  const known = stored.filter((item) => item.product in cartProducts);
+  if (known.length !== stored.length) setCart(win, known);
   refresh(doc);
 }

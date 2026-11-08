@@ -464,8 +464,8 @@ const fr = {
     ai: {
       packKicker: "Pack IA, meilleure valeur",
       packPrice: "C$449.99/mois",
-      packIndividualValue: "C$549.97/mois",
-      packMonthlySaving: "C$99.98/mois",
+      packIndividualValue: "C$499.97/mois",
+      packMonthlySaving: "C$49.98/mois",
       serviceKicker: "Service IA",
       individualValue: "Valeur individuelle :",
       monthlySaving: "Économie mensuelle :",
@@ -477,18 +477,22 @@ const fr = {
         "Prend les messages et les coordonnées de rappel",
         "500 minutes par mois, utilisation raisonnable",
       ],
-      chatPrice: "C$149.99/mois",
-      chatSetup: "C$149.99 unique",
+      chatPrice: "C$99.99/mois",
+      chatSetup: "Aucuns frais d'installation",
+      // Fusionné avec l'option Assistant clavardage IA entraîné : un seul
+      // produit, donc la même liste que la note 20 des conditions.
       chatIncludes: [
-        "Clavardage sur votre site web",
-        "Formé sur votre entreprise",
+        "FAQ spécifiques à l'entreprise",
+        "Plus de 25 questions et réponses courantes",
+        "Services et informations de base sur l'entreprise",
+        "Qualification et capture de prospects",
+        "Intégration de réservation lorsque prise en charge",
       ],
       followupPrice: "C$99.99/mois",
       followupSetup: "C$99.99 unique",
-      followupIncludes: [
-        "Rappel par texto après un appel manqué",
-        "Demandes d'avis après un travail",
-      ],
+      // Rappel par texto seulement : les demandes d'avis relèvent du
+      // moteur de génération d'avis.
+      followupIncludes: ["Rappel par texto après un appel manqué"],
     },
     popularStrip: {
       label: "Option populaire :",
@@ -587,6 +591,29 @@ const fr = {
     checkoutEmptyCta: "Voir les tarifs →",
     checkoutMixed:
       "Les articles mensuels et annuels ne peuvent pas être payés ensemble. Choisissez une seule fréquence de facturation dans votre panier.",
+    // Fenêtre de conflit : affichée quand une combinaison ne peut pas être
+    // achetée ensemble. Une ligne d'explication, puis un bouton qui corrige.
+    conflict: {
+      title: "Ça ne va pas ensemble",
+      included: "{item} est déjà inclus dans {plan}.",
+      notAvailable: "{item} n’est pas offert avec {plan}.",
+      bundleComponent: "{bundle} inclut déjà {item}.",
+      bundleOverlap: "{first} et {second} incluent tous les deux le moteur de génération d’avis.",
+      adsTwo: "Une seule option publicitaire à la fois.",
+      aiPack: "Le Pack IA inclut déjà {item}.",
+      monthlyOnlyAdd: "{item} est mensuel seulement, mais votre panier est annuel.",
+      yearlyBlocked: "La facturation annuelle n’est pas offerte avec {items}. Ils sont mensuels seulement.",
+      planSwitch: "Passer à {plan} ne fonctionne pas avec {items}.",
+      fixRemove: "Retirer {item}",
+      fixReplace: "Remplacer {old} par {new}",
+      fixSwitchPlan: "Passer à {plan} et l’ajouter",
+      fixSwitchMonthly: "Tout passer au mensuel",
+      fixSwitchYearly: "Retirer {items} et passer à annuel",
+      fixSwitchRemove: "Changer et retirer {items}",
+      keepPlan: "Garder {plan}",
+      keepAsIs: "Garder tel quel",
+      dontAdd: "Ne pas l’ajouter",
+    },
   },
 
   // Le parcours d'achat : /fr/commencer recueille les coordonnées et confirme
@@ -631,7 +658,7 @@ const fr = {
       adsNone: "Aucun pack publicitaire",
       aiLegend: "Services IA",
       aiReceptionist: "Réceptionniste IA",
-      aiChat: "Chat IA pour site web",
+      aiChat: "Assistant clavardage IA entraîné",
       aiFollowup: "Suivi IA",
       aiPack: "Pack IA",
       summaryTitle: "Récapitulatif",
@@ -1030,7 +1057,7 @@ const fr = {
         title: "Retouche de site web",
         blocks: [
           { text: "La retouche de site web est un service unique de C$199.99 : nous corrigeons les problèmes que l'audit gratuit a trouvés sur votre site existant, tels qu'énumérés dans votre rapport d'audit. Elle couvre votre site existant sur sa plateforme actuelle. Pas de nouveau design, pas de refonte, et pas de migration." },
-          { text: "L'achat d'une retouche de site web donne droit à 10 % de rabais sur n'importe quel abonnement (forfait site web, Pack publicitaire ou service IA) pendant les 3 premiers mois. Le rabais ne peut être utilisé qu'une seule fois, sur un seul abonnement, et ne peut pas être combiné avec d'autres offres. Nous vous envoyons le code de coupon après votre achat de retouche." },
+          { text: "L'achat d'une retouche de site web donne droit à 10 % de rabais sur n'importe quel abonnement (forfait site web, Pack publicitaire ou service IA) pendant les 3 premiers mois. Le rabais ne peut être utilisé qu'une seule fois, sur un seul abonnement, et ne peut pas être combiné avec d'autres offres. Achetez la retouche avec un abonnement et le rabais est appliqué automatiquement au paiement; achetez-la seule et nous vous envoyons le code de coupon après votre achat." },
         ],
       },
     },
@@ -1517,7 +1544,7 @@ const fr = {
         {
           code: "WEBAOFIXIT3256",
           detail:
-            "10 % de rabais sur n'importe quel abonnement (forfait site web, Pack publicitaire ou service IA) pendant les 3 premiers mois, une seule utilisation, sur un seul abonnement. Débloqué par l'achat de la retouche de site web (C$199.99). Envoyez-le à l'acheteur après son achat de retouche. Note : dans Stripe, ce coupon n'a aucune restriction de produit, donc il s'applique à n'importe quel abonnement; il n'est pas limité à une seule utilisation dans Stripe, donc utilisez-le une fois par acheteur.",
+            "10 % de rabais sur n'importe quel abonnement (forfait site web, Pack publicitaire ou service IA) pendant les 3 premiers mois, une seule utilisation, sur un seul abonnement. Débloqué par l'achat de la retouche de site web (C$199.99). Envoyez-le à l'acheteur après son achat de retouche, sauf s'il a acheté la retouche avec un abonnement : le rabais de 10 % a alors déjà été appliqué automatiquement au paiement (voir les métadonnées touchup_discount de la commande) et le code ne doit pas être envoyé. Note : dans Stripe, ce coupon n'a aucune restriction de produit, donc il s'applique à n'importe quel abonnement; il n'est pas limité à une seule utilisation dans Stripe, donc utilisez-le une fois par acheteur.",
         },
       ],
     },

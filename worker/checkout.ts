@@ -14,6 +14,83 @@
 //     and "payment" when the cart is one-time only.
 
 import { EMAIL_RE, json, err, originAllowed } from "./util";
+import { findConflicts, type CartConflict, type RuleItem } from "../src/lib/cart-rules";
+
+/** Website plans, the only products with type "plan" for the rules. */
+const PLAN_PRODUCTS = new Set(["launch", "grow", "scale"]);
+
+/**
+ * Stripe coupon for the Website touchup discount: 10% off any
+ * subscription for the first 3 months, one use only. The coupon's Stripe
+ * id IS the code, and it is applied directly by coupon id below: no
+ * promotion-code object exists in Stripe, so a buyer typing the code
+ * could not redeem it.
+ */
+const TOUCHUP_COUPON_ID = "WEBAOFIXIT3256";
+
+/** Display names for the products the cart rules can mention. */
+const PRODUCT_NAMES: Record<string, string> = {
+  launch: "Launch",
+  grow: "Grow",
+  scale: "Scale",
+  quotephoto: "Quote Photo Upload",
+  review: "Review Generation Engine",
+  booking: "Online Booking",
+  report: "Monthly Growth Report",
+  admin: "Advanced Admin Panel",
+  "lead-pack": "Lead Pack",
+  "visibility-pack": "Visibility Pack",
+  localseo: "Local SEO Management",
+  aichat: "Trained AI Chat Assistant",
+  "ai-pack": "AI Pack",
+  "ai-receptionist": "AI Receptionist",
+  "ai-followup": "AI Follow-up",
+  "ads-pack": "Ads Pack",
+  "ads-meta": "Meta",
+  "ads-google": "Google",
+  "ads-both": "Meta and Google",
+  "ads-starter": "Starter test",
+};
+
+function productName(product: string): string {
+  return PRODUCT_NAMES[product] ?? product;
+}
+
+/** Cart keys to the rule engine's items (setup keys pass through: no rule fires on them). */
+function toRuleItems(items: ResolvedItem[]): RuleItem[] {
+  return items
+    .filter((item) => item.key !== LEGACY_KEY)
+    .map((item) => {
+      const product = item.key.replace(/-(month|year|onetime)$/, "");
+      return {
+        product,
+        interval: item.interval,
+        type: PLAN_PRODUCTS.has(product) ? ("plan" as const) : ("addon" as const),
+      };
+    });
+}
+
+/** One short error for a cart conflict (the UI guards prevent these, so this is the backstop for crafted requests). */
+function conflictError(conflict: CartConflict): string {
+  switch (conflict.kind) {
+    case "ads-two":
+      return "Choose one Ads Pack option: Meta, Google, both together, or the Starter test. Buying two Ads options together is not allowed.";
+    case "ai-pack":
+      return "The AI Pack already includes AI Receptionist, Trained AI Chat Assistant and AI Follow-up. Buy the pack on its own, or the individual services on their own.";
+    case "mixed-intervals":
+      return "Monthly and yearly items can't be paid in the same checkout. Choose one billing term in your cart.";
+    case "two-plans":
+      return "Only one website plan can be bought at a time.";
+    case "included":
+      return `${productName(conflict.component ?? "")} is already included in ${productName(conflict.plan ?? "")}.`;
+    case "not-available":
+      return `${productName(conflict.component ?? "")} isn't available with ${productName(conflict.plan ?? "")}.`;
+    case "bundle-component":
+      return `${productName(conflict.bundle ?? "")} already includes ${productName(conflict.component ?? "")}.`;
+    case "bundle-overlap":
+      return "Lead Pack and Visibility Pack both include the Review Generation Engine.";
+  }
+}
 
 type Env = {
   STRIPE_SECRET_KEY?: string;
@@ -86,7 +163,6 @@ export const PRICE_MAP: Record<string, string> = {
   // are not catalog items. They ride along server-side below, following
   // the Ads Pack setup pattern.
   "ai-receptionist-month": "price_1UYFX9E57vVzxI41tORfQmiE",
-  "ai-website-chat-month": "price_1UYFXFE57vVzxI41HANoOHoh",
   "ai-followup-month": "price_1UYFXJE57vVzxI41rtocXmsu",
   "ai-pack-month": "price_1UYFXOE57vVzxI41aR00rKZe",
   "visibility-pack-year": "price_1UORRqE57vVzxI41BDPCliaR",
@@ -125,8 +201,6 @@ export function intervalOf(key: string): LineInterval {
 const ADS_MONTHLY_KEYS = ["ads-pack-month", "ads-meta-month", "ads-google-month", "ads-both-month"];
 /** Starter test monthly key: a separate Ads option, never a second pack. */
 const ADS_STARTER_MONTHLY_KEY = "ads-starter-month";
-/** Every Ads option at most one of, Starter included. */
-const ADS_OPTION_KEYS = [...ADS_MONTHLY_KEYS, ADS_STARTER_MONTHLY_KEY];
 /** Both-channels setup price (Stripe), used when no bundle-setup secret is set. */
 const ADS_BUNDLE_SETUP_PRICE = "price_1UWkEvE57vVzxI41jrWbtpuZ";
 /** Starter test setup price (Stripe): C$349.99 one-time, not the C$499.99
@@ -138,11 +212,9 @@ const ADS_STARTER_SETUP_PRICE = "price_1UZeIVE57vVzxI41VXckzjG2";
  *  added server-side and can never be bought on their own. */
 const AI_SETUPS: Array<{ monthly: string; setupKey: string; setupPriceId: string }> = [
   { monthly: "ai-receptionist-month", setupKey: "ai-receptionist-setup-onetime", setupPriceId: "price_1UYFXDE57vVzxI41cwShDW7k" },
-  { monthly: "ai-website-chat-month", setupKey: "ai-website-chat-setup-onetime", setupPriceId: "price_1UYFXIE57vVzxI41pREjaFlg" },
   { monthly: "ai-followup-month", setupKey: "ai-followup-setup-onetime", setupPriceId: "price_1UYFXNE57vVzxI417TlokH2v" },
   { monthly: "ai-pack-month", setupKey: "ai-pack-setup-onetime", setupPriceId: "price_1UYFXSE57vVzxI41Qx20HwYn" },
 ];
-const AI_INDIVIDUAL_KEYS = ["ai-receptionist-month", "ai-website-chat-month", "ai-followup-month"];
 
 export async function handleCheckoutSession(req: Request, env: Env): Promise<Response> {
   if (!originAllowed(req, true, env)) return err("Forbidden origin", 403);
@@ -223,16 +295,6 @@ export async function handleCheckoutSession(req: Request, env: Env): Promise<Res
   // The setup fee cannot be bought on its own: a crafted request with only
   // ads-setup-onetime used to create a checkout for a setup with no pack
   // attached (and no ads state, since hasAdsPack matches ads-pack*).
-  // Only one Ads Pack option per checkout: Meta, Google, or both. Buying
-  // two single channels separately would double-bill the single price
-  // instead of the bundle price.
-  if (lineItems.filter((item) => ADS_OPTION_KEYS.includes(item.key)).length > 1) {
-    return err(
-      "Choose one Ads Pack option: Meta, Google, both together, or the Starter test. Buying two Ads options together is not allowed.",
-      400,
-    );
-  }
-
   if (
     lineItems.some((item) => item.key === "ads-setup-onetime") &&
     !lineItems.some((item) => ADS_MONTHLY_KEYS.includes(item.key))
@@ -247,18 +309,6 @@ export async function handleCheckoutSession(req: Request, env: Env): Promise<Res
     return err("The Starter test setup fee cannot be bought on its own", 400);
   }
 
-  // AI Pack already includes all three individual AI services, so buying
-  // it together with any of them would double-bill the same service.
-  if (
-    lineItems.some((item) => item.key === "ai-pack-month") &&
-    lineItems.some((item) => AI_INDIVIDUAL_KEYS.includes(item.key))
-  ) {
-    return err(
-      "The AI Pack already includes AI Receptionist, AI Website Chat and AI Follow-up. Buy the pack on its own, or the individual services on their own.",
-      400,
-    );
-  }
-
   // An AI setup fee cannot be bought on its own, same rule as Ads.
   for (const setup of AI_SETUPS) {
     if (
@@ -269,15 +319,17 @@ export async function handleCheckoutSession(req: Request, env: Env): Promise<Res
     }
   }
 
-  // Checkout refuses sessions mixing several billing intervals, so reject
-  // instead of letting Stripe return an opaque error.
-  const recurring = lineItems.filter((item) => item.interval !== "one-time");
-  if (new Set(recurring.map((item) => item.interval)).size > 1) {
-    return err(
-      "Monthly and yearly items can't be paid in the same checkout. Choose one billing term in your cart.",
-      400,
-    );
+  // Cart conflicts, same rules as the UI guards (src/lib/cart-rules.ts):
+  // the UI stops these combinations from being added, but a crafted
+  // request could still send them, so the server rejects them too.
+  // The old per-rule checks (two Ads options, AI Pack + individual,
+  // mixed intervals) are the same rules, now in one place.
+  const conflicts = findConflicts(toRuleItems(lineItems));
+  if (conflicts.length > 0) {
+    return err(conflictError(conflicts[0]), 400);
   }
+
+  const recurring = lineItems.filter((item) => item.interval !== "one-time");
 
   // Ads Pack: the one-time setup fee rides along automatically, added
   // server-side so it cannot be removed from the cart (single: the setup
@@ -363,10 +415,22 @@ export async function handleCheckoutSession(req: Request, env: Env): Promise<Res
   const params = new URLSearchParams();
   params.set("ui_mode", "embedded_page");
   params.set("mode", mode);
-  // Let the buyer enter a coupon code at checkout (e.g. the touchup
-  // coupon: 10% off any subscription for the first 3 months, one use
-  // only, unlocked by buying the Website touchup).
+  // Let the buyer enter a coupon code at checkout. The touchup coupon is
+  // NOT entered this way: when the cart holds a Website touchup and a
+  // subscription, it is applied automatically below (no promotion-code
+  // object exists in Stripe for it, so typing the code would fail).
   params.set("allow_promotion_codes", "true");
+
+  // Website touchup + subscription in the same cart: the 10% off the
+  // touchup unlocks is applied automatically, no code needed. The discount
+  // cannot be combined with other offers, so promotion codes are disabled
+  // for this session, and metadata records it so the code is not also
+  // sent to the buyer afterwards (they already got the discount).
+  if (lineItems.some((item) => item.key === "website-touchup-onetime") && mode === "subscription") {
+    params.set("discounts[0][coupon]", TOUCHUP_COUPON_ID);
+    params.set("allow_promotion_codes", "false");
+    params.set("metadata[touchup_discount]", "auto");
+  }
 
   lineItems.forEach((item, index) => {
     params.set(`line_items[${index}][price]`, item.priceId);

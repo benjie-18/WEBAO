@@ -63,19 +63,32 @@ test('only the money wrapper is deliberately blank, and blanks are symmetric', (
 });
 
 test('every cart string exists in both languages', () => {
+  // Walk nested groups too (cart.conflict holds the popup strings).
+  const leaves = (dict: unknown, prefix = 'cart'): Array<[string, string]> => {
+    const out: Array<[string, string]> = [];
+    for (const [key, value] of Object.entries(dict as Record<string, unknown>)) {
+      if (typeof value === 'string') out.push([`${prefix}.${key}`, value]);
+      else if (value && typeof value === 'object') out.push(...leaves(value, `${prefix}.${key}`));
+    }
+    return out;
+  };
   for (const locale of locales) {
     const cart = useTranslations(locale).cart;
-    for (const [key, value] of Object.entries(cart)) {
-      assert.equal(typeof value, 'string', `${locale}.cart.${key}`);
-      if (key !== 'moneyPrefix' && key !== 'moneySuffix') {
-        assert.notEqual(value, '', `${locale}.cart.${key} is translated`);
-      }
+    for (const [path, value] of leaves(cart)) {
+      if (path === 'cart.moneyPrefix' || path === 'cart.moneySuffix') continue;
+      assert.notEqual(value, '', `${locale}.${path} is translated`);
     }
     assert.match(cart.add, /\{name\}/);
     assert.match(cart.remove, /\{name\}/);
     assert.notEqual(cart.suffixMonth, cart.suffixYear);
     assert.equal(cart.moneyDecimal, locale === 'fr' ? ',' : '.');
     assert.equal([cart.moneyPrefix, cart.moneySuffix].filter((part) => part.trim() !== '').length, 1, 'a symbol on one side');
+    // The conflict popup has the same keys in both languages.
+    assert.deepEqual(
+      Object.keys(cart.conflict).sort(),
+      Object.keys(useTranslations(locale === 'en' ? 'fr' : 'en').cart.conflict).sort(),
+      `${locale}.cart.conflict keys match the other locale`,
+    );
   }
   assert.equal(en.cart.suffixMonth, '/mo');
   assert.equal(fr.cart.suffixMonth, '/mois');

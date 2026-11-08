@@ -20,15 +20,19 @@ const services = [
     product: "ai-receptionist",
     price: ai.receptionistPrice,
     priceCents: 29999,
+    yearlyPriceCents: undefined,
     setup: ai.receptionistSetup,
     accent: "ai--receptionist",
     includes: ai.receptionistIncludes,
   },
   {
     name: t.start.selection.aiChat,
-    product: "ai-website-chat",
+    product: "aichat",
     price: ai.chatPrice,
-    priceCents: 14999,
+    priceCents: 9999,
+    // Merged with the Trained AI Chat Assistant add-on: one product,
+    // yearly available, so the button follows the billing toggle.
+    yearlyPriceCents: 99990,
     setup: ai.chatSetup,
     accent: "ai--chat",
     includes: ai.chatIncludes,
@@ -38,6 +42,7 @@ const services = [
     product: "ai-followup",
     price: ai.followupPrice,
     priceCents: 9999,
+    yearlyPriceCents: undefined,
     setup: ai.followupSetup,
     accent: "ai--followup",
     includes: ai.followupIncludes,
@@ -77,7 +82,7 @@ const services = [
       <p class="bc-kicker">{ai.serviceKicker}</p>
       <div class="bc-name-row">
         <h3 class="bc-name">{s.name}</h3>
-        <CartButton locale={locale} product={s.product} name={s.name} priceCents={s.priceCents} interval="month" type="addon" />
+        <CartButton locale={locale} product={s.product} name={s.name} priceCents={s.priceCents} interval="month" type="addon" yearlyPriceCents={s.yearlyPriceCents} />
       </div>
       <p class="bc-price">{s.price}</p>
       <ul class="bc-includes">

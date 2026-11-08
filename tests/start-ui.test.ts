@@ -74,7 +74,7 @@ function fixture(options: FixtureOptions = {}) {
             </fieldset>
             <fieldset data-branch-picker="ai" hidden>
               <label><input type="checkbox" name="ai-service" value="ai-receptionist" data-name="AI Receptionist" /><span data-ai-price></span></label>
-              <label><input type="checkbox" name="ai-service" value="ai-website-chat" data-name="AI Website Chat" /><span data-ai-price></span></label>
+              <label><input type="checkbox" name="ai-service" value="aichat" data-name="Trained AI Chat Assistant" /><span data-ai-price></span></label>
               <label><input type="checkbox" name="ai-service" value="ai-followup" data-name="AI Follow-up" /><span data-ai-price></span></label>
               <label><input type="checkbox" name="ai-service" value="ai-pack" data-name="AI Pack" /><span data-ai-price></span></label>
             </fieldset>
@@ -101,6 +101,33 @@ function fixture(options: FixtureOptions = {}) {
         <strong data-cart-total>C$0.00</strong>
         <a href="/start" data-cart-checkout aria-disabled="true">Checkout</a>
       </aside>
+      <div data-cart-conflict-overlay hidden></div>
+      <div data-cart-conflict role="dialog" aria-modal="true" hidden
+        data-title="That doesn't go together"
+        data-msg-included="{item} is already included in {plan}."
+        data-msg-not-available="{item} isn't available with {plan}."
+        data-msg-bundle-component="{bundle} already includes {item}."
+        data-msg-bundle-overlap="{first} and {second} both include the Review Generation Engine."
+        data-msg-ads-two="You can only have one Ads option at a time."
+        data-msg-ai-pack="The AI Pack already includes {item}."
+        data-msg-monthly-only-add="{item} is monthly only, but your cart is yearly."
+        data-msg-yearly-blocked="Yearly billing isn't available with {items}. They're monthly only."
+        data-msg-plan-switch="Switching to {plan} doesn't work with {items}."
+        data-msg-mixed="Monthly and yearly items can't be paid together. Pick one billing term in your cart."
+        data-fix-remove="Remove {item}"
+        data-fix-replace="Replace {old} with {new}"
+        data-fix-switch-plan="Switch to {plan} and add it"
+        data-fix-switch-monthly="Switch everything to monthly"
+        data-fix-switch-yearly="Remove {items} and switch to yearly"
+        data-fix-switch-remove="Switch and remove {items}"
+        data-keep-plan="Keep {plan}"
+        data-keep-as-is="Keep as is"
+        data-dont-add="Don't add it">
+        <h2 data-cart-conflict-title></h2>
+        <p data-cart-conflict-message></p>
+        <div data-cart-conflict-actions></div>
+        <button type="button" data-cart-conflict-close aria-label="Close">×</button>
+      </div>
     </body></html>`,
     {
       url: options.french ? 'https://webao.ca/fr/commencer' : 'https://webao.ca/start',
@@ -160,12 +187,23 @@ function fixture(options: FixtureOptions = {}) {
     input.dispatchEvent(new window.Event('change', { bubbles: true }));
   };
   const summary = () => doc.querySelector<HTMLElement>('[data-start-extras-list]')!.textContent ?? '';
+  const conflict = () => doc.querySelector<HTMLElement>('[data-cart-conflict]')!;
+  const conflictMessage = () =>
+    doc.querySelector<HTMLElement>('[data-cart-conflict-message]')!.textContent ?? '';
+  const conflictButtons = () =>
+    [...doc.querySelectorAll<HTMLElement>('[data-cart-conflict-actions] button')].map((b) => b.textContent ?? '');
+  const clickConflictButton = (label: string) => {
+    const btn = [...doc.querySelectorAll<HTMLElement>('[data-cart-conflict-actions] button')].find(
+      (b) => b.textContent === label,
+    );
+    click(btn ?? null);
+  };
   const click = (el: Element | null) => {
     assert.ok(el, 'expected element to click');
     el!.dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
   };
   const error = (field: string) => form.querySelector<HTMLElement>(`[data-error="${field}"]`)!;
-  return { dom, window, doc, cart, radio, price, form, fill, submit, choose, click, error, requests, navigations, chip, adsRadio, aiBox, gbpBox, chooseAds, toggleBox, summary };
+  return { dom, window, doc, cart, radio, price, form, fill, submit, choose, click, error, requests, navigations, chip, adsRadio, aiBox, gbpBox, chooseAds, toggleBox, summary, conflict, conflictMessage, conflictButtons, clickConflictButton };
 }
 
 const details = { name: 'Ada Lovelace', email: 'ada@example.com', business: 'Analytical Engines' };
@@ -212,17 +250,26 @@ test('a visitor arriving with a cart keeps exactly that cart', () => {
   window.close();
 });
 
-test('switching the plan radio swaps the plan and keeps the add-ons', () => {
+test('switching to a plan that already includes an add-on asks before dropping it', () => {
   const extra: CartItem = { key: 'review-month', product: 'review', name: 'Review Generation Engine', priceCents: 9999, interval: 'month', type: 'addon' };
-  const { window, doc, cart, radio, choose } = fixture({ cart: [planItem('grow', 'Grow', 'month')!, extra] });
+  const { window, doc, cart, radio, choose, conflict, conflictMessage, conflictButtons, clickConflictButton } = fixture({ cart: [planItem('grow', 'Grow', 'month')!, extra] });
   choose('scale');
+  assert.equal(conflict().hidden, false);
+  assert.equal(conflictMessage(), "Switching to Scale doesn't work with Review Generation Engine.");
+  assert.deepEqual(conflictButtons(), ['Switch and remove Review Generation Engine', 'Keep Grow']);
   assert.deepEqual(
     cart().map((item) => item.key),
-    ['review-month', 'scale-month'],
+    ['grow-month', 'review-month'],
+  );
+  clickConflictButton('Switch and remove Review Generation Engine');
+  assert.equal(conflict().hidden, true);
+  assert.deepEqual(
+    cart().map((item) => item.key),
+    ['scale-month'],
   );
   assert.equal(radio('scale').checked, true);
   assert.equal(radio('grow').checked, false);
-  assert.equal(doc.querySelector('[data-start-total]')!.textContent, 'C$449.98');
+  assert.equal(doc.querySelector('[data-start-total]')!.textContent, 'C$349.99');
   // The default note only describes the seeded Grow plan.
   assert.equal(doc.querySelector<HTMLElement>('[data-start-default-note]')!.hidden, true);
   window.close();
@@ -413,6 +460,29 @@ test('an Ads channel can be added on the start page and replaces the previous ch
   window.close();
 });
 
+test('picking a channel while the Starter test is in the cart asks before replacing it', () => {
+  const starter: CartItem = { key: 'ads-starter-month', product: 'ads-starter', name: 'Starter test', priceCents: 49999, interval: 'month', type: 'addon' };
+  const { window, cart, chip, click, chooseAds, conflict, conflictMessage, conflictButtons, clickConflictButton } = fixture({
+    cart: [planItem('grow', 'Grow', 'month')!, starter],
+  });
+  click(chip('ads'));
+  chooseAds('ads-meta');
+  assert.equal(conflict().hidden, false);
+  assert.equal(conflictMessage(), 'You can only have one Ads option at a time.');
+  assert.deepEqual(conflictButtons(), ['Replace Starter test with Meta', "Don't add it"]);
+  assert.deepEqual(
+    cart().map((item) => item.key),
+    ['grow-month', 'ads-starter-month'],
+  );
+  clickConflictButton('Replace Starter test with Meta');
+  assert.equal(conflict().hidden, true);
+  assert.deepEqual(
+    cart().map((item) => item.key),
+    ['grow-month', 'ads-meta-month'],
+  );
+  window.close();
+});
+
 test('the GBP revamp toggles on and off', () => {
   const { window, cart, chip, click, toggleBox, gbpBox } = fixture();
   click(chip('ads'));
@@ -429,8 +499,8 @@ test('the GBP revamp toggles on and off', () => {
   window.close();
 });
 
-test('AI services can be added, and the Pack excludes the individuals', () => {
-  const { window, cart, chip, click, toggleBox, aiBox } = fixture();
+test('AI services can be added, and the Pack asks before replacing the individuals', () => {
+  const { window, cart, chip, click, toggleBox, aiBox, conflict, conflictMessage, conflictButtons, clickConflictButton } = fixture();
   click(chip('ai'));
   toggleBox(aiBox('ai-receptionist'), true);
   toggleBox(aiBox('ai-followup'), true);
@@ -439,14 +509,56 @@ test('AI services can be added, and the Pack excludes the individuals', () => {
     ['grow-month', 'ai-receptionist-month', 'ai-followup-month'],
   );
   toggleBox(aiBox('ai-pack'), true);
+  assert.equal(conflict().hidden, false);
+  assert.equal(conflictMessage(), 'The AI Pack already includes AI Receptionist, AI Follow-up.');
+  assert.deepEqual(conflictButtons(), ['Replace AI Receptionist, AI Follow-up with AI Pack', "Don't add it"]);
+  assert.deepEqual(
+    cart().map((item) => item.key),
+    ['grow-month', 'ai-receptionist-month', 'ai-followup-month'],
+  );
+  clickConflictButton('Replace AI Receptionist, AI Follow-up with AI Pack');
+  assert.equal(conflict().hidden, true);
   assert.deepEqual(
     cart().map((item) => item.key),
     ['grow-month', 'ai-pack-month'],
   );
+  // The fix re-syncs the checkboxes: the individuals are off, the Pack is on.
+  assert.equal(aiBox('ai-pack').checked, true);
+  assert.equal(aiBox('ai-followup').checked, false);
+  toggleBox(aiBox('ai-followup'), true);
+  assert.equal(conflict().hidden, false);
+  assert.equal(conflictMessage(), 'The AI Pack already includes AI Follow-up.');
+  assert.deepEqual(conflictButtons(), ['Replace AI Pack with AI Follow-up', "Don't add it"]);
+  clickConflictButton('Replace AI Pack with AI Follow-up');
+  assert.deepEqual(
+    cart().map((item) => item.key),
+    ['grow-month', 'ai-followup-month'],
+  );
+  window.close();
+});
+
+test('the yearly toggle is blocked while a monthly-only AI service is in the cart', () => {
+  const { window, doc, cart, chip, click, toggleBox, aiBox, conflict, conflictMessage, conflictButtons, clickConflictButton } = fixture();
+  click(chip('ai'));
   toggleBox(aiBox('ai-followup'), true);
   assert.deepEqual(
     cart().map((item) => item.key),
     ['grow-month', 'ai-followup-month'],
+  );
+  click(doc.querySelector('[data-billing-opt="year"]'));
+  assert.equal(conflict().hidden, false);
+  assert.equal(conflictMessage(), "Yearly billing isn't available with AI Follow-up. They're monthly only.");
+  assert.deepEqual(conflictButtons(), ['Remove AI Follow-up and switch to yearly', 'Keep as is']);
+  clickConflictButton('Keep as is');
+  assert.deepEqual(
+    cart().map((item) => item.key),
+    ['grow-month', 'ai-followup-month'],
+  );
+  click(doc.querySelector('[data-billing-opt="year"]'));
+  clickConflictButton('Remove AI Follow-up and switch to yearly');
+  assert.deepEqual(
+    cart().map((item) => item.key),
+    ['grow-year'],
   );
   window.close();
 });
