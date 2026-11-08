@@ -94,8 +94,9 @@ test('built site serves static pages and KV-only images through the custom Worke
         body: JSON.stringify(body),
       });
 
-    // Monthly and yearly items can never share a Stripe session.
-    const mixed = await post({ items: [{ key: 'launch-month' }, { key: 'grow-year' }] });
+    // Monthly and yearly items can never share a Stripe session. One plan
+    // only: two different plans would trip the two-plans rule first.
+    const mixed = await post({ items: [{ key: 'launch-month' }, { key: 'review-year' }] });
     assert.equal(mixed.status, 400);
     assert.match(String(((await mixed.json()) as { error: string }).error), /Monthly and yearly/);
 
