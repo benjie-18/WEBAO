@@ -272,3 +272,50 @@ test('the service pages use the pricing SEO term and agree in French', () => {
   const frPme = read('src/pages/fr/services/conception-site-web-pme/index.astro');
   assert.ok(frPme.includes('sont incluses dans le frais mensuel'), 'the FR small-business FAQ agrees "mises à jour" with "incluses"');
 });
+
+test('the guide pages use the pricing SEO term, the Ads Packages name, and the full Bill 96 exceptions', () => {
+  // Same drift as the service pages: the guides said "Basic SEO" /
+  // "SEO de base" while pricing calls the feature "Foundational SEO" /
+  // "SEO fondamental", the EN ads guide heading said "Ads Pack", and the
+  // Bill 96 guides listed only three of Educaloi's four limited exceptions.
+  assert.ok(en.pricing.plans.launch.features.includes('Foundational SEO'), 'pricing EN calls it Foundational SEO');
+  assert.ok(fr.pricing.plans.launch.features.includes('SEO fondamental'), 'pricing FR calls it SEO fondamental');
+  const enGuides = [
+    'src/pages/guides/index.astro',
+    'src/pages/guides/ai-receptionist-small-business/index.astro',
+    'src/pages/guides/meta-vs-google-ads-small-business/index.astro',
+    'src/pages/guides/quebec-bill-96-website/index.astro',
+    'src/pages/guides/quebec-law-25-website/index.astro',
+    'src/pages/guides/small-business-seo-basics/index.astro',
+    'src/pages/guides/website-cost-canada/index.astro',
+    'src/pages/guides/website-that-brings-quote-requests/index.astro',
+    'src/pages/guides/what-to-prepare-for-your-website/index.astro',
+    'src/pages/guides/when-to-redesign-your-website/index.astro',
+  ];
+  const frGuides = [
+    'src/pages/fr/guides/index.astro',
+    'src/pages/fr/guides/bases-seo-pme/index.astro',
+    'src/pages/fr/guides/cout-site-web-canada/index.astro',
+    'src/pages/fr/guides/loi-25-site-web-quebec/index.astro',
+    'src/pages/fr/guides/loi-96-site-web-quebec/index.astro',
+    'src/pages/fr/guides/meta-ou-google-ads-pme/index.astro',
+    'src/pages/fr/guides/preparer-votre-site-web/index.astro',
+    'src/pages/fr/guides/quand-refaire-votre-site-web/index.astro',
+    'src/pages/fr/guides/receptionniste-ia-pme/index.astro',
+    'src/pages/fr/guides/site-web-demandes-soumission/index.astro',
+  ];
+  for (const path of enGuides) {
+    const page = read(path);
+    assert.equal(page.includes('Basic SEO') || page.includes('basic SEO'), false, `${path} has no "Basic SEO" left`);
+  }
+  for (const path of frGuides) {
+    const page = read(path);
+    assert.equal(page.includes('SEO de base'), false, `${path} has no "SEO de base" left`);
+  }
+  const enAds = read('src/pages/guides/meta-vs-google-ads-small-business/index.astro');
+  assert.ok(enAds.includes('What the Ads Packages include'), 'the EN ads guide heading uses the Ads Packages name');
+  const enBill96 = read('src/pages/guides/quebec-bill-96-website/index.astro');
+  assert.ok(enBill96.includes('an event intended solely for a specialized or limited public'), 'the EN Bill 96 guide lists the fourth Educaloi exception');
+  const frBill96 = read('src/pages/fr/guides/loi-96-site-web-quebec/index.astro');
+  assert.ok(frBill96.includes('un événement destiné uniquement à un public spécialisé ou limité'), 'the FR Bill 96 guide lists the fourth Educaloi exception');
+});
