@@ -445,7 +445,6 @@ const fr = {
       upgradeNote: "Déjà sur un canal ? Passez aux deux pour C$450/mois de plus, plus un supplément de mise en place de C$250.",
       starterTitle: "Test de départ (Meta seulement)",
       starterBody: "Essayez Meta d'abord avec un budget plus bas : C$499.99/mois plus C$349.99 de mise en place, dépenses publicitaires à partir de C$750/mois. Test de 90 jours, une campagne, puis passez au tarif normal ou arrêtez.",
-      starterLink: "Demander le test de départ",
       gbpLabel: "Ajoutez une refonte de fiche d’entreprise Google :",
       gbpName: "Refonte de fiche d’entreprise Google",
       gbpPrice: "C$149.99 unique",

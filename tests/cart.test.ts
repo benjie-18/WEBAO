@@ -162,6 +162,18 @@ test('ads pack is monthly-only and stays monthly on a yearly cart', () => {
   assert.deepEqual(yearly.map((i) => i.priceCents), [89999]);
 });
 
+test('ads starter test is monthly-only and stays monthly on a yearly cart', () => {
+  assert.equal(intervalFor('ads-starter', 'month'), 'month');
+  assert.equal(priceCentsFor('ads-starter', 'month'), 49999);
+  assert.equal(priceCentsFor('ads-starter', 'year'), undefined);
+  const cart: CartItem[] = [
+    item({ key: 'ads-starter-month', product: 'ads-starter', name: 'Starter test (Meta only)', priceCents: 49999, type: 'bundle' }),
+  ];
+  const yearly = convertItemsToBilling(cart, 'year');
+  assert.deepEqual(yearly.map((i) => i.key), ['ads-starter-month']);
+  assert.deepEqual(yearly.map((i) => i.priceCents), [49999]);
+});
+
 test('switching the billing term re-prices recurring items only', () => {
   const cart: CartItem[] = [
     item(),

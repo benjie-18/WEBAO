@@ -134,9 +134,11 @@ const selected = variants[0];
   </dl>
 
   <div class="bc-starter" data-ads-starter>
-    <p class="bc-label">{a.starterTitle}</p>
-    <p class="bc-starter-body">{a.starterBody}</p>
-    <a class="bc-starter-link" href={locale === "fr" ? "/fr/contact" : "/contact"}>{a.starterLink}</a>
+    <div>
+      <p class="bc-label">{a.starterTitle}</p>
+      <p class="bc-starter-body">{a.starterBody}</p>
+    </div>
+    <CartButton locale={locale} product="ads-starter" name={a.starterTitle} priceCents={49999} interval="month" type="bundle" />
   </div>
 
   <p class="bc-note">{a.upgradeNote}</p>
@@ -165,12 +167,23 @@ const selected = variants[0];
     var budgetEl = root.querySelector("[data-ads-budget]");
     var includeEl = root.querySelector("[data-ads-include]");
     var btn = root.querySelector("[data-cart-btn]") as HTMLElement | null;
-    var starterEl = root.querySelector("[data-ads-starter]") as HTMLElement | null;
     var adsKeys = ["ads-pack-month", "ads-meta-month", "ads-google-month", "ads-both-month"];
-    // Starter test is Meta-only: show it for Meta, hide it for Google/Both.
+    // Starter test is Meta-only and monthly-only: show it for Meta on the
+    // monthly term, hide it for Google/Both and when yearly is selected.
+    // The billing term lives in localStorage (same key as cart-ui).
+    // The element is re-queried each time so a ClientRouter remount cannot
+    // leave this pointing at a detached card.
+    function isYearlyBilling() {
+      try {
+        return window.localStorage.getItem("webao_billing_v1") === "year";
+      } catch (e) {
+        return false;
+      }
+    }
     function syncStarter(product: string) {
-      if (!starterEl) return;
-      starterEl.hidden = product !== "ads-meta";
+      var live = document.querySelector("[data-ads-starter]") as HTMLElement | null;
+      if (!live) return;
+      live.hidden = product !== "ads-meta" || isYearlyBilling();
     }
     var checkedInput = root.querySelector('input[name="ads-channel"]:checked') as HTMLInputElement | null;
     if (checkedInput) syncStarter(checkedInput.dataset.product || "");
@@ -210,6 +223,24 @@ const selected = variants[0];
         // Cart swap is a convenience; the button still adds the new variant.
       }
     });
+    // Re-check the Starter when the billing term changes: the toggle lives
+    // outside this card, so listen on the document (toggle click) and on the
+    // cart change event the toggle fires when it re-prices the cart.
+    // Bound once per document; the handler re-queries the live card.
+    var docState = document as unknown as Record<string, unknown>;
+    if (!docState.__webaoStarterBillingBound) {
+      docState.__webaoStarterBillingBound = true;
+      document.addEventListener("click", function (event) {
+        var target = event.target as HTMLElement | null;
+        if (!target || !target.closest || !target.closest("[data-billing-opt]")) return;
+        var checked = document.querySelector('input[name="ads-channel"]:checked') as HTMLInputElement | null;
+        if (checked) syncStarter(checked.dataset.product || "");
+      });
+      window.addEventListener("webao:cart-change", function () {
+        var checked = document.querySelector('input[name="ads-channel"]:checked') as HTMLInputElement | null;
+        if (checked) syncStarter(checked.dataset.product || "");
+      });
+    }
   }
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", initAdsPack);
@@ -352,6 +383,10 @@ const selected = variants[0];
     padding: 16px;
     border: 1px solid var(--bc-line);
     border-radius: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
   }
   .bc-starter[hidden] {
     display: none;
@@ -363,13 +398,6 @@ const selected = variants[0];
     margin-top: 6px;
     font-size: 0.88rem;
     color: var(--bc-soft);
-  }
-  .bc-starter-link {
-    display: inline-block;
-    margin-top: 10px;
-    font-size: 0.88rem;
-    font-weight: 650;
-    color: var(--bc-text);
   }
   .bc-gbp {
     margin-top: 18px;

@@ -442,7 +442,6 @@ const en = {
       upgradeNote: "Already on one channel? Upgrade to both for C$450/mo more, plus a C$250 setup top-up.",
       starterTitle: "Starter test (Meta only)",
       starterBody: "Try Meta first with a lower budget: C$499.99/mo plus C$349.99 setup, ad spend from C$750/mo. 90-day test, one campaign, then step up or stop.",
-      starterLink: "Ask about the Starter test",
       gbpLabel: "Add a Google Business Profile revamp:",
       gbpName: "Google Business Profile Revamp",
       gbpPrice: "C$149.99 one-time",

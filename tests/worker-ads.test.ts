@@ -341,8 +341,21 @@ test('checkout: revamped ads variants map to the right Stripe prices and setup f
     assert.equal(res.status, 200);
     assert.deepEqual(prices(), [PRICE_MAP['gbp-revamp-onetime']]);
 
+    // Starter test alone: its monthly price plus its own C$349.99 setup,
+    // never the C$499.99 Core setup, even with the setup secret set.
+    res = await call([{ key: 'ads-starter-month' }], {
+      STRIPE_SECRET_KEY: 'sk_test',
+      STRIPE_PRICE_ADS_SETUP: 'price_ads_setup',
+    });
+    assert.equal(res.status, 200);
+    assert.deepEqual(prices().sort(), [PRICE_MAP['ads-starter-month'], 'price_1UZeIVE57vVzxI41VXckzjG2'].sort());
+
     // Two Ads Pack variants in one cart are rejected, not double-billed.
     res = await call([{ key: 'ads-meta-month' }, { key: 'ads-both-month' }], { STRIPE_SECRET_KEY: 'sk_test' });
+    assert.equal(res.status, 400);
+
+    // Starter plus a Core variant in one cart are rejected too.
+    res = await call([{ key: 'ads-starter-month' }, { key: 'ads-meta-month' }], { STRIPE_SECRET_KEY: 'sk_test' });
     assert.equal(res.status, 400);
   } finally {
     globalThis.fetch = original;
@@ -355,12 +368,16 @@ test('ads platform and minimum budget follow the purchased variant', async () =>
   assert.equal(adsPlatformFromItems(['ads-google-month']), 'google');
   assert.equal(adsPlatformFromItems(['ads-both-month']), 'both');
   assert.equal(adsPlatformFromItems(['ads-pack-month']), 'meta');
+  assert.equal(adsPlatformFromItems(['ads-starter-month']), 'meta');
   assert.equal(adsPlatformFromItems(['launch-month']), undefined);
   assert.equal(hasAdsPack({ items: ['ads-google-month'] } as never), true);
+  assert.equal(hasAdsPack({ items: ['ads-starter-month'] } as never), true);
   assert.equal(hasAdsPack({ items: ['gbp-revamp-one-time'] } as never), false);
   const memory = memoryKV();
   const both = await createClient(memory.kv, { email: 'both@example.ca', source: 'stripe', items: ['ads-both-month'] });
   assert.equal(adsMinMonthlyBudget(both), 2500);
   const single = await createClient(memory.kv, { email: 'single@example.ca', source: 'stripe', items: ['ads-google-month'] });
   assert.equal(adsMinMonthlyBudget(single), 1500);
+  const starter = await createClient(memory.kv, { email: 'starter@example.ca', source: 'stripe', items: ['ads-starter-month'] });
+  assert.equal(adsMinMonthlyBudget(starter), 750);
 });

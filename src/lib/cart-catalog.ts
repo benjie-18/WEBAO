@@ -66,6 +66,11 @@ const catalog = {
   "ads-meta": { product: "ads-meta", type: "bundle", monthCents: 89999 },
   "ads-google": { product: "ads-google", type: "bundle", monthCents: 89999 },
   "ads-both": { product: "ads-both", type: "bundle", monthCents: 134999 },
+  // Starter test, Meta only, monthly only (no annual price, so it can
+  // never be bought yearly). One campaign, 90 days, then step up or stop.
+  // Setup is C$349.99, added server-side by checkout (see
+  // worker/checkout.ts), never the C$499.99 Core setup.
+  "ads-starter": { product: "ads-starter", type: "bundle", monthCents: 49999 },
   // Google Business Profile revamp: one-time, sold on its own or with a pack.
   "gbp-revamp": { product: "gbp-revamp", type: "addon", oneTimeCents: 14999 },
   // Website touchup: one-time, we fix what the free audit found on the

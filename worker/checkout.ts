@@ -47,6 +47,8 @@ export const PRICE_MAP: Record<string, string> = {
   "ads-meta-month": "price_1UTsvJE57vVzxI41esicPXuU",
   "ads-google-month": "price_1UTsvJE57vVzxI41esicPXuU",
   "ads-both-month": "price_1UWkEsE57vVzxI41TxD7CIV8",
+  // Starter test, Meta only, monthly only (no yearly price exists).
+  "ads-starter-month": "price_1UZeIQE57vVzxI41l33CkUsv",
   "gbp-revamp-onetime": "price_1UWkF9E57vVzxI41yOVeWE6d",
   "website-touchup-onetime": "price_1UYeOrE57vVzxI41H43kyjyk",
   "aichat-month": "price_1UO3E9E57vVzxI41BTXxcMD6",
@@ -121,8 +123,16 @@ export function intervalOf(key: string): LineInterval {
 
 /** Cart keys for a monthly Ads Pack, single channel or both together. */
 const ADS_MONTHLY_KEYS = ["ads-pack-month", "ads-meta-month", "ads-google-month", "ads-both-month"];
+/** Starter test monthly key: a separate Ads option, never a second pack. */
+const ADS_STARTER_MONTHLY_KEY = "ads-starter-month";
+/** Every Ads option at most one of, Starter included. */
+const ADS_OPTION_KEYS = [...ADS_MONTHLY_KEYS, ADS_STARTER_MONTHLY_KEY];
 /** Both-channels setup price (Stripe), used when no bundle-setup secret is set. */
 const ADS_BUNDLE_SETUP_PRICE = "price_1UWkEvE57vVzxI41jrWbtpuZ";
+/** Starter test setup price (Stripe): C$349.99 one-time, not the C$499.99
+ *  Core setup. Hard-coded like the AI setup prices so a missing secret
+ *  cannot silently undercharge. */
+const ADS_STARTER_SETUP_PRICE = "price_1UZeIVE57vVzxI41VXckzjG2";
 /** AI services: monthly cart key -> one-time setup price (Stripe).
  *  Kept out of PRICE_MAP on purpose (see the comment above): setups are
  *  added server-side and can never be bought on their own. */
@@ -216,9 +226,9 @@ export async function handleCheckoutSession(req: Request, env: Env): Promise<Res
   // Only one Ads Pack option per checkout: Meta, Google, or both. Buying
   // two single channels separately would double-bill the single price
   // instead of the bundle price.
-  if (lineItems.filter((item) => ADS_MONTHLY_KEYS.includes(item.key)).length > 1) {
+  if (lineItems.filter((item) => ADS_OPTION_KEYS.includes(item.key)).length > 1) {
     return err(
-      "Choose one Ads Pack option: Meta, Google, or both together. Buying two single channels separately is not allowed.",
+      "Choose one Ads Pack option: Meta, Google, both together, or the Starter test. Buying two Ads options together is not allowed.",
       400,
     );
   }
@@ -228,6 +238,13 @@ export async function handleCheckoutSession(req: Request, env: Env): Promise<Res
     !lineItems.some((item) => ADS_MONTHLY_KEYS.includes(item.key))
   ) {
     return err("The Ads Pack setup fee cannot be bought on its own", 400);
+  }
+
+  if (
+    lineItems.some((item) => item.key === "ads-starter-setup-onetime") &&
+    !lineItems.some((item) => item.key === ADS_STARTER_MONTHLY_KEY)
+  ) {
+    return err("The Starter test setup fee cannot be bought on its own", 400);
   }
 
   // AI Pack already includes all three individual AI services, so buying
@@ -270,6 +287,19 @@ export async function handleCheckoutSession(req: Request, env: Env): Promise<Res
   // Both channels carry the bundle setup fee, never the single fee: the
   // bundle setup price is hard-coded as a fallback so a missing secret
   // cannot silently undercharge, matching how PRICE_MAP holds price ids.
+  // Starter test: its own C$349.99 setup rides along automatically, added
+  // server-side so it cannot be removed from the cart, following the Ads
+  // Pack pattern. It never takes the C$499.99 Core setup below.
+  if (
+    lineItems.some((item) => item.key === ADS_STARTER_MONTHLY_KEY) &&
+    !lineItems.some((item) => item.key === "ads-starter-setup-onetime")
+  ) {
+    lineItems.push({
+      key: "ads-starter-setup-onetime",
+      priceId: ADS_STARTER_SETUP_PRICE,
+      interval: "one-time",
+    });
+  }
   if (
     lineItems.some((item) => item.key === "ads-both-month") &&
     !lineItems.some((item) => item.key === "ads-bundle-setup-onetime")

@@ -150,14 +150,15 @@ export interface AdsState {
   updatedAt: number;
 }
 
-/** True when the client's purchases include the Ads Pack. */
+/** True when the client's purchases include the Ads Pack or the Starter test. */
 export function hasAdsPack(client: Client): boolean {
   return (client.items || []).some(
     (k) =>
       k.startsWith("ads-pack") ||
       k.startsWith("ads-meta") ||
       k.startsWith("ads-google") ||
-      k.startsWith("ads-both"),
+      k.startsWith("ads-both") ||
+      k.startsWith("ads-starter"),
   );
 }
 
@@ -166,16 +167,21 @@ export function adsPlatformFromItems(items: string[] | undefined): "meta" | "goo
   if (!items) return undefined;
   if (items.some((k) => k.startsWith("ads-both"))) return "both";
   if (items.some((k) => k.startsWith("ads-google"))) return "google";
-  if (items.some((k) => k.startsWith("ads-pack") || k.startsWith("ads-meta"))) return "meta";
+  if (items.some((k) => k.startsWith("ads-pack") || k.startsWith("ads-meta") || k.startsWith("ads-starter")))
+    return "meta";
   return undefined;
 }
 
 /** Minimum monthly ad spend (client's own card) for the Ads Pack. */
 export const ADS_MIN_MONTHLY_BUDGET = 1500;
 export const ADS_MIN_MONTHLY_BUDGET_BOTH = 2500;
+/** Minimum monthly ad spend for the Meta-only Starter test (90 days). */
+export const ADS_MIN_MONTHLY_BUDGET_STARTER = 750;
 
-/** Minimum client ad spend for this client's pack: C$2,500 for both, else C$1,500. */
+/** Minimum client ad spend for this client's pack: C$750 for the Starter
+ *  test, C$2,500 for both channels, else C$1,500. */
 export function adsMinMonthlyBudget(client: Client): number {
+  if ((client.items || []).some((k) => k.startsWith("ads-starter"))) return ADS_MIN_MONTHLY_BUDGET_STARTER;
   return client.ads?.platform === "both" || adsPlatformFromItems(client.items) === "both"
     ? ADS_MIN_MONTHLY_BUDGET_BOTH
     : ADS_MIN_MONTHLY_BUDGET;

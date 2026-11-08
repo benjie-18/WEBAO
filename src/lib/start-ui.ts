@@ -115,7 +115,9 @@ export type Branch = "web" | "ads" | "ai";
 
 /** Ads Pack channels (one at a time) plus the GBP revamp add-on. */
 const ADS_CHANNELS = ["ads-meta", "ads-google", "ads-both", "ads-pack"];
-const ADS_PRODUCTS = new Set([...ADS_CHANNELS, "gbp-revamp"]);
+/** The Starter test is an Ads product for grouping, but not a channel:
+ *  picking a channel on /start must never swap it out for a Core pack. */
+const ADS_PRODUCTS = new Set([...ADS_CHANNELS, "ads-starter", "gbp-revamp"]);
 /** AI services and the AI Pack (mutually exclusive, like the pricing page). */
 const AI_PRODUCTS = new Set(["ai-receptionist", "ai-website-chat", "ai-followup", "ai-pack"]);
 
