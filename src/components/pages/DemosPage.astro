@@ -84,7 +84,7 @@ const families = styleFamilies;
 
 <section class="section" style="padding-top: 20px;">
   <div class="shell">
-    <div id="demo-grid" class="demo-grid" data-reveal>
+    <div id="demo-grid" class="demo-grid">
       {displayDemos.map((d, i) => (
         <a href={liveDemos.has(d.id) ? demoHref(d.id) : "#"} class="demo-card-demo" data-category={d.category} data-search={`${d.name} ${d.category} ${d.city} ${d.tone} ${d.palette} ${d.localizedDescription} ${((t.demos.categories as any)[d.category] ?? d.category)} ${d.trade ? ((t.demos.trades as any)[d.trade] ?? d.trade) : ""}`.toLowerCase()} data-reveal style={`--d:${(i%3)*80}ms`} data-demo-id={d.id} data-demo-index={catalogIndex.get(d.id)} data-demo-tone={d.tone} data-demo-family={getDemoFamily(d.id)} data-demo-trade={d.trade ?? ""} data-demo-palette={d.palette} data-live={liveDemos.has(d.id) ? "true" : undefined} aria-label={`${d.name} — ${t.demos.viewDemo.replace(" →", "")}`}>
           {liveDemos.has(d.id) ? (
@@ -565,6 +565,29 @@ const families = styleFamilies;
     const tradeChips = Array.from(document.querySelectorAll('[data-trade-filter]'));
     const cards = Array.from(document.querySelectorAll('[data-category]')) as HTMLElement[];
     const empty = document.getElementById('empty') as HTMLElement | null;
+
+    // Cards fade in as they load: the grid itself no longer carries
+    // data-reveal, because a tall hidden parent kept every card invisible
+    // until 5% of the whole grid entered the viewport, so scrolling showed
+    // blank space. The first six cards reveal immediately on load; the
+    // rest reveal 600px before they enter the viewport, so there is no
+    // blank gap while scrolling. The global reveal observer still watches
+    // the cards as a backstop; adding is-visible twice is harmless.
+    const revealCard = (card: HTMLElement) => card.classList.add('is-visible');
+    cards.slice(0, 6).forEach(revealCard);
+    if ('IntersectionObserver' in window) {
+      const early = new IntersectionObserver((entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            revealCard(e.target as HTMLElement);
+            early.unobserve(e.target);
+          }
+        }
+      }, { threshold: 0.01, rootMargin: '0px 0px 600px 0px' });
+      cards.slice(6).forEach((card) => early.observe(card));
+    } else {
+      cards.slice(6).forEach(revealCard);
+    }
     const clearBtn = document.getElementById('clear');
     const i18nEl = document.getElementById('demo-i18n');
     const toastTemplate = i18nEl?.getAttribute('data-toast-template') || '{name} is a fictional business and one of our design directions: {tone}, {palette}. The full clickable demo site isn’t published yet. Like this direction? Mention it when you contact us.';

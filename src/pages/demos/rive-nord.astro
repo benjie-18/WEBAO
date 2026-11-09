@@ -53,25 +53,27 @@ const IMG = {
         <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="2" y="2" width="44" height="44" rx="8" fill="#F2B705" /><path d="M14 38 L24 10 L34 38" fill="none" stroke="#3B3F45" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /><path d="M19 28 h10" stroke="#3B3F45" stroke-width="5" stroke-linecap="round" /></svg>
         <span class="rn-brand-text">RIVE-NORD<span class="rn-brand-sub">DEMENAGEMENT · TERREBONNE</span></span>
       </a>
-      <button class="rn-menu-btn" id="rn-menu-btn" type="button" aria-expanded="false" aria-controls="rn-nav">Menu</button>
       <nav class="rn-nav" id="rn-nav" aria-label="Main navigation">
         <a href="#rn-services">Services</a>
-        <a href="#rn-how">How it works</a>
         <a href="#rn-pricing">Pricing</a>
         <a href="#rn-reviews">Reviews</a>
-        <a href="#rn-areas">Areas</a>
-        <a href="#rn-faq">FAQ</a>
+        <a href="#rn-how">How it works</a>
         <a href="#rn-contact">Contact</a>
       </nav>
       <div class="rn-header-cta">
-        <p class="rn-header-stars"><span role="img" aria-label="Rated 4.8 out of 5 from 132 reviews">&#9733;&#9733;&#9733;&#9733;&#9733;</span> 4.8/5 <span>(132 reviews)</span></p>
-        <a class="rn-header-phone" href="tel:+14505550193">(450) 555-0193</a>
-        <a class="rn-btn rn-btn-yellow" href="#rn-calculator">Get a quote</a>
+        <a class="rn-btn rn-btn-yellow" href="#rn-calculator"><span class="rn-cta-full">Get a quote</span><span class="rn-cta-short">Quote</span></a>
       </div>
     </div>
   </header>
 
   <main id="rn-main">
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+      <defs>
+        <symbol id="rn-star" viewBox="0 0 24 24">
+          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+        </symbol>
+      </defs>
+    </svg>
     <!-- HERO: availability first, calculator in the hero -->
     <section class="rn-hero" id="rn-top">
       <div class="rn-hero-in">
@@ -219,6 +221,33 @@ const IMG = {
     <p class="rn-facts">Since 2016 · About 2,400 moves · 7 towns across the North Shore · 4.8/5 from 132 reviews</p>
 
     <!-- SERVICES -->
+    <!-- CREWS THIS WEEK -->
+    <section class="rn-crews" id="rn-avail">
+      <h2 class="rn-h2">Crews this week</h2>
+      <p class="rn-sec-sub">Who is free, and when. Book the slot and the crew is confirmed on the spot.</p>
+      <div class="rn-avail-grid">
+        <article class="rn-avail-card">
+          <p class="rn-avail-day">Today</p>
+          <p class="rn-avail-crew"><strong>Karim + Julie</strong> · 2 movers, 16 ft truck</p>
+          <p class="rn-avail-slot"><span class="rn-avail-open">2 slots open</span> · 8 h and 13 h</p>
+          <a class="rn-btn rn-btn-yellow" href="#rn-calculator">Book this crew</a>
+        </article>
+        <article class="rn-avail-card">
+          <p class="rn-avail-day">Tomorrow</p>
+          <p class="rn-avail-crew"><strong>Thomas + Lea</strong> · 3 movers, 20 ft truck</p>
+          <p class="rn-avail-slot"><span class="rn-avail-open">1 slot open</span> · 9 h</p>
+          <a class="rn-btn rn-btn-yellow" href="#rn-calculator">Book this crew</a>
+        </article>
+        <article class="rn-avail-card">
+          <p class="rn-avail-day">Day after tomorrow</p>
+          <p class="rn-avail-crew"><strong>Karim + Thomas</strong> · 3 movers, 20 ft truck</p>
+          <p class="rn-avail-slot"><span class="rn-avail-full">Fully booked</span> · next opening the day after</p>
+          <a class="rn-btn rn-btn-yellow" href="#rn-calculator">Join the waitlist</a>
+        </article>
+      </div>
+      <p class="rn-avail-note">July 1 is the busiest moving day in Quebec. For a July 1 move, book at least 6 weeks ahead.</p>
+    </section>
+
     <section class="rn-services" id="rn-services">
       <h2 class="rn-h2">What we move</h2>
       <p class="rn-sec-sub">Six jobs, one crew, one price logic. Every job ends with boxes in the right room.</p>
@@ -234,41 +263,6 @@ const IMG = {
         <img src={IMG.packing} alt="Empty moving boxes with blank NAME and CONTENTS labels, ready to pack" width="1024" height="683" loading="lazy" decoding="async" />
         <figcaption>Empty boxes, labelled before anything goes in.</figcaption>
       </figure>
-    </section>
-
-    <!-- HOW IT WORKS -->
-    <section class="rn-how" id="rn-how">
-      <div class="rn-how-in">
-        <div>
-          <h2 class="rn-h2">How it works</h2>
-          <ol class="rn-steps">
-            <li><strong>Book</strong> Get your range in 60 seconds, pick a date, and we confirm the crew and the truck size by phone.</li>
-            <li><strong>Load</strong> The crew protects doors, floors and rails, then loads the truck tight, heavy at the bottom, fragile on top.</li>
-            <li><strong>Deliver</strong> We unload room by room, place the furniture where you want it, and take the used boxes away.</li>
-          </ol>
-          <p>Your crew: Karim runs the team, with Julie, Thomas and Lea on the truck. Same faces at loading and at delivery, no day labour picked up on the way.</p>
-        </div>
-        <figure>
-          <img src={IMG.crew} alt="A Rive-Nord mover carrying a stack of labelled boxes to the truck" width="1024" height="768" loading="lazy" decoding="async" />
-          <figcaption>Stacked, strapped, and carried in one trip.</figcaption>
-        </figure>
-      </div>
-    </section>
-
-    <!-- PROTECTION CHECKLIST -->
-    <section class="rn-protect" id="rn-protect">
-      <h2 class="rn-h2">Protected before we lift anything</h2>
-      <p class="rn-sec-sub">The gear is on the truck for every job, not rented when something breaks.</p>
-      <ul class="rn-checklist">
-        <li>Door covers on every door we use</li>
-        <li>Floor mats on hardwood and tile</li>
-        <li>Full mattress covers, sealed</li>
-        <li>Sofa covers, fitted</li>
-        <li>Bubble wrap for glass and mirrors</li>
-        <li>Stair-rail protectors on every flight</li>
-        <li>Thick furniture blankets, strapped</li>
-        <li>Cardboard corners for framed pieces</li>
-      </ul>
     </section>
 
     <!-- PRICING EXPLAINER -->
@@ -294,43 +288,64 @@ const IMG = {
         <p><strong>Released value:</strong> the basic cover, 60 cents per pound per item. A 40 lb TV is worth $24 under released value. That is why the full value option exists.</p>
         <p>We walk through both options at booking. No fine print surprise on moving day.</p>
       </div>
+      <p class="rn-protect-note">Every move is protected the same way: furniture blankets on wood and leather, stretch wrap on upholstery, floor runners in both homes, and the truck loaded tight so nothing shifts.</p>
     </section>
 
     <!-- REVIEWS -->
     <section class="rn-reviews" id="rn-reviews">
       <h2 class="rn-h2">Reviews, by move type</h2>
-      <p class="rn-sec-sub">4.8/5 from 132 reviews. Names, neighbourhoods and dates, because a star count alone says nothing. These reviews are written for this fictional demo company.</p>
+      <p class="rn-review-stars-row" role="img" aria-label="Rated 4.8 out of 5 from 132 reviews"><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><span>4.8/5 from 132 reviews</span></p>
+      <p class="rn-sec-sub">Names, neighbourhoods and dates, because a star count alone says nothing. These reviews are written for this fictional demo company.</p>
       <div class="rn-review-grid">
         <article class="rn-review">
+          <p class="rn-stars" role="img" aria-label="5 out of 5 stars"><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg></p>
           <p class="rn-review-type">Local move</p>
-          <p class="rn-stars"><span role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></p>
           <blockquote>Condo on the 8th floor in Terrebonne, elevator booked for 9 h, everything down by noon. Karim checked the loading dock rules before we arrived.</blockquote>
           <p class="rn-review-who">Isabelle, Terrebonne, March 2026</p>
         </article>
         <article class="rn-review">
+          <p class="rn-stars" role="img" aria-label="5 out of 5 stars"><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg></p>
           <p class="rn-review-type">Long-distance move</p>
-          <p class="rn-stars"><span role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></p>
           <blockquote>Lachenaie to Montreal in one day. The truck left at 8 h, we were eating dinner in the new kitchen at 19 h. Every box landed in the room written on it.</blockquote>
           <p class="rn-review-who">Antoine and Sara, Lachenaie, February 2026</p>
         </article>
         <article class="rn-review">
+          <p class="rn-stars" role="img" aria-label="5 out of 5 stars"><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg></p>
           <p class="rn-review-type">Office move</p>
-          <p class="rn-stars"><span role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></p>
           <blockquote>Our whole clinic moved over a Saturday: six treatment rooms, the front desk, and the filing cabinets. Monday morning the first patient walked into a finished room.</blockquote>
           <p class="rn-review-who">David, Mascouche, January 2026</p>
         </article>
         <article class="rn-review">
+          <p class="rn-stars" role="img" aria-label="5 out of 5 stars"><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg></p>
           <p class="rn-review-type">Packing</p>
-          <p class="rn-stars"><span role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></p>
           <blockquote>Julie packed the kitchen in one morning. Every glass survived, and the labels said which shelf each box belonged on. I unpacked in two evenings.</blockquote>
           <p class="rn-review-who">Nathalie, La Plaine, April 2026</p>
         </article>
         <article class="rn-review">
+          <p class="rn-stars" role="img" aria-label="4 out of 5 stars"><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg class="rn-star-empty" aria-hidden="true"><use href="#rn-star" /></svg></p>
           <p class="rn-review-type">Piano move</p>
-          <p class="rn-stars"><span role="img" aria-label="4 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></p>
           <blockquote>Baby grand from a second-floor living room, down the stairs and into the new place without a scratch. They sent three movers just for the piano and explained the plan before lifting.</blockquote>
           <p class="rn-review-who">Michel, Blainville, May 2026</p>
         </article>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="rn-how" id="rn-how">
+      <div class="rn-how-in">
+        <div>
+          <h2 class="rn-h2">How it works</h2>
+          <ol class="rn-steps">
+            <li><strong>Book</strong> Get your range in 60 seconds, pick a date, and we confirm the crew and the truck size by phone.</li>
+            <li><strong>Load</strong> The crew protects doors, floors and rails, then loads the truck tight, heavy at the bottom, fragile on top.</li>
+            <li><strong>Deliver</strong> We unload room by room, place the furniture where you want it, and take the used boxes away.</li>
+          </ol>
+          <p>Your crew: Karim runs the team, with Julie, Thomas and Lea on the truck. Same faces at loading and at delivery, no day labour picked up on the way.</p>
+        </div>
+        <figure>
+          <img src={IMG.crew} alt="A Rive-Nord mover carrying a stack of labelled boxes to the truck" width="1024" height="768" loading="lazy" decoding="async" />
+          <figcaption>Stacked, strapped, and carried in one trip.</figcaption>
+        </figure>
       </div>
     </section>
 
@@ -349,33 +364,6 @@ const IMG = {
           <figcaption>Storage units between moves. We load from the unit straight to your new door.</figcaption>
         </figure>
       </div>
-    </section>
-
-    <!-- FAQ -->
-    <section class="rn-faq" id="rn-faq">
-      <h2 class="rn-h2">Questions before you call</h2>
-      <dl class="rn-faq-list">
-        <div>
-          <dt>What do you not move?</dt>
-          <dd>Firearms, hazardous materials, plants and perishables. Fuel, paint and propane tanks stay behind too. Ask us about anything odd and we will give you a straight answer.</dd>
-        </div>
-        <div>
-          <dt>What happens if something is damaged?</dt>
-          <dd>Tell the crew lead on the day, then send photos within 48 hours. Claims are answered within 5 business days, and repairs or payment follow the valuation option you chose at booking.</dd>
-        </div>
-        <div>
-          <dt>How far ahead should I book?</dt>
-          <dd>Two to three weeks for a normal date, six weeks for July 1 and for end-of-month Saturdays. Last-minute moves happen when a crew is free, and the calculator shows the same range either way.</dd>
-        </div>
-        <div>
-          <dt>What about July 1, moving day?</dt>
-          <dd>July 1 books out first, so reserve at least six weeks ahead. June 30 or July 2 are easier to book and the crews are less rushed. If you must move July 1, book early and confirm the elevator slot with your building the same week.</dd>
-        </div>
-        <div>
-          <dt>Do you take furniture apart?</dt>
-          <dd>Yes. Beds, tables and shelving come apart and go back together at the other end. Keep the screws in a labelled bag, or let the crew bag them for you.</dd>
-        </div>
-      </dl>
     </section>
 
     <!-- CONTACT / FOOTER -->
@@ -403,37 +391,6 @@ const IMG = {
 
   <script>
     (function () {
-      var menuBtn = document.getElementById('rn-menu-btn') as HTMLButtonElement | null;
-      var nav = document.getElementById('rn-nav') as HTMLElement | null;
-      menuBtn?.addEventListener('click', function () {
-        var open = nav?.classList.toggle('rn-nav-open');
-        menuBtn?.setAttribute('aria-expanded', open ? 'true' : 'false');
-        if (menuBtn) menuBtn.textContent = open ? 'Close' : 'Menu';
-      });
-      nav?.querySelectorAll('a').forEach(function (a) {
-        a.addEventListener('click', function () {
-          nav?.classList.remove('rn-nav-open');
-          menuBtn?.setAttribute('aria-expanded', 'false');
-          if (menuBtn) menuBtn.textContent = 'Menu';
-        });
-      });
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && nav?.classList.contains('rn-nav-open')) {
-          nav?.classList.remove('rn-nav-open');
-          menuBtn?.setAttribute('aria-expanded', 'false');
-          if (menuBtn) menuBtn.textContent = 'Menu';
-        }
-      });
-      document.addEventListener('click', function (e) {
-        var t = e.target as HTMLElement | null;
-        var header = document.querySelector('.rn-header') as HTMLElement | null;
-        if (nav?.classList.contains('rn-nav-open') && header && t && !header.contains(t)) {
-          nav?.classList.remove('rn-nav-open');
-          menuBtn?.setAttribute('aria-expanded', 'false');
-          if (menuBtn) menuBtn.textContent = 'Menu';
-        }
-      });
-
       var BASE = {
         studio: [420, 580], '1bed': [620, 840], '2bed': [880, 1180],
         '3bed': [1150, 1520], house: [1450, 1950], office: [1800, 2600]
@@ -572,7 +529,7 @@ const IMG = {
     }
     .rn *, .rn *::before, .rn *::after { box-sizing: border-box; }
     .rn img { display: block; max-width: 100%; }
-    .rn section { scroll-margin-top: 140px; }
+    .rn section { scroll-margin-top: 80px; }
     .rn a:not(.rn-btn-yellow):not(.rn-call-big):not(.rn-call-light):not(.rn-sticky-link) { color: inherit; }
     .rn a:focus-visible, .rn button:focus-visible, .rn input:focus-visible, .rn select:focus-visible {
       outline: 2px solid #fff; outline-offset: 2px; box-shadow: 0 0 0 4px #1B1D21;
@@ -596,31 +553,25 @@ const IMG = {
       border-bottom: 4px solid var(--rn-yellow);
     }
     .rn-header-in {
-      max-width: 1180px; margin: 0 auto; padding: 12px clamp(16px, 4vw, 32px);
-      display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+      max-width: 1180px; margin: 0 auto; padding: 8px clamp(12px, 3vw, 32px);
+      display: flex; align-items: center; gap: 16px; flex-wrap: nowrap;
     }
     .rn-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-    .rn-brand svg { width: 44px; height: 44px; flex: none; }
+    .rn-brand svg { width: 36px; height: 36px; flex: none; }
     .rn-brand-text {
-      font-family: var(--rn-oswald); font-weight: 700; font-size: 26px; letter-spacing: 0.04em; line-height: 1;
+      font-family: var(--rn-oswald); font-weight: 700; font-size: 22px; letter-spacing: 0.04em; line-height: 1; white-space: nowrap;
     }
     .rn-brand-sub { display: block; font-family: var(--rn-inter); font-size: 10.5px; letter-spacing: 0.22em; color: var(--rn-yellow); margin-top: 4px; }
-    .rn-nav { display: flex; gap: 4px; margin-left: auto; flex-wrap: wrap; }
+    .rn-nav { display: flex; gap: 4px; margin-left: auto; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+    .rn-nav::-webkit-scrollbar { display: none; }
     .rn-nav a {
-      color: #fff; text-decoration: none; font-weight: 600; font-size: 14.5px;
-      padding: 10px 12px; border-radius: 6px;
+      color: #fff; text-decoration: none; font-weight: 600; font-size: 14px;
+      padding: 8px 10px; border-radius: 6px; white-space: nowrap;
     }
     .rn-nav a:hover { background: rgba(255,255,255,0.12); }
-    .rn-header-cta { display: flex; align-items: center; gap: 14px; margin-left: auto; }
-    .rn-nav + .rn-header-cta { margin-left: 0; }
-    .rn-header-stars { margin: 0; font-size: 14px; font-weight: 600; color: var(--rn-yellow); white-space: nowrap; }
-    .rn-header-stars span { color: rgba(255,255,255,0.75); font-weight: 500; }
-    .rn-header-phone { font-weight: 700; font-size: 17px; text-decoration: none; white-space: nowrap; }
-    .rn-menu-btn {
-      display: none; margin-left: auto; font-family: var(--rn-inter); font-weight: 700; font-size: 15px;
-      background: var(--rn-yellow); color: var(--rn-charcoal); border: 0; border-radius: 8px;
-      padding: 12px 18px; min-height: 44px; cursor: pointer;
-    }
+    .rn-header-cta { display: flex; align-items: center; gap: 14px; margin-left: auto; flex: none; }
+    .rn-header-cta .rn-btn { padding: 10px 16px; min-height: 44px; font-size: 15px; }
+    .rn-cta-short { display: none; }
     .rn-btn {
       display: inline-block; font-weight: 700; font-size: 16px; text-decoration: none;
       padding: 14px 24px; border-radius: 8px; border: 0; cursor: pointer; min-height: 48px;
@@ -658,7 +609,7 @@ const IMG = {
 
     .rn-calc {
       max-width: 1180px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 32px) clamp(44px, 7vh, 72px);
-      scroll-margin-top: 140px;
+      scroll-margin-top: 80px;
     }
     .rn-calc .rn-h2 { color: #fff; }
     .rn-calc-sub { color: rgba(255,255,255,0.9); font-size: 16px; line-height: 1.6; max-width: 70ch; margin: 0 0 8px; }
@@ -690,9 +641,20 @@ const IMG = {
 
     .rn-facts { max-width: 1180px; margin: 0 auto; padding: 18px clamp(16px, 4vw, 32px); border-top: 1px solid rgba(59,63,69,0.25); border-bottom: 1px solid rgba(59,63,69,0.25); text-align: center; font-size: 15px; font-weight: 600; color: var(--rn-charcoal); }
 
-    .rn-services, .rn-protect, .rn-pricing, .rn-reviews, .rn-faq {
+    .rn-services, .rn-crews, .rn-pricing, .rn-reviews {
       max-width: 1180px; margin: 0 auto; padding: clamp(48px, 8vh, 84px) clamp(16px, 4vw, 32px);
     }
+    .rn-crews { background: var(--rn-plaster); }
+    .rn-avail-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .rn-avail-card { background: #fff; border: 2px solid var(--rn-charcoal); border-radius: 12px; padding: 22px; display: flex; flex-direction: column; gap: 8px; }
+    .rn-avail-day { font-family: var(--rn-oswald); text-transform: uppercase; font-size: 1.3rem; margin: 0; }
+    .rn-avail-crew { font-size: 15.5px; line-height: 1.55; margin: 0; }
+    .rn-avail-slot { font-size: 15px; margin: 0 0 8px; }
+    .rn-avail-open { font-weight: 700; color: #1E7B34; }
+    .rn-avail-full { font-weight: 700; color: #B3261E; }
+    .rn-avail-card .rn-btn { margin-top: auto; align-self: flex-start; }
+    .rn-avail-note { margin: 20px 0 0; font-size: 15.5px; font-weight: 600; }
+
     .rn-rate { margin-top: 28px; border-top: 2px solid var(--rn-charcoal); }
     .rn-rate-row { display: grid; grid-template-columns: 1fr auto; gap: 8px 24px; padding: 20px 0; border-bottom: 1px solid rgba(59,63,69,0.25); }
     .rn-rate-row h3 { font-family: var(--rn-oswald); text-transform: uppercase; font-size: 1.35rem; color: var(--rn-charcoal); margin: 0 0 6px; }
@@ -716,12 +678,6 @@ const IMG = {
     .rn-how p { font-size: 16px; line-height: 1.65; color: rgba(255,255,255,0.9); }
     .rn-how img { width: 100%; height: 380px; object-fit: cover; border-radius: 12px; border: 4px solid var(--rn-yellow); }
 
-    .rn-checklist {
-      list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 14px 28px;
-    }
-    .rn-checklist li { font-weight: 600; font-size: 16px; }
-    .rn-checklist li::before { content: "\2713  "; color: #1E7B34; }
-
     .rn-pricing { background: #fff; max-width: none; }
     .rn-pricing > * { max-width: 1180px; margin-left: auto; margin-right: auto; }
     .rn-defs { margin: 0 0 32px; }
@@ -732,6 +688,7 @@ const IMG = {
     .rn-bullets { font-size: 16px; line-height: 1.7; margin: 0 0 32px; padding-left: 22px; }
     .rn-valuation { background: var(--rn-plaster); border: 2px solid var(--rn-charcoal); border-radius: 12px; padding: 24px 28px; }
     .rn-valuation .rn-h3 { color: var(--rn-charcoal); }
+    .rn-protect-note { margin: 24px 0 0; font-size: 16px; line-height: 1.65; font-weight: 600; }
 
     .rn-review-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
     .rn-review {
@@ -742,7 +699,12 @@ const IMG = {
       margin: 0 0 8px; font-weight: 700; font-size: 13px; letter-spacing: 0.12em;
       text-transform: uppercase; color: var(--rn-charcoal);
     }
-    .rn-stars { margin: 0 0 12px; color: #B8860B; font-size: 18px; letter-spacing: 2px; }
+    .rn-stars { display: flex; gap: 3px; margin: 0 0 14px; line-height: 1; }
+    .rn-stars svg { width: 26px; height: 26px; fill: #F2B705; stroke: #3B3F45; stroke-width: 0.6; flex: none; }
+    .rn-stars svg.rn-star-empty { fill: none; }
+    .rn-review-stars-row { display: flex; align-items: center; gap: 10px; margin: 0 0 28px; }
+    .rn-review-stars-row svg { width: 30px; height: 30px; fill: #F2B705; stroke: #3B3F45; stroke-width: 0.6; flex: none; }
+    .rn-review-stars-row span { font-weight: 700; font-size: 17px; }
     .rn-review blockquote { margin: 0 0 16px; font-size: 16px; line-height: 1.65; }
     .rn-review-who { margin: auto 0 0; font-size: 14px; font-weight: 600; color: rgba(27,29,33,0.7); }
 
@@ -754,11 +716,6 @@ const IMG = {
     .rn-areas .rn-h2 { color: #fff; }
     .rn-areas p { font-size: 16.5px; line-height: 1.7; color: rgba(255,255,255,0.92); }
     .rn-areas img { width: 100%; height: 380px; object-fit: cover; border-radius: 12px; border: 4px solid var(--rn-yellow); }
-
-    .rn-faq-list { margin: 0; }
-    .rn-faq-list div { border-bottom: 2px solid var(--rn-charcoal); padding: 20px 0; }
-    .rn-faq-list dt { font-family: var(--rn-oswald); text-transform: uppercase; font-size: 1.25rem; color: var(--rn-charcoal); margin-bottom: 6px; }
-    .rn-faq-list dd { margin: 0; font-size: 16px; line-height: 1.65; max-width: 72ch; }
 
     .rn-contact { background: var(--rn-yellow); text-align: center; padding: clamp(48px, 8vh, 84px) clamp(16px, 4vw, 32px); }
     .rn-contact .rn-h2 { margin-bottom: 8px; }
@@ -778,29 +735,29 @@ const IMG = {
     .rn-sticky a {
       flex: 1; text-align: center; text-decoration: none; font-weight: 700; font-size: 16px;
       padding: 13px 10px; border-radius: 8px; min-height: 48px;
+      display: flex; align-items: center; justify-content: center;
     }
     .rn-sticky a:first-child { background: #fff; color: var(--rn-charcoal); }
     .rn-sticky a:last-child { background: var(--rn-yellow); color: var(--rn-charcoal); }
 
     @media (max-width: 900px) {
       .rn-hero-in, .rn-how-in, .rn-areas-in { grid-template-columns: 1fr; }
-      .rn-review-grid { grid-template-columns: 1fr 1fr; }
-      .rn-menu-btn { display: block; }
-      .rn-nav {
-        display: none; flex-basis: 100%; flex-direction: column; margin: 0;
-      }
-      .rn-nav-open { display: flex; }
-      .rn-header-cta { margin-left: 0; }
-      .rn-header-stars { display: none; }
+      .rn-review-grid, .rn-avail-grid { grid-template-columns: 1fr 1fr; }
+      .rn-header-in { gap: 10px; }
+      .rn-brand-text { font-size: 19px; }
+      .rn-brand-sub { display: none; }
+      .rn-nav a { padding: 8px 8px; font-size: 13.5px; }
+      .rn-header-cta .rn-btn { padding: 9px 12px; font-size: 14px; }
+      .rn-cta-full { display: none; }
+      .rn-cta-short { display: inline; }
     }
     @media (max-width: 640px) {
-      .rn-grid, .rn-review-grid, .rn-checklist { grid-template-columns: 1fr; }
+      .rn-grid, .rn-review-grid, .rn-avail-grid { grid-template-columns: 1fr; }
       .rn-rate-row { grid-template-columns: 1fr; }
       .rn-rate-side { text-align: left; }
       .rn-sticky { display: flex; }
       /* Lift the shared EscapeHatch above the sticky bar so Call stays tappable; !important beats the component's scoped rule. */
       :global(.demo-exit) { bottom: calc(84px + env(safe-area-inset-bottom, 0px)) !important; }
-      .rn-header-phone { display: none; }
       .rn-wide-img img, .rn-how img, .rn-areas img { height: 240px; }
     }
     @media (prefers-reduced-motion: reduce) {

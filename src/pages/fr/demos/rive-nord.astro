@@ -54,25 +54,27 @@ const IMG = {
         <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="2" y="2" width="44" height="44" rx="8" fill="#F2B705" /><path d="M14 38 L24 10 L34 38" fill="none" stroke="#3B3F45" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /><path d="M19 28 h10" stroke="#3B3F45" stroke-width="5" stroke-linecap="round" /></svg>
         <span class="rn-brand-text">RIVE-NORD<span class="rn-brand-sub">DEMENAGEMENT · TERREBONNE</span></span>
       </a>
-      <button class="rn-menu-btn" id="rn-menu-btn" type="button" aria-expanded="false" aria-controls="rn-nav">Menu</button>
       <nav class="rn-nav" id="rn-nav" aria-label="Navigation principale">
         <a href="#rn-services">Services</a>
-        <a href="#rn-how">Comment ça marche</a>
         <a href="#rn-pricing">Tarifs</a>
         <a href="#rn-reviews">Avis</a>
-        <a href="#rn-areas">Secteurs</a>
-        <a href="#rn-faq">FAQ</a>
+        <a href="#rn-how">Comment ça marche</a>
         <a href="#rn-contact">Contact</a>
       </nav>
       <div class="rn-header-cta">
-        <p class="rn-header-stars"><span role="img" aria-label="Note de 4,8 sur 5 d'après 132 avis">&#9733;&#9733;&#9733;&#9733;&#9733;</span> 4,8/5 <span>(132 avis)</span></p>
-        <a class="rn-header-phone" href="tel:+14505550193">(450) 555-0193</a>
-        <a class="rn-btn rn-btn-yellow" href="#rn-calculator">Obtenir une soumission</a>
+        <a class="rn-btn rn-btn-yellow" href="#rn-calculator"><span class="rn-cta-full">Obtenir une soumission</span><span class="rn-cta-short">Soumission</span></a>
       </div>
     </div>
   </header>
 
   <main id="rn-main">
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+      <defs>
+        <symbol id="rn-star" viewBox="0 0 24 24">
+          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+        </symbol>
+      </defs>
+    </svg>
     <!-- HERO : la disponibilité d'abord, calculateur dans le hero -->
     <section class="rn-hero" id="rn-top">
       <div class="rn-hero-in">
@@ -220,6 +222,33 @@ const IMG = {
     <p class="rn-facts">Depuis 2016 · Environ 2 400 déménagements · 7 villes sur la Rive-Nord · 4,8/5 selon 132 avis</p>
 
     <!-- SERVICES -->
+    <!-- ÉQUIPES DE LA SEMAINE -->
+    <section class="rn-crews" id="rn-avail">
+      <h2 class="rn-h2">Équipes de la semaine</h2>
+      <p class="rn-sec-sub">Qui est libre, et quand. Réservez le créneau et l'équipe est confirmée sur-le-champ.</p>
+      <div class="rn-avail-grid">
+        <article class="rn-avail-card">
+          <p class="rn-avail-day">Aujourd'hui</p>
+          <p class="rn-avail-crew"><strong>Karim + Julie</strong> · 2 déménageurs, camion de 16 pi</p>
+          <p class="rn-avail-slot"><span class="rn-avail-open">2 créneaux libres</span> · 8 h et 13 h</p>
+          <a class="rn-btn rn-btn-yellow" href="#rn-calculator">Réserver cette équipe</a>
+        </article>
+        <article class="rn-avail-card">
+          <p class="rn-avail-day">Demain</p>
+          <p class="rn-avail-crew"><strong>Thomas + Lea</strong> · 3 déménageurs, camion de 20 pi</p>
+          <p class="rn-avail-slot"><span class="rn-avail-open">1 créneau libre</span> · 9 h</p>
+          <a class="rn-btn rn-btn-yellow" href="#rn-calculator">Réserver cette équipe</a>
+        </article>
+        <article class="rn-avail-card">
+          <p class="rn-avail-day">Après-demain</p>
+          <p class="rn-avail-crew"><strong>Karim + Thomas</strong> · 3 déménageurs, camion de 20 pi</p>
+          <p class="rn-avail-slot"><span class="rn-avail-full">Complet</span> · prochaine ouverture le jour suivant</p>
+          <a class="rn-btn rn-btn-yellow" href="#rn-calculator">Rejoindre la liste d'attente</a>
+        </article>
+      </div>
+      <p class="rn-avail-note">Le 1er juillet est la journée de déménagement la plus occupée au Québec. Pour un déménagement le 1er juillet, réservez au moins 6 semaines à l'avance.</p>
+    </section>
+
     <section class="rn-services" id="rn-services">
       <h2 class="rn-h2">Ce qu'on déménage</h2>
       <p class="rn-sec-sub">Six tâches, une équipe, une même logique de prix. Chaque tâche se termine avec les boîtes dans la bonne pièce.</p>
@@ -235,41 +264,6 @@ const IMG = {
         <img src={IMG.packing} alt="Boîtes de déménagement vides avec étiquettes NOM et CONTENU, prêtes à emballer" width="1024" height="683" loading="lazy" decoding="async" />
         <figcaption>Des boîtes vides, étiquetées avant qu'on les remplisse.</figcaption>
       </figure>
-    </section>
-
-    <!-- COMMENT CA MARCHE -->
-    <section class="rn-how" id="rn-how">
-      <div class="rn-how-in">
-        <div>
-          <h2 class="rn-h2">Comment ça marche</h2>
-          <ol class="rn-steps">
-            <li><strong>Réserver</strong> Obtenez votre fourchette en 60 secondes, choisissez une date, et on confirme l'équipe et la taille du camion par téléphone.</li>
-            <li><strong>Charger</strong> L'équipe protège les portes, les planchers et les rampes, puis charge le camion serré : le lourd en bas, le fragile en haut.</li>
-            <li><strong>Livrer</strong> On décharge pièce par pièce, on place les meubles où vous voulez, et on reprend les boîtes usagées.</li>
-          </ol>
-          <p>Votre équipe : Karim dirige l'équipe, avec Julie, Thomas et Léa sur le camion. Les mêmes visages au chargement et à la livraison, pas de journaliers ramassés en route.</p>
-        </div>
-        <figure>
-          <img src={IMG.crew} alt="Un déménageur Rive-Nord porte une pile de boîtes étiquetées vers le camion" width="1024" height="768" loading="lazy" decoding="async" />
-          <figcaption>Empilées, attachées, portées en une seule fois.</figcaption>
-        </figure>
-      </div>
-    </section>
-
-    <!-- LISTE DE PROTECTION -->
-    <section class="rn-protect" id="rn-protect">
-      <h2 class="rn-h2">Protégé avant qu'on lève quoi que ce soit</h2>
-      <p class="rn-sec-sub">L'équipement est sur le camion pour chaque tâche, pas loué quand quelque chose casse.</p>
-      <ul class="rn-checklist">
-        <li>Housses de porte sur chaque porte utilisée</li>
-        <li>Tapis de plancher sur le bois franc et la céramique</li>
-        <li>Housses de matelas complètes, scellées</li>
-        <li>Housses de divan, ajustées</li>
-        <li>Papier bulle pour le verre et les miroirs</li>
-        <li>Protecteurs de rampe sur chaque volée d'escalier</li>
-        <li>Couvertures de meubles épaisses, attachées</li>
-        <li>Coins de carton pour les pièces encadrées</li>
-      </ul>
     </section>
 
     <!-- EXPLICATION DES TARIFS -->
@@ -295,43 +289,64 @@ const IMG = {
         <p><strong>Valeur libérée :</strong> la couverture de base, 60 cents par livre par article. Une télévision de 40 lb vaut 24 $ en valeur libérée. C'est pour ça que l'option à valeur complète existe.</p>
         <p>On passe les deux options en revue à la réservation. Aucune surprise en petits caractères le jour du déménagement.</p>
       </div>
+      <p class="rn-protect-note">Chaque déménagement est protégé de la même façon : couvertures de déménagement sur le bois et le cuir, pellicule extensible sur les meubles rembourrés, tapis de protection dans les deux maisons, et le camion chargé serré pour que rien ne bouge.</p>
     </section>
 
     <!-- AVIS -->
     <section class="rn-reviews" id="rn-reviews">
       <h2 class="rn-h2">Avis, par type de déménagement</h2>
-      <p class="rn-sec-sub">4,8/5 d'après 132 avis. Des noms, des quartiers et des dates, parce qu'un nombre d'étoiles seul ne dit rien. Ces avis sont rédigés pour cette entreprise fictive de démonstration.</p>
+      <p class="rn-review-stars-row" role="img" aria-label="Note de 4,8 sur 5 d'après 132 avis"><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><span>4,8/5 d'après 132 avis</span></p>
+      <p class="rn-sec-sub">Des noms, des quartiers et des dates, parce qu'un nombre d'étoiles seul ne dit rien. Ces avis sont rédigés pour cette entreprise fictive de démonstration.</p>
       <div class="rn-review-grid">
         <article class="rn-review">
+          <p class="rn-stars" role="img" aria-label="5 étoiles sur 5"><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg></p>
           <p class="rn-review-type">Déménagement local</p>
-          <p class="rn-stars"><span role="img" aria-label="5 étoiles sur 5">&#9733;&#9733;&#9733;&#9733;&#9733;</span></p>
           <blockquote>Condo au 8e étage à Terrebonne, ascenseur réservé pour 9 h, tout était descendu avant midi. Karim a vérifié les règles du quai de chargement avant notre arrivée.</blockquote>
           <p class="rn-review-who">Isabelle, Terrebonne, mars 2026</p>
         </article>
         <article class="rn-review">
+          <p class="rn-stars" role="img" aria-label="5 étoiles sur 5"><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg></p>
           <p class="rn-review-type">Longue distance</p>
-          <p class="rn-stars"><span role="img" aria-label="5 étoiles sur 5">&#9733;&#9733;&#9733;&#9733;&#9733;</span></p>
           <blockquote>De Lachenaie à Montréal en une journée. Le camion est parti à 8 h, on soupait dans la nouvelle cuisine à 19 h. Chaque boîte est arrivée dans la pièce inscrite dessus.</blockquote>
           <p class="rn-review-who">Antoine et Sara, Lachenaie, février 2026</p>
         </article>
         <article class="rn-review">
+          <p class="rn-stars" role="img" aria-label="5 étoiles sur 5"><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg></p>
           <p class="rn-review-type">Déménagement de bureau</p>
-          <p class="rn-stars"><span role="img" aria-label="5 étoiles sur 5">&#9733;&#9733;&#9733;&#9733;&#9733;</span></p>
           <blockquote>Toute notre clinique déménagée un samedi : six salles de traitement, la réception et les classeurs. Le lundi matin, le premier patient est entré dans une salle terminée.</blockquote>
           <p class="rn-review-who">David, Mascouche, janvier 2026</p>
         </article>
         <article class="rn-review">
+          <p class="rn-stars" role="img" aria-label="5 étoiles sur 5"><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg></p>
           <p class="rn-review-type">Emballage</p>
-          <p class="rn-stars"><span role="img" aria-label="5 étoiles sur 5">&#9733;&#9733;&#9733;&#9733;&#9733;</span></p>
           <blockquote>Julie a emballé la cuisine en une matinée. Chaque verre a survécu, et les étiquettes disaient sur quelle tablette chaque boîte allait. J'ai déballé en deux soirées.</blockquote>
           <p class="rn-review-who">Nathalie, La Plaine, avril 2026</p>
         </article>
         <article class="rn-review">
+          <p class="rn-stars" role="img" aria-label="4 étoiles sur 5"><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg aria-hidden="true"><use href="#rn-star" /></svg><svg class="rn-star-empty" aria-hidden="true"><use href="#rn-star" /></svg></p>
           <p class="rn-review-type">Déménagement de piano</p>
-          <p class="rn-stars"><span role="img" aria-label="4 étoiles sur 5">&#9733;&#9733;&#9733;&#9733;&#9734;</span></p>
           <blockquote>Piano à queue d'un salon au deuxième étage, descendu dans les escaliers et installé dans le nouveau logement sans une égratignure. Ils ont envoyé trois déménageurs juste pour le piano et ont expliqué le plan avant de soulever.</blockquote>
           <p class="rn-review-who">Michel, Blainville, mai 2026</p>
         </article>
+      </div>
+    </section>
+
+    <!-- COMMENT CA MARCHE -->
+    <section class="rn-how" id="rn-how">
+      <div class="rn-how-in">
+        <div>
+          <h2 class="rn-h2">Comment ça marche</h2>
+          <ol class="rn-steps">
+            <li><strong>Réserver</strong> Obtenez votre fourchette en 60 secondes, choisissez une date, et on confirme l'équipe et la taille du camion par téléphone.</li>
+            <li><strong>Charger</strong> L'équipe protège les portes, les planchers et les rampes, puis charge le camion serré : le lourd en bas, le fragile en haut.</li>
+            <li><strong>Livrer</strong> On décharge pièce par pièce, on place les meubles où vous voulez, et on reprend les boîtes usagées.</li>
+          </ol>
+          <p>Votre équipe : Karim dirige l'équipe, avec Julie, Thomas et Léa sur le camion. Les mêmes visages au chargement et à la livraison, pas de journaliers ramassés en route.</p>
+        </div>
+        <figure>
+          <img src={IMG.crew} alt="Un déménageur Rive-Nord porte une pile de boîtes étiquetées vers le camion" width="1024" height="768" loading="lazy" decoding="async" />
+          <figcaption>Empilées, attachées, portées en une seule fois.</figcaption>
+        </figure>
       </div>
     </section>
 
@@ -350,33 +365,6 @@ const IMG = {
           <figcaption>Des unités d'entreposage entre deux déménagements. On charge à partir de l'unité jusqu'à votre nouvelle porte.</figcaption>
         </figure>
       </div>
-    </section>
-
-    <!-- FAQ -->
-    <section class="rn-faq" id="rn-faq">
-      <h2 class="rn-h2">Questions avant d'appeler</h2>
-      <dl class="rn-faq-list">
-        <div>
-          <dt>Qu'est-ce que vous ne déménagez pas?</dt>
-          <dd>Les armes à feu, les matières dangereuses, les plantes et les denrées périssables. L'essence, la peinture et les bonbonnes de propane restent derrière aussi. Demandez-nous pour tout ce qui sort de l'ordinaire et on vous donnera une réponse directe.</dd>
-        </div>
-        <div>
-          <dt>Que se passe-t-il si quelque chose est endommagé?</dt>
-          <dd>Dites-le au chef d'équipe le jour même, puis envoyez des photos dans les 48 heures. Les réclamations reçoivent une réponse dans les 5 jours ouvrables, et la réparation ou le paiement suit l'option de protection choisie à la réservation.</dd>
-        </div>
-        <div>
-          <dt>Combien de temps d'avance dois-je réserver?</dt>
-          <dd>Deux à trois semaines pour une date normale, six semaines pour le 1er juillet et pour les samedis de fin de mois. Les déménagements de dernière minute sont possibles quand une équipe est libre, et le calculateur montre la même fourchette dans tous les cas.</dd>
-        </div>
-        <div>
-          <dt>Et le 1er juillet, jour du déménagement?</dt>
-          <dd>Le 1er juillet se réserve en premier, alors réservez au moins six semaines d'avance. Le 30 juin ou le 2 juillet sont plus faciles à réserver et les équipes sont moins pressées. Si vous devez déménager le 1er juillet, réservez tôt et confirmez le créneau d'ascenseur avec votre immeuble la même semaine.</dd>
-        </div>
-        <div>
-          <dt>Démontez-vous les meubles?</dt>
-          <dd>Oui. Les lits, les tables et les tablettes se démontent et se remontent à l'autre bout. Gardez les vis dans un sac étiqueté, ou laissez l'équipe les mettre en sac pour vous.</dd>
-        </div>
-      </dl>
     </section>
 
     <!-- CONTACT / PIED DE PAGE -->
@@ -404,37 +392,6 @@ const IMG = {
 
   <script>
     (function () {
-      var menuBtn = document.getElementById('rn-menu-btn') as HTMLButtonElement | null;
-      var nav = document.getElementById('rn-nav') as HTMLElement | null;
-      menuBtn?.addEventListener('click', function () {
-        var open = nav?.classList.toggle('rn-nav-open');
-        menuBtn?.setAttribute('aria-expanded', open ? 'true' : 'false');
-        if (menuBtn) menuBtn.textContent = open ? 'Fermer' : 'Menu';
-      });
-      nav?.querySelectorAll('a').forEach(function (a) {
-        a.addEventListener('click', function () {
-          nav?.classList.remove('rn-nav-open');
-          menuBtn?.setAttribute('aria-expanded', 'false');
-          if (menuBtn) menuBtn.textContent = 'Menu';
-        });
-      });
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && nav?.classList.contains('rn-nav-open')) {
-          nav?.classList.remove('rn-nav-open');
-          menuBtn?.setAttribute('aria-expanded', 'false');
-          if (menuBtn) menuBtn.textContent = 'Menu';
-        }
-      });
-      document.addEventListener('click', function (e) {
-        var t = e.target as HTMLElement | null;
-        var header = document.querySelector('.rn-header') as HTMLElement | null;
-        if (nav?.classList.contains('rn-nav-open') && header && t && !header.contains(t)) {
-          nav?.classList.remove('rn-nav-open');
-          menuBtn?.setAttribute('aria-expanded', 'false');
-          if (menuBtn) menuBtn.textContent = 'Menu';
-        }
-      });
-
       var BASE = {
         studio: [420, 580], '1bed': [620, 840], '2bed': [880, 1180],
         '3bed': [1150, 1520], house: [1450, 1950], office: [1800, 2600]
@@ -573,7 +530,7 @@ const IMG = {
     }
     .rn *, .rn *::before, .rn *::after { box-sizing: border-box; }
     .rn img { display: block; max-width: 100%; }
-    .rn section { scroll-margin-top: 140px; }
+    .rn section { scroll-margin-top: 80px; }
     .rn a:not(.rn-btn-yellow):not(.rn-call-big):not(.rn-call-light):not(.rn-sticky-link) { color: inherit; }
     .rn a:focus-visible, .rn button:focus-visible, .rn input:focus-visible, .rn select:focus-visible {
       outline: 2px solid #fff; outline-offset: 2px; box-shadow: 0 0 0 4px #1B1D21;
@@ -597,31 +554,25 @@ const IMG = {
       border-bottom: 4px solid var(--rn-yellow);
     }
     .rn-header-in {
-      max-width: 1180px; margin: 0 auto; padding: 12px clamp(16px, 4vw, 32px);
-      display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+      max-width: 1180px; margin: 0 auto; padding: 8px clamp(12px, 3vw, 32px);
+      display: flex; align-items: center; gap: 16px; flex-wrap: nowrap;
     }
     .rn-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-    .rn-brand svg { width: 44px; height: 44px; flex: none; }
+    .rn-brand svg { width: 36px; height: 36px; flex: none; }
     .rn-brand-text {
-      font-family: var(--rn-oswald); font-weight: 700; font-size: 26px; letter-spacing: 0.04em; line-height: 1;
+      font-family: var(--rn-oswald); font-weight: 700; font-size: 22px; letter-spacing: 0.04em; line-height: 1; white-space: nowrap;
     }
     .rn-brand-sub { display: block; font-family: var(--rn-inter); font-size: 10.5px; letter-spacing: 0.22em; color: var(--rn-yellow); margin-top: 4px; }
-    .rn-nav { display: flex; gap: 4px; margin-left: auto; flex-wrap: wrap; }
+    .rn-nav { display: flex; gap: 4px; margin-left: auto; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+    .rn-nav::-webkit-scrollbar { display: none; }
     .rn-nav a {
-      color: #fff; text-decoration: none; font-weight: 600; font-size: 14.5px;
-      padding: 10px 12px; border-radius: 6px;
+      color: #fff; text-decoration: none; font-weight: 600; font-size: 14px;
+      padding: 8px 10px; border-radius: 6px; white-space: nowrap;
     }
     .rn-nav a:hover { background: rgba(255,255,255,0.12); }
-    .rn-header-cta { display: flex; align-items: center; gap: 14px; margin-left: auto; }
-    .rn-nav + .rn-header-cta { margin-left: 0; }
-    .rn-header-stars { margin: 0; font-size: 14px; font-weight: 600; color: var(--rn-yellow); white-space: nowrap; }
-    .rn-header-stars span { color: rgba(255,255,255,0.75); font-weight: 500; }
-    .rn-header-phone { font-weight: 700; font-size: 17px; text-decoration: none; white-space: nowrap; }
-    .rn-menu-btn {
-      display: none; margin-left: auto; font-family: var(--rn-inter); font-weight: 700; font-size: 15px;
-      background: var(--rn-yellow); color: var(--rn-charcoal); border: 0; border-radius: 8px;
-      padding: 12px 18px; min-height: 44px; cursor: pointer;
-    }
+    .rn-header-cta { display: flex; align-items: center; gap: 14px; margin-left: auto; flex: none; }
+    .rn-header-cta .rn-btn { padding: 10px 16px; min-height: 44px; font-size: 15px; }
+    .rn-cta-short { display: none; }
     .rn-btn {
       display: inline-block; font-weight: 700; font-size: 16px; text-decoration: none;
       padding: 14px 24px; border-radius: 8px; border: 0; cursor: pointer; min-height: 48px;
@@ -659,7 +610,7 @@ const IMG = {
 
     .rn-calc {
       max-width: 1180px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 32px) clamp(44px, 7vh, 72px);
-      scroll-margin-top: 140px;
+      scroll-margin-top: 80px;
     }
     .rn-calc .rn-h2 { color: #fff; }
     .rn-calc-sub { color: rgba(255,255,255,0.9); font-size: 16px; line-height: 1.6; max-width: 70ch; margin: 0 0 8px; }
@@ -691,9 +642,20 @@ const IMG = {
 
     .rn-facts { max-width: 1180px; margin: 0 auto; padding: 18px clamp(16px, 4vw, 32px); border-top: 1px solid rgba(59,63,69,0.25); border-bottom: 1px solid rgba(59,63,69,0.25); text-align: center; font-size: 15px; font-weight: 600; color: var(--rn-charcoal); }
 
-    .rn-services, .rn-protect, .rn-pricing, .rn-reviews, .rn-faq {
+    .rn-services, .rn-crews, .rn-pricing, .rn-reviews {
       max-width: 1180px; margin: 0 auto; padding: clamp(48px, 8vh, 84px) clamp(16px, 4vw, 32px);
     }
+    .rn-crews { background: var(--rn-plaster); }
+    .rn-avail-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .rn-avail-card { background: #fff; border: 2px solid var(--rn-charcoal); border-radius: 12px; padding: 22px; display: flex; flex-direction: column; gap: 8px; }
+    .rn-avail-day { font-family: var(--rn-oswald); text-transform: uppercase; font-size: 1.3rem; margin: 0; }
+    .rn-avail-crew { font-size: 15.5px; line-height: 1.55; margin: 0; }
+    .rn-avail-slot { font-size: 15px; margin: 0 0 8px; }
+    .rn-avail-open { font-weight: 700; color: #1E7B34; }
+    .rn-avail-full { font-weight: 700; color: #B3261E; }
+    .rn-avail-card .rn-btn { margin-top: auto; align-self: flex-start; }
+    .rn-avail-note { margin: 20px 0 0; font-size: 15.5px; font-weight: 600; }
+
     .rn-rate { margin-top: 28px; border-top: 2px solid var(--rn-charcoal); }
     .rn-rate-row { display: grid; grid-template-columns: 1fr auto; gap: 8px 24px; padding: 20px 0; border-bottom: 1px solid rgba(59,63,69,0.25); }
     .rn-rate-row h3 { font-family: var(--rn-oswald); text-transform: uppercase; font-size: 1.35rem; color: var(--rn-charcoal); margin: 0 0 6px; }
@@ -717,12 +679,6 @@ const IMG = {
     .rn-how p { font-size: 16px; line-height: 1.65; color: rgba(255,255,255,0.9); }
     .rn-how img { width: 100%; height: 380px; object-fit: cover; border-radius: 12px; border: 4px solid var(--rn-yellow); }
 
-    .rn-checklist {
-      list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 14px 28px;
-    }
-    .rn-checklist li { font-weight: 600; font-size: 16px; }
-    .rn-checklist li::before { content: "\2713  "; color: #1E7B34; }
-
     .rn-pricing { background: #fff; max-width: none; }
     .rn-pricing > * { max-width: 1180px; margin-left: auto; margin-right: auto; }
     .rn-defs { margin: 0 0 32px; }
@@ -733,6 +689,7 @@ const IMG = {
     .rn-bullets { font-size: 16px; line-height: 1.7; margin: 0 0 32px; padding-left: 22px; }
     .rn-valuation { background: var(--rn-plaster); border: 2px solid var(--rn-charcoal); border-radius: 12px; padding: 24px 28px; }
     .rn-valuation .rn-h3 { color: var(--rn-charcoal); }
+    .rn-protect-note { margin: 24px 0 0; font-size: 16px; line-height: 1.65; font-weight: 600; }
 
     .rn-review-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
     .rn-review {
@@ -743,7 +700,12 @@ const IMG = {
       margin: 0 0 8px; font-weight: 700; font-size: 13px; letter-spacing: 0.12em;
       text-transform: uppercase; color: var(--rn-charcoal);
     }
-    .rn-stars { margin: 0 0 12px; color: #B8860B; font-size: 18px; letter-spacing: 2px; }
+    .rn-stars { display: flex; gap: 3px; margin: 0 0 14px; line-height: 1; }
+    .rn-stars svg { width: 26px; height: 26px; fill: #F2B705; stroke: #3B3F45; stroke-width: 0.6; flex: none; }
+    .rn-stars svg.rn-star-empty { fill: none; }
+    .rn-review-stars-row { display: flex; align-items: center; gap: 10px; margin: 0 0 28px; }
+    .rn-review-stars-row svg { width: 30px; height: 30px; fill: #F2B705; stroke: #3B3F45; stroke-width: 0.6; flex: none; }
+    .rn-review-stars-row span { font-weight: 700; font-size: 17px; }
     .rn-review blockquote { margin: 0 0 16px; font-size: 16px; line-height: 1.65; }
     .rn-review-who { margin: auto 0 0; font-size: 14px; font-weight: 600; color: rgba(27,29,33,0.7); }
 
@@ -755,11 +717,6 @@ const IMG = {
     .rn-areas .rn-h2 { color: #fff; }
     .rn-areas p { font-size: 16.5px; line-height: 1.7; color: rgba(255,255,255,0.92); }
     .rn-areas img { width: 100%; height: 380px; object-fit: cover; border-radius: 12px; border: 4px solid var(--rn-yellow); }
-
-    .rn-faq-list { margin: 0; }
-    .rn-faq-list div { border-bottom: 2px solid var(--rn-charcoal); padding: 20px 0; }
-    .rn-faq-list dt { font-family: var(--rn-oswald); text-transform: uppercase; font-size: 1.25rem; color: var(--rn-charcoal); margin-bottom: 6px; }
-    .rn-faq-list dd { margin: 0; font-size: 16px; line-height: 1.65; max-width: 72ch; }
 
     .rn-contact { background: var(--rn-yellow); text-align: center; padding: clamp(48px, 8vh, 84px) clamp(16px, 4vw, 32px); }
     .rn-contact .rn-h2 { margin-bottom: 8px; }
@@ -779,29 +736,29 @@ const IMG = {
     .rn-sticky a {
       flex: 1; text-align: center; text-decoration: none; font-weight: 700; font-size: 16px;
       padding: 13px 10px; border-radius: 8px; min-height: 48px;
+      display: flex; align-items: center; justify-content: center;
     }
     .rn-sticky a:first-child { background: #fff; color: var(--rn-charcoal); }
     .rn-sticky a:last-child { background: var(--rn-yellow); color: var(--rn-charcoal); }
 
     @media (max-width: 900px) {
       .rn-hero-in, .rn-how-in, .rn-areas-in { grid-template-columns: 1fr; }
-      .rn-review-grid { grid-template-columns: 1fr 1fr; }
-      .rn-menu-btn { display: block; }
-      .rn-nav {
-        display: none; flex-basis: 100%; flex-direction: column; margin: 0;
-      }
-      .rn-nav-open { display: flex; }
-      .rn-header-cta { margin-left: 0; }
-      .rn-header-stars { display: none; }
+      .rn-review-grid, .rn-avail-grid { grid-template-columns: 1fr 1fr; }
+      .rn-header-in { gap: 10px; }
+      .rn-brand-text { font-size: 19px; }
+      .rn-brand-sub { display: none; }
+      .rn-nav a { padding: 8px 8px; font-size: 13.5px; }
+      .rn-header-cta .rn-btn { padding: 9px 12px; font-size: 14px; }
+      .rn-cta-full { display: none; }
+      .rn-cta-short { display: inline; }
     }
     @media (max-width: 640px) {
-      .rn-grid, .rn-review-grid, .rn-checklist { grid-template-columns: 1fr; }
+      .rn-grid, .rn-review-grid, .rn-avail-grid { grid-template-columns: 1fr; }
       .rn-rate-row { grid-template-columns: 1fr; }
       .rn-rate-side { text-align: left; }
       .rn-sticky { display: flex; }
       /* Lift the shared EscapeHatch above the sticky bar so Call stays tappable; !important beats the component's scoped rule. */
       :global(.demo-exit) { bottom: calc(84px + env(safe-area-inset-bottom, 0px)) !important; }
-      .rn-header-phone { display: none; }
       .rn-wide-img img, .rn-how img, .rn-areas img { height: 240px; }
     }
     @media (prefers-reduced-motion: reduce) {

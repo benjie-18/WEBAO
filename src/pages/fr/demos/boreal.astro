@@ -65,13 +65,20 @@ const IMG = {
       <div class="br-header-side">
         <p class="br-stars" aria-label="Note de 4,9 sur 5 selon 87 avis">4,9/5 · 87 avis</p>
         <a class="br-phone" href="tel:+18195550147">(819) 555-0147</a>
-        <a class="br-cta" href="#br-quote">Obtenir une soumission</a>
+        <a class="br-cta" href="#br-quote"><span class="br-cta-full">Obtenir une soumission</span><span class="br-cta-short">Soumission</span></a>
         <button class="br-menu-btn" id="br-menu-btn" type="button" aria-expanded="false" aria-controls="br-nav" aria-label="Ouvrir le menu">Menu</button>
       </div>
     </div>
   </header>
 
   <main id="br-main">
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+      <defs>
+        <symbol id="br-star" viewBox="0 0 24 24">
+          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+        </symbol>
+      </defs>
+    </svg>
     <section class="br-hero" id="br-top">
       <div class="br-hero-in">
         <div class="br-hero-copy">
@@ -177,6 +184,29 @@ const IMG = {
 
     <p class="br-facts">Depuis 2012 · Environ 3 400 déménagements · 6 camions, tous appartiennent à Boréal · 4,9/5 selon 87 avis</p>
 
+    <section class="br-reviews" id="br-reviews">
+      <div class="br-wrap">
+        <h2 class="br-h2">Avis</h2>
+        <p class="br-review-stars-row" role="img" aria-label="Note de 4,9 sur 5 selon 87 avis"><svg aria-hidden="true"><use href="#br-star" /></svg><svg aria-hidden="true"><use href="#br-star" /></svg><svg aria-hidden="true"><use href="#br-star" /></svg><svg aria-hidden="true"><use href="#br-star" /></svg><svg aria-hidden="true"><use href="#br-star" /></svg><span>4,9/5 selon 87 avis</span></p>
+        <p class="br-sec-intro">Regroupés par type de déménagement, pour que vous lisiez le déménagement le plus proche du vôtre. Ces avis sont rédigés pour cette entreprise fictive de démonstration.</p>
+        <h3>Déménagements locaux</h3>
+        <div class="br-cards">
+          <article class="br-review"><p class="br-review-stars" role="img" aria-label="5 étoiles sur 5"><svg aria-hidden="true"><use href="#br-star" /></svg><svg aria-hidden="true"><use href="#br-star" /></svg><svg aria-hidden="true"><use href="#br-star" /></svg><svg aria-hidden="true"><use href="#br-star" /></svg><svg aria-hidden="true"><use href="#br-star" /></svg></p><p>Appartement de deux chambres à Hull vers une maison à Aylmer. L'équipe a enveloppé la table en chêne dans des couvertures avant qu'elle sorte de la pièce, et la réservation de l'ascenseur était déjà faite à notre arrivée.</p><p class="br-review-meta">Marie-Claude · Hull vers Aylmer · mars 2026</p></article>
+          <article class="br-review"><p class="br-review-stars" role="img" aria-label="5 étoiles sur 5"><svg aria-hidden="true"><use href="#br-star" /></svg><svg aria-hidden="true"><use href="#br-star" /></svg><svg aria-hidden="true"><use href="#br-star" /></svg><svg aria-hidden="true"><use href="#br-star" /></svg><svg aria-hidden="true"><use href="#br-star" /></svg></p><p>Troisième étage sans ascenseur, et un divan qui passait à peine dans l'escalier. Ils ont enlevé les pattes, mesuré deux fois, et l'ont monté sans une marque sur le mur.</p><p class="br-review-meta">Daniel · Gatineau, Plateau · janvier 2026</p></article>
+        </div>
+        <h3>Longue distance</h3>
+        <div class="br-cards">
+          <article class="br-review"><p class="br-review-stars" role="img" aria-label="5 étoiles sur 5"><svg aria-hidden="true"><use href="#br-star" /></svg><svg aria-hidden="true"><use href="#br-star" /></svg><svg aria-hidden="true"><use href="#br-star" /></svg><svg aria-hidden="true"><use href="#br-star" /></svg><svg aria-hidden="true"><use href="#br-star" /></svg></p><p>De Gatineau à Montréal avec un piano et un coffre-fort. Un seul chef d'équipe du chargement à la livraison, un seul numéro de téléphone, et le piano a été accordé après qu'il se soit installé.</p><p class="br-review-meta">Aisha · Gatineau vers Montréal · février 2026</p></article>
+          <article class="br-review"><p class="br-review-stars" role="img" aria-label="5 étoiles sur 5"><svg aria-hidden="true"><use href="#br-star" /></svg><svg aria-hidden="true"><use href="#br-star" /></svg><svg aria-hidden="true"><use href="#br-star" /></svg><svg aria-hidden="true"><use href="#br-star" /></svg><svg aria-hidden="true"><use href="#br-star" /></svg></p><p>On a déménagé ma mère de Chelsea à Toronto. Sophie a étiqueté chaque boîte par pièce et écrit le contenu sur le côté. Ma mère a trouvé sa bouilloire en dix minutes.</p><p class="br-review-meta">Robert · Chelsea vers Toronto · novembre 2025</p></article>
+        </div>
+        <h3>Déménagements de bureaux</h3>
+        <div class="br-cards">
+          <article class="br-review"><p class="br-review-stars" role="img" aria-label="5 étoiles sur 5"><svg aria-hidden="true"><use href="#br-star" /></svg><svg aria-hidden="true"><use href="#br-star" /></svg><svg aria-hidden="true"><use href="#br-star" /></svg><svg aria-hidden="true"><use href="#br-star" /></svg><svg aria-hidden="true"><use href="#br-star" /></svg></p><p>Quatorze postes de travail déménagés pendant une fin de semaine au centre-ville de Hull. Les bureaux étaient en place à 7 h le lundi matin, câbles étiquetés, écrans sur les bons bureaux.</p><p class="br-review-meta">Camille · Bureau à Hull · avril 2026</p></article>
+          <article class="br-review"><p class="br-review-stars" role="img" aria-label="5 étoiles sur 5"><svg aria-hidden="true"><use href="#br-star" /></svg><svg aria-hidden="true"><use href="#br-star" /></svg><svg aria-hidden="true"><use href="#br-star" /></svg><svg aria-hidden="true"><use href="#br-star" /></svg><svg aria-hidden="true"><use href="#br-star" /></svg></p><p>Petit bureau de comptables, de Masson-Angers à Gatineau. Ils ont déplacé les classeurs pleins, sur des diables, et rien ne s'est perdu. La facture correspondait à l'estimation ferme, au dollar près.</p><p class="br-review-meta">Pierre · Masson-Angers · octobre 2025</p></article>
+        </div>
+      </div>
+    </section>
+
     <section class="br-services" id="br-services">
       <div class="br-wrap">
         <h2 class="br-h2">Nos déménagements</h2>
@@ -248,24 +278,27 @@ const IMG = {
       </div>
     </section>
 
-    <section class="br-reviews" id="br-reviews">
+    <section class="br-crew" id="br-crew">
       <div class="br-wrap">
-        <h2 class="br-h2">Avis</h2>
-        <p class="br-sec-intro">4,9/5 selon 87 avis. Regroupés par type de déménagement, pour que vous lisiez le déménagement le plus proche du vôtre. Ces avis sont rédigés pour cette entreprise fictive de démonstration.</p>
-        <h3>Déménagements locaux</h3>
+        <h2 class="br-h2">Les gens qui se présentent</h2>
+        <p class="br-sec-intro">Les mêmes chefs d'équipe mènent le travail de la première boîte à la dernière. Aucune main-d'œuvre journalière, aucun relais en cours de déménagement.</p>
         <div class="br-cards">
-          <article class="br-review"><p>Appartement de deux chambres à Hull vers une maison à Aylmer. L'équipe a enveloppé la table en chêne dans des couvertures avant qu'elle sorte de la pièce, et la réservation de l'ascenseur était déjà faite à notre arrivée.</p><p class="br-review-meta">Marie-Claude · Hull vers Aylmer · mars 2026</p></article>
-          <article class="br-review"><p>Troisième étage sans ascenseur, et un divan qui passait à peine dans l'escalier. Ils ont enlevé les pattes, mesuré deux fois, et l'ont monté sans une marque sur le mur.</p><p class="br-review-meta">Daniel · Gatineau, Plateau · janvier 2026</p></article>
-        </div>
-        <h3>Longue distance</h3>
-        <div class="br-cards">
-          <article class="br-review"><p>De Gatineau à Montréal avec un piano et un coffre-fort. Un seul chef d'équipe du chargement à la livraison, un seul numéro de téléphone, et le piano a été accordé après qu'il se soit installé.</p><p class="br-review-meta">Aisha · Gatineau vers Montréal · février 2026</p></article>
-          <article class="br-review"><p>On a déménagé ma mère de Chelsea à Toronto. Sophie a étiqueté chaque boîte par pièce et écrit le contenu sur le côté. Ma mère a trouvé sa bouilloire en dix minutes.</p><p class="br-review-meta">Robert · Chelsea vers Toronto · novembre 2025</p></article>
-        </div>
-        <h3>Déménagements de bureaux</h3>
-        <div class="br-cards">
-          <article class="br-review"><p>Quatorze postes de travail déménagés pendant une fin de semaine au centre-ville de Hull. Les bureaux étaient en place à 7 h le lundi matin, câbles étiquetés, écrans sur les bons bureaux.</p><p class="br-review-meta">Camille · Bureau à Hull · avril 2026</p></article>
-          <article class="br-review"><p>Petit bureau de comptables, de Masson-Angers à Gatineau. Ils ont déplacé les classeurs pleins, sur des diables, et rien ne s'est perdu. La facture correspondait à l'estimation ferme, au dollar près.</p><p class="br-review-meta">Pierre · Masson-Angers · octobre 2025</p></article>
+          <article class="br-card">
+            <h3>Marc-Antoine, chef d'équipe</h3>
+            <p>Douze ans de déménagement à Gatineau et Ottawa. Il fait l'évaluation, planifie le chargement et reste sur place jusqu'à ce que la dernière boîte soit posée. Si quelque chose va mal le jour du déménagement, c'est lui qui règle ça.</p>
+          </article>
+          <article class="br-card">
+            <h3>Sophie, responsable de l'emballage</h3>
+            <p>Elle emballe les cuisines et les articles fragiles. Elle étiquette chaque boîte par pièce et contenu, pour que le déballage commence par la bouilloire, pas par sa recherche. Elle forme chaque nouvel emballeur de l'équipe.</p>
+          </article>
+          <article class="br-card">
+            <h3>Félix, piano et spécialités</h3>
+            <p>Il s'occupe des pianos, des coffres-forts et de tout ce qui demande plus de deux paires de mains. Il mesure les escaliers avant le déménagement, pas pendant, et apporte les bons diables pour le travail.</p>
+          </article>
+          <article class="br-card">
+            <h3>Amélie, conductrice et livraison</h3>
+            <p>Elle conduit le camion de 20 pi et gère le côté livraison. Elle connaît la circulation des ponts, les permis de stationnement à Hull et les immeubles où il faut réserver l'ascenseur une semaine à l'avance.</p>
+          </article>
         </div>
       </div>
     </section>
@@ -506,16 +539,19 @@ const IMG = {
     .br-h2 + p, .br-sec-intro { font-size: 17px; line-height: 1.7; color: var(--br-muted); max-width: 62ch; }
     .br section { padding: clamp(48px, 7vh, 80px) 0; scroll-margin-top: 96px; }
     .br-header { position: sticky; top: 0; z-index: 50; background: #fff; border-bottom: 1px solid #D9E2E2; }
-    .br-header-in { max-width: 1200px; margin: 0 auto; padding: 12px clamp(16px, 4vw, 32px); display: flex; align-items: center; gap: 24px; }
+    .br-header-in { max-width: 1200px; margin: 0 auto; padding: 8px clamp(12px, 3vw, 32px); display: flex; align-items: center; gap: 16px; flex-wrap: nowrap; }
     .br-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--br-navy); flex: none; }
-    .br-brand svg { width: 40px; height: 40px; }
-    .br-brand-name { font-family: "Sora", sans-serif; font-weight: 700; font-size: 24px; }
+    .br-brand svg { width: 32px; height: 32px; }
+    .br-brand-name { font-family: "Sora", sans-serif; font-weight: 700; font-size: 20px; }
     .br-brand-sub { font-size: 12px; color: var(--br-muted); }
-    .br-nav { display: flex; gap: 16px; margin-left: auto; }
-    .br-nav a { text-decoration: none; color: var(--br-ink); font-weight: 500; font-size: 15px; white-space: nowrap; }
+    .br-nav { display: flex; gap: 12px; margin-left: auto; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+    .br-nav::-webkit-scrollbar { display: none; }
+    .br-nav a { text-decoration: none; color: var(--br-ink); font-weight: 500; font-size: 14.5px; white-space: nowrap; }
     .br-nav a:hover { color: var(--br-teal); }
-    .br-header-side { display: flex; align-items: center; gap: 14px; margin-left: auto; }
+    .br-header-side { display: flex; align-items: center; gap: 14px; margin-left: auto; flex: none; }
     .br-nav + .br-header-side { margin-left: 0; }
+    .br-header-side .br-cta { padding: 10px 16px; min-height: 44px; font-size: 15px; }
+    .br-cta-short { display: none; }
     .br-stars { margin: 0; font-size: 13px; font-weight: 600; color: var(--br-navy); white-space: nowrap; }
     .br-phone { font-weight: 600; color: var(--br-navy); text-decoration: none; white-space: nowrap; }
     .br-cta, .br-btn { display: inline-block; background: var(--br-teal); color: #fff; font-weight: 600; text-decoration: none; border: 0; border-radius: 8px; padding: 13px 22px; font-size: 16px; cursor: pointer; min-height: 48px; font-family: "Inter", sans-serif; }
@@ -582,6 +618,10 @@ const IMG = {
     .br-check-list { columns: 2; margin: 24px 0; padding-left: 20px; line-height: 2; font-size: 16px; }
     .br-protect p:last-child { line-height: 1.7; max-width: 62ch; opacity: 0.9; }
     .br-pricing { background: #fff; }
+    .br-crew { background: #fff; }
+    .br-crew .br-cards { grid-template-columns: repeat(2, 1fr); }
+    .br-crew h3 { font-family: "Sora", sans-serif; color: var(--br-navy); margin: 0 0 8px; }
+    .br-crew .br-card p { line-height: 1.7; margin: 0; }
     .br-pricing p, .br-faq dd { line-height: 1.7; max-width: 68ch; }
     .br-defs { margin: 20px 0; }
     .br-defs > div { border-top: 1px solid #D9E2E2; padding: 18px 0; }
@@ -589,6 +629,11 @@ const IMG = {
     .br-defs dd { margin: 0; }
     .br-reviews h3 { font-family: "Sora", sans-serif; color: var(--br-navy); margin: 28px 0 0; }
     .br-review p:first-child { line-height: 1.7; margin: 0 0 12px; }
+    .br-review p.br-review-stars { display: flex; gap: 3px; margin: 0 0 12px; line-height: 1; }
+    .br-review p.br-review-stars svg { width: 24px; height: 24px; fill: var(--br-teal); stroke: var(--br-navy); stroke-width: 0.6; flex: none; }
+    .br-reviews .br-review-stars-row { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; line-height: 1; }
+    .br-reviews .br-review-stars-row svg { width: 28px; height: 28px; fill: var(--br-teal); stroke: var(--br-navy); stroke-width: 0.6; flex: none; }
+    .br-reviews .br-review-stars-row span { font-weight: 700; font-size: 17px; color: var(--br-navy); }
     .br-review-meta { font-size: 14px; font-weight: 600; margin: 0; }
     .br-areas { background: #fff; }
     .br-areas p { line-height: 1.7; max-width: 68ch; }
@@ -599,7 +644,7 @@ const IMG = {
     .br-foot { background: var(--br-navy); color: rgba(255,255,255,0.85); text-align: center; padding: 36px 20px 90px; font-size: 14px; line-height: 1.9; }
     .br-foot p { margin: 0; }
     .br-sticky { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; display: none; background: #fff; border-top: 1px solid #D9E2E2; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); gap: 10px; }
-    .br-sticky a { flex: 1; text-align: center; text-decoration: none; font-weight: 600; padding: 12px; border-radius: 8px; min-height: 48px; }
+    .br-sticky a { flex: 1; text-align: center; text-decoration: none; font-weight: 600; padding: 12px; border-radius: 8px; min-height: 48px; display: flex; align-items: center; justify-content: center; }
     .br-sticky a:first-child { border: 2px solid var(--br-navy); color: var(--br-navy); }
     .br-sticky a:last-child { background: var(--br-teal); color: #fff; }
     @media (max-width: 900px) {
@@ -607,10 +652,15 @@ const IMG = {
       .br-nav { display: none; position: absolute; top: 100%; left: 0; right: 0; background: #fff; flex-direction: column; padding: 16px 20px 20px; border-bottom: 1px solid #D9E2E2; gap: 14px; margin-left: 0; }
       .br-nav-open { display: flex; }
       .br-menu-btn { display: block; }
-      .br-header-in { flex-wrap: wrap; position: relative; }
+      .br-header-in { flex-wrap: nowrap; position: relative; gap: 12px; }
+      .br-brand-sub { display: none; }
       .br-stars { display: none; }
+      .br-phone { display: none; }
       .br-header-side { margin-left: auto; }
+      .br-cta-full { display: none; }
+      .br-cta-short { display: inline; }
       .br-cards { grid-template-columns: 1fr; }
+      .br-crew .br-cards { grid-template-columns: 1fr; }
       .br-steps { grid-template-columns: 1fr; }
       .br-steps::before { display: none; }
       .br-rate-row { grid-template-columns: 1fr; }
@@ -618,7 +668,6 @@ const IMG = {
       .br-check-list { columns: 1; }
       .br-sticky { display: flex; }
       .br-nav a { padding: 10px 0; }
-      .br-phone { padding: 10px 6px; }
       /* Lift the shared EscapeHatch above the sticky bar so Call stays tappable; !important beats the component's scoped rule. */
       :global(.demo-exit) { bottom: calc(84px + env(safe-area-inset-bottom, 0px)) !important; }
       .br-figure img { height: 220px; }
