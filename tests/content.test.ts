@@ -319,3 +319,16 @@ test('the guide pages use the pricing SEO term, the Ads Packages name, and the f
   const frBill96 = read('src/pages/fr/guides/loi-96-site-web-quebec/index.astro');
   assert.ok(frBill96.includes('un événement destiné uniquement à un public spécialisé ou limité'), 'the FR Bill 96 guide lists the fourth Educaloi exception');
 });
+
+test('the mobile menu fits short viewports', () => {
+  // The panel is position: fixed, so on a landscape phone (about 375px
+  // tall) its roughly 450px of links, theme row and language switcher
+  // run past the bottom edge with no way to reach them. The panel must
+  // cap its own height at the viewport below the header and scroll.
+  const css = read('src/styles/global.css');
+  const at = css.indexOf('.mobile-panel {');
+  assert.ok(at > 0, 'the mobile panel rule exists');
+  const block = css.slice(at, css.indexOf('}', at));
+  assert.match(block, /max-height:\s*calc\(100dvh - var\(--header-h\)\)/, 'the panel caps its height at the viewport');
+  assert.match(block, /overflow-y:\s*auto/, 'the panel scrolls when it is taller than the viewport');
+});

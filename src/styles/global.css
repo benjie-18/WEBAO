@@ -764,6 +764,13 @@ html.theming *::after {
   border-bottom: 1px solid var(--line);
   padding: 12px var(--content-pad) 20px;
   z-index: 49;
+  /* The panel is fixed, so on short viewports (landscape phones, about
+     375px tall) its roughly 450px of links, theme row and language
+     switcher run past the bottom edge with no way to reach them. Cap
+     the panel at the viewport below the header and let it scroll. */
+  max-height: calc(100vh - var(--header-h));
+  max-height: calc(100dvh - var(--header-h));
+  overflow-y: auto;
 }
 .mobile-panel.open { display: block; }
 .mobile-panel a {
