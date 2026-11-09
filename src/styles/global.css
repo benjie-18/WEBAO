@@ -783,8 +783,9 @@ html.theming *::after {
   .menu-toggle { display: inline-flex; }
   /* Bulletproof mobile hide for the header language pill. Specificity 0,3,0
      beats the LanguageSwitcher component's scoped display rule (0,2,0)
-     regardless of style order; :not() guards the mobile-panel variant. */
-  .header-right > .lang-switcher:not(.lang-switcher--mobile) { display: none; }
+     regardless of style order; :not() guards the mobile-panel variant and
+     the single-flag toggle, which is the mobile header's switcher. */
+  .header-right > .lang-switcher:not(.lang-switcher--mobile):not(.lang-toggle) { display: none; }
 }
 
 /* Very narrow phones: drop the redundant domain suffix from the brand lockup
@@ -793,6 +794,14 @@ html.theming *::after {
   .brand-domain { display: none; }
   .header-inner { gap: 12px; }
   .header-right { gap: 10px; }
+}
+
+/* Smallest phones: the flag toggle adds a fifth header item, so tighten the
+   row a touch more so brand + flag + theme + cart + menu still fit at 320px
+   without clipping the menu button. */
+@media (max-width: 360px) {
+  .header-right { gap: 8px; }
+  .brand-logo { height: 30px; }
 }
 
 /* --- Footer --- */

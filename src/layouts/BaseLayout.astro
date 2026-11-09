@@ -421,6 +421,8 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
 
           <LanguageSwitcher locale={locale} currentPath={url.pathname} />
 
+          <LanguageSwitcher locale={locale} currentPath={url.pathname} variant="toggle" />
+
           <ThemeToggle locale={locale} />
 
           <button type="button" class="header-cart-btn" data-cart-open aria-label={t.cart.open}>

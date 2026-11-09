@@ -4,7 +4,7 @@ import { getAlternatePath, type Locale } from "../../lib/i18n/config";
 interface Props {
   locale: Locale;
   currentPath: string;
-  variant?: "header" | "mobile";
+  variant?: "header" | "mobile" | "toggle";
 }
 
 const { locale, currentPath, variant = "header" } = Astro.props as Props;
@@ -16,7 +16,22 @@ const isEn = locale === "en";
 const isFr = locale === "fr";
 ---
 
-<div class:list={["lang-switcher", variant === "mobile" && "lang-switcher--mobile"]} role="group" aria-label="Language switcher">
+<div class:list={["lang-switcher", variant === "mobile" && "lang-switcher--mobile", variant === "toggle" && "lang-toggle"]} role="group" aria-label="Language switcher">
+  {variant === "toggle" && (
+    <a
+      href={isEn ? frPath : enPath}
+      class="lang-toggle-link"
+      aria-label={isEn ? "Passer en français" : "Switch to English"}
+      title={isEn ? "Passer en français" : "Switch to English"}
+      data-lang={isEn ? "fr" : "en"}
+      hreflang={isEn ? "fr" : "en"}
+    >
+      <span class="lang-flag" aria-hidden="true">
+        <img src={isEn ? "/qc-flag.png" : "/us-flag.png"} alt="" width="20" height="20" loading="eager" decoding="async" class:list={["flag-img", isEn ? "flag-qc" : "flag-us"]} />
+      </span>
+    </a>
+  )}
+  {variant !== "toggle" && (
   <a
     href={enPath}
     class:list={["lang-option", isEn && "is-active"]}
@@ -43,6 +58,7 @@ const isFr = locale === "fr";
     </span>
     <span class="lang-label">FR</span>
   </a>
+  )}
 </div>
 
 <style>
@@ -133,6 +149,55 @@ const isFr = locale === "fr";
     height: 22px;
   }
 
+  /* Single-flag toggle: mobile header only. Same 40px footprint as the
+     theme toggle beside it, same theme tokens, so the pair reads as one
+     set of controls. Hidden on desktop, where the full pill is the
+     switcher. The flag itself is the existing PNG (flags have no
+     theme-aware variant); the button chrome and the white flag badge
+     are what adapt to the theme. */
+  .lang-switcher.lang-toggle {
+    display: none;
+    width: 40px;
+    height: 40px;
+    flex: none;
+    padding: 0;
+    border-radius: 12px;
+    background: var(--paper-2);
+    box-shadow: none;
+    justify-content: center;
+    cursor: pointer;
+    transition: background .25s var(--ease-out), border-color .25s var(--ease-out), transform .15s var(--ease-out), box-shadow .25s var(--ease-out);
+  }
+  @media (max-width: 860px) {
+    .lang-switcher.lang-toggle {
+      display: inline-flex;
+    }
+  }
+  .lang-switcher.lang-toggle:hover {
+    background: var(--paper-3);
+    border-color: var(--line-strong);
+  }
+  .lang-switcher.lang-toggle:active {
+    transform: scale(.9);
+  }
+  .lang-switcher.lang-toggle:focus-visible {
+    outline: 2px solid var(--focus-outline);
+    outline-offset: 2px;
+  }
+  [data-theme="dark"] .lang-switcher.lang-toggle:hover {
+    border-color: rgba(0,67,224,.55);
+    box-shadow: 0 0 0 3px rgba(0,67,224,.18);
+  }
+  .lang-toggle-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    text-decoration: none;
+  }
+
   /* In dark header, adapt */
   :global(.site-header--dark) .lang-switcher {
     background: rgba(255,255,255,.06);
@@ -152,7 +217,7 @@ const isFr = locale === "fr";
 </style>
 
 <script>
-  // Persist language choice (all instances: header + mobile drawer)
+  // Persist language choice (all instances: header + mobile drawer + mobile flag toggle)
   function initLangSwitcher() {
     document.querySelectorAll('.lang-switcher').forEach((switcher) => {
       const el = switcher as HTMLElement;
