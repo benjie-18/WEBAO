@@ -123,6 +123,16 @@ test('yearly items resolve to their own prices', async () => {
   ]);
 });
 
+test('the yearly AI Pack resolves to its yearly price and still carries its setup fee', async () => {
+  const { status, json, calls } = await call({ items: [{ key: 'ai-pack-year' }] });
+  assert.equal(status, 200);
+  assert.equal(json.mode, 'subscription');
+  assert.deepEqual(linePrices(calls[0].params), [
+    PRICE_MAP['ai-pack-year'],
+    'price_1UYFXSE57vVzxI41Qx20HwYn', // the C$399.99 one-time Pack setup
+  ]);
+});
+
 test('a yearly plan replaces the monthly one, never mixed', async () => {
   // The cart cannot hold both (the client converts on toggle); if a client
   // still sends both, the API refuses instead of letting Stripe fail. The
@@ -289,6 +299,10 @@ const CONFLICT_CARTS: Array<{ items: string[]; error: string }> = [
   },
   {
     items: ['ai-pack-month', 'aichat-month'],
+    error: 'The AI Pack already includes AI Receptionist, Trained AI Chat Assistant and AI Follow-up. Buy the pack on its own, or the individual services on their own.',
+  },
+  {
+    items: ['ai-pack-year', 'aichat-year'],
     error: 'The AI Pack already includes AI Receptionist, Trained AI Chat Assistant and AI Follow-up. Buy the pack on its own, or the individual services on their own.',
   },
   {

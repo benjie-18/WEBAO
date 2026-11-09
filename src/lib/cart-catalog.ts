@@ -79,14 +79,16 @@ const catalog = {
   // admin panel, Coupons tab, and is never shown on the site).
   "website-touchup": { product: "website-touchup", type: "addon", oneTimeCents: 19999 },
 
-  /* ── AI services (monthly only, like the Ads Pack). The one-time setup
-     fee is not sold here: checkout adds it server-side, see
-     worker/checkout.ts, following the Ads Pack setup pattern. The chat
-     service is the Trained AI Chat Assistant (aichat, in the add-ons
-     below): one product, C$99.99/mo, yearly available, no setup fee. */
+  /* ── AI services (monthly only, like the Ads Pack), except the AI Pack,
+     which is yearly available too (2 months free, like the plans). The
+     one-time setup fee is not sold here: checkout adds it server-side,
+     see worker/checkout.ts, following the Ads Pack setup pattern. The
+     chat service is the Trained AI Chat Assistant (aichat, in the
+     add-ons below): one product, C$99.99/mo, yearly available, no setup
+     fee. */
   "ai-receptionist": { product: "ai-receptionist", type: "addon", monthCents: 29999 },
   "ai-followup": { product: "ai-followup", type: "addon", monthCents: 9999 },
-  "ai-pack": { product: "ai-pack", type: "bundle", monthCents: 39999 },
+  "ai-pack": { product: "ai-pack", type: "bundle", monthCents: 39999, yearCents: 39999 * TEN_MONTHS },
 
   /* ── Add-ons (featured group first, then the rest) ───────────────────── */
   localseo: { product: "localseo", type: "addon", monthCents: 15999, yearCents: 15999 * TEN_MONTHS },

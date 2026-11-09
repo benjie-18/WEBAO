@@ -174,6 +174,18 @@ test('ads starter test is monthly-only and stays monthly on a yearly cart', () =
   assert.deepEqual(yearly.map((i) => i.priceCents), [49999]);
 });
 
+test('the AI Pack is yearly available and converts to its yearly price', () => {
+  assert.equal(intervalFor('ai-pack', 'month'), 'month');
+  assert.equal(priceCentsFor('ai-pack', 'month'), 39999);
+  assert.equal(priceCentsFor('ai-pack', 'year'), 399990);
+  const cart: CartItem[] = [
+    item({ key: 'ai-pack-month', product: 'ai-pack', name: 'AI Pack', priceCents: 39999, type: 'bundle' }),
+  ];
+  const yearly = convertItemsToBilling(cart, 'year');
+  assert.deepEqual(yearly.map((i) => i.key), ['ai-pack-year']);
+  assert.deepEqual(yearly.map((i) => i.priceCents), [399990]);
+});
+
 test('switching the billing term re-prices recurring items only', () => {
   const cart: CartItem[] = [
     item(),

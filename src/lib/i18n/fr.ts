@@ -464,6 +464,7 @@ const fr = {
     ai: {
       packKicker: "Pack IA, meilleure valeur",
       packPrice: "C$399.99/mois",
+      packYearlyPrice: "(C$3,999.90/an)",
       packIndividualValue: "C$499.97/mois",
       packMonthlySaving: "C$99.98/mois",
       serviceKicker: "Service IA",

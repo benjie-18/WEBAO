@@ -292,6 +292,26 @@ test('the yearly toggle re-prices the plan options and the selection', () => {
   window.close();
 });
 
+test('the yearly toggle converts the AI Pack to its yearly price', () => {
+  const { window, doc, cart, chip, click, toggleBox, aiBox } = fixture();
+  click(chip('ai'));
+  toggleBox(aiBox('ai-pack'), true);
+  assert.deepEqual(
+    cart().map((item) => item.key),
+    ['grow-month', 'ai-pack-month'],
+  );
+  click(doc.querySelector('[data-billing-opt="year"]'));
+  assert.deepEqual(
+    cart().map((item) => [item.key, item.priceCents]),
+    [
+      ['grow-year', 149990],
+      ['ai-pack-year', 399990],
+    ],
+  );
+  assert.equal(doc.querySelector('[data-start-total]')!.textContent, 'C$5,499.80');
+  window.close();
+});
+
 test('removing an add-on from the selection card updates the cart', () => {
   const extra: CartItem = { key: 'extrapage-one-time', product: 'extrapage', name: 'Extra Page', priceCents: 4499, interval: 'one-time', type: 'addon' };
   const { window, doc, cart, click, summary } = fixture({ cart: [planItem('grow', 'Grow', 'month')!, extra] });

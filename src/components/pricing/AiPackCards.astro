@@ -55,9 +55,10 @@ const services = [
     <p class="bc-kicker">{ai.packKicker}</p>
     <div class="bc-name-row">
       <h3 class="bc-name">{t.start.selection.aiPack}</h3>
-      <CartButton locale={locale} product="ai-pack" name={t.start.selection.aiPack} priceCents={39999} interval="month" type="bundle" />
+      <CartButton locale={locale} product="ai-pack" name={t.start.selection.aiPack} priceCents={39999} yearlyPriceCents={399990} interval="month" type="bundle" />
     </div>
     <p class="bc-price">{ai.packPrice}</p>
+    <p class="bc-annual">{ai.packYearlyPrice}</p>
     <ul class="bc-includes">
       <li><svg viewBox="0 0 16 16" aria-hidden="true" class="bc-check"><path d="M3.5 8.2l3.2 3.2 5.8-6.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg><span>{t.start.selection.aiReceptionist}</span></li>
       <li><svg viewBox="0 0 16 16" aria-hidden="true" class="bc-check"><path d="M3.5 8.2l3.2 3.2 5.8-6.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg><span>{t.start.selection.aiChat}</span></li>
@@ -144,6 +145,11 @@ const services = [
     font-weight: 750;
     letter-spacing: -0.03em;
     line-height: 1;
+  }
+  .bc-annual {
+    margin-top: 6px;
+    font-size: 0.95rem;
+    color: var(--bc-soft);
   }
   .bc-includes {
     list-style: none;

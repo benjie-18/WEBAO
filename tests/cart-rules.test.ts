@@ -89,9 +89,10 @@ test("rule tables only name real catalog products", () => {
 test("monthly-only set matches the catalog", () => {
   assert.deepEqual(
     [...monthlyOnly()].sort(),
-    ["ads-both", "ads-google", "ads-meta", "ads-pack", "ads-starter", "ai-followup", "ai-pack", "ai-receptionist"],
+    ["ads-both", "ads-google", "ads-meta", "ads-pack", "ads-starter", "ai-followup", "ai-receptionist"],
   );
   assert.ok(!monthlyOnly().has("aichat"), "the merged chat is yearly available");
+  assert.ok(!monthlyOnly().has("ai-pack"), "the AI Pack is yearly available (Benji, 2026-11-08)");
 });
 
 test("monthly price table matches the catalog", () => {

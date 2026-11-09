@@ -158,13 +158,15 @@ export const PRICE_MAP: Record<string, string> = {
   "scale-month": "price_1UO3DtE57vVzxI41h8bSDqZd",
   "scale-year": "price_1UU1M8E57vVzxI419tR3a3Gy",
   "visibility-pack-month": "price_1UO3DzE57vVzxI4199bDK2uj",
-  // AI services, monthly only. Setup fees are NOT in this map: the
+  // AI services. Receptionist and Follow-up are monthly only; the AI Pack
+  // is yearly available too. Setup fees are NOT in this map: the
   // parity test requires every map key to be a catalog key, and setups
   // are not catalog items. They ride along server-side below, following
   // the Ads Pack setup pattern.
   "ai-receptionist-month": "price_1UYFX9E57vVzxI41tORfQmiE",
   "ai-followup-month": "price_1UYFXJE57vVzxI41rtocXmsu",
   "ai-pack-month": "price_1UZg5vE57vVzxI41U5J4rBPd", // C$399.99 (was price_1UYFXOE57vVzxI41aR00rKZe at C$449.99; left active for existing subscribers)
+  "ai-pack-year": "price_1UZhOPE57vVzxI41KxH5xHzf", // C$3,999.90/yr (10x monthly, 2 months free)
   "visibility-pack-year": "price_1UORRqE57vVzxI41BDPCliaR",
 };
 
@@ -207,13 +209,14 @@ const ADS_BUNDLE_SETUP_PRICE = "price_1UWkEvE57vVzxI41jrWbtpuZ";
  *  Core setup. Hard-coded like the AI setup prices so a missing secret
  *  cannot silently undercharge. */
 const ADS_STARTER_SETUP_PRICE = "price_1UZeIVE57vVzxI41VXckzjG2";
-/** AI services: monthly cart key -> one-time setup price (Stripe).
- *  Kept out of PRICE_MAP on purpose (see the comment above): setups are
- *  added server-side and can never be bought on their own. */
-const AI_SETUPS: Array<{ monthly: string; setupKey: string; setupPriceId: string }> = [
+/** AI services: cart key -> one-time setup price (Stripe). The Pack
+ *  matches on its monthly key or its yearly key. Kept out of PRICE_MAP
+ *  on purpose (see the comment above): setups are added server-side and
+ *  can never be bought on their own. */
+const AI_SETUPS: Array<{ monthly: string; yearly?: string; setupKey: string; setupPriceId: string }> = [
   { monthly: "ai-receptionist-month", setupKey: "ai-receptionist-setup-onetime", setupPriceId: "price_1UYFXDE57vVzxI41cwShDW7k" },
   { monthly: "ai-followup-month", setupKey: "ai-followup-setup-onetime", setupPriceId: "price_1UYFXNE57vVzxI417TlokH2v" },
-  { monthly: "ai-pack-month", setupKey: "ai-pack-setup-onetime", setupPriceId: "price_1UYFXSE57vVzxI41Qx20HwYn" },
+  { monthly: "ai-pack-month", yearly: "ai-pack-year", setupKey: "ai-pack-setup-onetime", setupPriceId: "price_1UYFXSE57vVzxI41Qx20HwYn" },
 ];
 
 export async function handleCheckoutSession(req: Request, env: Env): Promise<Response> {
@@ -313,7 +316,7 @@ export async function handleCheckoutSession(req: Request, env: Env): Promise<Res
   for (const setup of AI_SETUPS) {
     if (
       lineItems.some((item) => item.key === setup.setupKey) &&
-      !lineItems.some((item) => item.key === setup.monthly)
+      !lineItems.some((item) => item.key === setup.monthly || item.key === setup.yearly)
     ) {
       return err("An AI setup fee cannot be bought on its own", 400);
     }
@@ -378,7 +381,7 @@ export async function handleCheckoutSession(req: Request, env: Env): Promise<Res
   // the three individual setup fees.
   for (const setup of AI_SETUPS) {
     if (
-      lineItems.some((item) => item.key === setup.monthly) &&
+      lineItems.some((item) => item.key === setup.monthly || item.key === setup.yearly) &&
       !lineItems.some((item) => item.key === setup.setupKey)
     ) {
       lineItems.push({

@@ -88,6 +88,8 @@ function fixture(options: { french?: boolean; cart?: CartItem[] } = {}) {
           data-name="Lead Pack" data-price-cents="23999" data-interval="month" data-type="bundle" data-price-year="239990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="visibility-pack-month" data-product="visibility-pack"
           data-name="Visibility Pack" data-price-cents="9999" data-interval="month" data-type="bundle" data-price-year="99990"></button>
+        <button type="button" class="cart-btn" data-cart-btn data-key="ai-pack-month" data-product="ai-pack"
+          data-name="AI Pack" data-price-cents="39999" data-interval="month" data-type="bundle" data-price-year="399990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="localseo-month" data-product="localseo"
           data-name="Local SEO Management" data-price-cents="15999" data-interval="month" data-type="addon" data-price-year="159990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="review-month" data-product="review"
@@ -638,6 +640,21 @@ test('yearly billing with only monthly-only items offers nothing but staying mon
   assert.deepEqual(conflictButtons(), ['Keep as is']);
   assert.deepEqual(cart().map((i) => i.key), ['ads-starter-month']);
   assert.equal(window.localStorage.getItem(BILLING_KEY), null);
+  window.close();
+});
+
+test('the yearly toggle converts the AI Pack and blocks only on the Starter test', () => {
+  const { cart, click, button, doc, conflict, conflictMessage, conflictButtons, clickConflictButton, window } = fixture();
+  click(button('ai-pack'));
+  click(button('ads-starter'));
+  click(doc.querySelector('[data-billing-opt="year"]'));
+  assert.equal(conflict().hidden, false);
+  // The Pack is yearly available, so only the Starter test blocks the switch.
+  assert.equal(conflictMessage(), "Yearly billing isn't available with Starter test. They're monthly only.");
+  assert.deepEqual(conflictButtons(), ['Remove Starter test and switch to yearly', 'Keep as is']);
+  clickConflictButton('Remove Starter test and switch to yearly');
+  assert.deepEqual(cart().map((i) => [i.key, i.priceCents]), [['ai-pack-year', 399990]]);
+  assert.equal(window.localStorage.getItem(BILLING_KEY), 'year');
   window.close();
 });
 
