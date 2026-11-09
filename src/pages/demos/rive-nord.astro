@@ -1,0 +1,881 @@
+---
+import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
+
+// Demo microsite: Déménagement Rive-Nord, fictional mover, Terrebonne QC.
+// Bold highway service-board voice: charcoal and signal yellow, oversized
+// Oswald headlines, availability first, 3-step instant-range calculator in
+// the hero, plain-language pricing explainer. All details fictional.
+const IMG = {
+  hero: "/demos/rive-nord/01.jpg",
+  crew: "/demos/rive-nord/02.jpg",
+  packing: "/demos/rive-nord/03.jpg",
+  truck: "/demos/rive-nord/04.jpg",
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <DemoSeo demoId="rive-nord" locale="en" title="Déménagement Rive-Nord · Terrebonne movers (450) 555-0193 · See your price in 60 seconds" description="Déménagement Rive-Nord: Terrebonne movers since 2016. Houses, condos and offices across the North Shore and Montreal. See a planning range in 60 seconds, no phone call required." ogImage="https://webao.ca/demos/rive-nord/01.jpg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "MovingCompany",
+      "name": "Déménagement Rive-Nord",
+      "telephone": "+1-450-555-0193",
+      "email": "info@demenagementrivenord.ca",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "1234, rue Fictive",
+        "addressLocality": "Terrebonne",
+        "addressRegion": "QC",
+        "postalCode": "J6W 1A1",
+        "addressCountry": "CA"
+      },
+      "openingHours": ["Mo-Sa 07:00-19:00", "Su 08:00-17:00"],
+      "areaServed": ["Terrebonne", "Mascouche", "Laval", "Repentigny", "Blainville", "Saint-Eustache", "Montreal"]
+    }
+  </script>
+</head>
+<body class="rn">
+  <a class="rn-skip" href="#rn-main">Skip to content</a>
+
+  <header class="rn-header">
+    <div class="rn-header-in">
+      <a class="rn-brand" href="#rn-top" aria-label="Déménagement Rive-Nord, back to top">
+        <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="2" y="2" width="44" height="44" rx="8" fill="#F2B705" /><path d="M14 38 L24 10 L34 38" fill="none" stroke="#3B3F45" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /><path d="M19 28 h10" stroke="#3B3F45" stroke-width="5" stroke-linecap="round" /></svg>
+        <span class="rn-brand-text">RIVE-NORD<span class="rn-brand-sub">DEMENAGEMENT · TERREBONNE</span></span>
+      </a>
+      <button class="rn-menu-btn" id="rn-menu-btn" type="button" aria-expanded="false" aria-controls="rn-nav">Menu</button>
+      <nav class="rn-nav" id="rn-nav" aria-label="Main navigation">
+        <a href="#rn-services">Services</a>
+        <a href="#rn-how">How it works</a>
+        <a href="#rn-pricing">Pricing</a>
+        <a href="#rn-reviews">Reviews</a>
+        <a href="#rn-areas">Areas</a>
+        <a href="#rn-faq">FAQ</a>
+        <a href="#rn-contact">Contact</a>
+      </nav>
+      <div class="rn-header-cta">
+        <p class="rn-header-stars"><span role="img" aria-label="Rated 4.8 out of 5 from 132 reviews">&#9733;&#9733;&#9733;&#9733;&#9733;</span> 4.8/5 <span>(132 reviews)</span></p>
+        <a class="rn-header-phone" href="tel:+14505550193">(450) 555-0193</a>
+        <a class="rn-btn rn-btn-yellow" href="#rn-calculator">Get a quote</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="rn-main">
+    <!-- HERO: availability first, calculator in the hero -->
+    <section class="rn-hero" id="rn-top">
+      <div class="rn-hero-in">
+        <div class="rn-hero-copy">
+          <p class="rn-avail"><span class="rn-dot" aria-hidden="true"></span>Crews available. Book fast.</p>
+          <h1 class="rn-h1">MOVE FAST.<br />MOVE RIGHT.</h1>
+          <p class="rn-lede">Déménagement Rive-Nord is the Terrebonne crew for houses, condos and offices. We load, we drive, and we place every box in the right room.</p>
+          <p class="rn-hero-call">
+            <a class="rn-call-big" href="tel:+14505550193">Call (450) 555-0193</a>
+            <span class="rn-call-note">We answer 7 h to 19 h, Mon to Sat.</span>
+          </p>
+          <ul class="rn-trust" aria-label="Trust signals">
+            <li>RBQ licence 0000-0000-00 (fictional)</li>
+            <li>Insured</li>
+            <li>Since 2016</li>
+            <li>4.8/5 from 132 reviews</li>
+          </ul>
+        </div>
+        <figure class="rn-hero-img">
+          <img src={IMG.hero} alt="The back of a moving truck loaded with boxes and furniture, ramp down" width="1024" height="768" decoding="async" fetchpriority="high" />
+          <figcaption>Our truck, loaded and ready. Terrebonne to Montreal in one run.</figcaption>
+        </figure>
+      </div>
+
+      <!-- CALCULATOR -->
+      <div class="rn-calc" id="rn-calculator">
+        <h2 class="rn-h2">See your price in 60 seconds</h2>
+        <p class="rn-calc-sub">Three steps. No phone call required to see your range. We only use your details to call you back about this move, within one business hour.</p>
+        <p class="rn-progress" id="rn-progress" aria-live="polite">Step 1 of 3</p>
+        <form class="rn-form" id="rn-form" novalidate>
+          <div class="rn-step" data-step="1">
+            <h3 class="rn-h3">Step 1: Where and when</h3>
+            <div class="rn-grid">
+              <p class="rn-field">
+                <label for="rn-size">Move size</label>
+                <select id="rn-size" name="size" required>
+                  <option value="">Choose a size</option>
+                  <option value="studio">Studio</option>
+                  <option value="1bed">1 bedroom</option>
+                  <option value="2bed">2 bedrooms</option>
+                  <option value="3bed">3 bedrooms</option>
+                  <option value="house">House, 4+ bedrooms</option>
+                  <option value="office">Office</option>
+                </select>
+              </p>
+              <p class="rn-field">
+                <label for="rn-from">Moving from (city or postal code)</label>
+                <input id="rn-from" name="from" type="text" required placeholder="Terrebonne" autocomplete="address-level2" />
+              </p>
+              <p class="rn-field">
+                <label for="rn-to">Moving to (city or postal code)</label>
+                <input id="rn-to" name="to" type="text" required placeholder="Montreal" autocomplete="address-level2" />
+              </p>
+              <p class="rn-field">
+                <label for="rn-date">Move date</label>
+                <input id="rn-date" name="date" type="date" required />
+              </p>
+            </div>
+            <p class="rn-field-note">City names or postal codes are enough for a range. We ask for the full address only when you book.</p>
+            <button class="rn-btn rn-btn-yellow" type="button" data-next="1">Next: what is being moved</button>
+          </div>
+
+          <div class="rn-step" data-step="2" hidden>
+            <h3 class="rn-h3">Step 2: What is being moved</h3>
+            <fieldset class="rn-checks">
+              <legend>Inventory</legend>
+              <label><input type="checkbox" name="inv" value="sofa" /> Sofa and armchairs</label>
+              <label><input type="checkbox" name="inv" value="beds" /> Beds and mattresses</label>
+              <label><input type="checkbox" name="inv" value="table" /> Table and chairs</label>
+              <label><input type="checkbox" name="inv" value="appliances" /> Fridge, washer, dryer</label>
+              <label><input type="checkbox" name="inv" value="boxes" /> Boxes, about 20 or more</label>
+              <label><input type="checkbox" name="inv" value="desk" /> Desks and shelves</label>
+            </fieldset>
+            <p class="rn-field-note">Inventory helps the crew plan. It does not change your range.</p>
+            <fieldset class="rn-checks">
+              <legend>Special items</legend>
+              <label><input type="checkbox" id="rn-piano" name="special" value="piano" /> Piano (+$180)</label>
+              <label><input type="checkbox" id="rn-safe" name="special" value="safe" /> Safe (+$150)</label>
+              <label><input type="checkbox" id="rn-art" name="special" value="artwork" /> Artwork or fragile pieces (+$120)</label>
+            </fieldset>
+            <p class="rn-field">
+              <label for="rn-access">Stairs and elevator</label>
+              <select id="rn-access" name="access">
+                <option value="easy">Ground floor or elevator at both ends</option>
+                <option value="stairs">Stairs, 2nd floor, no elevator</option>
+                <option value="stairs3">3rd floor or higher, no elevator (+$80)</option>
+              </select>
+            </p>
+            <p class="rn-field">
+              <fieldset class="rn-checks">
+                <legend>Packing level</legend>
+                <label><input type="radio" name="packing" value="none" checked /> No packing, we move what is boxed</label>
+                <label><input type="radio" name="packing" value="partial" /> Partial packing (+$250)</label>
+                <label><input type="radio" name="packing" value="full" /> Full packing, we box everything (+$450)</label>
+              </fieldset>
+            </p>
+            <p class="rn-step-nav">
+              <button class="rn-btn rn-btn-ghost" type="button" data-back="2">Back</button>
+              <button class="rn-btn rn-btn-yellow" type="button" data-next="2">Next: who is moving</button>
+            </p>
+          </div>
+
+          <div class="rn-step" data-step="3" hidden>
+            <h3 class="rn-h3">Step 3: Who is moving</h3>
+            <div class="rn-grid">
+              <p class="rn-field">
+                <label for="rn-name">Full name</label>
+                <input id="rn-name" name="name" type="text" required placeholder="Alex Tremblay" autocomplete="name" />
+              </p>
+              <p class="rn-field">
+                <label for="rn-phone">Mobile phone</label>
+                <input id="rn-phone" name="phone" type="tel" required placeholder="(450) 555-0000" autocomplete="tel" />
+              </p>
+              <p class="rn-field">
+                <label for="rn-email">Email</label>
+                <input id="rn-email" name="email" type="email" required placeholder="alex@example.com" autocomplete="email" />
+              </p>
+            </div>
+            <p class="rn-field rn-consent">
+              <label><input type="checkbox" id="rn-consent" name="consent" required /> Yes, text me about my move. No spam, no sharing your number.</label>
+            </p>
+            <p class="rn-step-nav">
+              <button class="rn-btn rn-btn-ghost" type="button" data-back="3">Back</button>
+              <button class="rn-btn rn-btn-yellow" type="submit">See my planning range</button>
+            </p>
+          </div>
+
+          <div class="rn-result" id="rn-result" hidden>
+            <h3 class="rn-h3">Your planning range</h3>
+            <p class="rn-range" id="rn-range" role="status" aria-live="polite"></p>
+            <p id="rn-breakdown"></p>
+            <p>This is a planning range, not a binding estimate. A binding estimate requires a 15-minute video survey.</p>
+            <p><strong>Video survey:</strong> show us each room on a 15-minute video call and we lock in a binding price before moving day. No visit, no waiting.</p>
+            <p>We will call you back within one business hour.</p>
+            <p><a class="rn-btn rn-btn-yellow" href="tel:+14505550193">Call (450) 555-0193</a></p>
+            <p><button class="rn-btn rn-btn-yellow" type="button" id="rn-video-btn">Book the 15-minute video survey</button></p>
+            <p><button class="rn-btn rn-btn-ghost" type="button" id="rn-edit-btn">Change my details</button></p>
+          </div>
+          <p class="rn-form-note" id="rn-form-note" role="status" aria-live="polite"></p>
+        </form>
+      <noscript><p>This calculator needs JavaScript. Call (450) 555-0193 and we will give you the range by phone.</p></noscript>
+      </div>
+    </section>
+
+    <!-- STATS WALL -->
+    <section class="rn-stats" aria-label="Rive-Nord in numbers">
+      <div class="rn-stats-in">
+        <p><strong>2,400+</strong><span>moves completed</span></p>
+        <p><strong>10</strong><span>years on the road</span></p>
+        <p><strong>4.8/5</strong><span>average rating</span></p>
+        <p><strong>7</strong><span>towns served across the North Shore</span></p>
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="rn-services" id="rn-services">
+      <h2 class="rn-h2">What we move</h2>
+      <p class="rn-sec-sub">Six jobs, one crew, one price logic. Every job ends with boxes in the right room.</p>
+      <div class="rn-cards">
+        <article class="rn-card">
+          <h3>Local Residential</h3>
+          <p>Apartments and houses across Terrebonne and the North Shore. Stairs, elevators and tight hallways, handled.</p>
+          <p class="rn-price">From $420 for a studio</p>
+          <a class="rn-card-cta" href="#rn-calculator">See my price</a>
+        </article>
+        <article class="rn-card">
+          <h3>Long-Distance</h3>
+          <p>Terrebonne to Montreal, Quebec City and beyond. One crew, one truck, one delivery window you can plan around.</p>
+          <p class="rn-price">From $1,500 for a 3 bedroom move to Montreal</p>
+          <a class="rn-card-cta" href="#rn-calculator">See my price</a>
+        </article>
+        <article class="rn-card">
+          <h3>Commercial and Office</h3>
+          <p>Desks, servers and files moved over a weekend, so Monday morning starts at the new address.</p>
+          <p class="rn-price">From $1,800 for a small office</p>
+          <a class="rn-card-cta" href="#rn-calculator">See my price</a>
+        </article>
+        <article class="rn-card">
+          <h3>Packing and Unpacking</h3>
+          <p>We box the kitchen, label every carton and unpack at the other end. You point, we pack.</p>
+          <p class="rn-price">Partial packing from $250</p>
+          <a class="rn-card-cta" href="#rn-calculator">See my price</a>
+        </article>
+        <article class="rn-card">
+          <h3>Storage</h3>
+          <p>A gap between two leases? Your boxes wait in a dry, locked unit until your new keys work.</p>
+          <p class="rn-price">Quoted with your move</p>
+          <a class="rn-card-cta" href="#rn-calculator">See my price</a>
+        </article>
+        <article class="rn-card">
+          <h3>Specialty and Piano</h3>
+          <p>Pianos, safes and solid wood pieces moved with straps, sliders and a crew that has done it before.</p>
+          <p class="rn-price">Piano add-on from $180</p>
+          <a class="rn-card-cta" href="#rn-calculator">See my price</a>
+        </article>
+      </div>
+      <figure class="rn-wide-img">
+        <img src={IMG.packing} alt="Empty moving boxes with blank NAME and CONTENTS labels, ready to pack" width="1024" height="683" loading="lazy" decoding="async" />
+        <figcaption>Empty boxes, labelled before anything goes in.</figcaption>
+      </figure>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="rn-how" id="rn-how">
+      <div class="rn-how-in">
+        <div>
+          <h2 class="rn-h2">How it works</h2>
+          <ol class="rn-steps">
+            <li><strong><span aria-hidden="true">1</span> Book</strong> Get your range in 60 seconds, pick a date, and we confirm the crew and the truck size by phone.</li>
+            <li><strong><span aria-hidden="true">2</span> Load</strong> The crew protects doors, floors and rails, then loads the truck tight, heavy at the bottom, fragile on top.</li>
+            <li><strong><span aria-hidden="true">3</span> Deliver</strong> We unload room by room, place the furniture where you want it, and take the used boxes away.</li>
+          </ol>
+          <p>Your crew: Karim runs the team, with Julie, Thomas and Lea on the truck. Same faces at loading and at delivery, no day labour picked up on the way.</p>
+        </div>
+        <figure>
+          <img src={IMG.crew} alt="A Rive-Nord mover carrying a stack of labelled boxes to the truck" width="1024" height="768" loading="lazy" decoding="async" />
+          <figcaption>Stacked, strapped, and carried in one trip.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- PROTECTION CHECKLIST -->
+    <section class="rn-protect" id="rn-protect">
+      <h2 class="rn-h2">Protected before we lift anything</h2>
+      <p class="rn-sec-sub">The gear is on the truck for every job, not rented when something breaks.</p>
+      <ul class="rn-checklist">
+        <li>Door covers on every door we use</li>
+        <li>Floor mats on hardwood and tile</li>
+        <li>Full mattress covers, sealed</li>
+        <li>Sofa covers, fitted</li>
+        <li>Bubble wrap for glass and mirrors</li>
+        <li>Stair-rail protectors on every flight</li>
+        <li>Thick furniture blankets, strapped</li>
+        <li>Cardboard corners for framed pieces</li>
+      </ul>
+    </section>
+
+    <!-- PRICING EXPLAINER -->
+    <section class="rn-pricing" id="rn-pricing">
+      <h2 class="rn-h2">How pricing works</h2>
+      <p class="rn-sec-sub">Three kinds of estimate, in plain language. Ask which one you are getting before you book.</p>
+      <p class="rn-sec-sub">Local means a move inside one city. Nearby is our home area: Terrebonne, Mascouche, Laval, Repentigny, Blainville, Saint-Eustache and Montreal. Anything farther is long distance.</p>
+      <div class="rn-price-grid">
+        <article>
+          <h3>Hourly</h3>
+          <p>You pay for the crew and the truck by the hour. Good for small local moves. The clock starts when we arrive and stops when the last box is placed.</p>
+        </article>
+        <article>
+          <h3>Binding</h3>
+          <p>One fixed total for the items listed on the survey. It does not change on moving day, even if the job runs long.</p>
+        </article>
+        <article>
+          <h3>Not-to-exceed</h3>
+          <p>A capped total. You pay less if the move weighs in lighter than the survey, never more than the cap.</p>
+        </article>
+      </div>
+      <h3 class="rn-h3">What changes a final bill</h3>
+      <ul class="rn-bullets">
+        <li>More items than listed on the survey</li>
+        <li>Stairs with no elevator, or a long carry from truck to door</li>
+        <li>Packing added on moving day</li>
+        <li>Waiting time at the building, elevator delays or a late key handover</li>
+      </ul>
+      <div class="rn-valuation">
+        <h3 class="rn-h3">Valuation: read this before you sign</h3>
+        <p><strong>Full value protection:</strong> if we damage an item, we repair it, replace it, or pay its current value.</p>
+        <p><strong>Released value:</strong> the basic cover, 60 cents per pound per item. A 40 lb TV is worth $24 under released value. That is why the full value option exists.</p>
+        <p>We walk through both options at booking. No fine print surprise on moving day.</p>
+      </div>
+    </section>
+
+    <!-- REVIEWS -->
+    <section class="rn-reviews" id="rn-reviews">
+      <h2 class="rn-h2">Reviews, by move type</h2>
+      <p class="rn-sec-sub">4.8/5 from 132 reviews. Names, neighbourhoods and dates, because a star count alone says nothing. These reviews are written for this fictional demo company.</p>
+      <div class="rn-review-grid">
+        <article class="rn-review">
+          <p class="rn-review-type">Local move</p>
+          <p class="rn-stars"><span role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></p>
+          <blockquote>Condo on the 8th floor in Terrebonne, elevator booked for 9 h, everything down by noon. Karim checked the loading dock rules before we arrived.</blockquote>
+          <p class="rn-review-who">Isabelle, Terrebonne, March 2026</p>
+        </article>
+        <article class="rn-review">
+          <p class="rn-review-type">Long-distance move</p>
+          <p class="rn-stars"><span role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></p>
+          <blockquote>Lachenaie to Montreal in one day. The truck left at 8 h, we were eating dinner in the new kitchen at 19 h. Every box landed in the room written on it.</blockquote>
+          <p class="rn-review-who">Antoine and Sara, Lachenaie, February 2026</p>
+        </article>
+        <article class="rn-review">
+          <p class="rn-review-type">Office move</p>
+          <p class="rn-stars"><span role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></p>
+          <blockquote>Our whole clinic moved over a Saturday: six treatment rooms, the front desk, and the filing cabinets. Monday morning the first patient walked into a finished room.</blockquote>
+          <p class="rn-review-who">David, Mascouche, January 2026</p>
+        </article>
+        <article class="rn-review">
+          <p class="rn-review-type">Packing</p>
+          <p class="rn-stars"><span role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></p>
+          <blockquote>Julie packed the kitchen in one morning. Every glass survived, and the labels said which shelf each box belonged on. I unpacked in two evenings.</blockquote>
+          <p class="rn-review-who">Nathalie, La Plaine, April 2026</p>
+        </article>
+        <article class="rn-review">
+          <p class="rn-review-type">Piano move</p>
+          <p class="rn-stars"><span role="img" aria-label="4 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></p>
+          <blockquote>Baby grand from a second-floor living room, down the stairs and into the new place without a scratch. They sent three movers just for the piano and explained the plan before lifting.</blockquote>
+          <p class="rn-review-who">Michel, Blainville, May 2026</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- SERVICE AREAS -->
+    <section class="rn-areas" id="rn-areas">
+      <div class="rn-areas-in">
+        <div>
+          <h2 class="rn-h2">Where we run</h2>
+          <p>Home base in Terrebonne: Vieux-Terrebonne, Lachenaie and La Plaine. We also run daily to Mascouche, Laval, Repentigny, Blainville and Saint-Eustache, and weekly Rive-Nord to Montreal runs.</p>
+          <p><strong>Parking and elevators:</strong> tell us about the loading zone and the elevator booking when you reserve. Condo moves need a booked elevator slot and a certificate of insurance for the building, and we send both before moving day.</p>
+          <p><strong>New construction:</strong> we move into new builds all year. Gravel driveways, no elevator yet, keys handed over the same morning: say so at booking and we bring the floor protection and the extra hands.</p>
+          <p>July 1 is the busiest day of the year in Quebec. Book July 1 at least six weeks ahead, or pick June 30 or July 2, which are easier to book.</p>
+        </div>
+        <figure>
+          <img src={IMG.truck} alt="A moving truck at a storage facility, with storage units and cars in the yard" width="1024" height="768" loading="lazy" decoding="async" />
+          <figcaption>Storage units between moves. We load from the unit straight to your new door.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="rn-faq" id="rn-faq">
+      <h2 class="rn-h2">Questions before you call</h2>
+      <dl class="rn-faq-list">
+        <div>
+          <dt>What do you not move?</dt>
+          <dd>Firearms, hazardous materials, plants and perishables. Fuel, paint and propane tanks stay behind too. Ask us about anything odd and we will give you a straight answer.</dd>
+        </div>
+        <div>
+          <dt>What happens if something is damaged?</dt>
+          <dd>Tell the crew lead on the day, then send photos within 48 hours. Claims are answered within 5 business days, and repairs or payment follow the valuation option you chose at booking.</dd>
+        </div>
+        <div>
+          <dt>How far ahead should I book?</dt>
+          <dd>Two to three weeks for a normal date, six weeks for July 1 and for end-of-month Saturdays. Last-minute moves happen when a crew is free, and the calculator shows the same range either way.</dd>
+        </div>
+        <div>
+          <dt>What about July 1, moving day?</dt>
+          <dd>July 1 books out first, so reserve at least six weeks ahead. June 30 or July 2 are easier to book and the crews are less rushed. If you must move July 1, book early and confirm the elevator slot with your building the same week.</dd>
+        </div>
+        <div>
+          <dt>Do you take furniture apart?</dt>
+          <dd>Yes. Beds, tables and shelving come apart and go back together at the other end. Keep the screws in a labelled bag, or let the crew bag them for you.</dd>
+        </div>
+      </dl>
+    </section>
+
+    <!-- CONTACT / FOOTER -->
+    <section class="rn-contact" id="rn-contact">
+      <h2 class="rn-h2">Talk to a person</h2>
+      <p class="rn-contact-lede">Call, or get your range first and we will call you.</p>
+      <p><a class="rn-call-big rn-call-light" href="tel:+14505550193">(450) 555-0193</a></p>
+      <p><a class="rn-contact-mail" href="mailto:info@demenagementrivenord.ca">info@demenagementrivenord.ca</a></p>
+      <p>1234, rue Fictive, Terrebonne QC J6W 1A1<br />Mon to Sat 7 h to 19 h, Sun 8 h to 17 h</p>
+    </section>
+  </main>
+
+  <footer class="rn-foot">
+    <p>Déménagement Rive-Nord · 1234, rue Fictive, Terrebonne QC J6W 1A1 · (450) 555-0193 · info@demenagementrivenord.ca<br />
+    RBQ licence 0000-0000-00 (fictional) · Fully insured · Serving Terrebonne, Mascouche, Laval, Repentigny, Blainville and Saint-Eustache since 2016 · © 2026</p>
+    <p>Fictional demo site. Rive-Nord is not a real company.</p>
+  </footer>
+
+  <div class="rn-sticky" role="navigation" aria-label="Quick actions">
+    <a href="tel:+14505550193">Call</a>
+    <a href="#rn-calculator">Get a quote</a>
+  </div>
+
+  <EscapeHatch locale="en" />
+
+  <script>
+    (function () {
+      var menuBtn = document.getElementById('rn-menu-btn') as HTMLButtonElement | null;
+      var nav = document.getElementById('rn-nav') as HTMLElement | null;
+      menuBtn?.addEventListener('click', function () {
+        var open = nav?.classList.toggle('rn-nav-open');
+        menuBtn?.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if (menuBtn) menuBtn.textContent = open ? 'Close' : 'Menu';
+      });
+      nav?.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () {
+          nav?.classList.remove('rn-nav-open');
+          menuBtn?.setAttribute('aria-expanded', 'false');
+          if (menuBtn) menuBtn.textContent = 'Menu';
+        });
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && nav?.classList.contains('rn-nav-open')) {
+          nav?.classList.remove('rn-nav-open');
+          menuBtn?.setAttribute('aria-expanded', 'false');
+          if (menuBtn) menuBtn.textContent = 'Menu';
+        }
+      });
+      document.addEventListener('click', function (e) {
+        var t = e.target as HTMLElement | null;
+        var header = document.querySelector('.rn-header') as HTMLElement | null;
+        if (nav?.classList.contains('rn-nav-open') && header && t && !header.contains(t)) {
+          nav?.classList.remove('rn-nav-open');
+          menuBtn?.setAttribute('aria-expanded', 'false');
+          if (menuBtn) menuBtn.textContent = 'Menu';
+        }
+      });
+
+      var BASE = {
+        studio: [420, 580], '1bed': [620, 840], '2bed': [880, 1180],
+        '3bed': [1150, 1520], house: [1450, 1950], office: [1800, 2600]
+      };
+      var NEARBY = ['terrebonne', 'mascouche', 'laval', 'repentigny', 'blainville', 'saint-eustache', 'st-eustache', 'montreal', 'boisbriand'];
+      var FSA_CITY: Record<string, string> = { j8: 'gatineau', j9: 'gatineau', k1: 'ottawa', k2: 'ottawa', h1: 'montreal', h2: 'montreal', h3: 'montreal', h4: 'montreal', m1: 'toronto', m2: 'toronto', m3: 'toronto', m4: 'toronto', m5: 'toronto', m6: 'toronto', m7: 'toronto', m8: 'toronto', m9: 'toronto', g1: 'quebec city', g2: 'quebec city', j6: 'terrebonne', j7: 'terrebonne' };
+      function norm(s: string) {
+        var v = (s || '').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        var m = v.match(/^([a-z]\d)[a-z]/);
+        if (m && FSA_CITY[m[1]]) return FSA_CITY[m[1]];
+        return v;
+      }
+      function round10(n: number) { return Math.round(n / 10) * 10; }
+      function money(n: number) { return '$' + n.toLocaleString('en-CA'); }
+
+      var form = document.getElementById('rn-form') as HTMLFormElement | null;
+      var progress = document.getElementById('rn-progress') as HTMLElement | null;
+      var note = document.getElementById('rn-form-note') as HTMLElement | null;
+      var result = document.getElementById('rn-result') as HTMLElement | null;
+      function showStep(n: number) {
+        form?.querySelectorAll('.rn-step').forEach(function (s) {
+          var el = s as HTMLElement;
+          el.hidden = Number(el.dataset.step) !== n;
+        });
+        if (progress) progress.textContent = 'Step ' + n + ' of 3';
+        if (note) note.textContent = '';
+      }
+      function requiredFilled(step: number) {
+        var ok = true;
+        form?.querySelectorAll('.rn-step[data-step="' + step + '"] [required]').forEach(function (el) {
+          var field = el as HTMLInputElement | HTMLSelectElement;
+          if (field instanceof HTMLInputElement && field.type === 'checkbox') { if (!field.checked) ok = false; }
+          else if (!field.value || !String(field.value).trim()) ok = false;
+        });
+        return ok;
+      }
+      form?.querySelectorAll('[data-next]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var step = Number((btn as HTMLElement).dataset.next);
+          if (!requiredFilled(step)) {
+            if (note) note.textContent = 'Fill in every field on this step first.';
+            return;
+          }
+          showStep(step + 1);
+        });
+      });
+      form?.querySelectorAll('[data-back]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          showStep(Number((btn as HTMLElement).dataset.back) - 1);
+        });
+      });
+
+      form?.addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter') return;
+        var step = form?.querySelector('.rn-step:not([hidden])');
+        var next = (step?.querySelector('button[data-next]') || null) as HTMLButtonElement | null;
+        if (next) { e.preventDefault(); next.click(); }
+      });
+      form?.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (!requiredFilled(3)) {
+          if (note) note.textContent = 'Add your name, phone, email and text consent first.';
+          return;
+        }
+        var emailEl = document.getElementById('rn-email') as HTMLInputElement | null;
+        var phoneEl = document.getElementById('rn-phone') as HTMLInputElement | null;
+        var emailVal = emailEl?.value || '';
+        if (emailVal.indexOf('@') === -1 || emailVal.indexOf('.', emailVal.indexOf('@')) === -1) {
+          if (note) note.textContent = 'Please check your email address: it needs an @ and a dot.';
+          emailEl?.focus();
+          return;
+        }
+        var digits = (phoneEl?.value || '').replace(/\D/g, '');
+        if (digits.length < 10) {
+          if (note) note.textContent = 'Please check your phone number: it needs at least 10 digits.';
+          phoneEl?.focus();
+          return;
+        }
+        var size = (document.getElementById('rn-size') as HTMLSelectElement | null)?.value || '2bed';
+        var from = norm((document.getElementById('rn-from') as HTMLInputElement | null)?.value || '');
+        var to = norm((document.getElementById('rn-to') as HTMLInputElement | null)?.value || '');
+        var base = BASE[size as keyof typeof BASE] || BASE['2bed'];
+        var factor = 1.0;
+        var distLabel = 'Local move';
+        if (from && to && from !== to) {
+          if (NEARBY.indexOf(to) !== -1 && NEARBY.indexOf(from) !== -1) { factor = 1.3; distLabel = 'Nearby, under 100 km'; }
+          else { factor = 1.8; distLabel = 'Long distance'; }
+        }
+        var add = 0;
+        var parts = [];
+        if ((document.getElementById('rn-piano') as HTMLInputElement | null)?.checked) { add += 180; parts.push('piano +$180'); }
+        if ((document.getElementById('rn-safe') as HTMLInputElement | null)?.checked) { add += 150; parts.push('safe +$150'); }
+        if ((document.getElementById('rn-art') as HTMLInputElement | null)?.checked) { add += 120; parts.push('artwork or fragile pieces +$120'); }
+        var access = (document.getElementById('rn-access') as HTMLSelectElement | null)?.value || '';
+        if (access === 'stairs3') { add += 80; parts.push('stairs, 3rd floor or higher, no elevator +$80'); }
+        var packingEl = form?.querySelector('input[name="packing"]:checked') as HTMLInputElement | null;
+        var packing = packingEl?.value || 'none';
+        if (packing === 'partial') { add += 250; parts.push('partial packing +$250'); }
+        if (packing === 'full') { add += 450; parts.push('full packing +$450'); }
+        var low = round10(base[0] * factor + add);
+        var high = round10(base[1] * factor + add);
+        var range = document.getElementById('rn-range') as HTMLElement | null;
+        if (range) range.textContent = 'Planning range: ' + money(low) + ' - ' + money(high);
+        var bd = document.getElementById('rn-breakdown') as HTMLElement | null;
+        if (bd) bd.textContent = distLabel + ' (x' + factor.toFixed(1) + ')' + (parts.length ? '. Add-ons: ' + parts.join(', ') + '.' : '. No add-ons.');
+        form?.querySelectorAll('.rn-step').forEach(function (s) { (s as HTMLElement).hidden = true; });
+        if (progress) progress.textContent = 'Your range is ready';
+        if (result) result.hidden = false;
+        if (note) note.textContent = 'Noted. We will call you back within one business hour.';
+      });
+      document.getElementById('rn-edit-btn')?.addEventListener('click', function () {
+        if (result) result.hidden = true;
+        showStep(1);
+      });
+      document.getElementById('rn-video-btn')?.addEventListener('click', function () {
+        if (note) note.textContent = 'Noted. We will text you three video survey times within one business hour.';
+      });
+    })();
+  </script>
+
+  <style>
+    .rn {
+      --rn-charcoal: #3B3F45;
+      --rn-yellow: #F2B705;
+      --rn-plaster: #F4F4F2;
+      --rn-ink: #1B1D21;
+      --rn-oswald: "Oswald", "Arial Narrow", sans-serif;
+      --rn-inter: "Inter", system-ui, sans-serif;
+      margin: 0;
+      background: var(--rn-plaster);
+      color: var(--rn-ink);
+      font-family: var(--rn-inter);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: clip;
+      padding-bottom: 72px;
+    }
+    .rn *, .rn *::before, .rn *::after { box-sizing: border-box; }
+    .rn img { display: block; max-width: 100%; }
+    .rn section { scroll-margin-top: 140px; }
+    .rn a:not(.rn-btn-yellow):not(.rn-call-big):not(.rn-call-light) { color: inherit; }
+    .rn a:focus-visible, .rn button:focus-visible, .rn input:focus-visible, .rn select:focus-visible {
+      outline: 2px solid #fff; outline-offset: 2px; box-shadow: 0 0 0 4px #1B1D21;
+    }
+    .rn-skip {
+      position: absolute; left: 12px; top: -60px; z-index: 10000;
+      background: var(--rn-charcoal); color: #fff; padding: 12px 18px; font-weight: 600;
+    }
+    .rn-skip:focus { top: 12px; }
+    .rn-h1, .rn-h2, .rn-h3 {
+      font-family: var(--rn-oswald); text-transform: uppercase; letter-spacing: 0.02em;
+      color: var(--rn-charcoal); line-height: 1.05; margin: 0;
+    }
+    .rn-h2 { font-size: clamp(1.9rem, 5vw, 2.8rem); margin-bottom: 10px; }
+    .rn-h3 { font-size: 1.25rem; margin-bottom: 12px; text-transform: none; }
+    .rn-sec-sub { max-width: 62ch; font-size: 16.5px; line-height: 1.65; margin: 0 0 28px; }
+
+    .rn-header {
+      position: sticky; top: 0; z-index: 900;
+      background: var(--rn-charcoal); color: #fff;
+      border-bottom: 4px solid var(--rn-yellow);
+    }
+    .rn-header-in {
+      max-width: 1180px; margin: 0 auto; padding: 12px clamp(16px, 4vw, 32px);
+      display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+    }
+    .rn-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .rn-brand svg { width: 44px; height: 44px; flex: none; }
+    .rn-brand-text {
+      font-family: var(--rn-oswald); font-weight: 700; font-size: 26px; letter-spacing: 0.04em; line-height: 1;
+    }
+    .rn-brand-sub { display: block; font-family: var(--rn-inter); font-size: 10.5px; letter-spacing: 0.22em; color: var(--rn-yellow); margin-top: 4px; }
+    .rn-nav { display: flex; gap: 4px; margin-left: auto; flex-wrap: wrap; }
+    .rn-nav a {
+      color: #fff; text-decoration: none; font-weight: 600; font-size: 14.5px;
+      padding: 10px 12px; border-radius: 6px;
+    }
+    .rn-nav a:hover { background: rgba(255,255,255,0.12); }
+    .rn-header-cta { display: flex; align-items: center; gap: 14px; margin-left: auto; }
+    .rn-nav + .rn-header-cta { margin-left: 0; }
+    .rn-header-stars { margin: 0; font-size: 14px; font-weight: 600; color: var(--rn-yellow); white-space: nowrap; }
+    .rn-header-stars span { color: rgba(255,255,255,0.75); font-weight: 500; }
+    .rn-header-phone { font-weight: 700; font-size: 17px; text-decoration: none; white-space: nowrap; }
+    .rn-menu-btn {
+      display: none; margin-left: auto; font-family: var(--rn-inter); font-weight: 700; font-size: 15px;
+      background: var(--rn-yellow); color: var(--rn-charcoal); border: 0; border-radius: 8px;
+      padding: 12px 18px; min-height: 44px; cursor: pointer;
+    }
+    .rn-btn {
+      display: inline-block; font-weight: 700; font-size: 16px; text-decoration: none;
+      padding: 14px 24px; border-radius: 8px; border: 0; cursor: pointer; min-height: 48px;
+      font-family: var(--rn-inter); text-align: center;
+    }
+    .rn-btn-yellow { background: var(--rn-yellow); color: var(--rn-charcoal); }
+    .rn-btn-yellow:hover { background: #FFC91F; }
+    .rn-btn-ghost { background: transparent; color: var(--rn-charcoal); border: 2px solid var(--rn-charcoal); }
+
+    .rn-hero { background: var(--rn-charcoal); color: #fff; }
+    .rn-hero-in {
+      max-width: 1180px; margin: 0 auto; padding: clamp(40px, 7vh, 76px) clamp(16px, 4vw, 32px) 32px;
+      display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(28px, 4vw, 56px); align-items: center;
+    }
+    .rn-hero .rn-h1 { color: #fff; font-size: clamp(3rem, 8.5vw, 5.6rem); }
+    .rn-avail {
+      display: inline-flex; align-items: center; gap: 10px; margin: 0 0 18px;
+      background: var(--rn-yellow); color: var(--rn-charcoal); font-weight: 700; font-size: 15px;
+      padding: 10px 16px; border-radius: 999px;
+    }
+    .rn-dot { width: 11px; height: 11px; border-radius: 50%; background: #1E7B34; flex: none; animation: rn-pulse 1.8s infinite; }
+    @keyframes rn-pulse { 50% { box-shadow: 0 0 0 8px rgba(30,123,52,0.25); } }
+    .rn-lede { font-size: 18px; line-height: 1.65; max-width: 52ch; margin: 18px 0 22px; color: rgba(255,255,255,0.92); }
+    .rn-hero-call { margin: 0 0 24px; }
+    .rn-call-big {
+      display: inline-block; font-family: var(--rn-oswald); font-weight: 700; text-decoration: none;
+      font-size: clamp(1.7rem, 4.5vw, 2.4rem); color: var(--rn-charcoal); background: var(--rn-yellow);
+      padding: 10px 22px; border-radius: 10px;
+    }
+    .rn-call-note { display: block; margin-top: 10px; font-size: 14px; color: rgba(255,255,255,0.8); }
+    .rn-trust {
+      list-style: none; margin: 0; padding: 18px 0 0; display: flex; flex-wrap: wrap; gap: 10px 22px;
+      border-top: 1px solid rgba(255,255,255,0.25); font-size: 14.5px; font-weight: 600;
+    }
+    .rn-trust li::before { content: "\2713  "; color: var(--rn-yellow); }
+    .rn-hero-img img { width: 100%; height: auto; border-radius: 12px; border: 4px solid var(--rn-yellow); }
+    .rn-hero-img figcaption, .rn-wide-img figcaption, .rn-how figcaption, .rn-areas figcaption {
+      font-size: 13.5px; color: rgba(255,255,255,0.7); margin-top: 10px;
+    }
+    .rn-wide-img figcaption, .rn-how figcaption, .rn-areas figcaption { color: rgba(27,29,33,0.65); }
+
+    .rn-calc {
+      max-width: 1180px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 32px) clamp(44px, 7vh, 72px);
+      scroll-margin-top: 140px;
+    }
+    .rn-calc .rn-h2 { color: #fff; }
+    .rn-calc-sub { color: rgba(255,255,255,0.9); font-size: 16px; line-height: 1.6; max-width: 70ch; margin: 0 0 8px; }
+    .rn-progress { font-weight: 700; color: var(--rn-yellow); font-size: 15px; margin: 0 0 16px; }
+    .rn-form {
+      background: #fff; color: var(--rn-ink); border-radius: 14px; padding: clamp(22px, 4vw, 36px);
+      border-top: 6px solid var(--rn-yellow);
+    }
+    .rn-form .rn-h3 { color: var(--rn-charcoal); }
+    .rn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 20px; margin-bottom: 8px; }
+    .rn-field { margin: 0 0 14px; }
+    .rn-field label { display: block; font-weight: 600; font-size: 14.5px; margin-bottom: 6px; }
+    .rn-field input, .rn-field select {
+      width: 100%; font-family: var(--rn-inter); font-size: 16px; padding: 13px 14px; min-height: 48px;
+      border: 2px solid var(--rn-charcoal); border-radius: 8px; background: #fff; color: var(--rn-ink);
+    }
+    .rn-field-note { font-size: 14px; color: rgba(27,29,33,0.65); margin: 0 0 18px; }
+    .rn-checks { border: 2px solid rgba(59,63,69,0.25); border-radius: 10px; padding: 16px 18px; margin: 0 0 18px; }
+    .rn-checks legend { font-weight: 700; padding: 0 8px; }
+    .rn-checks label { display: block; font-size: 15.5px; padding: 8px 0; cursor: pointer; }
+    .rn-checks input, .rn-consent input { width: 20px; height: 20px; accent-color: var(--rn-charcoal); vertical-align: -4px; margin-right: 8px; }
+    .rn-consent label { font-weight: 500; font-size: 15.5px; cursor: pointer; }
+    .rn-step-nav { display: flex; gap: 12px; flex-wrap: wrap; margin: 8px 0 0; }
+    .rn-result { border-top: 3px solid var(--rn-yellow); padding-top: 18px; }
+    .rn-range { font-family: var(--rn-oswald); font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 700; color: var(--rn-charcoal); margin: 0 0 10px; text-transform: uppercase; }
+    .rn-result p { font-size: 16px; line-height: 1.65; }
+    .rn-form-note { font-weight: 600; color: #1E7B34; min-height: 1.5em; margin: 12px 0 0; }
+    .rn-form-note:empty { display: none; }
+
+    .rn-stats { background: var(--rn-yellow); }
+    .rn-stats-in {
+      max-width: 1180px; margin: 0 auto; padding: clamp(36px, 6vh, 56px) clamp(16px, 4vw, 32px);
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; text-align: center;
+    }
+    .rn-stats p { margin: 0; }
+    .rn-stats strong {
+      display: block; font-family: var(--rn-oswald); font-size: clamp(2.6rem, 7vw, 4.2rem);
+      font-weight: 700; color: var(--rn-charcoal); line-height: 1;
+    }
+    .rn-stats span { display: block; margin-top: 8px; font-weight: 600; font-size: 15px; color: var(--rn-charcoal); }
+
+    .rn-services, .rn-protect, .rn-pricing, .rn-reviews, .rn-faq {
+      max-width: 1180px; margin: 0 auto; padding: clamp(48px, 8vh, 84px) clamp(16px, 4vw, 32px);
+    }
+    .rn-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .rn-card {
+      background: #fff; border: 2px solid var(--rn-charcoal); border-top: 8px solid var(--rn-yellow);
+      border-radius: 12px; padding: 24px; display: flex; flex-direction: column;
+    }
+    .rn-card h3 { font-family: var(--rn-oswald); text-transform: uppercase; font-size: 1.35rem; color: var(--rn-charcoal); margin: 0 0 10px; }
+    .rn-card p { font-size: 15.5px; line-height: 1.6; margin: 0 0 12px; }
+    .rn-price { font-weight: 700; color: var(--rn-charcoal); }
+    .rn-card-cta { margin-top: auto; font-weight: 700; color: var(--rn-charcoal); text-decoration: underline; text-decoration-color: var(--rn-yellow); text-decoration-thickness: 3px; }
+    .rn-wide-img { margin: 36px 0 0; }
+    .rn-wide-img img { width: 100%; height: 340px; object-fit: cover; border-radius: 12px; }
+
+    .rn-how { background: var(--rn-charcoal); color: #fff; }
+    .rn-how-in {
+      max-width: 1180px; margin: 0 auto; padding: clamp(48px, 8vh, 84px) clamp(16px, 4vw, 32px);
+      display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 4vw, 56px); align-items: center;
+    }
+    .rn-how .rn-h2 { color: #fff; }
+    .rn-steps { list-style: none; margin: 0 0 22px; padding: 0; }
+    .rn-steps li { font-size: 16.5px; line-height: 1.65; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.2); }
+    .rn-steps strong { display: block; font-family: var(--rn-oswald); text-transform: uppercase; font-size: 1.4rem; margin-bottom: 4px; }
+    .rn-steps strong span {
+      display: inline-block; width: 34px; height: 34px; line-height: 34px; text-align: center;
+      background: var(--rn-yellow); color: var(--rn-charcoal); border-radius: 50%; margin-right: 10px; font-size: 1.1rem;
+    }
+    .rn-how p { font-size: 16px; line-height: 1.65; color: rgba(255,255,255,0.9); }
+    .rn-how img { width: 100%; height: 380px; object-fit: cover; border-radius: 12px; border: 4px solid var(--rn-yellow); }
+
+    .rn-checklist {
+      list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 14px 28px;
+    }
+    .rn-checklist li {
+      background: #fff; border-left: 8px solid var(--rn-yellow); padding: 16px 18px;
+      font-weight: 600; font-size: 16px; border-radius: 0 8px 8px 0;
+    }
+    .rn-checklist li::before { content: "\2713  "; color: #1E7B34; }
+
+    .rn-pricing { background: #fff; max-width: none; }
+    .rn-pricing > * { max-width: 1180px; margin-left: auto; margin-right: auto; }
+    .rn-price-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 32px; }
+    .rn-price-grid article { border: 2px solid var(--rn-charcoal); border-radius: 12px; padding: 22px; }
+    .rn-price-grid h3 { font-family: var(--rn-oswald); text-transform: uppercase; font-size: 1.3rem; margin: 0 0 8px; color: var(--rn-charcoal); }
+    .rn-price-grid p, .rn-valuation p { font-size: 15.5px; line-height: 1.65; }
+    .rn-bullets { font-size: 16px; line-height: 1.7; margin: 0 0 32px; padding-left: 22px; }
+    .rn-valuation { background: var(--rn-plaster); border: 2px solid var(--rn-charcoal); border-radius: 12px; padding: 24px 28px; }
+    .rn-valuation .rn-h3 { color: var(--rn-charcoal); }
+
+    .rn-review-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .rn-review {
+      background: #fff; border-radius: 12px; padding: 24px; border-top: 8px solid var(--rn-charcoal);
+      display: flex; flex-direction: column;
+    }
+    .rn-review-type {
+      margin: 0 0 8px; font-weight: 700; font-size: 13px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--rn-charcoal);
+    }
+    .rn-stars { margin: 0 0 12px; color: #B8860B; font-size: 18px; letter-spacing: 2px; }
+    .rn-review blockquote { margin: 0 0 16px; font-size: 16px; line-height: 1.65; }
+    .rn-review-who { margin: auto 0 0; font-size: 14px; font-weight: 600; color: rgba(27,29,33,0.7); }
+
+    .rn-areas { background: var(--rn-charcoal); color: #fff; }
+    .rn-areas-in {
+      max-width: 1180px; margin: 0 auto; padding: clamp(48px, 8vh, 84px) clamp(16px, 4vw, 32px);
+      display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 4vw, 56px); align-items: center;
+    }
+    .rn-areas .rn-h2 { color: #fff; }
+    .rn-areas p { font-size: 16.5px; line-height: 1.7; color: rgba(255,255,255,0.92); }
+    .rn-areas img { width: 100%; height: 380px; object-fit: cover; border-radius: 12px; border: 4px solid var(--rn-yellow); }
+
+    .rn-faq-list { margin: 0; }
+    .rn-faq-list div { border-bottom: 2px solid var(--rn-charcoal); padding: 20px 0; }
+    .rn-faq-list dt { font-family: var(--rn-oswald); text-transform: uppercase; font-size: 1.25rem; color: var(--rn-charcoal); margin-bottom: 6px; }
+    .rn-faq-list dd { margin: 0; font-size: 16px; line-height: 1.65; max-width: 72ch; }
+
+    .rn-contact { background: var(--rn-yellow); text-align: center; padding: clamp(48px, 8vh, 84px) clamp(16px, 4vw, 32px); }
+    .rn-contact .rn-h2 { margin-bottom: 8px; }
+    .rn-contact-lede { font-size: 17px; font-weight: 600; margin: 0 0 20px; }
+    .rn-call-light { background: var(--rn-charcoal); color: #fff; }
+    .rn-contact-mail { font-weight: 700; font-size: 18px; }
+    .rn-contact p { font-size: 16.5px; line-height: 1.7; }
+
+    .rn-foot { background: var(--rn-charcoal); color: rgba(255,255,255,0.8); text-align: center; padding: 36px 20px 24px; font-size: 14px; line-height: 1.9; }
+    .rn-foot p { margin: 0; }
+
+    .rn-sticky {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 950;
+      display: none; gap: 10px; padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+      background: rgba(59,63,69,0.97); border-top: 3px solid var(--rn-yellow);
+    }
+    .rn-sticky a {
+      flex: 1; text-align: center; text-decoration: none; font-weight: 700; font-size: 16px;
+      padding: 13px 10px; border-radius: 8px; min-height: 48px;
+    }
+    .rn-sticky a:first-child { background: #fff; color: var(--rn-charcoal); }
+    .rn-sticky a:last-child { background: var(--rn-yellow); color: var(--rn-charcoal); }
+
+    @media (max-width: 900px) {
+      .rn-hero-in, .rn-how-in, .rn-areas-in { grid-template-columns: 1fr; }
+      .rn-cards, .rn-review-grid, .rn-price-grid { grid-template-columns: 1fr 1fr; }
+      .rn-stats-in { grid-template-columns: repeat(2, 1fr); }
+      .rn-menu-btn { display: block; }
+      .rn-nav {
+        display: none; flex-basis: 100%; flex-direction: column; margin: 0;
+      }
+      .rn-nav-open { display: flex; }
+      .rn-header-cta { margin-left: 0; }
+      .rn-header-stars { display: none; }
+    }
+    @media (max-width: 640px) {
+      .rn-grid, .rn-cards, .rn-review-grid, .rn-price-grid, .rn-checklist { grid-template-columns: 1fr; }
+      .rn-sticky { display: flex; }
+      /* Lift the shared EscapeHatch above the sticky bar so Call stays tappable; !important beats the component's scoped rule. */
+      :global(.demo-exit) { bottom: calc(84px + env(safe-area-inset-bottom, 0px)) !important; }
+      .rn-header-phone { display: none; }
+      .rn-wide-img img, .rn-how img, .rn-areas img { height: 240px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .rn-dot { animation: none; }
+      .rn-btn, .rn-call-big { transition: none; }
+    }
+  </style>
+</body>
+</html>

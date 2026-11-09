@@ -96,6 +96,8 @@ const demoDescriptions: Record<Locale, Record<string, string>> = {
     onde: "Premium audio e-commerce. Liquid chrome, adaptive ANC, 45-day trial.",
     noctua: "Dark-sky lodge. Working orrery, sky planner, telescope nights in Charlevoix.",
     lisiere: "Handweaving atelier. Draft notation, live loom configurator, warp orders.",
+    boreal: "Residential and commercial moving, Gatineau to Ottawa, quote in 24 hours.",
+    "rive-nord": "Movers for the North Shore. Houses, condos and offices, no surprises.",
   },
   fr: {
     nora: "Urgence résidentielle + commerciale, répartition 24 h.",
@@ -144,6 +146,8 @@ const demoDescriptions: Record<Locale, Record<string, string>> = {
     onde: "E-commerce audio haut de gamme. Chrome liquide, ANC adaptatif, essai de 45 jours.",
     noctua: "Auberge du ciel sombre. Orrery, planificateur du ciel et nuits au télescope en Charlevoix.",
     lisiere: "Atelier de tissage. Pointage de métier, configurateur en direct, commandes de chaîne.",
+    boreal: "Déménagement résidentiel et commercial, Gatineau-Ottawa, devis en 24 h.",
+    "rive-nord": "Déménageurs de la Rive-Nord. Maisons, condos et bureaux, sans surprise.",
   },
 };
 

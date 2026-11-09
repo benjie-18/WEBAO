@@ -1021,5 +1021,53 @@
   "file": "/demos/_remote/pexels-6920631.jpg",
   "source": "https://images.pexels.com/photos/6920631/pexels-photo-6920631.jpeg?auto=compress&cs=tinysrgb&w=800",
   "query": "pexels: modern kitchen interior (coherence fix; replaced bedroom photo)"
+ },
+ {
+  "demo": "boreal",
+  "file": "/demos/boreal/01.jpg",
+  "query": "white box truck street",
+  "source": "https://commons.wikimedia.org/wiki/File:White_DAF_LF_box_truck_with_tail_lift_parked_outside_shops_on_Military_Road,_Chatham,_Kent,_England,_6_October_2025.jpg"
+ },
+ {
+  "demo": "boreal",
+  "file": "/demos/boreal/02.jpg",
+  "query": "movers carrying boxes",
+  "source": "https://live.staticflickr.com/1816/43359490284_96b840e394_b.jpg"
+ },
+ {
+  "demo": "boreal",
+  "file": "/demos/boreal/03.jpg",
+  "query": "packing boxes moving",
+  "source": "https://live.staticflickr.com/1397/951103712_d27367d90b_b.jpg"
+ },
+ {
+  "demo": "boreal",
+  "file": "/demos/boreal/04.jpg",
+  "query": "moving van loading",
+  "source": "https://live.staticflickr.com/5607/15578323305_fa79df467f_b.jpg"
+ },
+ {
+  "demo": "rive-nord",
+  "file": "/demos/rive-nord/01.jpg",
+  "query": "moving truck",
+  "source": "https://commons.wikimedia.org/wiki/File:An_Overview_of_Moving_Companies_and_Their_Use_of_Moving_Boxes.jpg"
+ },
+ {
+  "demo": "rive-nord",
+  "file": "/demos/rive-nord/02.jpg",
+  "query": "furniture movers",
+  "source": "https://commons.wikimedia.org/wiki/File:Mover_At_Work_(63378711).jpeg"
+ },
+ {
+  "demo": "rive-nord",
+  "file": "/demos/rive-nord/03.jpg",
+  "query": "moving boxes",
+  "source": "https://commons.wikimedia.org/wiki/File:Moving-boxes.jpg"
+ },
+ {
+  "demo": "rive-nord",
+  "file": "/demos/rive-nord/04.jpg",
+  "query": "moving truck",
+  "source": "https://live.staticflickr.com/3294/2676371974_e23b4ce7ce_b.jpg"
  }
 ]

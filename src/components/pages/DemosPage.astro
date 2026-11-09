@@ -11,7 +11,7 @@ const paths = localizedPaths[locale];
 const demos = getDemos(locale);
 
 // Demos with published standalone microsites
-const liveDemos = new Set(["nora", "mira", "atelier-nord", "encre-brute", "kanso", "leduc", "boise", "sora", "forma", "toit-fils", "verte", "lune", "maison-lune", "finition-r", "pouf", "hexline", "papier-ciseaux", "studio-reve", "cyberdoll", "pixelforge", "vhs-dreams", "prism", "tactile", "lattice", "maximal", "atelier-caractere", "esquisse", "brume", "sahara-sage", "aeris", "debit", "bec-fin", "voltige", "lueur", "21-degres", "extreme-climat", "confort-76", "zenith", "toitures-tempete", "chantier-brut", "maison-dore", "sneaker-pro", "onde", "noctua", "lisiere"]);
+const liveDemos = new Set(["nora", "mira", "atelier-nord", "encre-brute", "kanso", "leduc", "boise", "sora", "forma", "toit-fils", "verte", "lune", "maison-lune", "finition-r", "pouf", "hexline", "papier-ciseaux", "studio-reve", "cyberdoll", "pixelforge", "vhs-dreams", "prism", "tactile", "lattice", "maximal", "atelier-caractere", "esquisse", "brume", "sahara-sage", "aeris", "debit", "bec-fin", "voltige", "lueur", "21-degres", "extreme-climat", "confort-76", "zenith", "toitures-tempete", "chantier-brut", "maison-dore", "sneaker-pro", "onde", "noctua", "lisiere", "boreal", "rive-nord"]);
 // Hidden from the catalog: style already covered by another demo (boba-club = Y2K, covered by cyberdoll)
 const hiddenDemos = new Set(["boba-club"]);
 const visibleDemos = demos.filter((d) => !hiddenDemos.has(d.id));
@@ -455,6 +455,29 @@ const families = styleFamilies;
                   </svg>
                   <div class="ls-name">LISIÈRE</div>
                   <div class="ls-bar">{locale === "fr" ? "DANVILLE · 24 EPI · SERGÉ 2/2" : "DANVILLE · 24 EPI · 2/2 TWILL"}</div>
+                </div>
+              )}
+              {d.id === "boreal" && (
+                <div class="dthumb-art">
+                  <svg class="br-pines" viewBox="0 0 140 96" aria-hidden="true">
+                    <line class="br-road" x1="70" y1="96" x2="70" y2="10" />
+                    <g class="br-pine"><polygon points="24,58 38,28 52,58" /><rect x="35" y="58" width="6" height="10" /></g>
+                    <g class="br-pine"><polygon points="88,58 102,28 116,58" /><rect x="99" y="58" width="6" height="10" /></g>
+                    <g class="br-pine"><polygon points="58,44 70,14 82,44" /><rect x="67" y="44" width="6" height="10" /></g>
+                  </svg>
+                  <div class="br-name">BORÉAL</div>
+                  <div class="br-bar">{locale === "fr" ? "GATINEAU · OTTAWA · DEVIS 24 H" : "GATINEAU · OTTAWA · QUOTE IN 24 H"}</div>
+                </div>
+              )}
+              {d.id === "rive-nord" && (
+                <div class="dthumb-art">
+                  <svg class="rn-road" viewBox="0 0 140 96" aria-hidden="true">
+                    <g class="rn-lane"><line x1="20" y1="96" x2="58" y2="8" /><line x1="120" y1="96" x2="82" y2="8" /></g>
+                    <g class="rn-dash"><line x1="70" y1="90" x2="70" y2="74" /><line x1="70" y1="62" x2="70" y2="46" /><line x1="70" y1="34" x2="70" y2="18" /></g>
+                    <polygon class="rn-arrow" points="70,4 78,18 62,18" />
+                  </svg>
+                  <div class="rn-name">RIVE-NORD</div>
+                  <div class="rn-bar">{locale === "fr" ? "TERREBONNE · SANS SURPRISE" : "TERREBONNE · NO SURPRISES"}</div>
                 </div>
               )}
             </div>
@@ -1327,6 +1350,50 @@ const families = styleFamilies;
   }
   .dthumb-lisiere .ls-bar {
     font-size: 9px; letter-spacing: 0.2em; color: rgba(160, 47, 62, 0.95);
+    font-family: "IBM Plex Mono", monospace; text-transform: uppercase;
+  }
+  /* BORÉAL: nordic road atlas, navy and teal */
+  .dthumb-boreal {
+    background: linear-gradient(170deg, #1B2A4A 0%, #101E33 100%);
+    color: #fff;
+  }
+  .dthumb-boreal .dthumb-art {
+    height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 12px; padding: 18px; border: 1.5px solid rgba(255, 255, 255, 0.35); margin: 12px;
+    background: rgba(14, 124, 123, 0.16);
+  }
+  .dthumb-boreal .br-pines { width: min(88%, 190px); height: auto; }
+  .dthumb-boreal .br-road { stroke: #2DD4BF; stroke-width: 2; stroke-dasharray: 6 6; }
+  .dthumb-boreal .br-pine polygon { fill: #FFFFFF; }
+  .dthumb-boreal .br-pine rect { fill: #0E7C7B; }
+  .dthumb-boreal .br-name {
+    font-size: clamp(19px, 2.5vw, 27px); letter-spacing: 0.3em; text-indent: 0.3em;
+    color: #fff; font-weight: 700;
+  }
+  .dthumb-boreal .br-bar {
+    font-size: 9px; letter-spacing: 0.2em; color: rgba(94, 234, 212, 0.9);
+    font-family: "IBM Plex Mono", monospace; text-transform: uppercase;
+  }
+  /* RIVE-NORD: highway service-board, asphalt and hazard yellow */
+  .dthumb-rive-nord {
+    background: linear-gradient(170deg, #3B3F45 0%, #23262B 100%);
+    color: #F4F4F2;
+  }
+  .dthumb-rive-nord .dthumb-art {
+    height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 12px; padding: 18px; border: 1.5px solid #F2B705; margin: 12px;
+    background: rgba(242, 183, 5, 0.07);
+  }
+  .dthumb-rive-nord .rn-road { width: min(88%, 190px); height: auto; }
+  .dthumb-rive-nord .rn-lane line { stroke: rgba(244, 244, 242, 0.7); stroke-width: 2; }
+  .dthumb-rive-nord .rn-dash line { stroke: #F2B705; stroke-width: 3; }
+  .dthumb-rive-nord .rn-arrow { fill: #F2B705; }
+  .dthumb-rive-nord .rn-name {
+    font-size: clamp(19px, 2.5vw, 27px); letter-spacing: 0.18em; text-indent: 0.18em;
+    color: #F2B705; font-weight: 700;
+  }
+  .dthumb-rive-nord .rn-bar {
+    font-size: 9px; letter-spacing: 0.2em; color: rgba(244, 244, 242, 0.75);
     font-family: "IBM Plex Mono", monospace; text-transform: uppercase;
   }
   .empty { text-align:center; padding:32px; background: var(--paper-2); border:1px dashed var(--line-strong); border-radius:16px; font-size:13px; color: var(--muted); margin-top:12px; }

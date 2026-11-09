@@ -1,0 +1,632 @@
+---
+import EscapeHatch from "../../components/demos/EscapeHatch.astro";
+import DemoSeo from "../../components/demos/DemoSeo.astro";
+
+// Demo microsite: Déménagement Boréal, fictional mover, Gatineau QC.
+// Clean and modern: navy and white with one teal accent, Sora and Inter.
+// Hero holds a 3 step instant planning range calculator. Contact is
+// captured before the price appears. All details are fictional.
+const IMG = {
+  hero: "/demos/boreal/01.jpg",
+  crew: "/demos/boreal/02.jpg",
+  packing: "/demos/boreal/03.jpg",
+  truck: "/demos/boreal/04.jpg",
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <DemoSeo demoId="boreal" locale="en" title="Déménagement Boréal · Movers in Gatineau (819) 555-0147 · Local and long distance" description="Déménagement Boréal: Gatineau movers since 2012. Local, long distance, office and packing moves across Gatineau and Ottawa. See a planning range in about 60 seconds." ogImage="https://webao.ca/demos/boreal/01.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MovingCompany",
+    "name": "Déménagement Boréal",
+    "telephone": "+1-819-555-0147",
+    "email": "info@demenagementboreal.ca",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "1234, rue Fictive",
+      "addressLocality": "Gatineau",
+      "addressRegion": "QC",
+      "postalCode": "J8Y 1A1",
+      "addressCountry": "CA"
+    },
+    "openingHours": ["Mo-Fr 08:00-18:00", "Sa 09:00-16:00"],
+    "areaServed": ["Gatineau", "Ottawa", "Cantley", "Chelsea", "Masson-Angers", "Buckingham"]
+  }
+  </script>
+</head>
+<body class="br">
+  <a class="br-skip" href="#br-main">Skip to main content</a>
+
+  <header class="br-header">
+    <div class="br-header-in">
+      <a class="br-brand" href="#br-top" aria-label="Déménagement Boréal home">
+        <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="22" fill="none" stroke="#0E7C7B" stroke-width="2.5" /><path d="M24 8 L29 24 L24 40 L19 24 Z" fill="#0E7C7B" /><path d="M8 24 L24 19 L40 24 L24 29 Z" fill="#1B2A4A" /><circle cx="24" cy="24" r="3.5" fill="#FFFFFF" /></svg>
+        <span class="br-brand-name">Boréal</span>
+        <span class="br-brand-sub">Déménagement Boréal · Gatineau</span>
+      </a>
+      <nav class="br-nav" id="br-nav" aria-label="Main navigation">
+        <a href="#br-services">Services</a>
+        <a href="#br-how">How</a>
+        <a href="#br-pricing">Pricing</a>
+        <a href="#br-reviews">Reviews</a>
+        <a href="#br-areas">Areas</a>
+        <a href="#br-faq">FAQ</a>
+        <a href="#br-contact">Contact</a>
+      </nav>
+      <div class="br-header-side">
+        <p class="br-stars" aria-label="Rated 4.9 out of 5 from 87 reviews">4.9/5 · 87 reviews</p>
+        <a class="br-phone" href="tel:+18195550147">(819) 555-0147</a>
+        <a class="br-cta" href="#br-quote">Get a quote</a>
+        <button class="br-menu-btn" id="br-menu-btn" type="button" aria-expanded="false" aria-controls="br-nav" aria-label="Open menu">Menu</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="br-main">
+    <section class="br-hero" id="br-top">
+      <div class="br-hero-in">
+        <div class="br-hero-copy">
+          <p class="br-eyebrow">Gatineau to Ottawa, and farther when you need it</p>
+          <h1 class="br-h1">Move with peace of mind, from Gatineau to Ottawa.</h1>
+          <p class="br-lede">We own our trucks and employ our crews. You get a named crew lead, a written plan for the day, and a price range before anyone picks up a box.</p>
+          <p class="br-trust">Licence RBQ 0000-0000-00 (fictional) · Insured · Since 2012 · 4.9/5 from 87 reviews</p>
+          <div class="br-hero-actions">
+            <a class="br-cta" href="#br-quote">See my price in 60 seconds</a>
+            <a class="br-call" href="tel:+18195550147">Call (819) 555-0147</a>
+          </div>
+          <img class="br-hero-img" src={IMG.hero} alt="A plain white box truck parked on a street, ready for loading" width="919" height="529" decoding="async" fetchpriority="high" />
+        </div>
+
+        <div class="br-calc" id="br-quote" aria-label="Instant planning range calculator">
+          <h2 class="br-calc-title">Your planning range</h2>
+          <p class="br-calc-progress" id="br-progress" aria-live="polite">Step 1 of 3</p>
+          <p class="br-form-error" id="br-form-error" role="status" aria-live="polite"></p>
+          <form id="br-form" novalidate>
+            <div class="br-step" data-step="1">
+              <h3>Where and when</h3>
+              <label for="br-size">Move size</label>
+              <select id="br-size" name="size" required>
+                <option value="">Choose a size</option>
+                <option value="studio">Studio</option>
+                <option value="1bed">1 bedroom</option>
+                <option value="2bed">2 bedrooms</option>
+                <option value="3bed">3 bedrooms</option>
+                <option value="house">House, 4 or more bedrooms</option>
+                <option value="office">Office</option>
+              </select>
+              <label for="br-from">Moving from (city or postal code)</label>
+              <input id="br-from" name="from" type="text" required placeholder="Gatineau" autocomplete="off" />
+              <label for="br-to">Moving to (city or postal code)</label>
+              <input id="br-to" name="to" type="text" required placeholder="Ottawa" autocomplete="off" />
+              <label for="br-date">Move date</label>
+              <input id="br-date" name="date" type="date" required />
+              <p class="br-field-note">No full address needed yet. Just the cities and a date.</p>
+              <button class="br-btn" type="button" data-next="2">Continue</button>
+            </div>
+            <div class="br-step" data-step="2" hidden>
+              <h3>What is being moved</h3>
+              <fieldset>
+                <legend>Inventory</legend>
+                <label class="br-check"><input type="checkbox" name="inv" value="sofa" /> Sofa and chairs</label>
+                <label class="br-check"><input type="checkbox" name="inv" value="beds" /> Beds and mattresses</label>
+                <label class="br-check"><input type="checkbox" name="inv" value="tables" /> Tables and desks</label>
+                <label class="br-check"><input type="checkbox" name="inv" value="boxes" /> Boxes, about 20 or more</label>
+                <label class="br-check"><input type="checkbox" name="inv" value="appliances" /> Large appliances</label>
+              </fieldset>
+              <p class="br-field-note">Inventory helps the crew plan. It does not change your range.</p>
+              <fieldset>
+                <legend>Special items</legend>
+                <label class="br-check"><input type="checkbox" id="br-piano" name="special" value="piano" /> Piano (+$180)</label>
+                <label class="br-check"><input type="checkbox" id="br-safe" name="special" value="safe" /> Safe (+$150)</label>
+                <label class="br-check"><input type="checkbox" id="br-art" name="special" value="art" /> Large artwork or mirror (+$120)</label>
+              </fieldset>
+              <label for="br-access">Stairs and elevator access</label>
+              <select id="br-access" name="access">
+                <option value="easy">Ground floor, or elevator at both ends</option>
+                <option value="stairs1">One or two floors of stairs</option>
+                <option value="stairs3">Third floor or higher, no elevator (+$80)</option>
+              </select>
+              <fieldset>
+                <legend>Packing level</legend>
+                <label class="br-check"><input type="radio" name="packing" value="none" checked /> No packing, we pack ourselves</label>
+                <label class="br-check"><input type="radio" name="packing" value="partial" /> Partial packing (+$250)</label>
+                <label class="br-check"><input type="radio" name="packing" value="full" /> Full packing (+$450)</label>
+              </fieldset>
+              <div class="br-step-btns">
+                <button class="br-btn br-btn-ghost" type="button" data-next="1">Back</button>
+                <button class="br-btn" type="button" data-next="3">Continue</button>
+              </div>
+            </div>
+            <div class="br-step" data-step="3" hidden>
+              <h3>Who is moving</h3>
+              <label for="br-name">Full name</label>
+              <input id="br-name" name="name" type="text" required placeholder="Your name" autocomplete="name" />
+              <label for="br-mobile">Mobile phone</label>
+              <input id="br-mobile" name="mobile" type="tel" required placeholder="(819) 555-0000" autocomplete="tel" />
+              <label for="br-email">Email</label>
+              <input id="br-email" name="email" type="email" required placeholder="you@example.ca" autocomplete="email" />
+              <label class="br-check"><input type="checkbox" id="br-consent" required /> You can text me about this move.</label>
+              <div class="br-step-btns">
+                <button class="br-btn br-btn-ghost" type="button" data-next="2">Back</button>
+                <button class="br-btn" type="submit">See my planning range</button>
+              </div>
+            </div>
+          </form>
+          <noscript><p>This calculator needs JavaScript. Call (819) 555-0147 and we will give you the range by phone.</p></noscript>
+          <div class="br-result" id="br-result" role="status" aria-live="polite" hidden>
+            <h3>Planning range: <span id="br-range"></span></h3>
+            <p id="br-breakdown"></p>
+            <p>This is a planning range, not a binding estimate. A binding estimate requires a 15-minute video survey.</p>
+            <p>We will call you back within one business hour.</p>
+            <button class="br-btn br-btn-ghost" type="button" id="br-edit-btn">Change my details</button>
+            <button class="br-btn" type="button" id="br-video-btn">Book the 15-minute video survey</button>
+            <p class="br-form-note" id="br-video-note" role="status" aria-live="polite"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="br-stats" aria-label="Boréal in numbers">
+      <div class="br-stats-in">
+        <div><p class="br-stat-num">3,400+</p><p>moves completed since 2012</p></div>
+        <div><p class="br-stat-num">14</p><p>years on the road in Gatineau and Ottawa</p></div>
+        <div><p class="br-stat-num">4.9/5</p><p>average from 87 reviews</p></div>
+        <div><p class="br-stat-num">6</p><p>trucks, all owned by Boréal</p></div>
+      </div>
+    </section>
+
+    <section class="br-services" id="br-services">
+      <div class="br-wrap">
+        <h2 class="br-h2">Services</h2>
+        <p class="br-sec-intro">Pick the move you are planning. Each one starts with a range built for that job.</p>
+        <div class="br-cards">
+          <article class="br-card"><h3>Local residential</h3><p>Apartments and houses in Gatineau and Ottawa, stairs and elevators handled.</p><p class="br-price">From $420 for a studio</p><a class="br-card-cta" href="#br-quote">Get a local range</a></article>
+          <article class="br-card"><h3>Long distance</h3><p>Gatineau to Montreal, Toronto, and Quebec City, planned end to end with one crew lead.</p><p class="br-price">From $1,580 for a 2 bedroom move</p><a class="br-card-cta" href="#br-quote">Get a long distance range</a></article>
+          <article class="br-card"><h3>Commercial and office</h3><p>Desks, workstations, and files moved over a weekend, so Monday starts on time.</p><p class="br-price">From $1,800 for a small office</p><a class="br-card-cta" href="#br-quote">Get an office range</a></article>
+          <article class="br-card"><h3>Packing and unpacking</h3><p>Our packing team comes 24 to 48 hours before moving day. Boxes go in the right rooms.</p><p class="br-price">Partial packing from $250</p><a class="br-card-cta" href="#br-quote">Add packing to my range</a></article>
+          <article class="br-card"><h3>Storage</h3><p>A dry, locked unit between homes, with delivery to your new door when you are ready.</p><p class="br-price">Quoted with your move</p><a class="br-card-cta" href="#br-quote">Ask about storage</a></article>
+          <article class="br-card"><h3>Specialty and piano</h3><p>Pianos, safes, and large artwork, moved with the right gear and a plan for each stairwell.</p><p class="br-price">Piano from $180 added to the move</p><a class="br-card-cta" href="#br-quote">Get a specialty range</a></article>
+        </div>
+        <figure class="br-figure">
+          <img src={IMG.packing} alt="Open moving boxes mid-pack in a living room, some repurposed from retail boxes" width="1024" height="768" loading="lazy" decoding="async" />
+          <figcaption>Packing in progress. Every box gets labelled before it leaves the house.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="br-how" id="br-how">
+      <div class="br-wrap">
+        <h2 class="br-h2">How it works</h2>
+        <ol class="br-steps">
+          <li><p class="br-step-num">1</p><h3>Book</h3><p>Pick a date in the calculator, or call us. We confirm the crew, the truck, and the arrival time in writing.</p></li>
+          <li><p class="br-step-num">2</p><h3>Load</h3><p>Marc-Antoine, our crew lead, walks the home with you first. Doors, floors, and stairs get covered before anything moves.</p></li>
+          <li><p class="br-step-num">3</p><h3>Deliver</h3><p>Boxes land in the rooms written on their labels. We check the list with you before the truck leaves.</p></li>
+        </ol>
+        <figure class="br-figure">
+          <img src={IMG.crew} alt="A mover carrying a stack of boxes down a truck ramp" width="1024" height="683" loading="lazy" decoding="async" />
+          <figcaption>One box at a time, down the ramp and into the truck. The same crew that loads is the crew that delivers.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="br-protect" id="br-protect">
+      <div class="br-wrap">
+        <h2 class="br-h2">Protection, before the first box moves</h2>
+        <p class="br-sec-intro">This is the gear on every truck, on every job. That is how a home stays protected while we work in it.</p>
+        <ul class="br-check-list">
+          <li>Door covers and door frame protectors</li>
+          <li>Non-slip floor mats and floor runners</li>
+          <li>Thick furniture blankets</li>
+          <li>Full mattress covers and sofa covers</li>
+          <li>Bubble wrap and protective cardboard for sensitive surfaces</li>
+          <li>Stair rail protectors and reinforced cardboard corners</li>
+        </ul>
+        <p>We also pack a first night box with you: bedding, chargers, toiletries, and coffee for the morning. It rides in the cab, not in the truck.</p>
+      </div>
+    </section>
+
+    <section class="br-pricing" id="br-pricing">
+      <div class="br-wrap">
+        <h2 class="br-h2">How pricing works</h2>
+        <p>Three kinds of price, in plain words.</p>
+        <dl class="br-defs">
+          <div><dt>Hourly</dt><dd>You pay for the time the crew is with you, from arrival to the last box placed. Best for small local moves.</dd></div>
+          <div><dt>Binding</dt><dd>One fixed total for the items listed on the inventory. If the list does not change, the total does not change.</dd></div>
+          <div><dt>Not to exceed</dt><dd>A capped total. If the move weighs in lighter than planned, you pay less. You never pay more than the cap.</dd></div>
+        </dl>
+        <h3>What changes a final bill</h3>
+        <p>Distance, stairs without an elevator, a piano or a safe, and how much packing you ask us to do. Long carries from truck to door, and waiting time at a locked building, also count. We name each one in the plan before moving day, so nothing on the bill is a surprise.</p>
+        <p>Local means a move within Gatineau, Hull, Aylmer or Ottawa, or between them. Nearby is the surrounding towns. Long distance is Montreal, Toronto, Quebec City and beyond.</p>
+        <h3>Valuation: two choices</h3>
+        <p>Full value protection covers repair or replacement at current value. Released value is the basic cover, 60 cents per pound per item. A 40 lb TV under released value is worth $24. Most of our customers choose full value protection for the TV, the piano, and anything they could not replace easily.</p>
+        <figure class="br-figure">
+          <img src={IMG.truck} alt="A mover carrying a labelled box out of a house, hand trucks waiting by the steps" width="1024" height="683" loading="lazy" decoding="async" />
+          <figcaption>Carried out one box at a time, labelled for the right room.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="br-reviews" id="br-reviews">
+      <div class="br-wrap">
+        <h2 class="br-h2">Reviews</h2>
+        <p class="br-sec-intro">4.9/5 from 87 reviews. Grouped by move type, so you can read the move closest to yours. These reviews are written for this fictional demo company.</p>
+        <h3>Local moves</h3>
+        <div class="br-cards">
+          <article class="br-review"><p>Two bedroom flat in Hull to a house in Aylmer. The crew wrapped the oak table in blankets before it left the room, and the elevator booking was already sorted when we arrived.</p><p class="br-review-meta">Marie-Claude · Hull to Aylmer · March 2026</p></article>
+          <article class="br-review"><p>Third floor walkup, no elevator, and a sofa that barely fit the stairwell. They took the legs off, measured twice, and got it up without a mark on the wall.</p><p class="br-review-meta">Daniel · Gatineau, Plateau · January 2026</p></article>
+        </div>
+        <h3>Long distance</h3>
+        <div class="br-cards">
+          <article class="br-review"><p>Gatineau to Montreal with a piano and a safe. One crew lead from loading to delivery, one phone number, and the piano was tuned after it settled.</p><p class="br-review-meta">Aisha · Gatineau to Montreal · February 2026</p></article>
+          <article class="br-review"><p>We moved my mother from Chelsea to Toronto. Sophie labelled every box by room and wrote the contents on the side. My mother found her kettle in ten minutes.</p><p class="br-review-meta">Robert · Chelsea to Toronto · November 2025</p></article>
+        </div>
+        <h3>Office moves</h3>
+        <div class="br-cards">
+          <article class="br-review"><p>Fourteen workstations moved over a weekend in downtown Hull. Desks were back in place by 7 in the morning on Monday, cables labelled, monitors on the right desks.</p><p class="br-review-meta">Camille · Hull office · April 2026</p></article>
+          <article class="br-review"><p>Small accounting office, Masson-Angers to Gatineau. They moved the filing cabinets full, on dollies, and nothing went missing. The bill matched the binding estimate to the dollar.</p><p class="br-review-meta">Pierre · Masson-Angers · October 2025</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="br-areas" id="br-areas">
+      <div class="br-wrap">
+        <h2 class="br-h2">Where we work</h2>
+        <p>Gatineau, including Hull and Aylmer. Ottawa, across the river, including downtown and the suburbs. Cantley, Chelsea, Masson-Angers, and Buckingham. We are bilingual, and we cross the river every day.</p>
+        <p>Local notes: bridge traffic is heavy at peak hours, so morning moves leave early. Downtown Hull buildings often need a parking permit for the truck, and Gatineau condos usually need an elevator booking. Tell us the building rules when you book and we handle the paperwork with the building.</p>
+        <p class="br-area-faq">Do you move from Ottawa to Gatineau? Yes, every week. Interprovincial moves are part of the regular schedule, not a special request.</p>
+      </div>
+    </section>
+
+    <section class="br-faq" id="br-faq">
+      <div class="br-wrap">
+        <h2 class="br-h2">Questions, answered</h2>
+        <dl class="br-defs">
+          <div><dt>What do you not move?</dt><dd>Firearms, hazardous materials, plants, and perishables. We will tell you where to take them instead.</dd></div>
+          <div><dt>What if something is damaged?</dt><dd>Note it on the delivery checklist before the crew leaves, then call us. Claims are answered within two business days, and full value protection covers repair or replacement.</dd></div>
+          <div><dt>How far ahead should I book?</dt><dd>Two to four weeks is comfortable. For July 1, moving day in Quebec, book six to eight weeks ahead. Short notice moves are possible when a crew is free, so call and ask.</dd></div>
+          <div><dt>Do you work on July 1?</dt><dd>Yes. July 1 is our busiest day of the year. Book early, and expect a firm arrival window rather than a precise minute, because the whole city is moving that day.</dd></div>
+          <div><dt>Can I change the inventory after booking?</dt><dd>Yes, up to 48 hours before moving day. A binding estimate only holds for the items listed, so tell us about the extra dresser and we will update the total in writing.</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="br-contact" id="br-contact">
+      <div class="br-wrap">
+        <h2 class="br-h2">Talk to us</h2>
+        <p>Call, or use the calculator above and we will call you back within one business hour.</p>
+        <p><a class="br-phone-big" href="tel:+18195550147">(819) 555-0147</a></p>
+        <p><a href="mailto:info@demenagementboreal.ca">info@demenagementboreal.ca</a></p>
+        <p>1234, rue Fictive, Gatineau QC J8Y 1A1</p>
+        <p>Mon to Fri 8:00 to 18:00, Sat 9:00 to 16:00</p>
+        <p>Crew lead: Marc-Antoine. Crew: Sophie, Félix, and Amélie.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="br-foot">
+    <p>Déménagement Boréal · 1234, rue Fictive, Gatineau QC J8Y 1A1 · (819) 555-0147 · info@demenagementboreal.ca</p>
+    <p>Licence RBQ 0000-0000-00 (fictional) · Fully insured · Mon to Fri 8:00 to 18:00, Sat 9:00 to 16:00 · Since 2012 · © 2026</p>
+    <p>Fictional demo site. Boréal is not a real company.</p>
+  </footer>
+
+  <div class="br-sticky" role="navigation" aria-label="Quick actions">
+    <a href="tel:+18195550147">Call</a>
+    <a href="#br-quote">Get a quote</a>
+  </div>
+
+  <EscapeHatch locale="en" />
+
+  <script>
+    (function () {
+      var menuBtn = document.getElementById('br-menu-btn') as HTMLButtonElement | null;
+      var nav = document.getElementById('br-nav') as HTMLElement | null;
+      menuBtn?.addEventListener('click', function () {
+        var open = nav?.classList.toggle('br-nav-open');
+        menuBtn?.setAttribute('aria-expanded', open ? 'true' : 'false');
+        menuBtn?.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        if (menuBtn) menuBtn.textContent = open ? 'Close' : 'Menu';
+      });
+      nav?.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () {
+          nav?.classList.remove('br-nav-open');
+          menuBtn?.setAttribute('aria-expanded', 'false');
+          menuBtn?.setAttribute('aria-label', 'Open menu');
+          if (menuBtn) menuBtn.textContent = 'Menu';
+        });
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && nav?.classList.contains('br-nav-open')) {
+          nav?.classList.remove('br-nav-open');
+          menuBtn?.setAttribute('aria-expanded', 'false');
+          menuBtn?.setAttribute('aria-label', 'Open menu');
+          if (menuBtn) menuBtn.textContent = 'Menu';
+        }
+      });
+      document.addEventListener('click', function (e) {
+        var t = e.target as HTMLElement | null;
+        var header = document.querySelector('.br-header') as HTMLElement | null;
+        if (nav?.classList.contains('br-nav-open') && header && t && !header.contains(t)) {
+          nav?.classList.remove('br-nav-open');
+          menuBtn?.setAttribute('aria-expanded', 'false');
+          menuBtn?.setAttribute('aria-label', 'Open menu');
+          if (menuBtn) menuBtn.textContent = 'Menu';
+        }
+      });
+
+      var BASE = {
+        studio: [420, 580], '1bed': [620, 840], '2bed': [880, 1180],
+        '3bed': [1150, 1520], house: [1450, 1950], office: [1800, 2600]
+      };
+      var REGION: Record<string, string> = {
+        gatineau: 'outaouais', hull: 'outaouais', aylmer: 'outaouais', ottawa: 'outaouais',
+        cantley: 'outaouais', chelsea: 'outaouais', 'masson-angers': 'outaouais', buckingham: 'outaouais',
+        montreal: 'mtl', laval: 'mtl', longueuil: 'mtl', brossard: 'mtl', repentigny: 'mtl',
+        terrebonne: 'mtl', blainville: 'mtl', 'saint-eustache': 'mtl', 'st-eustache': 'mtl', mascouche: 'mtl', boisbriand: 'mtl',
+        toronto: 'toronto', sherbrooke: 'sherbrooke', 'trois-rivieres': 'trois-rivieres', 'quebec city': 'quebec', quebec: 'quebec', kingston: 'kingston'
+      };
+      var FSA_CITY: Record<string, string> = { j8: 'gatineau', j9: 'gatineau', k1: 'ottawa', k2: 'ottawa', h1: 'montreal', h2: 'montreal', h3: 'montreal', h4: 'montreal', m1: 'toronto', m2: 'toronto', m3: 'toronto', m4: 'toronto', m5: 'toronto', m6: 'toronto', m7: 'toronto', m8: 'toronto', m9: 'toronto', g1: 'quebec city', g2: 'quebec city', j6: 'terrebonne', j7: 'terrebonne' };
+      function norm(s: string) {
+        var v = (s || '').toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        var m = v.match(/^([a-z]\d)[a-z]/);
+        if (m && FSA_CITY[m[1]]) return FSA_CITY[m[1]];
+        return v;
+      }
+      function regionOf(place: string) {
+        var k = Object.keys(REGION).find(function (key) { return place.indexOf(key) !== -1; });
+        return k ? REGION[k] : '';
+      }
+      function distanceFactor(from: string, to: string) {
+        var f = norm(from), t = norm(to);
+        if (!f || !t) return { factor: 1.0, label: 'Local' };
+        if (f === t) return { factor: 1.0, label: 'Local' };
+        var rf = regionOf(f), rt = regionOf(t);
+        if (rf && rf === rt) {
+          if (rf === 'outaouais') return { factor: 1.0, label: 'Local' };
+          return { factor: 1.3, label: 'Nearby, under 100 km' };
+        }
+        if (rf && rt) return { factor: 1.8, label: 'Long distance' };
+        return { factor: 1.3, label: 'Nearby, under 100 km' };
+      }
+      function round10(n: number) { return Math.round(n / 10) * 10; }
+      function money(n: number) { return '$' + n.toLocaleString('en-CA'); }
+
+      var form = document.getElementById('br-form') as HTMLFormElement | null;
+      var progress = document.getElementById('br-progress') as HTMLElement | null;
+      var result = document.getElementById('br-result') as HTMLElement | null;
+      var formError = document.getElementById('br-form-error') as HTMLElement | null;
+      function showFormError(msg: string) { if (formError) formError.textContent = msg; }
+      function showStep(n: number) {
+        form?.querySelectorAll('.br-step').forEach(function (s) {
+          (s as HTMLElement).hidden = s.getAttribute('data-step') !== String(n);
+        });
+        if (progress) progress.textContent = 'Step ' + n + ' of 3';
+        if (result) result.hidden = true;
+        if (formError) formError.textContent = '';
+        var vn = document.getElementById('br-video-note');
+        if (vn) vn.textContent = '';
+      }
+      form?.querySelectorAll('[data-next]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var target = parseInt(btn.getAttribute('data-next') || '1', 10);
+          if (target === 2) {
+            var size = document.getElementById('br-size') as HTMLSelectElement | null;
+            var from = document.getElementById('br-from') as HTMLInputElement | null;
+            var to = document.getElementById('br-to') as HTMLInputElement | null;
+            var date = document.getElementById('br-date') as HTMLInputElement | null;
+            if (!size?.value || !from?.value || !to?.value || !date?.value) {
+              showFormError('Please fill in the move size, both cities, and the move date first.');
+              var firstEmpty = !size?.value ? size : !from?.value ? from : !to?.value ? to : date;
+              firstEmpty?.focus();
+              return;
+            }
+          }
+          showStep(target);
+        });
+      });
+      form?.addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter') return;
+        var step = form?.querySelector('.br-step:not([hidden])');
+        var next = (step?.querySelector('button[data-next]:not(.br-btn-ghost)') || null) as HTMLButtonElement | null;
+        if (next) { e.preventDefault(); next.click(); }
+      });
+      form?.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var size = document.getElementById('br-size') as HTMLSelectElement | null;
+        var from = document.getElementById('br-from') as HTMLInputElement | null;
+        var to = document.getElementById('br-to') as HTMLInputElement | null;
+        var name = document.getElementById('br-name') as HTMLInputElement | null;
+        var mobile = document.getElementById('br-mobile') as HTMLInputElement | null;
+        var email = document.getElementById('br-email') as HTMLInputElement | null;
+        var consent = document.getElementById('br-consent') as HTMLInputElement | null;
+        if (!size?.value || !from?.value || !to?.value || !name?.value || !mobile?.value || !email?.value || !consent?.checked) {
+          showFormError('Please complete every field, and tick the text consent box, to see your range.');
+          var firstEmpty = !size?.value ? size : !from?.value ? from : !to?.value ? to : !name?.value ? name : !mobile?.value ? mobile : !email?.value ? email : consent;
+          firstEmpty?.focus();
+          return;
+        }
+        var emailVal = email?.value || '';
+        if (emailVal.indexOf('@') === -1 || emailVal.indexOf('.', emailVal.indexOf('@')) === -1) {
+          showFormError('Please check your email address: it needs an @ and a dot.');
+          email?.focus();
+          return;
+        }
+        var digits = (mobile?.value || '').replace(/\D/g, '');
+        if (digits.length < 10) {
+          showFormError('Please check your phone number: it needs at least 10 digits.');
+          mobile?.focus();
+          return;
+        }
+        var base = BASE[size?.value as keyof typeof BASE] || BASE['2bed'];
+        var d = distanceFactor(from?.value || '', to?.value || '');
+        var add = 0;
+        var parts = [];
+        if ((document.getElementById('br-piano') as HTMLInputElement | null)?.checked) { add += 180; parts.push('piano +$180'); }
+        if ((document.getElementById('br-safe') as HTMLInputElement | null)?.checked) { add += 150; parts.push('safe +$150'); }
+        if ((document.getElementById('br-art') as HTMLInputElement | null)?.checked) { add += 120; parts.push('large artwork or mirror +$120'); }
+        var access = document.getElementById('br-access') as HTMLSelectElement | null;
+        if (access?.value === 'stairs3') { add += 80; parts.push('stairs, third floor or higher, no elevator +$80'); }
+        var packing = form?.querySelector('input[name="packing"]:checked') as HTMLInputElement | null;
+        if (packing?.value === 'partial') { add += 250; parts.push('partial packing +$250'); }
+        if (packing?.value === 'full') { add += 450; parts.push('full packing +$450'); }
+        var low = round10(base[0] * d.factor + add);
+        var high = round10(base[1] * d.factor + add);
+        var range = document.getElementById('br-range') as HTMLElement | null;
+        if (range) range.textContent = money(low) + ' to ' + money(high);
+        var breakdown = document.getElementById('br-breakdown') as HTMLElement | null;
+        if (breakdown) {
+          breakdown.textContent = 'Base ' + money(base[0]) + ' to ' + money(base[1]) + ', times ' + d.label + ' factor ' + d.factor.toFixed(1) + (parts.length ? ', plus ' + parts.join(', ') : ', no add-ons') + ', rounded to the nearest $10.';
+        }
+        if (result) result.hidden = false;
+        if (progress) progress.textContent = 'Your range is ready';
+        result?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'nearest' });
+      });
+      document.getElementById('br-edit-btn')?.addEventListener('click', function () {
+        showStep(1);
+      });
+      document.getElementById('br-video-btn')?.addEventListener('click', function () {
+        var note = document.getElementById('br-video-note') as HTMLElement | null;
+        if (note) note.textContent = 'Noted. We will text you three video survey times within one business hour.';
+      });
+    })();
+  </script>
+
+  <style>
+    .br { --br-navy: #1B2A4A; --br-teal: #0E7C7B; --br-bg: #F4F7F7; --br-ink: #22303F; --br-muted: #5B6B7A; margin: 0; background: var(--br-bg); color: var(--br-ink); font-family: "Inter", system-ui, sans-serif; overflow-x: clip; padding-bottom: 64px; }
+    .br *, .br *::before, .br *::after { box-sizing: border-box; }
+    .br img { display: block; max-width: 100%; }
+    .br a:not(.br-cta):not(.br-brand):not(.br-phone):not(.br-phone-big):not(.br-call):not(.br-skip) { color: var(--br-teal); }
+    .br :focus-visible { outline: 2px solid #fff; outline-offset: 2px; box-shadow: 0 0 0 4px var(--br-teal); }
+    .br-skip { position: absolute; left: 16px; top: -60px; background: var(--br-navy); color: #fff; padding: 10px 16px; z-index: 100; }
+    .br-skip:focus { top: 12px; }
+    .br-wrap { max-width: 1080px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px); }
+    .br-h1 { font-family: "Sora", sans-serif; font-size: clamp(2.1rem, 5vw, 3.4rem); line-height: 1.1; color: var(--br-navy); margin: 0 0 16px; }
+    .br-h2 { font-family: "Sora", sans-serif; font-size: clamp(1.7rem, 4vw, 2.4rem); color: var(--br-navy); margin: 0 0 12px; }
+    .br-h2 + p, .br-sec-intro { font-size: 17px; line-height: 1.7; color: var(--br-muted); max-width: 62ch; }
+    .br section { padding: clamp(48px, 7vh, 80px) 0; scroll-margin-top: 96px; }
+    .br-header { position: sticky; top: 0; z-index: 50; background: #fff; border-bottom: 1px solid #D9E2E2; }
+    .br-header-in { max-width: 1200px; margin: 0 auto; padding: 12px clamp(16px, 4vw, 32px); display: flex; align-items: center; gap: 24px; }
+    .br-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--br-navy); flex: none; }
+    .br-brand svg { width: 40px; height: 40px; }
+    .br-brand-name { font-family: "Sora", sans-serif; font-weight: 700; font-size: 24px; }
+    .br-brand-sub { font-size: 12px; color: var(--br-muted); }
+    .br-nav { display: flex; gap: 16px; margin-left: auto; }
+    .br-nav a { text-decoration: none; color: var(--br-ink); font-weight: 500; font-size: 15px; white-space: nowrap; }
+    .br-nav a:hover { color: var(--br-teal); }
+    .br-header-side { display: flex; align-items: center; gap: 14px; margin-left: auto; }
+    .br-nav + .br-header-side { margin-left: 0; }
+    .br-stars { margin: 0; font-size: 13px; font-weight: 600; color: var(--br-navy); white-space: nowrap; }
+    .br-phone { font-weight: 600; color: var(--br-navy); text-decoration: none; white-space: nowrap; }
+    .br-cta, .br-btn { display: inline-block; background: var(--br-teal); color: #fff; font-weight: 600; text-decoration: none; border: 0; border-radius: 8px; padding: 13px 22px; font-size: 16px; cursor: pointer; min-height: 48px; font-family: "Inter", sans-serif; }
+    .br-cta:hover, .br-btn:hover { background: #0A5E5D; }
+    .br-menu-btn { display: none; background: var(--br-navy); color: #fff; border: 0; border-radius: 8px; padding: 11px 16px; font-size: 15px; font-weight: 600; cursor: pointer; min-height: 44px; }
+    .br-hero { background: #fff; }
+    .br-hero-in { max-width: 1200px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px); display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(28px, 4vw, 56px); align-items: start; }
+    .br-eyebrow { color: var(--br-teal); font-weight: 600; letter-spacing: 0.04em; margin: 8px 0 12px; }
+    .br-lede { font-size: 18px; line-height: 1.7; margin: 0 0 14px; }
+    .br-trust { font-size: 14px; color: var(--br-muted); line-height: 1.6; margin: 0 0 20px; }
+    .br-hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+    .br-call { display: inline-block; border: 2px solid var(--br-navy); color: var(--br-navy); border-radius: 8px; padding: 11px 20px; font-weight: 600; text-decoration: none; min-height: 48px; }
+    .br-hero-img { width: 100%; height: 300px; object-fit: cover; border-radius: 12px; }
+    .br-calc { background: var(--br-bg); border: 1px solid #D9E2E2; border-top: 4px solid var(--br-teal); border-radius: 12px; padding: 24px; scroll-margin-top: 96px; }
+    .br-calc-title { font-family: "Sora", sans-serif; color: var(--br-navy); margin: 0; font-size: 24px; }
+    .br-calc-progress { color: var(--br-teal); font-weight: 600; margin: 6px 0 18px; }
+    .br-calc h3 { font-family: "Sora", sans-serif; color: var(--br-navy); margin: 0 0 14px; }
+    .br-calc label, .br-calc legend { display: block; font-weight: 600; font-size: 14px; margin: 14px 0 6px; }
+    .br-calc input, .br-calc select { width: 100%; font: inherit; font-size: 16px; padding: 12px 14px; border: 2px solid #B9C6C6; border-radius: 8px; background: #fff; color: var(--br-ink); min-height: 48px; }
+    .br-calc input:focus, .br-calc select:focus { outline: 3px solid var(--br-teal); outline-offset: 1px; border-color: var(--br-teal); }
+    .br-calc fieldset { border: 1px solid #D9E2E2; border-radius: 8px; margin: 14px 0; padding: 6px 14px 14px; }
+    .br-calc fieldset legend { padding: 0 6px; }
+    .br-check { display: flex !important; align-items: center; gap: 10px; font-weight: 400 !important; margin: 10px 0 !important; }
+    .br-check input { width: auto; min-height: 24px; accent-color: var(--br-teal); }
+    .br-field-note { font-size: 14px; color: var(--br-muted); margin: 0 0 8px; }
+    .br-btn { width: 100%; margin-top: 16px; }
+    .br-btn-ghost { background: #fff; color: var(--br-navy); border: 2px solid var(--br-navy); width: auto; flex: 1; }
+    .br-step-btns { display: flex; gap: 10px; }
+    .br-step-btns .br-btn { flex: 2; }
+    .br-result { margin-top: 20px; border-top: 1px solid #D9E2E2; padding-top: 16px; }
+    .br-result h3 { color: var(--br-teal); }
+    .br-form-note { font-weight: 600; color: var(--br-navy); }
+    .br-form-note:empty { display: none; }
+    .br-form-error { font-weight: 600; color: #9B1C1C; }
+    .br-form-error:empty { display: none; }
+
+    .br-stats { background: var(--br-navy); color: #fff; }
+    .br-stats-in { max-width: 1080px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px); display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; text-align: center; }
+    .br-stat-num { font-family: "Sora", sans-serif; font-size: clamp(2rem, 5vw, 3rem); font-weight: 700; color: #fff; margin: 0 0 6px; }
+    .br-stats p:last-child { margin: 0; opacity: 0.85; line-height: 1.5; }
+    .br-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 28px; }
+    .br-card, .br-review { background: #fff; border: 1px solid #D9E2E2; border-radius: 12px; padding: 22px; }
+    .br-card h3, .br-review-meta { color: var(--br-navy); }
+    .br-card h3 { font-family: "Sora", sans-serif; margin: 0 0 8px; }
+    .br-card p { line-height: 1.65; margin: 0 0 10px; }
+    .br-price { font-weight: 600; color: var(--br-teal); }
+    .br-card-cta { font-weight: 600; }
+    .br-figure { margin: 32px 0 0; }
+    .br-figure img { width: 100%; height: 320px; object-fit: cover; border-radius: 12px; }
+    .br-figure figcaption { font-size: 14px; color: var(--br-muted); margin-top: 10px; line-height: 1.6; }
+    .br-how { background: #fff; }
+    .br-steps { list-style: none; margin: 28px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .br-steps li { border-top: 3px solid var(--br-teal); padding-top: 16px; }
+    .br-step-num { font-family: "Sora", sans-serif; font-size: 28px; font-weight: 700; color: var(--br-teal); margin: 0 0 8px; }
+    .br-steps h3 { font-family: "Sora", sans-serif; color: var(--br-navy); margin: 0 0 8px; }
+    .br-steps p:last-child { line-height: 1.65; margin: 0; }
+    .br-protect { background: var(--br-navy); color: #fff; }
+    .br-protect .br-h2, .br-protect .br-sec-intro { color: #fff; }
+    .br-protect .br-sec-intro { opacity: 0.85; }
+    .br-check-list { columns: 2; margin: 24px 0; padding-left: 20px; line-height: 2; font-size: 16px; }
+    .br-protect p:last-child { line-height: 1.7; max-width: 62ch; opacity: 0.9; }
+    .br-pricing { background: #fff; }
+    .br-pricing p, .br-faq dd { line-height: 1.7; max-width: 68ch; }
+    .br-defs { margin: 20px 0; }
+    .br-defs > div { border-top: 1px solid #D9E2E2; padding: 18px 0; }
+    .br-defs dt { font-family: "Sora", sans-serif; font-weight: 700; color: var(--br-navy); font-size: 18px; margin-bottom: 6px; }
+    .br-defs dd { margin: 0; }
+    .br-reviews h3 { font-family: "Sora", sans-serif; color: var(--br-navy); margin: 28px 0 0; }
+    .br-review p:first-child { line-height: 1.7; margin: 0 0 12px; }
+    .br-review-meta { font-size: 14px; font-weight: 600; margin: 0; }
+    .br-areas { background: #fff; }
+    .br-areas p { line-height: 1.7; max-width: 68ch; }
+    .br-area-faq { font-weight: 600; color: var(--br-navy); }
+    .br-contact { text-align: center; }
+    .br-contact p { line-height: 1.7; }
+    .br-phone-big { font-family: "Sora", sans-serif; font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 700; color: var(--br-navy); text-decoration: none; }
+    .br-foot { background: var(--br-navy); color: rgba(255,255,255,0.85); text-align: center; padding: 36px 20px 90px; font-size: 14px; line-height: 1.9; }
+    .br-foot p { margin: 0; }
+    .br-sticky { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; display: none; background: #fff; border-top: 1px solid #D9E2E2; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); gap: 10px; }
+    .br-sticky a { flex: 1; text-align: center; text-decoration: none; font-weight: 600; padding: 12px; border-radius: 8px; min-height: 48px; }
+    .br-sticky a:first-child { border: 2px solid var(--br-navy); color: var(--br-navy); }
+    .br-sticky a:last-child { background: var(--br-teal); color: #fff; }
+    @media (max-width: 900px) {
+      .br-hero-in { grid-template-columns: 1fr; }
+      .br-nav { display: none; position: absolute; top: 100%; left: 0; right: 0; background: #fff; flex-direction: column; padding: 16px 20px 20px; border-bottom: 1px solid #D9E2E2; gap: 14px; margin-left: 0; }
+      .br-nav-open { display: flex; }
+      .br-menu-btn { display: block; }
+      .br-header-in { flex-wrap: wrap; position: relative; }
+      .br-stars { display: none; }
+      .br-header-side { margin-left: auto; }
+      .br-cards { grid-template-columns: 1fr; }
+      .br-steps { grid-template-columns: 1fr; }
+      .br-stats-in { grid-template-columns: repeat(2, 1fr); }
+      .br-check-list { columns: 1; }
+      .br-sticky { display: flex; }
+      .br-nav a { padding: 10px 0; }
+      .br-phone { padding: 10px 6px; }
+      /* Lift the shared EscapeHatch above the sticky bar so Call stays tappable; !important beats the component's scoped rule. */
+      :global(.demo-exit) { bottom: calc(84px + env(safe-area-inset-bottom, 0px)) !important; }
+      .br-figure img { height: 220px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .br * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+    }
+  </style>
+</body>
+</html>

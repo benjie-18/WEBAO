@@ -561,6 +561,28 @@ export const demos: Demo[] = [
     description: "Audiophile e-commerce. Liquid chrome, deep silence.",
     pages: ["Home", "Collection", "Technology", "Reviews", "Contact"],
   },
+  {
+    id: "boreal",
+    name: "Déménagement Boréal",
+    category: "Trades",
+    city: "Gatineau",
+    tone: "Nordic road atlas",
+    palette: "Navy / White / Teal",
+    accent: "#0E7C7B",
+    description: "Déménagement résidentiel et commercial, Gatineau-Ottawa, estimé en 24 h.",
+    pages: ["Home", "Services", "Quote", "Protection", "Contact"],
+  },
+  {
+    id: "rive-nord",
+    name: "Déménagement Rive-Nord",
+    category: "Trades",
+    city: "Terrebonne",
+    tone: "Highway service-board",
+    palette: "Asphalt / Hazard yellow",
+    accent: "#F2B705",
+    description: "Déménageurs de la Rive-Nord. Maisons, condos et bureaux, sans surprise.",
+    pages: ["Home", "Services", "Quote", "Protection", "Contact"],
+  },
 ];
 
 
@@ -623,6 +645,8 @@ export const demoFamily: Record<string, StyleFamily> = {
   "onde": "bold",
   noctua: "elegant",
   lisiere: "timeless",
+  boreal: "timeless",
+  "rive-nord": "bold",
 };
 
 export function getDemoFamily(id: string): StyleFamily {
