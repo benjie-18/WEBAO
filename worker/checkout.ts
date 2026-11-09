@@ -86,7 +86,7 @@ function conflictError(conflict: CartConflict): string {
     case "not-available":
       return `${productName(conflict.component ?? "")} isn't available with ${productName(conflict.plan ?? "")}.`;
     case "bundle-component":
-      return `${productName(conflict.bundle ?? "")} already includes ${productName(conflict.component ?? "")}.`;
+      return `${productName(conflict.bundle ?? "")} already includes ${(conflict.components ?? [conflict.component ?? ""]).map((c) => productName(c)).join(", ")}.`;
     case "bundle-overlap":
       return "Lead Pack and Visibility Pack both include the Review Generation Engine.";
   }

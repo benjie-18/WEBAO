@@ -109,6 +109,7 @@ function fixture(options: FixtureOptions = {}) {
         data-msg-bundle-component="{bundle} already includes {item}."
         data-msg-bundle-overlap="{first} and {second} both include the Review Generation Engine."
         data-msg-ads-two="You can only have one Ads option at a time."
+        data-two-plans="Only one website plan can be bought at a time."
         data-msg-ai-pack="The AI Pack already includes {item}."
         data-msg-monthly-only-add="{item} is monthly only, but your cart is yearly."
         data-msg-yearly-blocked="Yearly billing isn't available with {items}. They're monthly only."
@@ -121,6 +122,7 @@ function fixture(options: FixtureOptions = {}) {
         data-fix-switch-yearly="Remove {items} and switch to yearly"
         data-fix-switch-remove="Switch and remove {items}"
         data-keep-plan="Keep {plan}"
+        data-keep-item="Keep {item}"
         data-keep-as-is="Keep as is"
         data-dont-add="Don't add it">
         <h2 data-cart-conflict-title></h2>
@@ -528,11 +530,48 @@ test('AI services can be added, and the Pack asks before replacing the individua
   toggleBox(aiBox('ai-followup'), true);
   assert.equal(conflict().hidden, false);
   assert.equal(conflictMessage(), 'The AI Pack already includes AI Follow-up.');
-  assert.deepEqual(conflictButtons(), ['Replace AI Pack with AI Follow-up', "Don't add it"]);
+  // The Pack ($399.99) costs more than one individual ($99.99), so keeping
+  // the Pack is the main button and swapping down is only the second choice.
+  assert.deepEqual(conflictButtons(), ['Keep AI Pack', 'Replace AI Pack with AI Follow-up']);
   clickConflictButton('Replace AI Pack with AI Follow-up');
   assert.deepEqual(
     cart().map((item) => item.key),
     ['grow-month', 'ai-followup-month'],
+  );
+  window.close();
+});
+
+test('the Pack keeps the individuals when all three together cost more', () => {
+  const { window, cart, chip, click, toggleBox, aiBox, conflict, conflictMessage, conflictButtons, clickConflictButton } = fixture();
+  click(chip('ai'));
+  toggleBox(aiBox('ai-receptionist'), true);
+  toggleBox(aiBox('aichat'), true);
+  toggleBox(aiBox('ai-followup'), true);
+  assert.deepEqual(
+    cart().map((item) => item.key),
+    ['grow-month', 'ai-receptionist-month', 'aichat-month', 'ai-followup-month'],
+  );
+  toggleBox(aiBox('ai-pack'), true);
+  assert.equal(conflict().hidden, false);
+  assert.equal(conflictMessage(), 'The AI Pack already includes AI Receptionist, Trained AI Chat Assistant, AI Follow-up.');
+  // All three individuals ($499.97) cost more than the Pack ($399.99), so
+  // the main button keeps them and the Pack swap is the second choice.
+  assert.deepEqual(conflictButtons(), [
+    'Keep AI Receptionist, Trained AI Chat Assistant, AI Follow-up',
+    'Replace AI Receptionist, Trained AI Chat Assistant, AI Follow-up with AI Pack',
+  ]);
+  clickConflictButton('Keep AI Receptionist, Trained AI Chat Assistant, AI Follow-up');
+  assert.equal(conflict().hidden, true);
+  assert.deepEqual(
+    cart().map((item) => item.key),
+    ['grow-month', 'ai-receptionist-month', 'aichat-month', 'ai-followup-month'],
+  );
+  assert.equal(aiBox('ai-pack').checked, false);
+  toggleBox(aiBox('ai-pack'), true);
+  clickConflictButton('Replace AI Receptionist, Trained AI Chat Assistant, AI Follow-up with AI Pack');
+  assert.deepEqual(
+    cart().map((item) => item.key),
+    ['grow-month', 'ai-pack-month'],
   );
   window.close();
 });

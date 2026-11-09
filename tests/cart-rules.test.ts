@@ -10,6 +10,7 @@ import {
   ADS_OPTIONS,
   BUNDLE_COMPONENTS,
   INCLUDED_IN_PLAN,
+  MONTHLY_PRICE_CENTS,
   NOT_AVAILABLE_ON_PLAN,
   conflictsForAdding,
   findConflicts,
@@ -91,6 +92,49 @@ test("monthly-only set matches the catalog", () => {
     ["ads-both", "ads-google", "ads-meta", "ads-pack", "ads-starter", "ai-followup", "ai-pack", "ai-receptionist"],
   );
   assert.ok(!monthlyOnly().has("aichat"), "the merged chat is yearly available");
+});
+
+test("monthly price table matches the catalog", () => {
+  for (const [product, cents] of Object.entries(MONTHLY_PRICE_CENTS)) {
+    assert.equal(cartProducts[product]?.monthCents, cents, `${product} price drifted from the catalog`);
+  }
+  // Every catalog product with a monthly rate is in the table.
+  for (const p of Object.values(cartProducts)) {
+    if (p.monthCents !== undefined) {
+      assert.ok(p.product in MONTHLY_PRICE_CENTS, `${p.product} has a monthly rate but no rules price`);
+    }
+  }
+});
+
+test("the automated fix always keeps the most expensive side", () => {
+  const fixOf = (items: RuleItem[]) => findConflicts(items)[0]?.fix;
+  // Ads: keep the dearer option (Both over the legacy pack, Meta over Starter).
+  assert.deepEqual(fixOf([bundle("ads-both"), bundle("ads-pack")]), { remove: ["ads-pack"] });
+  assert.deepEqual(fixOf([bundle("ads-meta"), bundle("ads-starter")]), { remove: ["ads-starter"] });
+  // Equal prices: the later pick wins (the candidate is appended last).
+  assert.deepEqual(fixOf([bundle("ads-meta"), bundle("ads-google")]), { remove: ["ads-meta"] });
+  // AI Pack: one or two individuals are cheaper than the Pack; all three cost more.
+  assert.deepEqual(fixOf([bundle("ai-pack"), item("ai-receptionist")]), { remove: ["ai-receptionist"] });
+  assert.deepEqual(fixOf([bundle("ai-pack"), item("ai-receptionist"), item("ai-followup")]), {
+    remove: ["ai-receptionist", "ai-followup"],
+  });
+  assert.deepEqual(fixOf([bundle("ai-pack"), item("ai-receptionist"), item("aichat"), item("ai-followup")]), {
+    remove: ["ai-pack"],
+  });
+  // Bundles: one component is cheaper than its bundle; all three Lead Pack components cost more.
+  assert.deepEqual(fixOf([bundle("lead-pack"), item("review")]), { remove: ["review"] });
+  assert.deepEqual(fixOf([bundle("lead-pack"), item("localseo"), item("review"), item("aichat")]), {
+    remove: ["lead-pack"],
+  });
+  assert.deepEqual(fixOf([bundle("visibility-pack"), item("report")]), { remove: ["report"] });
+  // One conflict per bundle, listing every component in the cart.
+  const lead = findConflicts([bundle("lead-pack"), item("localseo"), item("review"), item("aichat")]);
+  assert.equal(lead.length, 1);
+  assert.deepEqual(lead[0]?.components, ["localseo", "review", "aichat"]);
+  // Both bundles: keep the Lead Pack.
+  assert.deepEqual(fixOf([bundle("lead-pack"), bundle("visibility-pack")]), { remove: ["visibility-pack"] });
+  // Two plans: keep the dearer plan.
+  assert.deepEqual(fixOf([plan("launch"), plan("scale")]), { remove: ["launch"] });
 });
 
 test("included add-ons conflict with the plan that includes them", () => {

@@ -82,6 +82,14 @@ function fixture(options: { french?: boolean; cart?: CartItem[] } = {}) {
           data-name="Meta" data-price-cents="89999" data-interval="month" data-type="addon"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="ads-starter-month" data-product="ads-starter"
           data-name="Starter test" data-price-cents="49999" data-interval="month" data-type="addon"></button>
+        <button type="button" class="cart-btn" data-cart-btn data-key="ads-both-month" data-product="ads-both"
+          data-name="Meta + Google" data-price-cents="134999" data-interval="month" data-type="addon"></button>
+        <button type="button" class="cart-btn" data-cart-btn data-key="lead-pack-month" data-product="lead-pack"
+          data-name="Lead Pack" data-price-cents="23999" data-interval="month" data-type="bundle" data-price-year="239990"></button>
+        <button type="button" class="cart-btn" data-cart-btn data-key="visibility-pack-month" data-product="visibility-pack"
+          data-name="Visibility Pack" data-price-cents="9999" data-interval="month" data-type="bundle" data-price-year="99990"></button>
+        <button type="button" class="cart-btn" data-cart-btn data-key="localseo-month" data-product="localseo"
+          data-name="Local SEO Management" data-price-cents="15999" data-interval="month" data-type="addon" data-price-year="159990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="review-month" data-product="review"
           data-name="Review Generation Engine" data-price-cents="9999" data-interval="month" data-type="addon" data-price-year="99990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="extrapage-one-time" data-product="extrapage"
@@ -110,6 +118,7 @@ function fixture(options: { french?: boolean; cart?: CartItem[] } = {}) {
         data-msg-bundle-component="{bundle} already includes {item}."
         data-msg-bundle-overlap="{first} and {second} both include the Review Generation Engine."
         data-msg-ads-two="You can only have one Ads option at a time."
+        data-two-plans="Only one website plan can be bought at a time."
         data-msg-ai-pack="The AI Pack already includes {item}."
         data-msg-monthly-only-add="{item} is monthly only, but your cart is yearly."
         data-msg-yearly-blocked="Yearly billing isn't available with {items}. They're monthly only."
@@ -122,6 +131,7 @@ function fixture(options: { french?: boolean; cart?: CartItem[] } = {}) {
         data-fix-switch-yearly="Remove {items} and switch to yearly"
         data-fix-switch-remove="Switch and remove {items}"
         data-keep-plan="Keep {plan}"
+        data-keep-item="Keep {item}"
         data-keep-as-is="Keep as is"
         data-dont-add="Don't add it">
         <h2 data-cart-conflict-title></h2>
@@ -531,6 +541,64 @@ test('a second Ads option shows the popup and the fix swaps it in', () => {
   window.close();
 });
 
+test('the main Ads button keeps the dearer option; the cheaper swap is second', () => {
+  const { cart, click, button, conflict, conflictMessage, conflictButtons, clickConflictButton, window } = fixture();
+  click(button('ads-meta'));
+  click(button('ads-starter'));
+  assert.equal(conflict().hidden, false);
+  assert.equal(conflictMessage(), 'You can only have one Ads option at a time.');
+  // Meta ($899.99) costs more than the Starter test ($499.99), so keeping
+  // Meta is the main button and swapping down is only the second choice.
+  assert.deepEqual(conflictButtons(), ['Keep Meta', 'Replace Meta with Starter test']);
+  assert.deepEqual(cart().map((i) => i.key), ['ads-meta-month']);
+  clickConflictButton('Keep Meta');
+  assert.equal(conflict().hidden, true);
+  assert.deepEqual(cart().map((i) => i.key), ['ads-meta-month']);
+  click(button('ads-starter'));
+  clickConflictButton('Replace Meta with Starter test');
+  assert.deepEqual(cart().map((i) => i.key), ['ads-starter-month']);
+  window.close();
+});
+
+test('adding a bundle keeps the dearer side when its components cost more', () => {
+  const { cart, click, button, conflict, conflictMessage, conflictButtons, clickConflictButton, window } = fixture();
+  click(button('localseo'));
+  click(button('review'));
+  click(button('lead-pack'));
+  assert.equal(conflict().hidden, false);
+  assert.equal(conflictMessage(), 'Lead Pack already includes Local SEO Management, Review Generation Engine.');
+  // Local SEO + Review ($259.98) cost more than the Lead Pack ($239.99).
+  assert.deepEqual(conflictButtons(), [
+    'Keep Local SEO Management, Review Generation Engine',
+    'Replace Local SEO Management, Review Generation Engine with Lead Pack',
+  ]);
+  assert.deepEqual(cart().map((i) => i.key), ['localseo-month', 'review-month']);
+  clickConflictButton('Keep Local SEO Management, Review Generation Engine');
+  assert.equal(conflict().hidden, true);
+  assert.deepEqual(cart().map((i) => i.key), ['localseo-month', 'review-month']);
+  click(button('lead-pack'));
+  clickConflictButton('Replace Local SEO Management, Review Generation Engine with Lead Pack');
+  assert.deepEqual(cart().map((i) => i.key), ['lead-pack-month']);
+  window.close();
+});
+
+test('the second bundle keeps the dearer Lead Pack as the main button', () => {
+  const { cart, click, button, conflict, conflictMessage, conflictButtons, clickConflictButton, window } = fixture();
+  click(button('lead-pack'));
+  click(button('visibility-pack'));
+  assert.equal(conflict().hidden, false);
+  assert.equal(conflictMessage(), 'Lead Pack and Visibility Pack both include the Review Generation Engine.');
+  assert.deepEqual(conflictButtons(), ['Keep Lead Pack', 'Replace Lead Pack with Visibility Pack']);
+  assert.deepEqual(cart().map((i) => i.key), ['lead-pack-month']);
+  clickConflictButton('Keep Lead Pack');
+  assert.equal(conflict().hidden, true);
+  assert.deepEqual(cart().map((i) => i.key), ['lead-pack-month']);
+  click(button('visibility-pack'));
+  clickConflictButton('Replace Lead Pack with Visibility Pack');
+  assert.deepEqual(cart().map((i) => i.key), ['visibility-pack-month']);
+  window.close();
+});
+
 test('switching to a plan that excludes a cart add-on offers to remove it', () => {
   const { cart, click, button, conflict, conflictMessage, conflictButtons, clickConflictButton, window } = fixture();
   click(button('grow'));
@@ -586,6 +654,38 @@ test('a stale conflicting cart is caught at checkout and the fix removes the ext
   assert.deepEqual(conflictButtons(), ['Remove Quote Photo Upload', 'Keep as is']);
   clickConflictButton('Remove Quote Photo Upload');
   assert.deepEqual(cart().map((i) => i.key), ['grow-month']);
+  window.close();
+});
+
+test('checkout of a stale Ads cart removes the cheaper option', () => {
+  const { cart, click, doc, conflict, conflictMessage, conflictButtons, clickConflictButton, window } = fixture({
+    cart: [
+      { key: cartKey('ads-both', 'month'), product: 'ads-both', name: 'Meta + Google', priceCents: 134999, interval: 'month', type: 'addon' },
+      { key: cartKey('ads-pack', 'month'), product: 'ads-pack', name: 'Ads Pack', priceCents: 89999, interval: 'month', type: 'addon' },
+    ],
+  });
+  click(doc.querySelector('[data-cart-checkout]'));
+  assert.equal(conflict().hidden, false);
+  assert.equal(conflictMessage(), 'You can only have one Ads option at a time.');
+  assert.deepEqual(conflictButtons(), ['Remove Ads Pack', 'Keep as is']);
+  clickConflictButton('Remove Ads Pack');
+  assert.deepEqual(cart().map((i) => i.key), ['ads-both-month']);
+  window.close();
+});
+
+test('checkout of a stale two-plan cart keeps the dearer plan', () => {
+  const { cart, click, doc, conflict, conflictMessage, conflictButtons, clickConflictButton, window } = fixture({
+    cart: [
+      { key: cartKey('launch', 'month'), product: 'launch', name: 'Launch', priceCents: 8999, interval: 'month', type: 'plan' },
+      { key: cartKey('scale', 'month'), product: 'scale', name: 'Scale', priceCents: 34999, interval: 'month', type: 'plan' },
+    ],
+  });
+  click(doc.querySelector('[data-cart-checkout]'));
+  assert.equal(conflict().hidden, false);
+  assert.equal(conflictMessage(), 'Only one website plan can be bought at a time.');
+  assert.deepEqual(conflictButtons(), ['Remove Launch', 'Keep as is']);
+  clickConflictButton('Remove Launch');
+  assert.deepEqual(cart().map((i) => i.key), ['scale-month']);
   window.close();
 });
 

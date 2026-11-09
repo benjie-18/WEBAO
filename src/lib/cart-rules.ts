@@ -24,6 +24,11 @@
  * customers add options after purchase), Blog on Launch (the extra page
  * is included in its price), Priority Support on Scale (it still adds
  * the strategy call).
+ *
+ * The automated fix always resolves to the most expensive valid
+ * configuration (Benji, 2026-11-08): where two products clash, the popup's
+ * main button keeps the dearer side, and the cheaper swap is offered only
+ * as the secondary choice.
  */
 
 export type RuleInterval = "month" | "year" | "one-time";
@@ -58,6 +63,8 @@ export interface CartConflict {
   bundle?: string;
   /** Component / add-on involved, for bundle-component and ai-pack. */
   component?: string;
+  /** All components involved, for bundle-component (one conflict per bundle). */
+  components?: string[];
   /** The automated fix: what to drop, or which term to convert onto. */
   fix: ConflictFix;
 }
@@ -87,6 +94,62 @@ export const NOT_AVAILABLE_ON_PLAN: Record<string, string[]> = {
   scale: ["lead-pack", "visibility-pack"],
 };
 
+/**
+ * Monthly rate in cents, the common unit for comparing products. Pinned
+ * against the catalog by tests/cart-rules.test.ts, so a price change in
+ * one place fails loudly in the other.
+ */
+export const MONTHLY_PRICE_CENTS: Record<string, number> = {
+  launch: 8999,
+  grow: 14999,
+  scale: 34999,
+  "lead-pack": 23999,
+  "visibility-pack": 9999,
+  "ads-pack": 89999,
+  "ads-meta": 89999,
+  "ads-google": 89999,
+  "ads-both": 134999,
+  "ads-starter": 49999,
+  "ai-receptionist": 29999,
+  aichat: 9999,
+  "ai-followup": 9999,
+  "ai-pack": 39999,
+  localseo: 15999,
+  review: 9999,
+  booking: 4999,
+  report: 2999,
+  admin: 3999,
+  quotephoto: 999,
+  ecommerce: 5999,
+  blog: 3499,
+  email: 2999,
+  priority: 5999,
+};
+
+/** Monthly rate of one product (unknown products cost nothing here). */
+function priceOf(product: string): number {
+  return MONTHLY_PRICE_CENTS[product] ?? 0;
+}
+
+/**
+ * Most expensive product in the list. Ties keep the last one: in the
+ * add simulation the candidate is appended last, so an equally priced
+ * pick the visitor just made wins over the one already in the cart.
+ */
+function mostExpensive(products: string[]): string {
+  let best = products[0];
+  for (const product of products.slice(1)) {
+    if (priceOf(product) >= priceOf(best)) best = product;
+  }
+  return best;
+}
+
+/** The fix drops everything except the most expensive product. */
+function keepMostExpensive(products: string[]): ConflictFix {
+  const keep = mostExpensive(products);
+  return { remove: products.filter((product) => product !== keep) };
+}
+
 function planOf(items: RuleItem[]): string | undefined {
   return items.find((item) => item.type === "plan")?.product;
 }
@@ -103,10 +166,12 @@ export function findConflicts(items: RuleItem[]): CartConflict[] {
 
   const plans = items.filter((item) => item.type === "plan");
   if (plans.length > 1) {
+    // The fix keeps the most expensive plan (Benji, 2026-11-08: the popup's
+    // main button always resolves to the most expensive configuration).
     conflicts.push({
       kind: "two-plans",
       products: plans.map((item) => item.product),
-      fix: { remove: plans.slice(1).map((item) => item.product) },
+      fix: keepMostExpensive(plans.map((item) => item.product)),
     });
   }
 
@@ -135,47 +200,55 @@ export function findConflicts(items: RuleItem[]): CartConflict[] {
     }
   }
 
+  // One conflict per bundle with all of its components in the cart, so
+  // the popup's fix settles the whole bundle in one tap instead of one
+  // component per popup. The fix keeps whichever side costs more: the
+  // bundle, or the components it would replace, added up.
   for (const [bundle, components] of Object.entries(BUNDLE_COMPONENTS)) {
     if (!has(bundle)) continue;
-    for (const component of components) {
-      if (has(component)) {
-        conflicts.push({
-          kind: "bundle-component",
-          products: [bundle, component],
-          bundle,
-          component,
-          fix: { remove: [component] },
-        });
-      }
-    }
+    const present = components.filter((component) => has(component));
+    if (present.length === 0) continue;
+    const componentsCost = present.reduce((sum, component) => sum + priceOf(component), 0);
+    conflicts.push({
+      kind: "bundle-component",
+      products: [bundle, ...present],
+      bundle,
+      component: present[0],
+      components: present,
+      fix: componentsCost > priceOf(bundle) ? { remove: [bundle] } : { remove: present },
+    });
   }
 
   const bundles = Object.keys(BUNDLE_COMPONENTS).filter((bundle) => has(bundle));
   if (bundles.length > 1) {
-    // Both bundles include the Review Generation Engine.
+    // Both bundles include the Review Generation Engine: keep the dearer one.
     conflicts.push({
       kind: "bundle-overlap",
       products: bundles,
-      fix: { remove: bundles.slice(1) },
+      fix: keepMostExpensive(bundles),
     });
   }
 
   const ads = ADS_OPTIONS.filter((option) => has(option));
   if (ads.length > 1) {
-    conflicts.push({ kind: "ads-two", products: ads, fix: { remove: ads.slice(1) } });
+    // One Ads option at a time: keep the dearest, drop the rest.
+    conflicts.push({ kind: "ads-two", products: ads, fix: keepMostExpensive(ads) });
   }
 
   // One conflict for all the individuals the Pack already includes, so
   // the popup's fix removes them all in one tap instead of one per popup.
+  // The fix keeps whichever side costs more: the Pack, or the individuals
+  // added up (all three together cost more than the Pack).
   if (has(AI_PACK)) {
     const individuals = AI_INDIVIDUALS.filter((individual) => has(individual));
     if (individuals.length > 0) {
+      const individualsCost = individuals.reduce((sum, individual) => sum + priceOf(individual), 0);
       conflicts.push({
         kind: "ai-pack",
         products: [AI_PACK, ...individuals],
         bundle: AI_PACK,
         component: individuals[0],
-        fix: { remove: individuals },
+        fix: individualsCost > priceOf(AI_PACK) ? { remove: [AI_PACK] } : { remove: individuals },
       });
     }
   }

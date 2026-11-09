@@ -278,7 +278,7 @@ export function conflictMessage(doc: Document, conflict: CartConflict, items: Ca
     case "bundle-component":
       return fill(data.msgBundleComponent, {
         bundle: namesOf(items, [conflict.bundle ?? ""]),
-        item: namesOf(items, [conflict.component ?? ""]),
+        item: namesOf(items, conflict.components ?? [conflict.component ?? ""]),
       });
     case "bundle-overlap":
       return fill(data.msgBundleOverlap, {
@@ -292,7 +292,7 @@ export function conflictMessage(doc: Document, conflict: CartConflict, items: Ca
     case "mixed-intervals":
       return data.msgMixed ?? "";
     case "two-plans":
-      return data.msgMixed ?? "";
+      return data.twoPlans ?? "";
   }
 }
 
@@ -378,6 +378,36 @@ export function guardAdd(
   const removeProducts = (products: string[]) => cart.filter((i) => !products.includes(i.product));
   const dismiss = { label: data.dontAdd ?? "Don't add it", apply: () => {} };
 
+  // Buttons for a replace conflict (Ads, AI Pack, bundles). The automated
+  // fix always drops the cheaper side, so the main button keeps the dearer
+  // configuration; the cheaper swap is the secondary choice, for a visitor
+  // who really wants the cheaper option.
+  const fixRemove = conflict.fix && "remove" in conflict.fix ? conflict.fix.remove : [];
+  const candidateLoses = fixRemove.includes(candidate.product);
+  // Products the fix keeps that are already in the cart (never the candidate).
+  const keptExisting = conflict.products.filter((p) => p !== candidate.product && !fixRemove.includes(p));
+  const removedNames = namesOf(cart, fixRemove);
+  const keptNames = namesOf(cart, keptExisting);
+  const replaceActions = (): ConflictAction[] => {
+    if (candidateLoses) {
+      return [
+        { label: fill(data.keepItem ?? "Keep {item}", { item: keptNames }), primary: true, apply: () => {} },
+        {
+          label: fill(data.fixReplace, { old: keptNames, new: name }),
+          apply: () => setCart(win, [...removeProducts(keptExisting), candidate]),
+        },
+      ];
+    }
+    return [
+      {
+        label: fill(data.fixReplace, { old: removedNames, new: name }),
+        primary: true,
+        apply: () => setCart(win, [...removeProducts(fixRemove), candidate]),
+      },
+      dismiss,
+    ];
+  };
+
   switch (conflict.kind) {
     case "included": {
       return !showConflict(doc, fill(data.msgIncluded, { item: name, plan: plan?.name ?? "" }), [
@@ -404,26 +434,22 @@ export function guardAdd(
       return !showConflict(doc, fill(data.msgNotAvailable, { item: name, plan: plan?.name ?? "" }), actions);
     }
     case "bundle-component": {
+      const components = conflict.components ?? [conflict.component ?? ""];
       if (candidate.product === conflict.bundle) {
-        // Adding the bundle: replace the component already in the cart.
+        // Adding the bundle: the fix keeps whichever side costs more.
         return !showConflict(
           doc,
-          fill(data.msgBundleComponent, { bundle: name, item: namesOf(cart, [conflict.component ?? ""]) }),
-          [
-            {
-              label: fill(data.fixReplace, { old: namesOf(cart, [conflict.component ?? ""]), new: name }),
-              primary: true,
-              apply: () => setCart(win, [...removeProducts([conflict.component ?? ""]), candidate]),
-            },
-            dismiss,
-          ],
+          fill(data.msgBundleComponent, { bundle: name, item: namesOf(cart, components) }),
+          replaceActions(),
         );
       }
-      // Adding a component the bundle already includes: keep the bundle.
+      // Adding a component the bundle already includes: the bundle is the
+      // dearer side, so keeping it is the main button; swapping down to
+      // just the component is the secondary choice.
       return !showConflict(
         doc,
         fill(data.msgBundleComponent, { bundle: namesOf(cart, [conflict.bundle ?? ""]), item: name }),
-        [{ label: data.keepAsIs ?? "Keep as is", primary: true, apply: () => {} }],
+        replaceActions(),
       );
     }
     case "bundle-overlap": {
@@ -431,47 +457,18 @@ export function guardAdd(
       return !showConflict(
         doc,
         fill(data.msgBundleOverlap, { first: namesOf(cart, [existing]), second: name }),
-        [
-          {
-            label: fill(data.fixReplace, { old: namesOf(cart, [existing]), new: name }),
-            primary: true,
-            apply: () => setCart(win, [...removeProducts([existing]), candidate]),
-          },
-          dismiss,
-        ],
+        replaceActions(),
       );
     }
     case "ads-two": {
-      const existing = conflict.products.find((p) => p !== candidate.product) ?? "";
-      return !showConflict(doc, data.msgAdsTwo ?? "", [
-        {
-          label: fill(data.fixReplace, { old: namesOf(cart, [existing]), new: name }),
-          primary: true,
-          apply: () => setCart(win, [...removeProducts(conflict.products.filter((p) => p !== candidate.product)), candidate]),
-        },
-        dismiss,
-      ]);
+      return !showConflict(doc, data.msgAdsTwo ?? "", replaceActions());
     }
     case "ai-pack": {
       if (candidate.product === "ai-pack") {
         const individuals = conflict.products.filter((p) => p !== "ai-pack");
-        return !showConflict(doc, fill(data.msgAiPack, { item: namesOf(cart, individuals) }), [
-          {
-            label: fill(data.fixReplace, { old: namesOf(cart, individuals), new: name }),
-            primary: true,
-            apply: () => setCart(win, [...removeProducts(individuals), candidate]),
-          },
-          dismiss,
-        ]);
+        return !showConflict(doc, fill(data.msgAiPack, { item: namesOf(cart, individuals) }), replaceActions());
       }
-      return !showConflict(doc, fill(data.msgAiPack, { item: name }), [
-        {
-          label: fill(data.fixReplace, { old: namesOf(cart, ["ai-pack"]), new: name }),
-          primary: true,
-          apply: () => setCart(win, [...removeProducts(["ai-pack"]), candidate]),
-        },
-        dismiss,
-      ]);
+      return !showConflict(doc, fill(data.msgAiPack, { item: name }), replaceActions());
     }
     case "mixed-intervals": {
       return !showConflict(

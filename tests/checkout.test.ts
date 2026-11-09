@@ -272,6 +272,10 @@ const CONFLICT_CARTS: Array<{ items: string[]; error: string }> = [
     error: 'Lead Pack already includes Review Generation Engine.',
   },
   {
+    items: ['grow-month', 'lead-pack-month', 'localseo-month', 'review-month', 'aichat-month'],
+    error: 'Lead Pack already includes Local SEO Management, Review Generation Engine, Trained AI Chat Assistant.',
+  },
+  {
     items: ['grow-month', 'lead-pack-month', 'visibility-pack-month'],
     error: 'Lead Pack and Visibility Pack both include the Review Generation Engine.',
   },
