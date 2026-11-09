@@ -164,7 +164,7 @@ export const PRICE_MAP: Record<string, string> = {
   // the Ads Pack setup pattern.
   "ai-receptionist-month": "price_1UYFX9E57vVzxI41tORfQmiE",
   "ai-followup-month": "price_1UYFXJE57vVzxI41rtocXmsu",
-  "ai-pack-month": "price_1UYFXOE57vVzxI41aR00rKZe",
+  "ai-pack-month": "price_1UZg5vE57vVzxI41U5J4rBPd", // C$399.99 (was price_1UYFXOE57vVzxI41aR00rKZe at C$449.99; left active for existing subscribers)
   "visibility-pack-year": "price_1UORRqE57vVzxI41BDPCliaR",
 };
 

@@ -460,9 +460,9 @@ const en = {
     },
     ai: {
       packKicker: "AI bundle, best value",
-      packPrice: "C$449.99/mo",
+      packPrice: "C$399.99/mo",
       packIndividualValue: "C$499.97/mo",
-      packMonthlySaving: "C$49.98/mo",
+      packMonthlySaving: "C$99.98/mo",
       serviceKicker: "AI service",
       individualValue: "Individual value:",
       monthlySaving: "Monthly saving:",

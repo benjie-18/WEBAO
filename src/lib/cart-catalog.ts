@@ -86,7 +86,7 @@ const catalog = {
      below): one product, C$99.99/mo, yearly available, no setup fee. */
   "ai-receptionist": { product: "ai-receptionist", type: "addon", monthCents: 29999 },
   "ai-followup": { product: "ai-followup", type: "addon", monthCents: 9999 },
-  "ai-pack": { product: "ai-pack", type: "bundle", monthCents: 44999 },
+  "ai-pack": { product: "ai-pack", type: "bundle", monthCents: 39999 },
 
   /* ── Add-ons (featured group first, then the rest) ───────────────────── */
   localseo: { product: "localseo", type: "addon", monthCents: 15999, yearCents: 15999 * TEN_MONTHS },
