@@ -110,7 +110,10 @@ const bundleCents = (id: BundleId, interval: "month" | "year"): number =>
     font-size: 0.95rem;
   }
   /* 3D parallax layers: title floats closest, meta deepest. Only meaningful
-     inside a preserve-3d context (the scroll carousel). */
+     inside a preserve-3d context (the scroll carousel). The ring is flat,
+     so these translateZ values never change how the card paints — but they
+     would corrupt hit-testing in Chromium if a perspective were ever added
+     above the ring, so do not add one (see BundleCarousel). */
   .bundle-card--spatial {
     transform-style: preserve-3d;
     /* The carousel slot is wider than the card (560px vs 400px max):

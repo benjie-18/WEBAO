@@ -167,8 +167,12 @@ const names = bundles.map((bd) => tb[bd.id].name);
   .bundle-viewport {
     position: absolute;
     inset: 0;
-    perspective: 1250px;
-    perspective-origin: 50% 42%;
+    /* No perspective here, on purpose. The ring below is flat
+       (transform-style is not preserve-3d), so a perspective would
+       never change how the cards paint — but Chromium still hit-tests
+       the cards' translateZ through it, which shifts every hit area
+       away from its painted box and lets the price paragraph cover the
+       Lead Pack cart button. See the fix note in BundleCard. */
   }
   .bundle-ring {
     position: absolute;
@@ -378,9 +382,6 @@ const names = bundles.map((bd) => tb[bd.id].name);
   }
 
   @media (max-width: 819px) {
-    .bundle-viewport {
-      perspective: 1000px;
-    }
     .bcard {
       width: min(340px, 86vw);
       top: 42%;
