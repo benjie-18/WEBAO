@@ -418,7 +418,7 @@ test('built pages carry the full SEO head', () => {
   // Demos catalog: ItemList of the visible demos stays in canonical order.
   const catalog = head('demos/index.html');
   assert.match(catalog, /"@type":"ItemList"/);
-  assert.match(catalog, /"numberOfItems":45/);
+  assert.match(catalog, /"numberOfItems":47/);
   const itemListJson = /<script type="application\/ld\+json">(\{"@context":"https:\/\/schema\.org","@type":"ItemList".*?)<\/script>/s.exec(catalog)?.[1];
   assert.ok(itemListJson, 'catalog ItemList script is present');
   const itemList = JSON.parse(itemListJson!) as { itemListElement: Array<{ position: number; name: string; url: string }> };
@@ -570,6 +570,7 @@ test('built demo surfaces keep cacheable fallback order and canonical shuffle in
     'maximal', 'verte', 'mira', 'lune', 'atelier-nord', 'lattice', 'boise', 'forma', 'nora',
     'encre-brute', 'debit', 'bec-fin', 'voltige', 'lueur', '21-degres', 'extreme-climat',
     'confort-76', 'zenith', 'toitures-tempete', 'chantier-brut', 'maison-dore', 'sneaker-pro', 'onde',
+    'boreal', 'rive-nord',
   ];
   const ids = (html: string, selector: string) => {
     const dom = new JSDOM(html);
@@ -584,7 +585,7 @@ test('built demo surfaces keep cacheable fallback order and canonical shuffle in
   for (const file of ['dist/client/demos/index.html', 'dist/client/fr/demos/index.html']) {
     const html = readFileSync(file, 'utf-8');
     const cards = ids(html, '#demo-grid [data-demo-id]');
-    assert.equal(cards.length, 45, file);
+    assert.equal(cards.length, 47, file);
     assert.deepEqual(cards.map((card) => card.id), canonical, `${file} catalog fallback order`);
     assert.deepEqual(cards.map((card) => card.index), canonical.map((_, i) => i), `${file} canonical indices`);
     assert.equal(cards.some((card) => card.id === 'boba-club'), false, `${file} hides boba-club`);
@@ -592,7 +593,7 @@ test('built demo surfaces keep cacheable fallback order and canonical shuffle in
   for (const file of ['dist/client/index.html', 'dist/client/fr/index.html']) {
     const html = readFileSync(file, 'utf-8');
     const panels = ids(html, '[data-proof-track] [data-proof-panel]');
-    assert.equal(panels.length, 45, file);
+    assert.equal(panels.length, 47, file);
     assert.equal(panels[0].id, 'noctua', `${file} pinned first fallback`);
     assert.equal(panels[1].id, 'lisiere', `${file} pinned second fallback`);
     assert.equal(panels[2].id, 'studio-reve', `${file} pinned third fallback`);
