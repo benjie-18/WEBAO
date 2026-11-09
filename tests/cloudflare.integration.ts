@@ -8,6 +8,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import test from 'node:test';
 import { unstable_dev } from 'wrangler';
+import { isDemoPinActive } from '../src/lib/demo-order';
 
 const image = Buffer.from(readFileSync(new URL('./fixtures/image.jpg.b64', import.meta.url), 'utf8'), 'base64');
 const paths = ['/demos/tactile/01.jpg', '/carousel/tactile.jpg'];
@@ -415,16 +416,19 @@ test('built pages carry the full SEO head', () => {
   assert.ok(pricing.includes('"url":"https://webao.ca/pricing/"'), 'offer urls match the canonical');
   assert.match(pricing, /"@type":"BreadcrumbList"/);
 
-  // Demos catalog: ItemList of the visible demos stays in canonical order.
+  // Demos catalog: ItemList of the visible demos stays in static fallback order.
   const catalog = head('demos/index.html');
   assert.match(catalog, /"@type":"ItemList"/);
   assert.match(catalog, /"numberOfItems":47/);
   const itemListJson = /<script type="application\/ld\+json">(\{"@context":"https:\/\/schema\.org","@type":"ItemList".*?)<\/script>/s.exec(catalog)?.[1];
   assert.ok(itemListJson, 'catalog ItemList script is present');
   const itemList = JSON.parse(itemListJson!) as { itemListElement: Array<{ position: number; name: string; url: string }> };
-  assert.equal(itemList.itemListElement[0].name, 'Noctua');
-  assert.equal(itemList.itemListElement[1].name, 'Lisière');
-  assert.equal(itemList.itemListElement[0].url, 'https://webao.ca/demos/noctua/');
+  // The static list follows the static fallback order: the moving demos lead
+  // while their one-week pin is active, then the standing first demos return.
+  const pinned = isDemoPinActive();
+  assert.equal(itemList.itemListElement[0].name, pinned ? 'Déménagement Boréal' : 'Noctua');
+  assert.equal(itemList.itemListElement[1].name, pinned ? 'Déménagement Rive-Nord' : 'Lisière');
+  assert.equal(itemList.itemListElement[0].url, pinned ? 'https://webao.ca/demos/boreal/' : 'https://webao.ca/demos/noctua/');
   assert.equal(itemList.itemListElement.every((item, i) => item.position === i + 1), true);
 
   // Sources: breadcrumb wired through the new pageKey.
@@ -560,8 +564,9 @@ test('built success page shows the purchased selection', async () => {
 });
 
 // The per-visitor shuffle is a client-side enhancement. Built HTML must stay
-// identical for everyone: canonical catalog order, the existing pinned carousel
-// fallback, and canonical data-demo-index values for the shared shuffle input.
+// identical for everyone: the pinned fallback order (moving demos first while
+// their one-week pin is active), and canonical data-demo-index values for the
+// shared shuffle input.
 test('built demo surfaces keep cacheable fallback order and canonical shuffle indices', () => {
   const canonical = [
     'noctua', 'lisiere', 'brume', 'sahara-sage', 'esquisse', 'tactile', 'prism', 'hexline',
@@ -582,21 +587,31 @@ test('built demo surfaces keep cacheable fallback order and canonical shuffle in
     dom.window.close();
     return result;
   };
+  // The static fallback order follows the one-week moving-demo pin while it
+  // is active: boreal and rive-nord first, then the rest in canonical order.
+  // data-demo-index always stays canonical, so the client shuffle input is
+  // identical on both surfaces either way.
+  const pinned = isDemoPinActive();
+  const rest = canonical.filter((id) => !['boreal', 'rive-nord'].includes(id));
+  const catalogOrder = pinned ? ['boreal', 'rive-nord', ...rest] : canonical;
+  const standingPins = ['noctua', 'lisiere', 'studio-reve'];
+  const panelRest = canonical.filter((id) => !['boreal', 'rive-nord', ...standingPins, 'nora'].includes(id));
+  const panelOrder = pinned
+    ? ['boreal', 'rive-nord', ...standingPins, ...panelRest, 'nora']
+    : [...standingPins, ...panelRest, 'nora'];
   for (const file of ['dist/client/demos/index.html', 'dist/client/fr/demos/index.html']) {
     const html = readFileSync(file, 'utf-8');
     const cards = ids(html, '#demo-grid [data-demo-id]');
     assert.equal(cards.length, 47, file);
-    assert.deepEqual(cards.map((card) => card.id), canonical, `${file} catalog fallback order`);
-    assert.deepEqual(cards.map((card) => card.index), canonical.map((_, i) => i), `${file} canonical indices`);
+    assert.deepEqual(cards.map((card) => card.id), catalogOrder, `${file} catalog fallback order`);
+    assert.deepEqual(cards.map((card) => card.index), catalogOrder.map((id) => canonical.indexOf(id!)), `${file} canonical indices`);
     assert.equal(cards.some((card) => card.id === 'boba-club'), false, `${file} hides boba-club`);
   }
   for (const file of ['dist/client/index.html', 'dist/client/fr/index.html']) {
     const html = readFileSync(file, 'utf-8');
     const panels = ids(html, '[data-proof-track] [data-proof-panel]');
     assert.equal(panels.length, 47, file);
-    assert.equal(panels[0].id, 'noctua', `${file} pinned first fallback`);
-    assert.equal(panels[1].id, 'lisiere', `${file} pinned second fallback`);
-    assert.equal(panels[2].id, 'studio-reve', `${file} pinned third fallback`);
+    assert.deepEqual(panels.map((panel) => panel.id), panelOrder, `${file} carousel fallback order`);
     assert.equal(panels[panels.length - 1].id, 'nora', `${file} pinned last fallback`);
     assert.equal(panels.some((panel) => panel.id === 'boba-club'), false, `${file} hides boba-club`);
     for (const panel of panels) {

@@ -9,9 +9,59 @@
  *
  * The shuffle is Fisher-Yates driven by mulberry32. It never uses a
  * random-comparator sort, and it never adds or removes demos.
+ *
+ * One-week pin: while PINNED_DEMOS_UNTIL is in the future, the pinned demos
+ * move to the front of the shuffled order on both surfaces. The pin is
+ * date-driven, so it expires on its own with no code change.
  */
 
 export const DEMO_ORDER_STORAGE_KEY = "webao.demo-order.seed.v1";
+
+/**
+ * One-week showcase pin: the two new moving demos lead both surfaces until
+ * 2026-11-16 00:00 EST, then the pin expires on its own and every demo
+ * shuffles with the rest. No second deploy or code change resets it: the
+ * client shuffle checks the visitor's clock, and the static fallback checks
+ * the build date, so any build after the expiry renders the unpinned order.
+ */
+export const PINNED_DEMO_IDS: readonly string[] = ["boreal", "rive-nord"];
+export const PINNED_DEMOS_UNTIL = "2026-11-16T05:00:00Z";
+
+export function isDemoPinActive(now: Date = new Date()): boolean {
+  return now.getTime() < Date.parse(PINNED_DEMOS_UNTIL);
+}
+
+/**
+ * Rank for the prerendered carousel fallback. While the pin is active the
+ * moving demos lead, then the standing pins, with nora last. After the
+ * expiry the standing order returns.
+ */
+export function demoFallbackRank(id: string, now: Date = new Date()): number {
+  if (isDemoPinActive(now)) {
+    if (id === "boreal") return 0;
+    if (id === "rive-nord") return 1;
+    if (id === "noctua") return 2;
+    if (id === "lisiere") return 3;
+    if (id === "studio-reve") return 4;
+    if (id === "nora") return 99;
+    return 50;
+  }
+  return id === "noctua" ? 0 : id === "lisiere" ? 1 : id === "studio-reve" ? 2 : id === "nora" ? 99 : 50;
+}
+
+/**
+ * Display order for the prerendered catalog fallback and its ItemList:
+ * pinned demos first while the pin is active, otherwise canonical order.
+ * The input is untouched.
+ */
+export function sortCatalogForFallback<T extends { id: string }>(demos: readonly T[], now: Date = new Date()): T[] {
+  if (!isDemoPinActive(now)) return demos.slice();
+  const pinned = PINNED_DEMO_IDS.map((id) => demos.find((d) => d.id === id)).filter(
+    (d): d is T => d !== undefined,
+  );
+  const rest = demos.filter((d) => !PINNED_DEMO_IDS.includes(d.id));
+  return [...pinned, ...rest];
+}
 
 /** Window-level fallback so blocked storage still shares one seed per load. */
 const WINDOW_SEED_KEY = "__webaoDemoOrderSeed";
@@ -140,10 +190,28 @@ export function reorderDemoNodes<T extends HTMLElement>(
   return shuffled;
 }
 
+/**
+ * Move the pinned demos to the front, in pin order, keeping the shuffled
+ * order of the rest. Returns the input untouched once the pin expires.
+ */
+export function pinDemosFirst<T extends HTMLElement>(nodes: readonly T[], now: Date = new Date()): T[] {
+  if (!isDemoPinActive(now)) return nodes as T[];
+  const byId = new Map(nodes.map((node) => [node.dataset.demoId, node]));
+  const pinned = PINNED_DEMO_IDS.map((id) => byId.get(id)).filter((node): node is T => node !== undefined);
+  const rest = nodes.filter((node) => !PINNED_DEMO_IDS.includes(node.dataset.demoId ?? ""));
+  return [...pinned, ...rest];
+}
+
 /** Carousel: reorder panels, then refresh every position-derived label. */
-export function applyDemoOrderToCarousel(track: HTMLElement, seed: number): HTMLElement[] {
+export function applyDemoOrderToCarousel(track: HTMLElement, seed: number, now: Date = new Date()): HTMLElement[] {
   const panels = reorderDemoNodes<HTMLElement>(track, "[data-proof-panel]", seed);
-  panels.forEach((panel, i) => {
+  const ordered = pinDemosFirst(panels, now);
+  if (ordered !== panels) {
+    const fragment = track.ownerDocument.createDocumentFragment();
+    for (const panel of ordered) fragment.appendChild(panel);
+    track.appendChild(fragment);
+  }
+  ordered.forEach((panel, i) => {
     const index = panel.querySelector(".proof-index");
     if (index) index.textContent = String(i + 1).padStart(2, "0");
     const img = panel.querySelector("img");
@@ -165,14 +233,20 @@ export function applyDemoOrderToCarousel(track: HTMLElement, seed: number): HTML
     panel.classList.remove("is-active");
   });
   track.scrollLeft = 0;
-  return panels;
+  return ordered;
 }
 
 /** Catalog: reorder cards, then recompute reveal stagger from the new slot. */
-export function applyDemoOrderToCatalog(grid: HTMLElement, seed: number): HTMLElement[] {
+export function applyDemoOrderToCatalog(grid: HTMLElement, seed: number, now: Date = new Date()): HTMLElement[] {
   const cards = reorderDemoNodes<HTMLElement>(grid, "[data-category]", seed);
-  cards.forEach((card, i) => {
+  const ordered = pinDemosFirst(cards, now);
+  if (ordered !== cards) {
+    const fragment = grid.ownerDocument.createDocumentFragment();
+    for (const card of ordered) fragment.appendChild(card);
+    grid.appendChild(fragment);
+  }
+  ordered.forEach((card, i) => {
     card.style.setProperty("--d", `${(i % 3) * 80}ms`);
   });
-  return cards;
+  return ordered;
 }

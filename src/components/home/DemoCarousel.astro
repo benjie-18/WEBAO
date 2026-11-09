@@ -1,5 +1,6 @@
 ---
 import { getDemos, localizedPaths, useTranslations, type Locale } from "../../lib/i18n";
+import { demoFallbackRank } from "../../lib/demo-order";
 
 interface Props {
   locale: Locale;
@@ -9,13 +10,14 @@ const t = useTranslations(locale);
 const paths = localizedPaths[locale];
 
 // Same visible set as /demos, in canonical catalog order. The static HTML
-// keeps the existing pinned order as the no-JS fallback; the client module
+// keeps the pinned fallback order as the no-JS fallback; the client module
 // replaces it with the shared session shuffle before the carousel initializes.
+// The fallback rank puts the moving demos first while their one-week pin is
+// active, then the standing pins, with nora last.
 const hidden = new Set(["boba-club"]);
 const catalogDemos = getDemos(locale).filter((d) => !hidden.has(d.id));
 const catalogIndex = new Map(catalogDemos.map((d, i) => [d.id, i]));
-const rank = (id: string) =>
-  id === "noctua" ? 0 : id === "lisiere" ? 1 : id === "studio-reve" ? 2 : id === "nora" ? 99 : 50;
+const rank = (id: string) => demoFallbackRank(id);
 const demos = catalogDemos.slice().sort((a, b) => rank(a.id) - rank(b.id));
 
 const heading = t.home.proof.heading;

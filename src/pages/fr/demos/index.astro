@@ -4,22 +4,24 @@ import DemosPage from "../../../components/pages/DemosPage.astro";
 import { useTranslations } from "../../../lib/i18n";
 import { demos } from "../../../lib/demos";
 import { HIDDEN_DEMOS } from "../../../lib/demo-seo";
+import { sortCatalogForFallback } from "../../../lib/demo-order";
 
 const locale = "fr" as const;
 const t = useTranslations(locale);
 
 // ItemList structured data: presents the catalog to search engines as a list
-// of portfolio pieces (rich-result eligible) in canonical catalog order.
-// The client-side session shuffle is per visitor and cannot be represented in
-// prerendered SEO data, so this static list intentionally does not match each
-// visitor's shuffled view.
+// of portfolio pieces (rich-result eligible) in the static fallback order,
+// so it matches what the page shows. The client-side session shuffle is per
+// visitor and cannot be represented in prerendered SEO data, so this static
+// list intentionally does not match each visitor's shuffled view.
 const visibleDemos = demos.filter((demo) => !HIDDEN_DEMOS.has(demo.id));
+const displayDemos = sortCatalogForFallback(visibleDemos);
 const itemListSchema = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "ItemList",
   name: t.meta.demos.title,
   numberOfItems: visibleDemos.length,
-  itemListElement: visibleDemos.map((demo, i) => ({
+  itemListElement: displayDemos.map((demo, i) => ({
     "@type": "ListItem",
     position: i + 1,
     name: demo.name,

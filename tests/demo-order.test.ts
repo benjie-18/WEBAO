@@ -9,19 +9,29 @@ import { demos } from '../src/lib/demos';
 import { HIDDEN_DEMOS } from '../src/lib/demo-seo';
 import {
   DEMO_ORDER_STORAGE_KEY,
+  PINNED_DEMO_IDS,
   applyDemoOrderToCarousel,
   applyDemoOrderToCatalog,
+  demoFallbackRank,
   getDemoOrderSeed,
+  isDemoPinActive,
   mulberry32,
   parseDemoSeed,
+  pinDemosFirst,
   readOrCreateDemoSeed,
   reorderDemoNodes,
   shuffleWithSeed,
+  sortCatalogForFallback,
 } from '../src/lib/demo-order';
 import { filterDemoCards } from '../src/lib/demo-catalog';
 
 const visible = demos.filter((demo) => !HIDDEN_DEMOS.has(demo.id));
 const visibleIds = visible.map((demo) => demo.id);
+// The pin expires 2026-11-16 00:00 EST. Dates on either side of it keep the
+// unpinned and pinned expectations exact no matter when the suite runs.
+const beforePinExpiry = new Date('2026-11-10T12:00:00Z');
+const atPinExpiry = new Date('2026-11-16T05:00:00Z');
+const afterPinExpiry = new Date('2026-11-17T00:00:00Z');
 const seeds = [0, 1, 2, 7, 42, 12345, 0xdeadbeef, 0xffffffff, 0x80000000, 123456789];
 
 function idsOf(nodes: Element[]): string[] {
@@ -74,14 +84,81 @@ test('same seed produces the same order on both surfaces', () => {
     const expected = shuffleWithSeed(visibleIds, seed);
     const carousel = fixture('carousel');
     const catalog = fixture('catalog');
-    const panels = applyDemoOrderToCarousel(carousel.root, seed);
-    const cards = applyDemoOrderToCatalog(catalog.root, seed);
+    const panels = applyDemoOrderToCarousel(carousel.root, seed, afterPinExpiry);
+    const cards = applyDemoOrderToCatalog(catalog.root, seed, afterPinExpiry);
     assert.deepEqual(idsOf(panels), expected, `carousel seed ${seed}`);
     assert.deepEqual(idsOf(cards), expected, `catalog seed ${seed}`);
     assert.deepEqual(idsOf(panels), idsOf(cards), `surfaces agree for seed ${seed}`);
     carousel.dom.window.close();
     catalog.dom.window.close();
   }
+});
+
+test('pinned demos lead both surfaces while the pin is active, rest keeps shuffled order', () => {
+  for (const seed of seeds) {
+    const expected = shuffleWithSeed(visibleIds, seed);
+    const rest = expected.filter((id) => !PINNED_DEMO_IDS.includes(id));
+    const carousel = fixture('carousel');
+    const catalog = fixture('catalog');
+    const panels = applyDemoOrderToCarousel(carousel.root, seed, beforePinExpiry);
+    const cards = applyDemoOrderToCatalog(catalog.root, seed, beforePinExpiry);
+    for (const ordered of [panels, cards]) {
+      assert.deepEqual(idsOf(ordered).slice(0, 2), [...PINNED_DEMO_IDS], `seed ${seed} pinned first`);
+      assert.deepEqual(idsOf(ordered).slice(2), rest, `seed ${seed} rest keeps shuffled order`);
+    }
+    assert.deepEqual(idsOf(panels), idsOf(cards), `surfaces agree for seed ${seed}`);
+    carousel.dom.window.close();
+    catalog.dom.window.close();
+  }
+});
+
+test('pin is active before 2026-11-16 00:00 EST and expired at that moment', () => {
+  assert.equal(isDemoPinActive(new Date('2026-11-15T23:59:59Z')), true);
+  assert.equal(isDemoPinActive(new Date('2026-11-16T04:59:59Z')), true);
+  assert.equal(isDemoPinActive(atPinExpiry), false);
+  assert.equal(isDemoPinActive(afterPinExpiry), false);
+});
+
+test('pin expiry restores the plain shuffle on both surfaces', () => {
+  for (const seed of seeds) {
+    const expected = shuffleWithSeed(visibleIds, seed);
+    const carousel = fixture('carousel');
+    const catalog = fixture('catalog');
+    assert.deepEqual(idsOf(applyDemoOrderToCarousel(carousel.root, seed, atPinExpiry)), expected, `carousel seed ${seed}`);
+    assert.deepEqual(idsOf(applyDemoOrderToCatalog(catalog.root, seed, atPinExpiry)), expected, `catalog seed ${seed}`);
+    carousel.dom.window.close();
+    catalog.dom.window.close();
+  }
+});
+
+test('fallback rank puts the pinned demos first while active, then reverts', () => {
+  assert.equal(demoFallbackRank('boreal', beforePinExpiry), 0);
+  assert.equal(demoFallbackRank('rive-nord', beforePinExpiry), 1);
+  assert.equal(demoFallbackRank('noctua', beforePinExpiry), 2);
+  assert.equal(demoFallbackRank('lisiere', beforePinExpiry), 3);
+  assert.equal(demoFallbackRank('studio-reve', beforePinExpiry), 4);
+  assert.equal(demoFallbackRank('nora', beforePinExpiry), 99);
+  assert.equal(demoFallbackRank('boreal', afterPinExpiry), 50);
+  assert.equal(demoFallbackRank('rive-nord', afterPinExpiry), 50);
+  assert.equal(demoFallbackRank('noctua', afterPinExpiry), 0);
+  assert.equal(demoFallbackRank('lisiere', afterPinExpiry), 1);
+  assert.equal(demoFallbackRank('studio-reve', afterPinExpiry), 2);
+  assert.equal(demoFallbackRank('nora', afterPinExpiry), 99);
+});
+
+test('catalog fallback order leads with the pinned demos while active, canonical after', () => {
+  const pinned = sortCatalogForFallback(visible, beforePinExpiry);
+  assert.deepEqual(pinned.slice(0, 2).map((d) => d.id), [...PINNED_DEMO_IDS]);
+  assert.deepEqual(pinned.slice(2).map((d) => d.id), visibleIds.filter((id) => !PINNED_DEMO_IDS.includes(id)));
+  assert.deepEqual(sortCatalogForFallback(visible, afterPinExpiry).map((d) => d.id), visibleIds);
+  assert.deepEqual(visible.map((d) => d.id), visibleIds, 'input untouched');
+});
+
+test('pinDemosFirst returns the input untouched once the pin expires', () => {
+  const { dom, root } = fixture('catalog');
+  const nodes = Array.from(root.children) as HTMLElement[];
+  assert.equal(pinDemosFirst(nodes, afterPinExpiry), nodes);
+  dom.window.close();
 });
 
 test('different seeds produce different orders across several seeds', () => {
