@@ -12,6 +12,7 @@ import {
 } from '../worker/portal';
 import { handleAdmin } from '../worker/admin';
 import { createClient, getClient, saveClient } from '../worker/clients';
+import { putJson } from '../worker/kv';
 import { apiGet, apiRequest, bodyOf, envOf, memoryKV } from './helpers';
 
 const DAY = 24 * 3600 * 1000;
@@ -48,6 +49,12 @@ function cookieOf(res: Response): string {
   const m = /webao_portal=([a-f0-9]+)/.exec(set);
   assert.ok(m, 'session cookie issued');
   return `webao_portal=${m![1]}`;
+}
+
+async function sessionFor(memory: ReturnType<typeof memoryKV>, clientId: string) {
+  const token = 'b'.repeat(64);
+  await putJson(memory.kv, `portal-session:${token}`, { clientId, createdAt: Date.now() });
+  return { cookie: `webao_portal=${token}` };
 }
 
 test('request-link: unknown and known emails are both a silent ok (no client enumeration)', async () => {
@@ -153,6 +160,25 @@ test('onboarding: partial save keeps stage, complete save advances to build', as
     assert.equal(noAuth.status, 401);
   } finally {
     stub.restore();
+  }
+});
+
+test('me: ads view carries the minimum monthly budget for the purchased variant', async () => {
+  // The portal's budget label shows this floor: a Starter client is told
+  // $750 and a both-channels client $2,500, never the $1,500 default.
+  const memory = memoryKV();
+  const env = envOf(memory.kv, {});
+  const cases: Array<[string, string[], number]> = [
+    ['starter@example.ca', ['ads-starter-month'], 750],
+    ['both@example.ca', ['ads-both-month'], 2500],
+    ['single@example.ca', ['ads-pack-month'], 1500],
+  ];
+  for (const [email, items, expected] of cases) {
+    const client = await createClient(memory.kv, { email, items, source: 'stripe' });
+    const headers = await sessionFor(memory, client.id);
+    const me = await handlePortalMe(apiGet('/api/portal/me', { headers }), env);
+    assert.equal(me.status, 200);
+    assert.equal((await bodyOf(me)).client.ads.minBudget, expected, `${email} floor`);
   }
 });
 

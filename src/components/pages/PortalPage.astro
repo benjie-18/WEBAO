@@ -67,9 +67,11 @@ const copy = fr
       adsStLive: "Vos campagnes sont en ligne",
       adsStPaused: "Campagnes en pause",
       adsTrade: "Métier",
+      adsServices: "Vos services",
       adsTrades: [["plumbing", "Plomberie"], ["electrical", "Électricité"], ["hvac", "Chauffage et climatisation"], ["painting", "Peinture"], ["renovation", "Rénovation"], ["general", "Services généraux"]],
       adsRadius: "Rayon autour de votre zone (km)",
       adsBudget: "Budget publicitaire mensuel (min 1 500 $)",
+      adsBudgetPattern: "Budget publicitaire mensuel (min {n} $)",
       adsWebsite: "Votre site web (si nous ne l'hébergeons pas)",
       adsLeadEmail: "Où envoyer les prospects ? (courriel)",
       adsLeadPhone: "Alertes de prospects par téléphone (optionnel)",
@@ -170,9 +172,11 @@ const copy = fr
       adsStLive: "Your campaigns are live",
       adsStPaused: "Campaigns paused",
       adsTrade: "Trade",
+      adsServices: "Your services",
       adsTrades: [["plumbing", "Plumbing"], ["electrical", "Electrical"], ["hvac", "Heating and cooling"], ["painting", "Painting"], ["renovation", "Renovation"], ["general", "General services"]],
       adsRadius: "Radius around your area (km)",
       adsBudget: "Monthly ad budget (min $1,500)",
+      adsBudgetPattern: "Monthly ad budget (min ${n})",
       adsWebsite: "Your website (if we do not host it)",
       adsLeadEmail: "Where should leads go? (email)",
       adsLeadPhone: "Lead alerts by phone (optional)",
@@ -293,7 +297,7 @@ const supportHref = fr ? "/fr/soutien" : "/support";
           </div>
           <div data-portal-changes hidden style="margin-top:14px;">
             <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">
-              <textarea data-portal-changes-note rows="3" placeholder={copy.reviewNotePh} style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;"></textarea>
+              <textarea data-portal-changes-note rows="3" placeholder={copy.reviewNotePh} aria-label={copy.reviewNotePh} style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;"></textarea>
             </label>
             <button type="button" class="btn btn--primary" data-portal-changes-send style="margin-top:10px;">{copy.reviewSend}</button>
           </div>
@@ -385,7 +389,7 @@ const supportHref = fr ? "/fr/soutien" : "/support";
                 {copy.adsTrades.map(([value, label]) => <option value={value}>{label}</option>)}
               </select>
             </label>
-            <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.fields.services}
+            <label style="display:grid; gap:6px; font-size:14px; font-weight:600;">{copy.adsServices}
               <textarea data-ads-f="services" rows="2" style="padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong); background: var(--paper); color: var(--ink); font-size:15px;"></textarea>
             </label>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
@@ -489,6 +493,7 @@ const supportHref = fr ? "/fr/soutien" : "/support";
 <span hidden data-portal-msg-ads-st-ready>{copy.adsStReady}</span>
 <span hidden data-portal-msg-ads-st-live>{copy.adsStLive}</span>
 <span hidden data-portal-msg-ads-st-paused>{copy.adsStPaused}</span>
+<span hidden data-portal-msg-ads-budget>{copy.adsBudgetPattern}</span>
 <span hidden data-portal-msg-ads-saved>{copy.adsSaved}</span>
 <span hidden data-portal-msg-ads-noleads>{copy.adsNoLeads}</span>
 <span hidden data-portal-msg-ads-booked>{copy.adsBooked}</span>
@@ -576,7 +581,11 @@ const supportHref = fr ? "/fr/soutien" : "/support";
     function render(client) {
       current = client;
       var identity = root.querySelector("[data-portal-identity]");
-      identity.textContent = (client.business || client.email) + " · " + client.email;
+      // No business name yet (before the form is filled in) means the
+      // email would print twice: "a@b.ca · a@b.ca".
+      identity.textContent = client.business && client.business !== client.email
+        ? client.business + " · " + client.email
+        : client.email;
       root.querySelector("[data-portal-billing]").textContent = client.billingStatus || "";
       var order = ["onboarding", "build", "review", "live"];
       var idx = order.indexOf(client.stage);
@@ -629,6 +638,19 @@ const supportHref = fr ? "/fr/soutien" : "/support";
         adsCard.hidden = false;
         var stSel = "[data-portal-msg-ads-st-" + (client.ads.status || "onboarding") + "]";
         root.querySelector("[data-portal-ads-statusline]").textContent = msg(stSel);
+        // The server-rendered label says "min $1,500", the default floor;
+        // the real floor follows the purchased variant (Starter $750,
+        // both channels $2,500), so rewrite it from /me.
+        var budgetInput = root.querySelector('[data-ads-f="monthlyBudget"]');
+        if (budgetInput && typeof client.ads.minBudget === "number") {
+          var budgetLabel = budgetInput.closest("label");
+          if (budgetLabel && budgetLabel.firstChild) {
+            budgetLabel.firstChild.textContent = msg("[data-portal-msg-ads-budget]").replace(
+              "{n}",
+              client.ads.minBudget.toLocaleString(document.documentElement.lang || undefined),
+            );
+          }
+        }
         var ob = client.ads.onboarding || {};
         root.querySelectorAll("[data-ads-f]").forEach(function (el) {
           var f = el.getAttribute("data-ads-f");
@@ -864,6 +886,26 @@ const supportHref = fr ? "/fr/soutien" : "/support";
       });
     });
 
+    // Labels of the fields the build cannot start without, for the
+    // "Still needed: ..." status after a partial save. The domain counts
+    // as one item: either no mode was picked, or the value is empty.
+    function fieldLabel(key) {
+      var el = root.querySelector('[data-f="' + key + '"]');
+      var label = el && el.closest("label");
+      return label ? label.textContent.replace(/\s*\*\s*$/, "").trim() : key;
+    }
+    function missingOnboarding(payload) {
+      var missing = [];
+      ["businessName", "contactName", "phone", "services", "serviceArea"].forEach(function (key) {
+        if (!payload[key] || !String(payload[key]).trim()) missing.push(fieldLabel(key));
+      });
+      if (!payload.domainMode || !payload.domainValue || !String(payload.domainValue).trim()) {
+        var domainLabel = root.querySelector("[data-portal-domain-label]");
+        if (domainLabel) missing.push(domainLabel.textContent.trim());
+      }
+      return missing;
+    }
+
     var form = root.querySelector("[data-portal-form]");
     form.addEventListener("submit", function (e) {
       e.preventDefault();
@@ -885,9 +927,17 @@ const supportHref = fr ? "/fr/soutien" : "/support";
         btn.disabled = false;
         if (r.data.ok && r.data.client) {
           render(r.data.client);
-          status.textContent = r.data.domainConflict
-            ? msg("[data-portal-msg-domain-conflict]")
-            : msg("[data-portal-msg-saved]");
+          if (r.data.client.onboardingComplete) {
+            status.textContent = r.data.domainConflict
+              ? msg("[data-portal-msg-domain-conflict]")
+              : msg("[data-portal-msg-saved]");
+          } else {
+            // A partial save used to answer a bare "Saved.", so a client
+            // could walk away thinking the build would start. Name what
+            // is still missing, from the labels already on the page.
+            var missing = missingOnboarding(payload);
+            status.textContent = msg("[data-portal-msg-saved]") + (missing.length ? " " + msg("[data-portal-msg-required]") + missing.join(", ") : "");
+          }
         } else {
           status.textContent = r.data.error || msg("[data-portal-msg-generic]");
         }

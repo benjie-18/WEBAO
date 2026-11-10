@@ -332,3 +332,25 @@ test('the mobile menu fits short viewports', () => {
   assert.match(block, /max-height:\s*calc\(100dvh - var\(--header-h\)\)/, 'the panel caps its height at the viewport');
   assert.match(block, /overflow-y:\s*auto/, 'the panel scrolls when it is taller than the viewport');
 });
+
+test('the portal names what is still missing after a partial save, and shows the real ads budget floor', () => {
+  // A partial onboarding save used to answer a bare "Saved.", so a client
+  // could walk away thinking the build would start, while the "Still
+  // needed: ..." template sat unused. The ads budget label likewise said
+  // "min $1,500" for every pack, although Starter is $750 and both
+  // channels $2,500; the ads services field also carried a "*" it never
+  // had to earn (ads completeness does not require services).
+  const portal = read('src/components/pages/PortalPage.astro');
+  assert.ok(portal.includes('msg("[data-portal-msg-required]")'), 'the submit handler reads the still-needed template');
+  assert.ok(portal.includes('r.data.client.onboardingComplete'), 'the submit handler branches on completeness');
+  assert.ok(portal.includes('missingOnboarding(payload)'), 'the submit handler lists the missing fields');
+  assert.ok(portal.includes('data-portal-msg-ads-budget'), 'the ads budget pattern template exists');
+  assert.ok(portal.includes('client.ads.minBudget'), 'the budget label is rewritten from the per-variant floor');
+  assert.ok(portal.includes('{copy.adsServices}'), 'the ads form uses its own services label');
+  assert.ok(portal.includes('adsServices: "Your services"'), 'the EN ads services label has no asterisk');
+  assert.ok(portal.includes('adsServices: "Vos services"'), 'the FR ads services label has no asterisk');
+  assert.ok(portal.includes('adsBudgetPattern: "Monthly ad budget (min ${n})"'), 'the EN budget pattern takes the real floor');
+  assert.ok(portal.includes('adsBudgetPattern: "Budget publicitaire mensuel (min {n} $)"'), 'the FR budget pattern takes the real floor');
+  assert.ok(portal.includes('data-portal-changes-note rows="3" placeholder={copy.reviewNotePh} aria-label={copy.reviewNotePh}'), 'the review-changes note has an accessible name');
+  assert.ok(portal.includes('client.business !== client.email'), 'the identity line does not repeat the email when no business name is set');
+});
