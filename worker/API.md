@@ -87,8 +87,15 @@ strengths, categories, partial, lang, at, email?, reportRequestedAt? } }`
 ### `POST /api/audit/report`
 Body: `{ id, email }` (or `{ url, score, findings, email }` without an id,
 for a standalone report request). Attaches the business email to the audit
-record so the lead jobs can send the full report. The worker does not send
-the email itself. → `{ "ok": true }` (404 when the id is unknown).
+record and sends the full report email at once, through SMTP2GO
+(`sendClientEmail` in `worker/mailer.ts`, sender start@webao.ca; the
+`SMTP2GO_API_KEY` secret must be set). The email names one real
+finding in plain terms, lists every other finding code with its
+vague hint, and notes the rest are just as real and each code is
+understood. It is signed "Webao". Rate-limited
+to 5 requests per IP per hour. → `{ "ok": true }` (404 when the id is
+unknown, 429 over the limit, 502 when the email could not be sent; the
+request is still stored, so the admin Audits tab can follow up).
 
 ## Outreach lead tracking
 

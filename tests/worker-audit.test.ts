@@ -5,6 +5,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
+  buildAuditReportEmail,
   handleAudit,
   handleAuditFull,
   handleAuditGet,
@@ -36,6 +37,26 @@ function stubHomepage(html: string, finalUrl = 'https://example.com/'): () => vo
   }) as typeof fetch;
   return () => {
     globalThis.fetch = original;
+  };
+}
+
+/** Stub fetch for the SMTP2GO call; records the request bodies sent. */
+function stubSmtp(ok: boolean): { bodies: unknown[]; restore: () => void } {
+  const original = globalThis.fetch;
+  const bodies: unknown[] = [];
+  globalThis.fetch = (async (input: unknown, init?: { body?: unknown }) => {
+    bodies.push(init?.body ? JSON.parse(String(init.body)) : null);
+    return {
+      ok,
+      status: ok ? 200 : 500,
+      json: async () => ({ data: { succeeded: ok ? 1 : 0, failed: ok ? 0 : 1 } }),
+    } as unknown as Response;
+  }) as typeof fetch;
+  return {
+    bodies,
+    restore() {
+      globalThis.fetch = original;
+    },
   };
 }
 
@@ -794,12 +815,13 @@ test('GET /api/audit/:id returns a stored audit, 404 when missing', async () => 
   assert.equal(missing.status, 404);
 });
 
-test('POST /api/audit/report attaches the email to the audit', async () => {
+test('POST /api/audit/report stores the email and sends the report', async () => {
   const record: AuditRecord = {
     id: '1762456789000:abc123',
     url: 'https://example.com/',
     score: 82,
     findings: ['Slow to load.'],
+    findingCodes: ['WA-0013'],
     strengths: [],
     categories: { performance: 0.8 },
     metrics: {},
@@ -810,23 +832,181 @@ test('POST /api/audit/report attaches the email to the audit', async () => {
   };
   const memory = memoryKV({ [`audit:${record.id}`]: record });
   const kv = memory.kv;
-  const env = envOf(kv);
-  const badEmail = await handleAuditReport(
-    apiRequest('/api/audit/report', { id: record.id, email: 'not-an-email' }),
-    env,
-  );
-  assert.equal(badEmail.status, 400);
-  const unknown = await handleAuditReport(
-    apiRequest('/api/audit/report', { id: '1%3Anope', email: 'a@b.com' }),
-    env,
-  );
-  assert.equal(unknown.status, 404);
-  const ok = await handleAuditReport(
-    apiRequest('/api/audit/report', { id: record.id, email: 'owner@example.com' }),
-    env,
-  );
-  assert.equal(ok.status, 200);
-  const stored = await kv.get(`audit:${record.id}`, { type: 'json' }) as AuditRecord | null;
+  const env = envOf(kv, { SMTP2GO_API_KEY: 'test-key' });
+  const stub = stubSmtp(true);
+  try {
+    const badEmail = await handleAuditReport(
+      apiRequest('/api/audit/report', { id: record.id, email: 'not-an-email' }),
+      env,
+    );
+    assert.equal(badEmail.status, 400);
+    const unknown = await handleAuditReport(
+      apiRequest('/api/audit/report', { id: '1%3Anope', email: 'a@b.com' }),
+      env,
+    );
+    assert.equal(unknown.status, 404);
+    const ok = await handleAuditReport(
+      apiRequest('/api/audit/report', { id: record.id, email: 'owner@example.com' }),
+      env,
+    );
+    assert.equal(ok.status, 200);
+    const stored = await kv.get(`audit:${record.id}`, { type: 'json' }) as AuditRecord | null;
+    assert.equal(stored?.email, 'owner@example.com');
+    assert.ok(stored?.reportRequestedAt);
+    assert.equal(stub.bodies.length, 1);
+    const sent = stub.bodies[0] as { to: string[]; subject: string; text_body: string };
+    assert.deepEqual(sent.to, ['owner@example.com']);
+    assert.ok(sent.subject.includes('82/100'));
+    assert.ok(sent.text_body.includes('https://example.com/'));
+    assert.ok(sent.text_body.includes('WA-0013'));
+    assert.ok(sent.text_body.includes('Slow to load.'));
+  } finally {
+    stub.restore();
+  }
+});
+
+test('POST /api/audit/report answers 502 when the send fails, but still stores the request', async () => {
+  const record: AuditRecord = {
+    id: '1762456789000:def456',
+    url: 'https://example.com/',
+    score: 82,
+    findings: ['Slow to load.'],
+    findingCodes: ['WA-0013'],
+    strengths: [],
+    categories: { performance: 0.8 },
+    metrics: {},
+    partial: false,
+    pending: false,
+    lang: 'en',
+    at: 1762456789000,
+  };
+  // SMTP2GO answers with a failure tally.
+  const memory = memoryKV({ [`audit:${record.id}`]: record });
+  const env = envOf(memory.kv, { SMTP2GO_API_KEY: 'test-key' });
+  const stub = stubSmtp(false);
+  try {
+    const failed = await handleAuditReport(
+      apiRequest('/api/audit/report', { id: record.id, email: 'owner@example.com' }),
+      env,
+    );
+    assert.equal(failed.status, 502);
+  } finally {
+    stub.restore();
+  }
+  const stored = await memory.kv.get(`audit:${record.id}`, { type: 'json' }) as AuditRecord | null;
   assert.equal(stored?.email, 'owner@example.com');
   assert.ok(stored?.reportRequestedAt);
+  // No API key configured at all: the mailer is a no-op, so the
+  // request is stored but the page must not claim it was sent.
+  const memory2 = memoryKV({ [`audit:${record.id}`]: record });
+  const env2 = envOf(memory2.kv);
+  const noKey = await handleAuditReport(
+    apiRequest('/api/audit/report', { id: record.id, email: 'owner@example.com' }, { ip: '203.0.113.10' }),
+    env2,
+  );
+  assert.equal(noKey.status, 502);
+});
+
+test('POST /api/audit/report rate-limits at 5 per IP per hour', async () => {
+  const record: AuditRecord = {
+    id: '1762456789000:ghi789',
+    url: 'https://example.com/',
+    score: 82,
+    findings: [],
+    findingCodes: [],
+    strengths: [],
+    categories: {},
+    metrics: {},
+    partial: false,
+    pending: false,
+    lang: 'en',
+    at: 1762456789000,
+  };
+  const memory = memoryKV({ [`audit:${record.id}`]: record });
+  const env = envOf(memory.kv, { SMTP2GO_API_KEY: 'test-key' });
+  const stub = stubSmtp(true);
+  try {
+    for (let i = 0; i < 5; i++) {
+      const res = await handleAuditReport(
+        apiRequest('/api/audit/report', { id: record.id, email: 'owner@example.com' }, { ip: '203.0.113.77' }),
+        env,
+      );
+      assert.equal(res.status, 200);
+    }
+    const sixth = await handleAuditReport(
+      apiRequest('/api/audit/report', { id: record.id, email: 'owner@example.com' }, { ip: '203.0.113.77' }),
+      env,
+    );
+    assert.equal(sixth.status, 429);
+  } finally {
+    stub.restore();
+  }
+});
+
+test('buildAuditReportEmail names one real finding, lists every code, signs Webao', () => {
+  const en: AuditRecord = {
+    id: '1762456789000:abc123',
+    url: 'https://example.com/',
+    score: 82,
+    findings: [
+      'Render-blocking resources are slowing the page (1.2 s).',
+      'Unused CSS is loading on the page.',
+    ],
+    findingCodes: ['WA-0013', 'WA-0018'],
+    strengths: ['Strong speed (95/100)'],
+    categories: { performance: 0.8 },
+    metrics: {},
+    partial: false,
+    pending: false,
+    lang: 'en',
+    at: 1762456789000,
+    email: 'owner@example.com',
+  };
+  const mail = buildAuditReportEmail(en);
+  assert.equal(mail.to, 'owner@example.com');
+  assert.equal(mail.subject, 'Your website audit - 82/100');
+  assert.ok(mail.text.includes('https://example.com/'));
+  assert.ok(mail.text.includes('https://webao.ca/audits/1762456789000:abc123'));
+  assert.ok(mail.text.includes('Strong speed (95/100)'));
+  // One real finding, in plain terms, with its code.
+  assert.ok(mail.text.includes('Render-blocking resources are slowing the page (1.2 s).'));
+  assert.ok(mail.text.includes('WA-0013'));
+  // The rest stay as codes: every code is present, the second
+  // finding is never spelled out.
+  assert.ok(mail.text.includes('The other findings are just as real, and we know what each code describes:'));
+  assert.ok(mail.text.includes('WA-0018'));
+  assert.ok(mail.text.includes('Something on this page is doing nothing useful.'));
+  assert.ok(!mail.text.includes('Unused CSS is loading on the page.'));
+  assert.ok(mail.text.includes('https://webao.ca/start'));
+  assert.ok(mail.text.includes('https://webao.ca/demos'));
+  assert.ok(mail.text.includes('Webao'));
+  assert.ok(!mail.text.includes('Benjamin'));
+  assert.ok(!mail.text.includes('—'));
+
+  const fr: AuditRecord = {
+    ...en,
+    lang: 'fr',
+    partial: true,
+    findings: [
+      "Votre site n'utilise pas HTTPS. Les visiteurs voient un avertissement de sécurité, et Google le classe plus bas.",
+      'Pas de titre de page clair. Les résultats de recherche affichent un titre vide ou générique au lieu de votre entreprise.',
+    ],
+    findingCodes: ['WA-0001', 'WA-0002'],
+  };
+  const mailFr = buildAuditReportEmail(fr);
+  assert.equal(mailFr.subject, 'Votre audit de site web - 82/100');
+  assert.ok(mailFr.text.includes('Voici le rapport complet'));
+  assert.ok(mailFr.text.includes('https://webao.ca/fr/audits/1762456789000:abc123'));
+  assert.ok(mailFr.text.includes("Votre site n'utilise pas HTTPS."));
+  assert.ok(mailFr.text.includes('WA-0001'));
+  assert.ok(mailFr.text.includes('Les autres constats sont tout aussi réels, et nous savons ce que chaque code décrit :'));
+  assert.ok(mailFr.text.includes('WA-0002'));
+  assert.ok(!mailFr.text.includes('Pas de titre de page clair.'));
+  assert.ok(mailFr.text.includes('https://webao.ca/fr/commencer'));
+  assert.ok(mailFr.text.includes('89,99 $'));
+  assert.ok(mailFr.text.includes('désinscrire'));
+  assert.ok(mailFr.text.includes('estimations'));
+  assert.ok(mailFr.text.includes('Webao'));
+  assert.ok(!mailFr.text.includes('Benjamin'));
+  assert.ok(!mailFr.text.includes('—'));
 });

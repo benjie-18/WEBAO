@@ -15,6 +15,7 @@
 
 import { getJson, putJson, KvWriteError } from "./kv";
 import { json, err, clientIp } from "./util";
+import { sendClientEmail, type ClientEmail } from "./mailer";
 
 const PSI_ENDPOINT = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed";
 // The full audit waits up to 2 minutes for PageSpeed: direct calls
@@ -22,6 +23,10 @@ const PSI_ENDPOINT = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed
 // sometimes exceeds 120s. The first pass never calls PageSpeed.
 const PSI_FULL_TIMEOUT_MS = 180_000;
 const RATE_LIMIT_PER_HOUR = 5;
+// Report requests are rate-limited separately from audits (same
+// allowance): without it anyone could burn the SMTP2GO quota or use
+// the form to spam arbitrary addresses.
+const REPORT_RATE_LIMIT_PER_HOUR = 5;
 // A site served over plain HTTP is a fundamental security and SEO
 // failure: its score is capped here, in the estimate and in the
 // full audit, whatever PageSpeed says.
@@ -796,11 +801,223 @@ export async function handleAuditGet(req: Request, env: Env, path: string): Prom
   return json({ ok: true, audit: record });
 }
 
+/**
+ * Vague hints for each finding code, in the report email.
+ * Mirrors the findingHints maps in src/pages/audits/index.astro
+ * (EN) and src/pages/fr/audits/index.astro (FR): the visitor sees
+ * only the code plus its hint, never the real finding text, which
+ * stays in the audit record for the admin panel. Keep the three
+ * maps in sync when a hint changes.
+ */
+const FINDING_HINTS_EN: Record<string, string> = {
+  "WA-0000": "Something on this page needs a closer look.",
+  "WA-0001": "Something about this page isn't quite as it should be.",
+  "WA-0002": "Something about how this page presents itself could be better.",
+  "WA-0003": "Something about this page's first impression could be stronger.",
+  "WA-0004": "Something about how this page fits needs a look.",
+  "WA-0005": "A small detail on this page isn't quite right.",
+  "WA-0006": "Something on this page could be tighter.",
+  "WA-0007": "Something is making this page feel slower than it should.",
+  "WA-0008": "Something about what visitors see first needs work.",
+  "WA-0009": "This page doesn't feel as quick as it should.",
+  "WA-0010": "Something about how this page first appears needs attention.",
+  "WA-0011": "Something is getting in this page's way.",
+  "WA-0012": "Something on this page doesn't sit quite right.",
+  "WA-0013": "Something is slowing this page down.",
+  "WA-0014": "Something about the images here needs a look.",
+  "WA-0015": "Something about how this page loads needs attention.",
+  "WA-0016": "Something on this page could be leaner.",
+  "WA-0017": "Something on this page isn't pulling its weight.",
+  "WA-0018": "Something on this page is doing nothing useful.",
+  "WA-0019": "Something on this page is just sitting there.",
+  "WA-0020": "Something about the images here could be better.",
+  "WA-0021": "Something about this page could be more efficient.",
+  "WA-0022": "Something behind this page is slower than it should be.",
+  "WA-0023": "Something about how visitors get here needs a look.",
+  "WA-0024": "Something about this page could be more up to date.",
+  "WA-0114": "Something in how this page is put together needs a closer look.",
+  "WA-0123": "A detail on this page isn't quite where it should be.",
+  "WA-0131": "There's room to make this page work harder for the business.",
+  "WA-0142": "Something on this page isn't as tight as it could be.",
+  "WA-0156": "A small thing on this page is holding it back.",
+  "WA-0168": "Something on this page could be doing more.",
+};
+
+const FINDING_HINTS_FR: Record<string, string> = {
+  "WA-0000": "Something on this page needs a closer look.",
+  "WA-0001": "Something about this page isn't quite as it should be.",
+  "WA-0002": "Something about how this page presents itself could be better.",
+  "WA-0003": "Something about this page's first impression could be stronger.",
+  "WA-0004": "Something about how this page fits needs a look.",
+  "WA-0005": "A small detail on this page isn't quite right.",
+  "WA-0006": "Something on this page could be tighter.",
+  "WA-0007": "Something is making this page feel slower than it should.",
+  "WA-0008": "Something about what visitors see first needs work.",
+  "WA-0009": "This page doesn't feel as quick as it should.",
+  "WA-0010": "Something about how this page first appears needs attention.",
+  "WA-0011": "Something is getting in this page's way.",
+  "WA-0012": "Something on this page doesn't sit quite right.",
+  "WA-0013": "Something is slowing this page down.",
+  "WA-0014": "Something about the images here needs a look.",
+  "WA-0015": "Something about how this page loads needs attention.",
+  "WA-0016": "Something on this page could be leaner.",
+  "WA-0017": "Something on this page isn't pulling its weight.",
+  "WA-0018": "Something on this page is doing nothing useful.",
+  "WA-0019": "Something on this page is just sitting there.",
+  "WA-0020": "Something about the images here could be better.",
+  "WA-0021": "Something about this page could be more efficient.",
+  "WA-0022": "Something behind this page is slower than it should be.",
+  "WA-0023": "Something about how visitors get here needs a look.",
+  "WA-0024": "Something about this page could be more up to date.",
+  "WA-0114": "Something in how this page is put together needs a closer look.",
+  "WA-0123": "A detail on this page isn't quite where it should be.",
+  "WA-0131": "There's room to make this page work harder for the business.",
+  "WA-0142": "Something on this page isn't as tight as it could be.",
+  "WA-0156": "A small thing on this page is holding it back.",
+  "WA-0168": "Something on this page could be doing more.",
+};
+
+/**
+ * The full-report email for one audit record, built from the
+ * 2026-10-27 report template as revised by Benji on 2026-11-09:
+ * score and audited URL from the run, 1-2 verified strengths, ONE
+ * real finding named in plain terms (the first real fixable
+ * finding: not the partial note, not a blank filler, not the "no
+ * major problems" line), then every other finding by code, with
+ * the note that the rest are just as real and we know what each
+ * code describes. The sender is start@webao.ca (see
+ * worker/mailer.ts); replies to it reach the WEBAO inbox through
+ * the @webao.ca forwarding. Signed "Webao".
+ */
+export function buildAuditReportEmail(record: AuditRecord): ClientEmail {
+  const fr = record.lang === "fr";
+  const hints = fr ? FINDING_HINTS_FR : FINDING_HINTS_EN;
+  const fallback = hints["WA-0000"] ?? "";
+  const findings = record.findings ?? [];
+  const codes = (record.findingCodes ?? []).filter((c) => c);
+  const hasCodes = codes.length > 0;
+  const strengths = (record.strengths ?? []).filter((s) => s).slice(0, 2);
+  const resultsUrl = fr
+    ? `https://webao.ca/fr/audits/${record.id}`
+    : `https://webao.ca/audits/${record.id}`;
+  // First real finding: skip the partial note, blank fillers, and
+  // the "no major problems" line. Findings and codes run in
+  // parallel, except the partial note, which has an empty code.
+  const noneText = tr("none", record.lang);
+  const partialText = tr("partialNote", record.lang);
+  let namedIdx = -1;
+  for (let i = 0; i < findings.length; i++) {
+    const f = findings[i] ?? "";
+    const c = (record.findingCodes ?? [])[i] ?? "";
+    if (f && f !== noneText && f !== partialText && (!hasCodes || c)) {
+      namedIdx = i;
+      break;
+    }
+  }
+  const namedFinding = namedIdx >= 0 ? findings[namedIdx] : "";
+  const namedCode = namedIdx >= 0 ? ((record.findingCodes ?? [])[namedIdx] ?? "") : "";
+  const restCodes = codes.filter((c) => c !== namedCode);
+  const lines: string[] = [];
+  if (fr) {
+    lines.push("Bonjour,");
+    lines.push("");
+    if (record.url) {
+      lines.push(`Voici le rapport complet de l'audit de ${record.url}, qui a obtenu ${record.score}/100.`);
+    } else {
+      lines.push(`Voici le rapport complet de votre audit de site web, qui a obtenu ${record.score}/100.`);
+    }
+    lines.push(`Voir vos résultats : ${resultsUrl}`);
+    if (record.partial) {
+      lines.push("Note : les valeurs de ce rapport sont seulement des estimations et peuvent ne pas refléter les résultats finaux.");
+    }
+    lines.push("");
+    if (strengths.length > 0) {
+      lines.push("Ce qui fonctionne :");
+      for (const s of strengths) lines.push(`- ${s}`);
+      lines.push("");
+    }
+    if (namedFinding) {
+      lines.push("Un constat, en clair :");
+      lines.push(namedCode ? `- ${namedFinding} (${namedCode})` : `- ${namedFinding}`);
+      lines.push("");
+    }
+    if (restCodes.length > 0) {
+      lines.push("Les autres constats sont tout aussi réels, et nous savons ce que chaque code décrit :");
+      for (const code of restCodes) lines.push(`- ${code} : ${hints[code] ?? fallback}`);
+      lines.push("");
+    } else if (!namedFinding) {
+      lines.push("Aucun problème trouvé.");
+      lines.push("");
+    }
+    lines.push("Pour commencer, c'est par ici : https://webao.ca/fr/commencer");
+    lines.push("");
+    lines.push("Si vous voulez que nous nous en occupions, nos forfaits commencent à 89,99 $ par mois, tout inclus (domaine, hébergement, mises à jour) : https://webao.ca/demos");
+    lines.push("");
+    lines.push("Vous pouvez aussi me répondre directement pour en discuter, sans obligation.");
+    lines.push("");
+    lines.push("Webao");
+    lines.push("https://webao.ca");
+    lines.push('Pour ne plus recevoir nos messages, répondez "désinscrire".');
+    return {
+      to: record.email ?? "",
+      subject: `Votre audit de site web - ${record.score}/100`,
+      text: lines.join("\n"),
+    };
+  }
+  lines.push("Hi,");
+  lines.push("");
+  if (record.url) {
+    lines.push(`Here is the full report for the audit of ${record.url}, which scored ${record.score}/100.`);
+  } else {
+    lines.push(`Here is the full report for your website audit, which scored ${record.score}/100.`);
+  }
+  lines.push(`See your results: ${resultsUrl}`);
+  if (record.partial) {
+    lines.push("Note: the values in this report are only estimates and may not reflect the final results.");
+  }
+  lines.push("");
+  if (strengths.length > 0) {
+    lines.push("What works:");
+    for (const s of strengths) lines.push(`- ${s}`);
+    lines.push("");
+  }
+  if (namedFinding) {
+    lines.push("One finding, in plain terms:");
+    lines.push(namedCode ? `- ${namedFinding} (${namedCode})` : `- ${namedFinding}`);
+    lines.push("");
+  }
+  if (restCodes.length > 0) {
+    lines.push("The other findings are just as real, and we know what each code describes:");
+    for (const code of restCodes) lines.push(`- ${code}: ${hints[code] ?? fallback}`);
+    lines.push("");
+  } else if (!namedFinding) {
+    lines.push("No issues found.");
+    lines.push("");
+  }
+  lines.push("To get started, go here: https://webao.ca/start");
+  lines.push("");
+  lines.push("If you'd like us to take care of it, plans start at $89.99 a month, all included (domain, hosting, updates): https://webao.ca/demos");
+  lines.push("");
+  lines.push("You can also just reply to discuss it, no obligation.");
+  lines.push("");
+  lines.push("Webao");
+  lines.push("https://webao.ca");
+  lines.push('To stop receiving our messages, reply "unsubscribe".');
+  return {
+    to: record.email ?? "",
+    subject: `Your website audit - ${record.score}/100`,
+    text: lines.join("\n"),
+  };
+}
+
 export async function handleAuditReport(req: Request, env: Env): Promise<Response> {
-  // Phase 1: store the report request in KV for the admin / lead jobs to
-  // send from contact@webao.ca using the approved report template.
-  // The worker does NOT send email, deliberately, so no mailer
-  // credentials are added here.
+  // The report email is sent here, through SMTP2GO (see
+  // worker/mailer.ts), from the same sender the portal and welcome
+  // mail use. The send_email binding cannot address clients, so it
+  // is not an option for this endpoint. The request is stored in KV
+  // first, so a failed send still leaves a trace in the admin
+  // Audits tab; a failed send answers 502 so the results page shows
+  // its "did not go through" state instead of promising delivery.
   if (req.method !== "POST") return err("Method not allowed", 405);
   let body: Record<string, unknown>;
   try {
@@ -812,15 +1029,32 @@ export async function handleAuditReport(req: Request, env: Env): Promise<Respons
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return err("Provide a valid business email.", 400);
   }
+  // Rate limit: 5 report requests per IP per hour, counted
+  // separately from audits. A KV write failure fails open.
+  const ip = clientIp(req);
+  let count = 0;
+  try {
+    const cur = await getJson<string>(env.WEBAO_KV, `audit:report:ratelimit:${ip}`);
+    count = (cur ? parseInt(cur, 10) || 0 : 0) + 1;
+    await putJson(env.WEBAO_KV, `audit:report:ratelimit:${ip}`, String(count), 3600);
+  } catch (e) {
+    if (!(e instanceof KvWriteError)) throw e;
+    count = 0;
+  }
+  if (count > REPORT_RATE_LIMIT_PER_HOUR) {
+    return err("Too many report requests. Try again later.", 429);
+  }
   const id = typeof body?.id === "string" ? body.id : "";
+  let record: AuditRecord;
   if (id) {
-    const record = await getJson<AuditRecord>(env.WEBAO_KV, `audit:${id}`);
-    if (!record) return err("Audit not found. Run a new audit first.", 404);
-    record.email = email;
-    record.reportRequestedAt = Date.now();
-    await putJson(env.WEBAO_KV, `audit:${id}`, record);
+    const stored = await getJson<AuditRecord>(env.WEBAO_KV, `audit:${id}`);
+    if (!stored) return err("Audit not found. Run a new audit first.", 404);
+    stored.email = email;
+    stored.reportRequestedAt = Date.now();
+    await putJson(env.WEBAO_KV, `audit:${id}`, stored);
+    record = stored;
   } else {
-    const record: AuditRecord = {
+    record = {
       id: newAuditId(),
       url: typeof body?.url === "string" ? body.url : "",
       score: typeof body?.score === "number" ? body.score : 0,
@@ -837,6 +1071,11 @@ export async function handleAuditReport(req: Request, env: Env): Promise<Respons
       reportRequestedAt: Date.now(),
     };
     await storeAudit(env.WEBAO_KV, record);
+  }
+  const sent = await sendClientEmail(env, buildAuditReportEmail(record));
+  if (!sent) {
+    console.error("audit: report email failed to send", record.id);
+    return err("We could not send the report. Your request is saved, please try again or contact us directly.", 502);
   }
   return json({ ok: true });
 }
