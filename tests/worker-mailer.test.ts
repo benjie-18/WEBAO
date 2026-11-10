@@ -4,7 +4,7 @@
 // workerd-only import that cannot resolve under the node test runner.
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { base64Utf8, buildInboxEmail, encodeHeader, headerSafe, INBOX_ADDRESS } from '../worker/mailer';
+import { base64Utf8, buildInboxEmail, encodeHeader, headerSafe, INBOX_ADDRESS, sendClientEmail } from '../worker/mailer';
 
 test('buildInboxEmail: plain-ASCII headers pass through untouched', () => {
   const raw = buildInboxEmail({
@@ -65,4 +65,35 @@ test('encodeHeader and headerSafe: ASCII passthrough, CRLF flattened', () => {
   assert.equal(encodeHeader('Plain subject'), 'Plain subject');
   assert.equal(headerSafe('a\r\nb\nc'), 'a b c');
   assert.equal(encodeHeader('Café'), `=?UTF-8?B?${base64Utf8('Café')}?=`);
+});
+
+test('sendClientEmail sends from "Webao <start@webao.ca>"', async () => {
+  const original = globalThis.fetch;
+  const bodies: unknown[] = [];
+  globalThis.fetch = (async (_input: unknown, init?: { body?: unknown }) => {
+    bodies.push(init?.body ? JSON.parse(String(init.body)) : null);
+    return {
+      ok: true,
+      status: 200,
+      json: async () => ({ data: { succeeded: 1, failed: 0 } }),
+    } as unknown as Response;
+  }) as typeof fetch;
+  try {
+    const sent = await sendClientEmail(
+      { SMTP2GO_API_KEY: 'test-key' },
+      { to: 'owner@example.com', subject: 'Hi', text: 'Hello' },
+    );
+    assert.equal(sent, true);
+    assert.equal(bodies.length, 1);
+    const body = bodies[0] as { sender: string; to: string[] };
+    assert.equal(body.sender, 'Webao <start@webao.ca>');
+    assert.deepEqual(body.to, ['owner@example.com']);
+  } finally {
+    globalThis.fetch = original;
+  }
+});
+
+test('sendClientEmail is a no-op without the API key', async () => {
+  const sent = await sendClientEmail({}, { to: 'owner@example.com', subject: 'Hi', text: 'Hello' });
+  assert.equal(sent, false);
 });

@@ -942,7 +942,7 @@ export function buildAuditReportEmail(record: AuditRecord): ClientEmail {
       lines.push("");
     }
     if (restCodes.length > 0) {
-      lines.push("Les autres constats sont tout aussi réels, et nous savons ce que chaque code décrit :");
+      lines.push("Ces constats sont réels, et nous savons ce que chaque code décrit :");
       for (const code of restCodes) lines.push(`- ${code} : ${hints[code] ?? fallback}`);
       lines.push("");
     } else if (!namedFinding) {
@@ -987,7 +987,7 @@ export function buildAuditReportEmail(record: AuditRecord): ClientEmail {
     lines.push("");
   }
   if (restCodes.length > 0) {
-    lines.push("The other findings are just as real, and we know what each code describes:");
+    lines.push("These findings are real, and we know what each code describes:");
     for (const code of restCodes) lines.push(`- ${code}: ${hints[code] ?? fallback}`);
     lines.push("");
   } else if (!namedFinding) {

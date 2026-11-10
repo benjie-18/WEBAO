@@ -105,7 +105,11 @@ export async function sendClientEmail(
       body: JSON.stringify({
         api_key: apiKey,
         to: [mail.to],
-        sender: "start@webao.ca",
+        // Display name included: SMTP2GO accepts "Name <email>"
+        // for the sender, so clients see "Webao" instead of the
+        // bare start@webao.ca address. The address itself is
+        // unchanged, so DKIM/SPF alignment is unaffected.
+        sender: "Webao <start@webao.ca>",
         subject: mail.subject,
         text_body: mail.text,
       }),

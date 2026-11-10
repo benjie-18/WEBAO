@@ -973,7 +973,7 @@ test('buildAuditReportEmail names one real finding, lists every code, signs Weba
   assert.ok(mail.text.includes('WA-0013'));
   // The rest stay as codes: every code is present, the second
   // finding is never spelled out.
-  assert.ok(mail.text.includes('The other findings are just as real, and we know what each code describes:'));
+  assert.ok(mail.text.includes('These findings are real, and we know what each code describes:'));
   assert.ok(mail.text.includes('WA-0018'));
   assert.ok(mail.text.includes('Something on this page is doing nothing useful.'));
   assert.ok(!mail.text.includes('Unused CSS is loading on the page.'));
@@ -999,7 +999,7 @@ test('buildAuditReportEmail names one real finding, lists every code, signs Weba
   assert.ok(mailFr.text.includes('https://webao.ca/fr/audits/1762456789000:abc123'));
   assert.ok(mailFr.text.includes("Votre site n'utilise pas HTTPS."));
   assert.ok(mailFr.text.includes('WA-0001'));
-  assert.ok(mailFr.text.includes('Les autres constats sont tout aussi réels, et nous savons ce que chaque code décrit :'));
+  assert.ok(mailFr.text.includes('Ces constats sont réels, et nous savons ce que chaque code décrit :'));
   assert.ok(mailFr.text.includes('WA-0002'));
   assert.ok(!mailFr.text.includes('Pas de titre de page clair.'));
   assert.ok(mailFr.text.includes('https://webao.ca/fr/commencer'));
