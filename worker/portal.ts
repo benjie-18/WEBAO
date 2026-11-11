@@ -306,11 +306,9 @@ export async function handlePortalMe(req: Request, env: Env): Promise<Response> 
   if (hasAdsPack(client)) {
     view.ads = {
       status: client.ads?.status || "onboarding",
-      // The label in the portal shows this floor, so a Starter ($750) or
-      // both-channels ($2,500) client is never told the $1,500 default.
-      minBudget: adsMinMonthlyBudget(client),
       onboarding: client.ads?.onboarding,
       complete: adsOnboardingComplete(client),
+      minBudget: adsMinMonthlyBudget(client),
       leads: await listAdsLeads(env.WEBAO_KV, client.id),
     };
   }
@@ -564,6 +562,7 @@ export async function handlePortalAdsOnboarding(req: Request, env: Env): Promise
       status: client.ads.status,
       onboarding: client.ads.onboarding,
       complete: adsOnboardingComplete(client),
+      minBudget: adsMinMonthlyBudget(client),
     },
   });
 }

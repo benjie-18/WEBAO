@@ -816,7 +816,16 @@ const supportHref = fr ? "/fr/soutien" : "/support";
       status.textContent = msg("[data-portal-msg-saving]");
       api("/api/portal/ads-onboarding", { method: "POST", body: JSON.stringify(payload) }).then(function (r) {
         if (r.data.ok) {
-          status.textContent = msg("[data-portal-msg-ads-saved]");
+          if (r.data.ads && r.data.ads.complete) {
+            status.textContent = msg("[data-portal-msg-ads-saved]");
+          } else {
+            // Same trap as the website form: a bare "Saved, thank you."
+            // after a partial save reads as done. Name what is still
+            // missing, from the labels already on the page and the floor
+            // the server sent back with the save.
+            var missing = missingAds(r.data.ads);
+            status.textContent = msg("[data-portal-msg-ads-saved]") + (missing.length ? " " + msg("[data-portal-msg-required]") + missing.join(", ") : "");
+          }
           loadMe();
         } else {
           status.textContent = r.data.error || msg("[data-portal-msg-generic]");
@@ -903,6 +912,32 @@ const supportHref = fr ? "/fr/soutien" : "/support";
         var domainLabel = root.querySelector("[data-portal-domain-label]");
         if (domainLabel) missing.push(domainLabel.textContent.trim());
       }
+      return missing;
+    }
+
+    // Labels of the ads fields the campaigns cannot start without, for
+    // the "Still needed: ..." status after a partial ads save. Mirrors
+    // the server's completeness rule: trade, area, a budget at or above
+    // the floor the server sent back, somewhere to send leads (email or
+    // phone), and a landing page (their website, or the domain we host
+    // for them). The lead contact and the landing page each count as
+    // one item, like the domain above.
+    function adsFieldLabel(key) {
+      var el = root.querySelector('[data-ads-f="' + key + '"]');
+      var label = el && el.closest("label");
+      return label ? label.textContent.replace(/\s*\*\s*$/, "").trim() : key;
+    }
+    function missingAds(ads) {
+      var missing = [];
+      var o = (ads && ads.onboarding) || {};
+      var floor = ads && typeof ads.minBudget === "number" ? ads.minBudget : 1500;
+      if (!o.trade || !String(o.trade).trim()) missing.push(adsFieldLabel("trade"));
+      if (!o.serviceArea || !String(o.serviceArea).trim()) missing.push(adsFieldLabel("serviceArea"));
+      if (typeof o.monthlyBudget !== "number" || o.monthlyBudget < floor) missing.push(adsFieldLabel("monthlyBudget"));
+      if ((!o.leadEmail || !String(o.leadEmail).trim()) && (!o.leadPhone || !String(o.leadPhone).trim())) missing.push(adsFieldLabel("leadEmail"));
+      var domainBox = root.querySelector("[data-portal-domain]");
+      var hasDomain = !!(domainBox && !domainBox.hidden);
+      if ((!o.websiteUrl || !String(o.websiteUrl).trim()) && !hasDomain) missing.push(adsFieldLabel("websiteUrl"));
       return missing;
     }
 

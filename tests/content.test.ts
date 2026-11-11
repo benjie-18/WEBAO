@@ -344,6 +344,8 @@ test('the portal names what is still missing after a partial save, and shows the
   assert.ok(portal.includes('msg("[data-portal-msg-required]")'), 'the submit handler reads the still-needed template');
   assert.ok(portal.includes('r.data.client.onboardingComplete'), 'the submit handler branches on completeness');
   assert.ok(portal.includes('missingOnboarding(payload)'), 'the submit handler lists the missing fields');
+  assert.ok(portal.includes('missingAds(r.data.ads)'), 'the ads submit handler lists the missing fields');
+  assert.ok(portal.includes('r.data.ads.complete'), 'the ads submit handler branches on completeness');
   assert.ok(portal.includes('data-portal-msg-ads-budget'), 'the ads budget pattern template exists');
   assert.ok(portal.includes('client.ads.minBudget'), 'the budget label is rewritten from the per-variant floor');
   assert.ok(portal.includes('{copy.adsServices}'), 'the ads form uses its own services label');

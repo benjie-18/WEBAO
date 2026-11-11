@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   handleOnboardingNudges,
+  handlePortalAdsOnboarding,
   handlePortalClaim,
   handlePortalExchange,
   handlePortalMe,
@@ -180,6 +181,38 @@ test('me: ads view carries the minimum monthly budget for the purchased variant'
     assert.equal(me.status, 200);
     assert.equal((await bodyOf(me)).client.ads.minBudget, expected, `${email} floor`);
   }
+});
+
+test('ads-onboarding: partial save answers complete:false with the variant floor, full save completes', async () => {
+  // The ads form's "Still needed: ..." status is built from this answer:
+  // the saved onboarding, the completeness flag, and the floor for the
+  // purchased variant, so a Starter client is never told $1,500 is missing.
+  const memory = memoryKV();
+  const env = envOf(memory.kv, {});
+  const client = await createClient(memory.kv, { email: 'ads@example.ca', items: ['ads-starter-month'], source: 'stripe' });
+  const headers = await sessionFor(memory, client.id);
+
+  const partial = await handlePortalAdsOnboarding(apiRequest('/api/portal/ads-onboarding', {
+    trade: 'plumbing',
+    serviceArea: 'Montreal',
+    monthlyBudget: 500,
+  }, { headers }), env);
+  const partialBody = await bodyOf(partial);
+  assert.equal(partialBody.ok, true);
+  assert.equal(partialBody.ads.complete, false);
+  assert.equal(partialBody.ads.minBudget, 750);
+
+  const full = await handlePortalAdsOnboarding(apiRequest('/api/portal/ads-onboarding', {
+    trade: 'plumbing',
+    serviceArea: 'Montreal',
+    monthlyBudget: 800,
+    leadEmail: 'leads@example.ca',
+    websiteUrl: 'https://patplumbing.ca',
+  }, { headers }), env);
+  const fullBody = await bodyOf(full);
+  assert.equal(fullBody.ads.complete, true);
+  assert.equal(fullBody.ads.minBudget, 750);
+  assert.equal(fullBody.ads.status, 'setup');
 });
 
 test('claim: a paid Stripe session signs in, an unpaid one does not', async () => {
