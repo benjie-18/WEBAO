@@ -456,10 +456,12 @@ export async function handleCheckoutSession(req: Request, env: Env): Promise<Res
   // Which products this session was built from, for the Stripe dashboard.
   params.set("metadata[items]", lineItems.map((item) => item.key).join(",").slice(0, 480));
   // The buyer's language, read back by the webhook (welcome email, and the
-  // abandoned-checkout follow-up if the session expires): the checkout POST
-  // comes from the EN or FR pricing page, so the referer carries the locale.
+  // abandoned-checkout follow-up if the session expires): the checkout page
+  // posts its locale directly, so prefer it; the referer is the fallback
+  // for callers that do not send one. A stripped referer used to default
+  // a French buyer to English mail.
   const referer = req.headers.get("referer") || "";
-  params.set("metadata[lang]", referer.includes("/fr/") ? "fr" : "en");
+  params.set("metadata[lang]", body.locale === "fr" || referer.includes("/fr/") ? "fr" : "en");
 
   let stripeRes: Response;
   try {
@@ -493,13 +495,17 @@ export async function handleCheckoutSession(req: Request, env: Env): Promise<Res
     return json({ ok: false, error: msg }, 502);
   }
 
+  // The post-discount total is what will actually be charged: the
+  // subtotal is pre-discount, so a session with a coupon (the touchup
+  // auto-discount, or a buyer-entered promotion code) would otherwise
+  // show the full price on the checkout page while Stripe charges less.
   const pricedItems = (data.line_items?.data ?? []).map((item) => ({
     description: item.description ?? "",
     amount:
-      typeof item.amount_subtotal === "number"
-        ? item.amount_subtotal
-        : typeof item.amount_total === "number"
-          ? item.amount_total
+      typeof item.amount_total === "number"
+        ? item.amount_total
+        : typeof item.amount_subtotal === "number"
+          ? item.amount_subtotal
           : null,
     currency: item.currency ?? "cad",
     interval: item.price?.recurring?.interval ?? "one-time",

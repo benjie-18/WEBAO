@@ -25,8 +25,9 @@ const SUPPORT_CATEGORIES: Record<string, string> = {
   other: "Other",
 };
 
-/** The email copy for a stored submission, or null for forms without one. */
-function notifySpec(submission: FormSubmission): { from: string; fromName: string; subject: string; body: string } | null {
+/** The email copy for a stored submission, or null for forms without one.
+ *  Exported for tests. */
+export function notifySpec(submission: FormSubmission): { from: string; fromName: string; subject: string; body: string } | null {
   const f = submission.fields;
   const name = (f.name || "").trim();
   const email = (f.email || "").trim();
@@ -57,7 +58,7 @@ function notifySpec(submission: FormSubmission): { from: string; fromName: strin
       body: [
         "New contact message from the website form.",
         "",
-        `From: ${name} <${email}>`,
+        `From: ${name}${email ? ` <${email}>` : ""}`,
         `Page: ${page}`,
         "",
         message,

@@ -213,6 +213,35 @@ test('French checkout returns to the French success page', async () => {
   assert.equal(calls[0].params.get('return_url'), 'https://webao.ca/fr/checkout/success?session_id={CHECKOUT_SESSION_ID}');
 });
 
+test('the checkout language follows the posted locale even without a referer', async () => {
+  // The page posts its locale directly; the webhook reads metadata[lang]
+  // for the welcome email, so a French buyer whose browser strips the
+  // referer must still land in French.
+  const { calls } = await call({ locale: 'fr', items: [{ key: 'launch-month' }] });
+  assert.equal(calls[0].params.get('metadata[lang]'), 'fr');
+  const en = await call({ locale: 'en', items: [{ key: 'launch-month' }] });
+  assert.equal(en.calls[0].params.get('metadata[lang]'), 'en');
+});
+
+test('priced line items report what Stripe will actually charge (post-discount total)', async () => {
+  // The checkout page shows these amounts as the total due: the subtotal
+  // is pre-discount, so a touchup cart (10% off the subscription) would
+  // otherwise show the full price while Stripe charges 10% less.
+  const { json } = await call(
+    { items: [{ key: 'launch-month' }, { key: 'website-touchup-onetime' }] },
+    {
+      lineItems: [
+        { description: 'Launch', amount_subtotal: 8999, amount_total: 8099, currency: 'cad', price: { recurring: { interval: 'month' } } },
+        { description: 'Website touchup', amount_subtotal: 19999, amount_total: 19999, currency: 'cad', price: { recurring: null } },
+      ],
+    },
+  );
+  const items = json.lineItems as Array<{ amount: number }>;
+  assert.equal(items.length, 2);
+  assert.equal(items[0].amount, 8099, 'the discounted total is shown, not the pre-discount subtotal');
+  assert.equal(items[1].amount, 19999, 'undiscounted items are unchanged');
+});
+
 test('Stripe errors are surfaced, not swallowed', async () => {
   const originalFetch = globalThis.fetch;
   globalThis.fetch = (async () =>

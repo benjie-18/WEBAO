@@ -3,7 +3,7 @@
 // kept, so a submission costs exactly one KV write.
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { handleFormSubmit } from '../worker/forms';
+import { handleFormSubmit, notifySpec, type FormSubmission } from '../worker/forms';
 import { apiRequest, bodyOf, envOf, memoryKV } from './helpers';
 
 const submit = (body: unknown, options: Parameters<typeof apiRequest>[2] = {}) =>
@@ -231,6 +231,18 @@ test('old submissions are never deleted by a new one', async () => {
   assert.equal(memory.store.has('forms:index'), false);
   assert.equal(memory.deletes.length, 0);
   for (const key of oldKeys) assert.equal(memory.store.has(key), true);
+});
+
+test('the contact email copy omits the empty address when the visitor left no email', () => {
+  // Contact accepts a message without an email; the inbox copy must not
+  // print a broken "From: Sam <>" line with nowhere to reply to.
+  const base: FormSubmission = { form: 'contact', fields: { name: 'Sam', message: 'Bonjour' }, ip: '', country: '', ua: '', at: 0 };
+  const spec = notifySpec(base);
+  assert.ok(spec);
+  assert.ok(spec.body.includes('From: Sam'), 'the name is still shown');
+  assert.ok(!spec.body.includes('<>'), 'no empty angle brackets in the From line');
+  const withEmail = notifySpec({ ...base, fields: { name: 'Sam', email: 'sam@example.ca', message: 'Bonjour' } });
+  assert.ok(withEmail?.body.includes('From: Sam <sam@example.ca>'), 'an address is shown when given');
 });
 
 test('submissions include the visitor metadata the admin panel shows', async () => {
