@@ -225,8 +225,8 @@ test('the checkout language follows the posted locale even without a referer', a
 
 test('priced line items report what Stripe will actually charge (post-discount total)', async () => {
   // The checkout page shows these amounts as the total due: the subtotal
-  // is pre-discount, so a touchup cart (10% off the subscription) would
-  // otherwise show the full price while Stripe charges 10% less.
+  // is pre-discount, so a touchup cart (15% off the subscription) would
+  // otherwise show the full price while Stripe charges 15% less.
   const { json } = await call(
     { items: [{ key: 'launch-month' }, { key: 'website-touchup-onetime' }] },
     {
@@ -359,7 +359,7 @@ test('checkout applies the touchup discount automatically when touchup shares a 
   });
   assert.equal(status, 200);
   const [session] = calls;
-  assert.equal(session.params.get('discounts[0][coupon]'), 'WEBAOFIXIT3256');
+  assert.equal(session.params.get('discounts[0][coupon]'), 'WEBAOFIXIT15');
   assert.equal(session.params.get('allow_promotion_codes'), 'false');
   assert.equal(session.params.get('metadata[touchup_discount]'), 'auto');
 });

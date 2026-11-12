@@ -513,7 +513,7 @@ const en = {
         email: { name: "Email Marketing", price: "C$29.99/mo", note: 0, short: "" },
         report: { name: "Monthly Growth Report", price: "C$29.99/mo", note: 11, short: "" },
         extrapage: { name: "Extra Page", price: "C$44.99 one-time", note: 25, short: "" },
-        "website-touchup": { name: "Website touchup", price: "C$199.99 one-time", note: 31, short: "We fix what the free audit found on your site. Includes 10% off your first 3 months of any subscription." },
+        "website-touchup": { name: "Website touchup", price: "C$199.99 one-time", note: 31, short: "We fix what the free audit found on your site. Includes 15% off your first 3 months of any subscription." },
         priority: { name: "Priority Support + 1 Strategy Call per month", price: "C$59.99/mo", note: 26, short: "" },
         admin: { name: "Advanced Admin Panel", price: "C$39.99/mo", note: 27, short: "" },
         quotephoto: { name: "Quote Photo Upload (Launch only)", price: "C$9.99/mo", note: 28, short: "" },
@@ -1054,7 +1054,7 @@ const en = {
         title: "Website touchup",
         blocks: [
           { text: "Website touchup is a one-time service of C$199.99: we fix the issues the free audit found on your existing website, as listed in your audit report. It covers your existing site on its existing platform. No new design, no redesign, and no migration." },
-          { text: "Buying a Website touchup unlocks 10% off any subscription (website plan, Ads Pack, or AI service) for the first 3 months. The discount can be used only once, on a single subscription, and cannot be combined with other offers. Buy the touchup together with a subscription and the discount is applied automatically at checkout; buy it on its own and we send you the coupon code after your purchase." },
+          { text: "Buying a Website touchup unlocks 15% off any subscription (website plan, Ads Pack, or AI service) for the first 3 months. The discount can be used only once, on a single subscription, and cannot be combined with other offers. Buy the touchup together with a subscription and the discount is applied automatically at checkout; buy it on its own and we send you the coupon code after your purchase." },
         ],
       },
     },
@@ -1536,9 +1536,9 @@ const en = {
         "Coupon codes live here and nowhere else. They are never shown on the public site, in the terms, or in checkout text. Share a code with a buyer only after they have earned it.",
       items: [
         {
-          code: "WEBAOFIXIT3256",
+          code: "WEBAOFIXIT15",
           detail:
-            "10% off any subscription (website plan, Ads Pack, or AI service) for the first 3 months, one use only, on a single subscription. Unlocked by buying the Website touchup (C$199.99). Send it to the buyer after their touchup purchase, unless they bought the touchup together with a subscription: then the 10% was already applied automatically at checkout (see the order's touchup_discount metadata) and the code must not be sent. Note: in Stripe this coupon has no product restriction, so it applies to any subscription; it is not limited to one redemption in Stripe, so use it once per buyer.",
+            "15% off any subscription (website plan, Ads Pack, or AI service) for the first 3 months, one use only, on a single subscription. Unlocked by buying the Website touchup (C$199.99). Send it to the buyer after their touchup purchase, unless they bought the touchup together with a subscription: then the 15% was already applied automatically at checkout (see the order's touchup_discount metadata) and the code must not be sent. Note: in Stripe this coupon has no product restriction, so it applies to any subscription; it is not limited to one redemption in Stripe, so use it once per buyer.",
         },
       ],
     },

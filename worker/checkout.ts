@@ -20,13 +20,13 @@ import { findConflicts, type CartConflict, type RuleItem } from "../src/lib/cart
 const PLAN_PRODUCTS = new Set(["launch", "grow", "scale"]);
 
 /**
- * Stripe coupon for the Website touchup discount: 10% off any
+ * Stripe coupon for the Website touchup discount: 15% off any
  * subscription for the first 3 months, one use only. The coupon's Stripe
  * id IS the code, and it is applied directly by coupon id below: no
  * promotion-code object exists in Stripe, so a buyer typing the code
  * could not redeem it.
  */
-const TOUCHUP_COUPON_ID = "WEBAOFIXIT3256";
+const TOUCHUP_COUPON_ID = "WEBAOFIXIT15";
 
 /** Display names for the products the cart rules can mention. */
 const PRODUCT_NAMES: Record<string, string> = {
@@ -424,7 +424,7 @@ export async function handleCheckoutSession(req: Request, env: Env): Promise<Res
   // object exists in Stripe for it, so typing the code would fail).
   params.set("allow_promotion_codes", "true");
 
-  // Website touchup + subscription in the same cart: the 10% off the
+  // Website touchup + subscription in the same cart: the 15% off the
   // touchup unlocks is applied automatically, no code needed. The discount
   // cannot be combined with other offers, so promotion codes are disabled
   // for this session, and metadata records it so the code is not also

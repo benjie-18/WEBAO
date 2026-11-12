@@ -516,7 +516,7 @@ const fr = {
         email: { name: "Marketing par courriel", price: "C$29.99/mois", note: 0, short: "" },
         report: { name: "Rapport de croissance mensuel", price: "C$29.99/mois", note: 11, short: "" },
         extrapage: { name: "Page supplémentaire", price: "C$44.99 paiement unique", note: 25, short: "" },
-        "website-touchup": { name: "Retouche de site web", price: "C$199.99 paiement unique", note: 31, short: "Nous corrigeons ce que l'audit gratuit a trouvé sur votre site. Comprend 10 % de rabais sur vos 3 premiers mois de n'importe quel abonnement." },
+        "website-touchup": { name: "Retouche de site web", price: "C$199.99 paiement unique", note: 31, short: "Nous corrigeons ce que l'audit gratuit a trouvé sur votre site. Comprend 15 % de rabais sur vos 3 premiers mois de n'importe quel abonnement." },
         priority: { name: "Soutien prioritaire + 1 appel stratégique par mois", price: "C$59.99/mois", note: 26, short: "" },
         admin: { name: "Panneau d'administration avancé", price: "C$39.99/mois", note: 27, short: "" },
         quotephoto: { name: "Téléversement de photos pour soumission (Launch seulement)", price: "C$9.99/mois", note: 28, short: "" },
@@ -1060,7 +1060,7 @@ const fr = {
         title: "Retouche de site web",
         blocks: [
           { text: "La retouche de site web est un service unique de C$199.99 : nous corrigeons les problèmes que l'audit gratuit a trouvés sur votre site existant, tels qu'énumérés dans votre rapport d'audit. Elle couvre votre site existant sur sa plateforme actuelle. Pas de nouveau design, pas de refonte, et pas de migration." },
-          { text: "L'achat d'une retouche de site web donne droit à 10 % de rabais sur n'importe quel abonnement (forfait site web, Pack publicitaire ou service IA) pendant les 3 premiers mois. Le rabais ne peut être utilisé qu'une seule fois, sur un seul abonnement, et ne peut pas être combiné avec d'autres offres. Achetez la retouche avec un abonnement et le rabais est appliqué automatiquement au paiement; achetez-la seule et nous vous envoyons le code de coupon après votre achat." },
+          { text: "L'achat d'une retouche de site web donne droit à 15 % de rabais sur n'importe quel abonnement (forfait site web, Pack publicitaire ou service IA) pendant les 3 premiers mois. Le rabais ne peut être utilisé qu'une seule fois, sur un seul abonnement, et ne peut pas être combiné avec d'autres offres. Achetez la retouche avec un abonnement et le rabais est appliqué automatiquement au paiement; achetez-la seule et nous vous envoyons le code de coupon après votre achat." },
         ],
       },
     },
@@ -1545,9 +1545,9 @@ const fr = {
         "Les codes de coupon vivent ici et nulle part ailleurs. Ils ne sont jamais affichés sur le site public, dans les conditions, ou dans le texte de paiement. Partagez un code avec un acheteur seulement après qu'il l'a obtenu.",
       items: [
         {
-          code: "WEBAOFIXIT3256",
+          code: "WEBAOFIXIT15",
           detail:
-            "10 % de rabais sur n'importe quel abonnement (forfait site web, Pack publicitaire ou service IA) pendant les 3 premiers mois, une seule utilisation, sur un seul abonnement. Débloqué par l'achat de la retouche de site web (C$199.99). Envoyez-le à l'acheteur après son achat de retouche, sauf s'il a acheté la retouche avec un abonnement : le rabais de 10 % a alors déjà été appliqué automatiquement au paiement (voir les métadonnées touchup_discount de la commande) et le code ne doit pas être envoyé. Note : dans Stripe, ce coupon n'a aucune restriction de produit, donc il s'applique à n'importe quel abonnement; il n'est pas limité à une seule utilisation dans Stripe, donc utilisez-le une fois par acheteur.",
+            "15 % de rabais sur n'importe quel abonnement (forfait site web, Pack publicitaire ou service IA) pendant les 3 premiers mois, une seule utilisation, sur un seul abonnement. Débloqué par l'achat de la retouche de site web (C$199.99). Envoyez-le à l'acheteur après son achat de retouche, sauf s'il a acheté la retouche avec un abonnement : le rabais de 15 % a alors déjà été appliqué automatiquement au paiement (voir les métadonnées touchup_discount de la commande) et le code ne doit pas être envoyé. Note : dans Stripe, ce coupon n'a aucune restriction de produit, donc il s'applique à n'importe quel abonnement; il n'est pas limité à une seule utilisation dans Stripe, donc utilisez-le une fois par acheteur.",
         },
       ],
     },

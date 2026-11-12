@@ -74,7 +74,7 @@ const catalog = {
   // Google Business Profile revamp: one-time, sold on its own or with a pack.
   "gbp-revamp": { product: "gbp-revamp", type: "addon", oneTimeCents: 14999 },
   // Website touchup: one-time, we fix what the free audit found on the
-  // buyer's site. Buying it unlocks 10% off any subscription for the
+  // buyer's site. Buying it unlocks 15% off any subscription for the
   // first 3 months, one use only (see terms; the code lives in the
   // admin panel, Coupons tab, and is never shown on the site).
   "website-touchup": { product: "website-touchup", type: "addon", oneTimeCents: 19999 },
