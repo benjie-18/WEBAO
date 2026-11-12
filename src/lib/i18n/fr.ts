@@ -112,8 +112,6 @@ const fr = {
 
   home: {
     hero: {
-      kicker: "UN PETIT STUDIO WEB À MONTRÉAL",
-      badge: "Nouveaux projets acceptés",
       title1: "Votre",
       titleWork: "site web,",
       title2: "notre",
@@ -123,25 +121,8 @@ const fr = {
       leadRest: "On conçoit, on lance, on héberge et on entretient. Vous gérez votre entreprise.",
       ctaPrimary: "Démarrer mon site",
       auditCta: "Auditez le vôtre",
-      ctaSecondary: "Voir les démos",
       priceNote: "89,99 $ <span>CAD/mois</span> · Tout inclus",
-      visual: {
-        url: "studio-reve (démo)",
-        live: "Exemple de site fictif",
-        demoLabel: "DÉMO 01 · STUDIO RÊVE (FICTIF)",
-        demoTone: "Surréalisme · Des rêves à traverser",
-        mobileReady: "Prêt mobile",
-        domainIncluded: "Domaine + hébergement inclus",
-        domainDesc: "Votre domaine · SSL · mises à jour continues",
-        smallUpdates: "PETITES MISES À JOUR",
-        hours: "Heures, photos,<br />tarifs.",
-        included: "Inclus chaque mois",
-        sendEmail: "Il suffit d’envoyer un courriel",
-        captionLeft: "DÉMO 01 · STUDIO CRÉATIF",
-        captionRight: "Une de 47 directions de design →",
-      },
     },
-    marquee: "Électriciens <i></i> Plombiers <i></i> Couvreurs <i></i> Paysagistes <i></i> Restaurants <i></i> Cliniques",
     proof: {
       eyebrow: "Le catalogue en mouvement",
       heading: "Quarante-sept directions. Zéro modèle.",
@@ -302,17 +283,11 @@ const fr = {
       ],
     },
     finalCta: {
-      eyebrow: "PRÊT QUAND VOUS L’ÊTES",
       title: "Prêt pour un site<br /><span>qui marche tout simplement ?</span>",
       desc: "Envoyez votre métier, votre ville et quelques photos. On vous répond avec deux directions de démo et un échéancier honnête pour votre site.",
       ctaPrimary: "Démarrer mon site · 89,99 $/mois →",
       ctaSecondary: "Parcourir les démos d’abord",
       contact: "contact@webao.ca · Lun–ven, 9 h à 17 h, heure de l’Est",
-      preview: "APERÇU · VOTRE SITE",
-      yourBiz: "Votre<br />Entreprise",
-      call: "Appeler",
-      quote: "Devis",
-      live: "votreentreprise.ca · <span>●</span> En ligne",
     },
   },
 

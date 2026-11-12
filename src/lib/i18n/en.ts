@@ -109,8 +109,6 @@ const en = {
 
   home: {
     hero: {
-      kicker: "A SMALL WEB STUDIO IN MONTRÉAL",
-      badge: "Accepting new projects",
       title1: "Your",
       titleWork: "website,",
       title2: "Our",
@@ -120,25 +118,8 @@ const en = {
       leadRest: "We design, launch, host and maintain it. You run your business.",
       ctaPrimary: "Start your site",
       auditCta: "Audit yours now",
-      ctaSecondary: "See demo sites",
       priceNote: "$89.99 <span>CAD/month</span> · All-inclusive",
-      visual: {
-        url: "studio-reve (demo)",
-        live: "Fictional example site",
-        demoLabel: "DEMO 01 · STUDIO RÊVE (FICTIONAL)",
-        demoTone: "Surrealism · Dreams you can walk through",
-        mobileReady: "Mobile-ready",
-        domainIncluded: "Domain + hosting included",
-        domainDesc: "Your domain · SSL · ongoing updates",
-        smallUpdates: "SMALL UPDATES",
-        hours: "Hours, photos,<br />prices.",
-        included: "Included every month",
-        sendEmail: "Just send an email",
-        captionLeft: "DEMO 01 · CREATIVE STUDIO",
-        captionRight: "One of 47 design directions →",
-      },
     },
-    marquee: "Électriciens <i></i> Plombiers <i></i> Couvreurs <i></i> Paysagistes <i></i> Restaurants <i></i> Cliniques",
     proof: {
       eyebrow: "The catalog in motion",
       heading: "Forty-seven directions. Zero templates.",
@@ -299,17 +280,11 @@ const en = {
       ],
     },
     finalCta: {
-      eyebrow: "READY WHEN YOU ARE",
       title: "Ready for a website<br /><span>that just works?</span>",
       desc: "Send your trade, city, and a couple of photos. We’ll reply with two demo directions and an honest timeline for your site.",
       ctaPrimary: "Start your site · $89.99/mo →",
       ctaSecondary: "Browse demos first",
       contact: "contact@webao.ca · Mon–Fri, 9–5 Eastern",
-      preview: "PREVIEW · YOUR SITE",
-      yourBiz: "Your<br />Business",
-      call: "Call",
-      quote: "Get a quote",
-      live: "yourbusiness.ca · <span>●</span> Live",
     },
   },
 
