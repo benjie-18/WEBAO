@@ -142,7 +142,7 @@ const en = {
     proof: {
       eyebrow: "The catalog in motion",
       heading: "Forty-seven directions. Zero templates.",
-      sub: "Every frame is the real homepage of a demo site. Let it roll, click to explore.",
+      sub: "Every card opens the real homepage of a demo site. Let it roll, click to explore.",
       browse: "Browse all 47 demos →",
       prev: "Previous",
       next: "Next",
@@ -150,8 +150,8 @@ const en = {
     },
     process: {
       eyebrow: "How it works · Three steps, and no meetings that should have been emails",
-      title: "From idea to <span>live</span>, usually in about a week.",
-      day: "DAY",
+      title: "From idea to <span>live</span>, usually in two to three weeks.",
+      week: "WEEK",
       steps: [
         {
           title: "You send the basics",
@@ -197,7 +197,7 @@ const en = {
         price: "$89.99",
         priceSuffix: "CAD / month<br />all-in",
         title: "Three plans.<br />Everything in.",
-        desc: "Custom website, domain, hosting, SSL, SEO basics, analytics and support.",
+        desc: "Custom website, domain, hosting, SSL, Foundational SEO, analytics and support.",
         cta: "See what's included",
         mini: ["Custom site", "·", "Hosting", "·", "Updates included"],
       },
@@ -230,7 +230,7 @@ const en = {
           desc: "Fat thumbs, slow connections, bright sunlight. The layout is designed for real phones, not just resized in a browser.",
         },
         {
-          title: "SEO basics, done properly.",
+          title: "Foundational SEO, done properly.",
           desc: "Clean URLs, sitemap, fast pages, and help setting up your Google Business Profile, so local customers can find you when they need a trade.",
         },
         {
@@ -282,11 +282,11 @@ const en = {
         },
         {
           q: "What’s actually included in the $89.99/mo?",
-          a: "Everything a small-business site needs: a custom 1-page site, your domain, hosting, SSL, mobile-friendly design, a contact form, basic SEO, stats, security and maintenance, plus an hour of content updates each month. No setup fee, no per-change billing.",
+          a: "Everything a small-business site needs: a custom 1-page site, your domain, hosting, SSL, mobile-friendly design, a contact form, Foundational SEO, stats, security and maintenance, plus an hour of content updates each month. No setup fee, no per-change billing.",
         },
         {
           q: "Will my site show up on Google?",
-          a: "Yes. That’s the point. Every site ships with the SEO basics done properly: clean titles and descriptions, a sitemap, fast load times, and mobile-friendly pages. We also help set up your Google Business Profile, which is how most local customers find trades. Slow week? The goal is simple: when someone nearby searches for your trade, your site is ready to be found and to take the enquiry.",
+          a: "Yes. That’s the point. Every site ships with Foundational SEO done properly: clean titles and descriptions, a sitemap, fast load times, and mobile-friendly pages. We also help set up your Google Business Profile, which is how most local customers find trades. Slow week? The goal is simple: when someone nearby searches for your trade, your site is ready to be found and to take the enquiry.",
         },
         {
           q: "Can I pause or change things later?",

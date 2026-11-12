@@ -356,3 +356,29 @@ test('the portal names what is still missing after a partial save, and shows the
   assert.ok(portal.includes('data-portal-changes-note rows="3" placeholder={copy.reviewNotePh} aria-label={copy.reviewNotePh}'), 'the review-changes note has an accessible name');
   assert.ok(portal.includes('client.business !== client.email'), 'the identity line does not repeat the email when no business name is set');
 });
+
+test('the homepage timeline agrees with the FAQ: two to three weeks, not one week', () => {
+  // The process heading once said "about a week" while the FAQ and the
+  // service pages said "2 to 3 weeks", and the scrub readout counted
+  // DAY 0..7 to match. Both locales now count weeks, and the carousel
+  // sub no longer claims every frame is a real homepage screenshot:
+  // boreal and rive-nord have no carousel image (repo or KV), so their
+  // panels render the name/tone fallback while the card still opens the
+  // real demo homepage.
+  const cases = [
+    { locale: en, title: 'two to three weeks', weekLabel: 'WEEK', faqWeeks: '2 to 3 weeks', opens: 'opens the real homepage' },
+    { locale: fr, title: 'deux à trois semaines', weekLabel: 'SEMAINE', faqWeeks: '2 à 3 semaines', opens: 'ouvre la page d’accueil réelle' },
+  ] as const;
+  for (const { locale, title, weekLabel, faqWeeks, opens } of cases) {
+    assert.match(locale.home.process.title, new RegExp(title), 'process title states the real timeline');
+    assert.equal(locale.home.process.week, weekLabel, 'process readout counts weeks');
+    assert.equal('day' in locale.home.process, false, 'no day key left to revive the 7-day readout');
+    assert.ok(locale.home.faq.items.some((item) => item.a.includes(faqWeeks)), 'the FAQ states the same timeline');
+    assert.match(locale.home.proof.sub, new RegExp(opens), 'carousel sub says the card opens the real homepage');
+    assert.doesNotMatch(locale.home.proof.sub, /Every frame is the real homepage|Chaque vignette est la page/, 'carousel sub does not overclaim');
+  }
+  const home = read('src/components/pages/HomePage.astro');
+  assert.ok(home.includes('data-week-readout'), 'the scrub readout is a week readout');
+  assert.ok(!home.includes('data-day-readout'), 'no day readout remains');
+  assert.ok(!home.includes('Math.round(progress * 7)'), 'no 7-day readout math remains');
+});

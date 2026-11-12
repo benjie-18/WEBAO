@@ -150,11 +150,11 @@ const processId = locale === "fr" ? "processus" : "process";
   <div class="pin-wrap" data-process-pin>
     <div class="pin-stage">
       <div class="shell">
-        <div class="journey" data-journey data-day-label={t.home.process.day}>
+        <div class="journey" data-journey data-week-label={t.home.process.week}>
           <div class="journey-ends mono" aria-hidden="true">
-            <span>{t.home.process.day} 0</span>
-            <span data-day-readout>{t.home.process.day} 0</span>
-            <span>{t.home.process.day} 7</span>
+            <span>{t.home.process.week} 1</span>
+            <span data-week-readout>{t.home.process.week} 1</span>
+            <span>{t.home.process.week} 3</span>
           </div>
           <div class="journey-track">
             <div class="journey-line" aria-hidden="true"></div>
@@ -435,7 +435,7 @@ const processId = locale === "fr" ? "processus" : "process";
   }
   .journey { width: 100%; }
   .journey-ends { display: flex; justify-content: space-between; align-items: baseline; font-size: 10px; letter-spacing: .18em; color: rgba(248,245,239,.42); margin-bottom: 18px; }
-  .journey-ends [data-day-readout] { color: var(--journey-accent); font-weight: 700; }
+  .journey-ends [data-week-readout] { color: var(--journey-accent); font-weight: 700; }
   .journey-track { position: relative; height: 2px; margin-block: clamp(200px, 30vh, 320px); }
   .journey-line {
     position: absolute; inset: 0; border-radius: 2px;
@@ -559,7 +559,7 @@ const processId = locale === "fr" ? "processus" : "process";
     .station[data-station="0"] .station-card, .station[data-station="2"] .station-card {
       position: static; width: auto; max-width: 560px; opacity: 1; transform: none; pointer-events: auto; transition: none; visibility: visible;
     }
-    .journey-ends [data-day-readout] { display: none; }
+    .journey-ends [data-week-readout] { display: none; }
   }
   .split-head { display:grid; grid-template-columns: 1.2fr .8fr; gap: 24px; align-items: end; }
   .split-head-actions { padding-bottom: 6px; }
@@ -803,7 +803,7 @@ const processId = locale === "fr" ? "processus" : "process";
      viewport has travelled through the wrap (0..1) and:
        - set --scrub on the journey, which drives .crack-fill scaleX
        - toggle .is-active on stations whose --pos the crack has reached
-       - update the DAY 0..7 readout
+       - update the WEEK 1..3 readout
      Station thresholds sit slightly before each station's --pos so the
      card starts opening as the spark arrives. Everything is transform /
      opacity only. Reduced motion and narrow viewports get the static
@@ -813,14 +813,14 @@ const processId = locale === "fr" ? "processus" : "process";
     const journey = wrap?.querySelector('[data-journey]') as HTMLElement | null;
     if (!wrap || !journey) return;
     const stations = Array.from(journey.querySelectorAll<HTMLElement>('[data-station]'));
-    const readout = journey.querySelector('[data-day-readout]') as HTMLElement | null;
-    const dayLabel = journey.dataset.dayLabel ?? 'DAY';
+    const readout = journey.querySelector('[data-week-readout]') as HTMLElement | null;
+    const weekLabel = journey.dataset.weekLabel ?? 'WEEK';
     const narrow = window.matchMedia('(max-width: 860px)');
     if (prefersReduced || narrow.matches || !('requestAnimationFrame' in window)) {
       // Static fallbacks: light every station, fill the crack.
       stations.forEach((s) => s.classList.add('is-active'));
       journey.style.setProperty('--scrub', '1');
-      if (readout) readout.textContent = `${dayLabel} 7`;
+      if (readout) readout.textContent = `${weekLabel} 3`;
       return;
     }
 
@@ -872,8 +872,8 @@ const processId = locale === "fr" ? "processus" : "process";
         s.classList.toggle('is-active', progress >= (thresholds[i] ?? 1));
       });
       if (readout) {
-        const day = Math.round(progress * 7);
-        const label = `${dayLabel} ${day}`;
+        const week = Math.min(3, 1 + Math.floor(progress * 3));
+        const label = `${weekLabel} ${week}`;
         if (readout.textContent !== label) readout.textContent = label;
       }
     };
@@ -897,7 +897,7 @@ const processId = locale === "fr" ? "processus" : "process";
         window.removeEventListener('scroll', onScroll);
         stations.forEach((s) => s.classList.add('is-active'));
         journey.style.setProperty('--scrub', '1');
-        if (readout) readout.textContent = `${dayLabel} 7`;
+        if (readout) readout.textContent = `${weekLabel} 3`;
       }
     };
     narrow.addEventListener('change', onNarrow);

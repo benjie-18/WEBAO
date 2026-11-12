@@ -145,7 +145,7 @@ const fr = {
     proof: {
       eyebrow: "Le catalogue en mouvement",
       heading: "Quarante-sept directions. Zéro modèle.",
-      sub: "Chaque vignette est la page d’accueil réelle d’un site démo. Laissez défiler, cliquez pour explorer.",
+      sub: "Chaque carte ouvre la page d’accueil réelle d’un site démo. Laissez défiler, cliquez pour explorer.",
       browse: "Parcourir les 47 démos →",
       prev: "Précédent",
       next: "Suivant",
@@ -153,8 +153,8 @@ const fr = {
     },
     process: {
       eyebrow: "Fonctionnement · Trois étapes, sans réunions qui auraient pu être des courriels",
-      title: "De l’idée au <span>en ligne</span>, habituellement en une semaine.",
-      day: "JOUR",
+      title: "De l’idée au <span>en ligne</span>, habituellement en deux à trois semaines.",
+      week: "SEMAINE",
       steps: [
         {
           title: "Vous envoyez l’essentiel",
@@ -200,7 +200,7 @@ const fr = {
         price: "89,99 $",
         priceSuffix: "CAD / mois<br />tout inclus",
         title: "Trois forfaits.<br />Tout est inclus.",
-        desc: "Site sur mesure, domaine, hébergement, SSL, bases SEO, analytique et soutien.",
+        desc: "Site sur mesure, domaine, hébergement, SSL, SEO fondamental, analytique et soutien.",
         cta: "Voir ce qui est inclus",
         mini: ["Site sur mesure", "·", "Hébergement", "·", "Mises à jour incluses"],
       },
@@ -233,7 +233,7 @@ const fr = {
           desc: "Gros pouces, connexions lentes, gros soleil. La mise en page est pensée pour de vrais téléphones, pas juste rétrécie dans un navigateur.",
         },
         {
-          title: "Les bases SEO, bien faites.",
+          title: "Le SEO fondamental, bien fait.",
           desc: "URLs propres, plan de site, pages rapides et aide pour configurer votre fiche d’entreprise Google, pour que les clients locaux vous trouvent quand ils ont besoin d’un artisan.",
         },
         {
@@ -285,11 +285,11 @@ const fr = {
         },
         {
           q: "Qu’est-ce qui est vraiment inclus dans le 89,99 $/mois ?",
-          a: "Tout ce dont un site de petite entreprise a besoin : un site sur mesure d’une page, votre domaine, l’hébergement, le SSL, un design adapté au mobile, un formulaire de contact, le référencement de base, les statistiques, la sécurité et la maintenance, plus une heure de mises à jour de contenu par mois. Pas de frais d’installation, pas de facturation à la pièce.",
+          a: "Tout ce dont un site de petite entreprise a besoin : un site sur mesure d’une page, votre domaine, l’hébergement, le SSL, un design adapté au mobile, un formulaire de contact, le SEO fondamental, les statistiques, la sécurité et la maintenance, plus une heure de mises à jour de contenu par mois. Pas de frais d’installation, pas de facturation à la pièce.",
         },
         {
           q: "Est-ce que mon site va apparaître sur Google ?",
-          a: "Oui. C’est le but. Chaque site est livré avec les bases du référencement : titres et descriptions soignés, plan du site, temps de chargement rapides et pages adaptées au mobile. On configure aussi votre fiche d’établissement Google, qui est la façon dont la plupart des clients locaux trouvent les artisans. Semaine tranquille? L’objectif est simple : quand quelqu’un près de chez vous cherche votre métier, votre site est prêt à être trouvé et à recevoir la demande.",
+          a: "Oui. C’est le but. Chaque site est livré avec le SEO fondamental : titres et descriptions soignés, plan du site, temps de chargement rapides et pages adaptées au mobile. On configure aussi votre fiche d’établissement Google, qui est la façon dont la plupart des clients locaux trouvent les artisans. Semaine tranquille? L’objectif est simple : quand quelqu’un près de chez vous cherche votre métier, votre site est prêt à être trouvé et à recevoir la demande.",
         },
         {
           q: "Est-ce que je peux mettre en pause ou changer des choses plus tard ?",
