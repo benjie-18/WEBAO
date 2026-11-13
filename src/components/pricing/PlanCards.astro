@@ -324,12 +324,11 @@ const planCents = (id: PlanId, interval: "month" | "year"): number => priceCents
     letter-spacing: -0.01em;
     line-height: 1;
   }
-  .pcard-slot--launch .pcard-name { text-align: left; }
-  .pcard-slot--grow .pcard-name { text-align: center; }
-  .pcard-slot--scale .pcard-name { text-align: right; }
+  /* #10: tier headings align left on every card — the per-slot
+     left/center/right split made the row look ragged. */
+  .pcard-slot .pcard-name { text-align: left; }
   /* Desktop: the name must span the name row, otherwise the flex row shrinks
-     it to its text and the per-slot text-align above positions nothing.
-     (Mobile keeps its centered stacked layout, untouched.) */
+     it to its text and the text-align above positions nothing. */
   @media (min-width: 820px) {
     .pcard-name { flex: 1 1 auto; min-width: 0; }
   }
@@ -340,9 +339,7 @@ const planCents = (id: PlanId, interval: "month" | "year"): number => priceCents
     letter-spacing: -0.03em;
     line-height: 1;
   }
-  .pcard-slot--launch .pcard-price { text-align: left; }
-  .pcard-slot--grow .pcard-price { text-align: center; }
-  .pcard-slot--scale .pcard-price { text-align: right; }
+  .pcard-slot .pcard-price { text-align: left; }
   .pcard-annual {
     margin-top: 6px;
     font-size: 0.95rem;
@@ -444,20 +441,19 @@ const planCents = (id: PlanId, interval: "month" | "year"): number => priceCents
          tablet) instead of stretching them to the track. */
       align-items: stretch;
     }
-    /* All card text centered on mobile (overrides the per-slot
-       left/center/right desktop alignment). */
+    /* #10: card text left-aligns on mobile too, matching desktop. */
     .pcard-slot .pcard-content {
-      text-align: center;
+      text-align: left;
     }
     .pcard-slot .pcard-name,
     .pcard-slot .pcard-price {
-      text-align: center;
+      text-align: left;
     }
     .pcard-slot .pcard-badge {
-      align-self: center;
+      align-self: flex-start;
     }
     .pcard-slot .pcard-features li {
-      justify-content: center;
+      justify-content: flex-start;
     }
     .pcard-slot--grow .pcard-lift {
       transform: none;

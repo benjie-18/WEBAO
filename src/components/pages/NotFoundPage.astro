@@ -12,7 +12,7 @@ const paths = localizedPaths[locale];
 <section class="section grain" style="min-height: 60vh; display:grid; place-items:center; text-align:center;">
   <div class="shell" style="max-width: 560px;">
     <div class="eyebrow">{t.notfound.eyebrow}</div>
-    <h1 class="display" style="font-size: clamp(2.4rem, 5vw, 3.6rem); margin-top:12px; line-height:.9;" set:html={t.notfound.title}></h1>
+    <h1 class="display" style="font-size: var(--text-h1); margin-top:12px;" set:html={t.notfound.title}></h1>
     <p class="prose" style="margin-top:16px; margin-inline:auto;">{t.notfound.desc}</p>
     <div class="cluster" style="justify-content:center; margin-top: 20px;">
       <a href={paths.home} class="btn btn--primary">{t.notfound.home}</a>

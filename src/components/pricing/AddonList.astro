@@ -91,15 +91,18 @@ const addonPriceCents: Record<string, { cents: number; interval: "month" | "one-
                   <p class="addon-price">
                     <span class="price-roll"><span class="price-roll-inner">{it.price}</span></span>
                   </p>
-                  <CartButton
-                    locale={locale}
-                    product={id}
-                    name={it.name}
-                    priceCents={addonPriceCents[id].cents}
-                    yearlyPriceCents={addonPriceCents[id].yearCents}
-                    interval={addonPriceCents[id].interval}
-                    type="addon"
-                  />
+                  <span class="addon-add">
+                    <span class="addon-add-label" aria-hidden="true"><span class="addon-add-label--add">{t.cart.addShort}</span><span class="addon-add-label--added">{t.cart.addedShort}</span></span>
+                    <CartButton
+                      locale={locale}
+                      product={id}
+                      name={it.name}
+                      priceCents={addonPriceCents[id].cents}
+                      yearlyPriceCents={addonPriceCents[id].yearCents}
+                      interval={addonPriceCents[id].interval}
+                      type="addon"
+                    />
+                  </span>
                 </div>
               </div>
             </li>
@@ -126,15 +129,18 @@ const addonPriceCents: Record<string, { cents: number; interval: "month" | "one-
                   <p class="addon-price addon-price--sm">
                     <span class="price-roll"><span class="price-roll-inner">{it.price}</span></span>
                   </p>
-                  <CartButton
-                    locale={locale}
-                    product={id}
-                    name={it.name}
-                    priceCents={addonPriceCents[id].cents}
-                    yearlyPriceCents={addonPriceCents[id].yearCents}
-                    interval={addonPriceCents[id].interval}
-                    type="addon"
-                  />
+                  <span class="addon-add">
+                    <span class="addon-add-label" aria-hidden="true"><span class="addon-add-label--add">{t.cart.addShort}</span><span class="addon-add-label--added">{t.cart.addedShort}</span></span>
+                    <CartButton
+                      locale={locale}
+                      product={id}
+                      name={it.name}
+                      priceCents={addonPriceCents[id].cents}
+                      yearlyPriceCents={addonPriceCents[id].yearCents}
+                      interval={addonPriceCents[id].interval}
+                      type="addon"
+                    />
+                  </span>
                 </div>
               </div>
             </li>

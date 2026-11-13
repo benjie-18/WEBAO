@@ -1,5 +1,4 @@
 ---
-import CartButton from "./CartButton.astro";
 import { useTranslations, type Locale } from "../../lib/i18n";
 
 // AI service cards for the revamped pricing page.
@@ -14,6 +13,10 @@ interface Props {
 const { locale = "en" } = Astro.props as Props;
 const t = useTranslations(locale);
 const ai = t.pricing.ai;
+// Yearly price label for the CTA ("C$999.90/yr" / "C$999.90/an") — same
+// number format as the pack's i18n yearly price ("C$3,999.90/an" in FR).
+const yearlyPriceLabel = (cents: number) =>
+  `C$${(cents / 100).toLocaleString("en-CA", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}${locale === "fr" ? "/an" : "/yr"}`;
 const services = [
   {
     name: t.start.selection.aiReceptionist,
@@ -55,7 +58,6 @@ const services = [
     <p class="bc-kicker">{ai.packKicker}</p>
     <div class="bc-name-row">
       <h3 class="bc-name">{t.start.selection.aiPack}</h3>
-      <CartButton locale={locale} product="ai-pack" name={t.start.selection.aiPack} priceCents={39999} yearlyPriceCents={399990} interval="month" type="bundle" />
     </div>
     <p class="bc-price">{ai.packPrice}</p>
     <p class="bc-annual">{ai.packYearlyPrice}</p>
@@ -74,6 +76,30 @@ const services = [
         <dd>{ai.packMonthlySaving}</dd>
       </div>
     </dl>
+    {/* #66: full-width CTA at the card base — same cart toggle as the old
+        top-right icon. */}
+    <button
+      type="button"
+      class="btn btn--primary card-cta"
+      data-cart-btn
+      data-key="ai-pack-month"
+      data-product="ai-pack"
+      data-name={t.start.selection.aiPack}
+      data-price-cents={39999}
+      data-price-year="399990"
+      data-interval="month"
+      data-type="bundle"
+      aria-label={t.cart.add.replace("{name}", t.start.selection.aiPack)}
+      title={t.cart.add.replace("{name}", t.start.selection.aiPack)}
+      aria-pressed="false"
+    >
+      <span
+        data-cta-label
+        data-month={t.pricing.plans.choose.replace("{name}", t.start.selection.aiPack).replace("{price}", ai.packPrice)}
+        data-year={t.pricing.plans.choose.replace("{name}", t.start.selection.aiPack).replace("{price}", ai.packYearlyPrice.replace(/^\(|\)$/g, ""))}
+        data-added={t.pricing.plans.chosen.replace("{name}", t.start.selection.aiPack)}
+      >{t.pricing.plans.choose.replace("{name}", t.start.selection.aiPack).replace("{price}", ai.packPrice)}</span>
+    </button>
   </div>
 </div>
 
@@ -83,7 +109,6 @@ const services = [
       <p class="bc-kicker">{ai.serviceKicker}</p>
       <div class="bc-name-row">
         <h3 class="bc-name">{s.name}</h3>
-        <CartButton locale={locale} product={s.product} name={s.name} priceCents={s.priceCents} interval="month" type="addon" yearlyPriceCents={s.yearlyPriceCents} />
       </div>
       <p class="bc-price">{s.price}</p>
       <ul class="bc-includes">
@@ -97,6 +122,29 @@ const services = [
           <dd>{s.setup}</dd>
         </div>
       </dl>
+      {/* #66: full-width CTA at the card base. */}
+      <button
+        type="button"
+        class="btn btn--primary card-cta"
+        data-cart-btn
+        data-key={`${s.product}-month`}
+        data-product={s.product}
+        data-name={s.name}
+        data-price-cents={s.priceCents}
+        data-price-year={s.yearlyPriceCents ? String(s.yearlyPriceCents) : undefined}
+        data-interval="month"
+        data-type="addon"
+        aria-label={t.cart.add.replace("{name}", s.name)}
+        title={t.cart.add.replace("{name}", s.name)}
+        aria-pressed="false"
+      >
+        <span
+          data-cta-label
+          data-month={t.pricing.plans.choose.replace("{name}", s.name).replace("{price}", s.price)}
+          data-year={s.yearlyPriceCents ? t.pricing.plans.choose.replace("{name}", s.name).replace("{price}", yearlyPriceLabel(s.yearlyPriceCents)) : t.pricing.plans.choose.replace("{name}", s.name).replace("{price}", s.price)}
+          data-added={t.pricing.plans.chosen.replace("{name}", s.name)}
+        >{t.pricing.plans.choose.replace("{name}", s.name).replace("{price}", s.price)}</span>
+      </button>
       </div>
   ))}
 </div>

@@ -31,11 +31,13 @@ const forwardShort = locale === "fr" ? "Comme celui-ci →" : "Build like this �
   <span class="demo-exit-word">webao</span>
   <span class="demo-exit-sep" aria-hidden="true">·</span>
   <span class="demo-exit-note">{locale === "fr" ? "démo fictive" : "fictional demo"}</span>
+  <span class="demo-exit-back-banner">{locale === "fr" ? "Retour à WEBAO" : "Back to WEBAO"}</span>
 </a>
 <a href={forwardHref} class="demo-exit-forward" data-demo-forward data-forward-base={forwardHref}>
   <span class="demo-exit-forward-long">{forwardLabel}</span>
   <span class="demo-exit-forward-short">{forwardShort}</span>
 </a>
+<button type="button" class="demo-exit-dismiss" data-demo-dismiss aria-label={locale === "fr" ? "Masquer la barre" : "Dismiss banner"}>✕</button>
 </div>
 
 <script>
@@ -46,6 +48,16 @@ const forwardShort = locale === "fr" ? "Comme celui-ci →" : "Build like this �
     var m = /\/demos\/([^/?#]+)/.exec(location.pathname);
     if (!m) return;
     link.setAttribute("href", link.getAttribute("data-forward-base") + "?demo=" + encodeURIComponent(m[1]));
+  })();
+  // Mobile top banner is dismissible for this page view only: it comes back
+  // on the next page load, so the way back to WEBAO is never lost.
+  (function () {
+    var dismiss = document.querySelector("[data-demo-dismiss]");
+    if (!dismiss) return;
+    dismiss.addEventListener("click", function () {
+      var bar = document.querySelector(".demo-exit-bar");
+      if (bar) bar.remove();
+    });
   })();
 </script>
 
@@ -140,12 +152,40 @@ const forwardShort = locale === "fr" ? "Comme celui-ci →" : "Build like this �
       0 10px 28px rgba(0, 0, 0, 0.38);
   }
   .demo-exit-forward-short { display: none; }
+  .demo-exit-back-banner { display: none; }
+  .demo-exit-dismiss { display: none; }
   @media (max-width: 640px) {
-    .demo-exit-bar { left: 12px; }
-    .demo-exit { padding: 12px 14px; }
-    .demo-exit-forward { padding: 12px 14px; }
-    .demo-exit-forward-long { display: none; }
-    .demo-exit-forward-short { display: inline; }
+    /* #62: on mobile the hatch becomes a slim 36px top banner, so the
+       bottom thumb-zone belongs to the demo sites' own Quick actions bars. */
+    .demo-exit-bar {
+      left: 0; right: 0; top: 0; bottom: auto;
+      max-width: none; height: calc(36px + env(safe-area-inset-top, 0px));
+      padding-top: env(safe-area-inset-top, 0px);
+      box-sizing: border-box; gap: 0;
+      background: #0a0f1c;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.14), 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+    .demo-exit, .demo-exit-forward {
+      min-height: 36px; height: 36px; padding: 0 12px;
+      border-radius: 0; box-shadow: none;
+    }
+    .demo-exit:hover, .demo-exit-forward:hover { transform: none; }
+    .demo-exit-word, .demo-exit-sep, .demo-exit-note { display: none; }
+    .demo-exit-back-banner { display: inline; font-weight: 800; }
+    .demo-exit-forward { flex: 1; min-width: 0; justify-content: center; }
+    .demo-exit-forward-long {
+      display: inline; overflow: hidden; text-overflow: ellipsis;
+    }
+    .demo-exit-forward-short { display: none; }
+    .demo-exit-dismiss {
+      display: inline-flex; align-items: center; justify-content: center;
+      flex: none; width: 36px; height: 36px; min-height: 36px;
+      background: transparent; color: #ffffff; border: none; cursor: pointer;
+      font-size: 13px; line-height: 1;
+    }
+    .demo-exit-dismiss:focus-visible {
+      outline: none; box-shadow: inset 0 0 0 2px #ffffff;
+    }
   }
   @media (prefers-reduced-motion: reduce) {
     .demo-exit { transition: none; }

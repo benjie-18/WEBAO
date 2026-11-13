@@ -38,6 +38,11 @@ const {
 
 const url = Astro.url;
 const detected = getLocaleFromUrl(url);
+// #67: active nav state — the current page's link carries aria-current
+// and a subtle pill. Paths are compared without trailing slashes so
+// "/pricing/" matches the "/pricing" link target.
+const currentPath = url.pathname.replace(/\/$/, "") || "/";
+const isCurrent = (href: string) => href.replace(/\/$/, "") === currentPath;
 const locale: Locale = localeProp ?? detected;
 const t = useTranslations(locale);
 
@@ -407,6 +412,8 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
   <body>
     <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress-bar" data-progress></div></div>
     <a href="#main" class="skip-link">{t.nav.skip}</a>
+    <!-- #73: live region announcing theme changes to screen readers. -->
+    <div class="visually-hidden" aria-live="polite" data-theme-live></div>
 
     <header class:list={["site-header", headerVariant === "dark" && "site-header--dark"]} role="banner">
       <div class="header-inner">
@@ -417,9 +424,9 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
 
         <div class="header-right">
           <nav class="nav" aria-label={locale==="fr" ? "Principal" : "Primary"}>
-            <a href={navLinks.demos}>{t.nav.demos}</a>
-            <a href={navLinks.pricing}>{t.nav.pricing}</a>
-            <a href={navLinks.audit}>{t.nav.audit}</a>
+            <a href={navLinks.demos} aria-current={isCurrent(navLinks.demos) ? "page" : undefined}>{t.nav.demos}</a>
+            <a href={navLinks.pricing} aria-current={isCurrent(navLinks.pricing) ? "page" : undefined}>{t.nav.pricing}</a>
+            <a href={navLinks.audit} aria-current={isCurrent(navLinks.audit) ? "page" : undefined}>{t.nav.audit}</a>
             <div class="nav-item--mega" data-mega>
               <button type="button" class="nav-mega-trigger" aria-expanded="false" aria-haspopup="true" data-mega-trigger>
                 {t.nav.services} <span class="nav-mega-caret" aria-hidden="true">▾</span>
@@ -427,23 +434,23 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
               <div class="nav-mega" data-mega-panel hidden>
                 <div class="nav-mega-col">
                   <p class="nav-mega-heading">{t.nav.services}</p>
-                  <a href={navLinks.serviceDesign}>{t.nav.megaDesign}</a>
-                  <a href={navLinks.servicePlans}>{t.nav.megaPlans}</a>
-                  <a href={navLinks.serviceHosting}>{t.nav.megaHosting}</a>
-                  <a href={navLinks.serviceMontreal}>{t.nav.megaMontreal}</a>
+                  <a href={navLinks.serviceDesign} aria-current={isCurrent(navLinks.serviceDesign) ? "page" : undefined}>{t.nav.megaDesign}</a>
+                  <a href={navLinks.servicePlans} aria-current={isCurrent(navLinks.servicePlans) ? "page" : undefined}>{t.nav.megaPlans}</a>
+                  <a href={navLinks.serviceHosting} aria-current={isCurrent(navLinks.serviceHosting) ? "page" : undefined}>{t.nav.megaHosting}</a>
+                  <a href={navLinks.serviceMontreal} aria-current={isCurrent(navLinks.serviceMontreal) ? "page" : undefined}>{t.nav.megaMontreal}</a>
                 </div>
                 <div class="nav-mega-col">
                   <p class="nav-mega-heading">{t.nav.megaResources}</p>
-                  <a href={navLinks.guideIndex}>{t.nav.guides}</a>
-                  <a href={navLinks.guideBill96}>{t.nav.megaBill96}</a>
-                  <a href={navLinks.guideLaw25}>{t.nav.megaLaw25}</a>
-                  <a href={navLinks.portal}>{t.nav.portal}</a>
-                  <a href={navLinks.support}>{t.nav.support}</a>
+                  <a href={navLinks.guideIndex} aria-current={isCurrent(navLinks.guideIndex) ? "page" : undefined}>{t.nav.guides}</a>
+                  <a href={navLinks.guideBill96} aria-current={isCurrent(navLinks.guideBill96) ? "page" : undefined}>{t.nav.megaBill96}</a>
+                  <a href={navLinks.guideLaw25} aria-current={isCurrent(navLinks.guideLaw25) ? "page" : undefined}>{t.nav.megaLaw25}</a>
+                  <a href={navLinks.portal} aria-current={isCurrent(navLinks.portal) ? "page" : undefined}>{t.nav.portal}</a>
+                  <a href={navLinks.support} aria-current={isCurrent(navLinks.support) ? "page" : undefined}>{t.nav.support}</a>
                 </div>
               </div>
             </div>
-            <a href={navLinks.contact} class="nav-contact">{t.nav.contact}</a>
-            <a href={navLinks.start} class="cta" data-track="cta" data-track-label={t.nav.startSite} data-start-cta>{t.nav.startSite}</a>
+            <a href={navLinks.contact} class="nav-contact" aria-current={isCurrent(navLinks.contact) ? "page" : undefined}>{t.nav.contact}</a>
+            <a href={navLinks.start} class="cta" data-track="cta" data-track-label={t.nav.startSite} data-start-cta aria-current={isCurrent(navLinks.start) ? "page" : undefined}>{t.nav.startSite}</a>
           </nav>
 
           <LanguageSwitcher locale={locale} currentPath={url.pathname} />
@@ -479,12 +486,12 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
     <div class="nav-scrim" data-mega-scrim hidden></div>
 
     <div id="mobile-panel" class="mobile-panel" hidden>
-      <a href={navLinks.demos} style="--i:0">{t.nav.demos} <span aria-hidden="true">→</span></a>
-      <a href={navLinks.pricing} style="--i:1">{t.nav.pricing} <span aria-hidden="true">→</span></a>
-      <a href={navLinks.audit} style="--i:2">{t.nav.audit} <span aria-hidden="true">→</span></a>
-      <a href={navLinks.contact} style="--i:3">{t.nav.contact} <span aria-hidden="true">→</span></a>
-      <a href={localizedPaths[locale].serviceDesign} style="--i:4">{t.nav.services} <span aria-hidden="true">→</span></a>
-      <a href={localizedPaths[locale].guideIndex} style="--i:5">{t.nav.guides} <span aria-hidden="true">→</span></a>
+      <a href={navLinks.demos} style="--i:0" aria-current={isCurrent(navLinks.demos) ? "page" : undefined}>{t.nav.demos} <span aria-hidden="true">→</span></a>
+      <a href={navLinks.pricing} style="--i:1" aria-current={isCurrent(navLinks.pricing) ? "page" : undefined}>{t.nav.pricing} <span aria-hidden="true">→</span></a>
+      <a href={navLinks.audit} style="--i:2" aria-current={isCurrent(navLinks.audit) ? "page" : undefined}>{t.nav.audit} <span aria-hidden="true">→</span></a>
+      <a href={navLinks.contact} style="--i:3" aria-current={isCurrent(navLinks.contact) ? "page" : undefined}>{t.nav.contact} <span aria-hidden="true">→</span></a>
+      <a href={localizedPaths[locale].serviceDesign} style="--i:4" aria-current={isCurrent(localizedPaths[locale].serviceDesign) ? "page" : undefined}>{t.nav.services} <span aria-hidden="true">→</span></a>
+      <a href={localizedPaths[locale].guideIndex} style="--i:5" aria-current={isCurrent(localizedPaths[locale].guideIndex) ? "page" : undefined}>{t.nav.guides} <span aria-hidden="true">→</span></a>
       <a href={navLinks.portal} style="--i:6">{t.nav.portal} <span aria-hidden="true">→</span></a>
       <a href={navLinks.support} style="--i:7">{t.nav.support} <span aria-hidden="true">→</span></a>
       <a
@@ -611,6 +618,10 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
             } else {
               panel.removeAttribute('hidden');
               panel.classList.add('open');
+              // #71: move focus into the open menu so keyboard users land
+              // inside it, not behind it.
+              const firstLink = panel.querySelector('a[href]') as HTMLElement | null;
+              firstLink?.focus();
             }
           };
 
@@ -630,6 +641,21 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
               panel.setAttribute('hidden', '');
               panel.classList.remove('open');
               (toggle as HTMLElement).focus();
+            }
+            // #71: trap Tab inside the open menu (links + utility buttons),
+            // mirroring the cart drawer's trap.
+            if (e.key === 'Tab' && panel.classList.contains('open')) {
+              const focusables = Array.from(panel.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')).filter((el) => el.offsetParent !== null);
+              if (focusables.length === 0) return;
+              const first = focusables[0];
+              const last = focusables[focusables.length - 1];
+              if (e.shiftKey && document.activeElement === first) {
+                e.preventDefault();
+                last.focus();
+              } else if (!e.shiftKey && document.activeElement === last) {
+                e.preventDefault();
+                first.focus();
+              }
             }
           };
           document.addEventListener('keydown', onKeyDown);
@@ -774,7 +800,12 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
                   progress.style.transform = `scaleX(${p})`;
                 }
                 if (toTop) {
-                  const show = y > window.innerHeight * 0.9;
+                  // #11: show only after the visitor has scrolled past
+                  // half the page (docH is the scrollable distance), not
+                  // after one viewport — the old threshold left the button
+                  // overlapping dividers, table checkmarks and footer text
+                  // for most of the scroll.
+                  const show = y > docH / 2;
                   if (show !== toTopShown) {
                     toTopShown = show;
                     toTop.hidden = !show;
@@ -955,6 +986,10 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
       data-label-empty-confirm={t.cart.emptyConfirm}
       data-empty-title={t.cart.emptyTitle}
       data-empty-hint={t.cart.emptyHint}
+      data-empty-starter={t.cart.emptyStarter}
+      data-empty-add-grow={t.cart.emptyAddGrow}
+      data-empty-browse-demos={t.cart.emptyBrowseDemos}
+      data-demos-path={navLinks.demos}
       data-suffix-month={t.cart.suffixMonth}
       data-suffix-year={t.cart.suffixYear}
       data-suffix-one-time={t.cart.suffixOneTime}
@@ -1191,6 +1226,22 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
         text-align: center;
         color: var(--muted);
         padding: 40px 20px;
+      }
+      /* #74: empty-cart quick starter, rendered by cart-ui.ts. */
+      :global(.cart-empty-starter) {
+        display: grid;
+        gap: 10px;
+        padding: 0 20px 20px;
+        text-align: center;
+      }
+      :global(.cart-empty-starter p) {
+        margin: 0;
+        font-size: 0.95rem;
+        color: var(--ink);
+      }
+      :global(.cart-empty-starter .btn) {
+        width: 100%;
+        justify-content: center;
       }
       :global(.cart-item) {
         display: flex;

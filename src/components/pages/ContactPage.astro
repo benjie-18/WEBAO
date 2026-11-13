@@ -15,39 +15,42 @@ const paths = localizedPaths[locale];
     <div class="contact-grid">
       <div class="contact-copy" data-reveal>
         <div class="eyebrow">{t.contact.hero.eyebrow}</div>
-        <h1 class="display" style="font-size: clamp(2.6rem, 6vw, 4.8rem); line-height:.88; margin-top:12px;" set:html={t.contact.hero.title}></h1>
+        <h1 class="display" style="font-size: var(--text-h1); margin-top:12px;" set:html={t.contact.hero.title}></h1>
         <p class="prose" style="margin-top:14px; max-width:52ch;">
           {t.contact.hero.desc}
         </p>
 
+        <!-- #25: one contact card (email + location rows) and one "more"
+             card (trust + browse demos + existing clients), instead of four
+             competing boxes. -->
         <div class="contact-cards">
-          <a href="mailto:contact@webao.ca" class="c-card">
-            <span class="c-icon" aria-hidden="true">✉</span>
-            <span>
-              <strong>{t.contact.hero.email}</strong>
-              <span class="mono">{t.contact.hero.emailNote}</span>
-            </span>
-            <span aria-hidden="true">→</span>
-          </a>
           <div class="c-card">
-            <span class="c-icon" aria-hidden="true">📍</span>
-            <span>
-              <strong>{t.contact.hero.location}</strong>
-              <span class="mono">{t.contact.hero.locationNote}</span>
-            </span>
+            <a href="mailto:contact@webao.ca" class="c-row">
+              <span class="c-icon" aria-hidden="true">✉</span>
+              <span>
+                <strong>{t.contact.hero.email}</strong>
+                <span class="mono">{t.contact.hero.emailNote}</span>
+              </span>
+              <span aria-hidden="true" style="margin-left:auto;">→</span>
+            </a>
+            <div class="c-row">
+              <span class="c-icon" aria-hidden="true">📍</span>
+              <span>
+                <strong>{t.contact.hero.location}</strong>
+                <span class="mono">{t.contact.hero.locationNote}</span>
+              </span>
+            </div>
           </div>
         </div>
 
-        <div class="trust-mini mono">
-          {t.contact.hero.trust.map(tr => <span>{tr}</span>)}
-        </div>
-
         <div class="testi">
+          <div class="trust-mini mono">
+            {t.contact.hero.trust.map(tr => <span>{tr}</span>)}
+          </div>
           <p>{t.contact.hero.browseText}</p>
           <a href={paths.start} class="mono" style="display:inline-block; margin-top:8px; font-size:12px; font-weight:600; color: var(--accent-text); text-decoration: underline; text-underline-offset:3px;">{t.contact.hero.browseCta}</a>
+          <p class="mono" style="margin-top:12px; font-size:12px; color: var(--muted); line-height:1.6;">{t.contact.hero.clientText} <a href={paths.support} style="color: var(--accent-text); font-weight:600; text-decoration: underline; text-underline-offset:3px;">{t.contact.hero.clientCta}</a></p>
         </div>
-
-        <p class="mono" style="margin-top:14px; font-size:12px; color: var(--muted); line-height:1.6;">{t.contact.hero.clientText} <a href={paths.support} style="color: var(--accent-text); font-weight:600; text-decoration: underline; text-underline-offset:3px;">{t.contact.hero.clientCta}</a></p>
       </div>
 
       <div class="contact-form-wrap" data-reveal style="--d:120ms">
@@ -65,10 +68,12 @@ const paths = localizedPaths[locale];
 
           <label>{t.contact.form.name}
             <input name="name" placeholder={t.contact.form.namePlaceholder} autocomplete="name" required />
+            <p class="field-error" data-error-for="name" hidden>{t.contact.form.errorName}</p>
           </label>
 
           <label>{t.contact.form.email}
             <input name="email" type="email" placeholder={t.contact.form.emailPlaceholder} autocomplete="email" required />
+            <p class="field-error" data-error-for="email" hidden>{t.contact.form.errorEmail}</p>
           </label>
 
           <label>{t.contact.form.trade}
@@ -97,6 +102,7 @@ const paths = localizedPaths[locale];
 
           <label>{t.contact.form.message}
             <textarea name="message" rows="5" placeholder={t.contact.form.messagePlaceholder} required></textarea>
+            <p class="field-error" data-error-for="message" hidden>{t.contact.form.errorMessage}</p>
           </label>
 
           <div class="form-meta mono">
@@ -191,6 +197,26 @@ const paths = localizedPaths[locale];
       // API and come back as a misleading "could not send" error.
       const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
+      // #74: inline per-field errors (shown on blur and on a failed submit),
+      // so the visitor sees which field failed instead of only the generic
+      // status line.
+      const fieldError = (fieldName: string) =>
+        form.querySelector(`[data-error-for="${fieldName}"]`) as HTMLElement | null;
+      const validateField = (fieldName: string): boolean => {
+        const input = form.querySelector(`[name="${fieldName}"]`) as HTMLInputElement | null;
+        if (!input) return true;
+        const value = input.value.trim();
+        const ok = fieldName === "email" ? EMAIL_RE.test(value) : value !== "";
+        input.setAttribute("aria-invalid", ok ? "false" : "true");
+        const err = fieldError(fieldName);
+        if (err) err.hidden = ok;
+        return ok;
+      };
+      ["name", "email", "message"].forEach((fieldName) => {
+        const input = form.querySelector(`[name="${fieldName}"]`) as HTMLElement | null;
+        input?.addEventListener("blur", () => validateField(fieldName));
+      });
+
       form.addEventListener('submit', (e) => {
         e.preventDefault();
         if (form.dataset.sending === '1') return;
@@ -205,6 +231,7 @@ const paths = localizedPaths[locale];
         if (!name || !email || !message) valid = false;
         if (!EMAIL_RE.test(email)) valid = false;
         if (!valid) {
+          ["name", "email", "message"].forEach((fieldName) => validateField(fieldName));
           (status as HTMLElement).hidden = false;
           status.textContent = validationError;
           status.classList.remove('form-status--success');
@@ -272,13 +299,17 @@ const paths = localizedPaths[locale];
   .contact-grid { display:grid; grid-template-columns: 1fr 1.05fr; gap: clamp(24px,4vw,40px); align-items:start; }
   .contact-copy { position: sticky; top: calc(var(--header-h) + 16px); }
   .contact-cards { margin-top:18px; display:grid; gap:10px; }
-  .c-card { display:flex; align-items:center; gap:12px; background: var(--card-bg); border:1px solid var(--line); border-radius:14px; padding:14px; box-shadow: var(--shadow-sm); transition: transform .2s var(--ease-out), box-shadow .2s; }
-  a.c-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .c-card { background: var(--card-bg); border:1px solid var(--line); border-radius:14px; padding:14px; box-shadow: var(--shadow-sm); }
+  .c-row { display:flex; align-items:center; gap:12px; }
+  .c-row + .c-row { border-top:1px solid var(--line); margin-top:12px; padding-top:12px; }
+  a.c-row { color: inherit; text-decoration: none; }
+  a.c-row:hover strong { text-decoration: underline; text-underline-offset:3px; }
   .c-icon { width:36px; height:36px; border-radius:10px; background: var(--paper-2); border:1px solid var(--line); display:grid; place-items:center; font-size:14px; }
   .c-card strong { display:block; font-size:14.5px; letter-spacing:-0.02em; }
   .c-card .mono { display:block; font-size:11px; color: var(--muted); margin-top:2px; }
   .trust-mini { margin-top:14px; display:flex; gap:8px; flex-wrap:wrap; font-size:11px; color: var(--muted); }
   .testi { margin-top:18px; background: var(--card-bg); border:1px solid var(--line); border-radius:14px; padding:16px; box-shadow: var(--shadow-sm); }
+  .testi .trust-mini { margin: 0 0 12px; }
   .testi p { font-size:14px; line-height:1.6; color: var(--ink-3); }
   .contact-form-wrap { display:grid; gap:10px; }
   .form { background: var(--card-bg); border:1px solid var(--line); border-radius:18px; padding:18px; box-shadow: var(--shadow-md); display:grid; gap:14px; }
@@ -292,6 +323,9 @@ const paths = localizedPaths[locale];
   .form-shortlist { font-size: 14px; color: var(--muted); line-height: 1.55; margin: 0; }
   .form-shortlist a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; margin-left: 6px; }
   .form-status { padding:10px 12px; border-radius:10px; border:1px solid var(--line); font-size:12.5px; line-height:1.5; }
+  /* #74: inline per-field validation errors. */
+  .field-error { color: var(--accent-text); font-size: 12.5px; line-height: 1.4; margin: 6px 0 0; }
+  .form input[aria-invalid="true"], .form textarea[aria-invalid="true"], .form select[aria-invalid="true"] { border-color: var(--accent); }
   .faq-title { font-size: 1.6rem; letter-spacing:-0.02em; font-weight:750; margin-bottom: 16px; }
   .faq-list { display:grid; gap:12px; max-width: 720px; }
   .faq-item { background: var(--card-bg); border:1px solid var(--line); border-radius:16px; padding: 16px 18px; box-shadow: var(--shadow-sm); }

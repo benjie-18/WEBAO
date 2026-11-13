@@ -70,7 +70,6 @@ const selected = variants[0];
   <p class="bc-kicker">{a.eyebrow}</p>
   <div class="bc-name-row">
     <h3 class="bc-name">{a.name}</h3>
-    <CartButton locale={locale} product={selected.product} name={selected.name} priceCents={selected.priceCents} interval="month" type="bundle" />
   </div>
   <p class="bc-price" data-ads-price>{selected.price}</p>
 
@@ -146,7 +145,10 @@ const selected = variants[0];
       <p class="bc-label">{a.starterTitle}</p>
       <p class="bc-starter-body">{a.starterBody}</p>
     </div>
-    <CartButton locale={locale} product="ads-starter" name={a.starterTitle} priceCents={49999} interval="month" type="bundle" />
+    <span class="addon-add">
+      <span class="addon-add-label" aria-hidden="true"><span class="addon-add-label--add">{t.cart.addShort}</span><span class="addon-add-label--added">{t.cart.addedShort}</span></span>
+      <CartButton locale={locale} product="ads-starter" name={a.starterTitle} priceCents={49999} interval="month" type="bundle" />
+    </span>
   </div>
 
   <p class="bc-note">{a.upgradeNote}</p>
@@ -157,8 +159,38 @@ const selected = variants[0];
       <p class="bc-gbp-name">{a.gbpName} <span class="mono">{a.gbpPrice}</span></p>
       <p class="bc-gbp-short">{a.gbpShort}</p>
     </div>
-    <CartButton locale={locale} product="gbp-revamp" name={a.gbpName} priceCents={14999} interval="one-time" type="addon" />
+    <span class="addon-add">
+      <span class="addon-add-label" aria-hidden="true"><span class="addon-add-label--add">{t.cart.addShort}</span><span class="addon-add-label--added">{t.cart.addedShort}</span></span>
+      <CartButton locale={locale} product="gbp-revamp" name={a.gbpName} priceCents={14999} interval="one-time" type="addon" />
+    </span>
   </div>
+
+  {/* #66: full-width CTA at the card base — same cart toggle as the old
+      top-right icon. The channel picker rewrites this button's dataset
+      (and its label, below) when the channel changes. */}
+  <button
+    type="button"
+    class="btn btn--primary card-cta"
+    data-cart-btn
+    data-key="ads-meta-month"
+    data-product={selected.product}
+    data-name={selected.name}
+    data-price-cents={selected.priceCents}
+    data-interval="month"
+    data-type="bundle"
+    data-choose-template={t.pricing.plans.choose}
+    data-chosen-template={t.pricing.plans.chosen}
+    aria-label={t.cart.add.replace("{name}", selected.name)}
+    title={t.cart.add.replace("{name}", selected.name)}
+    aria-pressed="false"
+  >
+    <span
+      data-cta-label
+      data-month={t.pricing.plans.choose.replace("{name}", selected.name).replace("{price}", selected.price)}
+      data-year={t.pricing.plans.choose.replace("{name}", selected.name).replace("{price}", selected.price)}
+      data-added={t.pricing.plans.chosen.replace("{name}", selected.name)}
+    >{t.pricing.plans.choose.replace("{name}", selected.name).replace("{price}", selected.price)}</span>
+  </button>
 </div>
 
 <script>
@@ -208,6 +240,24 @@ const selected = variants[0];
         btn.dataset.name = input.dataset.name || "";
         btn.dataset.priceCents = input.dataset.priceCents || "";
         btn.dataset.key = (input.dataset.product || "") + "-month";
+        // #66: the full-width CTA's visible label tracks the channel too.
+        // The label templates live on the button so both this handler and
+        // PricingPage2's channel sync (which dispatches a change event)
+        // rebuild the same text.
+        var ctaLabel = btn.querySelector("[data-cta-label]") as HTMLElement | null;
+        if (ctaLabel) {
+          var chooseTpl = (btn as HTMLElement).dataset.chooseTemplate || "Choose {name} · {price} →";
+          var chosenTpl = (btn as HTMLElement).dataset.chosenTemplate || "{name} selected";
+          var monthText = chooseTpl
+            .replace("{name}", input.dataset.name || "")
+            .replace("{price}", input.dataset.price || "");
+          ctaLabel.dataset.month = monthText;
+          ctaLabel.dataset.year = monthText;
+          ctaLabel.dataset.added = chosenTpl.replace("{name}", input.dataset.name || "");
+          ctaLabel.textContent = btn.classList.contains("is-added")
+            ? ctaLabel.dataset.added || ""
+            : monthText;
+        }
       }
       try {
         var raw = window.localStorage.getItem("webao_cart_v1");

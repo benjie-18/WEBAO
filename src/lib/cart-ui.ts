@@ -728,7 +728,18 @@ export function renderDrawer(doc: Document): void {
   if (items.length === 0) {
     const title = label(doc, "emptyTitle", "Your cart is empty.");
     const hint = label(doc, "emptyHint", "Add items from the pricing page.");
-    container.innerHTML = `<div class="cart-drawer-empty">${escapeHtml(title)}<br/>${escapeHtml(hint)}</div>`;
+    // #74: the empty drawer is a quick starter, not a void — the most
+    // common first step (Grow) plus a way to browse demos instead.
+    const starter = label(doc, "emptyStarter", "Most small businesses start with Grow (C$149.99/mo).");
+    const addGrow = label(doc, "emptyAddGrow", "Add Grow to cart");
+    const browseDemos = label(doc, "emptyBrowseDemos", "Browse 47 demos");
+    const demosPath = label(doc, "demosPath", "/demos");
+    container.innerHTML = `<div class="cart-drawer-empty">${escapeHtml(title)}<br/>${escapeHtml(hint)}</div>
+      <div class="cart-empty-starter">
+        <p>${escapeHtml(starter)}</p>
+        <button type="button" class="btn btn--primary" data-cart-btn data-key="grow-month" data-product="grow" data-name="Grow" data-price-cents="14999" data-price-year="149990" data-interval="month" data-type="plan" aria-label="${escapeHtml(addGrow)}">${escapeHtml(addGrow)}</button>
+        <a class="btn btn--ghost" href="${escapeHtml(demosPath)}">${escapeHtml(browseDemos)}</a>
+      </div>`;
   } else {
     const removeLabel = label(doc, "labelRemove", "Remove {name} from cart");
     container.innerHTML = items

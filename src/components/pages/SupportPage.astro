@@ -18,7 +18,7 @@ const categoryIds = ["billing", "changes", "addons", "issue", "other"] as const;
     <div class="contact-grid">
       <div class="contact-copy" data-reveal>
         <div class="eyebrow">{s.hero.eyebrow}</div>
-        <h1 class="display" style="font-size: clamp(2.6rem, 6vw, 4.8rem); line-height:.88; margin-top:12px;" set:html={s.hero.title}></h1>
+        <h1 class="display" style="font-size: var(--text-h1); margin-top:12px;" set:html={s.hero.title}></h1>
         <p class="prose" style="margin-top:14px; max-width:52ch;">
           {s.hero.desc}
         </p>
@@ -63,10 +63,12 @@ const categoryIds = ["billing", "changes", "addons", "issue", "other"] as const;
 
           <label>{s.form.name}
             <input name="name" placeholder={s.form.namePlaceholder} autocomplete="name" required />
+            <p class="field-error" data-error-for="name" hidden>{s.form.errorName}</p>
           </label>
 
           <label>{s.form.email}
             <input name="email" type="email" placeholder={s.form.emailPlaceholder} autocomplete="email" required />
+            <p class="field-error" data-error-for="email" hidden>{s.form.errorEmail}</p>
           </label>
 
           <label>{s.form.category}
@@ -74,14 +76,17 @@ const categoryIds = ["billing", "changes", "addons", "issue", "other"] as const;
               <option value="" disabled selected>{s.form.categoryPlaceholder}</option>
               {categoryIds.map(id => <option value={id}>{s.form.categories[id]}</option>)}
             </select>
+            <p class="field-error" data-error-for="category" hidden>{s.form.errorCategory}</p>
           </label>
 
           <label>{s.form.subject}
             <input name="subject" placeholder={s.form.subjectPlaceholder} required />
+            <p class="field-error" data-error-for="subject" hidden>{s.form.errorSubject}</p>
           </label>
 
           <label>{s.form.message}
             <textarea name="message" rows="5" placeholder={s.form.messagePlaceholder} required></textarea>
+            <p class="field-error" data-error-for="message" hidden>{s.form.errorMessage}</p>
           </label>
 
           <div class="form-meta mono">
@@ -187,6 +192,26 @@ const categoryIds = ["billing", "changes", "addons", "issue", "other"] as const;
       // reach the API and come back as a misleading "could not send" error.
       const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
+      // #74: inline per-field errors (shown on blur and on a failed submit),
+      // so the visitor sees which field failed instead of only the generic
+      // status line.
+      const fieldError = (fieldName: string) =>
+        form.querySelector(`[data-error-for="${fieldName}"]`) as HTMLElement | null;
+      const validateField = (fieldName: string): boolean => {
+        const input = form.querySelector(`[name="${fieldName}"]`) as HTMLInputElement | null;
+        if (!input) return true;
+        const value = input.value.trim();
+        const ok = fieldName === "email" ? EMAIL_RE.test(value) : value !== "";
+        input.setAttribute("aria-invalid", ok ? "false" : "true");
+        const err = fieldError(fieldName);
+        if (err) err.hidden = ok;
+        return ok;
+      };
+      ["name", "email", "category", "subject", "message"].forEach((fieldName) => {
+        const input = form.querySelector(`[name="${fieldName}"]`) as HTMLElement | null;
+        input?.addEventListener("blur", () => validateField(fieldName));
+      });
+
       form.addEventListener('submit', (e) => {
         e.preventDefault();
         if (form.dataset.sending === '1') return;
@@ -200,6 +225,7 @@ const categoryIds = ["billing", "changes", "addons", "issue", "other"] as const;
         if (!name || !email || !category || !subject || !message) valid = false;
         if (!EMAIL_RE.test(email)) valid = false;
         if (!valid) {
+          ["name", "email", "category", "subject", "message"].forEach((fieldName) => validateField(fieldName));
           (status as HTMLElement).hidden = false;
           status.textContent = validationError;
           status.classList.remove('form-status--success');
@@ -282,6 +308,9 @@ const categoryIds = ["billing", "changes", "addons", "issue", "other"] as const;
   input:focus, select:focus, textarea:focus { outline:none; border-color: var(--ink); box-shadow: 0 0 0 3px var(--focus-ring); }
   .form-meta { display:grid; gap:8px; font-size:11px; color: var(--muted); line-height:1.5; }
   .form-status { padding:10px 12px; border-radius:10px; border:1px solid var(--line); font-size:12.5px; line-height:1.5; }
+  /* #74: inline per-field validation errors. */
+  .field-error { color: var(--accent-text); font-size: 12.5px; line-height: 1.4; margin: 6px 0 0; }
+  .form input[aria-invalid="true"], .form textarea[aria-invalid="true"], .form select[aria-invalid="true"] { border-color: var(--accent); }
   .info-grid { display:grid; grid-template-columns: repeat(3,1fr); gap:16px; }
   .info-card { background: var(--card-bg); border:1px solid var(--line); border-radius:16px; padding:18px; box-shadow: var(--shadow-sm); }
   .info-card h3 { font-size:14.5px; letter-spacing:-0.02em; font-weight:750; }

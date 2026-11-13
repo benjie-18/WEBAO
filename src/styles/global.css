@@ -383,6 +383,8 @@ button, input, textarea, select { font: inherit; }
   --text-6xl: 5rem;
   --text-7xl: 6.5rem;
   --text-8xl: 8.5rem;
+  /* #64: single h1 scale — page headings use this instead of per-page clamps. */
+  --text-h1: clamp(2.25rem, 5vw, 4.5rem);
 
   /* Space */
   --space-1: 4px;
@@ -554,7 +556,7 @@ html.theming *::after {
 .display {
   font-family: var(--font-display);
   font-weight: 400;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   line-height: 0.9;
 }
 .sans {
@@ -590,6 +592,12 @@ html.theming *::after {
   padding-block: clamp(48px, 8vw, 120px);
   position: relative;
 }
+/* #64: tighten vertical section padding below 768px (64px -> 40px). */
+@media (max-width: 768px) { .section { padding-block: 40px; } }
+/* #64: widen mobile serif line-height (1.05-1.12) and ease tracking to
+   -0.015em. Scoped to h1.display so it beats the per-page title classes
+   without !important; the hero display title keeps its own treatment. */
+@media (max-width: 768px) { h1.display { line-height: 1.08; letter-spacing: -0.015em; } }
 .section--tight { padding-block: clamp(32px, 5vw, 72px); }
 .section--dark {
   background: var(--section-dark-bg);
@@ -672,26 +680,13 @@ html.theming *::after {
   letter-spacing: -0.03em;
   font-size: 1.25rem;
 }
-.brand-mark {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: var(--ink);
-  color: var(--paper);
-  display: grid;
-  place-items: center;
-  font-family: var(--font-display);
-  font-size: 1.05rem;
-  line-height: 1;
-}
-.site-header--dark .brand-mark { background: var(--paper); color: var(--ink); }
 
 /* Brand logo images (light/dark variants) */
 .brand-logo {
   display: block;
   height: 34px;
   width: auto;
-  border-radius: 6px;
+  border-radius: 0;
 }
 .brand-logo--dark { display: none; }
 [data-theme="dark"] .brand-logo--light { display: none; }
@@ -716,6 +711,9 @@ html.theming *::after {
 }
 .nav a:hover { background: var(--line); }
 .site-header--dark .nav a:hover { background: var(--line-on-dark); }
+/* #67: the current page's link reads as the active pill. */
+.nav a[aria-current="page"] { background: var(--line); font-weight: 650; }
+.site-header--dark .nav a[aria-current="page"] { background: var(--line-on-dark); }
 .nav .cta {
   background: var(--ink);
   color: var(--paper);
@@ -990,6 +988,33 @@ html.theming *::after {
   box-shadow: 0 8px 20px var(--accent-glow);
 }
 .btn--primary:hover { background: var(--btn-primary-hover-bg); transform: translateY(-1px); box-shadow: 0 12px 28px var(--accent-glow); }
+/* #66: full-width card CTA (Ads Pack, AI Pack, AI services, bundles) — the
+   same cart toggle as the old top-right icon, with a price label that
+   follows the billing term (cart-ui keeps the [data-cta-label] text in
+   sync). The added state reads as selected, not as a second primary. */
+.card-cta {
+  width: 100%;
+  justify-content: center;
+  min-height: 46px;
+}
+.card-cta.is-added {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--ink);
+  box-shadow: none;
+}
+.card-cta.is-added:hover {
+  background: var(--paper-2);
+  border-color: var(--line);
+}
+/* #66: small optional add-ons keep the 44px icon button, with a visible
+   "+ Add" label that flips to "Added" once the item is in the cart
+   (cart-ui toggles .is-added on the button). */
+.addon-add { display: inline-flex; align-items: center; gap: 8px; flex: none; }
+.addon-add-label { font-size: 12px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+.addon-add-label--added { display: none; }
+.addon-add:has(.cart-btn.is-added) .addon-add-label--add { display: none; }
+.addon-add:has(.cart-btn.is-added) .addon-add-label--added { display: inline; }
 .btn--dark {
   background: var(--ink);
   color: var(--paper);

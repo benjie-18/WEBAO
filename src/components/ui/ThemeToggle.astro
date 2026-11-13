@@ -15,6 +15,8 @@ const t = useTranslations(locale);
   data-theme-toggle
   data-label-to-dark={t.nav.themeToDark}
   data-label-to-light={t.nav.themeToLight}
+  data-label-dark-on={t.nav.themeDarkOn}
+  data-label-light-on={t.nav.themeLightOn}
   aria-label={t.nav.themeToDark}
   title={t.nav.themeToDark}
 >
@@ -102,6 +104,16 @@ const t = useTranslations(locale);
       if (currentTheme() === theme) {
         syncToggles(theme);
         return;
+      }
+      // #73: announce the change to screen readers via the layout's live
+      // region (only on a user toggle, never on page load).
+      var live = document.querySelector("[data-theme-live]");
+      if (live) {
+        var onLabel = theme === "dark"
+          ? (sourceBtn && sourceBtn.getAttribute("data-label-dark-on")) || "Dark theme on"
+          : (sourceBtn && sourceBtn.getAttribute("data-label-light-on")) || "Light theme on";
+        live.textContent = "";
+        window.setTimeout(function () { live.textContent = onLabel; }, 50);
       }
       var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       var canVT =
