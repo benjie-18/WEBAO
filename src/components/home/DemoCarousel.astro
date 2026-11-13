@@ -69,7 +69,7 @@ const total = String(demos.length).padStart(2, "0");
         {demos.map((d, i) => (
           <article class="proof-panel" data-proof-panel data-demo-id={d.id} data-demo-index={catalogIndex.get(d.id)}>
             {i > 0 && <span class="proof-fracture" aria-hidden="true"></span>}
-            <a href={`${paths.demos}/${d.id}`} class="proof-shot" aria-label={`${d.name}, ${d.tone}`}>
+            <a href={`${paths.demos}/${d.id}`} class="proof-shot" aria-label={`${d.name}, ${d.localizedTone}`}>
               <img
                 src={`/carousel/${d.id}.jpg`}
                 alt={imgAlt(d.name)}
@@ -81,13 +81,13 @@ const total = String(demos.length).padStart(2, "0");
               />
               <span class="proof-fallback" aria-hidden="true" style="display:none;">
                 <span class="proof-fallback-name">{d.name}</span>
-                <span class="proof-fallback-tone">{d.tone}</span>
+                <span class="proof-fallback-tone">{d.localizedTone}</span>
               </span>
             </a>
             <div class="proof-meta">
               <span class="proof-index mono" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
               <h3 class="proof-name">{d.name}</h3>
-              <p class="proof-tags mono"><span>{d.category}</span><span aria-hidden="true"> · </span><span>{d.tone}</span></p>
+              <p class="proof-tags mono"><span>{((t.demos.categories as any)[d.category] ?? d.category)}</span><span aria-hidden="true"> · </span><span>{d.localizedTone}</span></p>
             </div>
           </article>
         ))}

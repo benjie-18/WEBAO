@@ -86,7 +86,7 @@ const families = styleFamilies;
   <div class="shell">
     <div id="demo-grid" class="demo-grid">
       {displayDemos.map((d, i) => (
-        <a href={liveDemos.has(d.id) ? demoHref(d.id) : "#"} class="demo-card-demo" data-category={d.category} data-search={`${d.name} ${d.category} ${d.city} ${d.tone} ${d.palette} ${d.localizedDescription} ${((t.demos.categories as any)[d.category] ?? d.category)} ${d.trade ? ((t.demos.trades as any)[d.trade] ?? d.trade) : ""}`.toLowerCase()} data-reveal style={`--d:${(i%3)*80}ms`} data-demo-id={d.id} data-demo-index={catalogIndex.get(d.id)} data-demo-tone={d.tone} data-demo-family={getDemoFamily(d.id)} data-demo-trade={d.trade ?? ""} data-demo-palette={d.palette} data-live={liveDemos.has(d.id) ? "true" : undefined} aria-label={`${d.name} — ${t.demos.viewDemo.replace(" →", "")}`}>
+        <a href={liveDemos.has(d.id) ? demoHref(d.id) : "#"} class="demo-card-demo" data-category={d.category} data-search={`${d.name} ${d.category} ${d.city} ${d.tone} ${d.localizedTone} ${d.palette} ${d.localizedDescription} ${((t.demos.categories as any)[d.category] ?? d.category)} ${d.trade ? ((t.demos.trades as any)[d.trade] ?? d.trade) : ""}`.toLowerCase()} data-reveal style={`--d:${(i%3)*80}ms`} data-demo-id={d.id} data-demo-index={catalogIndex.get(d.id)} data-demo-tone={d.localizedTone} data-demo-family={getDemoFamily(d.id)} data-demo-trade={d.trade ?? ""} data-demo-palette={d.palette} data-live={liveDemos.has(d.id) ? "true" : undefined} aria-label={`${d.name} — ${t.demos.viewDemo.replace(" →", "")}`}>
           {liveDemos.has(d.id) ? (
             <div class={`demo-thumb dthumb dthumb-${d.id}`}>
               {d.id === "nora" && (
@@ -493,7 +493,7 @@ const families = styleFamilies;
               <div class="thumb-inner">
                 <div class="thumb-bar mono">{d.city.toUpperCase()} · {((t.demos.categories as any)[d.category] ?? d.category).toUpperCase()}</div>
                 <div class="thumb-title display" style="font-size:1.35rem; line-height:.9; color:white;">{d.name.split(" ")[0]} <span style="font-weight:400; opacity:.8;">{d.name.split(" ").slice(1).join(" ")}</span></div>
-                <div class="thumb-tone mono" style="color: rgba(255,255,255,.7); font-size:10px; margin-top:6px;">{d.tone} · {d.palette}</div>
+                <div class="thumb-tone mono" style="color: rgba(255,255,255,.7); font-size:10px; margin-top:6px;">{d.localizedTone} · {d.palette}</div>
                 <div style="margin-top:14px; height:1px; background: rgba(255,255,255,.18);"></div>
               </div>
               <div class="thumb-meta mono" style="background: rgba(0,0,0,.22); backdrop-filter: blur(8px);">
@@ -504,7 +504,7 @@ const families = styleFamilies;
           <div class="demo-card-foot">
             <div>
               <div style="font-weight:750; letter-spacing:-0.02em; font-size:14px;">{d.name}</div>
-              <div class="mono" style="font-size:11px; color: var(--muted);">{d.city} · {d.tone}</div>
+              <div class="mono" style="font-size:11px; color: var(--muted);">{d.city} · {d.localizedTone}</div>
             </div>
             <span class="mono" style="font-size:11px; background: var(--paper-2); border:1px solid var(--line); padding:6px 10px; border-radius:99px;">{liveDemos.has(d.id) ? t.demos.viewDemo : t.demos.details}</span>
           </div>

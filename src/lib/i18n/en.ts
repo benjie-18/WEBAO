@@ -1264,6 +1264,13 @@ const en = {
       Wellness: "Wellness",
       Hospitality: "Hospitality",
       Landscaping: "Landscaping",
+      Technology: "Technology",
+      Fashion: "Fashion",
+      Music: "Music",
+      Finance: "Finance",
+      Gaming: "Gaming",
+      Design: "Design",
+      Beauty: "Beauty",
     },
   },
 

@@ -201,3 +201,36 @@ test('getDemos localizes every demo description in both languages', () => {
   assert.ok(translated >= demos.length - 1, `expected nearly every demo to be translated, got ${translated}/${demos.length}`);
   assert.notEqual(english.get('nora'), french.get('nora'));
 });
+
+test('getDemos localizes every demo tone in both languages', () => {
+  for (const locale of locales) {
+    const localized = getDemos(locale);
+    assert.equal(localized.length, demos.length);
+    for (const demo of localized) {
+      assert.equal(typeof demo.localizedTone, 'string');
+      assert.notEqual(demo.localizedTone.trim(), '', `${locale}:${demo.id}`);
+    }
+  }
+  // A few style terms are identical in French by design (Y2K, Synthwave,
+  // Pixel art, Frutiger Aero, Cybercore); the rest must differ.
+  const english = new Map(getDemos('en').map((demo) => [demo.id, demo.localizedTone]));
+  const french = new Map(getDemos('fr').map((demo) => [demo.id, demo.localizedTone]));
+  const translated = demos.filter((demo) => english.get(demo.id) !== french.get(demo.id)).length;
+  assert.ok(translated >= demos.length - 5, `expected nearly every tone to be translated, got ${translated}/${demos.length}`);
+  assert.notEqual(english.get('boreal'), french.get('boreal'));
+  assert.equal(english.get('cyberdoll'), french.get('cyberdoll'), 'Y2K stays Y2K in French');
+});
+
+test('the demo category map covers every demo category in both languages', () => {
+  const categories = [...new Set(demos.map((demo) => demo.category))];
+  for (const locale of locales) {
+    const map = (translations as any)[locale].demos.categories as Record<string, string>;
+    for (const category of categories) {
+      assert.equal(typeof map[category], 'string', `${locale}:${category}`);
+      assert.notEqual(map[category].trim(), '', `${locale}:${category}`);
+    }
+  }
+  const fr = (translations as any).fr.demos.categories as Record<string, string>;
+  assert.equal(fr.Trades, 'Métiers');
+  assert.equal(fr.Gaming, 'Jeux vidéo');
+});
