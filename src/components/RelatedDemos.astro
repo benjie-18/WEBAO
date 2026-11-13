@@ -1,0 +1,83 @@
+---
+// Related demos (#26): service and guide pages embed three real demo
+// directions (the same trio as the hero preview) plus a mid-page audit
+// link, so the pages show what WEBAO builds instead of only describing
+// it. Demos are fictional design directions, never clients. Screenshots
+// use the carousel JPGs with the same onerror text fallback as
+// DemoCarousel (only 19 of 47 demos have screenshots).
+import { getDemos, localizedPaths, useTranslations, type Locale } from "../lib/i18n";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props as Props;
+const t = useTranslations(locale);
+const paths = localizedPaths[locale];
+const featuredIds = ["boreal", "leduc", "sora"];
+const all = getDemos(locale);
+const demos = featuredIds
+  .map((id) => all.find((d) => d.id === id))
+  .filter((d): d is NonNullable<typeof d> => Boolean(d));
+---
+
+<section class="section section--tight">
+  <div class="shell" style="max-width: 860px;">
+    <h2 class="display" style="font-size: clamp(1.6rem, 3.5vw, 2.4rem); line-height:.95;">{t.ctaBand.relatedDemos}</h2>
+    <div class="related-grid">
+      {demos.map((d) => (
+        <a href={`${paths.demos}/${d.id}`} class="related-card">
+          <span class="related-thumb">
+            <img
+              src={`/carousel/${d.id}.jpg`}
+              alt={d.name}
+              loading="lazy"
+              width="1280"
+              height="800"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+            />
+            <span class="related-fallback" aria-hidden="true" style="display:none;">
+              <span class="related-fallback-name">{d.name}</span>
+              <span class="related-fallback-tone mono">{d.localizedTone}</span>
+            </span>
+          </span>
+          <span class="related-meta">
+            <strong>{d.name}</strong>
+            <span class="mono">{d.localizedTone}</span>
+          </span>
+        </a>
+      ))}
+    </div>
+    <p class="related-audit"><a href={paths.audit}>{t.ctaBand.audit}</a></p>
+  </div>
+</section>
+
+<style>
+  .related-grid { display: grid; gap: 16px; margin-top: 20px; }
+  @media (min-width: 640px) { .related-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .related-card {
+    display: block;
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: clip;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: var(--shadow-sm);
+  }
+  .related-card:hover { border-color: var(--accent); }
+  .related-thumb { display: block; aspect-ratio: 8 / 5; background: var(--paper-2); overflow: clip; }
+  .related-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .related-fallback {
+    width: 100%; height: 100%;
+    flex-direction: column; align-items: flex-start; justify-content: flex-end;
+    gap: 2px; padding: 14px 16px;
+    background: var(--paper-2);
+  }
+  .related-fallback-name { font-size: 1.05rem; font-weight: 750; letter-spacing: -0.02em; }
+  .related-fallback-tone { font-size: 11px; letter-spacing: .08em; color: var(--muted); }
+  .related-meta { display: flex; flex-direction: column; gap: 2px; padding: 12px 14px; line-height: 1.3; }
+  .related-meta strong { font-size: 14px; letter-spacing: -0.01em; }
+  .related-meta .mono { font-size: 10px; letter-spacing: .1em; color: var(--muted); }
+  .related-audit { margin-top: 18px; font-size: 14px; }
+  .related-audit a { color: var(--accent-text); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+</style>

@@ -94,7 +94,7 @@ const families = styleFamilies;
     <div id="demo-grid" class="demo-grid">
       {displayDemos.map((d, i) => (
         <div class="demo-card-wrap" data-category={d.category} data-search={`${d.name} ${d.category} ${d.city} ${d.tone} ${d.localizedTone} ${d.palette} ${d.localizedDescription} ${((t.demos.categories as any)[d.category] ?? d.category)} ${d.trade ? ((t.demos.trades as any)[d.trade] ?? d.trade) : ""}`.toLowerCase()} data-reveal style={`--d:${(i%3)*80}ms`} data-demo-id={d.id} data-demo-index={catalogIndex.get(d.id)} data-demo-tone={d.localizedTone} data-demo-family={getDemoFamily(d.id)} data-demo-trade={d.trade ?? ""} data-demo-palette={d.palette} data-live={liveDemos.has(d.id) ? "true" : undefined}>
-        <a href={liveDemos.has(d.id) ? demoHref(d.id) : "#"} class="demo-card-demo" aria-label={`${d.name} — ${t.demos.viewDemo.replace(" →", "")}`}>
+        <a href={liveDemos.has(d.id) ? demoHref(d.id) : "#"} class="demo-card-demo" aria-label={`${d.name} · ${t.demos.viewDemo.replace(" →", "")}`}>
           {liveDemos.has(d.id) ? (
             <div class={`demo-thumb dthumb dthumb-${d.id}`}>
               {d.id === "nora" && (

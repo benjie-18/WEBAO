@@ -76,6 +76,7 @@ const en = {
     demos: "Browse 47 demo directions →",
     audit: "Audit your current site →",
     plans: "See plans →",
+    relatedDemos: "Three demo directions to start from",
   },
 
   estimator: {
@@ -143,6 +144,9 @@ const en = {
       auditCta: "Audit yours now",
       priceNote: "$89.99 <span>CAD/month</span> · All-inclusive",
       trustStrip: ["$0 setup fee", "Bilingual EN/FR", "Live in 2–3 weeks", "Cancel with 30 days' notice"],
+    },
+    heroPreview: {
+      tag: "Fictional demo",
     },
     proof: {
       eyebrow: "The catalog in motion",
@@ -1310,6 +1314,7 @@ const en = {
     quickLookMobile: "Mobile",
     quickLookBuild: "Build my site like this →",
     quickLookBuildShort: "Build like this →",
+    quickLookOpenFull: "Open full page ↗",
     trades: {
       plumbing: "Plumbing",
       electrical: "Electrical",

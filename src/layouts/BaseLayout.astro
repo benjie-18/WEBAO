@@ -492,8 +492,8 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
       <a href={navLinks.contact} style="--i:3" aria-current={isCurrent(navLinks.contact) ? "page" : undefined}>{t.nav.contact} <span aria-hidden="true">→</span></a>
       <a href={localizedPaths[locale].serviceDesign} style="--i:4" aria-current={isCurrent(localizedPaths[locale].serviceDesign) ? "page" : undefined}>{t.nav.services} <span aria-hidden="true">→</span></a>
       <a href={localizedPaths[locale].guideIndex} style="--i:5" aria-current={isCurrent(localizedPaths[locale].guideIndex) ? "page" : undefined}>{t.nav.guides} <span aria-hidden="true">→</span></a>
-      <a href={navLinks.portal} style="--i:6">{t.nav.portal} <span aria-hidden="true">→</span></a>
-      <a href={navLinks.support} style="--i:7">{t.nav.support} <span aria-hidden="true">→</span></a>
+      <a href={navLinks.portal} style="--i:6" aria-current={isCurrent(navLinks.portal) ? "page" : undefined}>{t.nav.portal} <span aria-hidden="true">→</span></a>
+      <a href={navLinks.support} style="--i:7" aria-current={isCurrent(navLinks.support) ? "page" : undefined}>{t.nav.support} <span aria-hidden="true">→</span></a>
       <a
         href={navLinks.start}
         data-track="cta"

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import RelatedDemos from "../RelatedDemos.astro";
 import { localizedPaths, useTranslations, type Locale, type PageKey } from "../../lib/i18n";
 
 export interface ServiceSection {
@@ -106,6 +107,8 @@ const faqSchema = {
       </div>
     </div>
   </section>
+
+  <RelatedDemos locale={locale} />
 
   <section class="section section--tight">
     <div class="shell" style="max-width: 860px;">

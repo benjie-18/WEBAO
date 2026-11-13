@@ -39,6 +39,7 @@ const paths = localizedPaths[locale];
         <button type="button" data-quicklook-width="desktop" aria-pressed="true">{t.demos.quickLookDesktop}</button>
         <button type="button" data-quicklook-width="mobile" aria-pressed="false">{t.demos.quickLookMobile}</button>
       </div>
+      <a class="btn btn--ghost quicklook-open" data-quicklook-open-link href={paths.start}>{t.demos.quickLookOpenFull}</a>
       <a class="btn btn--primary quicklook-build" data-quicklook-build href={paths.start}>{t.demos.quickLookBuild}</a>
     </div>
   </div>
@@ -57,6 +58,7 @@ const paths = localizedPaths[locale];
     const metaEl = modal.querySelector("[data-quicklook-meta]") as HTMLElement | null;
     const frame = modal.querySelector("[data-quicklook-frame]") as HTMLElement | null;
     const buildLink = modal.querySelector("[data-quicklook-build]") as HTMLAnchorElement | null;
+    const openLink = modal.querySelector("[data-quicklook-open-link]") as HTMLAnchorElement | null;
     const closeBtn = modal.querySelector(".quicklook-close") as HTMLButtonElement | null;
     const startHref = buildLink?.getAttribute("href") || "/start";
     const buildLabel = buildLink?.textContent || "";
@@ -81,13 +83,14 @@ const paths = localizedPaths[locale];
     const open = (trigger: HTMLElement) => {
       const id = trigger.getAttribute("data-quicklook-open") || "";
       const href = trigger.getAttribute("data-demo-href") || "";
-      if (!id || !href || !iframe || !nameEl || !metaEl || !buildLink) return;
+      if (!id || !href || !iframe || !nameEl || !metaEl || !buildLink || !openLink) return;
       currentId = id;
       lastTrigger = trigger;
       nameEl.textContent = trigger.getAttribute("data-demo-name") || id;
       metaEl.textContent = trigger.getAttribute("data-demo-meta") || "";
       iframe.title = trigger.getAttribute("data-demo-name") || id;
       iframe.src = href;
+      openLink.href = href;
       buildLink.href = `${startHref}?demo=${encodeURIComponent(id)}`;
       modal.hidden = false;
       document.body.style.overflow = "hidden";

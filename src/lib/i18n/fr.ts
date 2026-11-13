@@ -79,6 +79,7 @@ const fr = {
     demos: "Parcourir les 47 directions de démo →",
     audit: "Auditer votre site actuel →",
     plans: "Voir les tarifs →",
+    relatedDemos: "Trois directions de démo pour commencer",
   },
 
   estimator: {
@@ -146,6 +147,9 @@ const fr = {
       auditCta: "Auditez le vôtre",
       priceNote: "89,99 $ <span>CAD/mois</span> · Tout inclus",
       trustStrip: ["0 $ de frais d'installation", "Bilingue EN/FR", "En ligne en 2 à 3 semaines", "Résiliation avec 30 jours de préavis"],
+    },
+    heroPreview: {
+      tag: "Démo fictive",
     },
     proof: {
       eyebrow: "Le catalogue en mouvement",
@@ -1318,6 +1322,7 @@ const fr = {
     quickLookMobile: "Mobile",
     quickLookBuild: "Construire mon site comme celui-ci →",
     quickLookBuildShort: "Comme celui-ci →",
+    quickLookOpenFull: "Ouvrir la page complète ↗",
     trades: {
       plumbing: "Plombiers",
       electrical: "Électriciens",

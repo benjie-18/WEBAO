@@ -180,9 +180,12 @@ const forwardShort = locale === "fr" ? "Comme celui-ci â†’" : "Build like this â
     .demo-exit-dismiss {
       display: inline-flex; align-items: center; justify-content: center;
       flex: none; width: 36px; height: 36px; min-height: 36px;
+      position: relative;
       background: transparent; color: #ffffff; border: none; cursor: pointer;
       font-size: 13px; line-height: 1;
     }
+    /* 36px visual, 44px tap target (site touch-target rule). */
+    .demo-exit-dismiss::after { content: ""; position: absolute; inset: -4px; }
     .demo-exit-dismiss:focus-visible {
       outline: none; box-shadow: inset 0 0 0 2px #ffffff;
     }

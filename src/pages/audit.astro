@@ -5,7 +5,6 @@
 // loading screen and the visitor is redirected to /audits/<id> when the
 // audit finishes. The report form lives on the results page.
 import BaseLayout from "../layouts/BaseLayout.astro";
-import StarMark from "../components/ui/StarMark.astro";
 ---
 
 <BaseLayout title="Free website audit · Webao" description="See how your business website scores, and what to fix first. Free, no obligation." locale="en" pageKey="audit">
@@ -13,9 +12,7 @@ import StarMark from "../components/ui/StarMark.astro";
     <section class="audit-hero grain">
       <div class="shell audit-hero-inner">
         <div class="audit-title-row">
-          <span class="audit-hero-star audit-hero-star--left" aria-hidden="true"><StarMark /></span>
           <h1 class="display audit-title">Free website audit</h1>
-          <span class="audit-hero-star audit-hero-star--right" aria-hidden="true"><StarMark /></span>
         </div>
         <p class="audit-sub">Enter your business website. You get an instant score and the first things to fix, free, no obligation.</p>
         <form id="audit-form" class="audit-form" novalidate>
@@ -100,7 +97,7 @@ import StarMark from "../components/ui/StarMark.astro";
     </div>
     <div class="audit-loading-inner">
       <span class="audit-loading-glow" aria-hidden="true"></span>
-      <span class="audit-loading-star" aria-hidden="true"><StarMark /></span>
+      <span class="audit-loading-star" aria-hidden="true"></span>
       <div class="audit-loading-bar" role="progressbar" aria-label="Audit in progress">
         <div class="audit-loading-fill" data-audit-fill></div>
       </div>
@@ -292,23 +289,6 @@ import StarMark from "../components/ui/StarMark.astro";
       line-height: 0.95;
       letter-spacing: -0.02em;
       text-align: center;
-    }
-    /* Same star as the pricing hero: ink on the left, accent on the
-       right, shifted about 40% off the screen edge. The hero clips
-       the overflow, so no horizontal scroll. */
-    .audit-hero-star {
-      --star: clamp(120px, 16vw, 200px);
-      position: absolute;
-      top: 50%;
-      width: var(--star);
-      height: var(--star);
-      pointer-events: none;
-    }
-    .audit-hero-star :global(svg) { width: 100%; height: 100%; display: block; overflow: visible; }
-    .audit-hero-star--left { left: calc((100% - 100vw) / 2 - var(--star) * 0.4); color: var(--ink); opacity: 0.9; transform: translateY(-50%) rotate(-18deg); }
-    .audit-hero-star--right { right: calc((100% - 100vw) / 2 - var(--star) * 0.4); color: var(--accent-mid); transform: translateY(-50%) rotate(22deg); }
-    @media (max-width: 640px) {
-      .audit-hero-star { --star: 80px; }
     }
     .audit-sub {
       max-width: 560px;
@@ -505,7 +485,7 @@ import StarMark from "../components/ui/StarMark.astro";
       width: var(--s, 14px);
       height: var(--s, 14px);
       background: var(--accent);
-      clip-path: polygon(50% 0, 63% 37%, 100% 50%, 63% 63%, 50% 100%, 37% 63%, 0 50%, 37% 37%);
+      border-radius: 50%;
       opacity: 0;
       animation: audit-sparkle-twinkle var(--t, 2.8s) ease-in-out var(--d, 0s) infinite;
     }
@@ -539,17 +519,18 @@ import StarMark from "../components/ui/StarMark.astro";
       0%, 100% { opacity: 0.55; transform: translateX(-50%) scale(0.95); }
       50% { opacity: 1; transform: translateX(-50%) scale(1.06); }
     }
+    /* Plain ring spinner (no star): #3 removed the star graphic from /audit. */
     .audit-loading-star {
-      width: clamp(96px, 18vw, 140px);
-      height: clamp(96px, 18vw, 140px);
-      color: var(--accent);
-      animation: audit-star-spin 1.5s infinite;
+      width: clamp(72px, 14vw, 104px);
+      height: clamp(72px, 14vw, 104px);
+      border: 4px solid var(--line);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: audit-spin 1s linear infinite;
     }
-    .audit-loading-star :global(svg) { width: 100%; height: 100%; display: block; overflow: visible; }
-    @keyframes audit-star-spin {
-      0% { transform: rotate(0deg); animation-timing-function: var(--ease-out-expo); }
-      50% { transform: rotate(360deg); animation-timing-function: linear; }
-      100% { transform: rotate(360deg); }
+    @keyframes audit-spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
     /* The shimmer is tied to the bar (the track), never to the fill:
        it sweeps the whole bar width on a fixed loop, so its geometry

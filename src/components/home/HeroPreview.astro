@@ -1,0 +1,231 @@
+---
+// Hero preview (#3 + #43): the hero's right column is a live, interactive
+// demo site in a browser frame — not the old outline stars. Cycles three
+// real catalog demos (Boréal, Plomberie Leduc, Clinique Sora), each a
+// fictional design direction, never a client. Desktop/Mobile switches the
+// frame width; EN/FR switches the demo's own locale route (both exist).
+// Without JS the first demo still loads in the frame; the controls just
+// don't work. The demos carry their own EscapeHatch, same as Quick Look.
+import { getDemos, useTranslations, type Locale } from "../../lib/i18n";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props as Props;
+const t = useTranslations(locale);
+const featuredIds = ["boreal", "leduc", "sora"];
+const all = getDemos(locale);
+const demos = featuredIds
+  .map((id) => all.find((d) => d.id === id))
+  .filter((d): d is NonNullable<typeof d> => Boolean(d));
+const first = demos[0];
+const demoPath = (id: string, loc: Locale) => (loc === "fr" ? `/fr/demos/${id}/` : `/demos/${id}/`);
+const startPath = locale === "fr" ? "/fr/commencer" : "/start";
+const data = demos.map((d) => ({ id: d.id, name: d.name, tone: d.localizedTone }));
+---
+
+<div class="hero-preview" data-hero-preview>
+  <div class="hero-preview-chrome">
+    <span class="hero-preview-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="hero-preview-url mono" data-hero-preview-url>webao.ca{demoPath(first.id, locale)}</span>
+    <span class="hero-preview-tag mono">{t.home.heroPreview.tag}</span>
+  </div>
+  <div class="hero-preview-frame" data-hero-preview-frame>
+    <iframe
+      data-hero-preview-iframe
+      title={first.name}
+      src={demoPath(first.id, locale)}
+      loading="lazy"
+    ></iframe>
+  </div>
+  <div class="hero-preview-bar">
+    <div class="hero-preview-nav">
+      <button type="button" class="hero-preview-arrow" data-hero-preview-prev aria-label={t.demos.quickLookPrev}>←</button>
+      <span class="hero-preview-name">
+        <strong data-hero-preview-name>{first.name}</strong>
+        <span class="hero-preview-tone mono" data-hero-preview-tone>{first.localizedTone}</span>
+      </span>
+      <button type="button" class="hero-preview-arrow" data-hero-preview-next aria-label={t.demos.quickLookNext}>→</button>
+    </div>
+    <div class="hero-preview-toggles">
+      <div class="hero-preview-group" role="group" aria-label={t.demos.quickLookDesktop + " / " + t.demos.quickLookMobile}>
+        <button type="button" data-hero-preview-width="desktop" aria-pressed="true">{t.demos.quickLookDesktop}</button>
+        <button type="button" data-hero-preview-width="mobile" aria-pressed="false">{t.demos.quickLookMobile}</button>
+      </div>
+      <div class="hero-preview-group" role="group" aria-label="EN / FR">
+        <button type="button" data-hero-preview-lang="en" aria-pressed={locale === "en"}>EN</button>
+        <button type="button" data-hero-preview-lang="fr" aria-pressed={locale === "fr"}>FR</button>
+      </div>
+    </div>
+    <a class="hero-preview-build" data-hero-preview-build href={`${startPath}?demo=${first.id}`}>{t.demos.quickLookBuild}</a>
+  </div>
+</div>
+
+<script type="application/json" data-hero-preview-data set:html={JSON.stringify(data)}></script>
+
+<script>
+  (function () {
+    const root = document.querySelector("[data-hero-preview]") as HTMLElement | null;
+    if (!root || root.dataset.init) return;
+    root.dataset.init = "1";
+    const el = root;
+    const dataEl = document.querySelector("[data-hero-preview-data]");
+    let demos: Array<{ id: string; name: string; tone: string }> = [];
+    try { demos = JSON.parse(dataEl ? dataEl.textContent || "[]" : "[]"); } catch (e) { demos = []; }
+    if (!demos.length) return;
+    let idx = 0;
+    let lang = document.documentElement.lang === "fr" ? "fr" : "en";
+    const iframe = root.querySelector("[data-hero-preview-iframe]") as HTMLIFrameElement | null;
+    const nameEl = root.querySelector("[data-hero-preview-name]");
+    const toneEl = root.querySelector("[data-hero-preview-tone]");
+    const urlEl = root.querySelector("[data-hero-preview-url]");
+    const buildEl = root.querySelector("[data-hero-preview-build]");
+    const frame = root.querySelector("[data-hero-preview-frame]");
+    const startBase = buildEl ? (buildEl.getAttribute("href") || "/start").split("?")[0] : "/start";
+
+    function pathFor(d: { id: string }) {
+      return (lang === "fr" ? "/fr/demos/" : "/demos/") + d.id + "/";
+    }
+    function show(i: number) {
+      idx = (i + demos.length) % demos.length;
+      const d = demos[idx];
+      if (iframe) {
+        iframe.src = pathFor(d);
+        iframe.title = d.name;
+      }
+      if (nameEl) nameEl.textContent = d.name;
+      if (toneEl) toneEl.textContent = d.tone;
+      if (urlEl) urlEl.textContent = "webao.ca" + pathFor(d);
+      if (buildEl) buildEl.setAttribute("href", startBase + "?demo=" + encodeURIComponent(d.id));
+    }
+    function setLang(l: string) {
+      lang = l;
+      el.querySelectorAll("[data-hero-preview-lang]").forEach(function (b) {
+        b.setAttribute("aria-pressed", String(b.getAttribute("data-hero-preview-lang") === l));
+      });
+      show(idx);
+    }
+    root.querySelector("[data-hero-preview-prev]")?.addEventListener("click", function () { show(idx - 1); });
+    root.querySelector("[data-hero-preview-next]")?.addEventListener("click", function () { show(idx + 1); });
+    root.querySelectorAll("[data-hero-preview-width]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        const w = b.getAttribute("data-hero-preview-width") || "desktop";
+        frame?.classList.toggle("is-mobile", w === "mobile");
+        root.querySelectorAll("[data-hero-preview-width]").forEach(function (x) {
+          x.setAttribute("aria-pressed", String(x === b));
+        });
+      });
+    });
+    root.querySelectorAll("[data-hero-preview-lang]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        setLang(b.getAttribute("data-hero-preview-lang") || "en");
+      });
+    });
+  })();
+</script>
+
+<style>
+  .hero-preview {
+    grid-column: 9 / 13;
+    min-width: 0;
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    box-shadow: var(--shadow-lg);
+    overflow: clip;
+  }
+  /* Hero entrance, same pattern as the title/lead: hidden only when JS runs. */
+  html.js .hero-preview { opacity: 0; }
+  [data-hero-enter="true"] .hero-preview { animation: hero-preview-in var(--dur-4) var(--ease-out-expo) forwards; animation-delay: calc(4 * var(--stagger)); }
+  @keyframes hero-preview-in { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+  .hero-preview-chrome {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line);
+    background: var(--paper-2);
+  }
+  .hero-preview-dots { display: inline-flex; gap: 6px; flex: none; }
+  .hero-preview-dots i { width: 10px; height: 10px; border-radius: 50%; display: block; }
+  .hero-preview-dots i:nth-child(1) { background: #FF5F57; }
+  .hero-preview-dots i:nth-child(2) { background: #FFBD2E; }
+  .hero-preview-dots i:nth-child(3) { background: #28C940; }
+  .hero-preview-url {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 99px;
+    padding: 5px 12px;
+  }
+  .hero-preview-tag { flex: none; font-size: 10px; letter-spacing: .14em; color: var(--accent-text); }
+  .hero-preview-frame { background: var(--paper-2); display: flex; justify-content: center; }
+  .hero-preview-frame iframe { width: 100%; height: 440px; border: 0; background: #fff; display: block; }
+  .hero-preview-frame.is-mobile iframe { width: 390px; max-width: 100%; border-inline: 1px solid var(--line); }
+  .hero-preview-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 16px;
+    padding: 12px 14px;
+    border-top: 1px solid var(--line);
+  }
+  .hero-preview-nav { display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1; }
+  .hero-preview-arrow {
+    flex: none;
+    width: 44px;
+    height: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--paper-2);
+    color: var(--ink);
+    font-size: 15px;
+    cursor: pointer;
+  }
+  .hero-preview-name { min-width: 0; display: flex; flex-direction: column; line-height: 1.25; }
+  .hero-preview-name strong { font-size: 14px; letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .hero-preview-tone { font-size: 10px; letter-spacing: .1em; color: var(--muted); }
+  .hero-preview-toggles { display: flex; gap: 8px; align-items: center; }
+  .hero-preview-group { display: inline-flex; border: 1px solid var(--line); border-radius: 99px; overflow: clip; }
+  .hero-preview-group button {
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 7px 12px;
+    min-height: 44px;
+    cursor: pointer;
+  }
+  .hero-preview-group button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+  .hero-preview-build {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--accent-text);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .hero-preview-build:hover { text-decoration: underline; }
+  @media (max-width: 960px) {
+    .hero-preview { grid-column: 1 / -1; }
+    .hero-preview-frame iframe { height: 380px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-hero-enter="true"] .hero-preview { animation: none; }
+    html.js .hero-preview { opacity: 1; }
+  }
+</style>
