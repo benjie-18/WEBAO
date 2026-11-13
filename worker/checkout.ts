@@ -13,7 +13,7 @@
 //  2. mode must be "subscription" as soon as one recurring price is present,
 //     and "payment" when the cart is one-time only.
 
-import { EMAIL_RE, json, err, originAllowed } from "./util";
+import { EMAIL_RE, isTestMode, json, err, originAllowed } from "./util";
 import { findConflicts, type CartConflict, type RuleItem } from "../src/lib/cart-rules";
 
 /** Website plans, the only products with type "plan" for the rules. */
@@ -94,6 +94,8 @@ function conflictError(conflict: CartConflict): string {
 
 type Env = {
   STRIPE_SECRET_KEY?: string;
+  /** "1" on the test worker: checkout is disabled. */
+  TEST_MODE?: string;
   STRIPE_PRICE_ID?: string;
   /** Ads Pack: the monthly price is in PRICE_MAP below. The one-time setup
    *  price stays a secret because it is not a catalog item: checkout adds it
@@ -221,6 +223,7 @@ const AI_SETUPS: Array<{ monthly: string; yearly?: string; setupKey: string; set
 
 export async function handleCheckoutSession(req: Request, env: Env): Promise<Response> {
   if (!originAllowed(req, true, env)) return err("Forbidden origin", 403);
+  if (isTestMode(env)) return err("Checkout is disabled on the test site", 503);
 
   let body: {
     email?: string;

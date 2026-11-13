@@ -27,7 +27,7 @@
 // Anything else is acknowledged and ignored.
 
 import { putJson } from "./kv";
-import { EMAIL_RE, json, err, timingSafeEqual, clampStr } from "./util";
+import { EMAIL_RE, isTestMode, json, err, timingSafeEqual, clampStr } from "./util";
 import { buildInboxEmail, notifyInbox, sendClientEmail, INBOX_ADDRESS } from "./mailer";
 import { storeAbandonedCheckout } from "./recovery";
 import {
@@ -462,7 +462,7 @@ async function sendWelcomeEmail(env: Env, client: Client): Promise<void> {
 }
 
 async function notifyNewClient(env: Env, client: Client): Promise<void> {
-  if (!env.EMAIL) return;
+  if (!env.EMAIL || isTestMode(env)) return;
   try {
     const lines = [
       `New WEBAO client (created by Stripe checkout).`,
@@ -494,6 +494,7 @@ async function notifyNewClient(env: Env, client: Client): Promise<void> {
 // ---------------------------------------------------------------------------
 
 export async function handleStripeWebhook(req: Request, env: Env): Promise<Response> {
+  if (isTestMode(env)) return json({ ok: false, error: "Webhooks are disabled on the test site" }, 503);
   const secret = env.STRIPE_WEBHOOK_SECRET;
   if (!secret) return json({ ok: false, error: "Webhook not configured" }, 503);
   const kv = env.WEBAO_KV;

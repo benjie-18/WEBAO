@@ -26,7 +26,7 @@ import { handleInternalBuild, servePreviewSite, servePublishedSite } from "./bui
 import { handleMonthlyReports, recordTenantView } from "./reports";
 import { handleAdsLeadIntake } from "./ads";
 import { handleAbandonedFollowups } from "./recovery";
-import { json } from "./util";
+import { isTestMode, json } from "./util";
 import { KvWriteError } from "./kv";
 
 async function routeApi(req: Request, env: Env): Promise<Response> {
@@ -65,8 +65,7 @@ async function routeApi(req: Request, env: Env): Promise<Response> {
   return json({ ok: false, error: "Not found" }, 404);
 }
 
-export default {
-  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+async function handleFetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
 
     // Tenant hosts: a non-main hostname with a domain mapping resolves to
@@ -196,5 +195,19 @@ export default {
 
     // Everything else: the static site, served by the assets binding.
     return env.ASSETS.fetch(request);
+}
+
+export default {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+    const res = await handleFetch(request, env, ctx);
+    if (!isTestMode(env)) return res;
+    // Test site: identical content, but never indexed.
+    const headers = new Headers(res.headers);
+    headers.set("X-Robots-Tag", "noindex, nofollow");
+    return new Response(res.body, {
+      status: res.status,
+      statusText: res.statusText,
+      headers,
+    });
   },
 };

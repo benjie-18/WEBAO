@@ -4,10 +4,16 @@
 export const ALLOWED_HOSTS = new Set([
   "webao.ca",
   "www.webao.ca",
+  "test.webao.ca",
   "webao.bnji.net",
   "localhost",
   "127.0.0.1",
 ]);
+
+/** True on the test worker (test.webao.ca): all external effects off. */
+export function isTestMode(env: { TEST_MODE?: string }): boolean {
+  return env.TEST_MODE === "1";
+}
 
 export function json(data: unknown, status = 200, headers: Record<string, string> = {}): Response {
   return new Response(JSON.stringify(data), {

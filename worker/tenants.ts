@@ -25,7 +25,7 @@ export interface TenantEnv {
   INTERNAL_CRON_SECRET?: string;
 }
 
-export const MAIN_HOSTS = new Set(["webao.ca", "www.webao.ca", "webao.bnji.net"]);
+export const MAIN_HOSTS = new Set(["webao.ca", "www.webao.ca", "webao.bnji.net", "test.webao.ca"]);
 
 /** Hosts that belong to the main WEBAO site (never treated as tenants). */
 export function isMainHost(hostname: string): boolean {

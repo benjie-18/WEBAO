@@ -7,6 +7,8 @@
 // SMTP2GO_API_KEY worker secret; without it every send is a no-op returning
 // false, and callers degrade gracefully.
 
+import { isTestMode } from "./util";
+
 export interface ClientEmail {
   to: string;
   subject: string;
@@ -73,11 +75,11 @@ export function buildInboxEmail(mail: InboxEmail): string {
  * binding (the one channel that can only ever reach the inbox).
  */
 export async function notifyInbox(
-  env: { EMAIL?: SendEmailBinding },
+  env: { EMAIL?: SendEmailBinding; TEST_MODE?: string },
   subject: string,
   lines: string[],
 ): Promise<void> {
-  if (!env.EMAIL) return;
+  if (!env.EMAIL || isTestMode(env)) return;
   try {
     const raw = buildInboxEmail({
       from: "start@webao.ca",
@@ -93,10 +95,11 @@ export async function notifyInbox(
 }
 
 export async function sendClientEmail(
-  env: { SMTP2GO_API_KEY?: string },
+  env: { SMTP2GO_API_KEY?: string; TEST_MODE?: string },
   mail: ClientEmail,
 ): Promise<boolean> {
   const apiKey = env.SMTP2GO_API_KEY;
+  if (isTestMode(env)) return false;
   if (!apiKey) return false;
   try {
     const res = await fetch("https://api.smtp2go.com/v3/email/send", {

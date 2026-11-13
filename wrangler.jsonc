@@ -24,5 +24,18 @@
   "name": "webao",
   "observability": {
     "enabled": true
+  },
+  "env": {
+    "test": {
+      "name": "webao-test",
+      "routes": [{ "pattern": "test.webao.ca/*", "zone_name": "webao.ca" }],
+      "vars": { "TEST_MODE": "1" },
+      "kv_namespaces": [
+        {
+          "binding": "WEBAO_KV",
+          "id": "c5c9c6b80997418ab21e92f6d69dab5d"
+        }
+      ]
+    }
   }
 }

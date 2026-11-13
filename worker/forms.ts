@@ -6,7 +6,7 @@
 
 import { putJson } from "./kv";
 import { buildInboxEmail, INBOX_ADDRESS } from "./mailer";
-import { EMAIL_RE, clientIp, clientCountry, readJson, json, err, originAllowed, uuid } from "./util";
+import { EMAIL_RE, clientIp, clientCountry, isTestMode, readJson, json, err, originAllowed, uuid } from "./util";
 
 export interface FormSubmission {
   form: "pricing" | "contact" | "support";
@@ -75,7 +75,7 @@ export function notifySpec(submission: FormSubmission): { from: string; fromName
  * and never fails the submission — the admin panel record is what counts.
  */
 async function notifyByEmail(env: Env, submission: FormSubmission): Promise<void> {
-  if (!env.EMAIL) return;
+  if (!env.EMAIL || isTestMode(env)) return;
   const spec = notifySpec(submission);
   if (!spec) return;
   try {

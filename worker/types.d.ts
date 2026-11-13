@@ -84,4 +84,9 @@ interface Env {
   INTERNAL_CRON_SECRET?: string;
   /** PageSpeed Insights API key for the free audit funnel (secret). */
   PAGESPEED_API_KEY?: string;
+  /**
+   * "1" on the test worker (test.webao.ca): all external effects off —
+   * no mail, no Stripe, no PageSpeed. Never set on production.
+   */
+  TEST_MODE?: string;
 }
