@@ -336,7 +336,10 @@ const addonPriceCents: Record<string, { cents: number; interval: "month" | "one-
   .addon-reveal-inner {
     position: relative;
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    /* Four columns: number, name, price, cart button. Three columns left
+       the button (the fourth child) wrapping onto a second row under the
+       row number on every add-on row. */
+    grid-template-columns: auto 1fr auto auto;
     gap: clamp(14px, 2.4vw, 26px);
     align-items: baseline;
     padding: 22px 14px;

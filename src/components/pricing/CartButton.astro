@@ -74,8 +74,11 @@ const addLabel = useTranslations(locale).cart.add.replace("{name}", name);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
+    /* 44px: the site's minimum touch target (EscapeHatch, portal
+       buttons, carousel nav). 36px was too small a tap target for the
+       add-to-cart control on every pricing card. */
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     border: 1px solid var(--line);
     background: var(--card-bg);

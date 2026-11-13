@@ -382,3 +382,30 @@ test('the homepage timeline agrees with the FAQ: two to three weeks, not one wee
   assert.ok(!home.includes('data-day-readout'), 'no day readout remains');
   assert.ok(!home.includes('Math.round(progress * 7)'), 'no 7-day readout math remains');
 });
+
+test('the pricing cart button meets the 44px touch target', () => {
+  // The add-to-cart button is the conversion control on every pricing
+  // card (plans, bundles, Ads Pack, AI, add-ons), and the site's own
+  // minimum touch target is 44px (EscapeHatch, portal buttons,
+  // carousel nav). At 36px it was the smallest tap target on the page.
+  const btn = read('src/components/pricing/CartButton.astro');
+  const at = btn.indexOf('.cart-btn {');
+  assert.ok(at > 0, 'the cart button rule exists');
+  const block = btn.slice(at, btn.indexOf('}', at));
+  assert.match(block, /width:\s*44px/, 'the cart button is 44px wide');
+  assert.match(block, /height:\s*44px/, 'the cart button is 44px tall');
+});
+
+test('the add-on rows keep the cart button on the name row', () => {
+  // The add-on row grid had three columns for four children (number,
+  // name, price, cart button), so the button wrapped onto a second row
+  // under the row number on every add-on row, desktop and mobile alike.
+  const list = read('src/components/pricing/AddonList.astro');
+  // The noscript block has its own .addon-reveal-inner rule first, so
+  // match the main rule by its position: relative opener.
+  assert.match(
+    list,
+    /\.addon-reveal-inner \{\s*position: relative;[^}]*grid-template-columns:\s*auto 1fr auto auto/,
+    'the row grid has a fourth column for the cart button',
+  );
+});
