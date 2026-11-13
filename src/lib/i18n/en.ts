@@ -83,7 +83,6 @@ const en = {
     replyTime: "We usually reply within one business day.<br />Monday to Friday, 9am to 5pm Eastern.",
     copyright: "© {year} WEBAO · Made in Montréal.",
     fictionalNote: "All demo businesses shown on this site are fictional.",
-    admin: "Admin",
   },
 
   intro: {

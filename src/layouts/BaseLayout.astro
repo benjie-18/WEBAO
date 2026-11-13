@@ -538,10 +538,6 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
           <span set:html={t.footer.copyright.replace("{year}", String(new Date().getFullYear()))}></span>
           <span style="display:flex; gap:16px; align-items:center;">
             <span>{t.footer.fictionalNote}</span>
-            <a
-              href={locale === "fr" ? "/fr/admin" : "/admin"}
-              style="font-size:11px; color: rgba(248,245,239,.45); text-decoration: underline; text-underline-offset: 3px;"
-            >{t.footer.admin}</a>
           </span>
         </div>
       </div>
@@ -1139,6 +1135,16 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
         width: 100%;
         justify-content: center;
       }
+      /* Checkout stays brand crimson in both themes: the dark theme's
+         primary token is royal blue, which must not outrank checkout. */
+      .cart-drawer-footer .cart-drawer-checkout {
+        background: #d92b22;
+        border-color: #d92b22;
+      }
+      .cart-drawer-footer .cart-drawer-checkout:hover {
+        background: #a81e14;
+        border-color: #a81e14;
+      }
       /* Empty cart: the link stays visible but inert (cart-ui also cancels
          the click and sets aria-disabled). */
       .cart-drawer-checkout.is-disabled {
@@ -1151,31 +1157,33 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
         color: var(--muted);
         margin: 12px 0 0;
       }
-      /* Empty-cart reset: solid red at rest; once clicked it flips to the
-         theme surface with a red outline ("Confirm") until clicked again
-         or the drawer re-renders (cart-ui owns the state). */
+      /* Empty cart: a quiet muted text link, never a solid red pill. The
+         two-click confirm keeps its meaning through red text alone. */
       .cart-empty-all {
         display: block;
         flex-shrink: 0;
-        margin: 16px auto 0;
-        padding: 7px 16px;
+        margin: 14px auto 0;
+        padding: 4px 2px;
         font: inherit;
         font-size: 0.78rem;
-        font-weight: 650;
-        color: #fff;
-        background: #ff3b30;
-        border: 1.5px solid #ff3b30;
-        border-radius: 999px;
+        font-weight: 500;
+        color: var(--muted);
+        background: transparent;
+        border: none;
+        border-radius: 0;
         cursor: pointer;
-        transition: background 0.2s ease, color 0.2s ease;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        transition: color 0.2s ease;
+      }
+      .cart-empty-all:hover {
+        color: var(--ink);
       }
       .cart-empty-all[hidden] {
         display: none;
       }
       .cart-empty-all.is-armed {
-        background: var(--paper);
-        color: #ff3b30;
-        border-color: #ff3b30;
+        color: #d92b22;
       }
       /* Cart conflict popup: centred dialog above everything else. The
          action buttons are injected by cart-ui.ts, so :global() required. */

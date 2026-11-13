@@ -743,8 +743,14 @@ export function renderDrawer(doc: Document): void {
   }
 
   const total = items.reduce((sum, item) => sum + item.priceCents, 0);
+  // Cadence on the total, only when every item shares one billing interval
+  // (a monthly plan alone reads "C$89.99/mo"). Mixed carts (recurring plus
+  // one-time) carry no suffix rather than a wrong one.
+  const intervals = new Set(items.map((item) => item.interval));
+  const totalSuffix =
+    items.length > 0 && intervals.size === 1 ? intervalSuffix(doc, items[0].interval) : "";
   doc.querySelectorAll<HTMLElement>("[data-cart-total]").forEach((el) => {
-    el.textContent = formatMoney(total, fmt);
+    el.textContent = formatMoney(total, fmt) + totalSuffix;
   });
 
   const checkout = doc.querySelector<HTMLElement>("[data-cart-checkout]");

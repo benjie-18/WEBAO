@@ -86,7 +86,6 @@ const fr = {
     replyTime: "On répond habituellement en un jour ouvrable.<br />Du lundi au vendredi, de 9 h à 17 h, heure de l’Est.",
     copyright: "© {year} WEBAO · Fait à Montréal.",
     fictionalNote: "Toutes les entreprises présentées en démo sur ce site sont fictives.",
-    admin: "Admin",
   },
 
   intro: {

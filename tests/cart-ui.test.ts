@@ -192,7 +192,7 @@ test('clicking a plan button adds it, again removes it', () => {
   assert.equal(button('launch')!.getAttribute('aria-label'), 'Remove Launch from cart');
   assert.equal(doc.querySelector('[data-cart-count]')!.textContent, '1');
   assert.equal(doc.querySelector('[data-cart-count]')!.hidden, false);
-  assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$89.99');
+  assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$89.99/mo');
   assert.match(doc.querySelector('[data-cart-items]')!.textContent ?? '', /Launch/);
   assert.match(doc.querySelector('[data-cart-items]')!.textContent ?? '', /C\$89\.99\/mo/);
 
@@ -323,7 +323,7 @@ test('removing an item from the drawer updates buttons, badge and total', () => 
   assert.deepEqual(cart().map((i) => i.key), ['review-month']);
   assert.equal(doc.querySelector('[data-cart-count]')!.textContent, '1');
   assert.equal(button('launch')!.classList.contains('is-added'), false);
-  assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$99.99');
+  assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$99.99/mo');
   window.close();
 });
 
@@ -411,7 +411,7 @@ test('cross-tab storage changes re-render the cart', () => {
   window.dispatchEvent(new window.StorageEvent('storage', { key: STORAGE_KEY }));
   assert.equal(doc.querySelector('[data-cart-count]')!.textContent, '1');
   assert.match(doc.querySelector('[data-cart-items]')!.textContent ?? '', /Scale/);
-  assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$349.99');
+  assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$349.99/mo');
   window.close();
 });
 
