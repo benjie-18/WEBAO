@@ -1177,16 +1177,6 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
         width: 100%;
         justify-content: center;
       }
-      /* Checkout stays brand crimson in both themes: the dark theme's
-         primary token is royal blue, which must not outrank checkout. */
-      .cart-drawer-footer .cart-drawer-checkout {
-        background: #d92b22;
-        border-color: #d92b22;
-      }
-      .cart-drawer-footer .cart-drawer-checkout:hover {
-        background: #a81e14;
-        border-color: #a81e14;
-      }
       /* Empty cart: the link stays visible but inert (cart-ui also cancels
          the click and sets aria-disabled). */
       .cart-drawer-checkout.is-disabled {
@@ -1288,7 +1278,7 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
         display: none;
       }
       .cart-empty-all.is-armed {
-        color: #d92b22;
+        color: var(--accent);
       }
       /* Cart conflict popup: centred dialog above everything else. The
          action buttons are injected by cart-ui.ts, so :global() required. */

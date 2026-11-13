@@ -639,7 +639,7 @@ test('audit built output: no cart-clip id, portal fieldset guard, AA tokens', ()
     .filter((n) => n.endsWith('.css'))
     .map((n) => readFileSync(join('dist/client/_astro', n), 'utf-8'))
     .join('\n');
-  assert.ok(css.includes('--btn-primary-bg:#c62820'), 'light AA primary button token present');
+  assert.ok(css.includes('--btn-primary-bg:#d92b22'), 'light AA primary button token present');
   assert.ok(css.includes('--offer-panel-bg:#a81e14'), 'light AA offer panel token present');
   // Portal styles are inlined into the page by Astro, not bundled: the
   // fieldset guard lives in the portal HTML style blocks, EN + FR.

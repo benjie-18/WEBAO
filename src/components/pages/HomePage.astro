@@ -194,7 +194,7 @@ const processId = locale === "fr" ? "processus" : "process";
                             <div style="position:absolute; inset:12px; border-radius:8px; background:white; border:1px solid rgba(10,15,28,.06); padding:10px;">
                               <div style="height:6px; width:42%; border-radius:99px; background:#0A0F1C; opacity:.9;"></div>
                               <div style="height:4px; width:64%; border-radius:99px; background:#0A0F1C; opacity:.14; margin-top:8px;"></div>
-                              <div style="display:flex; gap:6px; margin-top:10px;"><span style="flex:1; height:22px; border-radius:99px; background:#FF3B30;"></span><span style="flex:1; height:22px; border-radius:99px; border:1px solid rgba(10,15,28,.12);"></span></div>
+                              <div style="display:flex; gap:6px; margin-top:10px;"><span style="flex:1; height:22px; border-radius:99px; background:#D92B22;"></span><span style="flex:1; height:22px; border-radius:99px; border:1px solid rgba(10,15,28,.12);"></span></div>
                             </div>
                           </div>
                           <div style="margin-top:12px; display:flex; gap:8px;"><span class="btn btn--primary btn--sm" style="flex:1; justify-content:center;">{step.approve}</span><span class="btn btn--ghost btn--sm" style="flex:1; justify-content:center; border-color: rgba(255,255,255,.14); color:white;">{step.comment}</span></div>
@@ -257,7 +257,7 @@ const processId = locale === "fr" ? "processus" : "process";
                 <rect x="52" y="98" width="160" height="8" rx="4" fill="#0A0F1C" opacity=".08"/>
                 <rect x="52" y="114" width="120" height="12" rx="6" fill="#0A0F1C"/>
                 <rect x="52" y="136" width="180" height="6" rx="3" fill="#0A0F1C" opacity=".18"/>
-                <rect x="52" y="152" width="90" height="22" rx="11" fill="#FF3B30"/>
+                <rect x="52" y="152" width="90" height="22" rx="11" fill="#D92B22"/>
                 <rect x="272" y="84" width="248" height="180" rx="10" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.12)"/>
                 <g transform="translate(284 96)">
                   <rect width="224" height="8" rx="4" fill="white" opacity=".18"/>
@@ -266,7 +266,7 @@ const processId = locale === "fr" ? "processus" : "process";
                   <rect y="48" width="200" height="6" rx="3" fill="white" opacity=".08"/>
                   <g transform="translate(0 72)">
                     <rect width="104" height="64" rx="8" fill="white" opacity=".96"/>
-                    <rect x="114" y="0" width="110" height="64" rx="8" fill="#FF3B30"/>
+                    <rect x="114" y="0" width="110" height="64" rx="8" fill="#D92B22"/>
                   </g>
                 </g>
                 <g transform="translate(40 198)">
@@ -684,16 +684,14 @@ const processId = locale === "fr" ? "processus" : "process";
   .cta-statement-contact { font-size: 11px; letter-spacing: .06em; color: rgba(248,245,239,.46); }
   /* Final CTA: solid brand crimson with white text in both themes. The
      old "crack" button split cream over red with dark text across the
-     seam, which failed contrast at rest and on hover. */
-  .cta-statement-actions .btn--primary { background: #d92b22; border-color: #d92b22; }
-  .cta-statement-actions .btn--primary:hover { background: #a81e14; border-color: #a81e14; }
+     seam, which failed contrast at rest and on hover. The color comes
+     from the --btn-primary-bg token now, so no override is needed. */
   .section { content-visibility: auto; contain-intrinsic-size: auto 700px; }
   .hero, .marquee { content-visibility: visible; contain-intrinsic-size: auto; }
-  /* Dark theme only: --accent (#0043E0) as TEXT on near-black surfaces
-     fails WCAG even for large text (~2.4:1). --accent-text (#4D7FFF)
-     passes everywhere (5.6/5.4/4.9 on the hero gradient, 5.6 on the
-     final-CTA bg, 5.1 on offer cards). Light theme keeps --accent here
-     (it already passes) so light rendering is untouched. */
+  /* Dark theme only: --accent (#D92B22) as TEXT on near-black surfaces
+     is too dark for AA, so these use --accent-text (a light red tint).
+     Light theme keeps --accent here (it already passes) so light
+     rendering is untouched. */
   html[data-theme="dark"] .hero-title .hero-italic { color: var(--accent-text); }
   html[data-theme="dark"] .cta-statement-title span { color: var(--accent-text); }
   html[data-theme="dark"] .offer-link:hover .offer-link-cta { color: var(--accent-text); border-bottom-color: var(--accent-text); }

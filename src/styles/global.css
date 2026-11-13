@@ -288,24 +288,24 @@ button, input, textarea, select { font: inherit; }
   --line-strong: rgba(10,15,28,.14);
   --line-on-dark: rgba(248,245,239,.10);
   --line-on-dark-strong: rgba(248,245,239,.16);
-  --accent: #FF3B30;
-  --focus-outline: #FF3B30;
-  --accent-hover: #E6352B;
-  /* Text-bearing red surfaces (buttons, offer panel) use deepened reds:
-     white on the brand #FF3B30 is only 3.55:1, below the 4.5:1 AA bar.
-     #C62820 is 5.64:1, #A81E14 is 7.34:1. Brand #FF3B30 stays for
-     decoration (borders, glows, graphics). */
-  --btn-primary-bg: #C62820;
+  --accent: #D92B22;
+  --focus-outline: #D92B22;
+  --accent-hover: #A81E14;
+  /* Text-bearing red surfaces (buttons, offer panel) use #D92B22: white
+     on it is 4.88:1, above the 4.5:1 AA bar (the old brand #FF3B30 was
+     only 3.55:1, and #C62820's 5.64:1 is retired with the token).
+     #A81E14 (7.34:1) is the hover/deepened red. */
+  --btn-primary-bg: #D92B22;
   --btn-primary-hover-bg: #A81E14;
   --offer-panel-bg: #A81E14;
   --accent-soft: #FFF0EF;
   --accent-dark: #1A0A08;
   /* Accent derivatives (text-safe + gradients + glows) */
-  --accent-text: #C62820;
+  --accent-text: #D92B22;
   --accent-soft-text: #7A1F1A;
-  --accent-mid: #FF7A3D;
-  --accent-glow: rgba(255,59,48,.24);
-  --accent-underline: linear-gradient(90deg, rgba(255,59,48,.16), rgba(255,59,48,.08));
+  --accent-mid: #F2614F;
+  --accent-glow: rgba(217,43,34,.24);
+  --accent-underline: linear-gradient(90deg, rgba(217,43,34,.16), rgba(217,43,34,.08));
   --success: #0E7A5A;
   /* Surfaces */
   --card-bg: #FFFFFF;
@@ -337,7 +337,7 @@ button, input, textarea, select { font: inherit; }
   --plan-scale-glow: rgba(150, 100, 255, .45);
   --plan-scale-line: rgba(251, 246, 236, .22);
   /* Bundle carousel background blobs: warm in light mode. */
-  --bblob-a: rgba(255, 59, 48, .5);
+  --bblob-a: rgba(217, 43, 34, .5);
   --bblob-b: rgba(255, 193, 7, .5);
   --bblob-c: rgba(255, 122, 61, .5);
   /* Bundle cards: deep floating panels, tuned per theme. */
@@ -353,9 +353,9 @@ button, input, textarea, select { font: inherit; }
   --on-dark-btn-bg: #F8F5EF;
   --on-dark-btn-text: #0A0F1C;
   /* Hero ambience */
-  --hero-glow-a: rgba(255,59,48,.06);
+  --hero-glow-a: rgba(217,43,34,.06);
   --hero-glow-b: rgba(10,15,28,.04);
-  --cta-glow-a: rgba(255,59,48,.22);
+  --cta-glow-a: rgba(217,43,34,.22);
   /* Focus ring wash for form fields */
   --focus-ring: rgba(10,15,28,.08);
   /* Form status */
@@ -454,21 +454,22 @@ button, input, textarea, select { font: inherit; }
   --line-strong: rgba(248,245,239,.17);
   --line-on-dark: rgba(248,245,239,.10);
   --line-on-dark-strong: rgba(248,245,239,.18);
-  --accent: #0043E0;
-  --focus-outline: #8FADFF;
-  --accent-hover: #003BB8;
-  /* Dark theme already passes AA on these, so the tokens match the
-     existing accent values exactly: no dark-mode visual change. */
-  --btn-primary-bg: #0043E0;
-  --btn-primary-hover-bg: #003BB8;
-  --offer-panel-bg: #0043E0;
-  --accent-soft: rgba(0,67,224,.14);
-  --accent-dark: #0A1030;
-  --accent-text: #4D7FFF;
-  --accent-soft-text: #8FADFF;
-  --accent-mid: #3366FF;
-  --accent-glow: rgba(0,67,224,.38);
-  --accent-underline: linear-gradient(90deg, rgba(0,67,224,.38), rgba(0,67,224,.10));
+  --accent: #D92B22;
+  --focus-outline: #FF8A80;
+  --accent-hover: #A81E14;
+  /* Dark theme uses the same #D92B22 primary token as light (the old
+     royal-blue #0043E0 accent is retired). Text on near-black uses the
+     light tints below, since #D92B22 itself is too dark for text here. */
+  --btn-primary-bg: #D92B22;
+  --btn-primary-hover-bg: #A81E14;
+  --offer-panel-bg: #A81E14;
+  --accent-soft: rgba(217,43,34,.14);
+  --accent-dark: #1A0A08;
+  --accent-text: #FF6B5E;
+  --accent-soft-text: #FF9A90;
+  --accent-mid: #F2614F;
+  --accent-glow: rgba(217,43,34,.38);
+  --accent-underline: linear-gradient(90deg, rgba(217,43,34,.38), rgba(217,43,34,.10));
   --success: #34D399;
   --card-bg: #0D1322;
   --card-dark-bg: #0A0F1C;
@@ -506,10 +507,10 @@ button, input, textarea, select { font: inherit; }
   --section-dark-soft: rgba(248,245,239,.64);
   --on-dark-btn-bg: #F8F5EF;
   --on-dark-btn-text: #0A0F1C;
-  --hero-glow-a: rgba(0,67,224,.12);
+  --hero-glow-a: rgba(217,43,34,.12);
   --hero-glow-b: rgba(0,0,0,.28);
-  --cta-glow-a: rgba(0,67,224,.28);
-  --focus-ring: rgba(0,67,224,.28);
+  --cta-glow-a: rgba(217,43,34,.28);
+  --focus-ring: rgba(217,43,34,.28);
   --error-text: #FF9B93;
   --error-bg: #2A100D;
   --error-border: #5C231D;
@@ -931,6 +932,7 @@ html.theming *::after {
 .btn--primary {
   background: var(--btn-primary-bg);
   color: white;
+  min-height: 46px;
   box-shadow: 0 8px 20px var(--accent-glow);
 }
 .btn--primary:hover { background: var(--btn-primary-hover-bg); transform: translateY(-1px); box-shadow: 0 12px 28px var(--accent-glow); }
@@ -942,6 +944,7 @@ html.theming *::after {
 .btn--ghost {
   background: transparent;
   color: var(--ink);
+  min-height: 44px;
   border-color: var(--line-strong);
 }
 .btn--ghost:hover { background: var(--paper-2); }
@@ -1007,8 +1010,8 @@ html.theming *::after {
 .theme-toggle:active { transform: scale(.9); }
 .theme-toggle:focus-visible { outline: 2px solid var(--focus-outline); outline-offset: 2px; }
 [data-theme="dark"] .theme-toggle:hover {
-  border-color: rgba(0,67,224,.55);
-  box-shadow: 0 0 0 3px rgba(0,67,224,.18);
+  border-color: rgba(217,43,34,.55);
+  box-shadow: 0 0 0 3px rgba(217,43,34,.18);
 }
 .theme-toggle .tt-icon {
   position: absolute;
