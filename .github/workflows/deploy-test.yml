@@ -1,0 +1,41 @@
+name: Build & Deploy test.webao.ca
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy-test:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+      - name: Typecheck
+        run: npx astro check
+
+
+      - name: Test image routing and bindings
+        run: npm test
+
+      - name: Build and validate Cloudflare image serving
+        run: npm run test:integration
+
+      - name: Deploy test Worker + assets to Cloudflare
+        run: |
+          rm -f dist/client/wrangler.json
+          npx wrangler deploy --config wrangler.jsonc --env test
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
