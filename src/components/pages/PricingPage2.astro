@@ -1,6 +1,7 @@
 ---
 import { useTranslations, type Locale } from "../../lib/i18n";
 import PlanCards from "../pricing/PlanCards.astro";
+import PlanEstimator from "../pricing/PlanEstimator.astro";
 import BundleCarousel from "../pricing/BundleCarousel.astro";
 import AdsPackCard from "../pricing/AdsPackCard.astro";
 import AddonList from "../pricing/AddonList.astro";
@@ -73,6 +74,7 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
           <p class="terms-link"><a href={termsPath}>{t.pricing.termsCta.label}</a></p>
         </div>
       </section>
+      <PlanEstimator locale={locale} showCompare={false} />
       <BundleCarousel locale={locale} />
       <AddonList locale={locale} />
       <CompareTable locale={locale} />

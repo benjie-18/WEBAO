@@ -1,5 +1,6 @@
 ---
 import DemoCarousel from "../home/DemoCarousel.astro";
+import PlanEstimator from "../pricing/PlanEstimator.astro";
 import { useTranslations, localizedPaths, type Locale } from "../../lib/i18n";
 
 interface Props {
@@ -312,6 +313,9 @@ const processId = locale === "fr" ? "processus" : "process";
     </div>
   </div>
 </section>
+
+<!-- PLAN ESTIMATOR -->
+<PlanEstimator locale={locale} />
 
 <!-- FAQ -->
 <section class="section" style="background: var(--paper-2); border-block: 1px solid var(--line);">

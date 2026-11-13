@@ -1,0 +1,229 @@
+---
+// Quick Look modal (#34): preview a live demo in an iframe without
+// leaving the catalog. Desktop/Mobile width toggle, Prev/Next through the
+// currently visible live demos (in the page's own shuffled order, so it
+// follows the visitor's filters), and a "Build my site like this" link
+// that carries ?demo=<slug> into /start (the #23 mechanism). Only live
+// demos get a trigger: a demo with no published page has nothing to
+// preview, and the catalog toast already says so.
+import { useTranslations, localizedPaths, type Locale } from "../../lib/i18n";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props as Props;
+const t = useTranslations(locale);
+const paths = localizedPaths[locale];
+---
+
+<div class="quicklook" data-quicklook data-build-short={t.demos.quickLookBuildShort} hidden role="dialog" aria-modal="true" aria-labelledby="quicklook-title">
+  <div class="quicklook-backdrop" data-quicklook-close></div>
+  <div class="quicklook-panel">
+    <div class="quicklook-head">
+      <div class="quicklook-heading">
+        <p class="quicklook-title" id="quicklook-title" data-quicklook-name></p>
+        <p class="mono quicklook-meta" data-quicklook-meta></p>
+      </div>
+      <button type="button" class="quicklook-close" data-quicklook-close aria-label={t.demos.quickLookClose}>✕</button>
+    </div>
+    <div class="quicklook-frame" data-quicklook-frame>
+      <iframe data-quicklook-iframe title="" src="about:blank" loading="lazy"></iframe>
+    </div>
+    <div class="quicklook-foot">
+      <div class="quicklook-nav">
+        <button type="button" class="btn btn--ghost" data-quicklook-prev>{t.demos.quickLookPrev}</button>
+        <button type="button" class="btn btn--ghost" data-quicklook-next>{t.demos.quickLookNext}</button>
+      </div>
+      <div class="quicklook-width" role="group">
+        <button type="button" data-quicklook-width="desktop" aria-pressed="true">{t.demos.quickLookDesktop}</button>
+        <button type="button" data-quicklook-width="mobile" aria-pressed="false">{t.demos.quickLookMobile}</button>
+      </div>
+      <a class="btn btn--primary quicklook-build" data-quicklook-build href={paths.start}>{t.demos.quickLookBuild}</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  // One init per page; the triggers live on the catalog cards, so open
+  // is wired by delegation on the document.
+  document.querySelectorAll("[data-quicklook]").forEach((root) => {
+    const modal = root as HTMLElement;
+    if (modal.dataset.quicklookInit === "1") return;
+    modal.dataset.quicklookInit = "1";
+    const panel = modal.querySelector(".quicklook-panel") as HTMLElement | null;
+    const iframe = modal.querySelector("[data-quicklook-iframe]") as HTMLIFrameElement | null;
+    const nameEl = modal.querySelector("[data-quicklook-name]") as HTMLElement | null;
+    const metaEl = modal.querySelector("[data-quicklook-meta]") as HTMLElement | null;
+    const frame = modal.querySelector("[data-quicklook-frame]") as HTMLElement | null;
+    const buildLink = modal.querySelector("[data-quicklook-build]") as HTMLAnchorElement | null;
+    const closeBtn = modal.querySelector(".quicklook-close") as HTMLButtonElement | null;
+    const startHref = buildLink?.getAttribute("href") || "/start";
+    const buildLabel = buildLink?.textContent || "";
+    const buildShort = modal.dataset.buildShort || buildLabel;
+    let currentId = "";
+    let lastTrigger: HTMLElement | null = null;
+
+    const visibleLive = (): HTMLElement[] => {
+      const wraps = Array.from(document.querySelectorAll('#demo-grid .demo-card-wrap[data-live="true"]')) as HTMLElement[];
+      return wraps.filter((w) => w.offsetParent !== null);
+    };
+    const step = (dir: 1 | -1) => {
+      const list = visibleLive();
+      if (list.length === 0) return;
+      const ids = list.map((w) => w.getAttribute("data-demo-id") || "");
+      let at = ids.indexOf(currentId);
+      at = at === -1 ? 0 : (at + dir + ids.length) % ids.length;
+      const next = list[at];
+      const trigger = next.querySelector("[data-quicklook-open]") as HTMLElement | null;
+      if (trigger) open(trigger);
+    };
+    const open = (trigger: HTMLElement) => {
+      const id = trigger.getAttribute("data-quicklook-open") || "";
+      const href = trigger.getAttribute("data-demo-href") || "";
+      if (!id || !href || !iframe || !nameEl || !metaEl || !buildLink) return;
+      currentId = id;
+      lastTrigger = trigger;
+      nameEl.textContent = trigger.getAttribute("data-demo-name") || id;
+      metaEl.textContent = trigger.getAttribute("data-demo-meta") || "";
+      iframe.title = trigger.getAttribute("data-demo-name") || id;
+      iframe.src = href;
+      buildLink.href = `${startHref}?demo=${encodeURIComponent(id)}`;
+      modal.hidden = false;
+      document.body.style.overflow = "hidden";
+      closeBtn?.focus();
+    };
+    const close = () => {
+      modal.hidden = true;
+      document.body.style.overflow = "";
+      if (iframe) iframe.src = "about:blank";
+      currentId = "";
+      lastTrigger?.focus();
+      lastTrigger = null;
+    };
+    document.addEventListener("click", (e) => {
+      const trigger = (e.target as HTMLElement).closest("[data-quicklook-open]") as HTMLElement | null;
+      if (trigger) {
+        e.preventDefault();
+        open(trigger);
+        return;
+      }
+      const closer = (e.target as HTMLElement).closest("[data-quicklook-close]") as HTMLElement | null;
+      if (closer) close();
+    });
+    modal.querySelector("[data-quicklook-prev]")?.addEventListener("click", () => step(-1));
+    modal.querySelector("[data-quicklook-next]")?.addEventListener("click", () => step(1));
+    modal.querySelectorAll("[data-quicklook-width]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const width = (btn as HTMLElement).dataset.quicklookWidth || "desktop";
+        modal.querySelectorAll("[data-quicklook-width]").forEach((b) => {
+          b.setAttribute("aria-pressed", String(b === btn));
+        });
+        frame?.classList.toggle("is-mobile", width === "mobile");
+      });
+    });
+    document.addEventListener("keydown", (e) => {
+      if (modal.hidden) return;
+      if (e.key === "Escape") {
+        close();
+        return;
+      }
+      // Keep Tab inside the panel while the modal is open.
+      if (e.key === "Tab" && panel) {
+        const focusables = Array.from(
+          panel.querySelectorAll<HTMLElement>('button, a[href], iframe, [tabindex]:not([tabindex="-1"])'),
+        ).filter((el) => !el.hasAttribute("disabled") && el.offsetParent !== null);
+        if (focusables.length === 0) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    });
+    // Narrow viewports get the short build label, like the demo exit bar.
+    const mq = window.matchMedia("(max-width: 640px)");
+    const syncBuildLabel = () => {
+      if (buildLink) buildLink.textContent = mq.matches ? buildShort : buildLabel;
+    };
+    mq.addEventListener("change", syncBuildLabel);
+    syncBuildLabel();
+  });
+</script>
+
+<style>
+  .quicklook { position: fixed; inset: 0; z-index: 90; display: flex; align-items: center; justify-content: center; padding: 16px; }
+  .quicklook[hidden] { display: none; }
+  .quicklook-backdrop { position: absolute; inset: 0; background: rgba(10, 15, 28, 0.6); backdrop-filter: blur(4px); }
+  .quicklook-panel {
+    position: relative;
+    width: min(1100px, 100%);
+    height: min(860px, 92vh);
+    display: flex;
+    flex-direction: column;
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+  .quicklook-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--line);
+  }
+  .quicklook-title { font-size: 1.25rem; font-weight: 750; letter-spacing: -0.02em; line-height: 1.2; margin: 0; }
+  .quicklook-meta { font-size: 11px; color: var(--muted); margin: 4px 0 0; }
+  .quicklook-close {
+    flex: none;
+    width: 36px;
+    height: 36px;
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--paper-2);
+    color: var(--ink);
+    font-size: 15px;
+    cursor: pointer;
+  }
+  .quicklook-frame { flex: 1; min-height: 0; background: var(--paper-2); display: flex; justify-content: center; }
+  .quicklook-frame iframe { width: 100%; height: 100%; border: 0; background: #fff; display: block; }
+  .quicklook-frame.is-mobile iframe { width: 390px; max-width: 100%; border-inline: 1px solid var(--line); }
+  .quicklook-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    border-top: 1px solid var(--line);
+  }
+  .quicklook-nav { display: flex; gap: 8px; }
+  .quicklook-width { display: flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+  .quicklook-width button {
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 14px;
+    min-height: 36px;
+    cursor: pointer;
+  }
+  .quicklook-width button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+  .quicklook-build { margin-left: auto; }
+  @media (max-width: 640px) {
+    .quicklook { padding: 0; }
+    .quicklook-panel { width: 100%; height: 100%; border-radius: 0; border: 0; }
+    .quicklook-build { margin-left: 0; width: 100%; justify-content: center; }
+  }
+</style>

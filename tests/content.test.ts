@@ -24,7 +24,29 @@ const validCategories = new Set([
   'Hospitality', 'Landscaping', 'Technology', 'Fashion', 'Music', 'Finance', 'Gaming',
   'Design', 'Beauty',
 ]);
-const validTrades = new Set(['plumbing', 'electrical', 'hvac', 'roofing', 'renovation']);
+const validTrades = new Set([
+  'plumbing',
+  'electrical',
+  'hvac',
+  'roofing',
+  'renovation',
+  'automotive',
+  'beauty',
+  'creative',
+  'design',
+  'fashion',
+  'finance',
+  'gaming',
+  'health',
+  'hospitality',
+  'landscaping',
+  'moving',
+  'music',
+  'restaurant',
+  'retail',
+  'technology',
+  'wellness',
+]);
 
 const noteNumbers = (values: Array<number | undefined>) =>
   values.filter((value): value is number => typeof value === 'number' && value > 0);

@@ -88,6 +88,13 @@ const paths = localizedPaths[locale];
             </select>
           </label>
 
+          <p class="form-shortlist" data-contact-shortlist hidden>
+            <strong>{t.demos.shortlistTitle}:</strong>
+            <span data-contact-shortlist-names></span>
+            <a href={paths.demos}>{t.demos.shortlistChange}</a>
+          </p>
+          <input type="hidden" name="shortlist" data-contact-shortlist-field value="" />
+
           <label>{t.contact.form.message}
             <textarea name="message" rows="5" placeholder={t.contact.form.messagePlaceholder} required></textarea>
           </label>
@@ -152,10 +159,26 @@ const paths = localizedPaths[locale];
 </section>
 
 <script>
+  import { readShortlist, shortlistNames } from "../../lib/shortlist";
+
   function initContactPage() {
     const form = document.getElementById('contact-form') as HTMLFormElement | null;
     const status = document.getElementById('form-status') as HTMLElement | null;
     const locale = document.documentElement.lang === 'fr' ? 'fr' : 'en';
+
+    // Shortlist (#50): show the visitor's shortlisted demos and carry
+    // them with the message so the owner sees which directions they liked.
+    const shortlistEl = document.querySelector('[data-contact-shortlist]') as HTMLElement | null;
+    const shortlistNamesEl = document.querySelector('[data-contact-shortlist-names]') as HTMLElement | null;
+    const shortlistField = document.querySelector('[data-contact-shortlist-field]') as HTMLInputElement | null;
+    const shortlistIds = readShortlist(window);
+    if (shortlistIds.length > 0 && shortlistEl && shortlistNamesEl && shortlistField) {
+      const names = shortlistNames(shortlistIds);
+      shortlistNamesEl.textContent = names.join(', ');
+      shortlistField.value = names.join(', ');
+      shortlistEl.hidden = false;
+    }
+
     if (form && status && !form.dataset.bound) {
       form.dataset.bound = '1';
       const validationError = form.getAttribute('data-validation-error') || 'Please fill in the required fields with a valid email, and tick the contact checkbox.';
@@ -266,6 +289,8 @@ const paths = localizedPaths[locale];
   textarea { resize: vertical; min-height: 72px; }
   input:focus, select:focus, textarea:focus { outline:none; border-color: var(--ink); box-shadow: 0 0 0 3px var(--focus-ring); }
   .form-meta { display:grid; gap:8px; font-size:11px; color: var(--muted); line-height:1.5; }
+  .form-shortlist { font-size: 14px; color: var(--muted); line-height: 1.55; margin: 0; }
+  .form-shortlist a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; margin-left: 6px; }
   .form-status { padding:10px 12px; border-radius:10px; border:1px solid var(--line); font-size:12.5px; line-height:1.5; }
   .faq-title { font-size: 1.6rem; letter-spacing:-0.02em; font-weight:750; margin-bottom: 16px; }
   .faq-list { display:grid; gap:12px; max-width: 720px; }

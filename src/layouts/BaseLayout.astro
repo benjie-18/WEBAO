@@ -115,6 +115,8 @@ const navLinks = {
   portal: localizedPaths[locale].portal,
   serviceDesign: localizedPaths[locale].serviceDesign,
   servicePlans: localizedPaths[locale].servicePlans,
+  serviceHosting: localizedPaths[locale].serviceHosting,
+  serviceMontreal: localizedPaths[locale].serviceMontreal,
   guideCost: localizedPaths[locale].guideCost,
   guideBill96: localizedPaths[locale].guideBill96,
   guideLaw25: localizedPaths[locale].guideLaw25,
@@ -418,6 +420,28 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
             <a href={navLinks.demos}>{t.nav.demos}</a>
             <a href={navLinks.pricing}>{t.nav.pricing}</a>
             <a href={navLinks.audit}>{t.nav.audit}</a>
+            <div class="nav-item--mega" data-mega>
+              <button type="button" class="nav-mega-trigger" aria-expanded="false" aria-haspopup="true" data-mega-trigger>
+                {t.nav.services} <span class="nav-mega-caret" aria-hidden="true">▾</span>
+              </button>
+              <div class="nav-mega" data-mega-panel hidden>
+                <div class="nav-mega-col">
+                  <p class="nav-mega-heading">{t.nav.services}</p>
+                  <a href={navLinks.serviceDesign}>{t.nav.megaDesign}</a>
+                  <a href={navLinks.servicePlans}>{t.nav.megaPlans}</a>
+                  <a href={navLinks.serviceHosting}>{t.nav.megaHosting}</a>
+                  <a href={navLinks.serviceMontreal}>{t.nav.megaMontreal}</a>
+                </div>
+                <div class="nav-mega-col">
+                  <p class="nav-mega-heading">{t.nav.megaResources}</p>
+                  <a href={navLinks.guideIndex}>{t.nav.guides}</a>
+                  <a href={navLinks.guideBill96}>{t.nav.megaBill96}</a>
+                  <a href={navLinks.guideLaw25}>{t.nav.megaLaw25}</a>
+                  <a href={navLinks.portal}>{t.nav.portal}</a>
+                  <a href={navLinks.support}>{t.nav.support}</a>
+                </div>
+              </div>
+            </div>
             <a href={navLinks.contact} class="nav-contact">{t.nav.contact}</a>
             <a href={navLinks.start} class="cta" data-track="cta" data-track-label={t.nav.startSite} data-start-cta>{t.nav.startSite}</a>
           </nav>
@@ -451,6 +475,8 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
         </div>
       </div>
     </header>
+
+    <div class="nav-scrim" data-mega-scrim hidden></div>
 
     <div id="mobile-panel" class="mobile-panel" hidden>
       <a href={navLinks.demos} style="--i:0">{t.nav.demos} <span aria-hidden="true">→</span></a>
@@ -607,6 +633,58 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
             }
           };
           document.addEventListener('keydown', onKeyDown);
+        }
+
+        // Desktop mega-menu (#31): frosted Services/Resources dropdown.
+        // Hover and focus open it; click toggles (touch); Esc or a scrim
+        // click closes it. Guarded so a ClientRouter re-init never
+        // double-binds the same trigger.
+        const mega = document.querySelector('[data-mega]') as HTMLElement | null;
+        const megaTrigger = document.querySelector('[data-mega-trigger]') as HTMLButtonElement | null;
+        const megaPanel = document.querySelector('[data-mega-panel]') as HTMLElement | null;
+        const megaScrim = document.querySelector('[data-mega-scrim]') as HTMLElement | null;
+        if (mega && megaTrigger && megaPanel && megaScrim && !megaTrigger.dataset.webaoBound) {
+          megaTrigger.dataset.webaoBound = '1';
+          let megaHoverTimer = 0;
+          const setMega = (open: boolean) => {
+            mega.classList.toggle('is-open', open);
+            megaTrigger.setAttribute('aria-expanded', String(open));
+            if (open) {
+              megaPanel.removeAttribute('hidden');
+              megaScrim.removeAttribute('hidden');
+            } else {
+              megaPanel.setAttribute('hidden', '');
+              megaScrim.setAttribute('hidden', '');
+            }
+          };
+          const openSoon = () => {
+            window.clearTimeout(megaHoverTimer);
+            megaHoverTimer = window.setTimeout(() => setMega(true), 120);
+          };
+          const closeSoon = () => {
+            window.clearTimeout(megaHoverTimer);
+            megaHoverTimer = window.setTimeout(() => setMega(false), 180);
+          };
+          mega.addEventListener('mouseenter', openSoon);
+          mega.addEventListener('mouseleave', closeSoon);
+          megaTrigger.addEventListener('focus', openSoon);
+          mega.addEventListener('focusout', (e: FocusEvent) => {
+            if (!mega.contains(e.relatedTarget as Node | null)) closeSoon();
+          });
+          megaTrigger.addEventListener('click', () => {
+            window.clearTimeout(megaHoverTimer);
+            setMega(!mega.classList.contains('is-open'));
+          });
+          megaScrim.addEventListener('click', () => setMega(false));
+          megaPanel.querySelectorAll('a').forEach((a) => {
+            a.addEventListener('click', () => setMega(false));
+          });
+          document.addEventListener('keydown', (e: KeyboardEvent) => {
+            if (e.key === 'Escape' && mega.classList.contains('is-open')) {
+              setMega(false);
+              megaTrigger.focus();
+            }
+          });
         }
 
         // Reveal on scroll, respects prefers-reduced-motion.

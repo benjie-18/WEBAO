@@ -726,6 +726,58 @@ html.theming *::after {
 .nav .cta:hover { background: var(--ink-2); }
 .site-header--dark .nav .cta:hover { background: var(--paper-2); }
 
+/* Desktop mega-menu (#31): frosted Services/Resources dropdown. */
+.nav-item--mega { position: relative; }
+.nav-mega-trigger .nav-mega-caret {
+  display: inline-block;
+  font-size: 10px;
+  transition: transform .2s var(--ease-out);
+}
+.nav-item--mega.is-open .nav-mega-caret { transform: rotate(180deg); }
+.nav-mega {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 28px;
+  min-width: 470px;
+  padding: 18px 20px;
+  background: color-mix(in srgb, var(--paper) 92%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg);
+  z-index: 60;
+}
+.nav-mega-col { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+.nav-mega-heading {
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 8px;
+  padding: 0 12px;
+}
+.nav-mega a {
+  display: block;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+/* Backdrop scrim behind the open mega-menu: dims the page, never the
+   header (it sits between page content and the sticky header). */
+.nav-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.28);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  z-index: 40;
+}
+
 /* Mobile nav */
 .menu-toggle {
   display: none;
@@ -814,10 +866,12 @@ html.theming *::after {
   .header-right > .lang-switcher:not(.lang-switcher--mobile):not(.lang-toggle) { display: none; }
 }
 
-/* Tablet (768-860px): the desktop nav stays visible, only Contact hides
-   (the header fits Demos / Pricing / Audit + the Start CTA at this width).
-   The hamburger + mobile panel take over below 768px. */
-@media (max-width: 860px) and (min-width: 768px) {
+/* Tablet (768-900px): the desktop nav stays visible, only Contact hides
+   (the header fits Demos / Pricing / Audit / Services + the Start CTA at
+   this width; the band widened from 860 to 900px when the Services
+   mega-menu trigger was added in #31). The hamburger + mobile panel take
+   over below 768px. */
+@media (max-width: 900px) and (min-width: 768px) {
   .nav-contact { display: none; }
 }
 

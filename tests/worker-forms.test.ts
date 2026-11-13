@@ -245,6 +245,15 @@ test('the contact email copy omits the empty address when the visitor left no em
   assert.ok(withEmail?.body.includes('From: Sam <sam@example.ca>'), 'an address is shown when given');
 });
 
+test('the contact email copy carries the shortlisted demos when the visitor shortlisted any', () => {
+  const base: FormSubmission = { form: 'contact', fields: { name: 'Sam', message: 'Bonjour' }, ip: '', country: '', ua: '', at: 0 };
+  const spec = notifySpec(base);
+  assert.ok(spec);
+  assert.ok(!spec.body.includes('Shortlisted demos'), 'no line when nothing was shortlisted');
+  const withShortlist = notifySpec({ ...base, fields: { name: 'Sam', message: 'Bonjour', shortlist: 'Nora, Mira' } });
+  assert.ok(withShortlist?.body.includes('Shortlisted demos: Nora, Mira'), 'the shortlist travels with the message');
+});
+
 test('submissions include the visitor metadata the admin panel shows', async () => {
   const memory = memoryKV();
   await handleFormSubmit(

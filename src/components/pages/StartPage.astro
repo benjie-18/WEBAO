@@ -247,6 +247,11 @@ const aiRows = [
         </button>
         <p class="mono start-reassurance">{t.start.form.reassurance}</p>
         <p class="mono start-launch-date" data-launch-date data-template={t.start.form.launchRange} hidden></p>
+        <p class="mono start-shortlist" data-start-shortlist hidden>
+          <strong>{t.demos.shortlistTitle}:</strong>
+          <span data-start-shortlist-names></span>
+          <a href={paths.demos}>{t.demos.shortlistChange}</a>
+        </p>
         <a href={paths.contact} class="start-directions">{t.start.form.directionsLink}</a>
         <p class="mono start-hint">{t.start.form.hint}</p>
       </form>
@@ -713,6 +718,13 @@ const aiRows = [
     margin: 6px 0 0;
     text-align: center;
   }
+  .start-shortlist {
+    font-size: 11.5px;
+    color: var(--muted);
+    margin: 6px 0 0;
+    text-align: center;
+  }
+  .start-shortlist a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; margin-left: 4px; }
   .start-directions {
     display: block;
     margin-top: 8px;

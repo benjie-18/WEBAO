@@ -1,0 +1,314 @@
+---
+// Plan & Price Estimator (#40): three quick questions, one plan
+// recommendation. The recommendation is driven by page count first (the
+// real plan boundary: Launch is 1 page, Grow is 3-5, Scale is 6+), with
+// the visitor's job as a secondary signal (bookings or sales need the
+// room Grow gives). AI and Ads never change the plan — they are add-ons,
+// so they only add a note line. Prices come from the cart catalog, never
+// hardcoded, and the result button is a real cart button (same attrs as
+// PlanCards), so cart-ui keeps its label and added state in sync.
+import { useTranslations, localizedPaths, type Locale } from "../../lib/i18n";
+import { priceCentsFor } from "../../lib/cart-catalog";
+
+interface Props {
+  locale: Locale;
+  // On /pricing the visitor is already comparing plans, so the
+  // "Compare all plans" link is redundant there.
+  showCompare?: boolean;
+}
+
+const { locale, showCompare = true } = Astro.props as Props;
+const t = useTranslations(locale);
+const e = t.estimator;
+const tp = t.pricing.plans;
+const paths = localizedPaths[locale];
+
+const stripParens = (s: string) => s.replace(/^\(|\)$/g, "");
+const planData = {
+  launch: {
+    name: tp.launch.name,
+    monthly: tp.launch.monthly,
+    annual: stripParens(tp.launch.annual),
+    monthCents: priceCentsFor("launch", "month") ?? 0,
+    yearCents: priceCentsFor("launch", "year") ?? 0,
+    why: e.whyLaunch,
+  },
+  grow: {
+    name: tp.grow.name,
+    monthly: tp.grow.monthly,
+    annual: stripParens(tp.grow.annual),
+    monthCents: priceCentsFor("grow", "month") ?? 0,
+    yearCents: priceCentsFor("grow", "year") ?? 0,
+    why: e.whyGrow,
+  },
+  scale: {
+    name: tp.scale.name,
+    monthly: tp.scale.monthly,
+    annual: stripParens(tp.scale.annual),
+    monthCents: priceCentsFor("scale", "month") ?? 0,
+    yearCents: priceCentsFor("scale", "year") ?? 0,
+    why: e.whyScale,
+  },
+};
+const extraNotes = { ai: e.extraAiNote, ads: e.extraAdsNote };
+const def = planData.launch;
+---
+
+<section class="estimator" data-estimator data-plans={JSON.stringify(planData)} data-extras={JSON.stringify(extraNotes)} data-choose={tp.choose} data-chosen={tp.chosen} data-add={t.cart.add} aria-labelledby="estimator-h">
+  <div class="shell estimator-inner" data-reveal>
+    <p class="eyebrow">{e.eyebrow}</p>
+    <h2 id="estimator-h" class="display estimator-title">{e.title}</h2>
+    <p class="estimator-sub">{e.sub}</p>
+
+    <form class="estimator-questions" data-estimator-form>
+      <fieldset class="estimator-q">
+        <legend>{e.qPages}</legend>
+        <label class="estimator-opt">
+          <input type="radio" name="est-pages" value="1" />
+          <span>{e.pages1}</span>
+        </label>
+        <label class="estimator-opt">
+          <input type="radio" name="est-pages" value="3" />
+          <span>{e.pages3}</span>
+        </label>
+        <label class="estimator-opt">
+          <input type="radio" name="est-pages" value="6" />
+          <span>{e.pages6}</span>
+        </label>
+      </fieldset>
+
+      <fieldset class="estimator-q">
+        <legend>{e.qJob}</legend>
+        <label class="estimator-opt">
+          <input type="radio" name="est-job" value="inform" />
+          <span>{e.jobInform}</span>
+        </label>
+        <label class="estimator-opt">
+          <input type="radio" name="est-job" value="book" />
+          <span>{e.jobBook}</span>
+        </label>
+        <label class="estimator-opt">
+          <input type="radio" name="est-job" value="sell" />
+          <span>{e.jobSell}</span>
+        </label>
+      </fieldset>
+
+      <fieldset class="estimator-q">
+        <legend>{e.qExtra}</legend>
+        <label class="estimator-opt">
+          <input type="radio" name="est-extra" value="none" />
+          <span>{e.extraNone}</span>
+        </label>
+        <label class="estimator-opt">
+          <input type="radio" name="est-extra" value="ai" />
+          <span>{e.extraAi}</span>
+        </label>
+        <label class="estimator-opt">
+          <input type="radio" name="est-extra" value="ads" />
+          <span>{e.extraAds}</span>
+        </label>
+      </fieldset>
+    </form>
+
+    <div class="estimator-result" data-estimator-result hidden>
+      <p class="estimator-result-label">{e.resultLabel}</p>
+      <p class="display estimator-result-plan" data-estimator-plan></p>
+      <p class="estimator-result-price" data-estimator-price></p>
+      <p class="estimator-result-why" data-estimator-why></p>
+      <p class="estimator-result-extra" data-estimator-extra hidden></p>
+      <div class="estimator-result-actions">
+        <button
+          type="button"
+          class="btn btn--primary"
+          data-cart-btn
+          data-estimator-cta
+          data-key="launch-month"
+          data-product="launch"
+          data-name={def.name}
+          data-price-cents={def.monthCents}
+          data-interval="month"
+          data-type="plan"
+          data-price-year={def.yearCents}
+          aria-label={t.cart.add.replace("{name}", def.name)}
+          title={t.cart.add.replace("{name}", def.name)}
+          aria-pressed="false"
+        >
+          <span
+            data-cta-label
+            data-month={tp.choose.replace("{name}", def.name).replace("{price}", def.monthly)}
+            data-year={tp.choose.replace("{name}", def.name).replace("{price}", def.annual)}
+            data-added={tp.chosen.replace("{name}", def.name)}
+          >{tp.choose.replace("{name}", def.name).replace("{price}", def.monthly)}</span>
+        </button>
+        {showCompare && (
+          <a href={paths.pricing} class="estimator-compare">{e.compare}</a>
+        )}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // One init per estimator on the page; the result recomputes on every
+  // change, and the cart button's dataset is rewritten to the recommended
+  // plan so cart-ui treats it exactly like a plan-card CTA.
+  document.querySelectorAll("[data-estimator]").forEach((root) => {
+    const el = root as HTMLElement;
+    if (el.dataset.estimatorInit === "1") return;
+    el.dataset.estimatorInit = "1";
+    const result = root.querySelector("[data-estimator-result]") as HTMLElement | null;
+    const planEl = root.querySelector("[data-estimator-plan]") as HTMLElement | null;
+    const priceEl = root.querySelector("[data-estimator-price]") as HTMLElement | null;
+    const whyEl = root.querySelector("[data-estimator-why]") as HTMLElement | null;
+    const extraEl = root.querySelector("[data-estimator-extra]") as HTMLElement | null;
+    const btn = root.querySelector("[data-estimator-cta]") as HTMLButtonElement | null;
+    const label = btn?.querySelector("[data-cta-label]") as HTMLElement | null;
+    const plans = JSON.parse(el.dataset.plans || "{}") as Record<
+      string,
+      { name: string; monthly: string; annual: string; monthCents: number; yearCents: number; why: string }
+    >;
+    const extras = JSON.parse(el.dataset.extras || "{}") as Record<string, string>;
+    const chooseTemplate = el.dataset.choose || "";
+    const chosenTemplate = el.dataset.chosen || "";
+    const addTemplate = el.dataset.add || "";
+    const read = (name: string): string | null => {
+      const input = root.querySelector(`input[name="${name}"]:checked`) as HTMLInputElement | null;
+      return input ? input.value : null;
+    };
+    const render = () => {
+      if (!result || !planEl || !priceEl || !whyEl || !extraEl) return;
+      const pages = read("est-pages");
+      const job = read("est-job");
+      const extra = read("est-extra");
+      if (!pages || !job || !extra) {
+        result.hidden = true;
+        return;
+      }
+      // Page count is the real plan boundary; a booking or sales job
+      // needs the room Grow gives even on a small site.
+      let id = "launch";
+      if (pages === "6") id = "scale";
+      else if (pages === "3" || job !== "inform") id = "grow";
+      const p = plans[id];
+      if (!p) return;
+      planEl.textContent = p.name;
+      priceEl.textContent = p.monthly;
+      whyEl.textContent = p.why;
+      const extraNote = extra === "none" ? "" : (extras[extra] || "");
+      extraEl.textContent = extraNote;
+      extraEl.hidden = extraNote === "";
+      if (btn && label) {
+        btn.dataset.key = `${id}-month`;
+        btn.dataset.product = id;
+        btn.dataset.name = p.name;
+        btn.dataset.priceCents = String(p.monthCents);
+        btn.dataset.priceYear = String(p.yearCents);
+        btn.setAttribute("aria-label", addTemplate.replace("{name}", p.name));
+        btn.title = addTemplate.replace("{name}", p.name);
+        label.dataset.month = chooseTemplate.replace("{name}", p.name).replace("{price}", p.monthly);
+        label.dataset.year = chooseTemplate.replace("{name}", p.name).replace("{price}", p.annual);
+        label.dataset.added = chosenTemplate.replace("{name}", p.name);
+        label.textContent = label.dataset.month;
+        btn.setAttribute("aria-pressed", "false");
+        btn.classList.remove("is-added");
+      }
+      result.hidden = false;
+    };
+    root.addEventListener("change", render);
+  });
+</script>
+
+<style>
+  .estimator {
+    background: var(--paper-2);
+    border-block: 1px solid var(--line);
+    padding: 64px 0;
+  }
+  .estimator-inner { max-width: 860px; }
+  .estimator-title {
+    font-size: clamp(1.9rem, 4vw, 3rem);
+    line-height: .95;
+    margin-top: 12px;
+  }
+  .estimator-sub { color: var(--muted); margin-top: 10px; }
+  .estimator-questions { display: grid; gap: 24px; margin-top: 28px; }
+  .estimator-q {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+  .estimator-q legend {
+    font-weight: 650;
+    font-size: 15px;
+    margin-bottom: 4px;
+    padding: 0;
+  }
+  .estimator-opt {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--card-bg);
+    cursor: pointer;
+    font-size: 14.5px;
+  }
+  .estimator-opt:has(input:checked) {
+    border-color: var(--accent);
+    background: var(--accent-soft, rgba(217, 43, 34, 0.06));
+  }
+  .estimator-opt input {
+    accent-color: var(--accent);
+    width: 18px;
+    height: 18px;
+    flex: none;
+    margin: 0;
+  }
+  .estimator-result {
+    margin-top: 28px;
+    padding: 24px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--card-bg);
+    box-shadow: var(--shadow-sm);
+  }
+  .estimator-result-label {
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0;
+  }
+  .estimator-result-plan {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    line-height: 1;
+    margin-top: 8px;
+  }
+  .estimator-result-price {
+    font-size: 1.1rem;
+    font-weight: 650;
+    margin-top: 8px;
+  }
+  .estimator-result-why { color: var(--muted); margin-top: 8px; line-height: 1.55; }
+  .estimator-result-extra { color: var(--muted); margin-top: 8px; line-height: 1.55; }
+  .estimator-result-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    margin-top: 20px;
+  }
+  .estimator-compare {
+    font-weight: 600;
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  @media (min-width: 720px) {
+    .estimator-q { grid-template-columns: repeat(3, 1fr); }
+    .estimator-q legend { grid-column: 1 / -1; }
+  }
+</style>

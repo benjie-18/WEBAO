@@ -24,7 +24,28 @@ export type DemoCategory =
 // Trade filter for the demo catalog: a finer-grained business trade than the
 // broad DemoCategory. Only set on demos that represent a specific trade;
 // the catalog derives its trade filter chips from demos that have one.
-export type DemoTrade = "plumbing" | "electrical" | "hvac" | "roofing" | "renovation";
+export type DemoTrade =
+  | "plumbing"
+  | "electrical"
+  | "hvac"
+  | "roofing"
+  | "renovation"
+  | "restaurant"
+  | "automotive"
+  | "health"
+  | "creative"
+  | "retail"
+  | "wellness"
+  | "hospitality"
+  | "landscaping"
+  | "moving"
+  | "technology"
+  | "fashion"
+  | "music"
+  | "finance"
+  | "gaming"
+  | "design"
+  | "beauty";
 
 export type Demo = {
   id: string; // slug, used for future microsite routing e.g. /demos/nora
@@ -44,6 +65,7 @@ export const demos: Demo[] = [
     id: "noctua",
     name: "Noctua",
     category: "Hospitality",
+    trade: "hospitality",
     city: "Baie-Saint-Paul",
     tone: "Sidereal instrument",
     palette: "Ink sky / old brass / starlight",
@@ -55,6 +77,7 @@ export const demos: Demo[] = [
     id: "lisiere",
     name: "Lisière",
     category: "Creative",
+    trade: "creative",
     city: "Danville",
     tone: "Loom draft",
     palette: "Linen / indigo / madder",
@@ -66,6 +89,7 @@ export const demos: Demo[] = [
     id: "brume",
     name: "Brume Parfums",
     category: "Beauty",
+    trade: "beauty",
     city: "Grasse",
     tone: "Ethereal",
     palette: "Mist / Lavender",
@@ -77,6 +101,7 @@ export const demos: Demo[] = [
     id: "sahara-sage",
     name: "Sahara & Sage",
     category: "Retail",
+    trade: "retail",
     city: "Montréal",
     tone: "Bohemian",
     palette: "Terracotta / Sage",
@@ -88,6 +113,7 @@ export const demos: Demo[] = [
     id: "esquisse",
     name: "Esquisse",
     category: "Design",
+    trade: "design",
     city: "Montréal",
     tone: "Conceptual sketch",
     palette: "Paper / Graphite",
@@ -99,6 +125,7 @@ export const demos: Demo[] = [
     id: "tactile",
     name: "Tactile",
     category: "Technology",
+    trade: "technology",
     city: "Portland",
     tone: "Neumorphism",
     palette: "Lavender gray",
@@ -110,6 +137,7 @@ export const demos: Demo[] = [
     id: "prism",
     name: "Prism",
     category: "Finance",
+    trade: "finance",
     city: "Toronto",
     tone: "Glassmorphism",
     palette: "Violet / Cyan",
@@ -121,6 +149,7 @@ export const demos: Demo[] = [
     id: "hexline",
     name: "Hexline Systems",
     category: "Technology",
+    trade: "technology",
     city: "Montréal",
     tone: "Cybercore",
     palette: "Black / Cyan / Magenta",
@@ -132,6 +161,7 @@ export const demos: Demo[] = [
     id: "papier-ciseaux",
     name: "Papier Ciseaux",
     category: "Retail",
+    trade: "retail",
     city: "Québec",
     tone: "Scrapbook",
     palette: "Cream / Kraft / Red",
@@ -155,6 +185,7 @@ export const demos: Demo[] = [
     id: "studio-reve",
     name: "Studio Rêve",
     category: "Creative",
+    trade: "creative",
     city: "Montréal",
     tone: "Surrealism",
     palette: "Indigo / Gold",
@@ -166,6 +197,7 @@ export const demos: Demo[] = [
     id: "sora",
     name: "Clinique Sora",
     category: "Health",
+    trade: "health",
     city: "Brossard",
     tone: "Calm clinical",
     palette: "Mist / Teal / Ink",
@@ -177,6 +209,7 @@ export const demos: Demo[] = [
     id: "cyberdoll",
     name: "CYBERDOLL",
     category: "Fashion",
+    trade: "fashion",
     city: "Montréal",
     tone: "Y2K",
     palette: "Pink / Chrome",
@@ -188,6 +221,7 @@ export const demos: Demo[] = [
     id: "aeris",
     name: "AERIS",
     category: "Technology",
+    trade: "technology",
     city: "Montréal",
     tone: "Frutiger Aero",
     palette: "Aqua / Green",
@@ -199,6 +233,7 @@ export const demos: Demo[] = [
     id: "kanso",
     name: "Kanso",
     category: "Restaurant",
+    trade: "restaurant",
     city: "Montréal",
     tone: "Japanese minimal",
     palette: "Greige / Ink",
@@ -210,6 +245,7 @@ export const demos: Demo[] = [
     id: "pixelforge",
     name: "Pixelforge Games",
     category: "Gaming",
+    trade: "gaming",
     city: "Montréal",
     tone: "Pixel art",
     palette: "Navy / Neon",
@@ -221,6 +257,7 @@ export const demos: Demo[] = [
     id: "boba-club",
     name: "Boba Club",
     category: "Retail",
+    trade: "retail",
     city: "Québec",
     tone: "Y2K chrome",
     palette: "Pastel / Chrome / Gloss",
@@ -244,6 +281,7 @@ export const demos: Demo[] = [
     id: "pouf",
     name: "Pouf Studio",
     category: "Creative",
+    trade: "creative",
     city: "Montréal",
     tone: "Claymorphism",
     palette: "Pastel / Cream",
@@ -255,6 +293,7 @@ export const demos: Demo[] = [
     id: "vhs-dreams",
     name: "VHS Dreams",
     category: "Music",
+    trade: "music",
     city: "Montréal",
     tone: "Synthwave",
     palette: "Purple / Neon pink",
@@ -266,6 +305,7 @@ export const demos: Demo[] = [
     id: "atelier-caractere",
     name: "Atelier Caractère",
     category: "Design",
+    trade: "design",
     city: "Montréal",
     tone: "Luxury typography",
     palette: "Ivory / Gold",
@@ -289,6 +329,7 @@ export const demos: Demo[] = [
     id: "maison-lune",
     name: "Maison Lune",
     category: "Hospitality",
+    trade: "hospitality",
     city: "Magog",
     tone: "Soft boutique",
     palette: "Blush / Linen",
@@ -300,6 +341,7 @@ export const demos: Demo[] = [
     id: "maximal",
     name: "MAXIMAL",
     category: "Creative",
+    trade: "creative",
     city: "Montréal",
     tone: "Maximalism",
     palette: "Acid / Everything",
@@ -311,6 +353,7 @@ export const demos: Demo[] = [
     id: "verte",
     name: "Verte Épicerie",
     category: "Retail",
+    trade: "retail",
     city: "Sherbrooke",
     tone: "Playful organic",
     palette: "Leaf / Cream",
@@ -322,6 +365,7 @@ export const demos: Demo[] = [
     id: "mira",
     name: "Mira Cantine",
     category: "Restaurant",
+    trade: "restaurant",
     city: "Vieux-Montréal",
     tone: "Warm editorial",
     palette: "Cream / Terracotta / Ink",
@@ -333,6 +377,7 @@ export const demos: Demo[] = [
     id: "lune",
     name: "Lune Fitness",
     category: "Wellness",
+    trade: "wellness",
     city: "Trois-Rivières",
     tone: "Energetic bold",
     palette: "Black / Neon",
@@ -344,6 +389,7 @@ export const demos: Demo[] = [
     id: "atelier-nord",
     name: "Atelier Nord",
     category: "Automotive",
+    trade: "automotive",
     city: "Brossard",
     tone: "Premium technical",
     palette: "Navy / Slate / White",
@@ -355,6 +401,7 @@ export const demos: Demo[] = [
     id: "lattice",
     name: "Lattice",
     category: "Technology",
+    trade: "technology",
     city: "Toronto",
     tone: "Bento grid",
     palette: "Off-white / Lime",
@@ -366,6 +413,7 @@ export const demos: Demo[] = [
     id: "boise",
     name: "Boisé Paysage",
     category: "Landscaping",
+    trade: "landscaping",
     city: "Gatineau",
     tone: "Calm natural",
     palette: "Sage / Stone / Ink",
@@ -377,6 +425,7 @@ export const demos: Demo[] = [
     id: "forma",
     name: "Studio Forma",
     category: "Creative",
+    trade: "creative",
     city: "Montréal",
     tone: "Minimal luxury",
     palette: "Bone / Charcoal",
@@ -400,6 +449,7 @@ export const demos: Demo[] = [
     id: "encre-brute",
     name: "Encre Brute",
     category: "Creative",
+    trade: "creative",
     city: "Montréal",
     tone: "Neo-brutalist",
     palette: "Black / White / Signal red",
@@ -543,6 +593,7 @@ export const demos: Demo[] = [
     id: "sneaker-pro",
     name: "Sneaker Pro",
     category: "Fashion",
+    trade: "fashion",
     city: "Montréal",
     tone: "Futurist glass",
     palette: "Obsidian / mint aurora",
@@ -554,6 +605,7 @@ export const demos: Demo[] = [
     id: "onde",
     name: "ONDE",
     category: "Technology",
+    trade: "technology",
     city: "Longueuil",
     tone: "Liquid chrome",
     palette: "Pearl / chrome fuchsia",
@@ -565,6 +617,7 @@ export const demos: Demo[] = [
     id: "boreal",
     name: "Déménagement Boréal",
     category: "Trades",
+    trade: "moving",
     city: "Gatineau",
     tone: "Nordic road atlas",
     palette: "Navy / White / Teal",
@@ -576,6 +629,7 @@ export const demos: Demo[] = [
     id: "rive-nord",
     name: "Déménagement Rive-Nord",
     category: "Trades",
+    trade: "moving",
     city: "Terrebonne",
     tone: "Highway service-board",
     palette: "Asphalt / Hazard yellow",
@@ -656,4 +710,26 @@ export function getDemoFamily(id: string): StyleFamily {
 
 // Trade filters for the catalog: only trades with at least one demo get a chip.
 // Enables trade-specific landing views like /demos?trade=plumbing.
-export const tradeFilters: DemoTrade[] = ["plumbing", "electrical", "hvac", "roofing", "renovation"];
+export const tradeFilters: DemoTrade[] = [
+  "plumbing",
+  "electrical",
+  "hvac",
+  "roofing",
+  "renovation",
+  "automotive",
+  "beauty",
+  "creative",
+  "design",
+  "fashion",
+  "finance",
+  "gaming",
+  "health",
+  "hospitality",
+  "landscaping",
+  "moving",
+  "music",
+  "restaurant",
+  "retail",
+  "technology",
+  "wellness",
+];

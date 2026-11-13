@@ -26,6 +26,7 @@
 import { CART_CHANGE_EVENT, STORAGE_KEY, cartKey, type CartItem } from "./cart";
 import { baseInterval, cartProducts, convertItemsToBilling, intervalFor, priceCentsFor, supportsBilling, type Billing } from "./cart-catalog";
 import { BILLING_KEY, formatMoney, getCart, guardAdd, guardCheckout, guardPlanChange, intervalSuffix, moneyFormat, readBilling, setCart } from "./cart-ui";
+import { readShortlist, shortlistNames } from "./shortlist";
 
 /** sessionStorage key shared with the checkout page. */
 export const CUSTOMER_KEY = "webao-checkout";
@@ -472,6 +473,8 @@ function notifyOwner(doc: Document, details: CustomerDetails, cart: CartItem[]):
   // pages' forward link) travels with the order so the owner knows which
   // style they liked.
   const demo = new URLSearchParams(win.location.search).get("demo") || "";
+  // The shortlist (#50) travels the same way, as names the owner can read.
+  const shortlist = shortlistNames(readShortlist(win));
   try {
     win
       .fetch("/api/forms/submit", {
@@ -486,6 +489,7 @@ function notifyOwner(doc: Document, details: CustomerDetails, cart: CartItem[]):
             items: cart.map((item) => item.key).join(","),
             billing: readBilling(win),
             ...(demo ? { demo } : {}),
+            ...(shortlist.length ? { shortlist: shortlist.join(", ") } : {}),
             page: win.location.pathname,
           },
         }),
@@ -642,6 +646,7 @@ export function initStart(doc: Document = document, options: StartOptions = {}):
   setupPage(doc);
   renderStart(doc);
   renderLaunchDate(doc);
+  renderShortlist(doc);
 }
 
 // Launch-date estimator (#51): turn the static "Live in 2–3 weeks" into a
@@ -660,5 +665,18 @@ export function renderLaunchDate(doc: Document): void {
   el.textContent = template
     .replace("{a}", fmt(new Date(now.getTime() + 14 * day)))
     .replace("{b}", fmt(new Date(now.getTime() + 21 * day)));
+  el.hidden = false;
+}
+
+// Shortlist (#50): show the visitor's shortlisted demos under the form
+// and carry them with the order so the owner sees which directions they
+// liked. Without a shortlist the line stays hidden.
+export function renderShortlist(doc: Document): void {
+  const el = doc.querySelector("[data-start-shortlist]") as HTMLElement | null;
+  const namesEl = doc.querySelector("[data-start-shortlist-names]") as HTMLElement | null;
+  if (!el || !namesEl) return;
+  const names = shortlistNames(readShortlist(doc.defaultView));
+  if (names.length === 0) return;
+  namesEl.textContent = names.join(", ");
   el.hidden = false;
 }
