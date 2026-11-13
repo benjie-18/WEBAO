@@ -37,8 +37,9 @@ import StarMark from "../components/ui/StarMark.astro";
         <div>
           <p class="eyebrow audit-band-eyebrow">Next step</p>
           <h2 id="audit-band-h" class="display audit-band-title">Want us to fix it?</h2>
+          <p class="audit-band-sub">From C$89.99/mo · Live in 2–3 weeks · No setup fee</p>
         </div>
-        <a href="/start" class="btn btn--on-dark btn--lg">Start a project</a>
+        <a href="/pricing" class="btn btn--on-dark btn--lg">See plans →</a>
       </div>
     </section>
   </div>
@@ -380,6 +381,11 @@ import StarMark from "../components/ui/StarMark.astro";
       font-size: clamp(2rem, 4.6vw, 3.4rem);
       line-height: 0.95;
       margin-top: 10px;
+    }
+    .audit-band-sub {
+      margin-top: 10px;
+      font-size: 14px;
+      color: rgba(248, 245, 239, 0.75);
     }
     /* Loading screen: covers the whole viewport, paper gradient, star
        above the bar. The star spins 360 degrees in 0.75s on the

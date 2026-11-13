@@ -105,7 +105,8 @@ test('magic link: request, exchange once, session reads me, token cannot be reus
     assert.equal(client.id.startsWith('cl_'), true);
 
     const anon = await handlePortalMe(apiGet('/api/portal/me'), env);
-    assert.equal(anon.status, 401);
+    assert.equal(anon.status, 200);
+    assert.equal((await bodyOf(anon)).authenticated, false);
   } finally {
     stub.restore();
   }

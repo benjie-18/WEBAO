@@ -4,7 +4,7 @@ import { getAlternatePath, type Locale } from "../../lib/i18n/config";
 interface Props {
   locale: Locale;
   currentPath: string;
-  variant?: "header" | "mobile" | "toggle";
+  variant?: "header" | "toggle";
 }
 
 const { locale, currentPath, variant = "header" } = Astro.props as Props;
@@ -16,7 +16,7 @@ const isEn = locale === "en";
 const isFr = locale === "fr";
 ---
 
-<div class:list={["lang-switcher", variant === "mobile" && "lang-switcher--mobile", variant === "toggle" && "lang-toggle"]} role="group" aria-label="Language switcher">
+<div class:list={["lang-switcher", variant === "toggle" && "lang-toggle"]} role="group" aria-label="Language switcher">
   {variant === "toggle" && (
     <a
       href={isEn ? frPath : enPath}
@@ -30,6 +30,7 @@ const isFr = locale === "fr";
     </a>
   )}
   {variant !== "toggle" && (
+  <span class="lang-thumb" aria-hidden="true"></span>
   <a
     href={enPath}
     class:list={["lang-option", isEn && "is-active"]}
@@ -55,6 +56,7 @@ const isFr = locale === "fr";
 
 <style>
   .lang-switcher {
+    position: relative;
     display: inline-flex;
     align-items: center;
     gap: 2px;
@@ -64,7 +66,27 @@ const isFr = locale === "fr";
     border: 1px solid var(--line);
     box-shadow: var(--shadow-sm);
   }
+  /* Sliding thumb: a dark pill gliding under the active language instead
+     of the abrupt background swap. Both options are equal width, so the
+     thumb is exactly half the track (minus the 2px gap). */
+  .lang-thumb {
+    position: absolute;
+    top: 3px;
+    bottom: 3px;
+    left: 3px;
+    width: calc((100% - 8px) / 2);
+    border-radius: 999px;
+    background: var(--ink);
+    box-shadow: 0 2px 8px rgba(10,15,28,.12);
+    transition: transform .3s cubic-bezier(.16, 1, .3, 1);
+    pointer-events: none;
+  }
+  .lang-switcher:has(.lang-option[data-lang="fr"].is-active) .lang-thumb {
+    transform: translateX(calc(100% + 2px));
+  }
   .lang-option {
+    position: relative;
+    z-index: 1;
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -83,24 +105,14 @@ const isFr = locale === "fr";
     background: var(--paper-3);
     color: var(--ink);
   }
-  .lang-option.is-active {
-    background: var(--ink);
+  .lang-option.is-active:hover {
+    background: transparent;
     color: var(--paper);
-    box-shadow: 0 2px 8px rgba(10,15,28,.12);
   }
-  /* Mobile variant */
-  .lang-switcher--mobile {
-    width: 100%;
-    justify-content: center;
-    padding: 6px;
-    background: var(--paper-3);
-    margin-top: 12px;
-  }
-  .lang-switcher--mobile .lang-option {
-    flex: 1;
-    justify-content: center;
-    padding: 10px;
-    font-size: 12px;
+  .lang-option.is-active {
+    background: transparent;
+    color: var(--paper);
+    box-shadow: none;
   }
 
   /* Single-language toggle: mobile header only. Text-only (EN/FR): the

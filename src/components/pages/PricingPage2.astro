@@ -31,6 +31,7 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
       </div>
 
       <div class="service-chooser" role="tablist" aria-label={r.chooserLabel}>
+        <span class="service-thumb" aria-hidden="true"></span>
         <button type="button" class="service-pill" role="tab" id="p2-tab-ads" aria-controls="p2-panel-ads" aria-selected="false" data-service-pill="ads">{r.pillAds}</button>
         <button type="button" class="service-pill is-active" role="tab" id="p2-tab-web" aria-controls="p2-panel-web" aria-selected="true" data-service-pill="web">{r.pillWeb}</button>
         <button type="button" class="service-pill" role="tab" id="p2-tab-ai" aria-controls="p2-panel-ai" aria-selected="false" data-service-pill="ai">{r.pillAi}</button>
@@ -41,6 +42,7 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
         and still re-prices the cart when switched. -->
       <div class="billing-toggle-wrap">
         <div class="billing-toggle" role="group" aria-label={t.cart.billingLegend} data-billing-toggle>
+          <span class="billing-thumb" aria-hidden="true"></span>
           <button type="button" class="billing-opt is-active" data-billing-opt="month" aria-pressed="true">
             {t.cart.billingMonthly}
           </button>
@@ -51,6 +53,12 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
         </div>
         <p class="billing-toggle-hint mono">{t.cart.billingHint}</p>
       </div>
+
+      <ul class="trust-strip mono" aria-label={t.home.hero.trustStrip.join(" · ")}>
+        {t.home.hero.trustStrip.map((item) => (
+          <li>{item}</li>
+        ))}
+      </ul>
     </div>
   </section>
 
@@ -62,6 +70,7 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
           <h2 id="plans-h" class="visually-hidden">{t.pricing.plansTitle}</h2>
           <PlanCards locale={locale} badgeAbove />
           <p class="p2-plan-note">{r.planNote}</p>
+          <p class="terms-link"><a href={termsPath}>{t.pricing.termsCta.label}</a></p>
         </div>
       </section>
       <BundleCarousel locale={locale} />
@@ -112,6 +121,17 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
       </div>
     </section>
   </div>
+
+  <!-- Still deciding: one line that turns hesitation into a conversation. -->
+  <section class="section rescue-band" aria-labelledby="rescue-h">
+    <div class="shell rescue-band-inner" data-reveal>
+      <div>
+        <h2 id="rescue-h" class="display rescue-band-title">{t.pricing.rescue.title}</h2>
+        <p class="rescue-band-sub">{t.pricing.rescue.text}</p>
+      </div>
+      <a href={locale === "fr" ? "/fr/contact" : "/contact"} class="btn btn--primary btn--lg">{t.pricing.rescue.cta}</a>
+    </div>
+  </section>
 
   <section class="terms-band grain" aria-labelledby="terms-h">
     <div class="shell terms-band-inner">
@@ -337,21 +357,47 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
   @media (max-width: 640px) {
     .p2-hero-star { --star: 90px; }
   }
+  /* Service chooser: one segmented row, three equal pills, with a sliding
+     thumb behind the active one (same pattern as the billing toggle).
+     Stays a single row on mobile: the old ≤640px column stack pushed the
+     plan cards nearly off-screen. */
   .service-chooser {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    justify-content: center;
-    margin-top: 28px;
+    --chooser-gap: 10px;
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--chooser-gap);
+    width: min(460px, 100%);
+    margin: 28px auto 0;
+  }
+  .service-thumb {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: calc((100% - var(--chooser-gap) * 2) / 3);
+    background: var(--accent);
+    border-radius: 999px;
+    transition: transform 220ms cubic-bezier(.16,1,.3,1);
+    z-index: 0;
+  }
+  .service-chooser:has([data-service-pill="web"].is-active) .service-thumb {
+    transform: translateX(calc(100% + var(--chooser-gap)));
+  }
+  .service-chooser:has([data-service-pill="ai"].is-active) .service-thumb {
+    transform: translateX(calc(200% + var(--chooser-gap) * 2));
   }
   .service-pill {
-    padding: 11px 26px;
+    position: relative;
+    z-index: 1;
+    padding: 11px 8px;
     border: 1px solid var(--line);
     border-radius: 999px;
     background: transparent;
     color: var(--ink);
     font: inherit;
     font-weight: 600;
+    text-align: center;
     cursor: pointer;
     transition: background 160ms ease, color 160ms ease, border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
   }
@@ -363,9 +409,13 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
     transform: scale(0.97);
   }
   .service-pill.is-active {
-    background: var(--accent);
-    border-color: var(--accent);
+    background: transparent;
+    border-color: transparent;
     color: #fff;
+  }
+  .service-pill.is-active:hover {
+    border-color: transparent;
+    transform: none;
   }
   .service-pill:focus-visible {
     outline: 2px solid var(--accent);
@@ -380,6 +430,49 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
     color: var(--muted);
     font-size: 0.95rem;
     margin: 20px 0 0;
+  }
+  .terms-link {
+    margin: 20px 0 0;
+    text-align: center;
+    font-size: 13.5px;
+  }
+  .terms-link a {
+    color: var(--muted);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .terms-link a:hover {
+    color: var(--ink);
+  }
+  /* Scroll-end rescue band: a quiet card, not a shout, above the terms. */
+  .rescue-band-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 28px 32px;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: var(--card-bg);
+    box-shadow: var(--shadow-sm);
+  }
+  .rescue-band-title {
+    font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+  .rescue-band-sub {
+    margin-top: 8px;
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  @media (max-width: 760px) {
+    .rescue-band-inner {
+      flex-direction: column;
+      align-items: stretch;
+      padding: 24px 20px;
+    }
   }
   /* Pricing2 only: on desktop, show the three plan cards side by side
      instead of /pricing's deep overlap, so every price and cart button
@@ -610,13 +703,12 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
   }
   @media (max-width: 640px) {
     .service-chooser {
-      flex-direction: column;
-      align-items: stretch;
-      width: min(320px, 100%);
+      --chooser-gap: 6px;
+      width: 100%;
     }
     .service-pill {
-      text-align: center;
-      width: 100%;
+      padding: 10px 4px;
+      font-size: 0.85rem;
     }
     .ads-distinction {
       grid-template-columns: 1fr;

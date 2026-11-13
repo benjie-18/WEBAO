@@ -772,6 +772,37 @@ export function renderDrawer(doc: Document): void {
     checkout.tabIndex = empty ? -1 : 0;
   }
 
+  // Bundle suggestion: Local SEO + Reviews together cost more than the
+  // Lead Pack that covers both. Shown only when both are in the cart and
+  // the Pack isn't, with the saving computed from the catalog prices for
+  // the cart's own billing interval.
+  const suggest = doc.querySelector<HTMLElement>("[data-pack-suggest]");
+  if (suggest) {
+    const seo = items.find((item) => item.product === "localseo");
+    const review = items.find((item) => item.product === "review");
+    const pack = items.find((item) => item.product === "lead-pack");
+    if (seo && review && !pack && seo.interval === review.interval) {
+      const packCents = priceCentsFor("lead-pack", seo.interval);
+      const combined = seo.priceCents + review.priceCents;
+      if (packCents !== undefined && combined > packCents) {
+        const suffix = intervalSuffix(doc, seo.interval);
+        const textEl = suggest.querySelector<HTMLElement>("[data-pack-suggest-text]");
+        const template = suggest.dataset.packSuggestTemplate ?? "Local SEO + Reviews cost {combined}. The Lead Pack covers both for {pack}, saving you {save}.";
+        if (textEl) {
+          textEl.textContent = template
+            .replace("{combined}", formatMoney(combined, fmt) + suffix)
+            .replace("{pack}", formatMoney(packCents, fmt) + suffix)
+            .replace("{save}", formatMoney(combined - packCents, fmt) + suffix);
+        }
+        suggest.hidden = false;
+      } else {
+        suggest.hidden = true;
+      }
+    } else {
+      suggest.hidden = true;
+    }
+  }
+
   // Empty-cart button (end of the item list): visible only with items, and
   // every re-render resets it to the idle state, so a stray cart change can
   // never leave a live "Confirm" armed.
@@ -792,9 +823,12 @@ export function renderDrawer(doc: Document): void {
   });
 }
 
-/** Reflect the active billing term on the toggle. */
+/** Reflect the active billing term on the toggle, and on the page itself
+    (html[data-billing]) so CSS can hide the yearly total when Monthly is
+    active. */
 export function syncBillingToggle(doc: Document): void {
   const billing = readBilling(doc.defaultView);
+  doc.documentElement.dataset.billing = billing;
   doc.querySelectorAll<HTMLElement>("[data-billing-opt]").forEach((btn) => {
     const active = btn.dataset.billingOpt === billing;
     btn.classList.toggle("is-active", active);
@@ -821,7 +855,31 @@ function clearCartOnPaidPage(doc: Document): void {
   if (getCart(win).length > 0) setCart(win, []);
 }
 
+let toastTimer: ReturnType<typeof setTimeout> | null = null;
+
+/** Brief "Added X to cart" confirmation. Auto-hides after 3.5s; opening
+    the drawer dismisses it immediately. */
+function showAddedToast(doc: Document, name: string): void {
+  const toast = doc.querySelector<HTMLElement>("[data-cart-toast]");
+  if (!toast) return;
+  const text = toast.querySelector<HTMLElement>("[data-cart-toast-text]");
+  const template = toast.dataset.addedToast ?? "Added {name} to cart";
+  if (text) text.textContent = template.replace("{name}", name);
+  toast.hidden = false;
+  requestFrame(() => toast.classList.add("is-visible"));
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => hideAddedToast(doc), 3500);
+}
+
+function hideAddedToast(doc: Document): void {
+  const toast = doc.querySelector<HTMLElement>("[data-cart-toast]");
+  if (!toast) return;
+  toast.classList.remove("is-visible");
+  toast.hidden = true;
+}
+
 export function openDrawer(doc: Document): void {
+  hideAddedToast(doc);
   const drawer = drawerEl(doc);
   const overlay = overlayEl(doc);
   // Remember who opened the drawer so focus can return there on close.
@@ -964,7 +1022,16 @@ function onClick(event: Event, doc: Document): void {
   const cartBtn = closestElement(event.target, "[data-cart-btn]");
   if (cartBtn) {
     event.preventDefault();
+    const key = buttonKey(cartBtn, readBilling(win));
+    const wasAdded = getCart(win).some((item) => item.key === key);
     toggleFromButton(cartBtn, doc);
+    const nowAdded = getCart(win).some((item) => item.key === key);
+    if (!wasAdded && nowAdded) {
+      showAddedToast(doc, cartBtn.dataset.name ?? cartBtn.dataset.product ?? "");
+    } else if (wasAdded && !nowAdded) {
+      // The confirmation is stale once the item leaves the cart.
+      hideAddedToast(doc);
+    }
     return;
   }
 
@@ -976,6 +1043,36 @@ function onClick(event: Event, doc: Document): void {
       win,
       getCart(win).filter((item) => item.key !== key),
     );
+    return;
+  }
+
+  // Bundle switch: replace Local SEO + Reviews with the Lead Pack, on the
+  // same billing interval, through the same conflict guard as a normal add
+  // (Scale-ineligible packs are refused there, not here).
+  const packSwitch = closestElement(event.target, "[data-pack-switch]");
+  if (packSwitch) {
+    event.preventDefault();
+    const suggest = doc.querySelector<HTMLElement>("[data-pack-suggest]");
+    const cart = getCart(win);
+    const seo = cart.find((item) => item.product === "localseo");
+    const review = cart.find((item) => item.product === "review");
+    if (!seo || !review || seo.interval !== review.interval) return;
+    const packCents = priceCentsFor("lead-pack", seo.interval);
+    if (packCents === undefined) return;
+    const candidate: CartItem = {
+      key: cartKey("lead-pack", seo.interval),
+      product: "lead-pack",
+      name: suggest?.dataset.packName ?? "Lead Pack",
+      type: "bundle",
+      interval: seo.interval,
+      priceCents: packCents,
+    };
+    // Guard against the cart WITHOUT the two components: the Pack includes
+    // them, so guarding against the current cart would refuse the switch
+    // as a bundle overlap. Only commit when the guard passes.
+    const reduced = cart.filter((item) => item.product !== "localseo" && item.product !== "review");
+    if (!guardAdd(doc, reduced, candidate)) return;
+    setCart(win, [...reduced, candidate]);
     return;
   }
 

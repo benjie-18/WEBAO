@@ -49,6 +49,12 @@ const processId = locale === "fr" ? "processus" : "process";
         </a>
         <span class="hero-note mono" set:html={t.home.hero.priceNote}></span>
       </div>
+
+      <ul class="trust-strip mono" aria-label={t.home.hero.trustStrip.join(" · ")}>
+        {t.home.hero.trustStrip.map((item) => (
+          <li>{item}</li>
+        ))}
+      </ul>
     </div>
 
     <div class="hero-fracture" aria-hidden="true"><span class="fracture-v"></span></div>
@@ -654,9 +660,13 @@ const processId = locale === "fr" ? "processus" : "process";
   .faq-list details { background: transparent; border: 0; border-radius: 0; box-shadow: none; overflow: clip; }
   .faq-list summary { list-style:none; cursor:pointer; padding:18px 4px; font-weight:650; letter-spacing:-0.02em; font-size:15px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
   .faq-list summary::-webkit-details-marker{ display:none; }
-  .faq-list summary::after { content:"+"; width:24px; height:24px; border-radius:99px; border:1px solid var(--line); display:grid; place-items:center; font-weight:500; flex:none; font-size:12px; }
-  .faq-list details[open] summary::after { content:"\2212"; background: var(--ink); color: var(--paper); border-color: var(--ink); }
-  .faq-list details div { padding: 0 4px 20px; color: var(--muted); font-size:14px; line-height:1.6; }
+  .faq-list summary::after { content:"+"; width:24px; height:24px; border-radius:99px; border:1px solid var(--line); display:grid; place-items:center; font-weight:500; flex:none; font-size:12px; transition: transform .25s ease-out, background .2s, color .2s, border-color .2s; }
+  .faq-list details[open] summary::after { content:"+"; transform: rotate(45deg); background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  /* Smooth accordion: the answer row interpolates 0fr → 1fr instead of
+     snapping open. The inner <p> clips while the row is closed. */
+  .faq-list details div { display: grid; grid-template-rows: 0fr; padding: 0 4px; color: var(--muted); font-size:14px; line-height:1.6; opacity: 0; transition: grid-template-rows .25s ease-out, opacity .25s ease-out, padding .25s ease-out; }
+  .faq-list details div > * { overflow: hidden; min-height: 0; }
+  .faq-list details[open] div { grid-template-rows: 1fr; padding: 0 4px 20px; opacity: 1; }
   /* Hairline crack between FAQ items: the fracture motif as divider. */
   .fracture-divider { height: 8px; margin-block: 2px; background: var(--line-strong); opacity: .75; clip-path: polygon(0 42%, 9% 60%, 20% 34%, 33% 64%, 46% 38%, 59% 62%, 72% 36%, 84% 60%, 100% 42%, 100% 58%, 84% 74%, 72% 50%, 59% 76%, 46% 52%, 33% 78%, 20% 48%, 9% 74%, 0 56%); }
   @media (max-width: 880px) { .faq-grid { grid-template-columns: 1fr; } }

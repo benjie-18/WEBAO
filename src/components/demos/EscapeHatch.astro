@@ -6,6 +6,11 @@
 // (#C62820 — white on it is 5.64:1, AA; the brighter #FF3B30 is only 3.55:1),
 // full opacity, a 44px minimum touch target, safe-area-aware placement, and a
 // two-tone focus ring that reads on any background.
+// The bar has two ends: back to the catalog (left, red) and forward to
+// /start with this demo's slug (right, ink) — a prospect who likes the style
+// can act on it without leaving the demo. The slug comes from the URL at
+// runtime, so the 47 demo pages need no per-page prop; without JS the
+// forward link still goes to /start.
 interface Props {
   locale?: "en" | "fr";
   backHref?: string;
@@ -13,8 +18,12 @@ interface Props {
 const { locale = "en", backHref } = Astro.props as Props;
 const href = backHref ?? (locale === "fr" ? "/fr/demos" : "/demos");
 const label = locale === "fr" ? "Retour aux démos · démo fictive" : "Back to demos · fictional demo";
+const forwardHref = locale === "fr" ? "/fr/commencer" : "/start";
+const forwardLabel = locale === "fr" ? "Construire mon site comme celui-ci →" : "Build my site like this →";
+const forwardShort = locale === "fr" ? "Comme celui-ci →" : "Build like this →";
 ---
 
+<div class="demo-exit-bar">
 <a href={href} class="demo-exit" aria-label={label} title={label}>
   <svg class="demo-exit-arrow" width="14" height="14" viewBox="0 0 12 12" fill="none" aria-hidden="true">
     <path d="M7.5 2.5 4 6l3.5 3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -23,13 +32,35 @@ const label = locale === "fr" ? "Retour aux démos · démo fictive" : "Back to 
   <span class="demo-exit-sep" aria-hidden="true">·</span>
   <span class="demo-exit-note">{locale === "fr" ? "démo fictive" : "fictional demo"}</span>
 </a>
+<a href={forwardHref} class="demo-exit-forward" data-demo-forward data-forward-base={forwardHref}>
+  <span class="demo-exit-forward-long">{forwardLabel}</span>
+  <span class="demo-exit-forward-short">{forwardShort}</span>
+</a>
+</div>
+
+<script>
+  // Attach this demo's slug to the forward link: /start?demo=<slug>.
+  (function () {
+    var link = document.querySelector("[data-demo-forward]");
+    if (!link) return;
+    var m = /\/demos\/([^/?#]+)/.exec(location.pathname);
+    if (!m) return;
+    link.setAttribute("href", link.getAttribute("data-forward-base") + "?demo=" + encodeURIComponent(m[1]));
+  })();
+</script>
 
 <style>
-  .demo-exit {
+  .demo-exit-bar {
     position: fixed;
     left: 16px;
     bottom: calc(16px + env(safe-area-inset-bottom, 0px));
     z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    max-width: calc(100vw - 32px);
+  }
+  .demo-exit {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -70,11 +101,56 @@ const label = locale === "fr" ? "Retour aux démos · démo fictive" : "Back to 
   .demo-exit-word { font-weight: 800; }
   .demo-exit-sep { opacity: 0.6; }
   .demo-exit-note { opacity: 0.85; }
+  /* Forward end of the bar: the conversion path. Ink pill, same 44px
+     target, short label on narrow screens so the bar fits. */
+  .demo-exit-forward {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 12px 16px;
+    border-radius: 999px;
+    background: #0a0f1c;
+    color: #ffffff;
+    border: none;
+    box-shadow:
+      0 10px 28px rgba(0, 0, 0, 0.38),
+      0 0 0 1px rgba(255, 255, 255, 0.28);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .demo-exit-forward:hover {
+    background: #1c2438;
+    transform: translateY(-2px);
+    box-shadow:
+      0 14px 32px rgba(0, 0, 0, 0.42),
+      0 0 0 1px rgba(255, 255, 255, 0.32);
+  }
+  .demo-exit-forward:active {
+    transform: translateY(0);
+  }
+  .demo-exit-forward:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 2px #ffffff,
+      0 0 0 5px #0a0f1c,
+      0 10px 28px rgba(0, 0, 0, 0.38);
+  }
+  .demo-exit-forward-short { display: none; }
   @media (max-width: 640px) {
-    .demo-exit { left: 12px; padding: 12px 14px; }
+    .demo-exit-bar { left: 12px; }
+    .demo-exit { padding: 12px 14px; }
+    .demo-exit-forward { padding: 12px 14px; }
+    .demo-exit-forward-long { display: none; }
+    .demo-exit-forward-short { display: inline; }
   }
   @media (prefers-reduced-motion: reduce) {
     .demo-exit { transition: none; }
     .demo-exit:hover { transform: none; }
+    .demo-exit-forward { transition: none; }
+    .demo-exit-forward:hover { transform: none; }
   }
 </style>

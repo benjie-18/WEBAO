@@ -46,6 +46,10 @@ const en = {
     pricing: "Pricing",
     audit: "Audit",
     contact: "Contact",
+    services: "Services",
+    guides: "Guides",
+    portal: "Client portal",
+    support: "Support",
     startSite: "Start your site →",
     stickyCtaPrice: "$89.99/mo",
     stickyCta: "Start →",
@@ -97,6 +101,7 @@ const en = {
       ctaPrimary: "Start your site",
       auditCta: "Audit yours now",
       priceNote: "$89.99 <span>CAD/month</span> · All-inclusive",
+      trustStrip: ["$0 setup fee", "Bilingual EN/FR", "Live in 2–3 weeks", "Cancel with 30 days' notice"],
     },
     proof: {
       eyebrow: "The catalog in motion",
@@ -508,6 +513,11 @@ const en = {
       title: "Terms and details",
       label: "Read the terms and details →",
     },
+    rescue: {
+      title: "Still deciding between Launch and Grow?",
+      text: "Tell us your trade and we'll pick for you, same day.",
+      cta: "Tell us your trade →",
+    },
   },
 
   // Cart drawer, billing term toggle and checkout summary.
@@ -519,6 +529,9 @@ const en = {
     close: "Close cart",
     emptyTitle: "Your cart is empty.",
     emptyHint: "Add items from the pricing page.",
+    addedToast: "Added {name} to cart",
+    packSuggest: "Local SEO + Reviews cost {combined}. The Lead Pack covers both for {pack}, saving you {save}.",
+    packSwitch: "Switch to Lead Pack",
     total: "Total",
     checkout: "Checkout",
     note: "Taxes calculated at checkout.",
@@ -597,6 +610,16 @@ const en = {
       submit: "Continue to payment →",
       submitWithTotal: "Continue to payment · {total} →",
       hint: "We only use this to set up your order and send your receipt.",
+      reassurance: "Live in 2–3 weeks · Cancel with 30 days' notice",
+      directionsLink: "Rather see 2 free demo directions first? →",
+    },
+    steps: {
+      title: "What happens after checkout",
+      items: [
+        "Send 3–5 phone photos of your business",
+        "Preview your live draft in 3–5 days",
+        "Launch in 2–3 weeks",
+      ],
     },
     selection: {
       title: "Your selection",

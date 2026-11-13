@@ -49,7 +49,10 @@ test('route table: every API route dispatches (no fall-through 404)', async () =
     ['POST', '/api/portal/request-link', { email: 'nobody@example.ca' }, {}, 200],
     ['POST', '/api/portal/exchange', { token: 'bad' }, {}, 401],
     ['POST', '/api/portal/claim', { sessionId: 'cs_x' }, {}, 503],
-    ['GET', '/api/portal/me', null, {}, 401],
+    // Signed-out /me is a clean 200 { authenticated: false } (no console
+    // 401 for a visitor who simply isn't signed in); the signed-in path
+    // is covered in worker-portal.test.ts.
+    ['GET', '/api/portal/me', null, {}, 200],
     ['POST', '/api/portal/onboarding', {}, {}, 401],
     ['POST', '/api/portal/review', {}, {}, 401],
     ['POST', '/api/portal/ads-onboarding', {}, {}, 401],

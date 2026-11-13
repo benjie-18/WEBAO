@@ -49,6 +49,10 @@ const fr = {
     pricing: "Tarifs",
     audit: "Audit",
     contact: "Contact",
+    services: "Services",
+    guides: "Guides",
+    portal: "Portail client",
+    support: "Soutien",
     startSite: "Démarrer mon site →",
     stickyCtaPrice: "89,99 $/mois",
     stickyCta: "Démarrer →",
@@ -100,6 +104,7 @@ const fr = {
       ctaPrimary: "Démarrer mon site",
       auditCta: "Auditez le vôtre",
       priceNote: "89,99 $ <span>CAD/mois</span> · Tout inclus",
+      trustStrip: ["0 $ de frais d'installation", "Bilingue EN/FR", "En ligne en 2 à 3 semaines", "Résiliation avec 30 jours de préavis"],
     },
     proof: {
       eyebrow: "Le catalogue en mouvement",
@@ -511,6 +516,11 @@ const fr = {
       title: "Conditions et détails",
       label: "Lire les conditions et détails →",
     },
+    rescue: {
+      title: "Vous hésitez entre Launch et Grow ?",
+      text: "Dites-nous votre métier et on choisit pour vous, le jour même.",
+      cta: "Dites-nous votre métier →",
+    },
   },
 
   // Tiroir du panier, bascule de fréquence de facturation et récapitulatif de
@@ -523,6 +533,9 @@ const fr = {
     close: "Fermer le panier",
     emptyTitle: "Votre panier est vide.",
     emptyHint: "Ajoutez des articles depuis la page des tarifs.",
+    addedToast: "{name} ajouté au panier",
+    packSuggest: "SEO local + Avis coûtent {combined}. Le Pack leads couvre les deux pour {pack}, soit {save} d'économie.",
+    packSwitch: "Passer au Pack leads",
     total: "Total",
     checkout: "Passer à la caisse",
     note: "Taxes calculées à la caisse.",
@@ -603,6 +616,16 @@ const fr = {
       submit: "Continuer vers le paiement →",
       submitWithTotal: "Continuer vers le paiement · {total} →",
       hint: "Ces informations servent uniquement à préparer votre commande et à vous envoyer votre reçu.",
+      reassurance: "En ligne en 2 à 3 semaines · Résiliation avec 30 jours de préavis",
+      directionsLink: "Voir d'abord 2 directions de démo gratuites ? →",
+    },
+    steps: {
+      title: "Ce qui se passe après le paiement",
+      items: [
+        "Envoyez 3 à 5 photos de votre entreprise prises avec votre téléphone",
+        "Aperçu de votre brouillon en ligne en 3 à 5 jours",
+        "Lancement en 2 à 3 semaines",
+      ],
     },
     selection: {
       title: "Votre sélection",

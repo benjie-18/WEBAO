@@ -773,6 +773,26 @@ html.theming *::after {
   overflow-y: auto;
 }
 .mobile-panel.open { display: block; }
+/* Staggered cascade: each link fades down in turn when the drawer opens
+   (35ms apart, Apple-style spring easing). Skipped under reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .mobile-panel.open > a {
+    animation: drawer-link-in .3s cubic-bezier(.16, 1, .3, 1) both;
+    animation-delay: calc(var(--i, 0) * 35ms);
+  }
+  @keyframes drawer-link-in {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+/* One compact 44px utility bar: theme toggle + language toggle side by
+   side, instead of a THEME label row plus a full-width EN/FR bar. */
+.drawer-utils {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 4px 4px;
+}
 .mobile-panel a {
   display: flex;
   align-items: center;
@@ -1008,6 +1028,12 @@ html.theming *::after {
   [data-theme="dark"] .theme-toggle .tt-moon { transform: none; }
 }
 
+/* Route cross-dissolve: progressive enhancement, ignored by browsers
+   without View Transitions support. */
+@view-transition {
+  navigation: auto;
+}
+
 /* --- Reveal / Motion --- */
 /* Hidden states only apply with JS (html.js, set by the <head> init
    script): without JS the sections render instead of sitting invisible. */
@@ -1166,10 +1192,12 @@ html.js [data-reveal="fade"] { transform: none; }
   :root { --content-pad: 16px; }
 }
 
-/* Index note references: small superscript-style links to the terms page. */
+/* Index note references: a lightweight ⓘ that opens the matching terms
+   note, with the note's title + first line as a hover/focus tooltip. */
 .noteref {
+  position: relative;
   display: inline-block;
-  font-size: 5px;
+  font-size: 11px;
   font-weight: 500;
   line-height: 1;
   vertical-align: super;
@@ -1189,6 +1217,29 @@ html.js [data-reveal="fade"] { transform: none; }
 .noteref:focus-visible {
   outline: 2px solid var(--focus-outline);
   outline-offset: 2px;
+}
+.noteref[data-tip]:hover::after,
+.noteref[data-tip]:focus-visible::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 260px;
+  max-width: 80vw;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0;
+  text-align: left;
+  white-space: normal;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.3);
+  z-index: 50;
+  pointer-events: none;
 }
 /* White focus ring on colored cards (accent ring is invisible there). */
 .pcard .noteref:focus-visible,
@@ -1218,6 +1269,7 @@ html.js [data-reveal="fade"] { transform: none; }
   gap: 8px;
 }
 .billing-toggle {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -1226,7 +1278,28 @@ html.js [data-reveal="fade"] { transform: none; }
   border-radius: 999px;
   background: var(--card-bg);
 }
+/* Sliding thumb: a dark pill that glides under the active option instead
+   of the abrupt background swap. Both options are equal halves, so the
+   thumb is exactly half the track (minus the 4px gap). */
+.billing-thumb {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc((100% - 12px) / 2);
+  border-radius: 999px;
+  background: var(--ink);
+  transition: transform .3s cubic-bezier(.16, 1, .3, 1);
+  pointer-events: none;
+}
+.billing-toggle:has([data-billing-opt="year"].is-active) .billing-thumb {
+  transform: translateX(calc(100% + 4px));
+}
 .billing-opt {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  justify-content: center;
   display: inline-flex;
   align-items: baseline;
   gap: 6px;
@@ -1239,14 +1312,22 @@ html.js [data-reveal="fade"] { transform: none; }
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: color 0.2s ease;
 }
 .billing-opt:hover {
   color: var(--ink);
 }
-.billing-opt.is-active {
-  background: var(--ink);
+.billing-opt.is-active:hover {
   color: var(--paper);
+}
+.billing-opt.is-active {
+  background: transparent;
+  color: var(--paper);
+}
+/* The yearly total ("C$899.90/yr") stays visible only on the Yearly term:
+   under Monthly it is stale clutter next to the monthly price. */
+html[data-billing="month"] .pcard-annual {
+  display: none;
 }
 .billing-opt-note {
   font-family: var(--font-mono);
@@ -1254,6 +1335,24 @@ html.js [data-reveal="fade"] { transform: none; }
   letter-spacing: 0.06em;
   text-transform: uppercase;
   opacity: 0.7;
+}
+/* Risk-reversal trust strip under the hero / pricing CTAs: only claims
+   verified against the site (no setup fee, bilingual, 2–3 week launch,
+   30-day cancellation). "You own your domain" is NOT used — it is not
+   verified against /terms. */
+.trust-strip {
+  list-style: none;
+  padding: 0;
+  margin: 18px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+.trust-strip li::before {
+  content: "✓ ";
+  color: var(--ink);
 }
 .billing-toggle-hint {
   font-size: 10.5px;

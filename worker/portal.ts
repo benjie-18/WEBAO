@@ -293,10 +293,13 @@ export async function handlePortalLogout(req: Request, env: Env): Promise<Respon
 // Portal data
 // ---------------------------------------------------------------------------
 
-/** GET /api/portal/me — the signed-in client's view of their record. */
+/** GET /api/portal/me — the signed-in client's view of their record.
+    Signed-out visits are the normal case (the portal page loads this on
+    boot), so they get a clean 200 { authenticated: false } instead of a
+    401 — no console error for a visitor who simply isn't signed in. */
 export async function handlePortalMe(req: Request, env: Env): Promise<Response> {
   const client = await clientForSession(req, env);
-  if (!client) return err("Not signed in", 401);
+  if (!client) return json({ authenticated: false }, 200);
   const view = portalView(client) as Record<string, unknown>;
   if (await sessionViaAdmin(req, env)) view.viaAdmin = true;
   if (client.stage === "live") {

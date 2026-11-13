@@ -11,8 +11,14 @@ const { locale, note } = Astro.props as Props;
 const t = useTranslations(locale);
 const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
 const label = t.pricing.plans.noteAria.replace("{n}", String(note));
+// The note's own title + first line, for the hover tooltip: the reader
+// sees the substance without opening /terms. Truncated so the tooltip
+// stays readable; the link still goes to the full note.
+const entry = (t.terms.notes as Record<string, any>)[String(note)];
+const firstText = entry?.blocks?.map((b: any) => b.text ?? "").join(" ").trim() ?? "";
+const tip = entry ? `${entry.title}: ${firstText}`.slice(0, 160) : "";
 ---
 
-<a class="noteref" href={`${termsPath}#note-${note}`} aria-label={label}>
-  [{note}]
+<a class="noteref" href={`${termsPath}#note-${note}`} aria-label={label} data-tip={tip}>
+  <span aria-hidden="true">ⓘ</span>
 </a>

@@ -110,12 +110,20 @@ function fixture(options: { french?: boolean; cart?: CartItem[] } = {}) {
         <div class="cart-drawer-scroll">
           <div class="cart-drawer-items" data-cart-items><div class="cart-drawer-empty">Your cart is empty.</div></div>
           <button type="button" class="cart-empty-all" data-cart-empty-all hidden>Empty cart</button>
+          <div class="cart-pack-suggest" data-pack-suggest data-pack-suggest-template="Local SEO + Reviews cost {combined}. The Lead Pack covers both for {pack}, saving you {save}." data-pack-name="Lead Pack" hidden>
+            <p data-pack-suggest-text></p>
+            <button type="button" data-pack-switch>Switch to Lead Pack</button>
+          </div>
         </div>
         <div class="cart-drawer-footer">
           <strong data-cart-total>C$0.00</strong>
           <a href="/checkout" class="cart-drawer-checkout" data-cart-checkout aria-disabled="true">Checkout</a>
         </div>
       </aside>
+      <div class="cart-toast" data-cart-toast data-added-toast="Added {name} to cart" role="status" hidden>
+        <span data-cart-toast-text></span>
+        <button type="button" data-cart-open>Checkout →</button>
+      </div>
       <div class="cart-conflict-overlay" data-cart-conflict-overlay hidden></div>
       <div class="cart-conflict" data-cart-conflict role="dialog" aria-modal="true" hidden
         data-title="That doesn't go together"
@@ -734,5 +742,59 @@ test('a product removed from the catalog is dropped from a stored cart on load',
     ],
   });
   assert.deepEqual(cart().map((i) => i.key), ['grow-month']);
+  window.close();
+});
+
+test('Local SEO + Reviews shows the Lead Pack suggestion with the computed saving', () => {
+  const { doc, cart, click, button, window } = fixture();
+  click(button('localseo'));
+  click(button('review'));
+  const suggest = doc.querySelector<HTMLElement>('[data-pack-suggest]')!;
+  assert.equal(suggest.hidden, false);
+  const text = doc.querySelector<HTMLElement>('[data-pack-suggest-text]')!.textContent ?? '';
+  assert.match(text, /C\$259\.98\/mo/);
+  assert.match(text, /C\$239\.99\/mo/);
+  assert.match(text, /C\$19\.99\/mo/);
+  assert.deepEqual(cart().map((i) => i.key), ['localseo-month', 'review-month']);
+  window.close();
+});
+
+test('switching to the Lead Pack replaces both add-ons on the same term', () => {
+  const { doc, cart, click, button, window } = fixture();
+  click(button('localseo'));
+  click(button('review'));
+  click(doc.querySelector('[data-pack-switch]'));
+  assert.deepEqual(cart().map((i) => i.key), ['lead-pack-month']);
+  assert.equal(doc.querySelector<HTMLElement>('[data-pack-suggest]')!.hidden, true);
+  window.close();
+});
+
+test('the Lead Pack suggestion stays hidden when only one of the pair is in the cart', () => {
+  const { doc, click, button, window } = fixture();
+  click(button('localseo'));
+  assert.equal(doc.querySelector<HTMLElement>('[data-pack-suggest]')!.hidden, true);
+  window.close();
+});
+
+test('adding a product shows the add-to-cart toast with its name', async () => {
+  const { doc, click, button, window } = fixture();
+  click(button('grow'));
+  const toast = doc.querySelector<HTMLElement>('[data-cart-toast]')!;
+  assert.equal(toast.hidden, false);
+  // The visible class lands on the next animation frame (so the CSS
+  // slide-up transition runs); jsdom's rAF needs one tick to fire it.
+  await new Promise((resolve) => window.requestAnimationFrame(resolve));
+  assert.equal(toast.classList.contains('is-visible'), true);
+  assert.equal(doc.querySelector<HTMLElement>('[data-cart-toast-text]')!.textContent, 'Added Grow to cart');
+  window.close();
+});
+
+test('removing a product does not show the add-to-cart toast', () => {
+  const { doc, click, button, window } = fixture();
+  click(button('grow'));
+  const toast = doc.querySelector<HTMLElement>('[data-cart-toast]')!;
+  assert.equal(toast.hidden, false);
+  click(button('grow'));
+  assert.equal(toast.hidden, true);
   window.close();
 });

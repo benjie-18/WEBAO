@@ -115,30 +115,36 @@ const paths = localizedPaths[locale];
       <details class="faq-item" open>
         <summary>{t.contact.info.reply.title}</summary>
         <div class="faq-body">
+          <div class="faq-body-inner">
           <p>{t.contact.info.reply.desc}</p>
           <ul>
             {t.contact.info.reply.bullets.map(b => <li>{b}</li>)}
           </ul>
           <div class="mono" style="margin-top:10px; font-size:11px; color: var(--muted);">{t.contact.info.reply.note}</div>
+          </div>
         </div>
       </details>
       <details class="faq-item">
         <summary>{t.contact.info.send.title}</summary>
         <div class="faq-body">
+          <div class="faq-body-inner">
           <ul>
             {t.contact.info.send.bullets.map(b => <li>{b}</li>)}
           </ul>
           <div class="mono" style="margin-top:10px; font-size:11px; color: var(--muted);">{t.contact.info.send.note}</div>
+          </div>
         </div>
       </details>
       <details class="faq-item">
         <summary>{t.contact.info.plain.title}</summary>
         <div class="faq-body">
+          <div class="faq-body-inner">
           <p>{t.contact.info.plain.desc}</p>
           <div class="mono" style="display:grid; gap:6px; font-size:12.5px;">
             {t.contact.info.plain.lines.map(l => <span>{l}</span>)}
           </div>
           <a href="mailto:contact@webao.ca" class="btn btn--dark btn--sm" style="margin-top:14px;">{t.contact.info.plain.cta}</a>
+          </div>
         </div>
       </details>
     </div>
@@ -265,7 +271,9 @@ const paths = localizedPaths[locale];
   .faq-list { display:grid; gap:12px; max-width: 720px; }
   .faq-item { background: var(--card-bg); border:1px solid var(--line); border-radius:16px; padding: 16px 18px; box-shadow: var(--shadow-sm); }
   .faq-item summary { cursor: pointer; font-size:14.5px; letter-spacing:-0.02em; font-weight:750; }
-  .faq-body { margin-top:10px; }
+  .faq-body { display: grid; grid-template-rows: 0fr; margin-top: 0; opacity: 0; transition: grid-template-rows .25s ease-out, opacity .25s ease-out, margin .25s ease-out; }
+  .faq-body-inner { overflow: hidden; min-height: 0; }
+  .faq-item[open] .faq-body { grid-template-rows: 1fr; margin-top: 10px; opacity: 1; }
   .faq-body p { font-size:13px; color: var(--muted); line-height:1.5; }
   .faq-body ul { list-style:none; padding:0; margin-top:10px; display:grid; gap:6px; font-size:13px; line-height:1.5; color: var(--ink-3); }
   @media (max-width: 900px) { .contact-grid { grid-template-columns: 1fr; } .contact-copy { position: static; } }

@@ -468,6 +468,10 @@ export function selectionSummary(doc: Document, cart: CartItem[]): string {
 function notifyOwner(doc: Document, details: CustomerDetails, cart: CartItem[]): void {
   const win = doc.defaultView;
   if (!win || typeof win.fetch !== "function") return;
+  // The demo that brought the visitor here (?demo=<slug> from the demo
+  // pages' forward link) travels with the order so the owner knows which
+  // style they liked.
+  const demo = new URLSearchParams(win.location.search).get("demo") || "";
   try {
     win
       .fetch("/api/forms/submit", {
@@ -481,6 +485,7 @@ function notifyOwner(doc: Document, details: CustomerDetails, cart: CartItem[]):
             selection: selectionSummary(doc, cart),
             items: cart.map((item) => item.key).join(","),
             billing: readBilling(win),
+            ...(demo ? { demo } : {}),
             page: win.location.pathname,
           },
         }),

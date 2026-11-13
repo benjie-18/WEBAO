@@ -419,7 +419,7 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
             <a href={navLinks.pricing}>{t.nav.pricing}</a>
             <a href={navLinks.audit}>{t.nav.audit}</a>
             <a href={navLinks.contact} class="nav-contact">{t.nav.contact}</a>
-            <a href={navLinks.pricing} class="cta" data-track="cta" data-track-label={t.nav.startSite} data-start-cta>{t.nav.startSite}</a>
+            <a href={navLinks.start} class="cta" data-track="cta" data-track-label={t.nav.startSite} data-start-cta>{t.nav.startSite}</a>
           </nav>
 
           <LanguageSwitcher locale={locale} currentPath={url.pathname} />
@@ -453,23 +453,26 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
     </header>
 
     <div id="mobile-panel" class="mobile-panel" hidden>
-      <a href={navLinks.demos}>{t.nav.demos} <span aria-hidden="true">→</span></a>
-      <a href={navLinks.pricing}>{t.nav.pricing} <span aria-hidden="true">→</span></a>
-      <a href={navLinks.audit}>{t.nav.audit} <span aria-hidden="true">→</span></a>
-      <a href={navLinks.contact}>{t.nav.contact} <span aria-hidden="true">→</span></a>
+      <a href={navLinks.demos} style="--i:0">{t.nav.demos} <span aria-hidden="true">→</span></a>
+      <a href={navLinks.pricing} style="--i:1">{t.nav.pricing} <span aria-hidden="true">→</span></a>
+      <a href={navLinks.audit} style="--i:2">{t.nav.audit} <span aria-hidden="true">→</span></a>
+      <a href={navLinks.contact} style="--i:3">{t.nav.contact} <span aria-hidden="true">→</span></a>
+      <a href={localizedPaths[locale].serviceDesign} style="--i:4">{t.nav.services} <span aria-hidden="true">→</span></a>
+      <a href={localizedPaths[locale].guideIndex} style="--i:5">{t.nav.guides} <span aria-hidden="true">→</span></a>
+      <a href={navLinks.portal} style="--i:6">{t.nav.portal} <span aria-hidden="true">→</span></a>
+      <a href={navLinks.support} style="--i:7">{t.nav.support} <span aria-hidden="true">→</span></a>
       <a
-        href={navLinks.pricing}
+        href={navLinks.start}
         data-track="cta"
         data-track-label={t.nav.startSite}
         data-start-cta
-        style="background: var(--ink); color: var(--paper); border-radius: 12px; padding-inline: 16px; margin-top: 12px; border-bottom:0;"
+        style="--i:8; background: var(--ink); color: var(--paper); border-radius: 12px; padding-inline: 16px; margin-top: 12px; border-bottom:0;"
         >{t.nav.startSite}</a
       >
-      <div style="display:flex; align-items:center; justify-content:space-between; padding: 14px 4px 4px;">
-        <span class="mono" style="font-size:10px; letter-spacing:.14em; color: var(--muted);">{t.nav.theme}</span>
+      <div class="drawer-utils">
         <ThemeToggle locale={locale} />
+        <LanguageSwitcher locale={locale} currentPath={url.pathname} variant="toggle" />
       </div>
-      <LanguageSwitcher locale={locale} currentPath={url.pathname} variant="mobile" />
     </div>
 
     <!-- Full-viewport overlays (kept outside <main> so they are never affected
@@ -677,15 +680,15 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
                 const docH = document.documentElement.scrollHeight - window.innerHeight;
                 if (header) {
                   const dark = document.documentElement.getAttribute('data-theme') === 'dark';
-                  const state = (y > 8 ? 'scrolled' : 'top') + (dark ? '-dark' : '-light');
+                  const state = (y > 24 ? 'scrolled' : 'top') + (dark ? '-dark' : '-light');
                   if (state !== headerState) {
                     headerState = state;
-                    header.style.boxShadow = y > 8
+                    header.style.boxShadow = y > 24
                       ? (dark
-                          ? '0 4px 24px rgba(0,0,0,.45), 0 1px 0 rgba(248,245,239,.07)'
-                          : '0 4px 24px rgba(10,15,28,.06), 0 1px 0 rgba(10,15,28,.04)')
+                          ? '0 8px 32px rgba(0,0,0,.5), 0 1px 0 rgba(248,245,239,.09)'
+                          : '0 8px 32px rgba(10,15,28,.10), 0 1px 0 rgba(10,15,28,.06)')
                       : 'none';
-                    header.style.background = y > 8 ? 'color-mix(in srgb, var(--paper) 96%, transparent)' : 'color-mix(in srgb, var(--paper) 88%, transparent)';
+                    header.style.background = y > 24 ? 'color-mix(in srgb, var(--paper) 96%, transparent)' : 'color-mix(in srgb, var(--paper) 88%, transparent)';
                   }
                 }
                 if (progress) {
@@ -893,7 +896,20 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
         <div class="cart-drawer-items" data-cart-items>
           <div class="cart-drawer-empty">{t.cart.emptyTitle}<br/>{t.cart.emptyHint}</div>
         </div>
+        <!-- Bundle suggestion: Local SEO + Reviews cost more than the Lead
+             Pack that covers both. Filled + shown by cart-ui.ts only when
+             both are in the cart and the Pack isn't. -->
         <button type="button" class="cart-empty-all" data-cart-empty-all hidden>{t.cart.emptyAll}</button>
+        <div
+          class="cart-pack-suggest"
+          data-pack-suggest
+          data-pack-suggest-template={t.cart.packSuggest}
+          data-pack-name={t.pricing.bundles.lead.name}
+          hidden
+        >
+          <p data-pack-suggest-text></p>
+          <button type="button" data-pack-switch>{t.cart.packSwitch}</button>
+        </div>
       </div>
       <div class="cart-drawer-footer">
         <div class="cart-drawer-total">
@@ -914,6 +930,19 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
         <p class="cart-drawer-note">{t.cart.note}</p>
       </div>
     </aside>
+
+    <!-- Add-to-cart toast: brief confirmation after an add, with a direct
+         path to checkout. Hidden until cart-ui.ts shows it. -->
+    <div
+      class="cart-toast"
+      data-cart-toast
+      data-added-toast={t.cart.addedToast}
+      role="status"
+      hidden
+    >
+      <span data-cart-toast-text></span>
+      <button type="button" data-cart-open>{t.cart.checkout} →</button>
+    </div>
 
     <!-- Cart conflict popup. Hidden until cart-ui.ts shows it: one short
          line explaining why a combination can't be bought, plus buttons
@@ -1011,6 +1040,8 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
         position: fixed;
         inset: 0;
         background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
         z-index: 90;
         opacity: 0;
         transition: opacity 0.3s ease;
@@ -1167,6 +1198,69 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
         font-size: 0.8rem;
         color: var(--muted);
         margin: 12px 0 0;
+      }
+      /* Bundle suggestion: a quiet card inside the drawer, not a popup. */
+      .cart-pack-suggest {
+        margin-top: 14px;
+        padding: 14px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--paper-3);
+      }
+      .cart-pack-suggest p {
+        font-size: 13px;
+        line-height: 1.55;
+        color: var(--ink-3);
+      }
+      .cart-pack-suggest button {
+        margin-top: 10px;
+        border: 0;
+        border-radius: 999px;
+        padding: 9px 16px;
+        background: var(--ink);
+        color: var(--paper);
+        font: inherit;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      /* Add-to-cart toast: dark pill, bottom center, above the drawer. */
+      .cart-toast {
+        position: fixed;
+        left: 50%;
+        bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+        transform: translate(-50%, 16px);
+        z-index: 120;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        max-width: calc(100vw - 32px);
+        padding: 12px 12px 12px 18px;
+        border-radius: 999px;
+        background: var(--ink);
+        color: var(--paper);
+        font-size: 13.5px;
+        font-weight: 600;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+        opacity: 0;
+        transition: opacity .25s ease, transform .25s cubic-bezier(.16, 1, .3, 1);
+        pointer-events: none;
+      }
+      .cart-toast.is-visible {
+        opacity: 1;
+        transform: translate(-50%, 0);
+        pointer-events: auto;
+      }
+      .cart-toast button {
+        flex: none;
+        border: 0;
+        border-radius: 999px;
+        padding: 8px 14px;
+        background: var(--paper);
+        color: var(--ink);
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
       }
       /* Empty cart: a quiet muted text link, never a solid red pill. The
          two-click confirm keeps its meaning through red text alone. */

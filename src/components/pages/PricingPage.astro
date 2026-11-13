@@ -36,6 +36,7 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
     -->
     <div class="billing-toggle-wrap">
       <div class="billing-toggle" role="group" aria-label={t.cart.billingLegend} data-billing-toggle>
+        <span class="billing-thumb" aria-hidden="true"></span>
         <button type="button" class="billing-opt is-active" data-billing-opt="month" aria-pressed="true">
           {t.cart.billingMonthly}
         </button>
@@ -50,6 +51,12 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
     <div class="cluster pricing-hero-cta">
       <a href={paths.start} class="btn btn--primary">{t.nav.startSite}</a>
     </div>
+
+    <ul class="trust-strip mono">
+      {t.home.hero.trustStrip.map((item) => (
+        <li>{item}</li>
+      ))}
+    </ul>
   </div>
 </section>
 
@@ -58,6 +65,7 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
   <div class="shell">
     <h2 id="plans-h" class="visually-hidden">{t.pricing.plansTitle}</h2>
     <PlanCards locale={locale} />
+    <p class="terms-link"><a href={termsPath}>{t.pricing.termsCta.label}</a></p>
   </div>
 </section>
 
@@ -66,6 +74,17 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
   <div class="shell ads-wrap">
     <h2 id="ads-h" class="visually-hidden">{t.pricing.adsPack.eyebrow}: {t.pricing.adsPack.name}</h2>
     <AdsPackCard locale={locale} />
+  </div>
+</section>
+
+<!-- Still deciding: one line that turns hesitation into a conversation. -->
+<section class="section rescue-band" aria-labelledby="rescue-h">
+  <div class="shell rescue-band-inner" data-reveal>
+    <div>
+      <h2 id="rescue-h" class="display rescue-band-title">{t.pricing.rescue.title}</h2>
+      <p class="rescue-band-sub">{t.pricing.rescue.text}</p>
+    </div>
+    <a href={paths.contact} class="btn btn--primary btn--lg">{t.pricing.rescue.cta}</a>
   </div>
 </section>
 
@@ -87,6 +106,49 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
 </section>
 
 <style>
+  .terms-link {
+    margin: 20px 0 0;
+    text-align: center;
+    font-size: 13.5px;
+  }
+  .terms-link a {
+    color: var(--muted);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .terms-link a:hover {
+    color: var(--ink);
+  }
+  /* Scroll-end rescue band: a quiet card, not a shout, above the terms. */
+  .rescue-band-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 28px 32px;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: var(--card-bg);
+    box-shadow: var(--shadow-sm);
+  }
+  .rescue-band-title {
+    font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+  .rescue-band-sub {
+    margin-top: 8px;
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  @media (max-width: 760px) {
+    .rescue-band-inner {
+      flex-direction: column;
+      align-items: stretch;
+      padding: 24px 20px;
+    }
+  }
   .pricing-hero-new {
     padding-block: clamp(40px, 7vw, 88px) clamp(8px, 2vw, 16px);
     background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);

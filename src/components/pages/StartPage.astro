@@ -93,6 +93,7 @@ const aiRows = [
         </div>
 
         <div class="billing-toggle sel-billing" role="group" aria-label={t.cart.billingLegend} data-billing-toggle>
+          <span class="billing-thumb" aria-hidden="true"></span>
           <button type="button" class="billing-opt is-active" data-billing-opt="month" aria-pressed="true">
             {t.cart.billingMonthly}
           </button>
@@ -201,6 +202,18 @@ const aiRows = [
         </div>
         <p class="mono sel-note">{t.cart.note}</p>
         <p class="field-error mono sel-error" data-start-selection-error hidden>{t.start.form.errSelection}</p>
+
+        <div class="sel-steps">
+          <p class="mono sel-legend">{t.start.steps.title}</p>
+          <ol class="sel-steps-list">
+            {t.start.steps.items.map((step, i) => (
+              <li>
+                <span class="sel-step-num mono" aria-hidden="true">{i + 1}</span>
+                <span>{step}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
       </aside>
 
       <!-- Details form -->
@@ -232,6 +245,8 @@ const aiRows = [
         <button type="submit" class="btn btn--primary start-submit" data-track="cta" data-track-label={t.start.form.submit}>
           {t.start.form.submit}
         </button>
+        <p class="mono start-reassurance">{t.start.form.reassurance}</p>
+        <a href={paths.contact} class="start-directions">{t.start.form.directionsLink}</a>
         <p class="mono start-hint">{t.start.form.hint}</p>
       </form>
     </div>
@@ -605,6 +620,40 @@ const aiRows = [
   .sel-error {
     margin-top: 10px;
   }
+  /* What happens after checkout: numbered steps in the sidebar. */
+  .sel-steps {
+    margin-top: 18px;
+    border-top: 1px solid var(--line);
+    padding-top: 16px;
+  }
+  .sel-steps-list {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0;
+    display: grid;
+    gap: 10px;
+  }
+  .sel-steps-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-3);
+  }
+  .sel-step-num {
+    flex: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--paper);
+    display: grid;
+    place-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    margin-top: 1px;
+  }
 
   /* Form */
   .start-form label {
@@ -650,6 +699,22 @@ const aiRows = [
     color: var(--muted);
     margin: 0;
     text-align: center;
+  }
+  .start-reassurance {
+    font-size: 11.5px;
+    color: var(--muted);
+    margin: 10px 0 0;
+    text-align: center;
+  }
+  .start-directions {
+    display: block;
+    margin-top: 8px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
   .start-aside {
     margin-top: 24px;
