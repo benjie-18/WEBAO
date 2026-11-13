@@ -52,9 +52,13 @@ test('built site serves static pages and KV-only images through the custom Worke
       assert.match(response.headers.get('content-type') ?? '', /text\/html/);
       assert.match(await response.text(), /<!doctype html>/i);
     }
-    const staticImage = await request('/qc-flag.png');
+    // Static asset through the custom Worker (was /qc-flag.png; the flag
+    // PNGs were deleted in audit #14 when the language switcher went
+    // text-only, so the check now uses the dark-theme logo, a stable
+    // brand asset served from public/).
+    const staticImage = await request('/dark-logo.jpg');
     assert.equal(staticImage.status, 200);
-    assert.deepEqual(Buffer.from(await staticImage.arrayBuffer()), readFileSync('public/qc-flag.png'));
+    assert.deepEqual(Buffer.from(await staticImage.arrayBuffer()), readFileSync('public/dark-logo.jpg'));
     const missing = await request('/demos/not-seeded.jpg');
     assert.equal(missing.status, 404);
     // Proves /api also reaches our entrypoint, rather than the assets-only Worker.
