@@ -276,6 +276,22 @@ export function renderStart(doc: Document): void {
     el.textContent = formatMoney(total, fmt);
   });
 
+  // The submit button carries the live total, so the price sits on the
+  // action itself instead of only in the summary above it.
+  const submitBtn = root.querySelector<HTMLButtonElement>('button[type="submit"]');
+  if (submitBtn) {
+    if (cart.length === 0) {
+      submitBtn.textContent = label(root, "submit", "Continue to payment →");
+    } else {
+      const intervals = new Set(cart.map((item) => item.interval));
+      const suffix = intervals.size === 1 ? intervalSuffix(doc, cart[0].interval) : "";
+      submitBtn.textContent = label(root, "submitWithTotal", "Continue to payment · {total} →").replace(
+        "{total}",
+        `${formatMoney(total, fmt)}${suffix}`,
+      );
+    }
+  }
+
   // Mobile collapsed summary: one line naming the headline item + total.
   const summaryLine = root.querySelector<HTMLElement>("[data-start-summary-line]");
   if (summaryLine) {

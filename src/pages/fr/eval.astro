@@ -21,9 +21,13 @@ import StarMark from "../../components/ui/StarMark.astro";
         <p class="audit-sub">Entrez le site web de votre entreprise. Vous obtenez un score instantané et les premières choses à corriger, gratuitement, sans obligation.</p>
         <form id="audit-form" class="audit-form" novalidate>
           <label class="visually-hidden" for="audit-url">Votre site web</label>
-          <input id="audit-url" name="url" type="text" inputmode="url" autocomplete="url" placeholder="webao.ca" required />
+          <span class="audit-url-wrap">
+            <span class="audit-url-prefix" aria-hidden="true">https://</span>
+            <input id="audit-url" name="url" type="text" inputmode="url" autocomplete="url" placeholder="p. ex., votreentreprise.ca" required />
+          </span>
           <button type="submit" class="btn btn--primary btn--lg">Lancer mon audit gratuit</button>
         </form>
+        <button type="button" class="audit-example mono" data-audit-example>Essayer un exemple : webao.ca</button>
         <p id="audit-status" class="audit-status" aria-live="polite"></p>
         <p class="audit-note">Nous vérifions la vitesse, l'accessibilité, les bonnes pratiques et la visibilité dans les recherches avec un test de vitesse indépendant, ainsi que les bases (HTTPS, affichage mobile, titre et description) quand ce test n'est pas disponible. Nous ne partageons jamais votre résultat.</p>
       </div>
@@ -98,6 +102,19 @@ import StarMark from "../../components/ui/StarMark.astro";
       if (!form || !input || !page || !loading || !fill) return;
       if (form.dataset.auditInit === "1") return;
       form.dataset.auditInit = "1";
+      // The https:// prefix is an adornment, not part of the value: if the
+      // visitor types or pastes a full URL, strip its scheme on input.
+      input.addEventListener("input", function () {
+        var m = input.value.match(/^[a-z][a-z0-9+.-]*:\/\//i);
+        if (m) input.value = input.value.slice(m[0].length);
+      });
+      // Example chip: fills in webao.ca and runs the audit, so a visitor
+      // can see a real report without typing anything.
+      var example = document.querySelector("[data-audit-example]");
+      if (example) example.addEventListener("click", function () {
+        input.value = "webao.ca";
+        form.requestSubmit();
+      });
       // Reset in case the visitor came back here from the result page:
       // the static HTML starts clean, but a restored page may not.
       page.hidden = false;
@@ -281,21 +298,56 @@ import StarMark from "../../components/ui/StarMark.astro";
     .audit-form input {
       flex: 1 1 auto;
       min-width: 0;
-      padding: 14px 18px;
-      border: 1px solid var(--line-strong);
-      border-radius: 999px;
-      background: var(--card-bg);
+      padding: 14px 0 14px 4px;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
       font-size: 1rem;
       font-weight: 500;
       color: var(--ink);
       transition: border-color 0.2s, box-shadow 0.2s;
     }
-    .audit-form input:focus {
-      outline: none;
+    /* The https:// prefix lives in the wrap (the border moved here too),
+       so the input itself is borderless inside it. */
+    .audit-url-wrap {
+      flex: 1 1 auto;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      padding: 0 18px;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      background: var(--card-bg);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .audit-url-wrap:focus-within {
       border-color: var(--ink);
       box-shadow: 0 0 0 3px var(--focus-ring);
     }
+    .audit-url-prefix {
+      flex: none;
+      color: var(--muted);
+      font-size: 1rem;
+      font-weight: 500;
+      user-select: none;
+    }
+    .audit-form input:focus {
+      outline: none;
+    }
     .audit-form input::placeholder { color: var(--muted); }
+    .audit-example {
+      display: block;
+      margin: 12px auto 0;
+      padding: 8px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: border-color .2s, color .2s;
+    }
+    .audit-example:hover { border-color: var(--line-strong); color: var(--ink); }
     @media (max-width: 640px) {
       .audit-form { flex-direction: column; }
       .audit-form .btn { width: 100%; }

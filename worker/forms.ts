@@ -51,6 +51,9 @@ export function notifySpec(submission: FormSubmission): { from: string; fromName
     };
   }
   if (submission.form === "contact") {
+    const trade = (f.trade || "").trim();
+    const city = (f.city || "").trim();
+    const demo = (f.demo || "").trim();
     return {
       from: "contact@webao.ca",
       fromName: "WEBAO Contact",
@@ -60,6 +63,9 @@ export function notifySpec(submission: FormSubmission): { from: string; fromName
         "",
         `From: ${name}${email ? ` <${email}>` : ""}`,
         `Page: ${page}`,
+        ...(trade ? [`Trade: ${trade}`] : []),
+        ...(city ? [`City: ${city}`] : []),
+        ...(demo ? [`Demo style: ${demo}`] : []),
         "",
         message,
       ].join("\n"),

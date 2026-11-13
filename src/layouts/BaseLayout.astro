@@ -418,7 +418,7 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
             <a href={navLinks.demos}>{t.nav.demos}</a>
             <a href={navLinks.pricing}>{t.nav.pricing}</a>
             <a href={navLinks.audit}>{t.nav.audit}</a>
-            <a href={navLinks.contact}>{t.nav.contact}</a>
+            <a href={navLinks.contact} class="nav-contact">{t.nav.contact}</a>
             <a href={navLinks.pricing} class="cta" data-track="cta" data-track-label={t.nav.startSite} data-start-cta>{t.nav.startSite}</a>
           </nav>
 
@@ -965,8 +965,8 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
         border-radius: 50%;
         border: 1px solid var(--line);
         background: transparent;

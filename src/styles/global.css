@@ -728,8 +728,8 @@ html.theming *::after {
 /* Mobile nav */
 .menu-toggle {
   display: none;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   flex: none; /* never shrink: this is the rightmost header item, it must stay tappable */
   border-radius: 10px;
   border: 1px solid var(--line);
@@ -786,13 +786,23 @@ html.theming *::after {
 .mobile-panel a:last-child { border-bottom: 0; }
 
 @media (max-width: 860px) {
-  .nav { display: none; }
-  .menu-toggle { display: inline-flex; }
   /* Bulletproof mobile hide for the header language pill. Specificity 0,3,0
      beats the LanguageSwitcher component's scoped display rule (0,2,0)
      regardless of style order; :not() guards the mobile-panel variant and
      the single-flag toggle, which is the mobile header's switcher. */
   .header-right > .lang-switcher:not(.lang-switcher--mobile):not(.lang-toggle) { display: none; }
+}
+
+/* Tablet (768-860px): the desktop nav stays visible, only Contact hides
+   (the header fits Demos / Pricing / Audit + the Start CTA at this width).
+   The hamburger + mobile panel take over below 768px. */
+@media (max-width: 860px) and (min-width: 768px) {
+  .nav-contact { display: none; }
+}
+
+@media (max-width: 767px) {
+  .nav { display: none; }
+  .menu-toggle { display: inline-flex; }
 }
 
 /* Very narrow phones: drop the redundant domain suffix from the brand lockup
@@ -956,8 +966,8 @@ html.theming *::after {
 /* --- Theme toggle --- */
 .theme-toggle {
   position: relative;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   flex: none;
   border-radius: 12px;
   border: 1px solid var(--line);

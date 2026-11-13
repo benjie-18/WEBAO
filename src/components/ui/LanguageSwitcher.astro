@@ -26,9 +26,7 @@ const isFr = locale === "fr";
       data-lang={isEn ? "fr" : "en"}
       hreflang={isEn ? "fr" : "en"}
     >
-      <span class="lang-flag" aria-hidden="true">
-        <img src={isEn ? "/qc-flag.png" : "/us-flag.png"} alt="" width="20" height="20" loading="eager" decoding="async" class:list={["flag-img", isEn ? "flag-qc" : "flag-us"]} />
-      </span>
+      <span class="lang-toggle-label mono" aria-hidden="true">{isEn ? "FR" : "EN"}</span>
     </a>
   )}
   {variant !== "toggle" && (
@@ -40,9 +38,6 @@ const isFr = locale === "fr";
     data-lang="en"
     hreflang="en"
   >
-    <span class="lang-flag" aria-hidden="true">
-      <img src="/us-flag.png" alt="" width="20" height="20" loading="eager" decoding="async" class="flag-img flag-us" />
-    </span>
     <span class="lang-label">EN</span>
   </a>
   <a
@@ -53,9 +48,6 @@ const isFr = locale === "fr";
     data-lang="fr"
     hreflang="fr"
   >
-    <span class="lang-flag" aria-hidden="true">
-      <img src="/qc-flag.png" alt="" width="20" height="20" loading="eager" decoding="async" class="flag-img flag-qc" />
-    </span>
     <span class="lang-label">FR</span>
   </a>
   )}
@@ -76,7 +68,7 @@ const isFr = locale === "fr";
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 5px 10px 5px 6px;
+    padding: 6px 12px;
     border-radius: 999px;
     font-family: var(--font-mono);
     font-size: 11px;
@@ -96,36 +88,6 @@ const isFr = locale === "fr";
     color: var(--paper);
     box-shadow: 0 2px 8px rgba(10,15,28,.12);
   }
-  .lang-flag {
-    width: 20px;
-    height: 20px;
-    border-radius: 999px;
-    overflow: hidden;
-    display: grid;
-    place-items: center;
-    background: white;
-    border: 1px solid rgba(10,15,28,.08);
-    flex: none;
-  }
-  .lang-option.is-active .lang-flag {
-    border-color: rgba(248,245,239,.2);
-  }
-  .flag-img {
-    width: 20px;
-    height: 20px;
-    display: block;
-    object-fit: cover;
-    border-radius: 999px;
-  }
-  /* Normalize visual size: US flag has more transparent padding (0.855 vs 0.949) */
-  .flag-us {
-    transform: scale(1.11);
-    transform-origin: center;
-  }
-  .flag-qc {
-    transform: scale(1.02);
-  }
-
   /* Mobile variant */
   .lang-switcher--mobile {
     width: 100%;
@@ -140,25 +102,17 @@ const isFr = locale === "fr";
     padding: 10px;
     font-size: 12px;
   }
-  .lang-switcher--mobile .lang-flag {
-    width: 22px;
-    height: 22px;
-  }
-  .lang-switcher--mobile .flag-img {
-    width: 22px;
-    height: 22px;
-  }
 
-  /* Single-flag toggle: mobile header only. Same 40px footprint as the
-     theme toggle beside it, same theme tokens, so the pair reads as one
+  /* Single-language toggle: mobile header only. Text-only (EN/FR): the
+     switcher used to show a US flag for English beside the Québec flag
+     for French, from 1024px and 512px PNGs scaled to 20px. Same 44px
+     footprint as the theme toggle beside it, so the pair reads as one
      set of controls. Hidden on desktop, where the full pill is the
-     switcher. The flag itself is the existing PNG (flags have no
-     theme-aware variant); the button chrome and the white flag badge
-     are what adapt to the theme. */
+     switcher. */
   .lang-switcher.lang-toggle {
     display: none;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     flex: none;
     padding: 0;
     border-radius: 12px;
@@ -196,6 +150,12 @@ const isFr = locale === "fr";
     height: 100%;
     border-radius: 12px;
     text-decoration: none;
+  }
+  .lang-toggle-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--ink);
   }
 
   /* In dark header, adapt */

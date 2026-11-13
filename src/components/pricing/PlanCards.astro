@@ -439,6 +439,10 @@ const planCents = (id: PlanId, interval: "month" | "year"): number => priceCents
       flex-direction: column;
       gap: 18px;
       --overlap: 0px;
+      /* The desktop grid sets align-items: center; in a flex column
+         that sizes cards to their content width (353/372/336px on
+         tablet) instead of stretching them to the track. */
+      align-items: stretch;
     }
     /* All card text centered on mobile (overrides the per-slot
        left/center/right desktop alignment). */

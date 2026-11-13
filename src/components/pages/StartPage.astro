@@ -30,7 +30,7 @@ const fmt = { prefix: t.cart.moneyPrefix, suffix: t.cart.moneySuffix, decimal: t
 const planRows = plans.map((def) => {
   const p = t.pricing.plans[def.id];
   const cents = priceCentsFor(def.id, "month") ?? 0;
-  return { id: def.id, name: p.name, badge: p.badge, price: `${formatMoney(cents, fmt)}${t.cart.suffixMonth}` };
+  return { id: def.id, name: p.name, badge: p.badge, scope: p.features[0], price: `${formatMoney(cents, fmt)}${t.cart.suffixMonth}` };
 });
 /** Ads channels and AI services: monthly only, priced live from the catalog. */
 const adsRows = [
@@ -76,6 +76,8 @@ const aiRows = [
       data-label-group-ai={t.start.selection.groupAi}
       data-summary-empty={t.start.selection.summaryEmpty}
       data-summary-line={t.start.selection.summaryLine}
+      data-submit={t.start.form.submit}
+      data-submit-with-total={t.start.form.submitWithTotal}
     >
       <!-- Selection card (DOM-first so phones read "what am I buying" first) -->
       <aside class="sel-card" aria-labelledby="sel-title" data-reveal style="--d:80ms">
@@ -118,9 +120,12 @@ const aiRows = [
             <label class="plan-opt">
               <input type="radio" name="plan" value={row.id} data-name={row.name} />
               <span class="plan-opt-body">
-                <span class="plan-opt-name">
-                  {row.name}
-                  {row.badge !== "" && <em class="plan-opt-badge mono">{row.badge}</em>}
+                <span class="plan-opt-main">
+                  <span class="plan-opt-name">
+                    {row.name}
+                    {row.badge !== "" && <em class="plan-opt-badge mono">{row.badge}</em>}
+                  </span>
+                  <span class="plan-opt-scope">{row.scope}</span>
                 </span>
                 <span class="plan-opt-price mono" data-plan-price>{row.price}</span>
               </span>
@@ -129,7 +134,9 @@ const aiRows = [
           <label class="plan-opt plan-opt--none">
             <input type="radio" name="plan" value="none" />
             <span class="plan-opt-body">
-              <span class="plan-opt-name">{t.start.selection.noPlanOption}</span>
+              <span class="plan-opt-main">
+                <span class="plan-opt-name">{t.start.selection.noPlanOption}</span>
+              </span>
             </span>
           </label>
         </fieldset>
@@ -140,7 +147,9 @@ const aiRows = [
             <label class="plan-opt">
               <input type="radio" name="ads-channel" value={row.id} data-name={row.name} />
               <span class="plan-opt-body">
-                <span class="plan-opt-name">{row.name}</span>
+                <span class="plan-opt-main">
+                  <span class="plan-opt-name">{row.name}</span>
+                </span>
                 <span class="plan-opt-price mono" data-ads-price>{row.price}</span>
               </span>
             </label>
@@ -148,13 +157,17 @@ const aiRows = [
           <label class="plan-opt plan-opt--none">
             <input type="radio" name="ads-channel" value="none" />
             <span class="plan-opt-body">
-              <span class="plan-opt-name">{t.start.selection.adsNone}</span>
+              <span class="plan-opt-main">
+                <span class="plan-opt-name">{t.start.selection.adsNone}</span>
+              </span>
             </span>
           </label>
           <label class="plan-opt plan-opt--check">
             <input type="checkbox" name="gbp" value="gbp-revamp" data-name={t.pricing.adsPack.gbpName} />
             <span class="plan-opt-body">
-              <span class="plan-opt-name">{t.pricing.adsPack.gbpName}</span>
+              <span class="plan-opt-main">
+                <span class="plan-opt-name">{t.pricing.adsPack.gbpName}</span>
+              </span>
               <span class="plan-opt-price mono" data-gbp-price>{gbpPrice}</span>
             </span>
           </label>
@@ -166,7 +179,9 @@ const aiRows = [
             <label class="plan-opt plan-opt--check">
               <input type="checkbox" name="ai-service" value={row.id} data-name={row.name} />
               <span class="plan-opt-body">
-                <span class="plan-opt-name">{row.name}</span>
+                <span class="plan-opt-main">
+                  <span class="plan-opt-name">{row.name}</span>
+                </span>
                 <span class="plan-opt-price mono" data-ai-price>{row.price}</span>
               </span>
             </label>
@@ -407,15 +422,42 @@ const aiRows = [
     gap: 8px;
   }
   .plan-opt {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 12px 14px;
+    padding: 12px 14px 12px 42px;
     border: 1px solid var(--line);
     border-radius: 12px;
     background: var(--card-bg);
     cursor: pointer;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  /* Custom radio/check circle: the native input stays in the DOM
+     (keyboard + screen reader) but is visually replaced by this ring,
+     which fills with a checkmark on selection. */
+  .plan-opt::before {
+    content: "";
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid var(--line-strong);
+    background: var(--card-bg);
+    display: grid;
+    place-items: center;
+    font-size: 11px;
+    line-height: 1;
+    color: var(--paper);
+    transition: background .2s ease, border-color .2s ease;
+  }
+  .plan-opt:has(input:checked)::before {
+    content: "✓";
+    background: var(--accent);
+    border-color: var(--accent);
   }
   .plan-opt:hover {
     border-color: var(--line-strong);
@@ -429,11 +471,14 @@ const aiRows = [
     outline-offset: 2px;
   }
   .plan-opt input {
-    accent-color: var(--accent);
-    width: 16px;
-    height: 16px;
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
     margin: 0;
-    flex: none;
+    opacity: 0;
   }
   .plan-opt-body {
     flex: 1;
@@ -442,6 +487,18 @@ const aiRows = [
     justify-content: space-between;
     gap: 10px;
     min-width: 0;
+  }
+  .plan-opt-main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  .plan-opt-scope {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.45;
   }
   .plan-opt-name {
     font-weight: 600;
@@ -499,6 +556,7 @@ const aiRows = [
     color: var(--ink-3);
   }
   .sel-extras-list :global(.sel-extra-remove) {
+    position: relative;
     width: 26px;
     height: 26px;
     border-radius: 50%;
@@ -510,6 +568,13 @@ const aiRows = [
     display: inline-flex;
     align-items: center;
     justify-content: center;
+  }
+  /* 44px tap target without changing the 26px visual: the invisible
+     expansion covers the gap to the neighbouring row content. */
+  .sel-extras-list :global(.sel-extra-remove::after) {
+    content: "";
+    position: absolute;
+    inset: -9px;
   }
   .sel-extras-list :global(.sel-extra-remove:hover) {
     color: var(--accent-text);

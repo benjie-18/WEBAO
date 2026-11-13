@@ -1,5 +1,6 @@
 ---
 import { useTranslations, localizedPaths, type Locale } from "../../lib/i18n";
+import { styleFamilies } from "../../lib/demos";
 
 interface Props {
   locale: Locale;
@@ -70,12 +71,28 @@ const paths = localizedPaths[locale];
             <input name="email" type="email" placeholder={t.contact.form.emailPlaceholder} autocomplete="email" required />
           </label>
 
+          <label>{t.contact.form.trade}
+            <input name="trade" placeholder={t.contact.form.tradePlaceholder} autocomplete="off" />
+          </label>
+
+          <label>{t.contact.form.city}
+            <input name="city" placeholder={t.contact.form.cityPlaceholder} autocomplete="address-level2" />
+          </label>
+
+          <label>{t.contact.form.demo}
+            <select name="demo">
+              <option value="" selected>{t.contact.form.demoPlaceholder}</option>
+              {styleFamilies.map((family) => (
+                <option value={t.demos.families[family]}>{t.demos.families[family]}</option>
+              ))}
+            </select>
+          </label>
+
           <label>{t.contact.form.message}
             <textarea name="message" rows="5" placeholder={t.contact.form.messagePlaceholder} required></textarea>
           </label>
 
           <div class="form-meta mono">
-            <label class="check-row"><input type="checkbox" required /> {t.contact.form.consent}</label>
             <span>{t.contact.form.privacy}</span>
           </div>
 
@@ -152,11 +169,12 @@ const paths = localizedPaths[locale];
         const name = String(data.get('name') || '').trim();
         const email = String(data.get('email') || '').trim();
         const message = String(data.get('message') || '').trim();
+        const trade = String(data.get('trade') || '').trim();
+        const city = String(data.get('city') || '').trim();
+        const demo = String(data.get('demo') || '').trim();
         let valid = true;
         if (!name || !email || !message) valid = false;
         if (!EMAIL_RE.test(email)) valid = false;
-        const consent = form.querySelector('.check-row input') as HTMLInputElement | null;
-        if (consent && !consent.checked) valid = false;
         if (!valid) {
           (status as HTMLElement).hidden = false;
           status.textContent = validationError;
@@ -166,8 +184,7 @@ const paths = localizedPaths[locale];
           // instead of leaving focus on the submit button.
           const firstInvalid = (!name ? form.querySelector('[name="name"]') : null)
             ?? (!EMAIL_RE.test(email) ? form.querySelector('[name="email"]') : null)
-            ?? (!message ? form.querySelector('[name="message"]') : null)
-            ?? (consent && !consent.checked ? consent : null);
+            ?? (!message ? form.querySelector('[name="message"]') : null);
           (firstInvalid as HTMLElement | null)?.focus();
           return;
         }
@@ -184,7 +201,7 @@ const paths = localizedPaths[locale];
           keepalive: true,
           body: JSON.stringify({
             form: "contact",
-            fields: { name, email, message, page: location.pathname },
+            fields: { name, email, message, trade, city, demo, page: location.pathname },
           }),
         })
           .then((r) => r.json())
@@ -239,12 +256,10 @@ const paths = localizedPaths[locale];
   .form-head h2 { font-size: 1.35rem; letter-spacing:-0.02em; font-weight:750; line-height:1; }
   .form-head p { margin-top:4px; font-size:11px; color: var(--muted); }
   label { display:grid; gap:6px; font-size:13px; font-weight:600; letter-spacing:-0.01em; color: var(--ink-3); }
-  input, select, textarea { width:100%; padding:10px 12px; border:1px solid var(--line-strong); border-radius:10px; background: var(--paper-3); font-size:14px; font-weight:500; color: var(--ink); transition: border-color .2s, box-shadow .2s; }
+  input, select, textarea { width:100%; min-height: 48px; padding:10px 12px; border:1px solid var(--line-strong); border-radius:10px; background: var(--paper-3); font-size:14px; font-weight:500; color: var(--ink); transition: border-color .2s, box-shadow .2s; }
   textarea { resize: vertical; min-height: 72px; }
   input:focus, select:focus, textarea:focus { outline:none; border-color: var(--ink); box-shadow: 0 0 0 3px var(--focus-ring); }
   .form-meta { display:grid; gap:8px; font-size:11px; color: var(--muted); line-height:1.5; }
-  .check-row { display:flex; gap:8px; align-items:center; font-size:12.5px; color: var(--ink-3); font-weight:500; cursor:pointer; }
-  .check-row input { width:16px; height:16px; accent-color: var(--ink); }
   .form-status { padding:10px 12px; border-radius:10px; border:1px solid var(--line); font-size:12.5px; line-height:1.5; }
   .faq-title { font-size: 1.6rem; letter-spacing:-0.02em; font-weight:750; margin-bottom: 16px; }
   .faq-list { display:grid; gap:12px; max-width: 720px; }

@@ -64,7 +64,7 @@ const compatRows = compatibility.map((c) => ({
 
 ---
 
-<section class="compare-section" aria-labelledby="compare-h">
+<section class="compare-section" aria-labelledby="compare-h" data-plan="grow">
   <div class="shell" data-reveal>
     <p class="eyebrow">{tc.eyebrow}</p>
     <h2 id="compare-h" class="display compare-title">{tc.title}</h2>
@@ -77,6 +77,14 @@ const compatRows = compatibility.map((c) => ({
       <span class="legend-item"><span class="cell-addon cell-addon--static">{tc.cellAddonShort}</span> {tc.legendAddon}</span>
     </p>
 
+    <!-- Mobile plan switcher: one plan column at a time under 640px,
+         so the 35-row table never scrolls sideways on a phone. -->
+    <div class="plan-switcher" role="group" aria-label={tc.title}>
+      {planIds.map((pid) => (
+        <button type="button" class="plan-switcher-btn" data-switch-plan={pid} aria-pressed={pid === "grow" ? "true" : "false"}>{planMeta[pid].name}</button>
+      ))}
+    </div>
+
     <div class="table-scroll">
       <table class="compare-table">
         <caption class="visually-hidden">{tc.title}</caption>
@@ -84,7 +92,7 @@ const compatRows = compatibility.map((c) => ({
           <tr>
             <th scope="col" class="col-feature">{tc.colFeature}</th>
             {planIds.map((pid) => (
-              <th scope="col" class:list={["col-plan", pid === "grow" && "col-grow"]}>
+              <th scope="col" class:list={["col-plan", `col-${pid}`, pid === "grow" && "col-grow"]}>
                 <span class="col-plan-name">{planMeta[pid].name}</span>
                 <span class="col-plan-price mono">{planMeta[pid].monthly}</span>
               </th>
@@ -99,7 +107,7 @@ const compatRows = compatibility.map((c) => ({
                 {row.note > 0 && <NoteRef locale={locale} note={row.note} />}
               </th>
               {planIds.map((pid) => (
-                <td class:list={[pid === "grow" && "col-grow"]}>
+                <td class:list={[`col-${pid}`, pid === "grow" && "col-grow"]}>
                   {row[pid] === "I" && (
                     <span class="cell-check">
                       <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.2l3.2 3.2 5.8-6.8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -128,7 +136,7 @@ const compatRows = compatibility.map((c) => ({
                 {row.note > 0 && <NoteRef locale={locale} note={row.note} />}
               </th>
               {planIds.map((pid) => (
-                <td class:list={[pid === "grow" && "col-grow"]}>
+                <td class:list={[`col-${pid}`, pid === "grow" && "col-grow"]}>
                   {row[pid] === "I" && (
                     <span class="cell-check">
                       <span>{tc.cellIncluded}</span>
@@ -378,9 +386,60 @@ const compatRows = compatibility.map((c) => ({
     }
   }
 
+  /* Mobile plan switcher: one plan column at a time under 640px, so the
+     35-row table never scrolls sideways on a phone. Hidden on desktop. */
+  .plan-switcher { display: none; }
+  @media (max-width: 640px) {
+    .plan-switcher {
+      display: flex;
+      gap: 4px;
+      margin-top: 20px;
+      padding: 4px;
+      background: var(--paper-2);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+    }
+    .plan-switcher-btn {
+      flex: 1;
+      min-height: 44px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--ink);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .plan-switcher-btn[aria-pressed="true"] {
+      background: var(--ink);
+      color: var(--paper);
+    }
+    .compare-table { min-width: 0; }
+    .compare-section[data-plan="launch"] .col-grow,
+    .compare-section[data-plan="launch"] .col-scale,
+    .compare-section[data-plan="grow"] .col-launch,
+    .compare-section[data-plan="grow"] .col-scale,
+    .compare-section[data-plan="scale"] .col-launch,
+    .compare-section[data-plan="scale"] .col-grow { display: none; }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .compare-table tbody tr {
       transition: none;
     }
   }
 </style>
+
+<script>
+  // Mobile plan switcher: show one plan column at a time.
+  const section = document.querySelector('.compare-section');
+  const switchButtons = section ? Array.from(section.querySelectorAll('[data-switch-plan]')) : [];
+  for (const btn of switchButtons) {
+    btn.addEventListener('click', () => {
+      const plan = btn.getAttribute('data-switch-plan');
+      if (!plan || !section) return;
+      section.setAttribute('data-plan', plan);
+      for (const b of switchButtons) b.setAttribute('aria-pressed', String(b === btn));
+    });
+  }
+</script>
