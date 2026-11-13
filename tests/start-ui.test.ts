@@ -48,8 +48,12 @@ function fixture(options: FixtureOptions = {}) {
           data-eyebrow-web="Start your site" data-eyebrow-ads="Start your ads"
           data-eyebrow-ai="Start your AI" data-eyebrow-mixed="Start with WEBAO"
           data-hint-web="Add-ons only" data-hint-service="No website plan selected."
-          data-label-group-web="Website" data-label-group-ads="Ads" data-label-group-ai="AI">
-          <aside>
+          data-label-group-web="Website" data-label-group-ads="Ads" data-label-group-ai="AI"
+          data-summary-empty="Nothing selected yet" data-summary-line="Selected: {name} · {total}">
+          <aside class="sel-card">
+            <button type="button" class="sel-mobile-toggle" data-start-summary-toggle aria-expanded="false">
+              <span data-start-summary-line>Your selection</span><span aria-hidden="true">▾</span>
+            </button>
             <div class="billing-toggle" data-billing-toggle>
               <button type="button" class="billing-opt is-active" data-billing-opt="month" aria-pressed="true">Monthly</button>
               <button type="button" class="billing-opt" data-billing-opt="year" aria-pressed="false">Yearly</button>
@@ -225,6 +229,25 @@ test('an empty cart is seeded with the Grow plan and says so', () => {
   // The layout's drawer sees the same cart.
   assert.equal(doc.querySelector('[data-cart-count]')!.textContent, '1');
   assert.equal(doc.querySelector('[data-cart-checkout]')!.getAttribute('aria-disabled'), 'false');
+  window.close();
+});
+
+test('the mobile summary line follows the selection and the toggle opens the card', () => {
+  const { window, doc, click, choose } = fixture();
+  const line = () => doc.querySelector<HTMLElement>('[data-start-summary-line]')!.textContent;
+  const toggle = doc.querySelector<HTMLElement>('[data-start-summary-toggle]')!;
+  const card = toggle.closest('.sel-card')!;
+  assert.equal(line(), 'Selected: Grow · C$149.99/mo');
+  assert.equal(card.classList.contains('is-open'), false);
+  assert.equal(toggle.getAttribute('aria-expanded'), 'false');
+  click(toggle);
+  assert.equal(card.classList.contains('is-open'), true);
+  assert.equal(toggle.getAttribute('aria-expanded'), 'true');
+  click(toggle);
+  assert.equal(card.classList.contains('is-open'), false);
+  assert.equal(toggle.getAttribute('aria-expanded'), 'false');
+  choose('none');
+  assert.equal(line(), 'Nothing selected yet');
   window.close();
 });
 

@@ -356,6 +356,8 @@ const fr = {
         ],
       },
       noteAria: "Voir la note {n} dans les conditions",
+      choose: "Choisir {name} · {price} →",
+      chosen: "✓ {name} dans votre panier",
     },
     bundles: {
       eyebrow: "Packs",
@@ -624,6 +626,8 @@ const fr = {
     },
     selection: {
       title: "Votre sélection",
+      summaryEmpty: "Rien sélectionné pour l'instant",
+      summaryLine: "Sélection : {name} · {total}",
       change: "Modifier sur la page des tarifs →",
       branchesLabel: "Qu'achetez-vous ?",
       branchWeb: "Site web",

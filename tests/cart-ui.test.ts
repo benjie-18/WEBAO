@@ -72,6 +72,10 @@ function fixture(options: { french?: boolean; cart?: CartItem[] } = {}) {
           data-name="Launch" data-price-cents="8999" data-interval="month" data-type="plan" data-price-year="89990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="grow-month" data-product="grow"
           data-name="Grow" data-price-cents="14999" data-interval="month" data-type="plan" data-price-year="149990"></button>
+        <button type="button" class="pcard-cta" data-cart-btn data-key="grow-month" data-product="grow"
+          data-name="Grow" data-price-cents="14999" data-interval="month" data-type="plan" data-price-year="149990">
+          <span data-cta-label data-month="Choose Grow · C$149.99/mo →" data-year="Choose Grow · C$1,499.90/yr →" data-added="✓ Grow in your cart">Choose Grow · C$149.99/mo →</span>
+        </button>
         <button type="button" class="cart-btn" data-cart-btn data-key="scale-month" data-product="scale"
           data-name="Scale" data-price-cents="34999" data-interval="month" data-type="plan" data-price-year="349990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="quotephoto-month" data-product="quotephoto"
@@ -200,6 +204,22 @@ test('clicking a plan button adds it, again removes it', () => {
   assert.deepEqual(cart(), []);
   assert.equal(button('launch')!.classList.contains('is-added'), false);
   assert.equal(doc.querySelector('[data-cart-count]')!.hidden, true);
+});
+
+test('plan CTA label follows cart state and billing term', () => {
+  const { doc, click, window } = fixture();
+  const cta = doc.querySelector<HTMLElement>('.pcard-cta [data-cta-label]')!;
+  const ctaBtn = doc.querySelector<HTMLElement>('.pcard-cta')!;
+  assert.equal(cta.textContent, 'Choose Grow · C$149.99/mo →');
+  click(ctaBtn);
+  assert.equal(cta.textContent, '✓ Grow in your cart');
+  click(ctaBtn);
+  assert.equal(cta.textContent, 'Choose Grow · C$149.99/mo →');
+  click(doc.querySelector('[data-billing-opt="year"]'));
+  assert.equal(cta.textContent, 'Choose Grow · C$1,499.90/yr →');
+  click(ctaBtn);
+  assert.equal(cta.textContent, '✓ Grow in your cart');
+  window.close();
 });
 
 test('only one plan at a time, add-ons stack, totals add up', () => {

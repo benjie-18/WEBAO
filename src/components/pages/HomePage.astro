@@ -337,7 +337,7 @@ const processId = locale === "fr" ? "processus" : "process";
     <h2 class="display cta-statement-title" set:html={t.home.finalCta.title}></h2>
     <p class="cta-statement-desc">{t.home.finalCta.desc}</p>
     <div class="cluster cta-statement-actions">
-      <a href={paths.pricing} class="btn btn--on-dark btn--crack"><span class="btn--crack-label">{t.home.finalCta.ctaPrimary}</span></a>
+      <a href={paths.pricing} class="btn btn--primary">{t.home.finalCta.ctaPrimary}</a>
       <a href={paths.demos} class="btn btn--ghost-on-dark">{t.home.finalCta.ctaSecondary}</a>
     </div>
     <div class="mono cta-statement-contact">{t.home.finalCta.contact}</div>
@@ -663,20 +663,11 @@ const processId = locale === "fr" ? "processus" : "process";
   .cta-statement-desc { color: rgba(248,245,239,.68); font-size: clamp(1rem, 1.6vw, 1.15rem); line-height: 1.6; max-width: 46ch; text-wrap: pretty; }
   .cta-statement-actions { justify-content: center; }
   .cta-statement-contact { font-size: 11px; letter-spacing: .06em; color: rgba(248,245,239,.46); }
-  .btn--crack { background: var(--btn-primary-bg); color: #fff; }
-  .btn--crack:hover { transform: none; filter: none; box-shadow: 0 14px 34px color-mix(in srgb, var(--accent) 45%, transparent); }
-  .btn--crack .btn--crack-label { position: relative; z-index: 1; color: var(--on-dark-btn-text); }
-  .btn--crack::before, .btn--crack::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--on-dark-btn-bg); transition: transform var(--dur-3) var(--ease-out-expo); }
-  .btn--crack::before { clip-path: polygon(0 0, 100% 0, 100% 44%, 86% 47%, 93% 51%, 78% 54%, 88% 58%, 72% 61%, 0 61%); }
-  .btn--crack::after { clip-path: polygon(0 61%, 72% 61%, 88% 58%, 78% 54%, 93% 51%, 86% 47%, 100% 44%, 100% 100%, 0 100%); }
-  @media (hover: hover) and (pointer: fine) {
-    .btn--crack:hover::before { transform: translateY(-7px); }
-    .btn--crack:hover::after { transform: translateY(7px); }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .btn--crack::before, .btn--crack::after { transition: none; }
-    .btn--crack:hover::before, .btn--crack:hover::after { transform: none; }
-  }
+  /* Final CTA: solid brand crimson with white text in both themes. The
+     old "crack" button split cream over red with dark text across the
+     seam, which failed contrast at rest and on hover. */
+  .cta-statement-actions .btn--primary { background: #d92b22; border-color: #d92b22; }
+  .cta-statement-actions .btn--primary:hover { background: #a81e14; border-color: #a81e14; }
   .section { content-visibility: auto; contain-intrinsic-size: auto 700px; }
   .hero, .marquee { content-visibility: visible; contain-intrinsic-size: auto; }
   /* Dark theme only: --accent (#0043E0) as TEXT on near-black surfaces

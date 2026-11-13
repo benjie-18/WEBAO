@@ -681,6 +681,17 @@ export function syncButtons(doc: Document): void {
     btn.setAttribute("aria-label", added ? remove : add);
     btn.setAttribute("title", added ? remove : add);
     btn.setAttribute("aria-pressed", added ? "true" : "false");
+    // Full-width plan CTA: keep its visible price label in sync with the
+    // cart state and the active billing term.
+    const ctaLabel = btn.querySelector<HTMLElement>("[data-cta-label]");
+    if (ctaLabel) {
+      const d = ctaLabel.dataset;
+      ctaLabel.textContent = added
+        ? (d.added ?? "")
+        : billing === "year"
+          ? (d.year ?? d.month ?? "")
+          : (d.month ?? "");
+    }
   });
 }
 

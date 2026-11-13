@@ -353,6 +353,8 @@ const en = {
         ],
       },
       noteAria: "See note {n} in the terms",
+      choose: "Choose {name} · {price} →",
+      chosen: "✓ {name} in your cart",
     },
     bundles: {
       eyebrow: "Bundles",
@@ -618,6 +620,8 @@ const en = {
     },
     selection: {
       title: "Your selection",
+      summaryEmpty: "Nothing selected yet",
+      summaryLine: "Selected: {name} · {total}",
       change: "Change on the pricing page →",
       branchesLabel: "What are you buying?",
       branchWeb: "Website",

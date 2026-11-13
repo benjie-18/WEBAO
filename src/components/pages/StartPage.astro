@@ -74,9 +74,17 @@ const aiRows = [
       data-label-group-web={t.start.selection.groupWeb}
       data-label-group-ads={t.start.selection.groupAds}
       data-label-group-ai={t.start.selection.groupAi}
+      data-summary-empty={t.start.selection.summaryEmpty}
+      data-summary-line={t.start.selection.summaryLine}
     >
       <!-- Selection card (DOM-first so phones read "what am I buying" first) -->
       <aside class="sel-card" aria-labelledby="sel-title" data-reveal style="--d:80ms">
+        {/* Mobile only: collapsed order summary. The full pickers live
+            below; the toggle opens them. The line is filled by start-ui. */}
+        <button type="button" class="sel-mobile-toggle" data-start-summary-toggle aria-expanded="false">
+          <span class="sel-mobile-toggle-line" data-start-summary-line>{t.start.selection.title}</span>
+          <span class="sel-mobile-toggle-chevron" aria-hidden="true">▾</span>
+        </button>
         <div class="sel-head">
           <h2 id="sel-title" class="sel-title">{t.start.selection.title}</h2>
           <a href={paths.pricing} class="sel-change mono">{t.start.selection.change}</a>
@@ -278,6 +286,10 @@ const aiRows = [
     border-radius: 18px;
     padding: 24px;
   }
+  /* Mobile order summary: collapsed to one line, form first in view.
+     The toggle is hidden on desktop; the pickers show unless the card
+     is closed on a phone. */
+  .sel-mobile-toggle { display: none; }
   @media (max-width: 760px) {
     .start-grid {
       grid-template-columns: minmax(0, 1fr);
@@ -285,6 +297,38 @@ const aiRows = [
     }
     .sel-card {
       position: static;
+    }
+    .sel-card:not(.is-open) {
+      padding: 6px 22px;
+    }
+    .sel-mobile-toggle {
+      display: flex;
+      width: 100%;
+      min-height: 44px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 6px 2px;
+      background: transparent;
+      border: none;
+      font: inherit;
+      color: var(--ink);
+      cursor: pointer;
+      text-align: left;
+    }
+    .sel-mobile-toggle-line {
+      font-weight: 650;
+      font-size: 0.95rem;
+    }
+    .sel-mobile-toggle-chevron {
+      color: var(--muted);
+      transition: transform 0.2s ease;
+    }
+    .sel-card.is-open .sel-mobile-toggle-chevron {
+      transform: rotate(180deg);
+    }
+    .sel-card:not(.is-open) > :not(.sel-mobile-toggle) {
+      display: none;
     }
   }
 

@@ -3,7 +3,6 @@ import { plans, type PlanId } from "../../lib/pricing";
 import { useTranslations, type Locale } from "../../lib/i18n";
 import { priceCentsFor } from "../../lib/cart-catalog";
 import NoteRef from "../NoteRef.astro";
-import CartButton from "./CartButton.astro";
 
 interface Props {
   locale: Locale;
@@ -58,15 +57,6 @@ const planCents = (id: PlanId, interval: "month" | "year"): number => priceCents
                   )}
                   <div class="pcard-name-row">
                     <h3 class="pcard-name">{p.name}</h3>
-                    <CartButton
-                      locale={locale}
-                      product={def.id}
-                      name={p.name}
-                      priceCents={planCents(def.id, "month")}
-                      yearlyPriceCents={planCents(def.id, "year")}
-                      interval="month"
-                      type="plan"
-                    />
                   </div>
                   <p class="pcard-price">
                     {p.monthly}
@@ -100,6 +90,31 @@ const planCents = (id: PlanId, interval: "month" | "year"): number => priceCents
                       );
                     })}
                   </ul>
+                  {/* Full-width plan CTA: same cart toggle as the old top-right
+                      icon, with a price label that follows the billing term
+                      (cart-ui keeps the [data-cta-label] text in sync). */}
+                  <button
+                    type="button"
+                    class="btn btn--primary pcard-cta"
+                    data-cart-btn
+                    data-key={`${def.id}-month`}
+                    data-product={def.id}
+                    data-name={p.name}
+                    data-price-cents={planCents(def.id, "month")}
+                    data-interval="month"
+                    data-type="plan"
+                    data-price-year={planCents(def.id, "year")}
+                    aria-label={t.cart.add.replace("{name}", p.name)}
+                    title={t.cart.add.replace("{name}", p.name)}
+                    aria-pressed="false"
+                  >
+                    <span
+                      data-cta-label
+                      data-month={tp.choose.replace("{name}", p.name).replace("{price}", p.monthly)}
+                      data-year={tp.choose.replace("{name}", p.name).replace("{price}", p.annual.replace(/^\(|\)$/g, ""))}
+                      data-added={tp.chosen.replace("{name}", p.name)}
+                    >{tp.choose.replace("{name}", p.name).replace("{price}", p.monthly)}</span>
+                  </button>
                 </div>
               </article>
             </div>
@@ -302,12 +317,6 @@ const planCents = (id: PlanId, interval: "month" | "year"): number => priceCents
     border-radius: 999px;
     margin-bottom: 14px;
   }
-  .pcard-name-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-  }
   .pcard-name {
     font-family: var(--font-display);
     font-size: clamp(2rem, 3.2vw, 2.8rem);
@@ -376,6 +385,33 @@ const planCents = (id: PlanId, interval: "month" | "year"): number => priceCents
     color: var(--plan-text);
     opacity: 0.9;
     flex: none;
+  }
+
+  /* Full-width plan CTA, pinned to the card bottom so all three cards'
+     CTAs align. Crimson in both themes (the dark theme's primary token
+     is royal blue); the added state reads as selected, not as a second
+     primary button. */
+  .pcard-cta {
+    width: 100%;
+    justify-content: center;
+    margin-top: auto;
+    min-height: 46px;
+    background: #d92b22;
+    border-color: #d92b22;
+  }
+  .pcard-cta:hover {
+    background: #a81e14;
+    border-color: #a81e14;
+  }
+  .pcard-cta.is-added {
+    background: transparent;
+    border-color: var(--pline);
+    color: var(--plan-text);
+    box-shadow: none;
+  }
+  .pcard-cta.is-added:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: var(--pline);
   }
 
   /* Note refs inherit the card's light text. */

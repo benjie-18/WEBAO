@@ -276,6 +276,21 @@ export function renderStart(doc: Document): void {
     el.textContent = formatMoney(total, fmt);
   });
 
+  // Mobile collapsed summary: one line naming the headline item + total.
+  const summaryLine = root.querySelector<HTMLElement>("[data-start-summary-line]");
+  if (summaryLine) {
+    if (cart.length === 0) {
+      summaryLine.textContent = label(root, "summaryEmpty", "Nothing selected yet");
+    } else {
+      const intervals = new Set(cart.map((item) => item.interval));
+      const suffix = intervals.size === 1 ? intervalSuffix(doc, cart[0].interval) : "";
+      const name = plan?.name ?? cart[0].name;
+      summaryLine.textContent = label(root, "summaryLine", "Selected: {name} · {total}")
+        .replace("{name}", name)
+        .replace("{total}", `${formatMoney(total, fmt)}${suffix}`);
+    }
+  }
+
   // A non-empty cart clears the "choose something" error.
   if (cart.length > 0) showSelectionError(root, false);
 }
@@ -561,6 +576,13 @@ export function initStart(doc: Document = document, options: StartOptions = {}):
     // the next-tick re-render below is kept so the plan prices follow even
     // if that broadcast is ever missed.
     doc.addEventListener("click", (event) => {
+      const summaryToggle = closestElement(event.target, "[data-start-summary-toggle]") as HTMLButtonElement | null;
+      if (summaryToggle) {
+        const card = summaryToggle.closest(".sel-card") as HTMLElement | null;
+        const open = card?.classList.toggle("is-open") ?? false;
+        summaryToggle.setAttribute("aria-expanded", open ? "true" : "false");
+        return;
+      }
       const chip = closestElement(event.target, "[data-branch-toggle]") as HTMLButtonElement | null;
       if (chip && rootEl(doc)) {
         toggleBranch(doc, chip.dataset.branchToggle as Branch);
