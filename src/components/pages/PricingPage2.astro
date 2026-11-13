@@ -86,7 +86,7 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
       <h2 class="visually-hidden">{a.name}</h2>
       <section class="section ads-section" aria-label={a.name}>
         <div class="shell ads-wrap">
-          <AdsPackCard locale={locale} />
+          <AdsPackCard locale={locale} showChannelPicker={false} />
         </div>
       </section>
       <div class="shell ads-distinction">

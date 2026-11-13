@@ -65,6 +65,13 @@ const fr = {
     backToTop: "Haut de page",
   },
 
+  ctaBand: {
+    title: "Et maintenant ?",
+    demos: "Parcourir les 47 directions de démo →",
+    audit: "Auditer votre site actuel →",
+    plans: "Voir les tarifs →",
+  },
+
   footer: {
     tagline:
       "Sites web sur mesure, publicité et services IA pour les entreprises partout au Canada. Conçus et suivis par une personne.",
@@ -618,6 +625,7 @@ const fr = {
       hint: "Ces informations servent uniquement à préparer votre commande et à vous envoyer votre reçu.",
       reassurance: "En ligne en 2 à 3 semaines · Résiliation avec 30 jours de préavis",
       directionsLink: "Voir d'abord 2 directions de démo gratuites ? →",
+      launchRange: "Commencez aujourd'hui → en ligne du {a} au {b}",
     },
     steps: {
       title: "Ce qui se passe après le paiement",

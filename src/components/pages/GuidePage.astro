@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { localizedPaths, type Locale, type PageKey } from "../../lib/i18n";
+import { localizedPaths, useTranslations, type Locale, type PageKey } from "../../lib/i18n";
 
 export interface GuideSubsection {
   heading: string;
@@ -18,6 +18,12 @@ export interface GuideSection {
   items?: string[];
   subsections?: GuideSubsection[];
   links?: GuideLink[];
+}
+
+export interface GuideChecklist {
+  heading: string;
+  note?: string;
+  items: string[];
 }
 
 export interface GuideFaq {
@@ -41,6 +47,7 @@ interface Props {
   intro: string;
   answerLine?: string;
   sections: GuideSection[];
+  checklist?: GuideChecklist;
   faqs?: GuideFaq[];
   faqHeading?: string;
   siblingsHeading: string;
@@ -60,6 +67,7 @@ const {
   intro,
   answerLine,
   sections,
+  checklist,
   faqs,
   faqHeading,
   siblingsHeading,
@@ -70,6 +78,7 @@ const {
 } = Astro.props as Props;
 
 const paths = localizedPaths[locale];
+const t = useTranslations(locale);
 const faqSchema = faqs && {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -127,6 +136,41 @@ const faqSchema = faqs && {
     </div>
   </section>
 
+  {checklist && (
+  <section class="section section--tight" style="background: var(--paper-2); border-top:1px solid var(--line);">
+    <div class="shell" style="max-width: 860px;">
+      <div class="info-card" data-checklist data-checklist-key={pageKey}>
+        <h2>{checklist.heading}</h2>
+        {checklist.note && <p>{checklist.note}</p>}
+        <p class="mono" data-checklist-count data-template={locale === "fr" ? "{done} sur {total} fait" : "{done} of {total} done"}></p>
+        <ul class="checklist-items" style="list-style:none; padding:0; margin:16px 0 0; display:grid; gap:12px;">
+          {checklist.items.map((item, i) => (
+            <li>
+              <label style="display:flex; gap:10px; align-items:flex-start; cursor:pointer;">
+                <input type="checkbox" data-checklist-item={String(i)} style="margin-top:3px; width:18px; height:18px; flex:none; accent-color: var(--accent);" />
+                <span>{item}</span>
+              </label>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+  )}
+
+  <section class="section section--tight">
+    <div class="shell" style="max-width: 860px;">
+      <div class="info-card">
+        <h2>{t.ctaBand.title}</h2>
+        <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:16px;">
+          <a href={paths.demos} class="btn btn--primary">{t.ctaBand.demos}</a>
+          <a href={paths.audit} class="btn btn--ghost">{t.ctaBand.audit}</a>
+          <a href={paths.pricing} class="btn btn--ghost">{t.ctaBand.plans}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   {faqs && faqHeading && (
   <section class="section section--tight" style="background: var(--paper-2); border-top:1px solid var(--line);">
     <div class="shell" style="max-width: 860px;">
@@ -161,6 +205,43 @@ const faqSchema = faqs && {
     </div>
   </section>
 
+  <script>
+    // Interactive readiness checklist (#47): checkboxes + a live "X of Y
+    // done" counter, persisted per guide in localStorage.
+    document.querySelectorAll("[data-checklist]").forEach((root) => {
+      const key = "webao_checklist_" + (root.getAttribute("data-checklist-key") || "");
+      const boxes = Array.from(root.querySelectorAll("[data-checklist-item]")) as HTMLInputElement[];
+      const count = root.querySelector("[data-checklist-count]") as HTMLElement | null;
+      let saved: Record<string, boolean> = {};
+      try {
+        saved = JSON.parse(window.localStorage.getItem(key) || "{}") as Record<string, boolean>;
+      } catch {
+        saved = {};
+      }
+      const render = () => {
+        const done = boxes.filter((b) => b.checked).length;
+        if (count) {
+          count.textContent = (count.getAttribute("data-template") || "{done} of {total} done")
+            .replace("{done}", String(done))
+            .replace("{total}", String(boxes.length));
+        }
+      };
+      boxes.forEach((box, i) => {
+        box.checked = saved[String(i)] === true;
+        box.addEventListener("change", () => {
+          saved[String(i)] = box.checked;
+          try {
+            window.localStorage.setItem(key, JSON.stringify(saved));
+          } catch {
+            /* storage unavailable: the counter still updates */
+          }
+          render();
+        });
+      });
+      render();
+    });
+  </script>
+
   <style>
     .info-card { background: var(--card-bg); border:1px solid var(--line); border-radius:16px; padding:20px 22px; box-shadow: var(--shadow-sm); }
     .info-card h2 { font-size:1.15rem; letter-spacing:-0.01em; margin:0 0 10px; }
@@ -169,6 +250,7 @@ const faqSchema = faqs && {
     .info-card p strong { color: var(--ink); }
     .info-card ul { list-style:none; padding:0; margin:10px 0 0; display:grid; gap:6px; font-size:14px; line-height:1.6; color: var(--ink-3); }
     .info-card ul li::before { content: "· "; color: var(--accent-text); font-weight:700; }
+    .info-card ul.checklist-items li::before { content: none; }
     .faq-grid { display:grid; gap: 16px; }
     @media (min-width: 720px) { .faq-grid { grid-template-columns: 1fr 1fr; } }
   </style>

@@ -14,9 +14,17 @@ import CartButton from "./CartButton.astro";
 
 interface Props {
   locale: Locale;
+  /* Live /pricing shows the three channel cards above this card, and they
+     are the channel selector there (synced both ways by PricingPage2's
+     script). Showing this card's own radio picker too would present the
+     same choice twice, so the Ads panel hides it; the radios stay in the
+     DOM (hidden) so both scripts keep working. Everywhere else (the
+     previous /pricing2 page) the picker is the only selector, so it stays
+     visible by default. */
+  showChannelPicker?: boolean;
 }
 
-const { locale } = Astro.props as Props;
+const { locale, showChannelPicker = true } = Astro.props as Props;
 const t = useTranslations(locale);
 const a = t.pricing.adsPack;
 
@@ -66,7 +74,7 @@ const selected = variants[0];
   </div>
   <p class="bc-price" data-ads-price>{selected.price}</p>
 
-  <fieldset class="bc-channels">
+  <fieldset class="bc-channels" hidden={!showChannelPicker}>
     <legend class="bc-label">{a.channelLabel}</legend>
     {
       variants.map((v) => (

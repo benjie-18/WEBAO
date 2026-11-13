@@ -60,18 +60,6 @@ const locale = "fr" as const;
       ],
     },
     {
-      heading: "Une courte liste de vérification pour le site web d'une petite entreprise",
-      items: [
-        "Personne responsable des renseignements personnels nommée, avec titre et coordonnées publiés sur le site.",
-        "Politique de confidentialité publiée sur le site, en termes simples et clairs, couvrant ce qui est recueilli et pourquoi.",
-        "Formulaires de contact et d'inscription qui demandent un consentement pour une fin précise, sans cases de suivi déjà cochées.",
-        "Suivi et outils d'analyse désactivés par défaut jusqu'à l'obtention du consentement.",
-        "Un plan pour la durée de conservation de chaque type de données, et pour leur destruction lorsqu'elles ne sont plus nécessaires.",
-        "Un registre des incidents de confidentialité, et un plan pour aviser la CAI et les personnes concernées si un incident présente un risque de préjudice sérieux.",
-        "Un processus pour traiter les demandes d'accès, de rectification, de retrait et de déindexation.",
-      ],
-    },
-    {
       heading: "Ce que cette page n'affirme pas",
       body: "Cette page n'indique aucun montant d'amende, et elle ne donne aucune durée de conservation en années ni aucune durée de conservation du registre des incidents. Les chiffres d'amendes trouvés pendant la rédaction étaient en contradiction entre les sources secondaires, et aucun chiffre n'a été vérifié à partir d'une source primaire ou officielle, donc aucun chiffre n'est donné. Il en va de même pour tout délai précis : aucun n'est indiqué ici.",
     },
@@ -93,6 +81,19 @@ const locale = "fr" as const;
       ],
     },
   ]}
+  checklist={{
+    heading: "Une courte liste de vérification pour le site web d'une petite entreprise",
+    note: "Cochez ce que votre site fait déjà. Renseignements généraux, pas un conseil juridique.",
+    items: [
+      "Personne responsable des renseignements personnels nommée, avec titre et coordonnées publiés sur le site.",
+      "Politique de confidentialité publiée sur le site, en termes simples et clairs, couvrant ce qui est recueilli et pourquoi.",
+      "Formulaires de contact et d'inscription qui demandent un consentement pour une fin précise, sans cases de suivi déjà cochées.",
+      "Suivi et outils d'analyse désactivés par défaut jusqu'à l'obtention du consentement.",
+      "Un plan pour la durée de conservation de chaque type de données, et pour leur destruction lorsqu'elles ne sont plus nécessaires.",
+      "Un registre des incidents de confidentialité, et un plan pour aviser la CAI et les personnes concernées si un incident présente un risque de préjudice sérieux.",
+      "Un processus pour traiter les demandes d'accès, de rectification, de retrait et de déindexation.",
+    ],
+  }}
   faqs={[
     {
       q: "Un simple formulaire de contact suffit-il pour entrer dans le champ de la loi 25?",

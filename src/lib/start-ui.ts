@@ -641,4 +641,24 @@ export function initStart(doc: Document = document, options: StartOptions = {}):
   }
   setupPage(doc);
   renderStart(doc);
+  renderLaunchDate(doc);
+}
+
+// Launch-date estimator (#51): turn the static "Live in 2–3 weeks" into a
+// concrete date range, computed from today so it never goes stale. The
+// template lives on the element (data-template with {a}/{b} placeholders);
+// without JS the line stays hidden and the static reassurance stands.
+export function renderLaunchDate(doc: Document): void {
+  const el = doc.querySelector("[data-launch-date]") as HTMLElement | null;
+  if (!el) return;
+  const template = el.dataset.template ?? "";
+  if (!template) return;
+  const day = 24 * 60 * 60 * 1000;
+  const now = new Date();
+  const locale = doc.documentElement.lang === "fr" ? "fr-CA" : "en-CA";
+  const fmt = (d: Date) => d.toLocaleDateString(locale, { month: "short", day: "numeric" });
+  el.textContent = template
+    .replace("{a}", fmt(new Date(now.getTime() + 14 * day)))
+    .replace("{b}", fmt(new Date(now.getTime() + 21 * day)));
+  el.hidden = false;
 }

@@ -246,6 +246,7 @@ const aiRows = [
           {t.start.form.submit}
         </button>
         <p class="mono start-reassurance">{t.start.form.reassurance}</p>
+        <p class="mono start-launch-date" data-launch-date data-template={t.start.form.launchRange} hidden></p>
         <a href={paths.contact} class="start-directions">{t.start.form.directionsLink}</a>
         <p class="mono start-hint">{t.start.form.hint}</p>
       </form>
@@ -704,6 +705,12 @@ const aiRows = [
     font-size: 11.5px;
     color: var(--muted);
     margin: 10px 0 0;
+    text-align: center;
+  }
+  .start-launch-date {
+    font-size: 11.5px;
+    color: var(--muted);
+    margin: 6px 0 0;
     text-align: center;
   }
   .start-directions {

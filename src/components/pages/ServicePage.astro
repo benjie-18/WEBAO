@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { localizedPaths, type Locale, type PageKey } from "../../lib/i18n";
+import { localizedPaths, useTranslations, type Locale, type PageKey } from "../../lib/i18n";
 
 export interface ServiceSection {
   heading: string;
@@ -59,6 +59,7 @@ const {
 } = Astro.props as Props;
 
 const paths = localizedPaths[locale];
+const t = useTranslations(locale);
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -102,6 +103,19 @@ const faqSchema = {
             )}
           </div>
         ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="shell" style="max-width: 860px;">
+      <div class="info-card">
+        <h2>{t.ctaBand.title}</h2>
+        <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:16px;">
+          <a href={paths.demos} class="btn btn--primary">{t.ctaBand.demos}</a>
+          <a href={paths.audit} class="btn btn--ghost">{t.ctaBand.audit}</a>
+          <a href={paths.pricing} class="btn btn--ghost">{t.ctaBand.plans}</a>
+        </div>
       </div>
     </div>
   </section>

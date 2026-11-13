@@ -32,6 +32,35 @@ import StarMark from "../components/ui/StarMark.astro";
       </div>
     </section>
 
+    <section class="audit-sample" aria-labelledby="audit-sample-h">
+      <div class="shell audit-sample-inner">
+        <p class="eyebrow">Sample report</p>
+        <h2 id="audit-sample-h" class="display audit-sample-title">What a report looks like</h2>
+        <p class="audit-sample-note">Example scores for an example site, not a real audit.</p>
+        <div class="audit-sample-scores">
+          <div class="audit-sample-score">
+            <span class="audit-sample-label">Speed</span>
+            <strong class="audit-sample-value">52/100</strong>
+            <span class="audit-sample-bar"><i style="width:52%"></i></span>
+          </div>
+          <div class="audit-sample-score">
+            <span class="audit-sample-label">Mobile</span>
+            <strong class="audit-sample-value">61/100</strong>
+            <span class="audit-sample-bar"><i style="width:61%"></i></span>
+          </div>
+          <div class="audit-sample-score">
+            <span class="audit-sample-label">Search</span>
+            <strong class="audit-sample-value">48/100</strong>
+            <span class="audit-sample-bar"><i style="width:48%"></i></span>
+          </div>
+        </div>
+        <ul class="audit-sample-findings">
+          <li>French version missing (Bill 96)</li>
+          <li>Weak mobile call to action</li>
+        </ul>
+      </div>
+    </section>
+
     <section class="audit-band grain" aria-labelledby="audit-band-h">
       <div class="shell audit-band-inner">
         <div>
@@ -364,6 +393,25 @@ import StarMark from "../components/ui/StarMark.astro";
       font-size: 0.9rem;
       line-height: 1.55;
     }
+    .audit-sample {
+      background: var(--paper-2);
+      border-top: 1px solid var(--line);
+      padding: 56px 0;
+    }
+    .audit-sample-inner { max-width: 640px; }
+    .audit-sample-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      line-height: .95;
+      margin-top: 12px;
+    }
+    .audit-sample-note { color: var(--muted); font-size: 0.9rem; margin-top: 10px; }
+    .audit-sample-scores { display: grid; gap: 14px; margin-top: 24px; }
+    .audit-sample-score { display: grid; grid-template-columns: 72px 64px 1fr; align-items: center; gap: 12px; }
+    .audit-sample-label { font-size: 0.9rem; }
+    .audit-sample-value { font-size: 0.95rem; }
+    .audit-sample-bar { display: block; height: 8px; border-radius: 999px; background: var(--line); overflow: hidden; }
+    .audit-sample-bar i { display: block; height: 100%; background: var(--accent); border-radius: 999px; }
+    .audit-sample-findings { margin: 20px 0 0; padding-left: 20px; color: var(--muted); font-size: 0.95rem; line-height: 1.6; }
     .audit-band {
       background: var(--section-dark-bg);
       color: var(--section-dark-text);

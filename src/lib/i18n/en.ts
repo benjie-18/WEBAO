@@ -62,6 +62,13 @@ const en = {
     backToTop: "Back to top",
   },
 
+  ctaBand: {
+    title: "What next?",
+    demos: "Browse 47 demo directions →",
+    audit: "Audit your current site →",
+    plans: "See plans →",
+  },
+
   footer: {
     tagline:
       "Custom websites, advertising and AI services for businesses across Canada. Built and looked after by a person.",
@@ -612,6 +619,7 @@ const en = {
       hint: "We only use this to set up your order and send your receipt.",
       reassurance: "Live in 2–3 weeks · Cancel with 30 days' notice",
       directionsLink: "Rather see 2 free demo directions first? →",
+      launchRange: "Start today → live {a} to {b}",
     },
     steps: {
       title: "What happens after checkout",
