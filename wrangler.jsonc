@@ -28,7 +28,7 @@
   "env": {
     "test": {
       "name": "webao-test",
-      "routes": [{ "pattern": "test.webao.ca/*", "zone_name": "webao.ca" }],
+      // Route test.webao.ca/* -> webao-test is attached in the Cloudflare dashboard (like prod), NOT here: the deploy token cannot create zone routes.
       "vars": { "TEST_MODE": "1" },
       "kv_namespaces": [
         {
