@@ -88,27 +88,6 @@ const fr = {
     fictionalNote: "Toutes les entreprises présentées en démo sur ce site sont fictives.",
   },
 
-  intro: {
-    ariaLabel: "Introduction WEBAO",
-    captionBrand: "WEBAO",
-    captionLeft: "WEBAO · WEBAO.CA",
-    captionRight: "STUDIO · MONTRÉAL",
-    prompt: {
-      pointer: "Cliquez pour entrer",
-      touch: "Touchez pour entrer",
-      key: "Entrée",
-    },
-    surface: "◇ SURFACE 01",
-    enter: "◆ ENTRER",
-    tap: "◆ TOUCHER",
-    static: {
-      sub: "Sites web sur mesure pour PME · 89,99 $ CAD / mois",
-      button: "Entrer sur le site",
-      live: "Intro (mouvement réduit). Appuyez sur Entrée pour ouvrir le site.",
-      liveTouch: "Intro : {action} pour entrer.",
-    },
-  },
-
   home: {
     hero: {
       title1: "Votre",

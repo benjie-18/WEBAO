@@ -221,12 +221,8 @@
     }
 
     function updateOff() {
-      var introPlaying =
-        html.classList.contains("wi-run") &&
-        !html.classList.contains("wi-static") &&
-        !html.classList.contains("wi-released");
       var journeyVisible = !!document.querySelector(".journey-cursor.is-visible");
-      html.classList.toggle("cc-off", introPlaying || journeyVisible);
+      html.classList.toggle("cc-off", journeyVisible);
     }
 
     function onMove(e) {

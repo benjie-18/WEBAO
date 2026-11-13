@@ -20,8 +20,8 @@ const processId = locale === "fr" ? "processus" : "process";
 <!-- HERO: asymmetric editorial. Copy on cols 1-7, a vertical fracture
      divider, and the live site fragment on cols 9-12 bleeding off the right
      edge. Exactly 4 text elements: title, lead, primary CTA, price note.
-     Entrance is gated on data-hero-enter, fired by the intro handoff
-     (or immediately when no intro plays). -->
+     Entrance is gated on data-hero-enter, fired by the entrance script
+     on the next frames. -->
 <section class="hero grain" id="hero">
   <!-- No-JS fallback: the lead and CTAs start at opacity 0 and only the
        entrance script reveals them, so without JS they would stay invisible
@@ -348,7 +348,7 @@ const processId = locale === "fr" ? "processus" : "process";
   /* --- HERO: asymmetric editorial ---
      12-track grid: copy 1-7, 14px vertical fracture divider, visual 9-12
      bleeding off the right viewport edge. Entrance gated on
-     [data-hero-enter="true"] (intro handoff or immediate). */
+     [data-hero-enter="true"] (entrance script). */
   .hero { padding-block: clamp(24px, 4vw, 56px) clamp(32px, 5vw, 72px); background: linear-gradient(180deg, var(--paper) 0%, var(--paper-3) 100%); overflow: clip; position: relative; isolation: isolate; }
   .hero::before { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0; background: radial-gradient(700px 400px at 18% 18%, var(--hero-glow-a) 0%, transparent 62%), radial-gradient(600px 600px at 92% 88%, var(--hero-glow-b) 0%, transparent 58%); }
   .hero-grid { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)) 14px repeat(4, minmax(0, 1fr)); gap: clamp(20px, 3vw, 40px); align-items: center; }
@@ -360,7 +360,11 @@ const processId = locale === "fr" ? "processus" : "process";
      light, near-white in dark); accent stars use var(--accent-mid)
      (brand orange in light, brand blue in dark). Desktop only: hidden
      at 960px and below, where the hero stacks to one column. */
-  .hero-stars { grid-column: 9 / 13; position: relative; min-height: 420px; align-self: center; opacity: 0; }
+  .hero-stars { grid-column: 9 / 13; position: relative; min-height: 420px; align-self: center; }
+  /* Hero entrance is progressive enhancement: the hidden state only
+     applies when JS runs (html.js, set by the <head> init script), so a
+     no-JS or failed-JS load shows the hero instead of a blank page. */
+  html.js .hero-stars { opacity: 0; }
   .hero-star { position: absolute; display: block; }
   .hero-star svg { width: 100%; height: 100%; display: block; overflow: visible; }
   .hero-star--ink { color: var(--ink); opacity: .9; }
@@ -369,15 +373,18 @@ const processId = locale === "fr" ? "processus" : "process";
   .hero-visual { grid-column: 9 / 13; min-width: 0; position: relative; margin-right: calc((min(var(--content-max), 100vw - var(--content-pad) * 2) - 100vw) / 2); }
   .hero-title { font-size: clamp(2.9rem, 7.4vw, 6.4rem); line-height: .88; letter-spacing: -0.04em; text-wrap: balance; }
   .hero-title .hero-italic { font-style: italic; font-weight: 400; color: var(--accent); position: relative; }
-  .hero-title .w { display: inline-block; opacity: 0; transform: translateY(.55em); will-change: transform, opacity; }
+  .hero-title .w { display: inline-block; will-change: transform, opacity; }
+  html.js .hero-title .w { opacity: 0; transform: translateY(.55em); }
   [data-hero-enter="true"] .hero-title .w { animation: hero-word-in var(--dur-4) var(--ease-out-expo) forwards; animation-delay: calc(var(--wi, 0) * var(--stagger)); }
   @keyframes hero-word-in { to { opacity: 1; transform: translateY(0); } }
   .hero-title .hero-italic::after { content: ""; position: absolute; left: -2%; right: -2%; bottom: 0.08em; height: 0.34em; background: var(--accent-underline); z-index: -1; transform: scaleX(0); transform-origin: left; border-radius: 2px; }
   [data-hero-enter="true"] .hero-title .hero-italic::after { transform: scaleX(1); transition: transform var(--dur-5) var(--ease-out-expo) calc(6 * var(--stagger)); }
-  .hero-lead { margin-top: 20px; max-width: 46ch; font-size: clamp(1rem, 1.5vw, 1.08rem); opacity: 0; }
-  .hero-actions { margin-top: 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; opacity: 0; }
+  .hero-lead { margin-top: 20px; max-width: 46ch; font-size: clamp(1rem, 1.5vw, 1.08rem); }
+  html.js .hero-lead { opacity: 0; }
+  .hero-actions { margin-top: 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+  html.js .hero-actions { opacity: 0; }
   .hero-note { width: 100%; margin-top: 4px; font-size: 11px; color: var(--muted); letter-spacing: .04em; }
-  .hero-visual { opacity: 0; }
+  html.js .hero-visual { opacity: 0; }
   [data-hero-enter="true"] .hero-lead, [data-hero-enter="true"] .hero-actions { animation: hero-rise var(--dur-4) var(--ease-out-expo) forwards; }
   [data-hero-enter="true"] .hero-lead { animation-delay: calc(5 * var(--stagger)); }
   [data-hero-enter="true"] .hero-actions { animation-delay: calc(7 * var(--stagger)); }
@@ -427,6 +434,8 @@ const processId = locale === "fr" ? "processus" : "process";
   @media (max-width: 560px) { .hero { padding-block: 12px 16px; } .hero-title { font-size: clamp(2.6rem, 12.5vw, 4.2rem); } .float-card { position: relative; inset:auto !important; transform: none !important; margin-top:12px; width:auto; } .visual-stack { transform: none; } .preview-meta { flex-direction: column; align-items: flex-start; } }
   .section-head { max-width: 60ch; }
   .process { --journey-accent: var(--btn-primary-bg); }
+  /* Anchor jumps (/#process) must clear the sticky header. */
+  #process, #processus { scroll-margin-top: 96px; }
   /* Pinned scrub stage: the wrap provides scroll distance, the stage sticks */
   .pin-wrap { height: 280vh; position: relative; }
   .pin-stage {
@@ -897,9 +906,8 @@ const processId = locale === "fr" ? "processus" : "process";
   }
 
   /* Hero entrance: word-split title reveal gated on data-hero-enter.
-     The intro signals completion by adding .wi-released to <html>;
-     we watch for it so the hero choreography hands off seamlessly.
-     No intro (or already released) -> enter on the next frames. */
+     No intro gate anymore — the hero enters on the next frames once the
+     words are split (or immediately under reduced motion). */
   function splitWords(root: HTMLElement, lang: string): void {
     const segmenter = new Intl.Segmenter(lang, { granularity: 'word' });
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
@@ -957,16 +965,7 @@ const processId = locale === "fr" ? "processus" : "process";
 
       if (prefersReduced) { enter(); return; }
 
-      const html = document.documentElement;
-      if (html.classList.contains('wi-run') && !html.classList.contains('wi-released')) {
-        const mo = new MutationObserver(() => {
-          if (html.classList.contains('wi-released')) { mo.disconnect(); enter(); }
-        });
-        mo.observe(html, { attributes: true, attributeFilter: ['class'] });
-        window.setTimeout(() => { mo.disconnect(); enter(); }, 9000);
-      } else {
-        requestAnimationFrame(() => requestAnimationFrame(enter));
-      }
+      requestAnimationFrame(() => requestAnimationFrame(enter));
     };
 
     // Wait for fonts before splitting words: splitting with fallback fonts

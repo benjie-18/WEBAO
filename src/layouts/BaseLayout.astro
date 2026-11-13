@@ -148,10 +148,13 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
     <meta name="color-scheme" content="light dark" />
 
     <!-- Theme init: runs before first paint to avoid a flash of the wrong
-         theme. Stored choice wins; otherwise the OS preference is respected. -->
+         theme. Stored choice wins; otherwise the OS preference is respected.
+         Also marks the document as JS-run (html.js): entrance/reveal hidden
+         states only apply with JS, so a no-JS load shows the content. -->
     <script is:inline>
       (function () {
         try {
+          document.documentElement.classList.add("js");
           var stored = null;
           try { stored = localStorage.getItem("webao.theme"); } catch (e) {}
           var theme = stored === "dark" || stored === "light"
@@ -470,7 +473,7 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
     </div>
 
     <!-- Full-viewport overlays (kept outside <main> so they are never affected
-         by the landing page's own transforms). Used by the landing page intro. -->
+         by the landing page's own transforms). -->
     <slot name="overlay" />
 
     <main id="main">
@@ -606,6 +609,15 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
         // Reveal on scroll, respects prefers-reduced-motion.
         // Gated on fonts.ready: revealing text before webfonts load causes
         // layout shifts mid-animation (stutter), especially on slower connections.
+        // Anything already in the viewport is revealed immediately, so a
+        // hash jump or slow font load never leaves a visible void.
+        const revealInViewport = () => {
+          document.querySelectorAll('[data-reveal]').forEach((el) => {
+            const r = (el as HTMLElement).getBoundingClientRect();
+            if (r.top < window.innerHeight && r.bottom > 0) el.classList.add('is-visible');
+          });
+        };
+        revealInViewport();
         const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         const isCoarse = window.matchMedia('(pointer: coarse), (hover: none)').matches;
         const initReveals = () => {
@@ -818,9 +830,8 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
 
       document.addEventListener('astro:page-load', initLayout);
 
-      // Clean up intro state and reset layout transforms / mobile menu when preparing navigation
+      // Reset layout transforms / mobile menu when preparing navigation
       document.addEventListener('astro:before-preparation', () => {
-        document.documentElement.classList.remove('wi-run', 'wi-static', 'wi-released');
         const main = document.getElementById('main');
         const header = document.querySelector('.site-header') as HTMLElement | null;
         const footer = document.querySelector('.site-footer') as HTMLElement | null;

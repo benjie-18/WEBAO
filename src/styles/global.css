@@ -999,22 +999,26 @@ html.theming *::after {
 }
 
 /* --- Reveal / Motion --- */
+/* Hidden states only apply with JS (html.js, set by the <head> init
+   script): without JS the sections render instead of sitting invisible. */
 [data-reveal] {
-  opacity: 0;
-  transform: translateY(18px);
   transition: opacity .7s var(--ease-out), transform .7s var(--ease-out);
   transition-delay: var(--d, 0ms);
   will-change: opacity, transform;
 }
-[data-reveal].is-visible {
+html.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+}
+html.js [data-reveal].is-visible {
   opacity: 1;
   transform: none;
   will-change: auto;
 }
-[data-reveal="scale"] {
+html.js [data-reveal="scale"] {
   transform: translateY(12px) scale(.98);
 }
-[data-reveal="fade"] { transform: none; }
+html.js [data-reveal="fade"] { transform: none; }
 
 /* Stagger children */
 .stagger > * {

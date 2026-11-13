@@ -85,27 +85,6 @@ const en = {
     fictionalNote: "All demo businesses shown on this site are fictional.",
   },
 
-  intro: {
-    ariaLabel: "WEBAO introduction",
-    captionBrand: "WEBAO",
-    captionLeft: "WEBAO · WEBAO.CA",
-    captionRight: "STUDIO · MONTRÉAL",
-    prompt: {
-      pointer: "Click to enter",
-      touch: "Tap to enter",
-      key: "Enter",
-    },
-    surface: "◇ SURFACE 01",
-    enter: "◆ ENTER",
-    tap: "◆ TAP",
-    static: {
-      sub: "Custom websites for businesses · $89.99 CAD / month",
-      button: "Enter site",
-      live: "Intro (reduced motion). Press Enter to open the site.",
-      liveTouch: "Intro: {action} to enter.",
-    },
-  },
-
   home: {
     hero: {
       title1: "Your",
