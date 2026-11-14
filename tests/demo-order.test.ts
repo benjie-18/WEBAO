@@ -6,6 +6,7 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { JSDOM } from 'jsdom';
 import { demos } from '../src/lib/demos';
+import { getDemos, useTranslations, type Locale } from '../src/lib/i18n';
 import { HIDDEN_DEMOS } from '../src/lib/demo-seo';
 import {
   DEMO_ORDER_STORAGE_KEY,
@@ -233,6 +234,52 @@ test('catalog reorder recomputes reveal stagger from the new position', () => {
     assert.equal(card.style.getPropertyValue('--d'), `${(i % 3) * 80}ms`);
   });
   dom.window.close();
+});
+
+// Every DemoCategory needs a localized label in both languages: the catalog
+// builds each card's data-search from t.demos.categories with a raw-English
+// fallback, so a missing French label left FR search blind for that whole
+// category ("technologie" found 1 of 5, "musique" and "beauté" found 0).
+test('every demo category has a localized label and its search finds the category', () => {
+  const categories = [...new Set(demos.map((d) => d.category))];
+  assert.ok(categories.length > 10, `expected more than the 10 originally labeled categories, got ${categories.length}`);
+  for (const locale of ['en', 'fr'] as const satisfies Locale[]) {
+    const t = useTranslations(locale);
+    const labels = t.demos.categories as unknown as Record<string, string | undefined>;
+    const trades = t.demos.trades as unknown as Record<string, string | undefined>;
+    for (const category of categories) {
+      assert.ok(labels[category], `${locale} demos.categories is missing ${category}`);
+    }
+    // Cards built with the exact server-rendered data-search formula from
+    // DemosPage.astro, so the search runs against the same text as the page.
+    const dom = new JSDOM('<!doctype html><html><body><div id="root"></div></body></html>');
+    const doc = dom.window.document;
+    const root = doc.getElementById('root')!;
+    const cards = getDemos(locale)
+      .filter((d) => !HIDDEN_DEMOS.has(d.id))
+      .map((d) => {
+        const node = doc.createElement('a');
+        node.setAttribute('data-demo-id', d.id);
+        node.setAttribute('data-category', d.category);
+        node.setAttribute('data-demo-family', 'timeless');
+        node.setAttribute('data-demo-trade', d.trade ?? '');
+        node.setAttribute(
+          'data-search',
+          `${d.name} ${d.category} ${d.city} ${d.tone} ${d.palette} ${d.localizedDescription} ${labels[d.category] ?? d.category} ${d.trade ? (trades[d.trade] ?? d.trade) : ''}`.toLowerCase(),
+        );
+        root.appendChild(node);
+        return node as unknown as HTMLElement;
+      });
+    for (const category of categories) {
+      const label = labels[category]!;
+      filterDemoCards(cards, { style: 'All', trade: 'All', query: label.toLowerCase() });
+      for (const demo of demos.filter((d) => d.category === category && !HIDDEN_DEMOS.has(d.id))) {
+        const card = cards.find((c) => c.getAttribute('data-demo-id') === demo.id)!;
+        assert.equal(card.style.display, '', `${locale} search for "${label}" should show ${demo.id}`);
+      }
+    }
+    dom.window.close();
+  }
 });
 
 test('filtering and searching a shuffled catalog does not reshuffle it', () => {
