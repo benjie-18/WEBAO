@@ -1274,6 +1274,13 @@ const fr = {
       Wellness: "Mieux-être",
       Hospitality: "Hébergement",
       Landscaping: "Aménagement",
+      Technology: "Technologie",
+      Fashion: "Mode",
+      Music: "Musique",
+      Finance: "Finance",
+      Gaming: "Jeux vidéo",
+      Design: "Design",
+      Beauty: "Beauté",
     },
   },
 
