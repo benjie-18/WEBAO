@@ -958,8 +958,11 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 40px;
-        height: 40px;
+        /* 44px: the site's minimum touch target (EscapeHatch, portal
+           buttons, carousel nav, pricing cart button). 40px was below it
+           for the control that opens the cart on every page. */
+        width: 44px;
+        height: 44px;
         border-radius: 50%;
         border: 1px solid var(--line);
         background: transparent;
@@ -1042,8 +1045,10 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
         margin: 0;
       }
       .cart-drawer-close {
-        width: 36px;
-        height: 36px;
+        /* 44px: the site's minimum touch target. 36px was below it for
+           the drawer's only way out. */
+        width: 44px;
+        height: 44px;
         border-radius: 50%;
         border: 1px solid var(--line);
         background: transparent;
@@ -1054,8 +1059,8 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
         justify-content: center;
       }
       .cart-drawer-close svg {
-        width: 16px;
-        height: 16px;
+        width: 20px;
+        height: 20px;
       }
       .cart-drawer-scroll {
         flex: 1;
@@ -1100,8 +1105,10 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
         margin: 0;
       }
       :global(.cart-item-remove) {
-        width: 28px;
-        height: 28px;
+        /* 44px: the site's minimum touch target. 28px was the smallest
+           tap target in the drawer, on the button that removes an item. */
+        width: 44px;
+        height: 44px;
         border-radius: 50%;
         border: 1px solid var(--line);
         background: transparent;
@@ -1117,8 +1124,8 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
         border-color: #e00;
       }
       :global(.cart-item-remove svg) {
-        width: 15px;
-        height: 15px;
+        width: 20px;
+        height: 20px;
       }
       .cart-drawer-footer {
         padding: 20px 24px;
@@ -1158,7 +1165,11 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
         display: block;
         flex-shrink: 0;
         margin: 16px auto 0;
-        padding: 7px 16px;
+        /* 44px tall: the site's minimum touch target. At 7px padding the
+           pill measured ~35px; min-height holds it at 44px whatever the
+           font metrics do. */
+        min-height: 44px;
+        padding: 11px 20px;
         font: inherit;
         font-size: 0.78rem;
         font-weight: 650;
@@ -1205,7 +1216,9 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
       .cart-conflict-title {
         font-size: 1.2rem;
         font-weight: 700;
-        margin: 0 32px 8px 0;
+        /* 60px clearance: the 44px close button sits 16px from the right
+           edge, so a long title must stop before it. */
+        margin: 0 60px 8px 0;
       }
       .cart-conflict-message {
         margin: 0 0 20px;
@@ -1224,8 +1237,10 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
         position: absolute;
         top: 16px;
         right: 16px;
-        width: 32px;
-        height: 32px;
+        /* 44px: the site's minimum touch target. 32px was below it for
+           the popup's only way out besides its fix buttons. */
+        width: 44px;
+        height: 44px;
         border-radius: 50%;
         border: 1px solid var(--line);
         background: transparent;
@@ -1236,8 +1251,8 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
         justify-content: center;
       }
       .cart-conflict-close svg {
-        width: 14px;
-        height: 14px;
+        width: 20px;
+        height: 20px;
       }
     </style>
     <script>

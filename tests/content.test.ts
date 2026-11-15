@@ -396,6 +396,44 @@ test('the pricing cart button meets the 44px touch target', () => {
   assert.match(block, /height:\s*44px/, 'the cart button is 44px tall');
 });
 
+test('the cart drawer controls meet the 44px touch target', () => {
+  // The rest of the cart's controls sat below the site's 44px minimum:
+  // the header cart button (40px), the drawer close (36px), the per-item
+  // remove (28px), the empty-cart pill (~35px) and the conflict popup
+  // close (32px) — live-measured on webao.ca 2026-11-15. The conflict
+  // title also needs 60px of right clearance so it cannot run under
+  // the wider close button (44px + 16px from the edge).
+  const layout = read('src/layouts/BaseLayout.astro');
+  const rule = (selector: string): string => {
+    const at = layout.indexOf(selector);
+    assert.ok(at > 0, `${selector} rule exists`);
+    return layout.slice(at, layout.indexOf('}', at));
+  };
+  for (const selector of ['.header-cart-btn {', '.cart-drawer-close {', ':global(.cart-item-remove) {', '.cart-conflict-close {']) {
+    const block = rule(selector);
+    assert.match(block, /width:\s*44px/, `${selector} is 44px wide`);
+    assert.match(block, /height:\s*44px/, `${selector} is 44px tall`);
+  }
+  const emptyAll = rule('.cart-empty-all {');
+  assert.match(emptyAll, /min-height:\s*44px/, 'the empty-cart pill is at least 44px tall');
+  const title = rule('.cart-conflict-title {');
+  assert.match(title, /margin:\s*0 60px 8px 0/, 'the conflict title clears the close button');
+});
+
+test('an empty cart shows its message once on the checkout page', () => {
+  // The empty message used to render twice on /checkout and /fr/checkout:
+  // once in the summary slot (renderItems) and once in the payment box
+  // (the loading line) — live-verified on webao.ca 2026-11-15. The
+  // empty branch now hides the payment box instead of printing it again.
+  const page = read('src/components/pages/CheckoutPage.astro');
+  const at = page.indexOf('if (cartItems.length === 0) {');
+  assert.ok(at > 0, 'the empty-cart branch exists');
+  const block = page.slice(at, page.indexOf('return;', at));
+  assert.match(block, /stripe-checkout/, 'the branch touches the payment box');
+  assert.match(block, /\.hidden = true/, 'the branch hides the payment box');
+  assert.doesNotMatch(block, /checkoutEmpty/, 'the branch does not print the message again');
+});
+
 test('the add-on rows keep the cart button on the name row', () => {
   // The add-on row grid had three columns for four children (number,
   // name, price, cart button), so the button wrapped onto a second row

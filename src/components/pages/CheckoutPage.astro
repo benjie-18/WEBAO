@@ -150,12 +150,12 @@ const routes = { start: paths.start, pricing: paths.pricing, locale };
     renderItems(cartItems);
 
     // 1. Nothing to pay for: never open an empty Stripe session.
+    // renderItems already showed the empty message in the summary slot,
+    // so hide the payment box instead of printing it a second time
+    // (it used to render twice: once large, once in the loading line).
     if (cartItems.length === 0) {
-      if (loadingEl) {
-        loadingEl.innerHTML =
-          esc(labels.checkoutEmpty) +
-          ' <a href="' + esc(routes.pricing) + '" style="color:var(--accent-text);">' + esc(labels.checkoutEmptyCta) + '</a>';
-      }
+      const stripeEl = document.getElementById('stripe-checkout');
+      if (stripeEl) stripeEl.hidden = true;
       return;
     }
 
