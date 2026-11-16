@@ -177,7 +177,7 @@ const aiRows = [
           <strong class="mono" data-start-total>{formatMoney(0, fmt)}</strong>
         </div>
         <p class="mono sel-note">{t.cart.note}</p>
-        <p class="field-error mono sel-error" data-start-selection-error hidden>{t.start.form.errSelection}</p>
+        <p class="field-error mono sel-error" role="alert" data-start-selection-error hidden>{t.start.form.errSelection}</p>
       </aside>
 
       <!-- Details form -->
@@ -185,7 +185,6 @@ const aiRows = [
         id="start-form"
         class="start-form"
         data-start-form
-        data-astro-reload
         novalidate
         data-checkout-path={checkoutPath}
         data-err-name={t.start.form.errName}

@@ -145,6 +145,15 @@ const paths = localizedPaths[locale];
       // API and come back as a misleading "could not send" error.
       const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
+      // Mark a field as failed (or clear it), like the start page does:
+      // aria-invalid for screen readers, a red border for sighted
+      // visitors. Focus alone does neither.
+      const markInvalid = (el: HTMLElement | null, invalid: boolean) => {
+        if (!el) return;
+        el.classList.toggle('input-error', invalid);
+        el.setAttribute('aria-invalid', invalid ? 'true' : 'false');
+      };
+
       form.addEventListener('submit', (e) => {
         e.preventDefault();
         if (form.dataset.sending === '1') return;
@@ -162,6 +171,11 @@ const paths = localizedPaths[locale];
           status.textContent = validationError;
           status.classList.remove('form-status--success');
           status.classList.add('form-status--error');
+          // Mark the fields that failed (and clear the mark on the ones
+          // that pass), so the failure is perceivable, not just focused.
+          markInvalid(form.querySelector('[name="name"]'), !name);
+          markInvalid(form.querySelector('[name="email"]'), !EMAIL_RE.test(email));
+          markInvalid(form.querySelector('[name="message"]'), !message);
           // Focus the first field that failed, like the start page does,
           // instead of leaving focus on the submit button.
           const firstInvalid = (!name ? form.querySelector('[name="name"]') : null)
@@ -212,6 +226,16 @@ const paths = localizedPaths[locale];
             status.classList.add('form-status--error');
           });
       });
+
+      // Clear a field's error mark as soon as it is fixed, like the start
+      // page does, instead of leaving the red border up after the fix.
+      form.addEventListener('input', (e) => {
+        const target = e.target as HTMLInputElement | HTMLTextAreaElement | null;
+        if (!target || !target.classList.contains('input-error')) return;
+        const value = target.value.trim();
+        const ok = target.name === 'email' ? EMAIL_RE.test(value) : value !== '';
+        if (ok) markInvalid(target, false);
+      });
     }
   }
 
@@ -242,6 +266,7 @@ const paths = localizedPaths[locale];
   input, select, textarea { width:100%; padding:10px 12px; border:1px solid var(--line-strong); border-radius:10px; background: var(--paper-3); font-size:14px; font-weight:500; color: var(--ink); transition: border-color .2s, box-shadow .2s; }
   textarea { resize: vertical; min-height: 72px; }
   input:focus, select:focus, textarea:focus { outline:none; border-color: var(--ink); box-shadow: 0 0 0 3px var(--focus-ring); }
+  input.input-error, textarea.input-error { border-color: #c0392b; }
   .form-meta { display:grid; gap:8px; font-size:11px; color: var(--muted); line-height:1.5; }
   .check-row { display:flex; gap:8px; align-items:center; font-size:12.5px; color: var(--ink-3); font-weight:500; cursor:pointer; }
   .check-row input { width:16px; height:16px; accent-color: var(--ink); }

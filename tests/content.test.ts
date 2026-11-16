@@ -207,6 +207,26 @@ test('the support form validates like the contact form', () => {
   assert.notEqual(en.support.form.categoryPlaceholder, fr.support.form.categoryPlaceholder, 'the category placeholder is translated');
 });
 
+test('the contact form marks the fields that failed, like the start page', () => {
+  // Live-verified 2026-11-16: an empty submit moved focus to the name
+  // field but left every field with a grey border and no aria-invalid, so
+  // neither a sighted visitor nor a screen reader could tell which fields
+  // had failed. The start page already marks its fields, so the contact
+  // form mirrors it instead of inventing a second pattern.
+  const contactPage = read('src/components/pages/ContactPage.astro');
+  assert.ok(contactPage.includes("setAttribute('aria-invalid'"), 'the contact form sets aria-invalid on its fields');
+  assert.ok(contactPage.includes("classList.toggle('input-error'"), 'the contact form marks failed fields with the error class');
+  assert.ok(contactPage.includes('input.input-error'), 'the contact form has a red-border rule for marked fields');
+  assert.ok(contactPage.includes("classList.contains('input-error')"), 'the contact form clears the mark once a field is fixed');
+  // The start page's empty-cart error is announced, not just shown.
+  const startPage = read('src/components/pages/StartPage.astro');
+  assert.ok(
+    startPage.includes('<p class="field-error mono sel-error" role="alert" data-start-selection-error hidden>'),
+    'the selection error is announced to screen readers',
+  );
+  assert.equal(startPage.includes('data-astro-reload'), false, 'the start form has no dead reload attribute');
+});
+
 test('the image provenance list is well-formed and matches the catalog', () => {
   const sources = JSON.parse(read('src/lib/sources.json')) as Array<{
     demo: string;
