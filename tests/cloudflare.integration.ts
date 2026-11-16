@@ -298,8 +298,9 @@ test('built checkout page renders the cart and posts its keys', async () => {
   try {
     // An empty cart never opens a Stripe session.
     empty = await render([]);
-    const message = empty.window.document.getElementById('stripe-checkout')?.textContent ?? '';
-    assert.match(message, /No items in cart/);
+    const stripeEl = empty.window.document.getElementById('stripe-checkout');
+    assert.ok(stripeEl?.hidden, 'the payment box is hidden on an empty cart');
+    assert.match(empty.window.document.body.textContent ?? '', /No items in cart/, 'the empty message shows once, in the summary');
     assert.equal(checkoutCalls().length, 0, 'an empty cart never opens a Stripe session');
   } finally {
     empty?.window.close();
@@ -595,7 +596,9 @@ test('built demo surfaces keep cacheable fallback order and canonical shuffle in
   const rest = canonical.filter((id) => !['boreal', 'rive-nord'].includes(id));
   const catalogOrder = pinned ? ['boreal', 'rive-nord', ...rest] : canonical;
   const standingPins = ['noctua', 'lisiere', 'studio-reve'];
-  const panelRest = canonical.filter((id) => !['boreal', 'rive-nord', ...standingPins, 'nora'].includes(id));
+  const panelRest = pinned
+    ? canonical.filter((id) => !['boreal', 'rive-nord', ...standingPins, 'nora'].includes(id))
+    : canonical.filter((id) => ![...standingPins, 'nora'].includes(id));
   const panelOrder = pinned
     ? ['boreal', 'rive-nord', ...standingPins, ...panelRest, 'nora']
     : [...standingPins, ...panelRest, 'nora'];
