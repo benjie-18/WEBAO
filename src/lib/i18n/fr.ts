@@ -753,8 +753,8 @@ const fr = {
       "6": {
         title: "Niveaux de SEO",
         blocks: [
-          { label: "Fondations SEO (Launch)", text: "titre et méta-description uniques, balises Open Graph, plan du site, soumission d'indexation à Google et Bing, données structurées LocalBusiness, base de vitesse mobile." },
-          { label: "SEO sur page + configuration GBP (Grow)", text: "tout ce qui est dans Fondations, plus un texte ciblé par mots-clés pour votre service principal et votre ville sur chaque page, du maillage interne, et une configuration unique du profil d'entreprise Google (si inexistant) et son optimisation (catégories, services, heures, photos, description)." },
+          { label: "SEO fondamental (Launch)", text: "titre et méta-description uniques, balises Open Graph, plan du site, soumission d'indexation à Google et Bing, données structurées LocalBusiness, base de vitesse mobile." },
+          { label: "SEO sur page + configuration GBP (Grow)", text: "tout ce qui est dans le SEO fondamental, plus un texte ciblé par mots-clés pour votre service principal et votre ville sur chaque page, du maillage interne, et une configuration unique du profil d'entreprise Google (si inexistant) et son optimisation (catégories, services, heures, photos, description)." },
           { label: "SEO sur page étendu + zones desservies (Scale)", text: "tout ce qui est dans Grow, appliqué jusqu'à 10 pages, avec des pages dédiées par zone desservie et de l'optimisation d'images / textes alt." },
           { label: "Gestion du SEO local (option, tous les forfaits)", text: "travail mensuel continu : publications GBP, création et nettoyage de citations, surveillance des avis, suivi de la visibilité locale et ajustements." },
           { text: "Ligne de démarcation : configuration unique (incluse dans Grow et Scale) contre travail mensuel continu (option)." },
@@ -1013,7 +1013,7 @@ const fr = {
             ],
           },
           { text: "Permet aux clients de joindre des photos lorsqu'ils soumettent le formulaire de demande de soumission. Inclus comme fonctionnalité standard du formulaire de soumission sur Grow et Scale." },
-          { text: "Offert comme option à C$9/mois sur Launch seulement, où le téléversement est ajouté au formulaire de contact." },
+          { text: "Offert comme option à C$9.99/mois sur Launch seulement, où le téléversement est ajouté au formulaire de contact." },
           { label: "Limites", text: "jusqu'à 5 photos par soumission, conservées pendant 12 mois." },
         ],
       },

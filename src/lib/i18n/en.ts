@@ -747,8 +747,8 @@ const en = {
       "6": {
         title: "SEO levels",
         blocks: [
-          { label: "SEO Foundations (Launch)", text: "unique title and meta description, Open Graph tags, sitemap, Google and Bing indexing submission, LocalBusiness structured data, mobile speed baseline." },
-          { label: "SEO On-Page + GBP Setup (Grow)", text: "everything in Foundations, plus keyword-targeted copy for your main service and city on each page, internal linking, and a one-time Google Business Profile setup (if not existing) and optimization (categories, services, hours, photos, description)." },
+          { label: "Foundational SEO (Launch)", text: "unique title and meta description, Open Graph tags, sitemap, Google and Bing indexing submission, LocalBusiness structured data, mobile speed baseline." },
+          { label: "SEO On-Page + GBP Setup (Grow)", text: "everything in Foundational SEO, plus keyword-targeted copy for your main service and city on each page, internal linking, and a one-time Google Business Profile setup (if not existing) and optimization (categories, services, hours, photos, description)." },
           { label: "SEO Expanded On-Page + Service-Area (Scale)", text: "everything in Grow, applied to up to 10 pages, with dedicated service-area pages and image / alt-text optimization." },
           { label: "Local SEO Management (add-on, all tiers)", text: "ongoing monthly work: GBP posts, citation building and cleanup, review monitoring, local visibility tracking and adjustments." },
           { text: "Dividing line: one-time setup (included in Grow and Scale) versus ongoing monthly work (add-on)." },
@@ -1007,7 +1007,7 @@ const en = {
             ],
           },
           { text: "Lets customers attach photos when they submit the quote form. Included as a standard quote-form feature on Grow and Scale." },
-          { text: "Available as a C$9/mo add-on on Launch only, where the upload is added to the contact form." },
+          { text: "Available as a C$9.99/mo add-on on Launch only, where the upload is added to the contact form." },
           { label: "Limits", text: "up to 5 photos per submission, stored for 12 months." },
         ],
       },
