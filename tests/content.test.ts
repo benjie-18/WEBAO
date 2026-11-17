@@ -467,3 +467,40 @@ test('the add-on rows keep the cart button on the name row', () => {
     'the row grid has a fourth column for the cart button',
   );
 });
+
+test('the terms search hides sections left with no matching note', () => {
+  // Filtering used to hide the notes but leave every section heading
+  // standing: searching "cancel" left "Plans", "Features & services",
+  // "Bundles" and "Add-ons" as empty headings (live-verified on
+  // webao.ca/terms and /fr/conditions 2026-11-17). A filtered view now
+  // hides a section when none of its notes is visible, and clearing the
+  // search brings every section back.
+  const page = read('src/components/pages/TermsPage.astro');
+  assert.ok(page.includes('querySelectorAll("[data-term-section]")'), 'the script collects the sections');
+  assert.match(page, /sections\[s\]\.hidden = !anyVisible/, 'a section hides when no note in it is visible');
+  assert.match(page, /for \(var s = 0; s < sections\.length; s\+\+\) sections\[s\]\.hidden = false/, 'clearing the search restores every section');
+});
+
+test('the terms search controls meet the 44px touch target', () => {
+  // The search clear button (30px) and the prev/next buttons (34px)
+  // sat below the site's 44px minimum touch target (EscapeHatch,
+  // portal buttons, carousel nav, pricing cart button) — live-measured
+  // on webao.ca/terms 2026-11-17 (32px rendered). The input grows its
+  // padding so the 44px clear button fits inside it, and the browser's
+  // own search cancel button is hidden: it used to appear next to ours
+  // while typing, two x's side by side.
+  const page = read('src/components/pages/TermsPage.astro');
+  const rule = (selector: string): string => {
+    const at = page.indexOf(selector);
+    assert.ok(at > 0, `${selector} rule exists`);
+    return page.slice(at, page.indexOf('}', at));
+  };
+  for (const selector of ['.search-clear {', '.search-nav {']) {
+    const block = rule(selector);
+    assert.match(block, /width:\s*44px/, `${selector} is 44px wide`);
+    assert.match(block, /height:\s*44px/, `${selector} is 44px tall`);
+  }
+  const input = rule('.search-field input {');
+  assert.match(input, /padding:\s*14px 56px 14px 40px/, 'the input clears the 44px clear button');
+  assert.match(page, /::-webkit-search-cancel-button/, 'the native search cancel button is hidden');
+});

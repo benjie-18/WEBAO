@@ -271,12 +271,19 @@ const search = terms.search;
   }
   .search-field input {
     width: 100%;
-    padding: 12px 40px 12px 40px;
+    padding: 14px 56px 14px 40px;
     border-radius: 999px;
     border: 1px solid var(--line-strong);
     background: var(--card-bg);
     color: var(--ink);
     font-size: 0.95rem;
+  }
+  /* The browser's own search cancel button would sit next to our clear
+     button (two x's while typing); hide it, our button owns clearing. */
+  .search-field input::-webkit-search-cancel-button,
+  .search-field input::-webkit-search-decoration {
+    -webkit-appearance: none;
+    appearance: none;
   }
   .search-field input:focus {
     outline: 2px solid var(--focus-outline);
@@ -289,8 +296,8 @@ const search = terms.search;
   .search-clear {
     position: absolute;
     right: 8px;
-    width: 30px;
-    height: 30px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     border: 0;
     background: transparent;
@@ -320,8 +327,8 @@ const search = terms.search;
     text-align: right;
   }
   .search-nav {
-    width: 34px;
-    height: 34px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     border: 1px solid var(--line);
     background: var(--card-bg);
@@ -626,6 +633,7 @@ const search = terms.search;
     var statusEl = bar.querySelector("[data-search-status]");
     var emptyEl = document.querySelector("[data-search-empty]");
     var notes = Array.prototype.slice.call(document.querySelectorAll("[data-note]"));
+    var sections = Array.prototype.slice.call(document.querySelectorAll("[data-term-section]"));
     var tocLinks = Array.prototype.slice.call(document.querySelectorAll("[data-toc-link]"));
     var msgCount = document.querySelector("[data-search-msg-count]");
     var msgCountPl = document.querySelector("[data-search-msg-count-pl]");
@@ -760,6 +768,7 @@ const search = terms.search;
         countEl.textContent = "";
         clearBtn.hidden = true;
         emptyEl.hidden = true;
+        for (var s = 0; s < sections.length; s++) sections[s].hidden = false;
         updateNav();
         announce("");
         return;
@@ -786,6 +795,17 @@ const search = terms.search;
         }
         matched++;
         highlightNote(notes[i], regexes);
+      }
+
+      // Hide sections left with no visible note, so a filtered view does
+      // not show orphaned headings (e.g. "Plans" with nothing under it).
+      for (var s = 0; s < sections.length; s++) {
+        var secNotes = sections[s].querySelectorAll("[data-note]");
+        var anyVisible = false;
+        for (var n = 0; n < secNotes.length; n++) {
+          if (!secNotes[n].hidden) { anyVisible = true; break; }
+        }
+        sections[s].hidden = !anyVisible;
       }
 
       marks = Array.prototype.slice.call(
