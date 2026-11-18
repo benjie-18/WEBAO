@@ -1184,7 +1184,6 @@ const fr = {
     addons: {
       eyebrow: "Modules",
       title: "Ajouter une fonction à votre site",
-      addCta: "Ajouter",
     },
     faq: {
       eyebrow: "FAQ",
@@ -1196,7 +1195,7 @@ const fr = {
         },
         {
           q: "Comment fonctionnent les modules ?",
-          a: "Ajoutez-en un depuis la page des tarifs, ou demandez-le par le formulaire sur cette page (catégorie : Ajouter une fonction ou un module) et on l’installera sur votre forfait. Les prix sont mensuels, sauf indication « paiement unique ».",
+          a: "Ajoutez-en un dans la liste ci-dessus, ou demandez-le par le formulaire sur cette page (catégorie : Ajouter une fonction ou un module) et on l’installera sur votre forfait. Les prix sont mensuels, sauf indication « paiement unique ».",
         },
         {
           q: "Où sont mes factures ? Comment je mets à jour mon moyen de paiement ?",

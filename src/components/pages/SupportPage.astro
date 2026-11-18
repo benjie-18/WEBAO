@@ -1,6 +1,8 @@
 ---
 import { useTranslations, localizedPaths, type Locale } from "../../lib/i18n";
 import { featuredAddonOrder, remainingAddonOrder } from "../../lib/pricing";
+import { baseInterval, cartProducts } from "../../lib/cart-catalog";
+import CartButton from "../pricing/CartButton.astro";
 
 interface Props {
   locale: Locale;
@@ -10,6 +12,23 @@ const t = useTranslations(locale);
 const paths = localizedPaths[locale];
 const s = t.support;
 const addonIds = [...featuredAddonOrder, ...remainingAddonOrder];
+// Prices come from the shared cart catalog (same derivation as the pricing
+// page's AddonList), so the "Add" buttons add the real product at the real
+// price instead of linking away to the pricing page.
+const addonPriceCents: Record<string, { cents: number; interval: "month" | "one-time"; yearCents?: number }> =
+  Object.fromEntries(
+    addonIds.map((id) => {
+      const product = cartProducts[id];
+      return [
+        id,
+        {
+          cents: product.oneTimeCents ?? product.monthCents ?? 0,
+          interval: baseInterval(product),
+          yearCents: product.yearCents,
+        },
+      ];
+    }),
+  );
 const categoryIds = ["billing", "changes", "addons", "issue", "other"] as const;
 ---
 
@@ -141,7 +160,15 @@ const categoryIds = ["billing", "changes", "addons", "issue", "other"] as const;
             </div>
             <div class="addon-side">
               <span class="mono addon-price">{item.price}</span>
-              <a class="btn btn--dark btn--sm" href={`${paths.pricing}#addons`}>{s.addons.addCta}</a>
+              <CartButton
+                locale={locale}
+                product={id}
+                name={item.name}
+                priceCents={addonPriceCents[id].cents}
+                yearlyPriceCents={addonPriceCents[id].yearCents}
+                interval={addonPriceCents[id].interval}
+                type="addon"
+              />
             </div>
           </div>
         );
@@ -188,6 +215,15 @@ const categoryIds = ["billing", "changes", "addons", "issue", "other"] as const;
       // reach the API and come back as a misleading "could not send" error.
       const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
+      // Mark a field as failed (or clear it), like the contact and start
+      // pages do: aria-invalid for screen readers, a red border for
+      // sighted visitors. Focus alone does neither.
+      const markInvalid = (el: HTMLElement | null, invalid: boolean) => {
+        if (!el) return;
+        el.classList.toggle('input-error', invalid);
+        el.setAttribute('aria-invalid', invalid ? 'true' : 'false');
+      };
+
       form.addEventListener('submit', (e) => {
         e.preventDefault();
         if (form.dataset.sending === '1') return;
@@ -207,6 +243,13 @@ const categoryIds = ["billing", "changes", "addons", "issue", "other"] as const;
           status.textContent = validationError;
           status.classList.remove('form-status--success');
           status.classList.add('form-status--error');
+          // Mark the fields that failed (and clear the mark on the ones
+          // that pass), so the failure is perceivable, not just focused.
+          markInvalid(form.querySelector('[name="name"]'), !name);
+          markInvalid(form.querySelector('[name="email"]'), !EMAIL_RE.test(email));
+          markInvalid(form.querySelector('[name="category"]'), !category);
+          markInvalid(form.querySelector('[name="subject"]'), !subject);
+          markInvalid(form.querySelector('[name="message"]'), !message);
           // Focus the first field that failed, like the contact page does,
           // instead of leaving focus on the submit button.
           const firstInvalid = (!name ? form.querySelector('[name="name"]') : null)
@@ -255,6 +298,19 @@ const categoryIds = ["billing", "changes", "addons", "issue", "other"] as const;
             status.classList.add('form-status--error');
           });
       });
+
+      // Clear a field's error mark as soon as it is fixed, like the
+      // contact page does, instead of leaving the red border up after
+      // the fix. The select fires 'change', not 'input', so listen to both.
+      const clearOnFix = (e: Event) => {
+        const target = e.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement | null;
+        if (!target || !target.classList.contains('input-error')) return;
+        const value = target.value.trim();
+        const ok = target.name === 'email' ? EMAIL_RE.test(value) : value !== '';
+        if (ok) markInvalid(target, false);
+      };
+      form.addEventListener('input', clearOnFix);
+      form.addEventListener('change', clearOnFix);
     }
   }
 
@@ -284,6 +340,10 @@ const categoryIds = ["billing", "changes", "addons", "issue", "other"] as const;
   input, select, textarea { width:100%; padding:10px 12px; border:1px solid var(--line-strong); border-radius:10px; background: var(--paper-3); font-size:14px; font-weight:500; color: var(--ink); transition: border-color .2s, box-shadow .2s; }
   textarea { resize: vertical; min-height: 72px; }
   input:focus, select:focus, textarea:focus { outline:none; border-color: var(--ink); box-shadow: 0 0 0 3px var(--focus-ring); }
+  /* Failed fields, marked by the submit handler (same red as the contact
+     and start pages): the select needs listing too, it is a failed field
+     when no category was picked. */
+  input.input-error, select.input-error, textarea.input-error { border-color: #c0392b; }
   .form-meta { display:grid; gap:8px; font-size:11px; color: var(--muted); line-height:1.5; }
   .check-row { display:flex; gap:8px; align-items:center; font-size:12.5px; color: var(--ink-3); font-weight:500; cursor:pointer; }
   .check-row input { width:16px; height:16px; accent-color: var(--ink); }

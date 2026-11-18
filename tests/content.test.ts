@@ -205,6 +205,31 @@ test('the support form validates like the contact form', () => {
   assert.notEqual(en.support.form.categoryPlaceholder.trim(), '', 'the category placeholder exists in English');
   assert.notEqual(fr.support.form.categoryPlaceholder.trim(), '', 'the category placeholder exists in French');
   assert.notEqual(en.support.form.categoryPlaceholder, fr.support.form.categoryPlaceholder, 'the category placeholder is translated');
+  // Live-verified 2026-11-18: an empty submit moved focus to the name
+  // field but left every field with a grey border and no aria-invalid, so
+  // neither a sighted visitor nor a screen reader could tell which fields
+  // had failed. The support form marks its failed fields like the contact
+  // and start pages do, and clears the mark once a field is fixed.
+  assert.ok(supportPage.includes("setAttribute('aria-invalid'"), 'the support form sets aria-invalid on its fields');
+  assert.ok(supportPage.includes("classList.toggle('input-error'"), 'the support form marks failed fields with the error class');
+  assert.ok(supportPage.includes('input.input-error'), 'the support form has a red-border rule for marked fields');
+  assert.ok(supportPage.includes('select.input-error'), 'the red-border rule covers the category select too');
+  assert.ok(supportPage.includes("classList.contains('input-error')"), 'the support form clears the mark once a field is fixed');
+});
+
+test('the support add-ons add to the cart instead of linking away', () => {
+  // Live-verified 2026-11-18: the "Add" button on every support add-on row
+  // navigated to /pricing#addons instead of adding the item to the cart,
+  // so a client had to leave the page and find the add-on again. The rows
+  // now use the same CartButton as the pricing page, with prices derived
+  // from the shared cart catalog, and the FAQ says so.
+  const supportPage = read('src/components/pages/SupportPage.astro');
+  assert.equal(supportPage.includes('pricing#addons'), false, 'no support add-on row links away to the pricing page');
+  assert.ok(supportPage.includes('<CartButton'), 'the support add-on rows use the cart button');
+  assert.ok(supportPage.includes('cartProducts'), 'the support add-on prices come from the shared cart catalog');
+  assert.ok(supportPage.includes('type="addon"'), 'the support add-on buttons are add-on buttons');
+  assert.match(en.support.faq.items[1].a, /list above/, 'the English add-on FAQ points at the list on this page');
+  assert.match(fr.support.faq.items[1].a, /liste ci-dessus/, 'the French add-on FAQ points at the list on this page');
 });
 
 test('the contact form marks the fields that failed, like the start page', () => {

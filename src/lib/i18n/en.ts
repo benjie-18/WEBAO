@@ -1177,7 +1177,6 @@ const en = {
     addons: {
       eyebrow: "Add-ons",
       title: "Add a feature to your site",
-      addCta: "Add",
     },
     faq: {
       eyebrow: "FAQ",
@@ -1189,7 +1188,7 @@ const en = {
         },
         {
           q: "How do add-ons work?",
-          a: "Add one from the pricing page, or ask through the form on this page (category: Add a feature or add-on) and we'll set it up on your plan. Prices are monthly unless marked one-time.",
+          a: "Add one from the list above, or ask through the form on this page (category: Add a feature or add-on) and we'll set it up on your plan. Prices are monthly unless marked one-time.",
         },
         {
           q: "Where are my invoices? How do I update my payment method?",
