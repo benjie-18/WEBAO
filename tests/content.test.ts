@@ -315,7 +315,29 @@ test('the service pages use the pricing SEO term and agree in French', () => {
     assert.equal(page.includes('Référencement de base') || page.includes('référencement de base'), false, `${path} has no "Référencement de base" left`);
   }
   const frPme = read('src/pages/fr/services/conception-site-web-pme/index.astro');
-  assert.ok(frPme.includes('sont incluses dans le frais mensuel'), 'the FR small-business FAQ agrees "mises à jour" with "incluses"');
+  assert.ok(frPme.includes('sont incluses dans les frais mensuels'), 'the FR small-business FAQ agrees "mises à jour" with "incluses" and uses the plural "frais"');
+  // "Frais" is a plural-only noun: the FR service pages used the singular
+  // articles "le / un / aucun" with it ("le frais mensuel", "Aucun frais
+  // d'installation"), while the pricing copy already uses the correct
+  // "Aucuns frais" / "les frais mensuels". No singular-article "frais"
+  // may remain in any FR service page.
+  const frServicePages = [
+    ...frServices,
+    'src/pages/fr/services/hebergement-entretien-site-web/index.astro',
+  ];
+  for (const path of frServicePages) {
+    const page = read(path);
+    for (const bad of ['le frais ', 'un frais', 'Aucun frais']) {
+      assert.equal(page.includes(bad), false, `${path} has no "${bad}" left`);
+    }
+  }
+  // The Montreal pages name the 47-demo catalog as the source of the demo
+  // directions; the mention links to the catalog instead of leaving the
+  // reader to find it.
+  const montrealEn = read('src/pages/services/montreal-web-design/index.astro');
+  assert.ok(montrealEn.includes('href: "/demos/"'), 'EN Montreal page links to the demo catalog');
+  const montrealFr = read('src/pages/fr/services/conception-site-web-montreal/index.astro');
+  assert.ok(montrealFr.includes('href: "/fr/demos/"'), 'FR Montreal page links to the demo catalog');
 });
 
 test('the guide pages use the pricing SEO term, the Ads Packages name, and the full Bill 96 exceptions', () => {
