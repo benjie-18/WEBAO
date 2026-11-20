@@ -70,6 +70,18 @@ const {
 } = Astro.props as Props;
 
 const paths = localizedPaths[locale];
+const startPath = paths.start;
+// Guide copy tells the reader "Go to /start ..." as plain text. Split a
+// string on the locale's start path so the path renders as a link instead;
+// every guide string holds the path at most once.
+const startLinkParts = (text: string) => {
+  const at = text.indexOf(startPath);
+  return at < 0
+    ? null
+    : { before: text.slice(0, at), after: text.slice(at + startPath.length) };
+};
+const startLinkStyle =
+  "color: var(--accent-text); font-weight:600; text-decoration: underline; text-underline-offset:3px;";
 const faqSchema = faqs && {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -97,23 +109,31 @@ const faqSchema = faqs && {
       </div>
 
       <div style="margin-top: 44px; display:grid; gap: 20px;">
-        {sections.map((section) => (
+        {sections.map((section) => {
+          const bodyLink = section.body ? startLinkParts(section.body) : null;
+          return (
           <div class="info-card">
             <h2>{section.heading}</h2>
-            {section.body && <p>{section.body}</p>}
+            {section.body && <p>{bodyLink ? bodyLink.before : section.body}{bodyLink && <a href={startPath} style={startLinkStyle}>{startPath}</a>}{bodyLink ? bodyLink.after : ""}</p>}
             {section.items && (
               <ul>
-                {section.items.map((item) => (
-                  <li>{item}</li>
-                ))}
+                {section.items.map((item) => {
+                  const itemLink = startLinkParts(item);
+                  return (
+                  <li>{itemLink ? itemLink.before : item}{itemLink && <a href={startPath} style={startLinkStyle}>{startPath}</a>}{itemLink ? itemLink.after : ""}</li>
+                  );
+                })}
               </ul>
             )}
-            {section.subsections && section.subsections.map((sub) => (
+            {section.subsections && section.subsections.map((sub) => {
+              const subLink = startLinkParts(sub.body);
+              return (
               <div style="margin-top:14px;">
                 <h3>{sub.heading}</h3>
-                <p>{sub.body}</p>
+                <p>{subLink ? subLink.before : sub.body}{subLink && <a href={startPath} style={startLinkStyle}>{startPath}</a>}{subLink ? subLink.after : ""}</p>
               </div>
-            ))}
+              );
+            })}
             {section.links && (
               <ul>
                 {section.links.map((link) => (
@@ -122,7 +142,8 @@ const faqSchema = faqs && {
               </ul>
             )}
           </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   </section>
@@ -132,12 +153,15 @@ const faqSchema = faqs && {
     <div class="shell" style="max-width: 860px;">
       <h2 class="display" style="font-size: clamp(1.9rem, 4vw, 3rem); line-height:.95;">{faqHeading}</h2>
       <div class="faq-grid" style="margin-top: 24px;">
-        {faqs.map((item) => (
+        {faqs.map((item) => {
+          const answerLink = startLinkParts(item.a);
+          return (
           <div class="info-card">
             <h3>{item.q}</h3>
-            <p>{item.a}</p>
+            <p>{answerLink ? answerLink.before : item.a}{answerLink && <a href={startPath} style={startLinkStyle}>{startPath}</a>}{answerLink ? answerLink.after : ""}</p>
           </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   </section>

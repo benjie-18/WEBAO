@@ -387,6 +387,53 @@ test('the guide pages use the pricing SEO term, the Ads Packages name, and the f
   assert.ok(frBill96.includes('un événement destiné uniquement à un public spécialisé ou limité'), 'the FR Bill 96 guide lists the fourth Educaloi exception');
 });
 
+test('the guide pages link the start page and use the plural of "frais"', () => {
+  // Every guide's "How to start" copy says "Go to /start ..." / "Allez à
+  // /fr/commencer ..." as plain text, while the page's only start links
+  // were the two buttons. GuidePage now renders the start path as a link
+  // in section bodies, items, subsection bodies and FAQ answers. And
+  // "frais" is plural-only in French, so "Aucun frais" is wrong where the
+  // guides used it; the site's own pricing copy says "Aucuns frais".
+  const component = read('src/components/pages/GuidePage.astro');
+  assert.ok(component.includes('const startPath = paths.start'), 'GuidePage reads the locale start path');
+  assert.ok(component.includes('startLinkParts(section.body)'), 'GuidePage linkifies section bodies');
+  assert.ok(component.includes('startLinkParts(item)'), 'GuidePage linkifies section items');
+  assert.ok(component.includes('startLinkParts(sub.body)'), 'GuidePage linkifies subsection bodies');
+  assert.ok(component.includes('startLinkParts(item.a)'), 'GuidePage linkifies FAQ answers');
+  const guideFiles = [
+    'src/pages/guides/ai-receptionist-small-business/index.astro',
+    'src/pages/guides/meta-vs-google-ads-small-business/index.astro',
+    'src/pages/guides/quebec-bill-96-website/index.astro',
+    'src/pages/guides/quebec-law-25-website/index.astro',
+    'src/pages/guides/small-business-seo-basics/index.astro',
+    'src/pages/guides/website-cost-canada/index.astro',
+    'src/pages/guides/website-that-brings-quote-requests/index.astro',
+    'src/pages/guides/what-to-prepare-for-your-website/index.astro',
+    'src/pages/guides/when-to-redesign-your-website/index.astro',
+    'src/pages/fr/guides/bases-seo-pme/index.astro',
+    'src/pages/fr/guides/cout-site-web-canada/index.astro',
+    'src/pages/fr/guides/loi-25-site-web-quebec/index.astro',
+    'src/pages/fr/guides/loi-96-site-web-quebec/index.astro',
+    'src/pages/fr/guides/meta-ou-google-ads-pme/index.astro',
+    'src/pages/fr/guides/preparer-votre-site-web/index.astro',
+    'src/pages/fr/guides/quand-refaire-votre-site-web/index.astro',
+    'src/pages/fr/guides/receptionniste-ia-pme/index.astro',
+    'src/pages/fr/guides/site-web-demandes-soumission/index.astro',
+  ];
+  for (const path of guideFiles) {
+    const page = read(path);
+    // The helper renders one link per string, so a string must not hold
+    // the start path twice.
+    for (const match of page.matchAll(/"([^"]*(?:\/start|\/fr\/commencer)[^"]*)"/g)) {
+      const text = match[1];
+      const count = (text.match(/\/start/g) ?? []).length + (text.match(/\/fr\/commencer/g) ?? []).length;
+      assert.equal(count, 1, `${path} holds the start path once per string`);
+    }
+    assert.equal(page.includes('Aucun frais'), false, `${path} has no singular "Aucun frais" left`);
+  }
+  assert.ok(read('src/pages/fr/guides/cout-site-web-canada/index.astro').includes('Aucuns frais'), 'the FR cost guide uses "Aucuns frais"');
+});
+
 test('the mobile menu fits short viewports', () => {
   // The panel is position: fixed, so on a landscape phone (about 375px
   // tall) its roughly 450px of links, theme row and language switcher
