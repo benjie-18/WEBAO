@@ -119,7 +119,6 @@ const navLinks = {
   guideBill96: localizedPaths[locale].guideBill96,
   guideLaw25: localizedPaths[locale].guideLaw25,
   guideIndex: localizedPaths[locale].guideIndex,
-  process: locale === "fr" ? "/fr#processus" : "/#process",
 };
 
 // Localized process anchor
@@ -518,7 +517,7 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
             <h4>{t.footer.services}</h4>
             <a href={navLinks.serviceDesign}>{t.footer.customSites}</a>
             <a href={navLinks.servicePlans}>{t.footer.monthlyPlans}</a>
-            <a href={navLinks.pricing}>{t.footer.adsPackages}</a>
+            <a href={`${navLinks.pricing}#ads-h`}>{t.footer.adsPackages}</a>
             <a href={navLinks.pricing}>{t.footer.aiServices}</a>
           </div>
           <div class="footer-col">
@@ -564,6 +563,13 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
     <script>
       let scrollCleanup: (() => void) | null = null;
       let pauseCleanup: (() => void) | null = null;
+      // The mobile menu's Escape handler is a document-level listener,
+      // so it survives the view-transition DOM swap while the panel it
+      // closes does not: re-adding it on every astro:page-load without
+      // removing the old one piled up a stale listener per navigation.
+      // Stored here (same pattern as scrollCleanup) so the previous one
+      // is removed before the new one is added.
+      let menuKeyHandler: ((e: KeyboardEvent) => void) | null = null;
 
       function initLayout() {
         // Mobile menu setup & reset
@@ -604,7 +610,11 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
               (toggle as HTMLElement).focus();
             }
           };
-          document.addEventListener('keydown', onKeyDown);
+          if (menuKeyHandler) {
+            document.removeEventListener('keydown', menuKeyHandler);
+          }
+          menuKeyHandler = onKeyDown;
+          document.addEventListener('keydown', menuKeyHandler);
         }
 
         // Reveal on scroll, respects prefers-reduced-motion.

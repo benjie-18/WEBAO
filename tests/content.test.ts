@@ -447,6 +447,61 @@ test('the mobile menu fits short viewports', () => {
   assert.match(block, /overflow-y:\s*auto/, 'the panel scrolls when it is taller than the viewport');
 });
 
+test('the header controls meet the 44px touch target and the row still fits at 320px', () => {
+  // The menu toggle, theme toggle and mobile flag toggle sat at 40px,
+  // below the site's 44px minimum (EscapeHatch, portal buttons,
+  // carousel nav, pricing cart button, header cart button) — the theme
+  // toggle live-measured 40x40 on webao.ca 2026-11-21, the menu button
+  // hidden at desktop width. At 44px each, the smallest-phone row needs
+  // the 360px tightening (26px brand, 6px gaps, 8px inner gap) to stay
+  // inside the 288px available at a 320px viewport.
+  const css = read('src/styles/global.css');
+  const rule = (selector: string): string => {
+    const at = css.indexOf(selector);
+    assert.ok(at > 0, `${selector} rule exists`);
+    return css.slice(at, css.indexOf('}', at));
+  };
+  for (const selector of ['.menu-toggle {', '.theme-toggle {']) {
+    const block = rule(selector);
+    assert.match(block, /width:\s*44px/, `${selector} is 44px wide`);
+    assert.match(block, /height:\s*44px/, `${selector} is 44px tall`);
+  }
+  const switcher = read('src/components/ui/LanguageSwitcher.astro');
+  const toggleAt = switcher.indexOf('.lang-switcher.lang-toggle {');
+  assert.ok(toggleAt > 0, 'the flag toggle rule exists');
+  const toggleBlock = switcher.slice(toggleAt, switcher.indexOf('}', toggleAt));
+  assert.match(toggleBlock, /width:\s*44px/, 'the flag toggle is 44px wide');
+  assert.match(toggleBlock, /height:\s*44px/, 'the flag toggle is 44px tall');
+  const narrow = css.slice(css.indexOf('@media (max-width: 360px)'));
+  assert.match(narrow, /\.brand-logo \{\s*height:\s*26px/, 'the brand shrinks to 26px at 360px');
+  assert.match(narrow, /\.header-right \{\s*gap:\s*6px/, 'the header gaps tighten to 6px at 360px');
+  assert.match(narrow, /\.header-inner \{\s*gap:\s*8px/, 'the inner gap tightens to 8px at 360px');
+});
+
+test('the mobile menu Escape handler does not pile up, and the chrome keeps no dead selectors', () => {
+  // initLayout runs on every astro:page-load, and the menu's Escape
+  // handler is a document-level listener: the old code added a new one
+  // per client-router navigation while the panel it closed was already
+  // detached, so stale listeners accumulated for the session. The stored
+  // handler is now removed before the new one is added, the same pattern
+  // as scrollCleanup. The chrome also carried selectors that could never
+  // match: .brand-mark / .brand-domain have no such element anywhere,
+  // .mobile-panel a:last-child never matches (the switcher div is the
+  // panel's last child), and navLinks.process was never read. The footer
+  // Ads link now lands on the Ads Pack section instead of the top of
+  // the pricing page: the #ads-h anchor already exists there.
+  const layout = read('src/layouts/BaseLayout.astro');
+  assert.match(layout, /let menuKeyHandler: \(\(e: KeyboardEvent\) => void\) \| null = null/, 'the handler is stored module-level');
+  assert.match(layout, /document\.removeEventListener\('keydown', menuKeyHandler\)/, 'the old handler is removed before the new one is added');
+  assert.match(layout, /menuKeyHandler = onKeyDown/, 'the new handler is stored');
+  assert.ok(layout.includes('href={`${navLinks.pricing}#ads-h`}>{t.footer.adsPackages}'), 'the footer Ads link lands on the Ads Pack section');
+  assert.equal(layout.includes('process: locale === "fr"'), false, 'the unused navLinks.process key is gone');
+  const css = read('src/styles/global.css');
+  assert.equal(css.includes('.brand-mark'), false, 'no .brand-mark rule remains');
+  assert.equal(css.includes('.brand-domain'), false, 'no .brand-domain rule remains');
+  assert.equal(css.includes('.mobile-panel a:last-child'), false, 'no .mobile-panel a:last-child rule remains');
+});
+
 test('the portal names what is still missing after a partial save, and shows the real ads budget floor', () => {
   // A partial onboarding save used to answer a bare "Saved.", so a client
   // could walk away thinking the build would start, while the "Still

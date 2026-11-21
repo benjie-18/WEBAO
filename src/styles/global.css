@@ -671,20 +671,6 @@ html.theming *::after {
   letter-spacing: -0.03em;
   font-size: 1.25rem;
 }
-.brand-mark {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: var(--ink);
-  color: var(--paper);
-  display: grid;
-  place-items: center;
-  font-family: var(--font-display);
-  font-size: 1.05rem;
-  line-height: 1;
-}
-.site-header--dark .brand-mark { background: var(--paper); color: var(--ink); }
-
 /* Brand logo images (light/dark variants) */
 .brand-logo {
   display: block;
@@ -728,8 +714,11 @@ html.theming *::after {
 /* Mobile nav */
 .menu-toggle {
   display: none;
-  width: 40px;
-  height: 40px;
+  /* 44px: the site's minimum touch target (EscapeHatch, portal
+     buttons, carousel nav, pricing cart button). 40px was below it for
+     the control that opens the menu on every mobile page. */
+  width: 44px;
+  height: 44px;
   flex: none; /* never shrink: this is the rightmost header item, it must stay tappable */
   border-radius: 10px;
   border: 1px solid var(--line);
@@ -783,7 +772,6 @@ html.theming *::after {
   font-weight: 550;
   letter-spacing: -0.02em;
 }
-.mobile-panel a:last-child { border-bottom: 0; }
 
 @media (max-width: 860px) {
   .nav { display: none; }
@@ -795,20 +783,22 @@ html.theming *::after {
   .header-right > .lang-switcher:not(.lang-switcher--mobile):not(.lang-toggle) { display: none; }
 }
 
-/* Very narrow phones: drop the redundant domain suffix from the brand lockup
-   so the header row (brand + theme toggle + menu button) always fits. */
+/* Very narrow phones: tighten the header row so brand + flag + theme +
+   cart + menu still fit. */
 @media (max-width: 480px) {
-  .brand-domain { display: none; }
   .header-inner { gap: 12px; }
   .header-right { gap: 10px; }
 }
 
 /* Smallest phones: the flag toggle adds a fifth header item, so tighten the
    row a touch more so brand + flag + theme + cart + menu still fit at 320px
-   without clipping the menu button. */
+   without clipping the menu button. At 44px per control the row needs
+   78 (brand) + 176 (controls) + 18 (gaps) + 8 (inner gap) = 280px of the
+   288px available. */
 @media (max-width: 360px) {
-  .header-right { gap: 8px; }
-  .brand-logo { height: 30px; }
+  .header-inner { gap: 8px; }
+  .header-right { gap: 6px; }
+  .brand-logo { height: 26px; }
 }
 
 /* --- Footer --- */
@@ -956,8 +946,11 @@ html.theming *::after {
 /* --- Theme toggle --- */
 .theme-toggle {
   position: relative;
-  width: 40px;
-  height: 40px;
+  /* 44px: the site's minimum touch target (EscapeHatch, portal buttons,
+     carousel nav, pricing cart button). 40px was below it for a control
+     present in the header on every page. */
+  width: 44px;
+  height: 44px;
   flex: none;
   border-radius: 12px;
   border: 1px solid var(--line);
