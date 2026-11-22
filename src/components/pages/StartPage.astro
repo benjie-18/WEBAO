@@ -30,7 +30,7 @@ const fmt = { prefix: t.cart.moneyPrefix, suffix: t.cart.moneySuffix, decimal: t
 const planRows = plans.map((def) => {
   const p = t.pricing.plans[def.id];
   const cents = priceCentsFor(def.id, "month") ?? 0;
-  return { id: def.id, name: p.name, badge: p.badge, price: `${formatMoney(cents, fmt)}${t.cart.suffixMonth}` };
+  return { id: def.id, name: p.name, badge: p.badge, scope: p.features[0], price: `${formatMoney(cents, fmt)}${t.cart.suffixMonth}` };
 });
 /** Ads channels and AI services: monthly only, priced live from the catalog. */
 const adsRows = [
@@ -74,9 +74,19 @@ const aiRows = [
       data-label-group-web={t.start.selection.groupWeb}
       data-label-group-ads={t.start.selection.groupAds}
       data-label-group-ai={t.start.selection.groupAi}
+      data-summary-empty={t.start.selection.summaryEmpty}
+      data-summary-line={t.start.selection.summaryLine}
+      data-submit={t.start.form.submit}
+      data-submit-with-total={t.start.form.submitWithTotal}
     >
       <!-- Selection card (DOM-first so phones read "what am I buying" first) -->
       <aside class="sel-card" aria-labelledby="sel-title" data-reveal style="--d:80ms">
+        {/* Mobile only: collapsed order summary. The full pickers live
+            below; the toggle opens them. The line is filled by start-ui. */}
+        <button type="button" class="sel-mobile-toggle" data-start-summary-toggle aria-expanded="false">
+          <span class="sel-mobile-toggle-line" data-start-summary-line>{t.start.selection.title}</span>
+          <span class="sel-mobile-toggle-chevron" aria-hidden="true">▾</span>
+        </button>
         <div class="sel-head">
           <h2 id="sel-title" class="sel-title">{t.start.selection.title}</h2>
           <a href={paths.pricing} class="sel-change mono">{t.start.selection.change}</a>
@@ -110,9 +120,12 @@ const aiRows = [
             <label class="plan-opt">
               <input type="radio" name="plan" value={row.id} data-name={row.name} />
               <span class="plan-opt-body">
-                <span class="plan-opt-name">
-                  {row.name}
-                  {row.badge !== "" && <em class="plan-opt-badge mono">{row.badge}</em>}
+                <span class="plan-opt-main">
+                  <span class="plan-opt-name">
+                    {row.name}
+                    {row.badge !== "" && <em class="plan-opt-badge mono">{row.badge}</em>}
+                  </span>
+                  <span class="plan-opt-scope">{row.scope}</span>
                 </span>
                 <span class="plan-opt-price mono" data-plan-price>{row.price}</span>
               </span>
@@ -121,7 +134,9 @@ const aiRows = [
           <label class="plan-opt plan-opt--none">
             <input type="radio" name="plan" value="none" />
             <span class="plan-opt-body">
-              <span class="plan-opt-name">{t.start.selection.noPlanOption}</span>
+              <span class="plan-opt-main">
+                <span class="plan-opt-name">{t.start.selection.noPlanOption}</span>
+              </span>
             </span>
           </label>
         </fieldset>
@@ -132,7 +147,9 @@ const aiRows = [
             <label class="plan-opt">
               <input type="radio" name="ads-channel" value={row.id} data-name={row.name} />
               <span class="plan-opt-body">
-                <span class="plan-opt-name">{row.name}</span>
+                <span class="plan-opt-main">
+                  <span class="plan-opt-name">{row.name}</span>
+                </span>
                 <span class="plan-opt-price mono" data-ads-price>{row.price}</span>
               </span>
             </label>
@@ -140,13 +157,17 @@ const aiRows = [
           <label class="plan-opt plan-opt--none">
             <input type="radio" name="ads-channel" value="none" />
             <span class="plan-opt-body">
-              <span class="plan-opt-name">{t.start.selection.adsNone}</span>
+              <span class="plan-opt-main">
+                <span class="plan-opt-name">{t.start.selection.adsNone}</span>
+              </span>
             </span>
           </label>
           <label class="plan-opt plan-opt--check">
             <input type="checkbox" name="gbp" value="gbp-revamp" data-name={t.pricing.adsPack.gbpName} />
             <span class="plan-opt-body">
-              <span class="plan-opt-name">{t.pricing.adsPack.gbpName}</span>
+              <span class="plan-opt-main">
+                <span class="plan-opt-name">{t.pricing.adsPack.gbpName}</span>
+              </span>
               <span class="plan-opt-price mono" data-gbp-price>{gbpPrice}</span>
             </span>
           </label>
@@ -158,7 +179,9 @@ const aiRows = [
             <label class="plan-opt plan-opt--check">
               <input type="checkbox" name="ai-service" value={row.id} data-name={row.name} />
               <span class="plan-opt-body">
-                <span class="plan-opt-name">{row.name}</span>
+                <span class="plan-opt-main">
+                  <span class="plan-opt-name">{row.name}</span>
+                </span>
                 <span class="plan-opt-price mono" data-ai-price>{row.price}</span>
               </span>
             </label>
@@ -178,6 +201,18 @@ const aiRows = [
         </div>
         <p class="mono sel-note">{t.cart.note}</p>
         <p class="field-error mono sel-error" role="alert" data-start-selection-error hidden>{t.start.form.errSelection}</p>
+
+        <div class="sel-steps">
+          <p class="mono sel-legend">{t.start.steps.title}</p>
+          <ol class="sel-steps-list">
+            {t.start.steps.items.map((step, i) => (
+              <li>
+                <span class="sel-step-num mono" aria-hidden="true">{i + 1}</span>
+                <span>{step}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
       </aside>
 
       <!-- Details form -->
@@ -211,11 +246,20 @@ const aiRows = [
         <p class="mono start-hint">{t.start.form.hint}</p>
       </form>
 
+      <p class="mono start-reassurance">{t.start.form.reassurance}</p>
+      <ul class="start-trust mono" aria-label={t.home.hero.trustStrip.join(" · ")}>
+        {t.home.hero.trustStrip.map((item) => (
+          <li>{item}</li>
+        ))}
+      </ul>
+      <p class="mono start-launch-date" data-launch-date data-template={t.start.form.launchRange} hidden></p>
+
       <p class="mono start-shortlist" data-start-shortlist hidden>
         <strong>{t.demos.shortlistTitle}:</strong>
         <span data-start-shortlist-names></span>
         <a href={paths.demos}>{t.demos.shortlistChange}</a>
       </p>
+      <a href={paths.contact} class="start-directions">{t.start.form.directionsLink}</a>
     </div>
 
     <p class="mono start-aside">
@@ -283,6 +327,10 @@ const aiRows = [
     border-radius: 18px;
     padding: 24px;
   }
+  /* Mobile order summary: collapsed to one line, form first in view.
+     The toggle is hidden on desktop; the pickers show unless the card
+     is closed on a phone. */
+  .sel-mobile-toggle { display: none; }
   @media (max-width: 760px) {
     .start-grid {
       grid-template-columns: minmax(0, 1fr);
@@ -290,6 +338,38 @@ const aiRows = [
     }
     .sel-card {
       position: static;
+    }
+    .sel-card:not(.is-open) {
+      padding: 6px 22px;
+    }
+    .sel-mobile-toggle {
+      display: flex;
+      width: 100%;
+      min-height: 44px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 6px 2px;
+      background: transparent;
+      border: none;
+      font: inherit;
+      color: var(--ink);
+      cursor: pointer;
+      text-align: left;
+    }
+    .sel-mobile-toggle-line {
+      font-weight: 650;
+      font-size: 0.95rem;
+    }
+    .sel-mobile-toggle-chevron {
+      color: var(--muted);
+      transition: transform 0.2s ease;
+    }
+    .sel-card.is-open .sel-mobile-toggle-chevron {
+      transform: rotate(180deg);
+    }
+    .sel-card:not(.is-open) > :not(.sel-mobile-toggle) {
+      display: none;
     }
   }
 
@@ -371,12 +451,39 @@ const aiRows = [
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 12px 14px;
+    padding: 12px 14px 12px 42px;
     border: 1px solid var(--line);
     border-radius: 12px;
     background: var(--card-bg);
     cursor: pointer;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+  }
+  /* Custom radio/check circle: the native input stays in the DOM
+     (keyboard + screen reader) but is visually replaced by this ring,
+     which fills with a checkmark on selection. */
+  .plan-opt::before {
+    content: "";
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid var(--line-strong);
+    background: var(--card-bg);
+    display: grid;
+    place-items: center;
+    font-size: 11px;
+    line-height: 1;
+    color: var(--paper);
+    transition: background .2s ease, border-color .2s ease;
+  }
+  .plan-opt:has(input:checked)::before {
+    content: "✓";
+    background: var(--accent);
+    border-color: var(--accent);
   }
   .plan-opt:hover {
     border-color: var(--line-strong);
@@ -390,11 +497,14 @@ const aiRows = [
     outline-offset: 2px;
   }
   .plan-opt input {
-    accent-color: var(--accent);
-    width: 16px;
-    height: 16px;
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
     margin: 0;
-    flex: none;
+    opacity: 0;
   }
   .plan-opt-body {
     flex: 1;
@@ -403,6 +513,18 @@ const aiRows = [
     justify-content: space-between;
     gap: 10px;
     min-width: 0;
+  }
+  .plan-opt-main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  .plan-opt-scope {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.45;
   }
   .plan-opt-name {
     font-weight: 600;
@@ -471,6 +593,14 @@ const aiRows = [
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+  }
+  /* 44px tap target without changing the 26px visual: the invisible
+     expansion covers the gap to the neighbouring row content. */
+  .sel-extras-list :global(.sel-extra-remove::after) {
+    content: "";
+    position: absolute;
+    inset: -9px;
   }
   .sel-extras-list :global(.sel-extra-remove:hover) {
     color: var(--accent-text);
@@ -497,6 +627,40 @@ const aiRows = [
     font-size: 10.5px;
     color: var(--muted);
     margin: 8px 0 0;
+  }
+  /* What happens after checkout: numbered steps in the sidebar. */
+  .sel-steps {
+    margin-top: 18px;
+    border-top: 1px solid var(--line);
+    padding-top: 16px;
+  }
+  .sel-steps-list {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0;
+    display: grid;
+    gap: 10px;
+  }
+  .sel-steps-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-3);
+  }
+  .sel-step-num {
+    flex: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--paper);
+    display: grid;
+    place-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    margin-top: 1px;
   }
   .sel-error {
     margin-top: 10px;
@@ -557,6 +721,46 @@ const aiRows = [
     flex-wrap: wrap;
   }
   .start-shortlist a { color: var(--accent); font-weight: 700; }
+  .start-reassurance {
+    grid-column: 1 / -1;
+    font-size: 11.5px;
+    color: var(--muted);
+    margin: 10px 0 0;
+    text-align: center;
+  }
+  /* #46 trust strip on /start: same four items as the home hero. */
+  .start-trust {
+    grid-column: 1 / -1;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px 16px;
+    margin: 12px 0 0;
+    padding: 0;
+    font-size: 11px;
+    letter-spacing: .04em;
+    color: var(--muted);
+    text-align: center;
+  }
+  .start-launch-date {
+    grid-column: 1 / -1;
+    font-size: 11.5px;
+    color: var(--muted);
+    margin: 6px 0 0;
+    text-align: center;
+  }
+  .start-directions {
+    grid-column: 1 / -1;
+    display: block;
+    margin-top: 8px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
   .start-aside {
     margin-top: 24px;
     font-size: 11px;

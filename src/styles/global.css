@@ -894,6 +894,22 @@ html.theming *::after {
   box-shadow: 0 8px 20px var(--accent-glow);
 }
 .btn--primary:hover { background: var(--btn-primary-hover-bg); transform: translateY(-1px); box-shadow: 0 12px 28px var(--accent-glow); }
+/* Full-width add-to-cart CTA on the pricing cards (bundles, Ads, AI).
+   Same cart toggle as the small icon button, with a price label that
+   follows the billing term (cart-ui keeps [data-cta-label] in sync).
+   The added state reads as selected, not as a second primary button. */
+.card-cta {
+  width: 100%;
+  justify-content: center;
+  min-height: 46px;
+  margin-top: 18px;
+}
+.card-cta.is-added {
+  background: transparent;
+  border-color: var(--line);
+  color: inherit;
+  box-shadow: none;
+}
 .btn--dark {
   background: var(--ink);
   color: var(--paper);

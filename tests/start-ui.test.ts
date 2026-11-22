@@ -52,8 +52,14 @@ function fixture(options: FixtureOptions = {}) {
           data-eyebrow-web="Start your site" data-eyebrow-ads="Start your ads"
           data-eyebrow-ai="Start your AI" data-eyebrow-mixed="Start with WEBAO"
           data-hint-web="Add-ons only" data-hint-service="No website plan selected."
-          data-label-group-web="Website" data-label-group-ads="Ads" data-label-group-ai="AI">
-          <aside>
+          data-label-group-web="Website" data-label-group-ads="Ads" data-label-group-ai="AI"
+          data-summary-empty="Nothing selected yet" data-summary-line="Selected: {name} · {total}"
+          data-submit="Continue to payment →" data-submit-with-total="Continue to payment · {total} →">
+          <aside class="sel-card">
+            <button type="button" class="sel-mobile-toggle" data-start-summary-toggle aria-expanded="false">
+              <span class="sel-mobile-toggle-line" data-start-summary-line>Your selection</span>
+              <span class="sel-mobile-toggle-chevron" aria-hidden="true">▾</span>
+            </button>
             <div class="billing-toggle" data-billing-toggle>
               <button type="button" class="billing-opt is-active" data-billing-opt="month" aria-pressed="true">Monthly</button>
               <button type="button" class="billing-opt" data-billing-opt="year" aria-pressed="false">Yearly</button>
@@ -97,6 +103,7 @@ function fixture(options: FixtureOptions = {}) {
             <button type="submit">Continue</button>
           </form>
           <p data-start-shortlist hidden><strong>Your shortlisted demos:</strong> <span data-start-shortlist-names></span> <a href="/demos">Change</a></p>
+          <p data-launch-date data-template="Start today → live {a} to {b}" hidden></p>
         </div>
       </main>
       <div data-cart-overlay hidden></div>
@@ -424,6 +431,44 @@ test('without a demo or shortlist the notification carries neither field', () =>
   const body = requests[0].body as { fields: Record<string, string> };
   assert.equal(body.fields.demo, undefined);
   assert.equal(body.fields.shortlist, undefined);
+  window.close();
+});
+
+test('the submit button carries the live total, and reverts when the cart empties', () => {
+  const { doc, click, choose, window } = fixture();
+  const submitBtn = doc.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+  assert.equal(submitBtn.textContent, 'Continue to payment · C$149.99/mo →');
+  assert.equal(doc.querySelector('[data-start-summary-line]')!.textContent, 'Selected: Grow · C$149.99/mo');
+  choose('none');
+  assert.equal(submitBtn.textContent, 'Continue to payment →');
+  assert.equal(doc.querySelector('[data-start-summary-line]')!.textContent, 'Nothing selected yet');
+  window.close();
+});
+
+test('the summary toggle opens and closes the selection card', () => {
+  const { doc, click, window } = fixture();
+  const toggle = doc.querySelector<HTMLElement>('[data-start-summary-toggle]')!;
+  const card = doc.querySelector<HTMLElement>('.sel-card')!;
+  click(toggle);
+  assert.equal(card.classList.contains('is-open'), true);
+  assert.equal(toggle.getAttribute('aria-expanded'), 'true');
+  click(toggle);
+  assert.equal(card.classList.contains('is-open'), false);
+  assert.equal(toggle.getAttribute('aria-expanded'), 'false');
+  window.close();
+});
+
+test('the launch date renders a concrete range from today', () => {
+  const { doc, window } = fixture();
+  const el = doc.querySelector<HTMLElement>('[data-launch-date]')!;
+  assert.equal(el.hidden, false);
+  const day = 24 * 60 * 60 * 1000;
+  const now = new Date();
+  const fmt = (d: Date) => d.toLocaleDateString('en-CA', { month: 'short', day: 'numeric' });
+  assert.equal(
+    el.textContent,
+    `Start today → live ${fmt(new Date(now.getTime() + 14 * day))} to ${fmt(new Date(now.getTime() + 21 * day))}`,
+  );
   window.close();
 });
 

@@ -252,6 +252,18 @@ test('the contact form marks the fields that failed, like the start page', () =>
   assert.equal(startPage.includes('data-astro-reload'), false, 'the start form has no dead reload attribute');
 });
 
+test('the audit pages show what a report looks like, labelled as an example', () => {
+  // The sample scores are illustrative, so the page says so in both
+  // locales; a real audit result never appears on the landing page.
+  const enAudit = read('src/pages/audit.astro');
+  assert.ok(enAudit.includes('What a report looks like'), 'the EN audit page has the sample-report section');
+  assert.ok(enAudit.includes('Example scores for an example site, not a real audit.'), 'the EN sample is labelled as an example');
+  assert.ok(enAudit.includes('52/100') && enAudit.includes('61/100') && enAudit.includes('48/100'), 'the EN sample shows three example scores');
+  const frAudit = read('src/pages/fr/eval.astro');
+  assert.ok(frAudit.includes('À quoi ressemble un rapport'), 'the FR audit page has the sample-report section');
+  assert.ok(frAudit.includes("Scores d'exemple pour un site fictif, pas un vrai audit."), 'the FR sample is labelled as an example');
+});
+
 test('the image provenance list is well-formed and matches the catalog', () => {
   const sources = JSON.parse(read('src/lib/sources.json')) as Array<{
     demo: string;

@@ -681,6 +681,17 @@ export function syncButtons(doc: Document): void {
     btn.setAttribute("aria-label", added ? remove : add);
     btn.setAttribute("title", added ? remove : add);
     btn.setAttribute("aria-pressed", added ? "true" : "false");
+    // Full-width plan CTA: keep its visible price label in sync with the
+    // cart state and the active billing term.
+    const ctaLabel = btn.querySelector<HTMLElement>("[data-cta-label]");
+    if (ctaLabel) {
+      const d = ctaLabel.dataset;
+      ctaLabel.textContent = added
+        ? (d.added ?? "")
+        : billing === "year"
+          ? (d.year ?? d.month ?? "")
+          : (d.month ?? "");
+    }
   });
 }
 
@@ -717,7 +728,18 @@ export function renderDrawer(doc: Document): void {
   if (items.length === 0) {
     const title = label(doc, "emptyTitle", "Your cart is empty.");
     const hint = label(doc, "emptyHint", "Add items from the pricing page.");
-    container.innerHTML = `<div class="cart-drawer-empty">${escapeHtml(title)}<br/>${escapeHtml(hint)}</div>`;
+    // #74: the empty drawer is a quick starter, not a void — the most
+    // common first step (Grow) plus a way to browse demos instead.
+    const starter = label(doc, "emptyStarter", "Most small businesses start with Grow (C$149.99/mo).");
+    const addGrow = label(doc, "emptyAddGrow", "Add Grow to cart");
+    const browseDemos = label(doc, "emptyBrowseDemos", "Browse 47 demos");
+    const demosPath = label(doc, "demosPath", "/demos");
+    container.innerHTML = `<div class="cart-drawer-empty">${escapeHtml(title)}<br/>${escapeHtml(hint)}</div>
+      <div class="cart-empty-starter">
+        <p>${escapeHtml(starter)}</p>
+        <button type="button" class="btn btn--primary" data-cart-btn data-key="grow-month" data-product="grow" data-name="Grow" data-price-cents="14999" data-price-year="149990" data-interval="month" data-type="plan" aria-label="${escapeHtml(addGrow)}">${escapeHtml(addGrow)}</button>
+        <a class="btn btn--ghost" href="${escapeHtml(demosPath)}">${escapeHtml(browseDemos)}</a>
+      </div>`;
   } else {
     const removeLabel = label(doc, "labelRemove", "Remove {name} from cart");
     container.innerHTML = items
@@ -743,9 +765,46 @@ export function renderDrawer(doc: Document): void {
   }
 
   const total = items.reduce((sum, item) => sum + item.priceCents, 0);
+  // Cadence on the total, only when every item shares one billing interval
+  // (a monthly plan alone reads "C$89.99/mo"). Mixed carts (recurring plus
+  // one-time) carry no suffix rather than a wrong one.
+  const intervals = new Set(items.map((item) => item.interval));
+  const totalSuffix =
+    items.length > 0 && intervals.size === 1 ? intervalSuffix(doc, items[0].interval) : "";
   doc.querySelectorAll<HTMLElement>("[data-cart-total]").forEach((el) => {
-    el.textContent = formatMoney(total, fmt);
+    el.textContent = formatMoney(total, fmt) + totalSuffix;
   });
+
+  // Bundle suggestion: Local SEO + Reviews together cost more than the
+  // Lead Pack that covers both. Shown only when both are in the cart and
+  // the Pack isn't, with the saving computed from the catalog prices for
+  // the cart's own billing interval.
+  const suggest = doc.querySelector<HTMLElement>("[data-pack-suggest]");
+  if (suggest) {
+    const seo = items.find((item) => item.product === "localseo");
+    const review = items.find((item) => item.product === "review");
+    const pack = items.find((item) => item.product === "lead-pack");
+    if (seo && review && !pack && seo.interval === review.interval) {
+      const packCents = priceCentsFor("lead-pack", seo.interval);
+      const combined = seo.priceCents + review.priceCents;
+      if (packCents !== undefined && combined > packCents) {
+        const suffix = intervalSuffix(doc, seo.interval);
+        const textEl = suggest.querySelector<HTMLElement>("[data-pack-suggest-text]");
+        const template = suggest.dataset.packSuggestTemplate ?? "Local SEO + Reviews cost {combined}. The Lead Pack covers both for {pack}, saving you {save}.";
+        if (textEl) {
+          textEl.textContent = template
+            .replace("{combined}", formatMoney(combined, fmt) + suffix)
+            .replace("{pack}", formatMoney(packCents, fmt) + suffix)
+            .replace("{save}", formatMoney(combined - packCents, fmt) + suffix);
+        }
+        suggest.hidden = false;
+      } else {
+        suggest.hidden = true;
+      }
+    } else {
+      suggest.hidden = true;
+    }
+  }
 
   const checkout = doc.querySelector<HTMLElement>("[data-cart-checkout]");
   if (checkout) {
@@ -775,7 +834,9 @@ export function renderDrawer(doc: Document): void {
   });
 }
 
-/** Reflect the active billing term on the toggle. */
+/** Reflect the active billing term on the toggle, and on the page itself
+    (html[data-billing]) so CSS can hide the yearly total when Monthly is
+    active. */
 export function syncBillingToggle(doc: Document): void {
   const billing = readBilling(doc.defaultView);
   doc.querySelectorAll<HTMLElement>("[data-billing-opt]").forEach((btn) => {
@@ -783,6 +844,7 @@ export function syncBillingToggle(doc: Document): void {
     btn.classList.toggle("is-active", active);
     btn.setAttribute("aria-pressed", active ? "true" : "false");
   });
+  doc.documentElement.dataset.billing = billing;
 }
 
 /** Buttons, badge, toggle and drawer — everything derived from cart state. */
@@ -805,6 +867,7 @@ function clearCartOnPaidPage(doc: Document): void {
 }
 
 export function openDrawer(doc: Document): void {
+  hideAddedToast(doc);
   const drawer = drawerEl(doc);
   const overlay = overlayEl(doc);
   // Remember who opened the drawer so focus can return there on close.
@@ -907,6 +970,29 @@ function trapConflictTab(event: KeyboardEvent, doc: Document): void {
   }
 }
 
+let toastTimer: ReturnType<typeof setTimeout> | null = null;
+
+/** Brief "Added X to cart" confirmation. Auto-hides after 3.5s; opening
+    the drawer dismisses it immediately. */
+function showAddedToast(doc: Document, name: string): void {
+  const toast = doc.querySelector<HTMLElement>("[data-cart-toast]");
+  if (!toast) return;
+  const text = toast.querySelector<HTMLElement>("[data-cart-toast-text]");
+  const template = toast.dataset.addedToast ?? "Added {name} to cart";
+  if (text) text.textContent = template.replace("{name}", name);
+  toast.hidden = false;
+  requestFrame(() => toast.classList.add("is-visible"));
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => hideAddedToast(doc), 3500);
+}
+
+function hideAddedToast(doc: Document): void {
+  const toast = doc.querySelector<HTMLElement>("[data-cart-toast]");
+  if (!toast) return;
+  toast.classList.remove("is-visible");
+  toast.hidden = true;
+}
+
 function requestFrame(fn: () => void): void {
   if (typeof requestAnimationFrame === "function") requestAnimationFrame(() => fn());
   else setTimeout(fn, 0);
@@ -947,7 +1033,46 @@ function onClick(event: Event, doc: Document): void {
   const cartBtn = closestElement(event.target, "[data-cart-btn]");
   if (cartBtn) {
     event.preventDefault();
+    const key = buttonKey(cartBtn, readBilling(win));
+    const wasAdded = getCart(win).some((item) => item.key === key);
     toggleFromButton(cartBtn, doc);
+    const nowAdded = getCart(win).some((item) => item.key === key);
+    if (!wasAdded && nowAdded) {
+      showAddedToast(doc, cartBtn.dataset.name ?? cartBtn.dataset.product ?? "");
+    } else if (wasAdded && !nowAdded) {
+      // The confirmation is stale once the item leaves the cart.
+      hideAddedToast(doc);
+    }
+    return;
+  }
+
+  // Bundle switch: replace Local SEO + Reviews with the Lead Pack, on the
+  // same billing interval, through the same conflict guard as a normal add
+  // (Scale-ineligible packs are refused there, not here).
+  const packSwitch = closestElement(event.target, "[data-pack-switch]");
+  if (packSwitch) {
+    event.preventDefault();
+    const suggest = doc.querySelector<HTMLElement>("[data-pack-suggest]");
+    const cart = getCart(win);
+    const seo = cart.find((item) => item.product === "localseo");
+    const review = cart.find((item) => item.product === "review");
+    if (!seo || !review || seo.interval !== review.interval) return;
+    const packCents = priceCentsFor("lead-pack", seo.interval);
+    if (packCents === undefined) return;
+    const candidate: CartItem = {
+      key: cartKey("lead-pack", seo.interval),
+      product: "lead-pack",
+      name: suggest?.dataset.packName ?? "Lead Pack",
+      type: "bundle",
+      interval: seo.interval,
+      priceCents: packCents,
+    };
+    // Guard against the cart WITHOUT the two components: the Pack includes
+    // them, so guarding against the current cart would refuse the switch
+    // as a bundle overlap. Only commit when the guard passes.
+    const reduced = cart.filter((item) => item.product !== "localseo" && item.product !== "review");
+    if (!guardAdd(doc, reduced, candidate)) return;
+    setCart(win, [...reduced, candidate]);
     return;
   }
 

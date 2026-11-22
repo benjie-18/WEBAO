@@ -277,6 +277,37 @@ export function renderStart(doc: Document): void {
     el.textContent = formatMoney(total, fmt);
   });
 
+  // The submit button carries the live total, so the price sits on the
+  // action itself instead of only in the summary above it.
+  const submitBtn = root.querySelector<HTMLButtonElement>('button[type="submit"]');
+  if (submitBtn) {
+    if (cart.length === 0) {
+      submitBtn.textContent = label(root, "submit", "Continue to payment →");
+    } else {
+      const intervals = new Set(cart.map((item) => item.interval));
+      const suffix = intervals.size === 1 ? intervalSuffix(doc, cart[0].interval) : "";
+      submitBtn.textContent = label(root, "submitWithTotal", "Continue to payment · {total} →").replace(
+        "{total}",
+        `${formatMoney(total, fmt)}${suffix}`,
+      );
+    }
+  }
+
+  // Mobile collapsed summary: one line naming the headline item + total.
+  const summaryLine = root.querySelector<HTMLElement>("[data-start-summary-line]");
+  if (summaryLine) {
+    if (cart.length === 0) {
+      summaryLine.textContent = label(root, "summaryEmpty", "Nothing selected yet");
+    } else {
+      const intervals = new Set(cart.map((item) => item.interval));
+      const suffix = intervals.size === 1 ? intervalSuffix(doc, cart[0].interval) : "";
+      const name = plan?.name ?? cart[0].name;
+      summaryLine.textContent = label(root, "summaryLine", "Selected: {name} · {total}")
+        .replace("{name}", name)
+        .replace("{total}", `${formatMoney(total, fmt)}${suffix}`);
+    }
+  }
+
   // A non-empty cart clears the "choose something" error.
   if (cart.length > 0) showSelectionError(root, false);
 }
@@ -587,6 +618,14 @@ export function initStart(doc: Document = document, options: StartOptions = {}):
         toggleBranch(doc, chip.dataset.branchToggle as Branch);
         return;
       }
+      // Mobile collapsed summary: the toggle opens the pickers.
+      const summaryToggle = closestElement(event.target, "[data-start-summary-toggle]") as HTMLButtonElement | null;
+      if (summaryToggle) {
+        const card = summaryToggle.closest(".sel-card") as HTMLElement | null;
+        const open = card?.classList.toggle("is-open") ?? false;
+        summaryToggle.setAttribute("aria-expanded", open ? "true" : "false");
+        return;
+      }
       if (closestElement(event.target, "[data-billing-opt]") && rootEl(doc)) setTimeout(() => renderStart(doc), 0);
     });
 
@@ -620,4 +659,24 @@ export function initStart(doc: Document = document, options: StartOptions = {}):
   setupPage(doc);
   renderStart(doc);
   renderShortlist(doc);
+  renderLaunchDate(doc);
+}
+
+// Launch-date estimator: turn the static "Live in 2–3 weeks" into a
+// concrete date range, computed from today so it never goes stale. The
+// template lives on the element (data-template with {a}/{b} placeholders);
+// without JS the line stays hidden and the static reassurance stands.
+export function renderLaunchDate(doc: Document): void {
+  const el = doc.querySelector("[data-launch-date]") as HTMLElement | null;
+  if (!el) return;
+  const template = el.dataset.template ?? "";
+  if (!template) return;
+  const day = 24 * 60 * 60 * 1000;
+  const now = new Date();
+  const locale = doc.documentElement.lang === "fr" ? "fr-CA" : "en-CA";
+  const fmt = (d: Date) => d.toLocaleDateString(locale, { month: "short", day: "numeric" });
+  el.textContent = template
+    .replace("{a}", fmt(new Date(now.getTime() + 14 * day)))
+    .replace("{b}", fmt(new Date(now.getTime() + 21 * day)));
+  el.hidden = false;
 }
