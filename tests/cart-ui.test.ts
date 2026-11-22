@@ -85,15 +85,15 @@ function fixture(options: { french?: boolean; cart?: CartItem[] } = {}) {
         <button type="button" class="cart-btn" data-cart-btn data-key="ads-both-month" data-product="ads-both"
           data-name="Meta + Google" data-price-cents="134999" data-interval="month" data-type="addon"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="lead-pack-month" data-product="lead-pack"
-          data-name="Lead Pack" data-price-cents="23999" data-interval="month" data-type="bundle" data-price-year="239990"></button>
+          data-name="Lead Pack" data-price-cents="49999" data-interval="month" data-type="bundle" data-price-year="499990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="visibility-pack-month" data-product="visibility-pack"
-          data-name="Visibility Pack" data-price-cents="9999" data-interval="month" data-type="bundle" data-price-year="99990"></button>
+          data-name="Visibility Pack" data-price-cents="34999" data-interval="month" data-type="bundle" data-price-year="349990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="ai-pack-month" data-product="ai-pack"
           data-name="AI Pack" data-price-cents="39999" data-interval="month" data-type="bundle" data-price-year="399990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="localseo-month" data-product="localseo"
           data-name="Local SEO Management" data-price-cents="15999" data-interval="month" data-type="addon" data-price-year="159990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="review-month" data-product="review"
-          data-name="Review Generation Engine" data-price-cents="9999" data-interval="month" data-type="addon" data-price-year="99990"></button>
+          data-name="Review Generation Engine" data-price-cents="39999" data-interval="month" data-type="addon" data-price-year="399990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="extrapage-one-time" data-product="extrapage"
           data-name="Extra Page" data-price-cents="4499" data-interval="one-time" data-type="addon"></button>
       </main>
@@ -211,7 +211,7 @@ test('only one plan at a time, add-ons stack, totals add up', () => {
   click(button('review'));
   click(button('extrapage'));
   assert.deepEqual(cart().map((i) => i.key), ['grow-month', 'review-month', 'extrapage-one-time']);
-  assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$294.97');
+  assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$594.97');
   assert.match(doc.querySelector('[data-cart-items]')!.textContent ?? '', /C\$44\.99 one-time/);
   assert.equal(doc.querySelector('[data-cart-count]')!.textContent, '3');
 });
@@ -226,14 +226,14 @@ test('the yearly toggle prices every recurring item, one-time items untouched', 
   assert.equal(window.localStorage.getItem(BILLING_KEY), 'year');
   assert.deepEqual(cart().map((i) => [i.key, i.priceCents]), [
     ['launch-year', 89990],
-    ['review-year', 99990],
+    ['review-year', 399990],
     ['extrapage-one-time', 4499],
   ]);
   assert.equal(doc.querySelector('[data-billing-opt="year"]')!.getAttribute('aria-pressed'), 'true');
   assert.equal(doc.querySelector('[data-billing-opt="year"]')!.classList.contains('is-active'), true);
   assert.equal(doc.querySelector('[data-billing-opt="month"]')!.classList.contains('is-active'), false);
   assert.equal(button('launch')!.classList.contains('is-added'), true, 'the yearly button stays marked');
-  assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$1,944.79');
+  assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$4,944.79');
   assert.match(doc.querySelector('[data-cart-items]')!.textContent ?? '', /C\$899\.90\/yr/);
 
   // A button clicked while yearly adds the yearly price, and plans still
@@ -246,7 +246,7 @@ test('the yearly toggle prices every recurring item, one-time items untouched', 
   // Switching back restores monthly prices.
   click(doc.querySelector('[data-billing-opt="month"]'));
   assert.deepEqual(cart().map((i) => [i.key, i.priceCents]), [
-    ['review-month', 9999],
+    ['review-month', 39999],
     ['extrapage-one-time', 4499],
     ['grow-month', 14999],
   ]);
@@ -323,7 +323,7 @@ test('removing an item from the drawer updates buttons, badge and total', () => 
   assert.deepEqual(cart().map((i) => i.key), ['review-month']);
   assert.equal(doc.querySelector('[data-cart-count]')!.textContent, '1');
   assert.equal(button('launch')!.classList.contains('is-added'), false);
-  assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$99.99');
+  assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$399.99');
   window.close();
 });
 

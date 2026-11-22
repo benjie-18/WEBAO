@@ -145,8 +145,8 @@ export const PRICE_MAP: Record<string, string> = {
   "grow-year": "price_1UU1M7E57vVzxI41S5AANteS",
   "launch-month": "price_1UO3NhE57vVzxI41BeElAQVZ",
   "launch-year": "price_1UU1M4E57vVzxI41E0mPbwdV",
-  "lead-pack-month": "price_1UO3DwE57vVzxI41q2jb3Rxo",
-  "lead-pack-year": "price_1UORRoE57vVzxI41BenDkCDZ",
+  "lead-pack-month": "price_1UehJmE57vVzxI41lySHr788", // C$499.99 (was price_1UO3DwE57vVzxI41q2jb3Rxo at C$239.99; left active for existing subscribers)
+  "lead-pack-year": "price_1UehJsE57vVzxI41aj155qlY", // C$4,999.90/yr (10x monthly, 2 months free)
   "localseo-month": "price_1UO3E2E57vVzxI41T6FkSLJp",
   "localseo-year": "price_1UORRsE57vVzxI41DIqBnkzB",
   "priority-month": "price_1UO3EbE57vVzxI41kSjNOFtX",
@@ -155,11 +155,11 @@ export const PRICE_MAP: Record<string, string> = {
   "quotephoto-year": "price_1UORSEE57vVzxI41fZMW2qXR",
   "report-month": "price_1UO3EVE57vVzxI41eNT4NoDf",
   "report-year": "price_1UORS8E57vVzxI417LKUJ98z",
-  "review-month": "price_1UO3E6E57vVzxI41JJ7znxzO",
-  "review-year": "price_1UORRwE57vVzxI41ubO4Q6qM",
+  "review-month": "price_1UehJbE57vVzxI41rOygD4gP", // C$399.99 (was price_1UO3E6E57vVzxI41JJ7znxzO at C$99.99; left active for existing subscribers)
+  "review-year": "price_1UehJmE57vVzxI41vNPEBtnH", // C$3,999.90/yr (10x monthly, 2 months free)
   "scale-month": "price_1UO3DtE57vVzxI41h8bSDqZd",
   "scale-year": "price_1UU1M8E57vVzxI419tR3a3Gy",
-  "visibility-pack-month": "price_1UO3DzE57vVzxI4199bDK2uj",
+  "visibility-pack-month": "price_1UehJsE57vVzxI41zns1Z4ma", // C$349.99 (was price_1UO3DzE57vVzxI4199bDK2uj at C$99.99; left active for existing subscribers)
   // AI services. Receptionist and Follow-up are monthly only; the AI Pack
   // is yearly available too. Setup fees are NOT in this map: the
   // parity test requires every map key to be a catalog key, and setups
@@ -169,7 +169,7 @@ export const PRICE_MAP: Record<string, string> = {
   "ai-followup-month": "price_1UYFXJE57vVzxI41rtocXmsu",
   "ai-pack-month": "price_1UZg5vE57vVzxI41U5J4rBPd", // C$399.99 (was price_1UYFXOE57vVzxI41aR00rKZe at C$449.99; left active for existing subscribers)
   "ai-pack-year": "price_1UZhOPE57vVzxI41KxH5xHzf", // C$3,999.90/yr (10x monthly, 2 months free)
-  "visibility-pack-year": "price_1UORRqE57vVzxI41BDPCliaR",
+  "visibility-pack-year": "price_1UehJwE57vVzxI41unkN2eaa", // C$3,499.90/yr (10x monthly, 2 months free)
 };
 
 /** Key used by flows that have no cart (the /start form): the $149 plan. */

@@ -47,12 +47,12 @@ const catalog = {
   scale: { product: "scale", type: "plan", monthCents: 34999, yearCents: 34999 * TEN_MONTHS },
 
   /* ── Bundles ─────────────────────────────────────────────────────────── */
-  "lead-pack": { product: "lead-pack", type: "bundle", monthCents: 23999, yearCents: 23999 * TEN_MONTHS },
+  "lead-pack": { product: "lead-pack", type: "bundle", monthCents: 49999, yearCents: 49999 * TEN_MONTHS },
   "visibility-pack": {
     product: "visibility-pack",
     type: "bundle",
-    monthCents: 9999,
-    yearCents: 9999 * TEN_MONTHS,
+    monthCents: 34999,
+    yearCents: 34999 * TEN_MONTHS,
   },
   // Monthly only (no annual term). The one-time setup fee is not sold here:
   // checkout adds it server-side from the STRIPE_PRICE_ADS_SETUP secret.
@@ -93,7 +93,7 @@ const catalog = {
   /* ── Add-ons (featured group first, then the rest) ───────────────────── */
   localseo: { product: "localseo", type: "addon", monthCents: 15999, yearCents: 15999 * TEN_MONTHS },
   booking: { product: "booking", type: "addon", monthCents: 4999, yearCents: 4999 * TEN_MONTHS },
-  review: { product: "review", type: "addon", monthCents: 9999, yearCents: 9999 * TEN_MONTHS },
+  review: { product: "review", type: "addon", monthCents: 39999, yearCents: 39999 * TEN_MONTHS },
   ecommerce: { product: "ecommerce", type: "addon", monthCents: 5999, yearCents: 5999 * TEN_MONTHS },
   aichat: { product: "aichat", type: "addon", monthCents: 9999, yearCents: 9999 * TEN_MONTHS },
   blog: { product: "blog", type: "addon", monthCents: 3499, yearCents: 3499 * TEN_MONTHS },
