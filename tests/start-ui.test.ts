@@ -471,19 +471,19 @@ test('an Ads channel can be added on the start page and replaces the previous ch
   );
   assert.match(summary(), /Ads/);
   assert.match(summary(), /Meta/);
-  assert.equal(doc.querySelector('[data-start-total]')!.textContent, 'C$1,049.98');
+  assert.equal(doc.querySelector('[data-start-total]')!.textContent, 'C$799.98');
 
   chooseAds('ads-both');
   assert.deepEqual(
     cart().map((item) => item.key),
     ['grow-month', 'ads-both-month'],
   );
-  assert.equal(doc.querySelector('[data-start-total]')!.textContent, 'C$1,499.98');
+  assert.equal(doc.querySelector('[data-start-total]')!.textContent, 'C$1,149.98');
   window.close();
 });
 
 test('picking a channel while the Starter test is in the cart asks before replacing it', () => {
-  const starter: CartItem = { key: 'ads-starter-month', product: 'ads-starter', name: 'Starter test', priceCents: 49999, interval: 'month', type: 'addon' };
+  const starter: CartItem = { key: 'ads-starter-month', product: 'ads-starter', name: 'Starter test', priceCents: 39999, interval: 'month', type: 'addon' };
   const { window, cart, chip, click, chooseAds, conflict, conflictMessage, conflictButtons, clickConflictButton } = fixture({
     cart: [planItem('grow', 'Grow', 'month')!, starter],
   });
@@ -633,7 +633,7 @@ test('dismissing a blocked plan switch keeps the old plan ticked', () => {
 });
 
 test('dismissing a blocked channel pick keeps the channel radios as they were', () => {
-  const starter: CartItem = { key: 'ads-starter-month', product: 'ads-starter', name: 'Starter test', priceCents: 49999, interval: 'month', type: 'addon' };
+  const starter: CartItem = { key: 'ads-starter-month', product: 'ads-starter', name: 'Starter test', priceCents: 39999, interval: 'month', type: 'addon' };
   const { window, cart, chip, click, chooseAds, adsRadio, conflict, clickConflictButton } = fixture({
     cart: [planItem('grow', 'Grow', 'month')!, starter],
   });
@@ -680,7 +680,7 @@ test('the summary groups products by branch, in Website, Ads, AI order', () => {
   const { window, summary } = fixture({
     cart: [
       { key: 'ai-followup-month', product: 'ai-followup', name: 'AI Follow-up', priceCents: 9999, interval: 'month', type: 'addon' },
-      { key: 'ads-meta-month', product: 'ads-meta', name: 'Meta', priceCents: 89999, interval: 'month', type: 'bundle' },
+      { key: 'ads-meta-month', product: 'ads-meta', name: 'Meta', priceCents: 64999, interval: 'month', type: 'bundle' },
       planItem('grow', 'Grow', 'month')!,
     ],
   });
@@ -707,7 +707,7 @@ test('the eyebrow and the no-plan hint follow the branches in the cart', () => {
   const mixed = fixture({
     cart: [
       planItem('grow', 'Grow', 'month')!,
-      { key: 'ads-meta-month', product: 'ads-meta', name: 'Meta', priceCents: 89999, interval: 'month', type: 'bundle' },
+      { key: 'ads-meta-month', product: 'ads-meta', name: 'Meta', priceCents: 64999, interval: 'month', type: 'bundle' },
     ],
   });
   assert.equal(mixed.doc.querySelector('[data-start-eyebrow]')!.textContent, 'Start with WEBAO');

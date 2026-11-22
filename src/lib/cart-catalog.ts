@@ -54,23 +54,20 @@ const catalog = {
     monthCents: 34999,
     yearCents: 34999 * TEN_MONTHS,
   },
-  // Monthly only (no annual term). The one-time setup fee is not sold here:
-  // checkout adds it server-side from the STRIPE_PRICE_ADS_SETUP secret.
+  // Monthly only (no annual term). No setup fee on any Ads option.
   // Legacy key, kept so old carts and tests still resolve: same single-channel
   // price as ads-meta / ads-google below.
-  "ads-pack": { product: "ads-pack", type: "bundle", monthCents: 89999 },
+  "ads-pack": { product: "ads-pack", type: "bundle", monthCents: 64999 },
   // Revamped Ads Pack, monthly only. One channel (Meta or Google) is the
-  // single price; both channels together are the bundle price. The setup
-  // fee is added server-side by checkout (single: STRIPE_PRICE_ADS_SETUP
-  // secret; both: the bundle setup price, see worker/checkout.ts).
-  "ads-meta": { product: "ads-meta", type: "bundle", monthCents: 89999 },
-  "ads-google": { product: "ads-google", type: "bundle", monthCents: 89999 },
-  "ads-both": { product: "ads-both", type: "bundle", monthCents: 134999 },
+  // single price; both channels together are the bundle price. No setup
+  // fee on any Ads option.
+  "ads-meta": { product: "ads-meta", type: "bundle", monthCents: 64999 },
+  "ads-google": { product: "ads-google", type: "bundle", monthCents: 64999 },
+  "ads-both": { product: "ads-both", type: "bundle", monthCents: 99999 },
   // Starter test, Meta only, monthly only (no annual price, so it can
   // never be bought yearly). One campaign, 90 days, then step up or stop.
-  // Setup is C$349.99, added server-side by checkout (see
-  // worker/checkout.ts), never the C$499.99 Core setup.
-  "ads-starter": { product: "ads-starter", type: "bundle", monthCents: 49999 },
+  // No setup fee.
+  "ads-starter": { product: "ads-starter", type: "bundle", monthCents: 39999 },
   // Google Business Profile revamp: one-time, sold on its own or with a pack.
   "gbp-revamp": { product: "gbp-revamp", type: "addon", oneTimeCents: 14999 },
   // Website touchup: one-time, we fix what the free audit found on the
@@ -80,12 +77,10 @@ const catalog = {
   "website-touchup": { product: "website-touchup", type: "addon", oneTimeCents: 19999 },
 
   /* ── AI services (monthly only, like the Ads Pack), except the AI Pack,
-     which is yearly available too (2 months free, like the plans). The
-     one-time setup fee is not sold here: checkout adds it server-side,
-     see worker/checkout.ts, following the Ads Pack setup pattern. The
-     chat service is the Trained AI Chat Assistant (aichat, in the
-     add-ons below): one product, C$99.99/mo, yearly available, no setup
-     fee. */
+     which is yearly available too (2 months free, like the plans). No
+     setup fee on any AI service. The chat service is the Trained AI Chat
+     Assistant (aichat, in the add-ons below): one product, C$99.99/mo,
+     yearly available, no setup fee. */
   "ai-receptionist": { product: "ai-receptionist", type: "addon", monthCents: 29999 },
   "ai-followup": { product: "ai-followup", type: "addon", monthCents: 9999 },
   "ai-pack": { product: "ai-pack", type: "bundle", monthCents: 39999, yearCents: 39999 * TEN_MONTHS },

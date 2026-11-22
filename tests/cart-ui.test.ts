@@ -77,13 +77,13 @@ function fixture(options: { french?: boolean; cart?: CartItem[] } = {}) {
         <button type="button" class="cart-btn" data-cart-btn data-key="quotephoto-month" data-product="quotephoto"
           data-name="Quote Photo Upload" data-price-cents="999" data-interval="month" data-type="addon" data-price-year="9990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="ads-pack-month" data-product="ads-pack"
-          data-name="Ads Pack" data-price-cents="89999" data-interval="month" data-type="addon"></button>
+          data-name="Ads Pack" data-price-cents="64999" data-interval="month" data-type="addon"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="ads-meta-month" data-product="ads-meta"
-          data-name="Meta" data-price-cents="89999" data-interval="month" data-type="addon"></button>
+          data-name="Meta" data-price-cents="64999" data-interval="month" data-type="addon"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="ads-starter-month" data-product="ads-starter"
-          data-name="Starter test" data-price-cents="49999" data-interval="month" data-type="addon"></button>
+          data-name="Starter test" data-price-cents="39999" data-interval="month" data-type="addon"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="ads-both-month" data-product="ads-both"
-          data-name="Meta + Google" data-price-cents="134999" data-interval="month" data-type="addon"></button>
+          data-name="Meta + Google" data-price-cents="99999" data-interval="month" data-type="addon"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="lead-pack-month" data-product="lead-pack"
           data-name="Lead Pack" data-price-cents="49999" data-interval="month" data-type="bundle" data-price-year="499990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="visibility-pack-month" data-product="visibility-pack"
@@ -549,7 +549,7 @@ test('the main Ads button keeps the dearer option; the cheaper swap is second', 
   click(button('ads-starter'));
   assert.equal(conflict().hidden, false);
   assert.equal(conflictMessage(), 'You can only have one Ads option at a time.');
-  // Meta ($899.99) costs more than the Starter test ($499.99), so keeping
+  // Meta ($649.99) costs more than the Starter test ($399.99), so keeping
   // Meta is the main button and swapping down is only the second choice.
   assert.deepEqual(conflictButtons(), ['Keep Meta', 'Replace Meta with Starter test']);
   assert.deepEqual(cart().map((i) => i.key), ['ads-meta-month']);
@@ -677,8 +677,8 @@ test('a stale conflicting cart is caught at checkout and the fix removes the ext
 test('checkout of a stale Ads cart removes the cheaper option', () => {
   const { cart, click, doc, conflict, conflictMessage, conflictButtons, clickConflictButton, window } = fixture({
     cart: [
-      { key: cartKey('ads-both', 'month'), product: 'ads-both', name: 'Meta + Google', priceCents: 134999, interval: 'month', type: 'addon' },
-      { key: cartKey('ads-pack', 'month'), product: 'ads-pack', name: 'Ads Pack', priceCents: 89999, interval: 'month', type: 'addon' },
+      { key: cartKey('ads-both', 'month'), product: 'ads-both', name: 'Meta + Google', priceCents: 99999, interval: 'month', type: 'addon' },
+      { key: cartKey('ads-pack', 'month'), product: 'ads-pack', name: 'Ads Pack', priceCents: 64999, interval: 'month', type: 'addon' },
     ],
   });
   click(doc.querySelector('[data-cart-checkout]'));

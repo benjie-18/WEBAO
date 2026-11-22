@@ -56,7 +56,7 @@ function productName(product: string): string {
   return PRODUCT_NAMES[product] ?? product;
 }
 
-/** Cart keys to the rule engine's items (setup keys pass through: no rule fires on them). */
+/** Cart keys to the rule engine's items. */
 function toRuleItems(items: ResolvedItem[]): RuleItem[] {
   return items
     .filter((item) => item.key !== LEGACY_KEY)
@@ -97,15 +97,6 @@ type Env = {
   /** "1" on the test worker: checkout is disabled. */
   TEST_MODE?: string;
   STRIPE_PRICE_ID?: string;
-  /** Ads Pack: the monthly price is in PRICE_MAP below. The one-time setup
-   *  price stays a secret because it is not a catalog item: checkout adds it
-   *  server-side and it cannot be bought on its own. STRIPE_PRICE_ADS_PACK
-   *  remains only as a fallback if the price-map entry is ever removed. */
-  STRIPE_PRICE_ADS_PACK?: string;
-  STRIPE_PRICE_ADS_SETUP?: string;
-  /** Both-channels setup price. Falls back to the bundle setup price in
-   *  code when unset, so a missing secret never silently drops the fee. */
-  STRIPE_PRICE_ADS_BUNDLE_SETUP?: string;
   WEBAO_KV?: KVNamespace;
   ALLOWED_ORIGINS?: string;
 };
@@ -119,15 +110,15 @@ type Env = {
 export const PRICE_MAP: Record<string, string> = {
   "admin-month": "price_1UO3EeE57vVzxI41Vv1DW6l5",
   "admin-year": "price_1UORSCE57vVzxI4182C4kxPY",
-  "ads-pack-month": "price_1UTsvJE57vVzxI41esicPXuU",
+  "ads-pack-month": "price_1UehSsE57vVzxI41YRVxMPDX", // C$649.99 (was price_1UTsvJE57vVzxI41esicPXuU at C$899.99; left active for existing subscribers)
   // Revamped Ads Pack: one channel (Meta or Google) shares the single price;
   // both channels together use the bundle price. The cart key, not the
   // Stripe price, records which channel was bought (see metadata[items]).
-  "ads-meta-month": "price_1UTsvJE57vVzxI41esicPXuU",
-  "ads-google-month": "price_1UTsvJE57vVzxI41esicPXuU",
-  "ads-both-month": "price_1UWkEsE57vVzxI41TxD7CIV8",
+  "ads-meta-month": "price_1UehSsE57vVzxI41YRVxMPDX",
+  "ads-google-month": "price_1UehSsE57vVzxI41YRVxMPDX",
+  "ads-both-month": "price_1UehSxE57vVzxI41pWl9IpPw", // C$999.99 (was price_1UWkEsE57vVzxI41TxD7CIV8 at C$1,349.99; left active for existing subscribers)
   // Starter test, Meta only, monthly only (no yearly price exists).
-  "ads-starter-month": "price_1UZeIQE57vVzxI41l33CkUsv",
+  "ads-starter-month": "price_1UehSxE57vVzxI41pKmaaoX3", // C$399.99 (was price_1UZeIQE57vVzxI41l33CkUsv at C$499.99; left active for existing subscribers)
   "gbp-revamp-onetime": "price_1UWkF9E57vVzxI41yOVeWE6d",
   "website-touchup-onetime": "price_1UYeOrE57vVzxI41H43kyjyk",
   "aichat-month": "price_1UO3E9E57vVzxI41BTXxcMD6",
@@ -161,10 +152,7 @@ export const PRICE_MAP: Record<string, string> = {
   "scale-year": "price_1UU1M8E57vVzxI419tR3a3Gy",
   "visibility-pack-month": "price_1UehJsE57vVzxI41zns1Z4ma", // C$349.99 (was price_1UO3DzE57vVzxI4199bDK2uj at C$99.99; left active for existing subscribers)
   // AI services. Receptionist and Follow-up are monthly only; the AI Pack
-  // is yearly available too. Setup fees are NOT in this map: the
-  // parity test requires every map key to be a catalog key, and setups
-  // are not catalog items. They ride along server-side below, following
-  // the Ads Pack setup pattern.
+  // is yearly available too. No setup fee on any AI service.
   "ai-receptionist-month": "price_1UYFX9E57vVzxI41tORfQmiE",
   "ai-followup-month": "price_1UYFXJE57vVzxI41rtocXmsu",
   "ai-pack-month": "price_1UZg5vE57vVzxI41U5J4rBPd", // C$399.99 (was price_1UYFXOE57vVzxI41aR00rKZe at C$449.99; left active for existing subscribers)
@@ -201,25 +189,6 @@ export function intervalOf(key: string): LineInterval {
   return "one-time";
 }
 
-/** Cart keys for a monthly Ads Pack, single channel or both together. */
-const ADS_MONTHLY_KEYS = ["ads-pack-month", "ads-meta-month", "ads-google-month", "ads-both-month"];
-/** Starter test monthly key: a separate Ads option, never a second pack. */
-const ADS_STARTER_MONTHLY_KEY = "ads-starter-month";
-/** Both-channels setup price (Stripe), used when no bundle-setup secret is set. */
-const ADS_BUNDLE_SETUP_PRICE = "price_1UWkEvE57vVzxI41jrWbtpuZ";
-/** Starter test setup price (Stripe): C$349.99 one-time, not the C$499.99
- *  Core setup. Hard-coded like the AI setup prices so a missing secret
- *  cannot silently undercharge. */
-const ADS_STARTER_SETUP_PRICE = "price_1UZeIVE57vVzxI41VXckzjG2";
-/** AI services: cart key -> one-time setup price (Stripe). The Pack
- *  matches on its monthly key or its yearly key. Kept out of PRICE_MAP
- *  on purpose (see the comment above): setups are added server-side and
- *  can never be bought on their own. */
-const AI_SETUPS: Array<{ monthly: string; yearly?: string; setupKey: string; setupPriceId: string }> = [
-  { monthly: "ai-receptionist-month", setupKey: "ai-receptionist-setup-onetime", setupPriceId: "price_1UYFXDE57vVzxI41cwShDW7k" },
-  { monthly: "ai-followup-month", setupKey: "ai-followup-setup-onetime", setupPriceId: "price_1UYFXNE57vVzxI417TlokH2v" },
-  { monthly: "ai-pack-month", yearly: "ai-pack-year", setupKey: "ai-pack-setup-onetime", setupPriceId: "price_1UYFXSE57vVzxI41Qx20HwYn" },
-];
 
 export async function handleCheckoutSession(req: Request, env: Env): Promise<Response> {
   if (!originAllowed(req, true, env)) return err("Forbidden origin", 403);
@@ -260,15 +229,7 @@ export async function handleCheckoutSession(req: Request, env: Env): Promise<Res
 
     const unknown: string[] = [];
     for (const key of keys) {
-      const priceId =
-        key === LEGACY_KEY
-          ? legacyPriceId
-          : PRICE_MAP[key] ??
-            (key === "ads-pack-month"
-              ? env.STRIPE_PRICE_ADS_PACK
-              : key === "ads-setup-onetime"
-                ? env.STRIPE_PRICE_ADS_SETUP
-                : undefined);
+      const priceId = key === LEGACY_KEY ? legacyPriceId : PRICE_MAP[key];
       if (!priceId) {
         unknown.push(key);
         continue;
@@ -298,33 +259,6 @@ export async function handleCheckoutSession(req: Request, env: Env): Promise<Res
     lineItems = [{ key: LEGACY_KEY, priceId: legacyPriceId, interval: "month" }];
   }
 
-  // The setup fee cannot be bought on its own: a crafted request with only
-  // ads-setup-onetime used to create a checkout for a setup with no pack
-  // attached (and no ads state, since hasAdsPack matches ads-pack*).
-  if (
-    lineItems.some((item) => item.key === "ads-setup-onetime") &&
-    !lineItems.some((item) => ADS_MONTHLY_KEYS.includes(item.key))
-  ) {
-    return err("The Ads Pack setup fee cannot be bought on its own", 400);
-  }
-
-  if (
-    lineItems.some((item) => item.key === "ads-starter-setup-onetime") &&
-    !lineItems.some((item) => item.key === ADS_STARTER_MONTHLY_KEY)
-  ) {
-    return err("The Starter test setup fee cannot be bought on its own", 400);
-  }
-
-  // An AI setup fee cannot be bought on its own, same rule as Ads.
-  for (const setup of AI_SETUPS) {
-    if (
-      lineItems.some((item) => item.key === setup.setupKey) &&
-      !lineItems.some((item) => item.key === setup.monthly || item.key === setup.yearly)
-    ) {
-      return err("An AI setup fee cannot be bought on its own", 400);
-    }
-  }
-
   // Cart conflicts, same rules as the UI guards (src/lib/cart-rules.ts):
   // the UI stops these combinations from being added, but a crafted
   // request could still send them, so the server rejects them too.
@@ -337,63 +271,6 @@ export async function handleCheckoutSession(req: Request, env: Env): Promise<Res
 
   const recurring = lineItems.filter((item) => item.interval !== "one-time");
 
-  // Ads Pack: the one-time setup fee rides along automatically, added
-  // server-side so it cannot be removed from the cart (single: the setup
-  // secret; both: the bundle setup price). This runs BEFORE
-  // the cap check, so a cart already at the one-time cap plus the pack is
-  // rejected instead of leaving with 21 one-time items.
-  // Both channels carry the bundle setup fee, never the single fee: the
-  // bundle setup price is hard-coded as a fallback so a missing secret
-  // cannot silently undercharge, matching how PRICE_MAP holds price ids.
-  // Starter test: its own C$349.99 setup rides along automatically, added
-  // server-side so it cannot be removed from the cart, following the Ads
-  // Pack pattern. It never takes the C$499.99 Core setup below.
-  if (
-    lineItems.some((item) => item.key === ADS_STARTER_MONTHLY_KEY) &&
-    !lineItems.some((item) => item.key === "ads-starter-setup-onetime")
-  ) {
-    lineItems.push({
-      key: "ads-starter-setup-onetime",
-      priceId: ADS_STARTER_SETUP_PRICE,
-      interval: "one-time",
-    });
-  }
-  if (
-    lineItems.some((item) => item.key === "ads-both-month") &&
-    !lineItems.some((item) => item.key === "ads-bundle-setup-onetime")
-  ) {
-    lineItems.push({
-      key: "ads-bundle-setup-onetime",
-      priceId: env.STRIPE_PRICE_ADS_BUNDLE_SETUP ?? ADS_BUNDLE_SETUP_PRICE,
-      interval: "one-time",
-    });
-  } else if (
-    env.STRIPE_PRICE_ADS_SETUP &&
-    lineItems.some((item) => ADS_MONTHLY_KEYS.includes(item.key)) &&
-    !lineItems.some((item) => item.key === "ads-setup-onetime")
-  ) {
-    lineItems.push({
-      key: "ads-setup-onetime",
-      priceId: env.STRIPE_PRICE_ADS_SETUP,
-      interval: "one-time",
-    });
-  }
-  // AI services: the one-time setup fee rides along automatically,
-  // added server-side so it cannot be removed from the cart, following
-  // the Ads Pack pattern. The pack carries the bundle setup fee, never
-  // the three individual setup fees.
-  for (const setup of AI_SETUPS) {
-    if (
-      lineItems.some((item) => item.key === setup.monthly || item.key === setup.yearly) &&
-      !lineItems.some((item) => item.key === setup.setupKey)
-    ) {
-      lineItems.push({
-        key: setup.setupKey,
-        priceId: setup.setupPriceId,
-        interval: "one-time",
-      });
-    }
-  }
   if (
     lineItems.filter((item) => item.interval !== "one-time").length > MAX_RECURRING_ITEMS ||
     lineItems.filter((item) => item.interval === "one-time").length > MAX_ONE_TIME_ITEMS

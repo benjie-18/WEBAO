@@ -1,4 +1,4 @@
-// Step 6: Ads Pack backbone — checkout setup fee, webhook ads track,
+// Step 6: Ads Pack backbone — checkout, webhook ads track,
 // portal ads onboarding, lead intake + outcomes, launch packet, reporting.
 import assert from 'node:assert/strict';
 import test from 'node:test';
@@ -55,7 +55,7 @@ async function adsClient(memory: ReturnType<typeof memoryKV>): Promise<Client> {
   return (await getClient(memory.kv, client.id))!;
 }
 
-test('checkout: ads pack monthly price comes from the price map and the setup fee rides along', async () => {
+test('checkout: ads pack monthly price comes from the price map, no setup fee', async () => {
   const original = globalThis.fetch;
   let captured = '';
   globalThis.fetch = (async (_input: unknown, init?: { body?: unknown }) => {
@@ -67,29 +67,7 @@ test('checkout: ads pack monthly price comes from the price map and the setup fe
     } as Response;
   }) as typeof fetch;
   try {
-    const env = {
-      STRIPE_SECRET_KEY: 'sk_test',
-      STRIPE_PRICE_ADS_SETUP: 'price_ads_setup',
-    };
     const res = await handleCheckoutSession(
-      new Request('https://webao.ca/api/checkout/session', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json', origin: 'https://webao.ca' },
-        body: JSON.stringify({ email: 'a@b.ca', items: [{ key: 'ads-pack-month' }] }),
-      }),
-      env,
-    );
-    assert.equal(res.status, 200);
-    const params = new URLSearchParams(captured);
-    const prices = [...params.entries()]
-      .filter(([k]) => /^line_items\[\d+\]\[price\]$/.test(k))
-      .map(([, v]) => v);
-    assert.deepEqual(prices.sort(), [PRICE_MAP['ads-pack-month'], 'price_ads_setup']);
-    assert.ok((params.get('metadata[items]') || '').includes('ads-setup-onetime'));
-
-    // Without the setup secret the pack still checks out, monthly price
-    // only: the setup fee is added only when its secret is configured.
-    const noSetup = await handleCheckoutSession(
       new Request('https://webao.ca/api/checkout/session', {
         method: 'POST',
         headers: { 'content-type': 'application/json', origin: 'https://webao.ca' },
@@ -97,12 +75,13 @@ test('checkout: ads pack monthly price comes from the price map and the setup fe
       }),
       { STRIPE_SECRET_KEY: 'sk_test' },
     );
-    assert.equal(noSetup.status, 200);
-    const noSetupParams = new URLSearchParams(captured);
-    const noSetupPrices = [...noSetupParams.entries()]
+    assert.equal(res.status, 200);
+    const params = new URLSearchParams(captured);
+    const prices = [...params.entries()]
       .filter(([k]) => /^line_items\[\d+\]\[price\]$/.test(k))
       .map(([, v]) => v);
-    assert.deepEqual(noSetupPrices, [PRICE_MAP['ads-pack-month']]);
+    assert.deepEqual(prices, [PRICE_MAP['ads-pack-month']]);
+    assert.ok(!(params.get('metadata[items]') || '').includes('setup'));
   } finally {
     globalThis.fetch = original;
   }
@@ -297,7 +276,7 @@ test('monthly report: standalone ads clients get leads, booked and cost numbers'
   }
 });
 
-test('checkout: revamped ads variants map to the right Stripe prices and setup fees', async () => {
+test('checkout: revamped ads variants map to the right Stripe prices, no setup fee', async () => {
   const original = globalThis.fetch;
   let captured = '';
   globalThis.fetch = (async (_input: unknown, init?: { body?: unknown }) => {
@@ -323,32 +302,25 @@ test('checkout: revamped ads variants map to the right Stripe prices and setup f
         env,
       );
 
-    // Both channels: bundle monthly plus bundle setup, even with no setup secret.
+    // Both channels: bundle monthly only, no setup fee.
     let res = await call([{ key: 'ads-both-month' }], { STRIPE_SECRET_KEY: 'sk_test' });
     assert.equal(res.status, 200);
-    assert.deepEqual(prices().sort(), [PRICE_MAP['ads-both-month'], 'price_1UWkEvE57vVzxI41jrWbtpuZ'].sort());
+    assert.deepEqual(prices(), [PRICE_MAP['ads-both-month']]);
 
-    // Single Google channel: single monthly plus the single setup secret.
-    res = await call([{ key: 'ads-google-month' }], {
-      STRIPE_SECRET_KEY: 'sk_test',
-      STRIPE_PRICE_ADS_SETUP: 'price_ads_setup',
-    });
+    // Single Google channel: single monthly only, no setup fee.
+    res = await call([{ key: 'ads-google-month' }], { STRIPE_SECRET_KEY: 'sk_test' });
     assert.equal(res.status, 200);
-    assert.deepEqual(prices().sort(), [PRICE_MAP['ads-google-month'], 'price_ads_setup'].sort());
+    assert.deepEqual(prices(), [PRICE_MAP['ads-google-month']]);
 
     // GBP revamp alone: one-time only, no setup fee attached.
     res = await call([{ key: 'gbp-revamp-one-time' }], { STRIPE_SECRET_KEY: 'sk_test' });
     assert.equal(res.status, 200);
     assert.deepEqual(prices(), [PRICE_MAP['gbp-revamp-onetime']]);
 
-    // Starter test alone: its monthly price plus its own C$349.99 setup,
-    // never the C$499.99 Core setup, even with the setup secret set.
-    res = await call([{ key: 'ads-starter-month' }], {
-      STRIPE_SECRET_KEY: 'sk_test',
-      STRIPE_PRICE_ADS_SETUP: 'price_ads_setup',
-    });
+    // Starter test alone: its monthly price only, no setup fee.
+    res = await call([{ key: 'ads-starter-month' }], { STRIPE_SECRET_KEY: 'sk_test' });
     assert.equal(res.status, 200);
-    assert.deepEqual(prices().sort(), [PRICE_MAP['ads-starter-month'], 'price_1UZeIVE57vVzxI41VXckzjG2'].sort());
+    assert.deepEqual(prices(), [PRICE_MAP['ads-starter-month']]);
 
     // Two Ads Pack variants in one cart are rejected, not double-billed.
     res = await call([{ key: 'ads-meta-month' }, { key: 'ads-both-month' }], { STRIPE_SECRET_KEY: 'sk_test' });

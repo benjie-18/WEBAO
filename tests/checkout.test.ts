@@ -123,14 +123,11 @@ test('yearly items resolve to their own prices', async () => {
   ]);
 });
 
-test('the yearly AI Pack resolves to its yearly price and still carries its setup fee', async () => {
+test('the yearly AI Pack resolves to its yearly price with no setup fee', async () => {
   const { status, json, calls } = await call({ items: [{ key: 'ai-pack-year' }] });
   assert.equal(status, 200);
   assert.equal(json.mode, 'subscription');
-  assert.deepEqual(linePrices(calls[0].params), [
-    PRICE_MAP['ai-pack-year'],
-    'price_1UYFXSE57vVzxI41Qx20HwYn', // the C$399.99 one-time Pack setup
-  ]);
+  assert.deepEqual(linePrices(calls[0].params), [PRICE_MAP['ai-pack-year']]);
 });
 
 test('a yearly plan replaces the monthly one, never mixed', async () => {
