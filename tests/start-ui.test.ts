@@ -14,9 +14,11 @@ import {
   initStart,
   planItem,
   readCustomer,
+  renderShortlist,
   validateDetails,
   writeCustomer,
 } from '../src/lib/start-ui';
+import { SHORTLIST_KEY } from '../src/lib/shortlist';
 
 /** jsdom cannot navigate; ignore that one message, keep everything else. */
 function quietConsole() {
@@ -32,6 +34,8 @@ interface FixtureOptions {
   billing?: 'month' | 'year';
   customer?: Record<string, string>;
   french?: boolean;
+  demo?: string;
+  shortlist?: string[];
 }
 
 /** Mirrors the layout's drawer attributes and StartPage's selection card + form. */
@@ -92,6 +96,7 @@ function fixture(options: FixtureOptions = {}) {
             <input name="business" /><span data-error="business" hidden></span>
             <button type="submit">Continue</button>
           </form>
+          <p data-start-shortlist hidden><strong>Your shortlisted demos:</strong> <span data-start-shortlist-names></span> <a href="/demos">Change</a></p>
         </div>
       </main>
       <div data-cart-overlay hidden></div>
@@ -132,7 +137,11 @@ function fixture(options: FixtureOptions = {}) {
       </div>
     </body></html>`,
     {
-      url: options.french ? 'https://webao.ca/fr/commencer' : 'https://webao.ca/start',
+      url: options.demo
+        ? `https://webao.ca/start?demo=${options.demo}`
+        : options.french
+          ? 'https://webao.ca/fr/commencer'
+          : 'https://webao.ca/start',
       runScripts: 'dangerously',
       pretendToBeVisual: true,
       virtualConsole: quietConsole(),
@@ -143,6 +152,7 @@ function fixture(options: FixtureOptions = {}) {
   if (options.cart) window.localStorage.setItem(STORAGE_KEY, JSON.stringify(options.cart));
   if (options.billing) window.localStorage.setItem(BILLING_KEY, options.billing);
   if (options.customer) window.sessionStorage.setItem(CUSTOMER_KEY, JSON.stringify(options.customer));
+  if (options.shortlist) window.localStorage.setItem(SHORTLIST_KEY, JSON.stringify(options.shortlist));
 
   // The owner notification is fire-and-forget; capture it instead of sending it.
   const requests: Array<{ url: string; body: unknown; keepalive?: boolean }> = [];
@@ -380,6 +390,40 @@ test('valid details are stored, the owner is notified and the visitor moves to c
   assert.equal(body.fields.selection, 'Grow (C$149.99/mo)');
   assert.equal(body.fields.billing, 'month');
   assert.equal(body.fields.page, '/start');
+  window.close();
+});
+
+test('a demo link and shortlist travel with the owner notification', () => {
+  const { window, doc, fill, submit, requests } = fixture({ demo: 'nora', shortlist: ['nora', 'boreal'] });
+  // The shortlist line shows under the form as soon as the page loads.
+  const line = doc.querySelector<HTMLElement>('[data-start-shortlist]')!;
+  assert.equal(line.hidden, false);
+  assert.equal(
+    doc.querySelector('[data-start-shortlist-names]')!.textContent,
+    'Nora Électrique, Déménagement Boréal',
+  );
+  fill(details);
+  submit();
+
+  assert.equal(requests.length, 1);
+  const body = requests[0].body as { fields: Record<string, string> };
+  assert.equal(body.fields.demo, 'nora');
+  assert.equal(body.fields.shortlist, 'Nora Électrique, Déménagement Boréal');
+  window.close();
+});
+
+test('without a demo or shortlist the notification carries neither field', () => {
+  const { window, doc, fill, submit, requests } = fixture();
+  const line = doc.querySelector<HTMLElement>('[data-start-shortlist]')!;
+  assert.equal(line.hidden, true);
+  renderShortlist(doc);
+  assert.equal(line.hidden, true);
+  fill(details);
+  submit();
+
+  const body = requests[0].body as { fields: Record<string, string> };
+  assert.equal(body.fields.demo, undefined);
+  assert.equal(body.fields.shortlist, undefined);
   window.close();
 });
 

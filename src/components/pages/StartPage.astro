@@ -210,6 +210,12 @@ const aiRows = [
         </button>
         <p class="mono start-hint">{t.start.form.hint}</p>
       </form>
+
+      <p class="mono start-shortlist" data-start-shortlist hidden>
+        <strong>{t.demos.shortlistTitle}:</strong>
+        <span data-start-shortlist-names></span>
+        <a href={paths.demos}>{t.demos.shortlistChange}</a>
+      </p>
     </div>
 
     <p class="mono start-aside">
@@ -541,6 +547,16 @@ const aiRows = [
     margin: 0;
     text-align: center;
   }
+  .start-shortlist {
+    grid-column: 1 / -1;
+    font-size: 12px;
+    margin: 4px 0 0;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    flex-wrap: wrap;
+  }
+  .start-shortlist a { color: var(--accent); font-weight: 700; }
   .start-aside {
     margin-top: 24px;
     font-size: 11px;

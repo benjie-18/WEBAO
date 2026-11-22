@@ -26,6 +26,7 @@
 import { CART_CHANGE_EVENT, STORAGE_KEY, cartKey, type CartItem } from "./cart";
 import { baseInterval, cartProducts, convertItemsToBilling, intervalFor, priceCentsFor, supportsBilling, type Billing } from "./cart-catalog";
 import { BILLING_KEY, formatMoney, getCart, guardAdd, guardCheckout, guardPlanChange, intervalSuffix, moneyFormat, readBilling, setCart } from "./cart-ui";
+import { readShortlist, shortlistNames } from "./shortlist";
 
 /** sessionStorage key shared with the checkout page. */
 export const CUSTOMER_KEY = "webao-checkout";
@@ -438,6 +439,12 @@ function notifyOwner(doc: Document, details: CustomerDetails, cart: CartItem[]):
   const win = doc.defaultView;
   if (!win || typeof win.fetch !== "function") return;
   try {
+    // The demo that brought the visitor here (?demo=<slug> from the demo
+    // pages' build link) travels with the order so the owner knows which
+    // style they liked. The shortlist travels the same way, as names the
+    // owner can read.
+    const demo = new URLSearchParams(win.location.search).get("demo") || "";
+    const shortlist = shortlistNames(readShortlist(win));
     win
       .fetch("/api/forms/submit", {
         method: "POST",
@@ -450,6 +457,8 @@ function notifyOwner(doc: Document, details: CustomerDetails, cart: CartItem[]):
             selection: selectionSummary(doc, cart),
             items: cart.map((item) => item.key).join(","),
             billing: readBilling(win),
+            ...(demo ? { demo } : {}),
+            ...(shortlist.length ? { shortlist: shortlist.join(", ") } : {}),
             page: win.location.pathname,
           },
         }),
@@ -458,6 +467,18 @@ function notifyOwner(doc: Document, details: CustomerDetails, cart: CartItem[]):
   } catch {
     // Never block the visitor on the notification.
   }
+}
+
+// Shortlist: show the visitor's shortlisted demos under the form so they
+// see what travels with the order. Without a shortlist the line stays hidden.
+export function renderShortlist(doc: Document): void {
+  const el = doc.querySelector("[data-start-shortlist]") as HTMLElement | null;
+  const namesEl = doc.querySelector("[data-start-shortlist-names]") as HTMLElement | null;
+  if (!el || !namesEl) return;
+  const names = shortlistNames(readShortlist(doc.defaultView));
+  if (names.length === 0) return;
+  namesEl.textContent = names.join(", ");
+  el.hidden = false;
 }
 
 export type Navigate = (href: string) => void;
@@ -598,4 +619,5 @@ export function initStart(doc: Document = document, options: StartOptions = {}):
   }
   setupPage(doc);
   renderStart(doc);
+  renderShortlist(doc);
 }
