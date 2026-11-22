@@ -278,6 +278,32 @@ test('the hero shows a random live demo and the intro lives only in the archive'
   assert.equal(indexFr.includes('IntroSequence'), false, 'the FR home page no longer renders the intro');
 });
 
+test('the header dropdown carries the client portal and the estimator uses current tiers', () => {
+  const layout = read('src/layouts/BaseLayout.astro');
+  assert.ok(layout.includes('data-mega-trigger'), 'the header has the Services dropdown trigger');
+  assert.ok(layout.includes('data-mega-panel'), 'the header has the dropdown panel');
+  assert.ok(layout.includes('data-mega-scrim'), 'the dropdown has a scrim');
+  assert.ok(layout.includes('href={navLinks.portal}'), 'the client portal is in the header dropdown');
+  assert.ok(layout.includes('href={navLinks.serviceHosting}'), 'hosting is in the dropdown');
+  assert.ok(layout.includes('href={navLinks.serviceMontreal}'), 'Montreal is in the dropdown');
+  const panel = layout.split('id="mobile-panel"')[1];
+  assert.ok(panel.includes('href={navLinks.portal}'), 'the mobile panel has the portal link');
+  assert.ok(panel.includes('href={navLinks.serviceDesign}'), 'the mobile panel has the services link');
+  const estimator = read('src/components/pricing/PlanEstimator.astro');
+  assert.ok(estimator.includes('value="5"'), 'the quiz offers 1 to 5 pages');
+  assert.ok(estimator.includes('value="10"'), 'the quiz offers 5 to 10 pages');
+  assert.ok(estimator.includes('value="20"'), 'the quiz offers 10 to 20 pages');
+  assert.ok(estimator.includes('if (pages === "20") id = "scale";'), '10 to 20 pages recommends Scale');
+  assert.ok(estimator.includes('else if (pages === "10" || job !== "inform") id = "grow";'), '5 to 10 pages, or a booking/sales job, recommends Grow');
+  const en = read('src/lib/i18n/en.ts');
+  assert.ok(en.includes('title: "Find your plan in 5 seconds"'), 'the quiz title is 5 seconds, not 15');
+  assert.ok(en.includes('one channel from C$649.99/mo'), 'the ads note carries the current single-channel price');
+  const home = read('src/components/pages/HomePage.astro');
+  assert.ok(home.includes('<PlanEstimator locale={locale} />'), 'the home page shows the quiz');
+  const pricing = read('src/components/pages/PricingPage2.astro');
+  assert.ok(pricing.includes('<PlanEstimator locale={locale} showCompare={false} />'), 'the live pricing page shows the quiz without the compare link');
+});
+
 test('the audit pages show what a report looks like, labelled as an example', () => {
   // The sample scores are illustrative, so the page says so in both
   // locales; a real audit result never appears on the landing page.

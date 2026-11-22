@@ -1,6 +1,7 @@
 ---
 import { useTranslations, type Locale } from "../../lib/i18n";
 import PlanCards from "../pricing/PlanCards.astro";
+import PlanEstimator from "../pricing/PlanEstimator.astro";
 import BundleCarousel from "../pricing/BundleCarousel.astro";
 import AdsPackCard from "../pricing/AdsPackCard.astro";
 import AddonList from "../pricing/AddonList.astro";
@@ -57,6 +58,9 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
   <div class="p2-panels">
     <!-- Web (default): the normal price cards, bundles and add-ons. -->
     <section class="p2-panel" role="tabpanel" id="p2-panel-web" aria-labelledby="p2-tab-web" data-service-panel="web">
+      <!-- PLAN ESTIMATOR -->
+      <PlanEstimator locale={locale} showCompare={false} />
+
       <section class="section plans-section">
         <div class="shell">
           <h2 id="plans-h" class="visually-hidden">{t.pricing.plansTitle}</h2>

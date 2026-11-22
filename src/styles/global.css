@@ -701,6 +701,9 @@ html.theming *::after {
 }
 .nav a:hover { background: var(--line); }
 .site-header--dark .nav a:hover { background: var(--line-on-dark); }
+/* #67: the current page's link reads as the active pill. */
+.nav a[aria-current="page"] { background: var(--line); font-weight: 650; }
+.site-header--dark .nav a[aria-current="page"] { background: var(--line-on-dark); }
 .nav .cta {
   background: var(--ink);
   color: var(--paper);
@@ -710,6 +713,58 @@ html.theming *::after {
 .site-header--dark .nav .cta { background: var(--paper); color: var(--ink); }
 .nav .cta:hover { background: var(--ink-2); }
 .site-header--dark .nav .cta:hover { background: var(--paper-2); }
+
+/* Desktop mega-menu: frosted Services/Resources dropdown. */
+.nav-item--mega { position: relative; }
+.nav-mega-trigger .nav-mega-caret {
+  display: inline-block;
+  font-size: 10px;
+  transition: transform .2s var(--ease-out);
+}
+.nav-item--mega.is-open .nav-mega-caret { transform: rotate(180deg); }
+.nav-mega {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 28px;
+  min-width: 470px;
+  padding: 18px 20px;
+  background: color-mix(in srgb, var(--paper) 92%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg);
+  z-index: 60;
+}
+.nav-mega-col { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+.nav-mega-heading {
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 8px;
+  padding: 0 12px;
+}
+.nav-mega a {
+  display: block;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+/* Backdrop scrim behind the open mega-menu: dims the page, never the
+   header (it sits between page content and the sticky header). */
+.nav-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.28);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  z-index: 40;
+}
 
 /* Mobile nav */
 .menu-toggle {
