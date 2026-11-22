@@ -40,6 +40,9 @@ const PRODUCT_NAMES: Record<string, string> = {
   admin: "Advanced Admin Panel",
   "lead-pack": "Lead Pack",
   "visibility-pack": "Visibility Pack",
+  "growth-bundle": "Growth Bundle",
+  "growth-engine": "Growth Engine",
+  "seo-blog": "Weekly SEO Blog",
   localseo: "Local SEO Management",
   aichat: "Trained AI Chat Assistant",
   "ai-pack": "AI Pack",
@@ -88,7 +91,7 @@ function conflictError(conflict: CartConflict): string {
     case "bundle-component":
       return `${productName(conflict.bundle ?? "")} already includes ${(conflict.components ?? [conflict.component ?? ""]).map((c) => productName(c)).join(", ")}.`;
     case "bundle-overlap":
-      return "Lead Pack and Visibility Pack both include the Review Generation Engine.";
+      return `${conflict.products.map((p) => productName(p)).join(" and ")} both include the Review Generation Engine.`;
   }
 }
 
@@ -138,6 +141,11 @@ export const PRICE_MAP: Record<string, string> = {
   "launch-year": "price_1UU1M4E57vVzxI41E0mPbwdV",
   "lead-pack-month": "price_1UehJmE57vVzxI41lySHr788", // C$499.99 (was price_1UO3DwE57vVzxI41q2jb3Rxo at C$239.99; left active for existing subscribers)
   "lead-pack-year": "price_1UehJsE57vVzxI41aj155qlY", // C$4,999.90/yr (10x monthly, 2 months free)
+  // Growth bundles. The Growth Bundle is yearly available too; the Growth
+  // Engine is monthly only (it contains the monthly-only Ads Starter test).
+  "growth-bundle-month": "price_1UehYmE57vVzxI41QKo59uIY", // C$549.99
+  "growth-bundle-year": "price_1UehYtE57vVzxI41YXqOH5JL", // C$5,499.90/yr (10x monthly, 2 months free)
+  "growth-engine-month": "price_1UehYuE57vVzxI41pE84Almc", // C$899.99, monthly only
   "localseo-month": "price_1UO3E2E57vVzxI41T6FkSLJp",
   "localseo-year": "price_1UORRsE57vVzxI41DIqBnkzB",
   "priority-month": "price_1UO3EbE57vVzxI41kSjNOFtX",
@@ -148,6 +156,9 @@ export const PRICE_MAP: Record<string, string> = {
   "report-year": "price_1UORS8E57vVzxI417LKUJ98z",
   "review-month": "price_1UehJbE57vVzxI41rOygD4gP", // C$399.99 (was price_1UO3E6E57vVzxI41JJ7znxzO at C$99.99; left active for existing subscribers)
   "review-year": "price_1UehJmE57vVzxI41vNPEBtnH", // C$3,999.90/yr (10x monthly, 2 months free)
+  // Weekly SEO Blog: a new SEO post every week, written for the business.
+  "seo-blog-month": "price_1UehYnE57vVzxI41lnpsdwJW", // C$39.99
+  "seo-blog-year": "price_1UehYtE57vVzxI41Zz97BMiE", // C$399.90/yr (10x monthly, 2 months free)
   "scale-month": "price_1UO3DtE57vVzxI41h8bSDqZd",
   "scale-year": "price_1UU1M8E57vVzxI419tR3a3Gy",
   "visibility-pack-month": "price_1UehJsE57vVzxI41zns1Z4ma", // C$349.99 (was price_1UO3DzE57vVzxI4199bDK2uj at C$99.99; left active for existing subscribers)

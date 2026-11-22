@@ -130,6 +130,18 @@ test('the yearly AI Pack resolves to its yearly price with no setup fee', async 
   assert.deepEqual(linePrices(calls[0].params), [PRICE_MAP['ai-pack-year']]);
 });
 
+test('the Growth Bundle resolves to its yearly price; the Growth Engine is monthly only', async () => {
+  const yearly = await call({ items: [{ key: 'growth-bundle-year' }] });
+  assert.equal(yearly.status, 200);
+  assert.deepEqual(linePrices(yearly.calls[0].params), [PRICE_MAP['growth-bundle-year']]);
+  const engine = await call({ items: [{ key: 'growth-engine-month' }] });
+  assert.equal(engine.status, 200);
+  assert.deepEqual(linePrices(engine.calls[0].params), [PRICE_MAP['growth-engine-month']]);
+  const blog = await call({ items: [{ key: 'seo-blog-year' }] });
+  assert.equal(blog.status, 200);
+  assert.deepEqual(linePrices(blog.calls[0].params), [PRICE_MAP['seo-blog-year']]);
+});
+
 test('a yearly plan replaces the monthly one, never mixed', async () => {
   // The cart cannot hold both (the client converts on toggle); if a client
   // still sends both, the API refuses instead of letting Stripe fail. The
@@ -302,6 +314,26 @@ const CONFLICT_CARTS: Array<{ items: string[]; error: string }> = [
   {
     items: ['scale-month', 'lead-pack-month'],
     error: "Lead Pack isn't available with Scale.",
+  },
+  {
+    items: ['launch-month', 'growth-bundle-month'],
+    error: "Growth Bundle isn't available with Launch.",
+  },
+  {
+    items: ['scale-month', 'growth-engine-month'],
+    error: "Growth Engine isn't available with Scale.",
+  },
+  {
+    items: ['grow-month', 'growth-bundle-month', 'review-month'],
+    error: 'Growth Bundle already includes Grow, Review Generation Engine.',
+  },
+  {
+    items: ['growth-bundle-month', 'lead-pack-month'],
+    error: 'Lead Pack and Growth Bundle both include the Review Generation Engine.',
+  },
+  {
+    items: ['growth-engine-month', 'ads-starter-month'],
+    error: 'Growth Engine already includes Starter test.',
   },
   {
     items: ['grow-month', 'lead-pack-month', 'review-month'],

@@ -17,10 +17,14 @@ const t = useTranslations(locale);
 const b = t.pricing.bundles[bundleId];
 
 // Cart keys/labels differ from the bundle ids: the pricing plan sells
-// "Lead Pack" and "Visibility Pack" (see the shared cart catalog).
-const bundleProduct = (id: BundleId): string => (id === "lead" ? "lead-pack" : "visibility-pack");
+// "Lead Pack", "Visibility Pack", "Growth Bundle" and "Growth Engine"
+// (see the shared cart catalog).
+const bundleProduct = (id: BundleId): string =>
+  id === "lead" ? "lead-pack" : id === "visibility" ? "visibility-pack" : id === "growth" ? "growth-bundle" : "growth-engine";
 const bundleCents = (id: BundleId, interval: "month" | "year"): number =>
   priceCentsFor(bundleProduct(id), interval) ?? 0;
+const bundleYearCents = (id: BundleId): number | undefined =>
+  priceCentsFor(bundleProduct(id), "year") ?? undefined;
 ---
 
 <div class:list={["bundle-card", spatial && "bundle-card--spatial"]}>
@@ -33,7 +37,7 @@ const bundleCents = (id: BundleId, interval: "month" | "year"): number =>
       product={bundleProduct(bundleId)}
       name={b.name}
       priceCents={bundleCents(bundleId, "month")}
-      yearlyPriceCents={bundleCents(bundleId, "year")}
+      yearlyPriceCents={bundleYearCents(bundleId)}
       interval="month"
       type="bundle"
     />

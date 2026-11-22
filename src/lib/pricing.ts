@@ -69,7 +69,7 @@ export const plans: PlanDef[] = [
 
 /** Bundle ids in display order. Data-driven: adding a bundle is one entry
  *  here plus its strings in the i18n dictionaries. */
-export const bundleOrder = ["lead", "visibility"] as const;
+export const bundleOrder = ["lead", "visibility", "growth", "engine"] as const;
 export type BundleId = (typeof bundleOrder)[number];
 
 interface BundleDef {
@@ -87,6 +87,8 @@ interface BundleDef {
 export const bundles: BundleDef[] = [
   { id: "lead", note: 15, includes: ["i1", "i2", "i3"] },
   { id: "visibility", note: 16, includes: ["i1", "i2"] },
+  { id: "growth", note: 32, includes: ["i1", "i2", "i3"] },
+  { id: "engine", note: 33, includes: ["i1", "i2"] },
 ];
 
 /** Add-on ids. The first four are the featured/popular group, in the exact
@@ -101,6 +103,7 @@ export const featuredAddonOrder = [
 export const remainingAddonOrder = [
   "aichat",
   "blog",
+  "seo-blog",
   "email",
   "report",
   "extrapage",
@@ -138,6 +141,9 @@ export const compatibility: CompatRow[] = [
   { key: "quotephoto", note: 28, launch: "A", grow: "I", scale: "I" },
   { key: "leadpack", note: 17, launch: "A", grow: "A", scale: "N" },
   { key: "vispack", note: 17, launch: "A", grow: "A", scale: "N" },
+  { key: "growthbundle", note: 17, launch: "N", grow: "A", scale: "N" },
+  { key: "growthengine", note: 17, launch: "N", grow: "A", scale: "N" },
+  { key: "seo-blog", note: 34, launch: "A", grow: "A", scale: "A" },
 ];
 
 /** Terms page sections with their note numbers in ascending order. */
@@ -145,7 +151,7 @@ export const termSections = [
   { id: "billing", notes: [1, 2, 3] },
   { id: "plans", notes: [4, 9, 12] },
   { id: "details", notes: [5, 6, 7, 8, 10, 11, 13, 14, 23] },
-  { id: "bundles", notes: [15, 16, 17] },
+  { id: "bundles", notes: [15, 16, 17, 32, 33] },
   { id: "ads", notes: [30] },
-  { id: "addons", notes: [18, 19, 20, 21, 22, 24, 25, 26, 27, 28, 29, 31] },
+  { id: "addons", notes: [18, 19, 20, 21, 22, 24, 25, 26, 27, 28, 29, 31, 34] },
 ] as const;

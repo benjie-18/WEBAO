@@ -75,7 +75,7 @@ const en = {
     guideBill96: "Quebec Bill 96 and your website",
     guideLaw25: "Quebec Law 25 and your website",
     services: "Services",
-    customSites: "Custom 3–5 page sites",
+    customSites: "Custom websites",
     monthlyPlans: "Monthly website plans",
     adsPackages: "Ads Packages",
     aiServices: "AI services",
@@ -310,7 +310,7 @@ const en = {
         desc: "For solo operators who need to look professional online and be easy to contact.",
         inherits: "",
         features: [
-          "Custom 1-page website",
+          "Custom 1 to 5 page website",
           "Domain, hosting & SSL included",
           "Contact form & click-to-call",
           "Foundational SEO",
@@ -328,7 +328,7 @@ const en = {
         desc: "For established local businesses that need their website to bring in leads.",
         inherits: "Everything in Launch, plus:",
         features: [
-          "3 to 5 page custom website",
+          "5 to 10 page custom website",
           "Quote form with photo upload",
           "Google Business Profile & reviews",
           "Enhanced on-page SEO",
@@ -345,7 +345,7 @@ const en = {
         desc: "For growing businesses that want their site to do more of the selling.",
         inherits: "Everything in Grow, plus:",
         features: [
-          "Up to 10 pages, incl. service areas",
+          "Up to 20 pages, incl. service areas",
           "Online booking / scheduling",
           "Review Generation Engine",
           "Monthly Growth Report",
@@ -384,6 +384,34 @@ const en = {
         bundlePrice: "C$349.99/mo",
         availLabel: "Available on:",
         avail: "Launch, Grow",
+        availNote: 17,
+      },
+      growth: {
+        name: "Growth Bundle",
+        price: "C$549.99/mo",
+        priceNote: 32,
+        includesLabel: "Includes:",
+        includes: ["Grow plan", "Local SEO Management", "Review Generation Engine"],
+        individualLabel: "Individual value:",
+        individual: "C$149.99 + C$159.99 + C$399.99 = C$709.97/mo",
+        bundleLabel: "Bundle:",
+        bundlePrice: "C$549.99/mo",
+        availLabel: "Available on:",
+        avail: "Grow",
+        availNote: 17,
+      },
+      engine: {
+        name: "Growth Engine",
+        price: "C$899.99/mo",
+        priceNote: 33,
+        includesLabel: "Includes:",
+        includes: ["Growth Bundle", "Ads Starter test"],
+        individualLabel: "Individual value:",
+        individual: "C$549.99 + C$399.99 = C$949.98/mo",
+        bundleLabel: "Bundle:",
+        bundlePrice: "C$899.99/mo",
+        availLabel: "Available on:",
+        avail: "Grow",
         availNote: 17,
       },
       prev: "Previous bundle",
@@ -484,6 +512,7 @@ const en = {
         aichat: { name: "Trained AI Chat Assistant", price: "C$99.99/mo", note: 20, short: "A chat assistant trained on your business." },
         booking: { name: "Online Booking / Scheduling", price: "C$49.99/mo", note: 21, short: "Customers book appointments online." },
         blog: { name: "Blog & Updates", price: "C$34.99/mo", note: 22, short: "" },
+        "seo-blog": { name: "Weekly SEO Blog", price: "C$39.99/mo", note: 34, short: "A new SEO blog post every week, written for your business." },
         ecommerce: { name: "E-commerce Lite / Payment Links", price: "C$59.99/mo", note: 24, short: "Simple online payments, no full store." },
         email: { name: "Email Marketing", price: "C$29.99/mo", note: 0, short: "" },
         report: { name: "Monthly Growth Report", price: "C$29.99/mo", note: 11, short: "" },
@@ -522,6 +551,9 @@ const en = {
         quotephoto: "Quote Photo Upload",
         leadpack: "Lead Pack",
         vispack: "Visibility Pack",
+        growthbundle: "Growth Bundle",
+        growthengine: "Growth Engine",
+        "seo-blog": "Weekly SEO Blog",
       },
     },
     termsCta: {
@@ -749,7 +781,7 @@ const en = {
         blocks: [
           { label: "Foundational SEO (Launch)", text: "unique title and meta description, Open Graph tags, sitemap, Google and Bing indexing submission, LocalBusiness structured data, mobile speed baseline." },
           { label: "SEO On-Page + GBP Setup (Grow)", text: "everything in Foundational SEO, plus keyword-targeted copy for your main service and city on each page, internal linking, and a one-time Google Business Profile setup (if not existing) and optimization (categories, services, hours, photos, description)." },
-          { label: "SEO Expanded On-Page + Service-Area (Scale)", text: "everything in Grow, applied to up to 10 pages, with dedicated service-area pages and image / alt-text optimization." },
+          { label: "SEO Expanded On-Page + Service-Area (Scale)", text: "everything in Grow, applied to up to 20 pages, with dedicated service-area pages and image / alt-text optimization." },
           { label: "Local SEO Management (add-on, all tiers)", text: "ongoing monthly work: GBP posts, citation building and cleanup, review monitoring, local visibility tracking and adjustments." },
           { text: "Dividing line: one-time setup (included in Grow and Scale) versus ongoing monthly work (add-on)." },
         ],
@@ -842,7 +874,7 @@ const en = {
       "17": {
         title: "Bundle eligibility",
         blocks: [
-          { text: "Lead Pack and Visibility Pack are available on Launch and Grow. Scale already includes the Review Generation Engine and the Monthly Growth Report, so Scale clients add Local SEO Management and Trained AI Chat individually." },
+          { text: "Lead Pack and Visibility Pack are available on Launch and Grow. Growth Bundle and Growth Engine are available on Grow only: they include the Grow plan. Scale already includes the Review Generation Engine and the Monthly Growth Report, so Scale clients add Local SEO Management and Trained AI Chat individually." },
         ],
       },
       "18": {
@@ -958,7 +990,7 @@ const en = {
             listLabel: "Examples:",
             items: ["New service page", "New service-area page", "FAQ", "Gallery", "About / team page"],
           },
-          { text: "For additional content outside the plan's page allowance. One-time charge. On Scale it applies beyond the 10 included pages." },
+          { text: "For additional content outside the plan's page allowance. One-time charge. On Scale it applies beyond the 20 included pages." },
         ],
       },
       "26": {
@@ -1030,6 +1062,27 @@ const en = {
         blocks: [
           { text: "Website touchup is a one-time service of C$199.99: we fix the issues the free audit found on your existing website, as listed in your audit report. It covers your existing site on its existing platform. No new design, no redesign, and no migration." },
           { text: "Buying a Website touchup unlocks 15% off any subscription (website plan, Ads Pack, or AI service) for the first 3 months. The discount can be used only once, on a single subscription, and cannot be combined with other offers. Buy the touchup together with a subscription and the discount is applied automatically at checkout; buy it on its own and we send you the coupon code after your purchase." },
+        ],
+      },
+      "32": {
+        title: "Growth Bundle",
+        blocks: [
+          { text: "Combines the Grow plan with Local SEO Management and the Review Generation Engine." },
+          { text: "Available on Grow only: it includes the Grow plan, so it cannot be bought with Launch or Scale." },
+        ],
+      },
+      "33": {
+        title: "Growth Engine",
+        blocks: [
+          { text: "Combines the Growth Bundle with the Ads Starter test: one Meta campaign for 90 days, then step up or stop." },
+          { text: "Monthly only: the Ads Starter test has no yearly price. Available on Grow only: it includes the Grow plan." },
+        ],
+      },
+      "34": {
+        title: "Weekly SEO Blog",
+        blocks: [
+          { text: "A new SEO blog post every week, written for your business and its services, published to your site." },
+          { text: "Different from Blog & Updates (add-on 5): that one is a page where you write and post your own updates." },
         ],
       },
     },

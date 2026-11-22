@@ -78,7 +78,7 @@ const fr = {
     guideBill96: "La loi 96 du Québec et votre site web",
     guideLaw25: "La loi 25 du Québec et votre site web",
     services: "Services",
-    customSites: "Sites sur mesure 3 à 5 pages",
+    customSites: "Sites sur mesure",
     monthlyPlans: "Forfaits mensuels de site web",
     adsPackages: "Packs publicitaires",
     aiServices: "Services IA",
@@ -313,7 +313,7 @@ const fr = {
         desc: "Pour les travailleurs autonomes qui doivent avoir l’air professionnels en ligne et être faciles à joindre.",
         inherits: "",
         features: [
-          "Site web personnalisé d'une page",
+          "Site web personnalisé de 1 à 5 pages",
           "Domaine, hébergement et SSL inclus",
           "Formulaire de contact et appel en un clic",
           "SEO fondamental",
@@ -331,7 +331,7 @@ const fr = {
         desc: "Pour les entreprises locales établies qui ont besoin que leur site attire des clients.",
         inherits: "Tout ce qui est inclus dans Launch, plus :",
         features: [
-          "Site web personnalisé de 3 à 5 pages",
+          "Site web personnalisé de 5 à 10 pages",
           "Formulaire de soumission avec photo",
           "Profil d'entreprise Google et avis",
           "SEO sur page amélioré",
@@ -348,7 +348,7 @@ const fr = {
         desc: "Pour les entreprises en croissance qui veulent que leur site vende davantage.",
         inherits: "Tout ce qui est inclus dans Grow, plus :",
         features: [
-          "Jusqu'à 10 pages, zones desservies incluses",
+          "Jusqu'à 20 pages, zones desservies incluses",
           "Réservation / planification en ligne",
           "Moteur de génération d'avis",
           "Rapport de croissance mensuel",
@@ -387,6 +387,34 @@ const fr = {
         bundlePrice: "C$349.99/mois",
         availLabel: "Disponible sur :",
         avail: "Launch, Grow",
+        availNote: 17,
+      },
+      growth: {
+        name: "Growth Bundle",
+        price: "C$549.99/mois",
+        priceNote: 32,
+        includesLabel: "Inclus :",
+        includes: ["Forfait Grow", "Gestion du SEO local", "Moteur de génération d'avis"],
+        individualLabel: "Valeur individuelle :",
+        individual: "C$149.99 + C$159.99 + C$399.99 = C$709.97/mois",
+        bundleLabel: "Forfait :",
+        bundlePrice: "C$549.99/mois",
+        availLabel: "Disponible sur :",
+        avail: "Grow",
+        availNote: 17,
+      },
+      engine: {
+        name: "Growth Engine",
+        price: "C$899.99/mois",
+        priceNote: 33,
+        includesLabel: "Inclus :",
+        includes: ["Growth Bundle", "Test de départ publicitaire"],
+        individualLabel: "Valeur individuelle :",
+        individual: "C$549.99 + C$399.99 = C$949.98/mois",
+        bundleLabel: "Forfait :",
+        bundlePrice: "C$899.99/mois",
+        availLabel: "Disponible sur :",
+        avail: "Grow",
         availNote: 17,
       },
       prev: "Pack précédent",
@@ -487,6 +515,7 @@ const fr = {
         aichat: { name: "Assistant clavardage IA entraîné", price: "C$99.99/mois", note: 20, short: "Un assistant de clavardage formé sur votre entreprise." },
         booking: { name: "Réservation / Planification en ligne", price: "C$49.99/mois", note: 21, short: "Vos clients réservent en ligne." },
         blog: { name: "Blogue et mises à jour", price: "C$34.99/mois", note: 22, short: "" },
+        "seo-blog": { name: "Blogue SEO hebdomadaire", price: "C$39.99/mois", note: 34, short: "Un nouvel article de blogue SEO chaque semaine, rédigé pour votre entreprise." },
         ecommerce: { name: "Commerce électronique simplifié / Liens de paiement", price: "C$59.99/mois", note: 24, short: "Des paiements en ligne simples, sans boutique complète." },
         email: { name: "Marketing par courriel", price: "C$29.99/mois", note: 0, short: "" },
         report: { name: "Rapport de croissance mensuel", price: "C$29.99/mois", note: 11, short: "" },
@@ -525,6 +554,9 @@ const fr = {
         quotephoto: "Téléversement de photos pour soumission",
         leadpack: "Lead Pack",
         vispack: "Visibility Pack",
+        growthbundle: "Growth Bundle",
+        growthengine: "Growth Engine",
+        "seo-blog": "Blogue SEO hebdomadaire",
       },
     },
     termsCta: {
@@ -755,7 +787,7 @@ const fr = {
         blocks: [
           { label: "SEO fondamental (Launch)", text: "titre et méta-description uniques, balises Open Graph, plan du site, soumission d'indexation à Google et Bing, données structurées LocalBusiness, base de vitesse mobile." },
           { label: "SEO sur page + configuration GBP (Grow)", text: "tout ce qui est dans le SEO fondamental, plus un texte ciblé par mots-clés pour votre service principal et votre ville sur chaque page, du maillage interne, et une configuration unique du profil d'entreprise Google (si inexistant) et son optimisation (catégories, services, heures, photos, description)." },
-          { label: "SEO sur page étendu + zones desservies (Scale)", text: "tout ce qui est dans Grow, appliqué jusqu'à 10 pages, avec des pages dédiées par zone desservie et de l'optimisation d'images / textes alt." },
+          { label: "SEO sur page étendu + zones desservies (Scale)", text: "tout ce qui est dans Grow, appliqué jusqu'à 20 pages, avec des pages dédiées par zone desservie et de l'optimisation d'images / textes alt." },
           { label: "Gestion du SEO local (option, tous les forfaits)", text: "travail mensuel continu : publications GBP, création et nettoyage de citations, surveillance des avis, suivi de la visibilité locale et ajustements." },
           { text: "Ligne de démarcation : configuration unique (incluse dans Grow et Scale) contre travail mensuel continu (option)." },
         ],
@@ -848,7 +880,7 @@ const fr = {
       "17": {
         title: "Admissibilité aux forfaits groupés",
         blocks: [
-          { text: "Les packs Lead et Visibility sont offerts sur Launch et Grow. Scale inclut déjà le moteur de génération d'avis et le rapport de croissance mensuel, donc les clients Scale ajoutent la gestion du SEO local et le clavardage IA individuellement." },
+          { text: "Les packs Lead et Visibility sont offerts sur Launch et Grow. Les packs Growth Bundle et Growth Engine sont offerts sur Grow seulement : ils incluent le forfait Grow. Scale inclut déjà le moteur de génération d'avis et le rapport de croissance mensuel, donc les clients Scale ajoutent la gestion du SEO local et le clavardage IA individuellement." },
         ],
       },
       "18": {
@@ -964,7 +996,7 @@ const fr = {
             listLabel: "Exemples :",
             items: ["Nouvelle page de service", "Nouvelle page par zone desservie", "FAQ", "Galerie", "Page à propos / équipe"],
           },
-          { text: "Pour du contenu supplémentaire au-delà du nombre de pages du forfait. Frais uniques. Sur Scale, cela s'applique au-delà des 10 pages incluses." },
+          { text: "Pour du contenu supplémentaire au-delà du nombre de pages du forfait. Frais uniques. Sur Scale, cela s'applique au-delà des 20 pages incluses." },
         ],
       },
       "26": {
@@ -1036,6 +1068,27 @@ const fr = {
         blocks: [
           { text: "La retouche de site web est un service unique de C$199.99 : nous corrigeons les problèmes que l'audit gratuit a trouvés sur votre site existant, tels qu'énumérés dans votre rapport d'audit. Elle couvre votre site existant sur sa plateforme actuelle. Pas de nouveau design, pas de refonte, et pas de migration." },
           { text: "L'achat d'une retouche de site web donne droit à 15 % de rabais sur n'importe quel abonnement (forfait site web, Pack publicitaire ou service IA) pendant les 3 premiers mois. Le rabais ne peut être utilisé qu'une seule fois, sur un seul abonnement, et ne peut pas être combiné avec d'autres offres. Achetez la retouche avec un abonnement et le rabais est appliqué automatiquement au paiement; achetez-la seule et nous vous envoyons le code de coupon après votre achat." },
+        ],
+      },
+      "32": {
+        title: "Growth Bundle",
+        blocks: [
+          { text: "Combine le forfait Grow avec la gestion du SEO local et le moteur de génération d'avis." },
+          { text: "Offert sur Grow seulement : il inclut le forfait Grow, donc il ne peut pas être acheté avec Launch ou Scale." },
+        ],
+      },
+      "33": {
+        title: "Growth Engine",
+        blocks: [
+          { text: "Combine le Growth Bundle avec le test de départ publicitaire : une campagne Meta pendant 90 jours, puis passez à un niveau supérieur ou arrêtez." },
+          { text: "Mensuel seulement : le test de départ publicitaire n'a pas de prix annuel. Offert sur Grow seulement : il inclut le forfait Grow." },
+        ],
+      },
+      "34": {
+        title: "Blogue SEO hebdomadaire",
+        blocks: [
+          { text: "Un nouvel article de blogue SEO chaque semaine, rédigé pour votre entreprise et ses services, publié sur votre site." },
+          { text: "Différent de Blogue et mises à jour (option 5) : celui-ci est une page où vous rédigez et publiez vos propres mises à jour." },
         ],
       },
     },

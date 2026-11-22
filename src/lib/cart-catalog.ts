@@ -54,6 +54,13 @@ const catalog = {
     monthCents: 34999,
     yearCents: 34999 * TEN_MONTHS,
   },
+  // Growth Bundle: the Grow plan plus Local SEO Management and the Review
+  // Generation Engine. Available on Grow only (it includes the Grow plan).
+  "growth-bundle": { product: "growth-bundle", type: "bundle", monthCents: 54999, yearCents: 54999 * TEN_MONTHS },
+  // Growth Engine: the Growth Bundle plus the Ads Starter test. Monthly
+  // only, like the Starter test inside it (no annual price, so it can
+  // never be bought yearly). Available on Grow only.
+  "growth-engine": { product: "growth-engine", type: "bundle", monthCents: 89999 },
   // Monthly only (no annual term). No setup fee on any Ads option.
   // Legacy key, kept so old carts and tests still resolve: same single-channel
   // price as ads-meta / ads-google below.
@@ -92,6 +99,10 @@ const catalog = {
   ecommerce: { product: "ecommerce", type: "addon", monthCents: 5999, yearCents: 5999 * TEN_MONTHS },
   aichat: { product: "aichat", type: "addon", monthCents: 9999, yearCents: 9999 * TEN_MONTHS },
   blog: { product: "blog", type: "addon", monthCents: 3499, yearCents: 3499 * TEN_MONTHS },
+  // Weekly SEO Blog: a new SEO blog post every week, written for the
+  // business and published to its site. Distinct from Blog & Updates,
+  // which is for posts the client writes themselves.
+  "seo-blog": { product: "seo-blog", type: "addon", monthCents: 3999, yearCents: 3999 * TEN_MONTHS },
   email: { product: "email", type: "addon", monthCents: 2999, yearCents: 2999 * TEN_MONTHS },
   report: { product: "report", type: "addon", monthCents: 2999, yearCents: 2999 * TEN_MONTHS },
   extrapage: { product: "extrapage", type: "addon", oneTimeCents: 4499 },

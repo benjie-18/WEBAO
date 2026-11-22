@@ -88,6 +88,12 @@ function fixture(options: { french?: boolean; cart?: CartItem[] } = {}) {
           data-name="Lead Pack" data-price-cents="49999" data-interval="month" data-type="bundle" data-price-year="499990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="visibility-pack-month" data-product="visibility-pack"
           data-name="Visibility Pack" data-price-cents="34999" data-interval="month" data-type="bundle" data-price-year="349990"></button>
+        <button type="button" class="cart-btn" data-cart-btn data-key="growth-bundle-month" data-product="growth-bundle"
+          data-name="Growth Bundle" data-price-cents="54999" data-interval="month" data-type="bundle" data-price-year="549990"></button>
+        <button type="button" class="cart-btn" data-cart-btn data-key="growth-engine-month" data-product="growth-engine"
+          data-name="Growth Engine" data-price-cents="89999" data-interval="month" data-type="bundle"></button>
+        <button type="button" class="cart-btn" data-cart-btn data-key="seo-blog-month" data-product="seo-blog"
+          data-name="Weekly SEO Blog" data-price-cents="3999" data-interval="month" data-type="addon" data-price-year="39990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="ai-pack-month" data-product="ai-pack"
           data-name="AI Pack" data-price-cents="39999" data-interval="month" data-type="bundle" data-price-year="399990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="localseo-month" data-product="localseo"
@@ -598,6 +604,37 @@ test('the second bundle keeps the dearer Lead Pack as the main button', () => {
   click(button('visibility-pack'));
   clickConflictButton('Replace Lead Pack with Visibility Pack');
   assert.deepEqual(cart().map((i) => i.key), ['visibility-pack-month']);
+  window.close();
+});
+
+test('the Growth Bundle asks before replacing Grow, and wins over the Lead Pack', () => {
+  const { cart, click, button, conflict, conflictMessage, conflictButtons, clickConflictButton, window } = fixture();
+  click(button('grow'));
+  click(button('growth-bundle'));
+  assert.equal(conflict().hidden, false);
+  assert.equal(conflictMessage(), 'Growth Bundle already includes Grow.');
+  assert.deepEqual(conflictButtons(), ['Replace Grow with Growth Bundle', "Don't add it"]);
+  assert.deepEqual(cart().map((i) => i.key), ['grow-month']);
+  clickConflictButton('Replace Grow with Growth Bundle');
+  assert.deepEqual(cart().map((i) => i.key), ['growth-bundle-month']);
+  click(button('lead-pack'));
+  assert.equal(conflict().hidden, false);
+  assert.equal(conflictMessage(), 'Growth Bundle and Lead Pack both include the Review Generation Engine.');
+  assert.deepEqual(conflictButtons(), ['Keep Growth Bundle', 'Replace Growth Bundle with Lead Pack']);
+  assert.deepEqual(cart().map((i) => i.key), ['growth-bundle-month']);
+  window.close();
+});
+
+test('the Growth Engine asks before replacing the Starter test', () => {
+  const { cart, click, button, conflict, conflictMessage, conflictButtons, clickConflictButton, window } = fixture();
+  click(button('ads-starter'));
+  click(button('growth-engine'));
+  assert.equal(conflict().hidden, false);
+  assert.equal(conflictMessage(), 'Growth Engine already includes Starter test.');
+  assert.deepEqual(conflictButtons(), ['Replace Starter test with Growth Engine', "Don't add it"]);
+  assert.deepEqual(cart().map((i) => i.key), ['ads-starter-month']);
+  clickConflictButton('Replace Starter test with Growth Engine');
+  assert.deepEqual(cart().map((i) => i.key), ['growth-engine-month']);
   window.close();
 });
 
