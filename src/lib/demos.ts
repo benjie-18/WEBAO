@@ -587,6 +587,10 @@ export const demos: Demo[] = [
 
 
 
+// Live demos: the catalog ids with a real published demo site behind them.
+// Shared by the catalog page and the hero preview; keep in one place.
+export const liveDemoIds: ReadonlySet<string> = new Set(["nora", "mira", "atelier-nord", "encre-brute", "kanso", "leduc", "boise", "sora", "forma", "toit-fils", "verte", "lune", "maison-lune", "finition-r", "pouf", "hexline", "papier-ciseaux", "studio-reve", "cyberdoll", "pixelforge", "vhs-dreams", "prism", "tactile", "lattice", "maximal", "atelier-caractere", "esquisse", "brume", "sahara-sage", "aeris", "debit", "bec-fin", "voltige", "lueur", "21-degres", "extreme-climat", "confort-76", "zenith", "toitures-tempete", "chantier-brut", "maison-dore", "sneaker-pro", "onde", "noctua", "lisiere", "boreal", "rive-nord"]);
+
 // Style families: broad, plain-language groups for the style filter.
 // Each visible demo belongs to exactly one family.
 export type StyleFamily = "timeless" | "elegant" | "bold" | "playful" | "soft";

@@ -252,6 +252,32 @@ test('the contact form marks the fields that failed, like the start page', () =>
   assert.equal(startPage.includes('data-astro-reload'), false, 'the start form has no dead reload attribute');
 });
 
+test('the hero shows a random live demo and the intro lives only in the archive', () => {
+  const home = read('src/components/pages/HomePage.astro');
+  assert.ok(home.includes('<HeroPreview locale={locale} />'), 'the hero renders the live demo preview');
+  assert.equal(home.includes('hero-stars'), false, 'the hero stars are gone');
+  assert.ok(
+    home.includes('<a href={paths.pricing} class="btn btn--on-dark btn--lg">{t.home.finalCta.ctaPrimary}</a>'),
+    'the final CTA is one normal button',
+  );
+  assert.equal(home.includes('cta-statement-title'), false, 'the final CTA title is gone');
+  assert.equal(home.includes('btn--crack'), false, 'the crack button is gone');
+  const preview = read('src/components/home/HeroPreview.astro');
+  assert.ok(preview.includes('Math.floor(Math.random() * demos.length)'), 'the preview picks a random demo on every load');
+  assert.ok(preview.includes('liveDemoIds'), 'the preview draws from the live demos only');
+  // Intro archived, not live.
+  assert.ok(existsSync('src/archive/intro-animation/IntroSequence.astro'), 'the archived intro component exists');
+  assert.ok(existsSync('src/archive/intro-animation/README.md'), 'the archive explains how to restore it');
+  assert.equal(existsSync('src/components/anim/IntroSequence.astro'), false, 'the live intro component is gone');
+  assert.equal(existsSync('src/lib/intro/config.ts'), false, 'the live intro config is gone');
+  assert.equal(existsSync('src/lib/intro/engine.ts'), false, 'the live intro engine is gone');
+  assert.equal(existsSync('tests/intro-engine.test.ts'), false, 'the live intro test is gone');
+  const indexEn = read('src/pages/index.astro');
+  assert.equal(indexEn.includes('IntroSequence'), false, 'the EN home page no longer renders the intro');
+  const indexFr = read('src/pages/fr/index.astro');
+  assert.equal(indexFr.includes('IntroSequence'), false, 'the FR home page no longer renders the intro');
+});
+
 test('the audit pages show what a report looks like, labelled as an example', () => {
   // The sample scores are illustrative, so the page says so in both
   // locales; a real audit result never appears on the landing page.

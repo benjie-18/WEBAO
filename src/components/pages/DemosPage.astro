@@ -1,6 +1,6 @@
 ---
 import { useTranslations, localizedPaths, getDemos, type Locale } from "../../lib/i18n";
-import { styleFamilies, getDemoFamily, tradeFilters } from "../../lib/demos";
+import { styleFamilies, getDemoFamily, tradeFilters, liveDemoIds } from "../../lib/demos";
 import { sortCatalogForFallback } from "../../lib/demo-order";
 import QuickLook from "../demos/QuickLook.astro";
 
@@ -13,7 +13,7 @@ const paths = localizedPaths[locale];
 const demos = getDemos(locale);
 
 // Demos with published standalone microsites
-const liveDemos = new Set(["nora", "mira", "atelier-nord", "encre-brute", "kanso", "leduc", "boise", "sora", "forma", "toit-fils", "verte", "lune", "maison-lune", "finition-r", "pouf", "hexline", "papier-ciseaux", "studio-reve", "cyberdoll", "pixelforge", "vhs-dreams", "prism", "tactile", "lattice", "maximal", "atelier-caractere", "esquisse", "brume", "sahara-sage", "aeris", "debit", "bec-fin", "voltige", "lueur", "21-degres", "extreme-climat", "confort-76", "zenith", "toitures-tempete", "chantier-brut", "maison-dore", "sneaker-pro", "onde", "noctua", "lisiere", "boreal", "rive-nord"]);
+const liveDemos = liveDemoIds;
 // Hidden from the catalog: style already covered by another demo (boba-club = Y2K, covered by cyberdoll)
 const hiddenDemos = new Set(["boba-club"]);
 const visibleDemos = demos.filter((d) => !hiddenDemos.has(d.id));

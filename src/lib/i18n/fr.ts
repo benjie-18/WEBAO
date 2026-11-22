@@ -124,6 +124,9 @@ const fr = {
       priceNote: "89,99 $ <span>CAD/mois</span> · Tout inclus",
       trustStrip: ["0 $ de frais d'installation", "Bilingue EN/FR", "En ligne en 2 à 3 semaines", "Résiliation avec 30 jours de préavis"],
     },
+    heroPreview: {
+      tag: "Démo fictive",
+    },
     proof: {
       eyebrow: "Le catalogue en mouvement",
       heading: "Quarante-sept directions. Zéro modèle.",
@@ -284,11 +287,7 @@ const fr = {
       ],
     },
     finalCta: {
-      title: "Prêt pour un site<br /><span>qui marche tout simplement ?</span>",
-      desc: "Envoyez votre métier, votre ville et quelques photos. On vous répond avec deux directions de démo et un échéancier honnête pour votre site.",
       ctaPrimary: "Démarrer mon site · 89,99 $/mois →",
-      ctaSecondary: "Parcourir les démos d’abord",
-      contact: "contact@webao.ca · Lun–ven, 9 h à 17 h, heure de l’Est",
     },
   },
 

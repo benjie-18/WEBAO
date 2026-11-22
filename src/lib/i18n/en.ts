@@ -121,6 +121,9 @@ const en = {
       priceNote: "$89.99 <span>CAD/month</span> · All-inclusive",
       trustStrip: ["$0 setup fee", "Bilingual EN/FR", "Live in 2–3 weeks", "Cancel with 30 days' notice"],
     },
+    heroPreview: {
+      tag: "Fictional demo",
+    },
     proof: {
       eyebrow: "The catalog in motion",
       heading: "Forty-seven directions. Zero templates.",
@@ -281,11 +284,7 @@ const en = {
       ],
     },
     finalCta: {
-      title: "Ready for a website<br /><span>that just works?</span>",
-      desc: "Send your trade, city, and a couple of photos. We’ll reply with two demo directions and an honest timeline for your site.",
       ctaPrimary: "Start your site · $89.99/mo →",
-      ctaSecondary: "Browse demos first",
-      contact: "contact@webao.ca · Mon–Fri, 9–5 Eastern",
     },
   },
 
