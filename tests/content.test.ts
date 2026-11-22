@@ -526,6 +526,27 @@ test('the portal names what is still missing after a partial save, and shows the
   assert.ok(portal.includes('client.business !== client.email'), 'the identity line does not repeat the email when no business name is set');
 });
 
+test('the portal survives a dropped connection, guards the ads save, and says what a blank review note needs', () => {
+  // The portal's shared api() helper had no fetch-level catch, so a
+  // dropped connection rejected the promise and left every submit frozen
+  // (button disabled, status stuck on "Saving…" with no way back), while
+  // the contact and support forms already catch their submits. The ads
+  // form was also the only portal submit without an in-flight guard, so
+  // a double-click saved twice. And sending review changes with an empty
+  // note answered the generic "Something did not work", a dead end that
+  // read as a failed send.
+  const portal = read('src/components/pages/PortalPage.astro');
+  assert.ok(portal.includes('.catch(function () { return { status: 0, data: { ok: false } }; })'), 'a failed fetch answers ok:false instead of rejecting');
+  assert.ok(portal.includes("root.querySelector('[data-portal-ads-form] button[type=\"submit\"]')"), 'the ads submit handler holds its save button');
+  assert.ok(portal.includes('btn.disabled = false;\n        if (r.data.ok) {'), 'the ads save button is re-enabled on the save response');
+  assert.ok(portal.includes('reviewEmptyNote: "Write what should change before sending."'), 'the EN empty-note message exists');
+  assert.ok(portal.includes('reviewEmptyNote: "Écrivez ce qui doit changer avant d\'envoyer."'), 'the FR empty-note message exists');
+  assert.ok(portal.includes('data-portal-msg-review-empty'), 'the empty-note template is rendered for the script');
+  assert.ok(portal.includes('msg("[data-portal-msg-review-empty]")'), 'an empty review note shows the empty-note message, not the generic error');
+  assert.ok(portal.includes('root.querySelector("[data-portal-changes-note]").focus();'), 'an empty review note moves focus into the note field');
+  assert.ok(portal.includes('if (!r.data.ok) return;\n        current = null;'), 'sign-out only switches to the sign-in form once the server confirms');
+});
+
 test('the homepage timeline agrees with the FAQ: two to three weeks, not one week', () => {
   // The process heading once said "about a week" while the FAQ and the
   // service pages said "2 to 3 weeks", and the scrub readout counted

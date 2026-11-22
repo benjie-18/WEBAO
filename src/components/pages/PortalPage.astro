@@ -54,6 +54,7 @@ const copy = fr
       reviewApprove: "Approuver et publier",
       reviewChanges: "Demander des changements",
       reviewNotePh: "Que devons-nous changer ?",
+      reviewEmptyNote: "Écrivez ce qui doit changer avant d'envoyer.",
       reviewSend: "Envoyer les changements",
       reviewWorking: "Un instant…",
       reviewApprovedMsg: "Approuvé, merci. Votre site web est en ligne.",
@@ -159,6 +160,7 @@ const copy = fr
       reviewApprove: "Approve and publish",
       reviewChanges: "Request changes",
       reviewNotePh: "What should we change?",
+      reviewEmptyNote: "Write what should change before sending.",
       reviewSend: "Send the changes",
       reviewWorking: "One moment…",
       reviewApprovedMsg: "Approved, thank you. Your website is live.",
@@ -502,6 +504,7 @@ const supportHref = fr ? "/fr/soutien" : "/support";
 <span hidden data-portal-msg-review-working>{copy.reviewWorking}</span>
 <span hidden data-portal-msg-review-approved>{copy.reviewApprovedMsg}</span>
 <span hidden data-portal-msg-review-changes>{copy.reviewChangesMsg}</span>
+<span hidden data-portal-msg-review-empty>{copy.reviewEmptyNote}</span>
 <span hidden data-portal-msg-domain-register>{copy.domainToRegister}</span>
 <span hidden data-portal-msg-domain-pending>{copy.domainPending}</span>
 <span hidden data-portal-msg-domain-connected>{copy.domainConnected}</span>
@@ -531,7 +534,12 @@ const supportHref = fr ? "/fr/soutien" : "/support";
         return res.json().catch(function () { return { ok: false }; }).then(function (data) {
           return { status: res.status, data: data };
         });
-      });
+      // A dropped connection used to reject the fetch and leave every
+      // submit frozen: button disabled, status stuck on "Saving…" or
+      // "Sending…" with no way back. Answer ok:false instead, so each
+      // caller falls through to its existing error path (the contact and
+      // support forms already catch their submits the same way).
+      }).catch(function () { return { status: 0, data: { ok: false } }; });
     }
 
     var demos = [];
@@ -804,6 +812,7 @@ const supportHref = fr ? "/fr/soutien" : "/support";
     root.querySelector("[data-portal-ads-form]").addEventListener("submit", function (ev) {
       ev.preventDefault();
       var status = root.querySelector("[data-portal-ads-formstatus]");
+      var btn = root.querySelector('[data-portal-ads-form] button[type="submit"]');
       var payload = {};
       root.querySelectorAll("[data-ads-f]").forEach(function (el) {
         var f = el.getAttribute("data-ads-f");
@@ -813,8 +822,13 @@ const supportHref = fr ? "/fr/soutien" : "/support";
           payload[f] = el.value;
         }
       });
+      // The only portal submit without an in-flight guard: a double-click
+      // sent the save twice (the sign-in, onboarding, approve and
+      // changes-send handlers all disable their button while waiting).
+      btn.disabled = true;
       status.textContent = msg("[data-portal-msg-saving]");
       api("/api/portal/ads-onboarding", { method: "POST", body: JSON.stringify(payload) }).then(function (r) {
+        btn.disabled = false;
         if (r.data.ok) {
           if (r.data.ads && r.data.ads.complete) {
             status.textContent = msg("[data-portal-msg-ads-saved]");
@@ -864,7 +878,10 @@ const supportHref = fr ? "/fr/soutien" : "/support";
       var status = root.querySelector("[data-portal-review-status]");
       var note = root.querySelector("[data-portal-changes-note]").value.trim();
       if (!note) {
-        status.textContent = msg("[data-portal-msg-generic]");
+        // An empty note is not a failed send: say what is missing and put
+        // the cursor in the note field, instead of the generic error.
+        status.textContent = msg("[data-portal-msg-review-empty]");
+        root.querySelector("[data-portal-changes-note]").focus();
         return;
       }
       var btn = root.querySelector("[data-portal-changes-send]");
@@ -882,7 +899,12 @@ const supportHref = fr ? "/fr/soutien" : "/support";
     });
 
     root.querySelector("[data-portal-logout]").addEventListener("click", function () {
-      api("/api/portal/logout", { method: "POST", body: "{}" }).then(function () {
+      // Only switch to the sign-in form once the server confirms the
+      // session is dropped: with api() answering ok:false on a failed
+      // fetch, an unconditional switch would fake a sign-out while the
+      // session is still live in this browser.
+      api("/api/portal/logout", { method: "POST", body: "{}" }).then(function (r) {
+        if (!r.data.ok) return;
         current = null;
         show("signin");
       });
