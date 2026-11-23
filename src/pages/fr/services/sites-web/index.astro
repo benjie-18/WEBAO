@@ -1,0 +1,78 @@
+---
+import ServicePage from "../../../../components/pages/ServicePage.astro";
+
+const locale = "fr" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="serviceWebsites"
+  title="Conception de site web et forfaits mensuels | WEBAO"
+  description="Un site web sur mesure pour votre petite entreprise sur forfait mensuel : Launch 89,99 $/mois pour 1 à 5 pages, Grow 149,99 $/mois pour 5 à 10 pages, Scale 349,99 $/mois jusqu'à 20 pages. Domaine, hébergement, SSL et entretien inclus. Aucuns frais d'installation."
+  eyebrow="Sites web"
+  heading="Des sites web qui amènent des clients"
+  intro="Un site web sur mesure, pas un modèle, construit pour votre métier et votre ville. Vous payez chaque mois, comme un loyer : le domaine, l'hébergement, le SSL, le design adapté au mobile, le formulaire de contact, le SEO fondamental et l'entretien sont tous inclus. La plupart des sites sont en ligne en 2 à 3 semaines à partir de la réception des éléments complets."
+  answerLine="Un site web qui rend votre entreprise facile à trouver, facile à croire et facile à joindre, sans que vous touchiez à un CMS."
+  sections={[
+    {
+      heading: "Forfaits mensuels",
+      body: "Launch 89,99 $/mois : un site web sur mesure de 1 à 5 pages. Grow 149,99 $/mois : 5 à 10 pages, le forfait par lequel la plupart des petites entreprises commencent. Scale 349,99 $/mois : jusqu'à 20 pages, zones de service comprises. La facturation annuelle donne 2 mois gratuits. Aucuns frais d'installation. Le terme initial est de 6 mois, puis mensuel avec 30 jours de préavis.",
+      link: { href: "/fr/services/forfaits-mensuels-site-web/", label: "Forfaits mensuels de site web →" },
+    },
+    {
+      heading: "Design sur mesure",
+      body: "Chaque site client est une construction sur mesure. Le catalogue de démos montre ce qui est possible, et une démo qui vous plaît peut servir de direction de style seulement. Vous envoyez votre métier, votre ville et quelques photos; on vous répond avec deux directions de démo et un échéancier honnête.",
+      link: { href: "/fr/services/conception-site-web-pme/", label: "Conception de site web pour PME →" },
+    },
+    {
+      heading: "Hébergement et entretien",
+      body: "Hébergement, SSL, sécurité, sauvegardes et petites mises à jour sont inclus dans le tarif mensuel. Il n'y a aucun CMS à apprendre et rien à mettre à jour vous-même. Le domaine appartient à votre entreprise.",
+      link: { href: "/fr/services/hebergement-entretien-site-web/", label: "Hébergement et entretien de site web →" },
+    },
+    {
+      heading: "Des ajouts qui grandissent avec vous",
+      body: "SEO local 159,99 $/mois, génération d'avis 399,99 $/mois, un blogue SEO hebdomadaire 39,99 $/mois, et des ensembles qui les combinent : le Growth Bundle 549,99 $/mois et le Growth Engine 899,99 $/mois avec le test publicitaire de départ inclus.",
+    },
+    {
+      heading: "Montréal, en français et en anglais",
+      body: "Basé à Montréal, au service des entreprises qui s'adressent au Québec, dans les deux langues. Chaque site peut être bilingue, et une version française fait partie du travail bien fait au Québec.",
+      link: { href: "/fr/services/conception-site-web-montreal/", label: "Conception web à Montréal →" },
+    },
+  ]}
+  faqs={[
+    {
+      q: "Mon site est-il un modèle ?",
+      a: "Non. Les sites clients sont des constructions sur mesure. Le catalogue de démos montre ce qui est possible, et une démo qui vous plaît peut servir de direction de style seulement.",
+    },
+    {
+      q: "Combien de temps ça prend ?",
+      a: "La plupart des sites sont en ligne en 2 à 3 semaines à partir de la réception des éléments complets. Les pages simples d'une page peuvent aller plus vite. Vous recevez un échéancier honnête avant de payer, et un aperçu privé en quelques jours.",
+    },
+    {
+      q: "Que dois-je envoyer pour commencer ?",
+      a: "Votre métier, votre ville, quelques photos, vos services, votre zone de service, et ce que vous voulez que vos clients fassent : appeler, réserver ou demander une soumission.",
+    },
+    {
+      q: "Que se passe-t-il après le lancement ?",
+      a: "On entretient le site : domaine, hébergement, SSL, sauvegardes et petites mises à jour sont inclus dans le tarif mensuel. Vous pouvez résilier avec 30 jours de préavis après le terme initial de 6 mois.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Autres services"
+  siblings={[
+    { href: "/fr/services/publicite/", label: "Publicité", note: "Forfaits publicitaires sur Meta et Google : test 399,99 $/mois, un canal 649,99 $/mois, les deux 999,99 $/mois. Aucuns frais d'installation." },
+    { href: "/fr/services/ia/", label: "Services IA", note: "Réceptionniste IA, réceptionniste en ligne et suivi IA : à partir de 99,99 $/mois, ou le Pack IA pour 399,99 $/mois. Aucuns frais d'installation." },
+    { href: "/fr/services/", label: "Tous les services", note: "Sites web, publicité et services IA d'une seule équipe, sur une seule facture mensuelle." },
+  ]}
+  startLabel="Démarrer mon site"
+  emailLabel="Courriel contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Conception de site web et forfaits mensuels",
+    description: "Un site web sur mesure pour petites entreprises sur forfait mensuel : Launch 89,99 $/mois, Grow 149,99 $/mois, Scale 349,99 $/mois. Domaine, hébergement, SSL et entretien inclus. Aucuns frais d'installation.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: "CA",
+    serviceType: "Conception web",
+  }}
+/>

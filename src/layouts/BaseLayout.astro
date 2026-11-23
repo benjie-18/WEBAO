@@ -90,6 +90,10 @@ const crumbLabels: Record<string, string> = {
   sources: "Sources",
   refunds: locale === "fr" ? "Remboursements" : "Refunds",
   guideIndex: "Guides",
+  services: locale === "fr" ? "Services" : "Services",
+  serviceWebsites: locale === "fr" ? "Sites web" : "Websites",
+  serviceAds: locale === "fr" ? "Publicité" : "Advertising",
+  serviceAi: locale === "fr" ? "IA" : "AI",
 };
 const crumbName = pageKey ? crumbLabels[pageKey] : undefined;
 const breadcrumbSchema = crumbName

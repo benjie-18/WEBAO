@@ -1,0 +1,78 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="serviceWebsites"
+  title="Website design and monthly plans | WEBAO"
+  description="A custom website for your small business on a monthly plan: Launch C$89.99/mo for 1 to 5 pages, Grow C$149.99/mo for 5 to 10 pages, Scale C$349.99/mo for up to 20 pages. Domain, hosting, SSL, and maintenance included. No setup fee."
+  eyebrow="Websites"
+  heading="Websites that bring customers"
+  intro="A custom website, not a template, built for your trade and your city. You pay monthly, like rent: the domain, hosting, SSL, mobile-friendly design, contact form, Foundational SEO, and maintenance are all included. Most sites launch in 2 to 3 weeks from complete materials."
+  answerLine="A website that makes your business easy to find, easy to trust, and easy to contact, without you ever touching a CMS."
+  sections={[
+    {
+      heading: "Monthly plans",
+      body: "Launch C$89.99/mo: a custom 1 to 5 page website. Grow C$149.99/mo: 5 to 10 pages, the plan most small businesses start with. Scale C$349.99/mo: up to 20 pages, including service areas. Annual billing is 2 months free. No setup fee. The initial term is 6 months, then month to month with 30 days notice.",
+      link: { href: "/services/monthly-website-plans/", label: "Monthly website plans →" },
+    },
+    {
+      heading: "Custom design",
+      body: "Every client site is a custom build. The demo catalog shows what is possible, and a demo you like can be a style direction only. You send your trade, your city, and a couple of photos; we reply with two demo directions and an honest timeline.",
+      link: { href: "/services/small-business-website-design/", label: "Small-business website design →" },
+    },
+    {
+      heading: "Hosting and maintenance",
+      body: "Hosting, SSL, security, backups, and small updates are included in the monthly fee. There is no CMS to learn and nothing to update yourself. The domain belongs to your business.",
+      link: { href: "/services/website-hosting-maintenance/", label: "Website hosting and maintenance →" },
+    },
+    {
+      heading: "Add-ons that grow with you",
+      body: "Local SEO C$159.99/mo, Review Generation C$399.99/mo, a weekly SEO blog C$39.99/mo, and bundles that combine them: the Growth Bundle C$549.99/mo and the Growth Engine C$899.99/mo with the Ads Starter test included.",
+    },
+    {
+      heading: "Montreal, in English and French",
+      body: "Based in Montreal, working for Quebec-facing businesses in both languages. Every site can be bilingual, and a French version is part of doing business properly in Quebec.",
+      link: { href: "/services/montreal-web-design/", label: "Web design in Montreal →" },
+    },
+  ]}
+  faqs={[
+    {
+      q: "Is my site a template?",
+      a: "No. Client sites are custom builds. The demo catalog is a showcase of what is possible, and a demo you like can be a style direction only.",
+    },
+    {
+      q: "How long does it take?",
+      a: "Most sites launch in 2 to 3 weeks from complete materials. Simple one-pagers can go faster. You get an honest timeline before payment, and a private preview within a few days.",
+    },
+    {
+      q: "What do I need to send to start?",
+      a: "Your trade, your city, a couple of photos, your services, your service area, and what you want clients to do: call, book, or request a quote.",
+    },
+    {
+      q: "What happens after launch?",
+      a: "We maintain the site: domain, hosting, SSL, backups, and small updates are included in the monthly fee. You can cancel with 30 days notice after the initial 6-month term.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/ads/", label: "Advertising", note: "Ads Packages on Meta and Google: Starter C$399.99/mo, one channel C$649.99/mo, both C$999.99/mo. No setup fee." },
+    { href: "/services/ai/", label: "AI services", note: "AI receptionist, online receptionist, and AI follow-up: from C$99.99/mo, or the AI Pack for C$399.99/mo. No setup fee." },
+    { href: "/services/", label: "All services", note: "Websites, advertising, and AI services from one team, on one monthly bill." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Website design and monthly plans",
+    description: "A custom website for small businesses on a monthly plan: Launch C$89.99/mo, Grow C$149.99/mo, Scale C$349.99/mo. Domain, hosting, SSL, and maintenance included. No setup fee.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: "CA",
+    serviceType: "Web design",
+  }}
+/>

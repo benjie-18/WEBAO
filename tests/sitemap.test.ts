@@ -38,7 +38,7 @@ test('the sitemap is served as cacheable XML', async () => {
 test('the sitemap lists every locale page, the standalone pages and every visible demo', async () => {
   const { locs } = await sitemap();
   const expected =
-    24 * 2 + // home, pricing, contact, demos, start, audit, terms, refunds, support, privacy + 4 service pages + 3 guide pages + guides index + 6 new guide pages × en/fr
+    28 * 2 + // home, pricing, contact, demos, start, audit, terms, refunds, support, privacy + 8 service pages + 3 guide pages + guides index + 6 new guide pages × en/fr
     2 + // /sources, /fr/sources
     (demos.length - 1) * 2; // every demo except the hidden one, × en/fr
   assert.equal(locs.length, expected, `${locs.length} urls`);
@@ -71,6 +71,14 @@ test('the sitemap lists every locale page, the standalone pages and every visibl
     `${SITE}/fr/services/hebergement-entretien-site-web/`,
     `${SITE}/services/montreal-web-design/`,
     `${SITE}/fr/services/conception-site-web-montreal/`,
+    `${SITE}/services/`,
+    `${SITE}/fr/services/`,
+    `${SITE}/services/websites/`,
+    `${SITE}/fr/services/sites-web/`,
+    `${SITE}/services/ads/`,
+    `${SITE}/fr/services/publicite/`,
+    `${SITE}/services/ai/`,
+    `${SITE}/fr/services/ia/`,
     `${SITE}/guides/website-cost-canada/`,
     `${SITE}/fr/guides/cout-site-web-canada/`,
     `${SITE}/guides/quebec-bill-96-website/`,
@@ -154,6 +162,10 @@ test('the localized pages cross-link to their true counterparts', async () => {
   assert.match(contact, new RegExp(`hreflang="en" href="${SITE}/contact/"`));
   const service = blockFor(`${SITE}/services/montreal-web-design/`);
   assert.match(service, new RegExp(`hreflang="fr" href="${SITE}/fr/services/conception-site-web-montreal/"`));
+  const servicesHome = blockFor(`${SITE}/services/`);
+  assert.match(servicesHome, new RegExp(`hreflang="fr" href="${SITE}/fr/services/"`));
+  const servicesAds = blockFor(`${SITE}/services/ads/`);
+  assert.match(servicesAds, new RegExp(`hreflang="fr" href="${SITE}/fr/services/publicite/"`));
   const guide = blockFor(`${SITE}/guides/quebec-law-25-website/`);
   assert.match(guide, new RegExp(`hreflang="fr" href="${SITE}/fr/guides/loi-25-site-web-quebec/"`));
   const home = blockFor(`${SITE}/`);
@@ -178,7 +190,7 @@ test('the sitemap declares the image namespace and lists demo lead images', asyn
   }
   // The escaped ampersand in "Sahara & Sage" must survive as &amp; in the XML.
   assert.ok(body.includes('<image:title>Sahara &amp; Sage</image:title>'));
-  const expectedUrls = 24 * 2 + 2 + (demos.length - 1) * 2; // locale pages + /sources pair + visible demos
+  const expectedUrls = 28 * 2 + 2 + (demos.length - 1) * 2; // locale pages + /sources pair + visible demos
   assert.ok(locs.length === expectedUrls, 'image entries do not add url entries');
 });
 

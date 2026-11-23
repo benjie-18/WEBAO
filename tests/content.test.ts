@@ -304,6 +304,31 @@ test('the header dropdown carries the client portal and the estimator uses curre
   assert.ok(pricing.includes('<PlanEstimator locale={locale} showCompare={false} />'), 'the live pricing page shows the quiz without the compare link');
 });
 
+test('the services home and branch pages exist, with the model page treatment', () => {
+  for (const [path, key, schema] of [
+    ['src/pages/services/index.astro', 'services', 'WEBAO services'],
+    ['src/pages/services/websites/index.astro', 'serviceWebsites', 'Website design and monthly plans'],
+    ['src/pages/services/ads/index.astro', 'serviceAds', 'Ads Packages'],
+    ['src/pages/services/ai/index.astro', 'serviceAi', 'AI services'],
+    ['src/pages/fr/services/index.astro', 'services', 'Services WEBAO'],
+    ['src/pages/fr/services/sites-web/index.astro', 'serviceWebsites', 'Conception de site web et forfaits mensuels'],
+    ['src/pages/fr/services/publicite/index.astro', 'serviceAds', 'Forfaits publicitaires'],
+    ['src/pages/fr/services/ia/index.astro', 'serviceAi', 'Services IA'],
+  ] as const) {
+    const page = read(path);
+    assert.ok(page.includes('<ServicePage'), `${path} uses the shared service page`);
+    assert.ok(page.includes(`pageKey="${key}"`), `${path} carries pageKey ${key}`);
+    assert.ok(page.includes(`name: "${schema}"`), `${path} carries its Service schema`);
+    assert.ok(page.includes('serviceSchema={{'), `${path} carries its Service schema`);
+  }
+  const servicePage = read('src/components/pages/ServicePage.astro');
+  assert.ok(servicePage.includes('<RelatedDemos locale={locale} />'), 'service pages show three demo directions');
+  assert.ok(servicePage.includes('t.ctaBand.title'), 'service pages end with the what-next band');
+  const related = read('src/components/RelatedDemos.astro');
+  assert.ok(related.includes('{d.tone}'), 'related demos show the demo tone');
+  assert.equal(related.includes('localizedTone'), false, 'no localized tone field is used');
+});
+
 test('the audit pages show what a report looks like, labelled as an example', () => {
   // The sample scores are illustrative, so the page says so in both
   // locales; a real audit result never appears on the landing page.

@@ -1,0 +1,74 @@
+---
+import ServicePage from "../../../../components/pages/ServicePage.astro";
+
+const locale = "fr" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="serviceAds"
+  title="Forfaits publicitaires : publicités Meta et Google pour PME | WEBAO"
+  description="Forfaits publicitaires sur Meta, Google ou les deux : test de départ 399,99 $/mois, un canal 649,99 $/mois, les deux canaux 999,99 $/mois. Aucuns frais d'installation. Votre budget publicitaire va sur votre propre carte. Basé à Montréal."
+  eyebrow="Publicité"
+  heading="Des publicités qui amènent des clients"
+  intro="Les forfaits publicitaires placent votre entreprise devant des clients qui cherchent déjà, sur Meta, Google ou les deux. Vous fixez le budget publicitaire sur votre propre carte, on construit et on gère les campagnes, et chaque demande est envoyée à votre courriel sur-le-champ et affichée dans le portail client."
+  answerLine="Un canal ou les deux, un test de 90 jours ou un forfait continu : de la publicité à un prix honnête, sans frais d'installation."
+  sections={[
+    {
+      heading: "Test de départ publicitaire",
+      body: "Meta seulement, 399,99 $/mois, budget publicitaire à partir de 750 $/mois sur votre propre carte. Un test de 90 jours avec une campagne : ensuite, passez à un forfait complet ou arrêtez. Aucuns frais d'installation.",
+    },
+    {
+      heading: "Un canal",
+      body: "Meta ou Google, 649,99 $/mois. Budget publicitaire minimal de 1 500 $/mois sur votre propre carte. Une campagne, gérée pour vous, avec un rapport mensuel. Aucuns frais d'installation.",
+    },
+    {
+      heading: "Les deux canaux",
+      body: "Meta et Google ensemble, 999,99 $/mois. Budget publicitaire minimal de 2 500 $/mois au total, au moins 1 000 $ par canal. Déjà sur un canal ? Passez aux deux pour 350 $/mois de plus. Aucuns frais d'installation.",
+    },
+    {
+      heading: "Refonte de fiche Google Business",
+      body: "149,99 $ une fois pour une fiche existante : photos, services, heures et description nettoyés pour que la fiche travaille aussi fort que les publicités. Vous gardez la propriété de la fiche, et il n'y a aucune garantie de classement.",
+    },
+    {
+      heading: "Où vont les demandes",
+      body: "Un clic sur une publicité mène à un formulaire instantané Meta dans Facebook ou Instagram, ou à une page de destination sur le domaine WEBAO, alors il n'est pas nécessaire d'avoir un site web pour faire de la publicité. Chaque soumission est envoyée à votre courriel sur-le-champ et conservée dans le portail client, où vous pouvez marquer celles qui ont réservé.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "Faut-il un site web pour faire de la publicité ?",
+      a: "Non. Un clic sur une publicité peut mener à un formulaire instantané Meta ou à une page de destination sur le domaine WEBAO. Un site web aide quand même : il donne aux clients un endroit où vérifier qui vous êtes avant de vous joindre.",
+    },
+    {
+      q: "Qui paie le budget publicitaire, et combien ?",
+      a: "Vous, sur votre propre carte, alors le budget reste toujours à vous. Le test de départ exige au moins 750 $/mois, un canal 1 500 $/mois, les deux canaux 2 500 $/mois au total avec au moins 1 000 $ par canal.",
+    },
+    {
+      q: "Que se passe-t-il après le test de 90 jours ?",
+      a: "Vous passez à un forfait publicitaire complet ou vous arrêtez. Il n'y a aucun engagement au-delà du test, et le forfait mensuel se résilie avec 90 jours de préavis.",
+    },
+    {
+      q: "Comment savoir si les publicités fonctionnent ?",
+      a: "Chaque demande est envoyée à votre courriel sur-le-champ et affichée dans le portail client. Le rapport mensuel compte les demandes enregistrées, et les réservations que vous marquez dans le portail.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Autres services"
+  siblings={[
+    { href: "/fr/services/sites-web/", label: "Sites web", note: "Sites web sur mesure sur forfait mensuel : Launch 89,99 $/mois, Grow 149,99 $/mois, Scale 349,99 $/mois. Aucuns frais d'installation." },
+    { href: "/fr/services/ia/", label: "Services IA", note: "Réceptionniste IA, réceptionniste en ligne et suivi IA : à partir de 99,99 $/mois, ou le Pack IA pour 399,99 $/mois. Aucuns frais d'installation." },
+    { href: "/fr/services/", label: "Tous les services", note: "Sites web, publicité et services IA d'une seule équipe, sur une seule facture mensuelle." },
+  ]}
+  startLabel="Démarrer mon site"
+  emailLabel="Courriel contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Forfaits publicitaires",
+    description: "Forfaits publicitaires sur Meta, Google ou les deux : test de départ 399,99 $/mois, un canal 649,99 $/mois, les deux canaux 999,99 $/mois. Aucuns frais d'installation.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: "CA",
+    serviceType: "Publicité",
+  }}
+/>

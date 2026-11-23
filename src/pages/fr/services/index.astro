@@ -1,0 +1,73 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "fr" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Services | WEBAO"
+  description="Sites web sur mesure, publicité et services IA pour petites entreprises au Canada. Forfaits mensuels de site web à partir de 89,99 $/mois, forfaits publicitaires à partir de 399,99 $/mois, réceptionniste IA à partir de 299,99 $/mois. Aucuns frais d'installation. Basé à Montréal, en français et en anglais."
+  eyebrow="Services"
+  heading="Ce que WEBAO fait"
+  intro="Trois services, une seule équipe, une seule facture mensuelle. Un site web sur mesure qui rend votre entreprise facile à trouver et à joindre, de la publicité qui amène des clients, et une IA qui leur répond quand vous ne pouvez pas. Tout est construit et entretenu par une personne, en français et en anglais, à partir de Montréal."
+  answerLine="Un site web, de la publicité et une IA qui travaillent ensemble : le site donne aux clients un endroit où atterrir, la publicité les y amène, et l'IA leur répond."
+  sections={[
+    {
+      heading: "Sites web",
+      body: "Un site web sur mesure, pas un modèle, sur forfait mensuel. Launch 89,99 $/mois pour 1 à 5 pages, Grow 149,99 $/mois pour 5 à 10 pages, Scale 349,99 $/mois jusqu'à 20 pages. Domaine, hébergement, SSL, design adapté au mobile, formulaire de contact, SEO fondamental et entretien inclus. Aucuns frais d'installation.",
+      link: { href: "/fr/services/sites-web/", label: "Sites web →" },
+    },
+    {
+      heading: "Publicité",
+      body: "Forfaits publicitaires sur Meta, Google ou les deux. Test de départ à partir de 399,99 $/mois, un canal 649,99 $/mois, les deux canaux 999,99 $/mois. Aucuns frais d'installation. Votre budget publicitaire va sur votre propre carte, et chaque demande est envoyée à votre courriel sur-le-champ et affichée dans le portail client.",
+      link: { href: "/fr/services/publicite/", label: "Publicité →" },
+    },
+    {
+      heading: "Services IA",
+      body: "Une réceptionniste IA qui répond aux appels et aux messages, une réceptionniste en ligne pour votre site web, et un suivi IA qui relance vos soumissions. Réceptionniste 299,99 $/mois, réceptionniste en ligne 99,99 $/mois, suivi 99,99 $/mois, ou le Pack IA avec les trois pour 399,99 $/mois. Aucuns frais d'installation.",
+      link: { href: "/fr/services/ia/", label: "Services IA →" },
+    },
+    {
+      heading: "Comment ça commence",
+      body: "Envoyez votre métier, votre ville et quelques photos. On vous répond avec deux directions de démo et un échéancier honnête. La plupart des sites sont en ligne en 2 à 3 semaines à partir de la réception des éléments complets.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "Par quel service commencer ?",
+      a: "Par un site web d'abord, si vous n'en avez pas ou si le vôtre est dépassé : la publicité et l'IA fonctionnent toutes deux mieux avec un site où atterrir. Si votre site est correct, commencez par la publicité pour amener des clients, ou par la réceptionniste IA si vous manquez des appels.",
+    },
+    {
+      q: "Faut-il un site web pour faire de la publicité ?",
+      a: "Non. Un clic sur une publicité peut mener à un formulaire instantané Meta dans Facebook ou Instagram, ou à une page de destination sur le domaine WEBAO. Un site web aide quand même : il donne aux clients un endroit où vérifier qui vous êtes avant de vous joindre.",
+    },
+    {
+      q: "Les services IA ont-ils besoin d'un site web ?",
+      a: "La réceptionniste en ligne vit sur votre site web, alors il en faut un. La réceptionniste répond à vos appels téléphoniques et fonctionne seule. Le suivi relance vos soumissions existantes et fonctionne seul aussi.",
+    },
+    {
+      q: "Combien ça coûte pour commencer ?",
+      a: "Il n'y a aucuns frais d'installation sur aucun service. Les forfaits de site web commencent à 89,99 $/mois, le test publicitaire à 399,99 $/mois, et la réceptionniste IA à 299,99 $/mois. La facturation annuelle sur les forfaits de site web donne 2 mois gratuits.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Les trois services"
+  siblings={[
+    { href: "/fr/services/sites-web/", label: "Sites web", note: "Sites web sur mesure sur forfait mensuel : Launch 89,99 $/mois, Grow 149,99 $/mois, Scale 349,99 $/mois. Aucuns frais d'installation." },
+    { href: "/fr/services/publicite/", label: "Publicité", note: "Forfaits publicitaires sur Meta et Google : test 399,99 $/mois, un canal 649,99 $/mois, les deux 999,99 $/mois. Aucuns frais d'installation." },
+    { href: "/fr/services/ia/", label: "Services IA", note: "Réceptionniste IA, réceptionniste en ligne et suivi IA : à partir de 99,99 $/mois, ou le Pack IA pour 399,99 $/mois. Aucuns frais d'installation." },
+  ]}
+  startLabel="Démarrer mon site"
+  emailLabel="Courriel contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Services WEBAO",
+    description: "Sites web sur mesure, publicité et services IA pour petites entreprises au Canada. Basé à Montréal, en français et en anglais.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: "CA",
+    serviceType: "Conception web, publicité, services IA",
+  }}
+/>

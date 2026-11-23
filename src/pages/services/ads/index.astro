@@ -1,0 +1,74 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="serviceAds"
+  title="Ads Packages: Meta and Google ads for small businesses | WEBAO"
+  description="Ads Packages on Meta, Google, or both: Ads Starter test C$399.99/mo, one channel C$649.99/mo, both channels C$999.99/mo. No setup fee. Your ad spend goes on your own card. Based in Montreal."
+  eyebrow="Advertising"
+  heading="Ads that bring customers"
+  intro="Ads Packages put your business in front of customers who are already looking, on Meta, Google, or both. You set the ad budget on your own card, we build and manage the campaigns, and every lead is emailed to you instantly and shown in the client portal."
+  answerLine="One channel or both, a 90-day Starter test or an ongoing package: ads with an honest price and no setup fee."
+  sections={[
+    {
+      heading: "Ads Starter test",
+      body: "Meta only, C$399.99/mo, ad spend from C$750/mo on your own card. A 90-day test with one campaign: then step up to a full package or stop. No setup fee.",
+    },
+    {
+      heading: "One channel",
+      body: "Meta or Google, C$649.99/mo. Minimum ad spend C$1,500/mo on your own card. One campaign, managed for you, with a monthly report. No setup fee.",
+    },
+    {
+      heading: "Both channels",
+      body: "Meta and Google together, C$999.99/mo. Minimum total ad spend C$2,500/mo, at least C$1,000 per channel. Already on one channel? Upgrade to both for C$350/mo more. No setup fee.",
+    },
+    {
+      heading: "Google Business Profile revamp",
+      body: "C$149.99 one-time for an existing profile: photos, services, hours, and description cleaned up so the profile works as hard as the ads. You keep ownership of the profile, and there is no ranking guarantee.",
+    },
+    {
+      heading: "Where the leads go",
+      body: "An ad click goes to a Meta instant form inside Facebook or Instagram, or to a landing page on the WEBAO domain, so you do not need a website to run ads. Every submission is emailed to you instantly and stored in the client portal, where you can mark the ones that booked.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "Do I need a website to run ads?",
+      a: "No. An ad click can go to a Meta instant form or to a landing page on the WEBAO domain. A website still helps: it gives customers somewhere to check you out before they contact you.",
+    },
+    {
+      q: "Who pays the ad spend, and how much?",
+      a: "You do, on your own card, so the spend is always yours. The Starter test needs at least C$750/mo, one channel C$1,500/mo, both channels C$2,500/mo in total with at least C$1,000 per channel.",
+    },
+    {
+      q: "What happens after the 90-day Starter test?",
+      a: "You step up to a full Ads Package or stop. There is no lock-in beyond the test, and the monthly package cancels with 90 days notice.",
+    },
+    {
+      q: "How do I know the ads are working?",
+      a: "Every lead is emailed to you instantly and shown in the client portal. The monthly report counts the leads we recorded, and the bookings you mark in the portal.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/websites/", label: "Websites", note: "Custom websites on monthly plans: Launch C$89.99/mo, Grow C$149.99/mo, Scale C$349.99/mo. No setup fee." },
+    { href: "/services/ai/", label: "AI services", note: "AI receptionist, online receptionist, and AI follow-up: from C$99.99/mo, or the AI Pack for C$399.99/mo. No setup fee." },
+    { href: "/services/", label: "All services", note: "Websites, advertising, and AI services from one team, on one monthly bill." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Ads Packages",
+    description: "Ads Packages on Meta, Google, or both: Ads Starter test C$399.99/mo, one channel C$649.99/mo, both channels C$999.99/mo. No setup fee.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: "CA",
+    serviceType: "Advertising",
+  }}
+/>
