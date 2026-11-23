@@ -379,13 +379,13 @@ const fr = {
         price: "C$499.99/mois",
         priceNote: 15,
         includesLabel: "Inclus :",
-        includes: ["Gestion du SEO local", "Moteur de génération d'avis", "Assistant clavardage IA entraîné"],
+        includes: ["Gestion du SEO local", "Moteur de génération d'avis", "Réceptionniste en ligne"],
         individualLabel: "Valeur individuelle :",
         individual: "C$159.99 + C$399.99 + C$99.99 = C$659.97/mois",
         bundleLabel: "Forfait :",
         bundlePrice: "C$499.99/mois",
         availLabel: "Disponible sur :",
-        avail: "Launch, Grow",
+        avail: "Launch",
         availNote: 17,
       },
       visibility: {
@@ -496,7 +496,7 @@ const fr = {
       ],
       chatPrice: "C$99.99/mois",
       chatSetup: "Aucuns frais d'installation",
-      // Fusionné avec l'option Assistant clavardage IA entraîné : un seul
+      // Fusionné avec l'option Réceptionniste en ligne : un seul
       // produit, donc la même liste que la note 20 des conditions.
       chatIncludes: [
         "FAQ spécifiques à l'entreprise",
@@ -507,9 +507,9 @@ const fr = {
       ],
       followupPrice: "C$99.99/mois",
       followupSetup: "Aucuns frais d'installation",
-      // Rappel par texto seulement : les demandes d'avis relèvent du
-      // moteur de génération d'avis.
-      followupIncludes: ["Rappel par texto après un appel manqué"],
+      // Rappel par texto et relance de soumissions : les demandes d'avis
+      // relèvent du moteur de génération d'avis.
+      followupIncludes: ["Rappel par texto après un appel manqué", "Relance des soumissions jusqu'à réponse"],
     },
     popularStrip: {
       label: "Option populaire :",
@@ -525,9 +525,9 @@ const fr = {
       items: {
         localseo: { name: "SEO local / Gestion du profil d'entreprise Google", price: "C$159.99/mois", note: 18, short: "Un travail de référencement local continu, au-delà de la configuration initiale." },
         review: { name: "Moteur de génération d'avis", price: "C$399.99/mois", note: 19, short: "Des demandes d’avis automatiques après chaque travail." },
-        aichat: { name: "Assistant clavardage IA entraîné", price: "C$99.99/mois", note: 20, short: "Un assistant de clavardage formé sur votre entreprise." },
+        aichat: { name: "Réceptionniste en ligne", price: "C$99.99/mois", note: 20, short: "Une réceptionniste sur votre site web qui répond aux visiteurs et prend des rendez-vous après les heures d'ouverture." },
         booking: { name: "Réservation / Planification en ligne", price: "C$49.99/mois", note: 21, short: "Vos clients réservent en ligne." },
-        blog: { name: "Blogue et mises à jour", price: "C$34.99/mois", note: 22, short: "" },
+        blog: { name: "Blogue à faire soi-même", price: "C$34.99/mois", note: 22, short: "Une page où vous rédigez et publiez vos propres mises à jour." },
         "seo-blog": { name: "Blogue SEO hebdomadaire", price: "C$39.99/mois", note: 34, short: "Un nouvel article de blogue SEO chaque semaine, rédigé pour votre entreprise." },
         ecommerce: { name: "Commerce électronique simplifié / Liens de paiement", price: "C$59.99/mois", note: 24, short: "Des paiements en ligne simples, sans boutique complète." },
         email: { name: "Marketing par courriel", price: "C$29.99/mois", note: 0, short: "" },
@@ -554,9 +554,9 @@ const fr = {
       compatRows: {
         localseo: "Gestion du SEO local",
         review: "Moteur de génération d'avis",
-        aichat: "Assistant clavardage IA",
+        aichat: "Réceptionniste en ligne",
         booking: "Réservation en ligne",
-        blog: "Blogue et mises à jour",
+        blog: "Blogue à faire soi-même",
         ecommerce: "Commerce électronique simplifié",
         email: "Marketing par courriel",
         report: "Rapport de croissance mensuel",
@@ -576,6 +576,14 @@ const fr = {
       title: "Conditions et détails",
       label: "Lire les conditions et détails →",
     },
+  },
+
+  ctaBand: {
+    title: "Et maintenant ?",
+    demos: "Parcourir les 47 directions de démo →",
+    audit: "Auditer votre site actuel →",
+    plans: "Voir les tarifs →",
+    relatedDemos: "Trois directions de démo pour commencer",
   },
 
   // Estimateur de forfait (« Trouvez votre forfait en 5 secondes ») :
@@ -601,7 +609,7 @@ const fr = {
     whyLaunch: "Jusqu'à 5 pages couvrent tout l'essentiel : qui vous êtes, ce que vous faites et comment vous joindre.",
     whyGrow: "De la place pour vos services, vos réalisations et un moyen de réserver ou de demander une soumission.",
     whyScale: "Un site plus grand, avec de la place pour grandir, et l'aide la plus poussée.",
-    extraAiNote: "Ajoutez un clavardage IA à partir de 99,99 $/mois pour répondre aux visiteurs pendant que vous travaillez.",
+    extraAiNote: "Ajoutez une réceptionniste en ligne à partir de 99,99 $/mois pour répondre aux visiteurs pendant que vous travaillez.",
     extraAdsNote: "La publicité amène des clients : un canal à partir de 649,99 $/mois.",
     compare: "Comparer tous les forfaits →",
   },
@@ -731,7 +739,7 @@ const fr = {
       adsNone: "Aucun pack publicitaire",
       aiLegend: "Services IA",
       aiReceptionist: "Réceptionniste IA",
-      aiChat: "Assistant clavardage IA entraîné",
+      aiChat: "Réceptionniste en ligne",
       aiFollowup: "Suivi IA",
       aiPack: "Pack IA",
       summaryTitle: "Récapitulatif",
@@ -929,7 +937,7 @@ const fr = {
       "15": {
         title: "Lead Pack",
         blocks: [
-          { text: "Combine les trois services les plus axés sur la croissance : la gestion du SEO local, le moteur de génération d'avis et l'assistant clavardage IA entraîné." },
+          { text: "Combine les trois services les plus axés sur la croissance : la gestion du SEO local, le moteur de génération d'avis et la réceptionniste en ligne." },
           { text: "Pour les clients Launch et Grow qui veulent que WEBAO s’occupe de la génération de prospects." },
         ],
       },
@@ -943,7 +951,7 @@ const fr = {
       "17": {
         title: "Admissibilité aux forfaits groupés",
         blocks: [
-          { text: "Les packs Lead et Visibility sont offerts sur Launch et Grow. Les packs Growth Bundle et Growth Engine sont offerts sur Grow seulement : ils incluent le forfait Grow. Scale inclut déjà le moteur de génération d'avis et le rapport de croissance mensuel, donc les clients Scale ajoutent la gestion du SEO local et le clavardage IA individuellement." },
+          { text: "Le pack Lead est offert sur Launch seulement. Le pack Visibility est offert sur Launch et Grow. Les packs Growth Bundle et Growth Engine sont offerts sur Grow seulement : ils incluent le forfait Grow. Scale inclut déjà le moteur de génération d'avis et le rapport de croissance mensuel, donc les clients Scale ajoutent la gestion du SEO local et la réception en ligne individuellement." },
         ],
       },
       "18": {
@@ -981,7 +989,7 @@ const fr = {
         ],
       },
       "20": {
-        title: "Assistant clavardage IA entraîné",
+        title: "Réceptionniste en ligne",
         blocks: [
           {
             listLabel: "Inclus :",
@@ -993,7 +1001,7 @@ const fr = {
               "Intégration de réservation lorsque prise en charge",
             ],
           },
-          { text: "Un assistant de clavardage formé sur votre entreprise." },
+          { text: "Une réceptionniste en ligne formée sur votre entreprise." },
           { text: "Ceci est la version payante, entraînée et spécifique à l'entreprise. Grow et Scale incluent une FAQ étendue (voir 5)." },
         ],
       },
@@ -1008,7 +1016,7 @@ const fr = {
         ],
       },
       "22": {
-        title: "Blogue et mises à jour",
+        title: "Blogue à faire soi-même",
         blocks: [
           {
             listLabel: "Inclus :",
@@ -1151,7 +1159,7 @@ const fr = {
         title: "Blogue SEO hebdomadaire",
         blocks: [
           { text: "Un nouvel article de blogue SEO chaque semaine, rédigé pour votre entreprise et ses services, publié sur votre site." },
-          { text: "Différent de Blogue et mises à jour (option 5) : celui-ci est une page où vous rédigez et publiez vos propres mises à jour." },
+          { text: "Différent du blogue à faire soi-même (option 5) : celui-ci est une page où vous rédigez et publiez vos propres mises à jour." },
         ],
       },
     },

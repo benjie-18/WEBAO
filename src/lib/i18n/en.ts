@@ -376,13 +376,13 @@ const en = {
         price: "C$499.99/mo",
         priceNote: 15,
         includesLabel: "Includes:",
-        includes: ["Local SEO Management", "Review Generation Engine", "Trained AI Chat Assistant"],
+        includes: ["Local SEO Management", "Review Generation Engine", "Online Receptionist"],
         individualLabel: "Individual value:",
         individual: "C$159.99 + C$399.99 + C$99.99 = C$659.97/mo",
         bundleLabel: "Bundle:",
         bundlePrice: "C$499.99/mo",
         availLabel: "Available on:",
-        avail: "Launch, Grow",
+        avail: "Launch",
         availNote: 17,
       },
       visibility: {
@@ -493,8 +493,8 @@ const en = {
       ],
       chatPrice: "C$99.99/mo",
       chatSetup: "No setup fee",
-      // Merged with the Trained AI Chat Assistant add-on: one product,
-      // so this lists the same trained-chat features as terms note 20.
+      // Merged with the Online Receptionist add-on: one product,
+      // so this lists the same features as terms note 20.
       chatIncludes: [
         "Business-specific FAQs",
         "25+ common questions and answers",
@@ -504,9 +504,9 @@ const en = {
       ],
       followupPrice: "C$99.99/mo",
       followupSetup: "No setup fee",
-      // Missed-call text-back only: the review-request bullet was
+      // Text-back plus quote chasing: the review-request bullet stays
       // removed, that job belongs to the Review Generation Engine.
-      followupIncludes: ["Missed-call text-back"],
+      followupIncludes: ["Missed-call text-back", "Quote follow-ups until they answer"],
     },
     popularStrip: {
       label: "Popular add-on:",
@@ -522,9 +522,9 @@ const en = {
       items: {
         localseo: { name: "Local SEO / Google Business Profile Management", price: "C$159.99/mo", note: 18, short: "Ongoing local search work, beyond the initial setup." },
         review: { name: "Review Generation Engine", price: "C$399.99/mo", note: 19, short: "Automatic review requests after each job." },
-        aichat: { name: "Trained AI Chat Assistant", price: "C$99.99/mo", note: 20, short: "A chat assistant trained on your business." },
+        aichat: { name: "Online Receptionist", price: "C$99.99/mo", note: 20, short: "A receptionist on your website that answers visitors and books appointments after hours." },
         booking: { name: "Online Booking / Scheduling", price: "C$49.99/mo", note: 21, short: "Customers book appointments online." },
-        blog: { name: "Blog & Updates", price: "C$34.99/mo", note: 22, short: "" },
+        blog: { name: "DIY Blog Page", price: "C$34.99/mo", note: 22, short: "A page where you write and post your own updates." },
         "seo-blog": { name: "Weekly SEO Blog", price: "C$39.99/mo", note: 34, short: "A new SEO blog post every week, written for your business." },
         ecommerce: { name: "E-commerce Lite / Payment Links", price: "C$59.99/mo", note: 24, short: "Simple online payments, no full store." },
         email: { name: "Email Marketing", price: "C$29.99/mo", note: 0, short: "" },
@@ -551,9 +551,9 @@ const en = {
       compatRows: {
         localseo: "Local SEO Management",
         review: "Review Generation Engine",
-        aichat: "Trained AI Chat",
+        aichat: "Online Receptionist",
         booking: "Online Booking",
-        blog: "Blog & Updates",
+        blog: "DIY Blog Page",
         ecommerce: "E-commerce Lite",
         email: "Email Marketing",
         report: "Monthly Growth Report",
@@ -573,6 +573,14 @@ const en = {
       title: "Terms and details",
       label: "Read the terms and details →",
     },
+  },
+
+  ctaBand: {
+    title: "What next?",
+    demos: "Browse 47 demo directions →",
+    audit: "Audit your current site →",
+    plans: "See plans →",
+    relatedDemos: "Three demo directions to start from",
   },
 
   // Plan estimator ("Find your plan in 5 seconds"): three quick questions,
@@ -598,7 +606,7 @@ const en = {
     whyLaunch: "Up to 5 pages covers everything you need: who you are, what you do, and how to reach you.",
     whyGrow: "Room for your services, your work, and a way to book or ask for a quote.",
     whyScale: "A bigger site with room to grow, and the most hands-on help.",
-    extraAiNote: "Add an AI chat from C$99.99/mo to answer visitors while you work.",
+    extraAiNote: "Add an online receptionist from C$99.99/mo to answer visitors while you work.",
     extraAdsNote: "Ads bring customers to it: one channel from C$649.99/mo.",
     compare: "Compare all plans →",
   },
@@ -725,7 +733,7 @@ const en = {
       adsNone: "No Ads Pack",
       aiLegend: "AI services",
       aiReceptionist: "AI Receptionist",
-      aiChat: "Trained AI Chat Assistant",
+      aiChat: "Online Receptionist",
       aiFollowup: "AI Follow-up",
       aiPack: "AI Pack",
       summaryTitle: "Summary",
@@ -923,7 +931,7 @@ const en = {
       "15": {
         title: "Lead Pack",
         blocks: [
-          { text: "Combines the three strongest growth-focused services: Local SEO Management, Review Generation Engine and Trained AI Chat Assistant." },
+          { text: "Combines the three strongest growth-focused services: Local SEO Management, Review Generation Engine and Online Receptionist." },
           { text: "For Launch and Grow customers who want WEBAO to handle lead generation." },
         ],
       },
@@ -937,7 +945,7 @@ const en = {
       "17": {
         title: "Bundle eligibility",
         blocks: [
-          { text: "Lead Pack and Visibility Pack are available on Launch and Grow. Growth Bundle and Growth Engine are available on Grow only: they include the Grow plan. Scale already includes the Review Generation Engine and the Monthly Growth Report, so Scale clients add Local SEO Management and Trained AI Chat individually." },
+          { text: "Lead Pack is available on Launch only. Visibility Pack is available on Launch and Grow. Growth Bundle and Growth Engine are available on Grow only: they include the Grow plan. Scale already includes the Review Generation Engine and the Monthly Growth Report, so Scale clients add Local SEO Management and Online Receptionist individually." },
         ],
       },
       "18": {
@@ -975,7 +983,7 @@ const en = {
         ],
       },
       "20": {
-        title: "Trained AI Chat Assistant",
+        title: "Online Receptionist",
         blocks: [
           {
             listLabel: "Includes:",
@@ -987,7 +995,7 @@ const en = {
               "Booking integration where supported",
             ],
           },
-          { text: "A chat assistant trained on your business." },
+          { text: "An online receptionist trained on your business." },
           { text: "This is the paid, trained, business-specific version. Grow and Scale include an Extended FAQ (see 5)." },
         ],
       },
@@ -1002,7 +1010,7 @@ const en = {
         ],
       },
       "22": {
-        title: "Blog & Updates",
+        title: "DIY Blog Page",
         blocks: [
           {
             listLabel: "Includes:",
@@ -1145,7 +1153,7 @@ const en = {
         title: "Weekly SEO Blog",
         blocks: [
           { text: "A new SEO blog post every week, written for your business and its services, published to your site." },
-          { text: "Different from Blog & Updates (add-on 5): that one is a page where you write and post your own updates." },
+          { text: "Different from DIY Blog Page (add-on 5): that one is a page where you write and post your own updates." },
         ],
       },
     },

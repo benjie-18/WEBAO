@@ -316,6 +316,10 @@ const CONFLICT_CARTS: Array<{ items: string[]; error: string }> = [
     error: "Lead Pack isn't available with Scale.",
   },
   {
+    items: ['grow-month', 'lead-pack-month'],
+    error: "Lead Pack isn't available with Grow.",
+  },
+  {
     items: ['launch-month', 'growth-bundle-month'],
     error: "Growth Bundle isn't available with Launch.",
   },
@@ -336,15 +340,15 @@ const CONFLICT_CARTS: Array<{ items: string[]; error: string }> = [
     error: 'Growth Engine already includes Starter test.',
   },
   {
-    items: ['grow-month', 'lead-pack-month', 'review-month'],
+    items: ['launch-month', 'lead-pack-month', 'review-month'],
     error: 'Lead Pack already includes Review Generation Engine.',
   },
   {
-    items: ['grow-month', 'lead-pack-month', 'localseo-month', 'review-month', 'aichat-month'],
-    error: 'Lead Pack already includes Local SEO Management, Review Generation Engine, Trained AI Chat Assistant.',
+    items: ['launch-month', 'lead-pack-month', 'localseo-month', 'review-month', 'aichat-month'],
+    error: 'Lead Pack already includes Local SEO Management, Review Generation Engine, Online Receptionist.',
   },
   {
-    items: ['grow-month', 'lead-pack-month', 'visibility-pack-month'],
+    items: ['launch-month', 'lead-pack-month', 'visibility-pack-month'],
     error: 'Lead Pack and Visibility Pack both include the Review Generation Engine.',
   },
   {
@@ -357,11 +361,11 @@ const CONFLICT_CARTS: Array<{ items: string[]; error: string }> = [
   },
   {
     items: ['ai-pack-month', 'aichat-month'],
-    error: 'The AI Pack already includes AI Receptionist, Trained AI Chat Assistant and AI Follow-up. Buy the pack on its own, or the individual services on their own.',
+    error: 'The AI Pack already includes AI Receptionist, Online Receptionist and AI Follow-up. Buy the pack on its own, or the individual services on their own.',
   },
   {
     items: ['ai-pack-year', 'aichat-year'],
-    error: 'The AI Pack already includes AI Receptionist, Trained AI Chat Assistant and AI Follow-up. Buy the pack on its own, or the individual services on their own.',
+    error: 'The AI Pack already includes AI Receptionist, Online Receptionist and AI Follow-up. Buy the pack on its own, or the individual services on their own.',
   },
   {
     items: ['grow-year', 'ads-meta-month'],

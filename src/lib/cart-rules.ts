@@ -94,6 +94,7 @@ export const INCLUDED_IN_PLAN: Record<string, string[]> = {
 /** Plan -> products not available on that plan. */
 export const NOT_AVAILABLE_ON_PLAN: Record<string, string[]> = {
   launch: ["admin", "growth-bundle", "growth-engine"],
+  grow: ["lead-pack"],
   scale: ["lead-pack", "visibility-pack", "growth-bundle", "growth-engine"],
 };
 

@@ -85,8 +85,8 @@ const catalog = {
 
   /* ── AI services (monthly only, like the Ads Pack), except the AI Pack,
      which is yearly available too (2 months free, like the plans). No
-     setup fee on any AI service. The chat service is the Trained AI Chat
-     Assistant (aichat, in the add-ons below): one product, C$99.99/mo,
+     setup fee on any AI service. The chat service is the Online
+     Receptionist (aichat, in the add-ons below): one product, C$99.99/mo,
      yearly available, no setup fee. */
   "ai-receptionist": { product: "ai-receptionist", type: "addon", monthCents: 29999 },
   "ai-followup": { product: "ai-followup", type: "addon", monthCents: 9999 },
@@ -100,7 +100,7 @@ const catalog = {
   aichat: { product: "aichat", type: "addon", monthCents: 9999, yearCents: 9999 * TEN_MONTHS },
   blog: { product: "blog", type: "addon", monthCents: 3499, yearCents: 3499 * TEN_MONTHS },
   // Weekly SEO Blog: a new SEO blog post every week, written for the
-  // business and published to its site. Distinct from Blog & Updates,
+  // business and published to its site. Distinct from DIY Blog Page,
   // which is for posts the client writes themselves.
   "seo-blog": { product: "seo-blog", type: "addon", monthCents: 3999, yearCents: 3999 * TEN_MONTHS },
   email: { product: "email", type: "addon", monthCents: 2999, yearCents: 2999 * TEN_MONTHS },

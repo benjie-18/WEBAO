@@ -96,7 +96,7 @@ test("monthly-only set matches the catalog", () => {
     [...monthlyOnly()].sort(),
     ["ads-both", "ads-google", "ads-meta", "ads-pack", "ads-starter", "ai-followup", "ai-receptionist", "growth-engine"],
   );
-  assert.ok(!monthlyOnly().has("aichat"), "the merged chat is yearly available");
+  assert.ok(!monthlyOnly().has("aichat"), "the online receptionist is yearly available");
   assert.ok(!monthlyOnly().has("ai-pack"), "the AI Pack is yearly available (Benji, 2026-11-08)");
 });
 
@@ -175,6 +175,7 @@ test("included add-ons conflict with the plan that includes them", () => {
 test("not-available add-ons and bundles conflict", () => {
   assert.equal(findConflicts([plan("launch"), item("admin")])[0]?.kind, "not-available");
   assert.equal(findConflicts([plan("scale"), bundle("lead-pack")])[0]?.kind, "not-available");
+  assert.equal(findConflicts([plan("grow"), bundle("lead-pack")])[0]?.kind, "not-available");
   assert.equal(findConflicts([plan("scale"), bundle("visibility-pack")])[0]?.kind, "not-available");
   // The Growth bundles include the Grow plan, so they cannot be bought
   // with Launch or Scale.
@@ -182,7 +183,7 @@ test("not-available add-ons and bundles conflict", () => {
   assert.equal(findConflicts([plan("scale"), bundle("growth-bundle")])[0]?.kind, "not-available");
   assert.equal(findConflicts([plan("launch"), bundle("growth-engine")])[0]?.kind, "not-available");
   assert.equal(findConflicts([plan("scale"), bundle("growth-engine")])[0]?.kind, "not-available");
-  assert.deepEqual(findConflicts([plan("grow"), item("admin"), bundle("lead-pack")]), []);
+  assert.deepEqual(findConflicts([plan("grow"), item("admin")]), []);
 });
 
 test("bundles conflict with their own components and with each other", () => {

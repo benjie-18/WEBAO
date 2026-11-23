@@ -84,7 +84,7 @@ function fixture(options: FixtureOptions = {}) {
             </fieldset>
             <fieldset data-branch-picker="ai" hidden>
               <label><input type="checkbox" name="ai-service" value="ai-receptionist" data-name="AI Receptionist" /><span data-ai-price></span></label>
-              <label><input type="checkbox" name="ai-service" value="aichat" data-name="Trained AI Chat Assistant" /><span data-ai-price></span></label>
+              <label><input type="checkbox" name="ai-service" value="aichat" data-name="Online Receptionist" /><span data-ai-price></span></label>
               <label><input type="checkbox" name="ai-service" value="ai-followup" data-name="AI Follow-up" /><span data-ai-price></span></label>
               <label><input type="checkbox" name="ai-service" value="ai-pack" data-name="AI Pack" /><span data-ai-price></span></label>
             </fieldset>
@@ -662,14 +662,14 @@ test('the Pack keeps the individuals when all three together cost more', () => {
   );
   toggleBox(aiBox('ai-pack'), true);
   assert.equal(conflict().hidden, false);
-  assert.equal(conflictMessage(), 'The AI Pack already includes AI Receptionist, Trained AI Chat Assistant, AI Follow-up.');
+  assert.equal(conflictMessage(), 'The AI Pack already includes AI Receptionist, Online Receptionist, AI Follow-up.');
   // All three individuals ($499.97) cost more than the Pack ($399.99), so
   // the main button keeps them and the Pack swap is the second choice.
   assert.deepEqual(conflictButtons(), [
-    'Keep AI Receptionist, Trained AI Chat Assistant, AI Follow-up',
-    'Replace AI Receptionist, Trained AI Chat Assistant, AI Follow-up with AI Pack',
+    'Keep AI Receptionist, Online Receptionist, AI Follow-up',
+    'Replace AI Receptionist, Online Receptionist, AI Follow-up with AI Pack',
   ]);
-  clickConflictButton('Keep AI Receptionist, Trained AI Chat Assistant, AI Follow-up');
+  clickConflictButton('Keep AI Receptionist, Online Receptionist, AI Follow-up');
   assert.equal(conflict().hidden, true);
   assert.deepEqual(
     cart().map((item) => item.key),
@@ -677,7 +677,7 @@ test('the Pack keeps the individuals when all three together cost more', () => {
   );
   assert.equal(aiBox('ai-pack').checked, false);
   toggleBox(aiBox('ai-pack'), true);
-  clickConflictButton('Replace AI Receptionist, Trained AI Chat Assistant, AI Follow-up with AI Pack');
+  clickConflictButton('Replace AI Receptionist, Online Receptionist, AI Follow-up with AI Pack');
   assert.deepEqual(
     cart().map((item) => item.key),
     ['grow-month', 'ai-pack-month'],

@@ -139,7 +139,7 @@ export const compatibility: CompatRow[] = [
   { key: "priority", note: 26, launch: "A", grow: "A", scale: "A" },
   { key: "admin", note: 27, launch: "N", grow: "A", scale: "A" },
   { key: "quotephoto", note: 28, launch: "A", grow: "I", scale: "I" },
-  { key: "leadpack", note: 17, launch: "A", grow: "A", scale: "N" },
+  { key: "leadpack", note: 17, launch: "A", grow: "N", scale: "N" },
   { key: "vispack", note: 17, launch: "A", grow: "A", scale: "N" },
   { key: "growthbundle", note: 17, launch: "N", grow: "A", scale: "N" },
   { key: "growthengine", note: 17, launch: "N", grow: "A", scale: "N" },
