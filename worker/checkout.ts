@@ -46,8 +46,8 @@ const PRODUCT_NAMES: Record<string, string> = {
   localseo: "Local SEO Management",
   aichat: "Online Receptionist",
   "ai-pack": "AI Pack",
-  "ai-receptionist": "AI Receptionist",
-  "ai-followup": "AI Follow-up",
+  "ai-receptionist": "Receptionist",
+  "ai-followup": "Smart Follow-up",
   "ads-pack": "Ads Pack",
   "ads-meta": "Meta",
   "ads-google": "Google",
@@ -79,7 +79,7 @@ function conflictError(conflict: CartConflict): string {
     case "ads-two":
       return "Choose one Ads Pack option: Meta, Google, both together, or the Starter test. Buying two Ads options together is not allowed.";
     case "ai-pack":
-      return "The AI Pack already includes AI Receptionist, Online Receptionist and AI Follow-up. Buy the pack on its own, or the individual services on their own.";
+      return "The AI Pack already includes Receptionist, Online Receptionist and Smart Follow-up. Buy the pack on its own, or the individual services on their own.";
     case "mixed-intervals":
       return "Monthly and yearly items can't be paid in the same checkout. Choose one billing term in your cart.";
     case "two-plans":

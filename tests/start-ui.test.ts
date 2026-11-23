@@ -50,9 +50,9 @@ function fixture(options: FixtureOptions = {}) {
         <div class="eyebrow" data-start-eyebrow>Start your site</div>
         <div data-start data-default-plan="grow" data-label-remove="Remove {name}"
           data-eyebrow-web="Start your site" data-eyebrow-ads="Start your ads"
-          data-eyebrow-ai="Start your AI" data-eyebrow-mixed="Start with WEBAO"
+          data-eyebrow-ai="Start your services" data-eyebrow-mixed="Start with WEBAO"
           data-hint-web="Add-ons only" data-hint-service="No website plan selected."
-          data-label-group-web="Website" data-label-group-ads="Ads" data-label-group-ai="AI"
+          data-label-group-web="Website" data-label-group-ads="Ads" data-label-group-ai="Services"
           data-summary-empty="Nothing selected yet" data-summary-line="Selected: {name} · {total}"
           data-submit="Continue to payment →" data-submit-with-total="Continue to payment · {total} →">
           <aside class="sel-card">
@@ -67,7 +67,7 @@ function fixture(options: FixtureOptions = {}) {
             <div data-branch-select>
               <button type="button" data-branch-toggle="web" aria-pressed="true">Website</button>
               <button type="button" data-branch-toggle="ads" aria-pressed="false">Ads</button>
-              <button type="button" data-branch-toggle="ai" aria-pressed="false">AI</button>
+              <button type="button" data-branch-toggle="ai" aria-pressed="false">Services</button>
             </div>
             <fieldset data-branch-picker="web">
               <label><input type="radio" name="plan" value="launch" data-name="Launch" /><span data-plan-price></span></label>
@@ -83,9 +83,9 @@ function fixture(options: FixtureOptions = {}) {
               <label><input type="checkbox" name="gbp" value="gbp-revamp" data-name="Google Business Profile Revamp" /><span data-gbp-price></span></label>
             </fieldset>
             <fieldset data-branch-picker="ai" hidden>
-              <label><input type="checkbox" name="ai-service" value="ai-receptionist" data-name="AI Receptionist" /><span data-ai-price></span></label>
+              <label><input type="checkbox" name="ai-service" value="ai-receptionist" data-name="Receptionist" /><span data-ai-price></span></label>
               <label><input type="checkbox" name="ai-service" value="aichat" data-name="Online Receptionist" /><span data-ai-price></span></label>
-              <label><input type="checkbox" name="ai-service" value="ai-followup" data-name="AI Follow-up" /><span data-ai-price></span></label>
+              <label><input type="checkbox" name="ai-service" value="ai-followup" data-name="Smart Follow-up" /><span data-ai-price></span></label>
               <label><input type="checkbox" name="ai-service" value="ai-pack" data-name="AI Pack" /><span data-ai-price></span></label>
             </fieldset>
             <p data-start-no-plan hidden>Add-ons only</p>
@@ -621,13 +621,13 @@ test('AI services can be added, and the Pack asks before replacing the individua
   );
   toggleBox(aiBox('ai-pack'), true);
   assert.equal(conflict().hidden, false);
-  assert.equal(conflictMessage(), 'The AI Pack already includes AI Receptionist, AI Follow-up.');
-  assert.deepEqual(conflictButtons(), ['Replace AI Receptionist, AI Follow-up with AI Pack', "Don't add it"]);
+  assert.equal(conflictMessage(), 'The AI Pack already includes Receptionist, Smart Follow-up.');
+  assert.deepEqual(conflictButtons(), ['Replace Receptionist, Smart Follow-up with AI Pack', "Don't add it"]);
   assert.deepEqual(
     cart().map((item) => item.key),
     ['grow-month', 'ai-receptionist-month', 'ai-followup-month'],
   );
-  clickConflictButton('Replace AI Receptionist, AI Follow-up with AI Pack');
+  clickConflictButton('Replace Receptionist, Smart Follow-up with AI Pack');
   assert.equal(conflict().hidden, true);
   assert.deepEqual(
     cart().map((item) => item.key),
@@ -638,11 +638,11 @@ test('AI services can be added, and the Pack asks before replacing the individua
   assert.equal(aiBox('ai-followup').checked, false);
   toggleBox(aiBox('ai-followup'), true);
   assert.equal(conflict().hidden, false);
-  assert.equal(conflictMessage(), 'The AI Pack already includes AI Follow-up.');
+  assert.equal(conflictMessage(), 'The AI Pack already includes Smart Follow-up.');
   // The Pack ($399.99) costs more than one individual ($99.99), so keeping
   // the Pack is the main button and swapping down is only the second choice.
-  assert.deepEqual(conflictButtons(), ['Keep AI Pack', 'Replace AI Pack with AI Follow-up']);
-  clickConflictButton('Replace AI Pack with AI Follow-up');
+  assert.deepEqual(conflictButtons(), ['Keep AI Pack', 'Replace AI Pack with Smart Follow-up']);
+  clickConflictButton('Replace AI Pack with Smart Follow-up');
   assert.deepEqual(
     cart().map((item) => item.key),
     ['grow-month', 'ai-followup-month'],
@@ -662,14 +662,14 @@ test('the Pack keeps the individuals when all three together cost more', () => {
   );
   toggleBox(aiBox('ai-pack'), true);
   assert.equal(conflict().hidden, false);
-  assert.equal(conflictMessage(), 'The AI Pack already includes AI Receptionist, Online Receptionist, AI Follow-up.');
+  assert.equal(conflictMessage(), 'The AI Pack already includes Receptionist, Online Receptionist, Smart Follow-up.');
   // All three individuals ($499.97) cost more than the Pack ($399.99), so
   // the main button keeps them and the Pack swap is the second choice.
   assert.deepEqual(conflictButtons(), [
-    'Keep AI Receptionist, Online Receptionist, AI Follow-up',
-    'Replace AI Receptionist, Online Receptionist, AI Follow-up with AI Pack',
+    'Keep Receptionist, Online Receptionist, Smart Follow-up',
+    'Replace Receptionist, Online Receptionist, Smart Follow-up with AI Pack',
   ]);
-  clickConflictButton('Keep AI Receptionist, Online Receptionist, AI Follow-up');
+  clickConflictButton('Keep Receptionist, Online Receptionist, Smart Follow-up');
   assert.equal(conflict().hidden, true);
   assert.deepEqual(
     cart().map((item) => item.key),
@@ -677,7 +677,7 @@ test('the Pack keeps the individuals when all three together cost more', () => {
   );
   assert.equal(aiBox('ai-pack').checked, false);
   toggleBox(aiBox('ai-pack'), true);
-  clickConflictButton('Replace AI Receptionist, Online Receptionist, AI Follow-up with AI Pack');
+  clickConflictButton('Replace Receptionist, Online Receptionist, Smart Follow-up with AI Pack');
   assert.deepEqual(
     cart().map((item) => item.key),
     ['grow-month', 'ai-pack-month'],
@@ -740,7 +740,7 @@ test('dismissing a blocked channel pick keeps the channel radios as they were', 
 });
 
 test('the yearly toggle is blocked while a monthly-only ads channel is in the cart', () => {
-  // AI Follow-up used to be the monthly-only example here; it is yearly
+  // Smart Follow-up used to be the monthly-only example here; it is yearly
   // available now, so the block is proven with the Meta channel instead.
   const { window, doc, cart, chip, click, chooseAds, conflict, conflictMessage, conflictButtons, clickConflictButton } = fixture();
   click(chip('ads'));
@@ -767,7 +767,7 @@ test('the yearly toggle is blocked while a monthly-only ads channel is in the ca
   window.close();
 });
 
-test('the yearly toggle converts AI Follow-up instead of blocking it', () => {
+test('the yearly toggle converts Smart Follow-up instead of blocking it', () => {
   // Follow-up is yearly available now: switching the term converts it
   // in place, with no conflict dialog.
   const { window, doc, cart, chip, click, toggleBox, aiBox } = fixture();
@@ -785,10 +785,10 @@ test('the yearly toggle converts AI Follow-up instead of blocking it', () => {
   window.close();
 });
 
-test('the summary groups products by branch, in Website, Ads, AI order', () => {
+test('the summary groups products by branch, in Website, Ads, Services order', () => {
   const { window, summary } = fixture({
     cart: [
-      { key: 'ai-followup-month', product: 'ai-followup', name: 'AI Follow-up', priceCents: 9999, interval: 'month', type: 'addon' },
+      { key: 'ai-followup-month', product: 'ai-followup', name: 'Smart Follow-up', priceCents: 9999, interval: 'month', type: 'addon' },
       { key: 'ads-meta-month', product: 'ads-meta', name: 'Meta', priceCents: 64999, interval: 'month', type: 'bundle' },
       planItem('grow', 'Grow', 'month')!,
     ],
@@ -797,18 +797,18 @@ test('the summary groups products by branch, in Website, Ads, AI order', () => {
   assert.ok(text.indexOf('Website') < text.indexOf('Grow'));
   assert.ok(text.indexOf('Grow') < text.indexOf('Ads'));
   assert.ok(text.indexOf('Ads') < text.indexOf('Meta'));
-  assert.ok(text.indexOf('Meta') < text.indexOf('AI'));
-  assert.ok(text.indexOf('AI') < text.indexOf('AI Follow-up'));
+  assert.ok(text.indexOf('Meta') < text.indexOf('Services'));
+  assert.ok(text.indexOf('Services') < text.indexOf('Smart Follow-up'));
   window.close();
 });
 
 test('the eyebrow and the no-plan hint follow the branches in the cart', () => {
   const aiOnly = fixture({
     cart: [
-      { key: 'ai-receptionist-month', product: 'ai-receptionist', name: 'AI Receptionist', priceCents: 29999, interval: 'month', type: 'addon' },
+      { key: 'ai-receptionist-month', product: 'ai-receptionist', name: 'Receptionist', priceCents: 29999, interval: 'month', type: 'addon' },
     ],
   });
-  assert.equal(aiOnly.doc.querySelector('[data-start-eyebrow]')!.textContent, 'Start your AI');
+  assert.equal(aiOnly.doc.querySelector('[data-start-eyebrow]')!.textContent, 'Start your services');
   assert.equal(aiOnly.doc.querySelector<HTMLElement>('[data-start-no-plan]')!.hidden, false);
   assert.equal(aiOnly.doc.querySelector<HTMLElement>('[data-start-no-plan]')!.textContent, 'No website plan selected.');
   aiOnly.window.close();
