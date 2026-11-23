@@ -32,7 +32,6 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
       </div>
 
       <div class="service-chooser" role="tablist" aria-label={r.chooserLabel}>
-        <button type="button" class="service-pill" role="tab" id="p2-tab-services" aria-controls="p2-panel-web p2-panel-ads p2-panel-ai" aria-selected="false" data-service-pill="services">{r.pillServices}</button>
         <button type="button" class="service-pill" role="tab" id="p2-tab-ads" aria-controls="p2-panel-ads" aria-selected="false" data-service-pill="ads">{r.pillAds}</button>
         <button type="button" class="service-pill is-active" role="tab" id="p2-tab-web" aria-controls="p2-panel-web" aria-selected="true" data-service-pill="web">{r.pillWeb}</button>
         <button type="button" class="service-pill" role="tab" id="p2-tab-ai" aria-controls="p2-panel-ai" aria-selected="false" data-service-pill="ai">{r.pillAi}</button>
@@ -153,17 +152,15 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
     var current = "web";
     var busy = false;
     var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    // "services" shows all three panels at once; the other tabs show
-    // one. Panels are handled as key lists so both directions fade
-    // the same way.
-    var ALL_PANELS = ["web", "ads", "ai"];
+    // One tab shows one panel; the other panels hide. Panels are
+    // handled as key lists so both directions fade the same way.
     function visibleKeys() {
-      return current === "services" ? ALL_PANELS : [current];
+      return [current];
     }
     function show(next) {
       if (next === current || busy) return false;
       var fromKeys = visibleKeys();
-      var toKeys = next === "services" ? ALL_PANELS : [next];
+      var toKeys = [next];
       if (!panels[toKeys[0]]) return false;
       pills.forEach(function (b) {
         var on = b.getAttribute("data-service-pill") === next;
@@ -269,7 +266,7 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
     var chooser = root.querySelector(".service-chooser");
     if (chooser) {
       chooser.addEventListener("keydown", function (event) {
-        var order = ["services", "ads", "web", "ai"];
+        var order = ["ads", "web", "ai"];
         var idx = order.indexOf(current);
         var next = null;
         if (event.key === "ArrowRight") next = order[(idx + 1) % order.length];

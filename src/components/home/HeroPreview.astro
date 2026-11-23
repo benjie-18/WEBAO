@@ -138,6 +138,11 @@ const data = demos.map((d) => ({ id: d.id, name: d.name, tone: d.tone }));
     border-radius: 18px;
     box-shadow: var(--shadow-lg);
     overflow: clip;
+    /* The bar below answers to the preview's own width, not the
+       viewport: in the hero grid the preview is a narrow column, so the
+       arrows, toggles and build link crowded onto one row and the
+       next arrow slid under the Desktop/Mobile toggle. */
+    container-type: inline-size;
   }
   /* Hero entrance, same pattern as the title/lead: hidden only when JS runs. */
   html.js .hero-preview { opacity: 0; }
@@ -222,6 +227,11 @@ const data = demos.map((d) => ({ id: d.id, name: d.name, tone: d.tone }));
     white-space: nowrap;
   }
   .hero-preview-build:hover { text-decoration: underline; }
+  /* Narrow preview: the prev/next nav takes its own row, the toggles
+     and the build link share the next one, so nothing overlaps. */
+  @container (max-width: 640px) {
+    .hero-preview-nav { flex: 1 1 100%; }
+  }
   @media (max-width: 960px) {
     .hero-preview { grid-column: 1 / -1; }
     .hero-preview-frame iframe { height: 380px; }

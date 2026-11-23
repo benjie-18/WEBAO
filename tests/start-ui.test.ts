@@ -739,8 +739,38 @@ test('dismissing a blocked channel pick keeps the channel radios as they were', 
   window.close();
 });
 
-test('the yearly toggle is blocked while a monthly-only AI service is in the cart', () => {
-  const { window, doc, cart, chip, click, toggleBox, aiBox, conflict, conflictMessage, conflictButtons, clickConflictButton } = fixture();
+test('the yearly toggle is blocked while a monthly-only ads channel is in the cart', () => {
+  // AI Follow-up used to be the monthly-only example here; it is yearly
+  // available now, so the block is proven with the Meta channel instead.
+  const { window, doc, cart, chip, click, chooseAds, conflict, conflictMessage, conflictButtons, clickConflictButton } = fixture();
+  click(chip('ads'));
+  chooseAds('ads-meta');
+  assert.deepEqual(
+    cart().map((item) => item.key),
+    ['grow-month', 'ads-meta-month'],
+  );
+  click(doc.querySelector('[data-billing-opt="year"]'));
+  assert.equal(conflict().hidden, false);
+  assert.equal(conflictMessage(), "Yearly billing isn't available with Meta. They're monthly only.");
+  assert.deepEqual(conflictButtons(), ['Remove Meta and switch to yearly', 'Keep as is']);
+  clickConflictButton('Keep as is');
+  assert.deepEqual(
+    cart().map((item) => item.key),
+    ['grow-month', 'ads-meta-month'],
+  );
+  click(doc.querySelector('[data-billing-opt="year"]'));
+  clickConflictButton('Remove Meta and switch to yearly');
+  assert.deepEqual(
+    cart().map((item) => item.key),
+    ['grow-year'],
+  );
+  window.close();
+});
+
+test('the yearly toggle converts AI Follow-up instead of blocking it', () => {
+  // Follow-up is yearly available now: switching the term converts it
+  // in place, with no conflict dialog.
+  const { window, doc, cart, chip, click, toggleBox, aiBox } = fixture();
   click(chip('ai'));
   toggleBox(aiBox('ai-followup'), true);
   assert.deepEqual(
@@ -748,19 +778,9 @@ test('the yearly toggle is blocked while a monthly-only AI service is in the car
     ['grow-month', 'ai-followup-month'],
   );
   click(doc.querySelector('[data-billing-opt="year"]'));
-  assert.equal(conflict().hidden, false);
-  assert.equal(conflictMessage(), "Yearly billing isn't available with AI Follow-up. They're monthly only.");
-  assert.deepEqual(conflictButtons(), ['Remove AI Follow-up and switch to yearly', 'Keep as is']);
-  clickConflictButton('Keep as is');
   assert.deepEqual(
     cart().map((item) => item.key),
-    ['grow-month', 'ai-followup-month'],
-  );
-  click(doc.querySelector('[data-billing-opt="year"]'));
-  clickConflictButton('Remove AI Follow-up and switch to yearly');
-  assert.deepEqual(
-    cart().map((item) => item.key),
-    ['grow-year'],
+    ['grow-year', 'ai-followup-year'],
   );
   window.close();
 });

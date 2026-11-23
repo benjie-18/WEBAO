@@ -201,18 +201,6 @@ const aiRows = [
         </div>
         <p class="mono sel-note">{t.cart.note}</p>
         <p class="field-error mono sel-error" role="alert" data-start-selection-error hidden>{t.start.form.errSelection}</p>
-
-        <div class="sel-steps">
-          <p class="mono sel-legend">{t.start.steps.title}</p>
-          <ol class="sel-steps-list">
-            {t.start.steps.items.map((step, i) => (
-              <li>
-                <span class="sel-step-num mono" aria-hidden="true">{i + 1}</span>
-                <span>{step}</span>
-              </li>
-            ))}
-          </ol>
-        </div>
       </aside>
 
       <!-- Details form -->
@@ -245,6 +233,21 @@ const aiRows = [
         </button>
         <p class="mono start-hint">{t.start.form.hint}</p>
       </form>
+
+      <!-- What happens after checkout: under the form, not inside the
+        sticky summary card. It is reassurance, not selection, and it
+        kept the card tall enough to cover the page below it. -->
+      <div class="sel-steps">
+        <p class="mono sel-legend">{t.start.steps.title}</p>
+        <ol class="sel-steps-list">
+          {t.start.steps.items.map((step, i) => (
+            <li>
+              <span class="sel-step-num mono" aria-hidden="true">{i + 1}</span>
+              <span>{step}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
 
       <p class="mono start-reassurance">{t.start.form.reassurance}</p>
       <ul class="start-trust mono" aria-label={t.home.hero.trustStrip.join(" · ")}>
@@ -313,6 +316,13 @@ const aiRows = [
     grid-area: selection;
     position: sticky;
     top: 88px;
+    /* Never taller than the viewport: when every branch is selected the
+       card held three pickers plus extras, total and steps, and the
+       sticky card covered the page below it as it scrolled. The card
+       scrolls internally instead, so everything in it stays reachable
+       and it never overlaps the content underneath. */
+    max-height: calc(100dvh - 104px);
+    overflow-y: auto;
     border: 1px solid var(--line-strong);
     border-radius: 18px;
     background: var(--paper-2);
@@ -628,8 +638,10 @@ const aiRows = [
     color: var(--muted);
     margin: 8px 0 0;
   }
-  /* What happens after checkout: numbered steps in the sidebar. */
+  /* What happens after checkout: numbered steps under the form, in the
+     form column so they never slide under the sticky summary card. */
   .sel-steps {
+    grid-column: 1;
     margin-top: 18px;
     border-top: 1px solid var(--line);
     padding-top: 16px;
@@ -712,7 +724,7 @@ const aiRows = [
     text-align: center;
   }
   .start-shortlist {
-    grid-column: 1 / -1;
+    grid-column: 1;
     font-size: 12px;
     margin: 4px 0 0;
     display: flex;
@@ -722,15 +734,16 @@ const aiRows = [
   }
   .start-shortlist a { color: var(--accent); font-weight: 700; }
   .start-reassurance {
-    grid-column: 1 / -1;
+    grid-column: 1;
     font-size: 11.5px;
     color: var(--muted);
     margin: 10px 0 0;
     text-align: center;
   }
-  /* #46 trust strip on /start: same four items as the home hero. */
+  /* #46 trust strip on /start: same four items as the home hero. In the
+     form column, never under the sticky summary card. */
   .start-trust {
-    grid-column: 1 / -1;
+    grid-column: 1;
     list-style: none;
     display: flex;
     flex-wrap: wrap;
@@ -744,14 +757,14 @@ const aiRows = [
     text-align: center;
   }
   .start-launch-date {
-    grid-column: 1 / -1;
+    grid-column: 1;
     font-size: 11.5px;
     color: var(--muted);
     margin: 6px 0 0;
     text-align: center;
   }
   .start-directions {
-    grid-column: 1 / -1;
+    grid-column: 1;
     display: block;
     margin-top: 8px;
     text-align: center;

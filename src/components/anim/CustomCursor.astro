@@ -264,6 +264,60 @@
       html.classList.remove("cc-away");
     });
 
+    // Preview iframes (hero preview, Quick Look): pointer events stop at
+    // the iframe boundary, so the custom cursor froze at the frame's edge
+    // while the native arrow showed inside. Forward the iframe's pointer
+    // events into this document, converted to parent-viewport coordinates,
+    // so the cursor keeps tracking over a preview. Same-origin only; a
+    // foreign iframe throws on contentDocument access and is skipped.
+    // The native cursor inside the iframe is hidden by an injected style,
+    // so there is never a double cursor.
+    function forwardIframe(iframe) {
+      var doc;
+      try {
+        doc = iframe.contentDocument;
+      } catch (e) {
+        return;
+      }
+      if (!doc || iframe.dataset.ccForwarded === "1") return;
+      iframe.dataset.ccForwarded = "1";
+      try {
+        var st = doc.createElement("style");
+        st.textContent = "*{cursor:none !important}input,textarea,select{cursor:auto !important}";
+        doc.head.appendChild(st);
+      } catch (e) {}
+      function fwd(e) {
+        var r;
+        try {
+          r = iframe.getBoundingClientRect();
+        } catch (e2) {
+          return;
+        }
+        document.dispatchEvent(new MouseEvent(e.type, {
+          clientX: r.left + e.clientX,
+          clientY: r.top + e.clientY,
+          bubbles: true,
+        }));
+      }
+      doc.addEventListener("mousemove", fwd, { passive: true });
+      doc.addEventListener("mousedown", fwd, { passive: true });
+      doc.addEventListener("mouseup", fwd, { passive: true });
+    }
+    function scanIframes() {
+      Array.prototype.forEach.call(document.querySelectorAll("iframe"), function (iframe) {
+        if (iframe.dataset.ccLoadBound !== "1") {
+          iframe.dataset.ccLoadBound = "1";
+          // A fresh src reloads the document: clear the flag so the new
+          // document gets its own listeners and injected style.
+          iframe.addEventListener("load", function () {
+            iframe.dataset.ccForwarded = "";
+            forwardIframe(iframe);
+          });
+        }
+        forwardIframe(iframe);
+      });
+    }
+
     // Re-evaluate suppression when the intro or journey toggles classes.
     // Only <html> and the journey container itself are observed. This used
     // to watch class changes across the entire body subtree, which fired
@@ -305,6 +359,7 @@
       }
       html.classList.remove("cc-ready", "cc-down", "cc-away");
       bind();
+      scanIframes();
       // The journey element is fresh DOM after a navigation; re-observe it.
       var j = document.querySelector(".cursor-journey");
       if (j) {
@@ -319,5 +374,6 @@
 
     bind();
     updateOff();
+    scanIframes();
   })();
 </script>

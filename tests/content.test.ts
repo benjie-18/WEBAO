@@ -357,6 +357,106 @@ test('the pricing card buttons wrap instead of cutting the label off', () => {
   assert.match(block, /line-height:\s*1\.35/, 'the wrapped label keeps readable line height');
 });
 
+test('the pricing chooser has no Services pill: Ads, Web and AI only', () => {
+  // The Services pill showed all three panels at once and was removed:
+  // the chooser is three tabs, Web by default.
+  const page = read('src/components/pages/PricingPage2.astro');
+  assert.ok(!page.includes('data-service-pill="services"'), 'no Services pill in the chooser');
+  assert.ok(!page.includes('p2-tab-services'), 'no Services pill id');
+  assert.ok(!page.includes('ALL_PANELS'), 'no show-all branch left in the switch script');
+  for (const pill of ['ads', 'web', 'ai']) {
+    assert.ok(page.includes(`data-service-pill="${pill}"`), `the ${pill} pill is still there`);
+  }
+  assert.ok(page.includes('var order = ["ads", "web", "ai"];'), 'arrow keys walk Ads, Web, AI');
+});
+
+test('the Ads Starter trial is always visible in the Ads card', () => {
+  // The trial vanished whenever yearly billing was active or the
+  // channel was not Meta: the card hid it on both. It is a separate
+  // trial block now, always shown, and its own copy says Meta-only.
+  const card = read('src/components/pricing/AdsPackCard.astro');
+  assert.ok(card.includes('data-ads-starter'), 'the trial block is in the card');
+  assert.ok(!card.includes('syncStarter'), 'no channel/billing hiding logic left');
+  assert.ok(!card.includes('isYearlyBilling'), 'no yearly check left');
+  assert.ok(!card.includes('.bc-starter[hidden]'), 'no hidden rule left for the trial block');
+});
+
+test('the bundle carousel cards clear the pills on short viewports', () => {
+  // The tallest bundle card covered the pills row on short viewports:
+  // the old scale only subtracted 100px and divided by 560px, which
+  // assumed a shorter card and no UI zone at the stage bottom.
+  const carousel = read('src/components/pricing/BundleCarousel.astro');
+  const at = carousel.indexOf('.bcard {');
+  assert.ok(at > 0, 'the card rule exists');
+  const block = carousel.slice(at, carousel.indexOf('}', carousel.indexOf('scale:', at)) + 1);
+  assert.match(block, /top:\s*42%/, 'the card sits higher in the stage');
+  assert.match(block, /scale:\s*min\(1, calc\(\(100svh - 280px\) \/ 720px\)\)/, 'the scale reserves the pills zone and the tallest card');
+  // The pill and arrow targets used the full scroll distance while
+  // progress() reaches 1 at 70% of it, so the third card's target read
+  // as progress 0.95 and rounded up to the fourth: its pill could never
+  // be landed on. All three conversions share one factor now.
+  assert.ok(carousel.includes('var progressEnd = 0.7;'), 'one shared progress factor');
+  assert.ok(carousel.includes('top + (i / segCount) * progressEnd * total'), 'goTo lands on the card it names');
+  assert.ok(carousel.includes('snapY = top + nearest * progressEnd * total;'), 'the snap correction lands on the nearest card');
+});
+
+test('the AI services are yearly available, like the plans', () => {
+  // Receptionist and Follow-up were monthly-only; the Online
+  // Receptionist already had a yearly term. All three now follow the
+  // billing toggle on the card and in the quiz.
+  const catalog = read('src/lib/cart-catalog.ts');
+  assert.match(catalog, /"ai-receptionist": \{[^}]*yearCents: 29999 \* TEN_MONTHS/, 'Receptionist yearly is 10x monthly');
+  assert.match(catalog, /"ai-followup": \{[^}]*yearCents: 9999 \* TEN_MONTHS/, 'Follow-up yearly is 10x monthly');
+  const cards = read('src/components/pricing/AiPackCards.astro');
+  assert.ok(cards.includes('yearlyPriceCents: priceCentsFor("ai-receptionist", "year")'), 'the Receptionist card offers the yearly term');
+  assert.ok(cards.includes('yearlyPriceCents: priceCentsFor("ai-followup", "year")'), 'the Follow-up card offers the yearly term');
+  const estimator = read('src/components/pricing/PlanEstimator.astro');
+  assert.ok(estimator.includes('yearlyLabel(cartProducts["ai-receptionist"]?.yearCents ?? 0)'), 'the quiz shows the Receptionist yearly price');
+  assert.ok(estimator.includes('yearlyLabel(cartProducts["ai-followup"]?.yearCents ?? 0)'), 'the quiz shows the Follow-up yearly price');
+});
+
+test('the start summary never overlaps the page below it', () => {
+  // When every branch was selected the sticky summary card grew past
+  // the viewport and covered the trust strip and directions as they
+  // scrolled under it. The card is capped and scrolls internally, the
+  // steps live under the form, and the trailing rows sit in the form
+  // column, so nothing ever slides under the card.
+  const page = read('src/components/pages/StartPage.astro');
+  assert.ok(page.includes('max-height: calc(100dvh - 104px);'), 'the summary card is capped to the viewport');
+  assert.ok(page.includes('overflow-y: auto;'), 'the capped card scrolls internally');
+  assert.ok(!page.includes('grid-column: 1 / -1;'), 'no full-width row left to slide under the card');
+  const stepsAt = page.indexOf('<div class="sel-steps">');
+  const formAt = page.indexOf('</form>');
+  const asideAt = page.indexOf('</aside>');
+  assert.ok(stepsAt > formAt && stepsAt > asideAt, 'the steps sit after the form, outside the summary card');
+});
+
+test('the demo cards have no dead gap above the action row', () => {
+  // The grid stretches each row to its tallest card, and the card link
+  // grew (flex: 1) while its children did not, so the extra height sat
+  // as an empty gap between the name and the Quick look / Build row.
+  const page = read('src/components/pages/DemosPage.astro');
+  assert.match(page, /\.demo-thumb \{[^}]*flex:\s*1/, 'the thumb absorbs the stretched height');
+});
+
+test('preview pages hide the back button, keep the cursor, and stack the bar', () => {
+  // The red back-to-WEBAO pill belongs on the standalone demo page; in
+  // an iframe preview the host already has close and open controls.
+  const hatch = read('src/components/demos/EscapeHatch.astro');
+  assert.ok(hatch.includes('window.self !== window.top'), 'the pill hides when the demo is framed');
+  // The custom cursor froze at the iframe edge: pointer events stop at
+  // the boundary, so they are forwarded into the parent document.
+  const cursor = read('src/components/anim/CustomCursor.astro');
+  assert.ok(cursor.includes('scanIframes'), 'iframes are scanned for forwarding');
+  assert.ok(cursor.includes('iframe.contentDocument'), 'the iframe document gets the listeners');
+  assert.ok(cursor.includes('cursor:none !important'), 'the native cursor is hidden inside the preview');
+  // The hero preview bar crowded its arrows under the toggles at the
+  // preview's own narrow width; it stacks by container, not viewport.
+  const preview = read('src/components/home/HeroPreview.astro');
+  assert.ok(preview.includes('container-type: inline-size;'), 'the preview is a container');
+  assert.ok(preview.includes('@container (max-width: 640px)'), 'the bar stacks when the preview is narrow');
+});
+
 test('the services home and branch pages exist, with the model page treatment', () => {
   for (const [path, key, schema] of [
     ['src/pages/services/index.astro', 'services', 'WEBAO services'],
