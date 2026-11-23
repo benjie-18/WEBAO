@@ -134,10 +134,10 @@ test("the automated fix always keeps the most expensive side", () => {
   });
   assert.deepEqual(fixOf([bundle("visibility-pack"), item("report")]), { remove: ["report"] });
   // Growth Bundle: one component is cheaper than the bundle; Local SEO
-  // plus Review together cost more than the bundle, so they win.
+  // plus Review together now cost less than the bundle, so the bundle wins.
   assert.deepEqual(fixOf([bundle("growth-bundle"), item("grow")]), { remove: ["grow"] });
   assert.deepEqual(fixOf([bundle("growth-bundle"), item("localseo"), item("review")]), {
-    remove: ["growth-bundle"],
+    remove: ["localseo", "review"],
   });
   // Growth Engine: its components are cheaper than the bundle.
   assert.deepEqual(fixOf([bundle("growth-engine"), item("ads-starter")]), { remove: ["ads-starter"] });

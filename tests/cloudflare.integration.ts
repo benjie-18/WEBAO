@@ -189,7 +189,7 @@ test('built checkout page renders the cart and posts its keys', async () => {
   const html = readFileSync('dist/client/checkout/index.html', 'utf8');
   const cart = [
     { key: 'launch-year', product: 'launch', name: 'Launch', priceCents: 89990, interval: 'year', type: 'plan' },
-    { key: 'review-month', product: 'review', name: 'Review Generation Engine', priceCents: 9999, interval: 'month', type: 'addon' },
+    { key: 'review-month', product: 'review', name: 'Review Generation Engine', priceCents: 34999, interval: 'month', type: 'addon' },
     { key: 'extrapage-one-time', product: 'extrapage', name: 'Extra Page', priceCents: 1499, interval: 'one-time', type: 'addon' },
   ];
   /** Every fetch the page makes; the tracking beacon posts to /api/track/*. */
@@ -263,9 +263,9 @@ test('built checkout page renders the cart and posts its keys', async () => {
     assert.match(summary, /YOUR SELECTION/);
     assert.match(summary, /Launch/);
     assert.match(summary, /C\$899\.90\/yr/);
-    assert.match(summary, /C\$99\.99\/mo/);
+    assert.match(summary, /C\$349.99\/mo/);
     assert.match(summary, /C\$14\.99 one-time/);
-    assert.match(summary, /C\$1,014.88/, 'total = sum of the selected items');
+    assert.match(summary, /C\$1,264.88/, 'total = sum of the selected items');
     const customer = dom.window.document.getElementById('checkout-customer');
     assert.ok(customer?.textContent?.includes('A & B'), 'customer details render');
     assert.ok(!customer?.innerHTML.includes('<img'), 'customer details are HTML-escaped');
@@ -483,7 +483,7 @@ test('built pages carry the full SEO head', () => {
 test('built success page shows the purchased selection', async () => {
   const cart = [
     { key: 'launch-year', product: 'launch', name: 'Launch', priceCents: 89990, interval: 'year', type: 'plan' },
-    { key: 'review-month', product: 'review', name: 'Review Generation Engine', priceCents: 9999, interval: 'month', type: 'addon' },
+    { key: 'review-month', product: 'review', name: 'Review Generation Engine', priceCents: 34999, interval: 'month', type: 'addon' },
     { key: 'extrapage-one-time', product: 'extrapage', name: 'Extra Page', priceCents: 1499, interval: 'one-time', type: 'addon' },
   ];
   const render = async (path: string, items: unknown[]) => {
@@ -525,9 +525,9 @@ test('built success page shows the purchased selection', async () => {
     assert.match(text, /Review Generation Engine/);
     assert.match(text, /Extra Page/);
     assert.match(text, /C\$899\.90\/yr/);
-    assert.match(text, /C\$99\.99\/mo/);
+    assert.match(text, /C\$349.99\/mo/);
     assert.match(text, /C\$14\.99 one-time/);
-    assert.match(text, /C\$1,014.88/, 'total = sum of the purchased items');
+    assert.match(text, /C\$1,264.88/, 'total = sum of the purchased items');
     const copy = doc.getElementById('success-copy')?.textContent ?? '';
     assert.match(copy, /payment is confirmed/);
     assert.ok(!copy.includes('$149'), 'no hardcoded $149 for cart checkouts');
@@ -542,7 +542,7 @@ test('built success page shows the purchased selection', async () => {
     const text = doc.getElementById('order-summary')?.textContent ?? '';
     assert.match(text, /899,90\u00a0\$/, 'French money format (no-break space)');
     assert.match(text, /\/an/, 'French yearly suffix');
-    assert.match(text, /014,88/, 'French thousands separator');
+    assert.match(text, /264,88/, 'French thousands separator');
     const copy = doc.getElementById('success-copy')?.textContent ?? '';
     assert.match(copy, /paiement est confirmé/);
     assert.ok(!copy.includes('149 $'), 'no hardcoded 149 $ for cart checkouts');

@@ -270,7 +270,7 @@ test('a visitor arriving with a cart keeps exactly that cart', () => {
 });
 
 test('switching to a plan that already includes an add-on asks before dropping it', () => {
-  const extra: CartItem = { key: 'review-month', product: 'review', name: 'Review Generation Engine', priceCents: 39999, interval: 'month', type: 'addon' };
+  const extra: CartItem = { key: 'review-month', product: 'review', name: 'Review Generation Engine', priceCents: 34999, interval: 'month', type: 'addon' };
   const { window, doc, cart, radio, choose, conflict, conflictMessage, conflictButtons, clickConflictButton } = fixture({ cart: [planItem('grow', 'Grow', 'month')!, extra] });
   choose('scale');
   assert.equal(conflict().hidden, false);
@@ -707,7 +707,7 @@ test('dismissing the AI Pack popup unticks its checkbox', () => {
 });
 
 test('dismissing a blocked plan switch keeps the old plan ticked', () => {
-  const extra: CartItem = { key: 'review-month', product: 'review', name: 'Review Generation Engine', priceCents: 39999, interval: 'month', type: 'addon' };
+  const extra: CartItem = { key: 'review-month', product: 'review', name: 'Review Generation Engine', priceCents: 34999, interval: 'month', type: 'addon' };
   const { window, cart, radio, choose, conflict, clickConflictButton } = fixture({ cart: [planItem('grow', 'Grow', 'month')!, extra] });
   choose('scale');
   assert.equal(conflict().hidden, false);

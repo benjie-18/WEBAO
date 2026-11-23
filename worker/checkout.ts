@@ -124,8 +124,8 @@ export const PRICE_MAP: Record<string, string> = {
   "ads-starter-month": "price_1UehSxE57vVzxI41pKmaaoX3", // C$399.99 (was price_1UZeIQE57vVzxI41l33CkUsv at C$499.99; left active for existing subscribers)
   "gbp-revamp-onetime": "price_1UWkF9E57vVzxI41yOVeWE6d",
   "website-touchup-onetime": "price_1UYeOrE57vVzxI41H43kyjyk",
-  "aichat-month": "price_1UO3E9E57vVzxI41BTXxcMD6",
-  "aichat-year": "price_1UORS1E57vVzxI41852FAJaZ",
+  "aichat-month": "price_1UeyzgE57vVzxI41H7auoA46", // C$149.99 (was price_1UO3E9E57vVzxI41BTXxcMD6 at C$99.99; left active for existing subscribers)
+  "aichat-year": "price_1UeyzjE57vVzxI41rrQlSEr0", // C$1,499.90/yr (10x monthly, 2 months free; was price_1UORS1E57vVzxI41852FAJaZ at C$999.90)
   "blog-month": "price_1UeyfRE57vVzxI417Z4rUdQ7", // C$19.99 (was price_1UO3EGE57vVzxI41cXVWgJ1y at C$34.99; left active for existing subscribers)
   "blog-year": "price_1UeyfUE57vVzxI41BTfeA7w1", // C$199.90/yr (10x monthly, 2 months free; was price_1UORS3E57vVzxI41kUmsBh6T at C$349.90)
   "booking-month": "price_1UO3EDE57vVzxI41DW2cPjrK",
@@ -154,8 +154,8 @@ export const PRICE_MAP: Record<string, string> = {
   "quotephoto-year": "price_1UORSEE57vVzxI41fZMW2qXR",
   "report-month": "price_1UO3EVE57vVzxI41eNT4NoDf",
   "report-year": "price_1UORS8E57vVzxI417LKUJ98z",
-  "review-month": "price_1UehJbE57vVzxI41rOygD4gP", // C$399.99 (was price_1UO3E6E57vVzxI41JJ7znxzO at C$99.99; left active for existing subscribers)
-  "review-year": "price_1UehJmE57vVzxI41vNPEBtnH", // C$3,999.90/yr (10x monthly, 2 months free)
+  "review-month": "price_1UeyzYE57vVzxI41WishPNJs", // C$349.99 (was price_1UehJbE57vVzxI41rOygD4gP at C$399.99; left active for existing subscribers)
+  "review-year": "price_1UeyzbE57vVzxI41KAllDjkX", // C$3,499.90/yr (10x monthly, 2 months free; was price_1UehJmE57vVzxI41vNPEBtnH at C$3,999.90)
   // Weekly SEO Blog: a new SEO post every week, written for the business.
   "seo-blog-month": "price_1UeyfZE57vVzxI41sCSUZlIv", // C$29.99 (was price_1UehYnE57vVzxI41lnpsdwJW at C$39.99; left active for existing subscribers)
   "seo-blog-year": "price_1UeyfcE57vVzxI41vYgSKqvS", // C$299.90/yr (10x monthly, 2 months free; was price_1UehYtE57vVzxI41Zz97BMiE at C$399.90)
