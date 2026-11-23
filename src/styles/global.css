@@ -739,6 +739,12 @@ html.theming *::after {
   box-shadow: var(--shadow-lg);
   z-index: 60;
 }
+/* The panel carries the hidden attribute until the menu opens. Without
+   this rule the display: flex above beats the browser's built-in hidden
+   styling, so the panel shows on every page, all the time. */
+.nav-mega[hidden] {
+  display: none;
+}
 .nav-mega-col { display: flex; flex-direction: column; gap: 2px; flex: 1; }
 .nav-mega-heading {
   font-size: 11px;
