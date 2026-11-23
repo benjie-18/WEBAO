@@ -471,6 +471,7 @@ const fr = {
       pillAds: "Publicités",
       pillWeb: "Site web",
       pillAi: "IA",
+      pillServices: "Services",
       planNote: "Sans frais d'installation sur les forfaits site web. Résiliation avec un préavis de 30 jours.",
       bestValue: "Meilleure valeur",
       saveVsTwo: "Économisez C$299.99/mois par rapport à deux canaux séparés",

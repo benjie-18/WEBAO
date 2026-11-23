@@ -468,6 +468,7 @@ const en = {
       pillAds: "Ads",
       pillWeb: "Web",
       pillAi: "AI",
+      pillServices: "Services",
       planNote: "No setup fee on website plans. Cancel with 30 days' notice.",
       bestValue: "Best value",
       saveVsTwo: "Save C$299.99/mo vs two single channels",
