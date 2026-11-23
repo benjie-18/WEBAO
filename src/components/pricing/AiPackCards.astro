@@ -1,9 +1,10 @@
 ---
 import { useTranslations, type Locale } from "../../lib/i18n";
+import { priceCentsFor } from "../../lib/cart-catalog";
 
 // AI service cards for the revamped pricing page.
-// AI branch prices, live since the checkout wiring (Stripe prices in
-// worker/checkout.ts PRICE_MAP, setup fees added server-side there).
+// AI branch prices come from the cart catalog, never hardcoded, so the
+// buttons always charge what the cards show. No setup fee on any AI service.
 // Cart buttons are the same component as everywhere else.
 // Reuses the bundle-card classes from the Ads Pack card so the styling
 // matches the current pricing page.
@@ -18,7 +19,7 @@ const services = [
     name: t.start.selection.aiReceptionist,
     product: "ai-receptionist",
     price: ai.receptionistPrice,
-    priceCents: 29999,
+    priceCents: priceCentsFor("ai-receptionist", "month") ?? 0,
     yearlyPriceCents: undefined,
     setup: ai.receptionistSetup,
     accent: "ai--receptionist",
@@ -28,10 +29,10 @@ const services = [
     name: t.start.selection.aiChat,
     product: "aichat",
     price: ai.chatPrice,
-    priceCents: 9999,
+    priceCents: priceCentsFor("aichat", "month") ?? 0,
     // Merged with the Online Receptionist add-on: one product,
     // yearly available, so the button follows the billing toggle.
-    yearlyPriceCents: 99990,
+    yearlyPriceCents: priceCentsFor("aichat", "year") ?? undefined,
     setup: ai.chatSetup,
     accent: "ai--chat",
     includes: ai.chatIncludes,
@@ -40,7 +41,7 @@ const services = [
     name: t.start.selection.aiFollowup,
     product: "ai-followup",
     price: ai.followupPrice,
-    priceCents: 9999,
+    priceCents: priceCentsFor("ai-followup", "month") ?? 0,
     yearlyPriceCents: undefined,
     setup: ai.followupSetup,
     accent: "ai--followup",
@@ -85,8 +86,8 @@ const yearlyPriceLabel = (cents: number) =>
       data-key="ai-pack-month"
       data-product="ai-pack"
       data-name={t.start.selection.aiPack}
-      data-price-cents={39999}
-      data-price-year="399990"
+      data-price-cents={priceCentsFor("ai-pack", "month") ?? 0}
+      data-price-year={priceCentsFor("ai-pack", "year") ? String(priceCentsFor("ai-pack", "year")) : undefined}
       data-interval="month"
       data-type="bundle"
       aria-label={t.cart.add.replace("{name}", t.start.selection.aiPack)}

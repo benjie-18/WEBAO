@@ -432,14 +432,12 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
               <div class="nav-mega" data-mega-panel hidden>
                 <div class="nav-mega-col">
                   <p class="nav-mega-heading">{t.nav.services}</p>
-                  <a href={navLinks.serviceDesign} aria-current={isCurrent(navLinks.serviceDesign) ? "page" : undefined}>{t.nav.megaDesign}</a>
                   <a href={navLinks.servicePlans} aria-current={isCurrent(navLinks.servicePlans) ? "page" : undefined}>{t.nav.megaPlans}</a>
                   <a href={navLinks.serviceHosting} aria-current={isCurrent(navLinks.serviceHosting) ? "page" : undefined}>{t.nav.megaHosting}</a>
                   <a href={navLinks.serviceMontreal} aria-current={isCurrent(navLinks.serviceMontreal) ? "page" : undefined}>{t.nav.megaMontreal}</a>
                 </div>
                 <div class="nav-mega-col">
                   <p class="nav-mega-heading">{t.nav.megaResources}</p>
-                  <a href={navLinks.guideIndex} aria-current={isCurrent(navLinks.guideIndex) ? "page" : undefined}>{t.nav.guides}</a>
                   <a href={navLinks.guideBill96} aria-current={isCurrent(navLinks.guideBill96) ? "page" : undefined}>{t.nav.megaBill96}</a>
                   <a href={navLinks.guideLaw25} aria-current={isCurrent(navLinks.guideLaw25) ? "page" : undefined}>{t.nav.megaLaw25}</a>
                   <a href={navLinks.portal} aria-current={isCurrent(navLinks.portal) ? "page" : undefined}>{t.nav.portal}</a>
@@ -488,8 +486,6 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
       <a href={navLinks.pricing}>{t.nav.pricing} <span aria-hidden="true">→</span></a>
       <a href={navLinks.audit}>{t.nav.audit} <span aria-hidden="true">→</span></a>
       <a href={navLinks.contact}>{t.nav.contact} <span aria-hidden="true">→</span></a>
-      <a href={navLinks.serviceDesign}>{t.nav.megaDesign} <span aria-hidden="true">→</span></a>
-      <a href={navLinks.guideIndex}>{t.nav.guides} <span aria-hidden="true">→</span></a>
       <a href={navLinks.portal}>{t.nav.portal} <span aria-hidden="true">→</span></a>
       <a href={navLinks.support}>{t.nav.support} <span aria-hidden="true">→</span></a>
       <a
