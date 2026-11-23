@@ -144,6 +144,11 @@ test("the automated fix always keeps the most expensive side", () => {
   // Growth Engine: its components are cheaper than the bundle.
   assert.deepEqual(fixOf([bundle("growth-engine"), item("ads-starter")]), { remove: ["ads-starter"] });
   assert.deepEqual(fixOf([bundle("growth-engine"), bundle("growth-bundle")]), { remove: ["growth-bundle"] });
+  // Growth Engine: the Growth Bundle's contents are components too, so a
+  // plan or add-on the Engine already holds is dropped, not charged twice.
+  assert.deepEqual(fixOf([bundle("growth-engine"), plan("grow")]), { remove: ["grow"] });
+  assert.deepEqual(fixOf([bundle("growth-engine"), item("localseo")]), { remove: ["localseo"] });
+  assert.deepEqual(fixOf([bundle("growth-engine"), item("review")]), { remove: ["review"] });
   // Bundle overlap: the dearer bundle wins.
   assert.deepEqual(fixOf([bundle("growth-bundle"), bundle("lead-pack")]), { remove: ["lead-pack"] });
   assert.deepEqual(fixOf([bundle("growth-engine"), bundle("visibility-pack")]), {
@@ -205,6 +210,10 @@ test("bundles conflict with their own components and with each other", () => {
   // Growth Engine: the Growth Bundle and the Starter test are components.
   assert.equal(findConflicts([bundle("growth-engine"), bundle("growth-bundle")])[0]?.kind, "bundle-component");
   assert.equal(findConflicts([bundle("growth-engine"), bundle("ads-starter")])[0]?.kind, "bundle-component");
+  // Growth Engine: the Growth Bundle's contents are components too.
+  assert.equal(findConflicts([bundle("growth-engine"), plan("grow")])[0]?.kind, "bundle-component");
+  assert.equal(findConflicts([bundle("growth-engine"), item("localseo")])[0]?.kind, "bundle-component");
+  assert.equal(findConflicts([bundle("growth-engine"), item("review")])[0]?.kind, "bundle-component");
   // Growth bundles share the Review Generation Engine with the other bundles.
   assert.deepEqual(
     findConflicts([bundle("growth-bundle"), bundle("lead-pack")]).map((c) => c.kind),

@@ -340,6 +340,18 @@ const CONFLICT_CARTS: Array<{ items: string[]; error: string }> = [
     error: 'Growth Engine already includes Starter test.',
   },
   {
+    items: ['grow-month', 'growth-engine-month'],
+    error: 'Growth Engine already includes Grow.',
+  },
+  {
+    items: ['growth-engine-month', 'localseo-month'],
+    error: 'Growth Engine already includes Local SEO Management.',
+  },
+  {
+    items: ['growth-engine-month', 'review-month'],
+    error: 'Growth Engine already includes Review Generation Engine.',
+  },
+  {
     items: ['launch-month', 'lead-pack-month', 'review-month'],
     error: 'Lead Pack already includes Review Generation Engine.',
   },

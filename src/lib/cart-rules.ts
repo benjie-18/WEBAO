@@ -82,7 +82,11 @@ export const BUNDLE_COMPONENTS: Record<string, string[]> = {
   "lead-pack": ["localseo", "review", "aichat"],
   "visibility-pack": ["review", "report"],
   "growth-bundle": ["grow", "localseo", "review"],
-  "growth-engine": ["growth-bundle", "ads-starter"],
+  // The Engine holds the Growth Bundle, so it also holds the bundle's
+  // contents: the check below only looks one level deep, and a Grow plan
+  // or Local SEO bought with the Engine would otherwise pass with no
+  // conflict and be charged twice.
+  "growth-engine": ["growth-bundle", "grow", "localseo", "review", "ads-starter"],
 };
 
 /** Plan -> add-ons already included in the plan. */
