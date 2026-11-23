@@ -523,29 +523,29 @@ test('audit m9/m21: 25 due abandoned checkouts email exactly 20, and records pas
 });
 
 // ---------------------------------------------------------------------------
-// m17 + QA: checkout setup-fee rules and the auto-add ordering
+// m17 + QA: checkout rejects unknown setup-fee keys
 // ---------------------------------------------------------------------------
 
-test('audit m17: the Ads Pack setup fee cannot be bought on its own', async () => {
+test('audit m17: a setup-fee key is no longer a catalog item', async () => {
   const res = await handleCheckoutSession(
     apiRequest('/api/checkout/session', { email: 'buyer@example.ca', items: [{ key: 'ads-setup-onetime' }] }),
-    envOf(memoryKV().kv, { STRIPE_PRICE_ADS_SETUP: 'price_setup' }),
+    envOf(memoryKV().kv, {}),
   );
   assert.equal(res.status, 400);
 });
 
-test('audit checkout: pack + setup secret passes validation (blocked only at the missing Stripe secret)', async () => {
-  const env = envOf(memoryKV().kv, { STRIPE_PRICE_ADS_SETUP: 'price_setup' });
+test('audit checkout: pack passes validation (blocked only at the missing Stripe secret)', async () => {
+  const env = envOf(memoryKV().kv, {});
   const packOnly = await handleCheckoutSession(
     apiRequest('/api/checkout/session', { email: 'buyer@example.ca', items: [{ key: 'ads-pack-month' }] }),
     env,
   );
-  assert.equal(packOnly.status, 503, 'auto-added setup fee does not trip the caps');
+  assert.equal(packOnly.status, 503, 'pack with no setup fee reaches the Stripe secret check');
   const packPlusSetup = await handleCheckoutSession(
     apiRequest('/api/checkout/session', { email: 'buyer@example.ca', items: [{ key: 'ads-pack-month' }, { key: 'ads-setup-onetime' }] }),
     env,
   );
-  assert.equal(packPlusSetup.status, 503, 'an explicitly present setup fee is not added twice');
+  assert.equal(packPlusSetup.status, 400, 'an unknown setup-fee key is rejected');
 });
 
 // ---------------------------------------------------------------------------

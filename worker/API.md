@@ -391,12 +391,9 @@ Answers `{ emailed, converted, stale, pending }`.
 
 Buying the pack (cart key `ads-pack-month`) opens an ads track on the
 client record (`ads.status`: onboarding → setup → ready → live / paused).
-The one-time setup fee is added by checkout automatically (server-side)
-when the cart holds the pack. The monthly price is static in the
-checkout catalog (`price_1UTsvJE57vVzxI41esicPXuU`, C$899.99/mo); only
-the setup fee is env-configured (`STRIPE_PRICE_ADS_SETUP`, C$499.99
-one-time). Without the setup secret the pack still checks out, monthly
-only, with no setup line.
+There is no setup fee on any Ads option. The monthly price is static in the
+checkout catalog (`price_1UehSsE57vVzxI41YRVxMPDX`, C$649.99/mo for one
+channel, `price_1UehSxE57vVzxI41pWl9IpPw`, C$999.99/mo for both).
 
 `POST /api/portal/ads-onboarding` saves the ads intake (trade, services,
 area, radius, monthly budget, landing website, lead contacts). It counts

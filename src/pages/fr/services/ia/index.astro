@@ -1,0 +1,75 @@
+---
+import ServicePage from "../../../../components/pages/ServicePage.astro";
+
+const locale = "fr" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="serviceAi"
+  title="Réceptionniste IA, réceptionniste en ligne et suivi IA | WEBAO"
+  description="Services IA pour petites entreprises : réceptionniste IA 299,99 $/mois qui répond aux appels et aux messages, réceptionniste en ligne 99,99 $/mois qui répond aux visiteurs du site et prend des rendez-vous après les heures d'ouverture, suivi IA 99,99 $/mois qui relance vos soumissions. Ou le Pack IA avec les trois pour 399,99 $/mois. Aucuns frais d'installation."
+  eyebrow="Services IA"
+  heading="Une IA qui répond quand vous ne pouvez pas"
+  intro="Trois services IA qui s'occupent du travail que vous manquez pendant que vous êtes sur un chantier : une réceptionniste qui répond aux appels et aux messages, une réceptionniste en ligne qui répond aux visiteurs de votre site web, et un suivi qui relance les soumissions envoyées. Les trois ensemble dans le Pack IA pour 399,99 $/mois. Aucuns frais d'installation sur aucun d'eux."
+  answerLine="Le téléphone est répondu, le visiteur du site web reçoit une réponse, et la soumission envoyée est relancée, même pendant que vous travaillez."
+  sections={[
+    {
+      heading: "Réceptionniste IA",
+      body: "299,99 $/mois. Répond à vos appels et à vos messages, prend les messages et inscrit les appelants quand vous êtes occupé. Elle fonctionne seule : aucun site web requis.",
+      link: { href: "/fr/guides/receptionniste-ia-pme/", label: "Réceptionniste IA, en détail →" },
+    },
+    {
+      heading: "Réceptionniste en ligne",
+      body: "99,99 $/mois. Répond aux visiteurs de votre site web pendant que vous travaillez et prend des rendez-vous après les heures d'ouverture : heures, services, prix et façons de vous joindre. Elle vit sur votre site, alors il en faut un.",
+    },
+    {
+      heading: "Suivi IA",
+      body: "99,99 $/mois. Relance les soumissions envoyées pour que celles qui restent sans réponse reçoivent un rappel, et que celles qui répondent vous reviennent. Il fonctionne seul : aucun site web requis.",
+    },
+    {
+      heading: "Pack IA",
+      body: "399,99 $/mois pour les trois : réceptionniste IA, réceptionniste en ligne et suivi. La réceptionniste et le suivi fonctionnent seuls; la réceptionniste en ligne a besoin de votre site web. Aucuns frais d'installation.",
+    },
+    {
+      heading: "Ce que l'IA ne fait pas",
+      body: "Elle ne prétend pas être vous, et elle ne fait pas de promesses en votre nom. Quand elle ne peut pas répondre, elle prend un message et vous le remet. Vous restez responsable de chaque réservation et de chaque soumission.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "La réceptionniste IA remplace-t-elle mon téléphone ?",
+      a: "Non. Elle répond quand vous ne pouvez pas, prend le message et vous le remet. Votre téléphone sonne encore en premier quand vous êtes libre de répondre.",
+    },
+    {
+      q: "Que se passe-t-il quand l'IA ne peut pas répondre ?",
+      a: "Elle prend un message au lieu de deviner. Vous recevez le message avec les coordonnées de l'appelant et vous décidez de la suite.",
+    },
+    {
+      q: "Faut-il un site web pour les services IA ?",
+      a: "Seulement pour la réceptionniste en ligne, qui vit sur votre site web. La réceptionniste et le suivi fonctionnent seuls.",
+    },
+    {
+      q: "Y a-t-il des frais d'installation ?",
+      a: "Non. Il n'y a aucuns frais d'installation sur la réceptionniste, le clavardage, le suivi ou le Pack IA.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Autres services"
+  siblings={[
+    { href: "/fr/services/sites-web/", label: "Sites web", note: "Sites web sur mesure sur forfait mensuel : Launch 89,99 $/mois, Grow 149,99 $/mois, Scale 349,99 $/mois. Aucuns frais d'installation." },
+    { href: "/fr/services/publicite/", label: "Publicité", note: "Forfaits publicitaires sur Meta et Google : test 399,99 $/mois, un canal 649,99 $/mois, les deux 999,99 $/mois. Aucuns frais d'installation." },
+    { href: "/fr/services/", label: "Tous les services", note: "Sites web, publicité et services IA d'une seule équipe, sur une seule facture mensuelle." },
+  ]}
+  startLabel="Démarrer mon site"
+  emailLabel="Courriel contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Services IA",
+    description: "Réceptionniste IA 299,99 $/mois, réceptionniste en ligne 99,99 $/mois, suivi IA 99,99 $/mois, ou le Pack IA avec les trois pour 399,99 $/mois. Aucuns frais d'installation.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: "CA",
+    serviceType: "Services IA",
+  }}
+/>

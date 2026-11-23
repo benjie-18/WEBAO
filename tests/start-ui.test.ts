@@ -14,9 +14,11 @@ import {
   initStart,
   planItem,
   readCustomer,
+  renderShortlist,
   validateDetails,
   writeCustomer,
 } from '../src/lib/start-ui';
+import { SHORTLIST_KEY } from '../src/lib/shortlist';
 
 /** jsdom cannot navigate; ignore that one message, keep everything else. */
 function quietConsole() {
@@ -32,6 +34,8 @@ interface FixtureOptions {
   billing?: 'month' | 'year';
   customer?: Record<string, string>;
   french?: boolean;
+  demo?: string;
+  shortlist?: string[];
 }
 
 /** Mirrors the layout's drawer attributes and StartPage's selection card + form. */
@@ -48,8 +52,14 @@ function fixture(options: FixtureOptions = {}) {
           data-eyebrow-web="Start your site" data-eyebrow-ads="Start your ads"
           data-eyebrow-ai="Start your AI" data-eyebrow-mixed="Start with WEBAO"
           data-hint-web="Add-ons only" data-hint-service="No website plan selected."
-          data-label-group-web="Website" data-label-group-ads="Ads" data-label-group-ai="AI">
-          <aside>
+          data-label-group-web="Website" data-label-group-ads="Ads" data-label-group-ai="AI"
+          data-summary-empty="Nothing selected yet" data-summary-line="Selected: {name} · {total}"
+          data-submit="Continue to payment →" data-submit-with-total="Continue to payment · {total} →">
+          <aside class="sel-card">
+            <button type="button" class="sel-mobile-toggle" data-start-summary-toggle aria-expanded="false">
+              <span class="sel-mobile-toggle-line" data-start-summary-line>Your selection</span>
+              <span class="sel-mobile-toggle-chevron" aria-hidden="true">▾</span>
+            </button>
             <div class="billing-toggle" data-billing-toggle>
               <button type="button" class="billing-opt is-active" data-billing-opt="month" aria-pressed="true">Monthly</button>
               <button type="button" class="billing-opt" data-billing-opt="year" aria-pressed="false">Yearly</button>
@@ -74,7 +84,7 @@ function fixture(options: FixtureOptions = {}) {
             </fieldset>
             <fieldset data-branch-picker="ai" hidden>
               <label><input type="checkbox" name="ai-service" value="ai-receptionist" data-name="AI Receptionist" /><span data-ai-price></span></label>
-              <label><input type="checkbox" name="ai-service" value="aichat" data-name="Trained AI Chat Assistant" /><span data-ai-price></span></label>
+              <label><input type="checkbox" name="ai-service" value="aichat" data-name="Online Receptionist" /><span data-ai-price></span></label>
               <label><input type="checkbox" name="ai-service" value="ai-followup" data-name="AI Follow-up" /><span data-ai-price></span></label>
               <label><input type="checkbox" name="ai-service" value="ai-pack" data-name="AI Pack" /><span data-ai-price></span></label>
             </fieldset>
@@ -92,6 +102,8 @@ function fixture(options: FixtureOptions = {}) {
             <input name="business" /><span data-error="business" hidden></span>
             <button type="submit">Continue</button>
           </form>
+          <p data-start-shortlist hidden><strong>Your shortlisted demos:</strong> <span data-start-shortlist-names></span> <a href="/demos">Change</a></p>
+          <p data-launch-date data-template="Start today → live {a} to {b}" hidden></p>
         </div>
       </main>
       <div data-cart-overlay hidden></div>
@@ -132,7 +144,11 @@ function fixture(options: FixtureOptions = {}) {
       </div>
     </body></html>`,
     {
-      url: options.french ? 'https://webao.ca/fr/commencer' : 'https://webao.ca/start',
+      url: options.demo
+        ? `https://webao.ca/start?demo=${options.demo}`
+        : options.french
+          ? 'https://webao.ca/fr/commencer'
+          : 'https://webao.ca/start',
       runScripts: 'dangerously',
       pretendToBeVisual: true,
       virtualConsole: quietConsole(),
@@ -143,6 +159,7 @@ function fixture(options: FixtureOptions = {}) {
   if (options.cart) window.localStorage.setItem(STORAGE_KEY, JSON.stringify(options.cart));
   if (options.billing) window.localStorage.setItem(BILLING_KEY, options.billing);
   if (options.customer) window.sessionStorage.setItem(CUSTOMER_KEY, JSON.stringify(options.customer));
+  if (options.shortlist) window.localStorage.setItem(SHORTLIST_KEY, JSON.stringify(options.shortlist));
 
   // The owner notification is fire-and-forget; capture it instead of sending it.
   const requests: Array<{ url: string; body: unknown; keepalive?: boolean }> = [];
@@ -253,7 +270,7 @@ test('a visitor arriving with a cart keeps exactly that cart', () => {
 });
 
 test('switching to a plan that already includes an add-on asks before dropping it', () => {
-  const extra: CartItem = { key: 'review-month', product: 'review', name: 'Review Generation Engine', priceCents: 9999, interval: 'month', type: 'addon' };
+  const extra: CartItem = { key: 'review-month', product: 'review', name: 'Review Generation Engine', priceCents: 39999, interval: 'month', type: 'addon' };
   const { window, doc, cart, radio, choose, conflict, conflictMessage, conflictButtons, clickConflictButton } = fixture({ cart: [planItem('grow', 'Grow', 'month')!, extra] });
   choose('scale');
   assert.equal(conflict().hidden, false);
@@ -383,6 +400,78 @@ test('valid details are stored, the owner is notified and the visitor moves to c
   window.close();
 });
 
+test('a demo link and shortlist travel with the owner notification', () => {
+  const { window, doc, fill, submit, requests } = fixture({ demo: 'nora', shortlist: ['nora', 'boreal'] });
+  // The shortlist line shows under the form as soon as the page loads.
+  const line = doc.querySelector<HTMLElement>('[data-start-shortlist]')!;
+  assert.equal(line.hidden, false);
+  assert.equal(
+    doc.querySelector('[data-start-shortlist-names]')!.textContent,
+    'Nora Électrique, Déménagement Boréal',
+  );
+  fill(details);
+  submit();
+
+  assert.equal(requests.length, 1);
+  const body = requests[0].body as { fields: Record<string, string> };
+  assert.equal(body.fields.demo, 'nora');
+  assert.equal(body.fields.shortlist, 'Nora Électrique, Déménagement Boréal');
+  window.close();
+});
+
+test('without a demo or shortlist the notification carries neither field', () => {
+  const { window, doc, fill, submit, requests } = fixture();
+  const line = doc.querySelector<HTMLElement>('[data-start-shortlist]')!;
+  assert.equal(line.hidden, true);
+  renderShortlist(doc);
+  assert.equal(line.hidden, true);
+  fill(details);
+  submit();
+
+  const body = requests[0].body as { fields: Record<string, string> };
+  assert.equal(body.fields.demo, undefined);
+  assert.equal(body.fields.shortlist, undefined);
+  window.close();
+});
+
+test('the submit button carries the live total, and reverts when the cart empties', () => {
+  const { doc, click, choose, window } = fixture();
+  const submitBtn = doc.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+  assert.equal(submitBtn.textContent, 'Continue to payment · C$149.99/mo →');
+  assert.equal(doc.querySelector('[data-start-summary-line]')!.textContent, 'Selected: Grow · C$149.99/mo');
+  choose('none');
+  assert.equal(submitBtn.textContent, 'Continue to payment →');
+  assert.equal(doc.querySelector('[data-start-summary-line]')!.textContent, 'Nothing selected yet');
+  window.close();
+});
+
+test('the summary toggle opens and closes the selection card', () => {
+  const { doc, click, window } = fixture();
+  const toggle = doc.querySelector<HTMLElement>('[data-start-summary-toggle]')!;
+  const card = doc.querySelector<HTMLElement>('.sel-card')!;
+  click(toggle);
+  assert.equal(card.classList.contains('is-open'), true);
+  assert.equal(toggle.getAttribute('aria-expanded'), 'true');
+  click(toggle);
+  assert.equal(card.classList.contains('is-open'), false);
+  assert.equal(toggle.getAttribute('aria-expanded'), 'false');
+  window.close();
+});
+
+test('the launch date renders a concrete range from today', () => {
+  const { doc, window } = fixture();
+  const el = doc.querySelector<HTMLElement>('[data-launch-date]')!;
+  assert.equal(el.hidden, false);
+  const day = 24 * 60 * 60 * 1000;
+  const now = new Date();
+  const fmt = (d: Date) => d.toLocaleDateString('en-CA', { month: 'short', day: 'numeric' });
+  assert.equal(
+    el.textContent,
+    `Start today → live ${fmt(new Date(now.getTime() + 14 * day))} to ${fmt(new Date(now.getTime() + 21 * day))}`,
+  );
+  window.close();
+});
+
 test('French pages hand over to the French checkout with French money', () => {
   const { window, doc, fill, submit, requests, navigations, price } = fixture({ french: true });
   doc.querySelector<HTMLFormElement>('form[data-start-form]')!.dataset.checkoutPath = '/fr/checkout';
@@ -471,19 +560,19 @@ test('an Ads channel can be added on the start page and replaces the previous ch
   );
   assert.match(summary(), /Ads/);
   assert.match(summary(), /Meta/);
-  assert.equal(doc.querySelector('[data-start-total]')!.textContent, 'C$1,049.98');
+  assert.equal(doc.querySelector('[data-start-total]')!.textContent, 'C$799.98');
 
   chooseAds('ads-both');
   assert.deepEqual(
     cart().map((item) => item.key),
     ['grow-month', 'ads-both-month'],
   );
-  assert.equal(doc.querySelector('[data-start-total]')!.textContent, 'C$1,499.98');
+  assert.equal(doc.querySelector('[data-start-total]')!.textContent, 'C$1,149.98');
   window.close();
 });
 
 test('picking a channel while the Starter test is in the cart asks before replacing it', () => {
-  const starter: CartItem = { key: 'ads-starter-month', product: 'ads-starter', name: 'Starter test', priceCents: 49999, interval: 'month', type: 'addon' };
+  const starter: CartItem = { key: 'ads-starter-month', product: 'ads-starter', name: 'Starter test', priceCents: 39999, interval: 'month', type: 'addon' };
   const { window, cart, chip, click, chooseAds, conflict, conflictMessage, conflictButtons, clickConflictButton } = fixture({
     cart: [planItem('grow', 'Grow', 'month')!, starter],
   });
@@ -573,14 +662,14 @@ test('the Pack keeps the individuals when all three together cost more', () => {
   );
   toggleBox(aiBox('ai-pack'), true);
   assert.equal(conflict().hidden, false);
-  assert.equal(conflictMessage(), 'The AI Pack already includes AI Receptionist, Trained AI Chat Assistant, AI Follow-up.');
+  assert.equal(conflictMessage(), 'The AI Pack already includes AI Receptionist, Online Receptionist, AI Follow-up.');
   // All three individuals ($499.97) cost more than the Pack ($399.99), so
   // the main button keeps them and the Pack swap is the second choice.
   assert.deepEqual(conflictButtons(), [
-    'Keep AI Receptionist, Trained AI Chat Assistant, AI Follow-up',
-    'Replace AI Receptionist, Trained AI Chat Assistant, AI Follow-up with AI Pack',
+    'Keep AI Receptionist, Online Receptionist, AI Follow-up',
+    'Replace AI Receptionist, Online Receptionist, AI Follow-up with AI Pack',
   ]);
-  clickConflictButton('Keep AI Receptionist, Trained AI Chat Assistant, AI Follow-up');
+  clickConflictButton('Keep AI Receptionist, Online Receptionist, AI Follow-up');
   assert.equal(conflict().hidden, true);
   assert.deepEqual(
     cart().map((item) => item.key),
@@ -588,7 +677,7 @@ test('the Pack keeps the individuals when all three together cost more', () => {
   );
   assert.equal(aiBox('ai-pack').checked, false);
   toggleBox(aiBox('ai-pack'), true);
-  clickConflictButton('Replace AI Receptionist, Trained AI Chat Assistant, AI Follow-up with AI Pack');
+  clickConflictButton('Replace AI Receptionist, Online Receptionist, AI Follow-up with AI Pack');
   assert.deepEqual(
     cart().map((item) => item.key),
     ['grow-month', 'ai-pack-month'],
@@ -618,7 +707,7 @@ test('dismissing the AI Pack popup unticks its checkbox', () => {
 });
 
 test('dismissing a blocked plan switch keeps the old plan ticked', () => {
-  const extra: CartItem = { key: 'review-month', product: 'review', name: 'Review Generation Engine', priceCents: 9999, interval: 'month', type: 'addon' };
+  const extra: CartItem = { key: 'review-month', product: 'review', name: 'Review Generation Engine', priceCents: 39999, interval: 'month', type: 'addon' };
   const { window, cart, radio, choose, conflict, clickConflictButton } = fixture({ cart: [planItem('grow', 'Grow', 'month')!, extra] });
   choose('scale');
   assert.equal(conflict().hidden, false);
@@ -633,7 +722,7 @@ test('dismissing a blocked plan switch keeps the old plan ticked', () => {
 });
 
 test('dismissing a blocked channel pick keeps the channel radios as they were', () => {
-  const starter: CartItem = { key: 'ads-starter-month', product: 'ads-starter', name: 'Starter test', priceCents: 49999, interval: 'month', type: 'addon' };
+  const starter: CartItem = { key: 'ads-starter-month', product: 'ads-starter', name: 'Starter test', priceCents: 39999, interval: 'month', type: 'addon' };
   const { window, cart, chip, click, chooseAds, adsRadio, conflict, clickConflictButton } = fixture({
     cart: [planItem('grow', 'Grow', 'month')!, starter],
   });
@@ -680,7 +769,7 @@ test('the summary groups products by branch, in Website, Ads, AI order', () => {
   const { window, summary } = fixture({
     cart: [
       { key: 'ai-followup-month', product: 'ai-followup', name: 'AI Follow-up', priceCents: 9999, interval: 'month', type: 'addon' },
-      { key: 'ads-meta-month', product: 'ads-meta', name: 'Meta', priceCents: 89999, interval: 'month', type: 'bundle' },
+      { key: 'ads-meta-month', product: 'ads-meta', name: 'Meta', priceCents: 64999, interval: 'month', type: 'bundle' },
       planItem('grow', 'Grow', 'month')!,
     ],
   });
@@ -707,7 +796,7 @@ test('the eyebrow and the no-plan hint follow the branches in the cart', () => {
   const mixed = fixture({
     cart: [
       planItem('grow', 'Grow', 'month')!,
-      { key: 'ads-meta-month', product: 'ads-meta', name: 'Meta', priceCents: 89999, interval: 'month', type: 'bundle' },
+      { key: 'ads-meta-month', product: 'ads-meta', name: 'Meta', priceCents: 64999, interval: 'month', type: 'bundle' },
     ],
   });
   assert.equal(mixed.doc.querySelector('[data-start-eyebrow]')!.textContent, 'Start with WEBAO');

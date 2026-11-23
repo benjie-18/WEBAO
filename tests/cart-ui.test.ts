@@ -24,6 +24,10 @@ const drawerAttrs = (over: Record<string, string> = {}) =>
     'data-label-empty-confirm': 'Confirm',
     'data-empty-title': 'Your cart is empty.',
     'data-empty-hint': 'Add items from the pricing page.',
+    'data-empty-starter': 'Most small businesses start with Grow (C$149.99/mo).',
+    'data-empty-add-grow': 'Add Grow to cart',
+    'data-empty-browse-demos': 'Browse 47 demos',
+    'data-demos-path': '/demos',
     'data-suffix-month': '/mo',
     'data-suffix-year': '/yr',
     'data-suffix-one-time': ' one-time',
@@ -72,28 +76,38 @@ function fixture(options: { french?: boolean; cart?: CartItem[] } = {}) {
           data-name="Launch" data-price-cents="8999" data-interval="month" data-type="plan" data-price-year="89990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="grow-month" data-product="grow"
           data-name="Grow" data-price-cents="14999" data-interval="month" data-type="plan" data-price-year="149990"></button>
+        <button type="button" class="btn btn--primary pcard-cta" data-cart-btn data-key="grow-month" data-product="grow"
+          data-name="Grow" data-price-cents="14999" data-interval="month" data-type="plan" data-price-year="149990">
+          <span data-cta-label data-month="Choose Grow · C$149.99/mo →" data-year="Choose Grow · C$1,499.90/yr →" data-added="✓ Grow in your cart">Choose Grow · C$149.99/mo →</span>
+        </button>
         <button type="button" class="cart-btn" data-cart-btn data-key="scale-month" data-product="scale"
           data-name="Scale" data-price-cents="34999" data-interval="month" data-type="plan" data-price-year="349990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="quotephoto-month" data-product="quotephoto"
           data-name="Quote Photo Upload" data-price-cents="999" data-interval="month" data-type="addon" data-price-year="9990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="ads-pack-month" data-product="ads-pack"
-          data-name="Ads Pack" data-price-cents="89999" data-interval="month" data-type="addon"></button>
+          data-name="Ads Pack" data-price-cents="64999" data-interval="month" data-type="addon"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="ads-meta-month" data-product="ads-meta"
-          data-name="Meta" data-price-cents="89999" data-interval="month" data-type="addon"></button>
+          data-name="Meta" data-price-cents="64999" data-interval="month" data-type="addon"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="ads-starter-month" data-product="ads-starter"
-          data-name="Starter test" data-price-cents="49999" data-interval="month" data-type="addon"></button>
+          data-name="Starter test" data-price-cents="39999" data-interval="month" data-type="addon"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="ads-both-month" data-product="ads-both"
-          data-name="Meta + Google" data-price-cents="134999" data-interval="month" data-type="addon"></button>
+          data-name="Meta + Google" data-price-cents="99999" data-interval="month" data-type="addon"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="lead-pack-month" data-product="lead-pack"
-          data-name="Lead Pack" data-price-cents="23999" data-interval="month" data-type="bundle" data-price-year="239990"></button>
+          data-name="Lead Pack" data-price-cents="49999" data-interval="month" data-type="bundle" data-price-year="499990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="visibility-pack-month" data-product="visibility-pack"
-          data-name="Visibility Pack" data-price-cents="9999" data-interval="month" data-type="bundle" data-price-year="99990"></button>
+          data-name="Visibility Pack" data-price-cents="34999" data-interval="month" data-type="bundle" data-price-year="349990"></button>
+        <button type="button" class="cart-btn" data-cart-btn data-key="growth-bundle-month" data-product="growth-bundle"
+          data-name="Growth Bundle" data-price-cents="54999" data-interval="month" data-type="bundle" data-price-year="549990"></button>
+        <button type="button" class="cart-btn" data-cart-btn data-key="growth-engine-month" data-product="growth-engine"
+          data-name="Growth Engine" data-price-cents="89999" data-interval="month" data-type="bundle"></button>
+        <button type="button" class="cart-btn" data-cart-btn data-key="seo-blog-month" data-product="seo-blog"
+          data-name="Weekly SEO Blog" data-price-cents="3999" data-interval="month" data-type="addon" data-price-year="39990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="ai-pack-month" data-product="ai-pack"
           data-name="AI Pack" data-price-cents="39999" data-interval="month" data-type="bundle" data-price-year="399990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="localseo-month" data-product="localseo"
           data-name="Local SEO Management" data-price-cents="15999" data-interval="month" data-type="addon" data-price-year="159990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="review-month" data-product="review"
-          data-name="Review Generation Engine" data-price-cents="9999" data-interval="month" data-type="addon" data-price-year="99990"></button>
+          data-name="Review Generation Engine" data-price-cents="39999" data-interval="month" data-type="addon" data-price-year="399990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="extrapage-one-time" data-product="extrapage"
           data-name="Extra Page" data-price-cents="4499" data-interval="one-time" data-type="addon"></button>
       </main>
@@ -106,12 +120,20 @@ function fixture(options: { french?: boolean; cart?: CartItem[] } = {}) {
         <div class="cart-drawer-scroll">
           <div class="cart-drawer-items" data-cart-items><div class="cart-drawer-empty">Your cart is empty.</div></div>
           <button type="button" class="cart-empty-all" data-cart-empty-all hidden>Empty cart</button>
+          <div class="cart-pack-suggest" data-pack-suggest data-pack-suggest-template="Local SEO + Reviews cost {combined}. The Lead Pack covers both for {pack}, saving you {save}." data-pack-name="Lead Pack" hidden>
+            <p data-pack-suggest-text></p>
+            <button type="button" data-pack-switch>Switch to Lead Pack</button>
+          </div>
         </div>
         <div class="cart-drawer-footer">
           <strong data-cart-total>C$0.00</strong>
           <a href="/checkout" class="cart-drawer-checkout" data-cart-checkout aria-disabled="true">Checkout</a>
         </div>
       </aside>
+      <div class="cart-toast" data-cart-toast data-added-toast="Added {name} to cart" role="status" hidden>
+        <span data-cart-toast-text></span>
+        <button type="button" data-cart-open>Checkout →</button>
+      </div>
       <div class="cart-conflict-overlay" data-cart-conflict-overlay hidden></div>
       <div class="cart-conflict" data-cart-conflict role="dialog" aria-modal="true" hidden
         data-title="That doesn't go together"
@@ -178,9 +200,29 @@ test('an empty cart renders the localized empty state', () => {
   const { doc, window, cart } = fixture();
   assert.equal(doc.querySelector('[data-cart-count]')!.hidden, true);
   assert.match(doc.querySelector('[data-cart-items]')!.textContent ?? '', /Your cart is empty\./);
+  // #74: the empty drawer is a quick starter, not a void.
+  assert.match(doc.querySelector('[data-cart-items]')!.textContent ?? '', /Most small businesses start with Grow \(C\$149\.99\/mo\)\./);
+  assert.equal(doc.querySelector('[data-cart-items] [data-cart-btn][data-product="grow"]')?.textContent, 'Add Grow to cart');
+  assert.equal(doc.querySelector('[data-cart-items] .cart-empty-starter a')?.getAttribute('href'), '/demos');
   assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$0.00');
   assert.equal(doc.querySelector('[data-cart-checkout]')!.getAttribute('aria-disabled'), 'true');
   assert.equal(cart().length, 0);
+  window.close();
+});
+
+test('plan CTA label follows cart state and billing term', () => {
+  const { doc, click, window } = fixture();
+  const cta = doc.querySelector<HTMLElement>('.pcard-cta [data-cta-label]')!;
+  const ctaBtn = doc.querySelector<HTMLElement>('.pcard-cta')!;
+  assert.equal(cta.textContent, 'Choose Grow · C$149.99/mo →');
+  click(ctaBtn);
+  assert.equal(cta.textContent, '✓ Grow in your cart');
+  click(ctaBtn);
+  assert.equal(cta.textContent, 'Choose Grow · C$149.99/mo →');
+  click(doc.querySelector('[data-billing-opt="year"]'));
+  assert.equal(cta.textContent, 'Choose Grow · C$1,499.90/yr →');
+  click(ctaBtn);
+  assert.equal(cta.textContent, '✓ Grow in your cart');
   window.close();
 });
 
@@ -192,7 +234,7 @@ test('clicking a plan button adds it, again removes it', () => {
   assert.equal(button('launch')!.getAttribute('aria-label'), 'Remove Launch from cart');
   assert.equal(doc.querySelector('[data-cart-count]')!.textContent, '1');
   assert.equal(doc.querySelector('[data-cart-count]')!.hidden, false);
-  assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$89.99');
+  assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$89.99/mo');
   assert.match(doc.querySelector('[data-cart-items]')!.textContent ?? '', /Launch/);
   assert.match(doc.querySelector('[data-cart-items]')!.textContent ?? '', /C\$89\.99\/mo/);
 
@@ -211,7 +253,7 @@ test('only one plan at a time, add-ons stack, totals add up', () => {
   click(button('review'));
   click(button('extrapage'));
   assert.deepEqual(cart().map((i) => i.key), ['grow-month', 'review-month', 'extrapage-one-time']);
-  assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$294.97');
+  assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$594.97');
   assert.match(doc.querySelector('[data-cart-items]')!.textContent ?? '', /C\$44\.99 one-time/);
   assert.equal(doc.querySelector('[data-cart-count]')!.textContent, '3');
 });
@@ -226,14 +268,14 @@ test('the yearly toggle prices every recurring item, one-time items untouched', 
   assert.equal(window.localStorage.getItem(BILLING_KEY), 'year');
   assert.deepEqual(cart().map((i) => [i.key, i.priceCents]), [
     ['launch-year', 89990],
-    ['review-year', 99990],
+    ['review-year', 399990],
     ['extrapage-one-time', 4499],
   ]);
   assert.equal(doc.querySelector('[data-billing-opt="year"]')!.getAttribute('aria-pressed'), 'true');
   assert.equal(doc.querySelector('[data-billing-opt="year"]')!.classList.contains('is-active'), true);
   assert.equal(doc.querySelector('[data-billing-opt="month"]')!.classList.contains('is-active'), false);
   assert.equal(button('launch')!.classList.contains('is-added'), true, 'the yearly button stays marked');
-  assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$1,944.79');
+  assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$4,944.79');
   assert.match(doc.querySelector('[data-cart-items]')!.textContent ?? '', /C\$899\.90\/yr/);
 
   // A button clicked while yearly adds the yearly price, and plans still
@@ -246,7 +288,7 @@ test('the yearly toggle prices every recurring item, one-time items untouched', 
   // Switching back restores monthly prices.
   click(doc.querySelector('[data-billing-opt="month"]'));
   assert.deepEqual(cart().map((i) => [i.key, i.priceCents]), [
-    ['review-month', 9999],
+    ['review-month', 39999],
     ['extrapage-one-time', 4499],
     ['grow-month', 14999],
   ]);
@@ -323,7 +365,7 @@ test('removing an item from the drawer updates buttons, badge and total', () => 
   assert.deepEqual(cart().map((i) => i.key), ['review-month']);
   assert.equal(doc.querySelector('[data-cart-count]')!.textContent, '1');
   assert.equal(button('launch')!.classList.contains('is-added'), false);
-  assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$99.99');
+  assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$399.99/mo');
   window.close();
 });
 
@@ -411,7 +453,7 @@ test('cross-tab storage changes re-render the cart', () => {
   window.dispatchEvent(new window.StorageEvent('storage', { key: STORAGE_KEY }));
   assert.equal(doc.querySelector('[data-cart-count]')!.textContent, '1');
   assert.match(doc.querySelector('[data-cart-items]')!.textContent ?? '', /Scale/);
-  assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$349.99');
+  assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$349.99/mo');
   window.close();
 });
 
@@ -549,7 +591,7 @@ test('the main Ads button keeps the dearer option; the cheaper swap is second', 
   click(button('ads-starter'));
   assert.equal(conflict().hidden, false);
   assert.equal(conflictMessage(), 'You can only have one Ads option at a time.');
-  // Meta ($899.99) costs more than the Starter test ($499.99), so keeping
+  // Meta ($649.99) costs more than the Starter test ($399.99), so keeping
   // Meta is the main button and swapping down is only the second choice.
   assert.deepEqual(conflictButtons(), ['Keep Meta', 'Replace Meta with Starter test']);
   assert.deepEqual(cart().map((i) => i.key), ['ads-meta-month']);
@@ -598,6 +640,37 @@ test('the second bundle keeps the dearer Lead Pack as the main button', () => {
   click(button('visibility-pack'));
   clickConflictButton('Replace Lead Pack with Visibility Pack');
   assert.deepEqual(cart().map((i) => i.key), ['visibility-pack-month']);
+  window.close();
+});
+
+test('the Growth Bundle asks before replacing Grow, and wins over the Lead Pack', () => {
+  const { cart, click, button, conflict, conflictMessage, conflictButtons, clickConflictButton, window } = fixture();
+  click(button('grow'));
+  click(button('growth-bundle'));
+  assert.equal(conflict().hidden, false);
+  assert.equal(conflictMessage(), 'Growth Bundle already includes Grow.');
+  assert.deepEqual(conflictButtons(), ['Replace Grow with Growth Bundle', "Don't add it"]);
+  assert.deepEqual(cart().map((i) => i.key), ['grow-month']);
+  clickConflictButton('Replace Grow with Growth Bundle');
+  assert.deepEqual(cart().map((i) => i.key), ['growth-bundle-month']);
+  click(button('lead-pack'));
+  assert.equal(conflict().hidden, false);
+  assert.equal(conflictMessage(), 'Growth Bundle and Lead Pack both include the Review Generation Engine.');
+  assert.deepEqual(conflictButtons(), ['Keep Growth Bundle', 'Replace Growth Bundle with Lead Pack']);
+  assert.deepEqual(cart().map((i) => i.key), ['growth-bundle-month']);
+  window.close();
+});
+
+test('the Growth Engine asks before replacing the Starter test', () => {
+  const { cart, click, button, conflict, conflictMessage, conflictButtons, clickConflictButton, window } = fixture();
+  click(button('ads-starter'));
+  click(button('growth-engine'));
+  assert.equal(conflict().hidden, false);
+  assert.equal(conflictMessage(), 'Growth Engine already includes Starter test.');
+  assert.deepEqual(conflictButtons(), ['Replace Starter test with Growth Engine', "Don't add it"]);
+  assert.deepEqual(cart().map((i) => i.key), ['ads-starter-month']);
+  clickConflictButton('Replace Starter test with Growth Engine');
+  assert.deepEqual(cart().map((i) => i.key), ['growth-engine-month']);
   window.close();
 });
 
@@ -677,8 +750,8 @@ test('a stale conflicting cart is caught at checkout and the fix removes the ext
 test('checkout of a stale Ads cart removes the cheaper option', () => {
   const { cart, click, doc, conflict, conflictMessage, conflictButtons, clickConflictButton, window } = fixture({
     cart: [
-      { key: cartKey('ads-both', 'month'), product: 'ads-both', name: 'Meta + Google', priceCents: 134999, interval: 'month', type: 'addon' },
-      { key: cartKey('ads-pack', 'month'), product: 'ads-pack', name: 'Ads Pack', priceCents: 89999, interval: 'month', type: 'addon' },
+      { key: cartKey('ads-both', 'month'), product: 'ads-both', name: 'Meta + Google', priceCents: 99999, interval: 'month', type: 'addon' },
+      { key: cartKey('ads-pack', 'month'), product: 'ads-pack', name: 'Ads Pack', priceCents: 64999, interval: 'month', type: 'addon' },
     ],
   });
   click(doc.querySelector('[data-cart-checkout]'));
@@ -714,5 +787,59 @@ test('a product removed from the catalog is dropped from a stored cart on load',
     ],
   });
   assert.deepEqual(cart().map((i) => i.key), ['grow-month']);
+  window.close();
+});
+
+test('Local SEO + Reviews shows the Lead Pack suggestion with the computed saving', () => {
+  const { doc, cart, click, button, window } = fixture();
+  click(button('localseo'));
+  click(button('review'));
+  const suggest = doc.querySelector<HTMLElement>('[data-pack-suggest]')!;
+  assert.equal(suggest.hidden, false);
+  const text = doc.querySelector<HTMLElement>('[data-pack-suggest-text]')!.textContent ?? '';
+  assert.match(text, /C\$559\.98\/mo/);
+  assert.match(text, /C\$499\.99\/mo/);
+  assert.match(text, /C\$59\.99\/mo/);
+  assert.deepEqual(cart().map((i) => i.key), ['localseo-month', 'review-month']);
+  window.close();
+});
+
+test('switching to the Lead Pack replaces both add-ons on the same term', () => {
+  const { doc, cart, click, button, window } = fixture();
+  click(button('localseo'));
+  click(button('review'));
+  click(doc.querySelector('[data-pack-switch]'));
+  assert.deepEqual(cart().map((i) => i.key), ['lead-pack-month']);
+  assert.equal(doc.querySelector<HTMLElement>('[data-pack-suggest]')!.hidden, true);
+  window.close();
+});
+
+test('the Lead Pack suggestion stays hidden when only one of the pair is in the cart', () => {
+  const { doc, click, button, window } = fixture();
+  click(button('localseo'));
+  assert.equal(doc.querySelector<HTMLElement>('[data-pack-suggest]')!.hidden, true);
+  window.close();
+});
+
+test('adding a product shows the add-to-cart toast with its name', async () => {
+  const { doc, click, button, window } = fixture();
+  click(button('grow'));
+  const toast = doc.querySelector<HTMLElement>('[data-cart-toast]')!;
+  assert.equal(toast.hidden, false);
+  // The visible class lands on the next animation frame (so the CSS
+  // slide-up transition runs); jsdom's rAF needs one tick to fire it.
+  await new Promise((resolve) => window.requestAnimationFrame(resolve));
+  assert.equal(toast.classList.contains('is-visible'), true);
+  assert.equal(doc.querySelector<HTMLElement>('[data-cart-toast-text]')!.textContent, 'Added Grow to cart');
+  window.close();
+});
+
+test('removing a product does not show the add-to-cart toast', () => {
+  const { doc, click, button, window } = fixture();
+  click(button('grow'));
+  const toast = doc.querySelector<HTMLElement>('[data-cart-toast]')!;
+  assert.equal(toast.hidden, false);
+  click(button('grow'));
+  assert.equal(toast.hidden, true);
   window.close();
 });

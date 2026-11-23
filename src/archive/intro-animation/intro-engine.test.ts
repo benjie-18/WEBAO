@@ -19,7 +19,7 @@ import {
   springStep,
   substep,
   track,
-} from '../src/lib/intro/engine';
+} from './engine';
 
 test('clamp, lerp, smoothstep and damp behave like the primitives they wrap', () => {
   assert.equal(clamp(5, 0, 1), 1);

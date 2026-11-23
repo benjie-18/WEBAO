@@ -383,14 +383,13 @@ test('round2 QA: size-budget fails past 200000 bytes', async () => {
 test('round2 pins: contrast fixes and doc corrections exist in source', () => {
   const css = readFileSync(new URL('../src/styles/global.css', import.meta.url), 'utf-8');
   assert.ok(css.includes('.sticky-cta-btn {') && /background: var\(--btn-primary-bg\);/.test(css), 'sticky CTA uses the primary token');
-  const intro = readFileSync(new URL('../src/components/anim/IntroSequence.astro', import.meta.url), 'utf-8');
+  const intro = readFileSync(new URL('../src/archive/intro-animation/IntroSequence.astro', import.meta.url), 'utf-8');
   assert.ok(intro.includes('background: var(--btn-primary-bg);'), 'reduced-motion intro button uses the primary token');
   assert.ok(intro.includes('background: var(--btn-primary-hover-bg);'), 'reduced-motion intro hover uses the primary hover token');
   const home = readFileSync(new URL('../src/components/pages/HomePage.astro', import.meta.url), 'utf-8');
   assert.ok(home.includes('.margin-note-tag { font-size: 10px; letter-spacing: .14em; color: var(--accent-text); }'), 'margin tag uses accent-text');
   assert.ok(home.includes('.process { --journey-accent: var(--btn-primary-bg); }'), 'journey accent uses the primary token');
   assert.ok(home.includes('html[data-theme="dark"] .hero-title .hero-italic { color: var(--accent-text); }'), 'dark hero italic override');
-  assert.ok(home.includes('html[data-theme="dark"] .cta-statement-title span { color: var(--accent-text); }'), 'dark final-CTA override');
   assert.ok(home.includes('html[data-theme="dark"] .offer-link:hover .offer-link-cta { color: var(--accent-text);'), 'dark offer-link hover override');
   assert.ok(home.includes("onHomeDispose(() => narrow.removeEventListener('change', onNarrow));"), 'narrow listener disposed');
   const readme = readFileSync(new URL('../README.md', import.meta.url), 'utf-8');

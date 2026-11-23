@@ -20,7 +20,7 @@
  *     alignment is pixel-true at every viewport size.
  */
 
-import { INTRO_CONFIG } from "../../lib/intro/config";
+import { INTRO_CONFIG } from "./config";
 import { useTranslations, type Locale } from "../../lib/i18n";
 
 interface Props {
@@ -879,7 +879,7 @@ const promptKey = t.intro.prompt.key;
 </style>
 
 <script>
-  import { INTRO_CONFIG as CFG, type Frac } from "../../lib/intro/config";
+  import { INTRO_CONFIG as CFG, type Frac } from "./config";
   import {
     Clock,
     Debris,
@@ -895,7 +895,7 @@ const promptKey = t.intro.prompt.key;
     springStep,
     substep,
     track,
-  } from "../../lib/intro/engine";
+  } from "./engine";
 
   /* ---------------------------------------------------------------- helpers */
 

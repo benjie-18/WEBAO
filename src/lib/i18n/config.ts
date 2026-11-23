@@ -2,7 +2,7 @@ export const locales = ["en", "fr"] as const;
 export type Locale = typeof locales[number];
 export const defaultLocale: Locale = "en";
 
-export type PageKey = "home" | "pricing" | "contact" | "demos" | "notfound" | "start" | "terms" | "refunds" | "sources" | "support" | "privacy" | "portal" | "serviceDesign" | "servicePlans" | "serviceHosting" | "serviceMontreal" | "guideCost" | "guideBill96" | "guideLaw25" | "guideIndex" | "guideSeo" | "guideAdsChannels" | "guideAiReceptionist" | "guidePrepare" | "guideQuoteRequests" | "guideRedesign" | "audit";
+export type PageKey = "home" | "pricing" | "contact" | "demos" | "notfound" | "start" | "terms" | "refunds" | "sources" | "support" | "privacy" | "portal" | "services" | "serviceWebsites" | "serviceAds" | "serviceAi" | "serviceDesign" | "servicePlans" | "serviceHosting" | "serviceMontreal" | "guideCost" | "guideBill96" | "guideLaw25" | "guideIndex" | "guideSeo" | "guideAdsChannels" | "guideAiReceptionist" | "guidePrepare" | "guideQuoteRequests" | "guideRedesign" | "audit";
 
 export const localizedPaths: Record<Locale, Record<PageKey, string>> = {
   en: {
@@ -23,6 +23,10 @@ export const localizedPaths: Record<Locale, Record<PageKey, string>> = {
     servicePlans: "/services/monthly-website-plans",
     serviceHosting: "/services/website-hosting-maintenance",
     serviceMontreal: "/services/montreal-web-design",
+    services: "/services",
+    serviceWebsites: "/services/websites",
+    serviceAds: "/services/ads",
+    serviceAi: "/services/ai",
     guideCost: "/guides/website-cost-canada",
     guideBill96: "/guides/quebec-bill-96-website",
     guideLaw25: "/guides/quebec-law-25-website",
@@ -52,6 +56,10 @@ export const localizedPaths: Record<Locale, Record<PageKey, string>> = {
     servicePlans: "/fr/services/forfaits-mensuels-site-web",
     serviceHosting: "/fr/services/hebergement-entretien-site-web",
     serviceMontreal: "/fr/services/conception-site-web-montreal",
+    services: "/fr/services",
+    serviceWebsites: "/fr/services/sites-web",
+    serviceAds: "/fr/services/publicite",
+    serviceAi: "/fr/services/ia",
     guideCost: "/fr/guides/cout-site-web-canada",
     guideBill96: "/fr/guides/loi-96-site-web-quebec",
     guideLaw25: "/fr/guides/loi-25-site-web-quebec",

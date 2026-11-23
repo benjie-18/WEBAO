@@ -1,0 +1,73 @@
+---
+import ServicePage from "../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Services | WEBAO"
+  description="Custom websites, advertising, and AI services for small businesses in Canada. Monthly website plans from C$89.99/mo, Ads Packages from C$399.99/mo, AI receptionist from C$299.99/mo. No setup fee. Based in Montreal, in English and French."
+  eyebrow="Services"
+  heading="What WEBAO does"
+  intro="Three services, one team, one monthly bill. A custom website that makes your business easy to find and contact, advertising that brings in customers, and AI that answers them when you cannot. Everything is built and looked after by a person, in English and French, from Montreal."
+  answerLine="A website, ads, and AI that work together: the site gives customers somewhere to land, the ads bring them there, and the AI answers them."
+  sections={[
+    {
+      heading: "Websites",
+      body: "A custom website, not a template, on a monthly plan. Launch C$89.99/mo for 1 to 5 pages, Grow C$149.99/mo for 5 to 10 pages, Scale C$349.99/mo for up to 20 pages. Domain, hosting, SSL, mobile-friendly design, contact form, Foundational SEO, and maintenance included. No setup fee.",
+      link: { href: "/services/websites/", label: "Websites →" },
+    },
+    {
+      heading: "Advertising",
+      body: "Ads Packages on Meta, Google, or both. Ads Starter test from C$399.99/mo, one channel C$649.99/mo, both channels C$999.99/mo. No setup fee. Your ad spend goes on your own card, and every lead is emailed to you instantly and shown in the client portal.",
+      link: { href: "/services/ads/", label: "Advertising →" },
+    },
+    {
+      heading: "AI services",
+      body: "An AI receptionist that answers calls and chats, an online receptionist for your website, and AI follow-up that chases quotes. Receptionist C$299.99/mo, online receptionist C$99.99/mo, follow-up C$99.99/mo, or the AI Pack with all three for C$399.99/mo. No setup fee.",
+      link: { href: "/services/ai/", label: "AI services →" },
+    },
+    {
+      heading: "How it starts",
+      body: "Send your trade, your city, and a couple of photos. We reply with two demo directions and an honest timeline. Most sites launch in 2 to 3 weeks from complete materials.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "Which service should I start with?",
+      a: "A website first, if you do not have one or yours is outdated: ads and AI both work better with a site to land on. If your site is fine, start with ads to bring in customers, or the AI receptionist if you miss calls.",
+    },
+    {
+      q: "Do I need a website to run ads?",
+      a: "No. An ad click can go to a Meta instant form inside Facebook or Instagram, or to a landing page on the WEBAO domain. A website still helps: it gives customers somewhere to check you out before they contact you.",
+    },
+    {
+      q: "Do the AI services need a website?",
+      a: "The online receptionist lives on your website, so it needs one. The receptionist answers your phone calls and works on its own. The follow-up chases quotes from your existing customers and works on its own too.",
+    },
+    {
+      q: "What does it cost to start?",
+      a: "There is no setup fee on any service. Website plans start at C$89.99/mo, the Ads Starter test at C$399.99/mo, and the AI receptionist at C$299.99/mo. Annual billing on website plans is 2 months free.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="The three services"
+  siblings={[
+    { href: "/services/websites/", label: "Websites", note: "Custom websites on monthly plans: Launch C$89.99/mo, Grow C$149.99/mo, Scale C$349.99/mo. No setup fee." },
+    { href: "/services/ads/", label: "Advertising", note: "Ads Packages on Meta and Google: Starter C$399.99/mo, one channel C$649.99/mo, both C$999.99/mo. No setup fee." },
+    { href: "/services/ai/", label: "AI services", note: "AI receptionist, online receptionist, and AI follow-up: from C$99.99/mo, or the AI Pack for C$399.99/mo. No setup fee." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "WEBAO services",
+    description: "Custom websites, advertising, and AI services for small businesses in Canada. Based in Montreal, in English and French.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: "CA",
+    serviceType: "Web design, advertising, AI services",
+  }}
+/>

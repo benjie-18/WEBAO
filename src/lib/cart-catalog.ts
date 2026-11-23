@@ -47,30 +47,34 @@ const catalog = {
   scale: { product: "scale", type: "plan", monthCents: 34999, yearCents: 34999 * TEN_MONTHS },
 
   /* ── Bundles ─────────────────────────────────────────────────────────── */
-  "lead-pack": { product: "lead-pack", type: "bundle", monthCents: 23999, yearCents: 23999 * TEN_MONTHS },
+  "lead-pack": { product: "lead-pack", type: "bundle", monthCents: 49999, yearCents: 49999 * TEN_MONTHS },
   "visibility-pack": {
     product: "visibility-pack",
     type: "bundle",
-    monthCents: 9999,
-    yearCents: 9999 * TEN_MONTHS,
+    monthCents: 34999,
+    yearCents: 34999 * TEN_MONTHS,
   },
-  // Monthly only (no annual term). The one-time setup fee is not sold here:
-  // checkout adds it server-side from the STRIPE_PRICE_ADS_SETUP secret.
+  // Growth Bundle: the Grow plan plus Local SEO Management and the Review
+  // Generation Engine. Available on Grow only (it includes the Grow plan).
+  "growth-bundle": { product: "growth-bundle", type: "bundle", monthCents: 54999, yearCents: 54999 * TEN_MONTHS },
+  // Growth Engine: the Growth Bundle plus the Ads Starter test. Monthly
+  // only, like the Starter test inside it (no annual price, so it can
+  // never be bought yearly). Available on Grow only.
+  "growth-engine": { product: "growth-engine", type: "bundle", monthCents: 89999 },
+  // Monthly only (no annual term). No setup fee on any Ads option.
   // Legacy key, kept so old carts and tests still resolve: same single-channel
   // price as ads-meta / ads-google below.
-  "ads-pack": { product: "ads-pack", type: "bundle", monthCents: 89999 },
+  "ads-pack": { product: "ads-pack", type: "bundle", monthCents: 64999 },
   // Revamped Ads Pack, monthly only. One channel (Meta or Google) is the
-  // single price; both channels together are the bundle price. The setup
-  // fee is added server-side by checkout (single: STRIPE_PRICE_ADS_SETUP
-  // secret; both: the bundle setup price, see worker/checkout.ts).
-  "ads-meta": { product: "ads-meta", type: "bundle", monthCents: 89999 },
-  "ads-google": { product: "ads-google", type: "bundle", monthCents: 89999 },
-  "ads-both": { product: "ads-both", type: "bundle", monthCents: 134999 },
+  // single price; both channels together are the bundle price. No setup
+  // fee on any Ads option.
+  "ads-meta": { product: "ads-meta", type: "bundle", monthCents: 64999 },
+  "ads-google": { product: "ads-google", type: "bundle", monthCents: 64999 },
+  "ads-both": { product: "ads-both", type: "bundle", monthCents: 99999 },
   // Starter test, Meta only, monthly only (no annual price, so it can
   // never be bought yearly). One campaign, 90 days, then step up or stop.
-  // Setup is C$349.99, added server-side by checkout (see
-  // worker/checkout.ts), never the C$499.99 Core setup.
-  "ads-starter": { product: "ads-starter", type: "bundle", monthCents: 49999 },
+  // No setup fee.
+  "ads-starter": { product: "ads-starter", type: "bundle", monthCents: 39999 },
   // Google Business Profile revamp: one-time, sold on its own or with a pack.
   "gbp-revamp": { product: "gbp-revamp", type: "addon", oneTimeCents: 14999 },
   // Website touchup: one-time, we fix what the free audit found on the
@@ -80,12 +84,10 @@ const catalog = {
   "website-touchup": { product: "website-touchup", type: "addon", oneTimeCents: 19999 },
 
   /* ── AI services (monthly only, like the Ads Pack), except the AI Pack,
-     which is yearly available too (2 months free, like the plans). The
-     one-time setup fee is not sold here: checkout adds it server-side,
-     see worker/checkout.ts, following the Ads Pack setup pattern. The
-     chat service is the Trained AI Chat Assistant (aichat, in the
-     add-ons below): one product, C$99.99/mo, yearly available, no setup
-     fee. */
+     which is yearly available too (2 months free, like the plans). No
+     setup fee on any AI service. The chat service is the Online
+     Receptionist (aichat, in the add-ons below): one product, C$99.99/mo,
+     yearly available, no setup fee. */
   "ai-receptionist": { product: "ai-receptionist", type: "addon", monthCents: 29999 },
   "ai-followup": { product: "ai-followup", type: "addon", monthCents: 9999 },
   "ai-pack": { product: "ai-pack", type: "bundle", monthCents: 39999, yearCents: 39999 * TEN_MONTHS },
@@ -93,10 +95,14 @@ const catalog = {
   /* ── Add-ons (featured group first, then the rest) ───────────────────── */
   localseo: { product: "localseo", type: "addon", monthCents: 15999, yearCents: 15999 * TEN_MONTHS },
   booking: { product: "booking", type: "addon", monthCents: 4999, yearCents: 4999 * TEN_MONTHS },
-  review: { product: "review", type: "addon", monthCents: 9999, yearCents: 9999 * TEN_MONTHS },
+  review: { product: "review", type: "addon", monthCents: 39999, yearCents: 39999 * TEN_MONTHS },
   ecommerce: { product: "ecommerce", type: "addon", monthCents: 5999, yearCents: 5999 * TEN_MONTHS },
   aichat: { product: "aichat", type: "addon", monthCents: 9999, yearCents: 9999 * TEN_MONTHS },
   blog: { product: "blog", type: "addon", monthCents: 3499, yearCents: 3499 * TEN_MONTHS },
+  // Weekly SEO Blog: a new SEO blog post every week, written for the
+  // business and published to its site. Distinct from DIY Blog Page,
+  // which is for posts the client writes themselves.
+  "seo-blog": { product: "seo-blog", type: "addon", monthCents: 3999, yearCents: 3999 * TEN_MONTHS },
   email: { product: "email", type: "addon", monthCents: 2999, yearCents: 2999 * TEN_MONTHS },
   report: { product: "report", type: "addon", monthCents: 2999, yearCents: 2999 * TEN_MONTHS },
   extrapage: { product: "extrapage", type: "addon", oneTimeCents: 4499 },

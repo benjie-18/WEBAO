@@ -123,14 +123,23 @@ test('yearly items resolve to their own prices', async () => {
   ]);
 });
 
-test('the yearly AI Pack resolves to its yearly price and still carries its setup fee', async () => {
+test('the yearly AI Pack resolves to its yearly price with no setup fee', async () => {
   const { status, json, calls } = await call({ items: [{ key: 'ai-pack-year' }] });
   assert.equal(status, 200);
   assert.equal(json.mode, 'subscription');
-  assert.deepEqual(linePrices(calls[0].params), [
-    PRICE_MAP['ai-pack-year'],
-    'price_1UYFXSE57vVzxI41Qx20HwYn', // the C$399.99 one-time Pack setup
-  ]);
+  assert.deepEqual(linePrices(calls[0].params), [PRICE_MAP['ai-pack-year']]);
+});
+
+test('the Growth Bundle resolves to its yearly price; the Growth Engine is monthly only', async () => {
+  const yearly = await call({ items: [{ key: 'growth-bundle-year' }] });
+  assert.equal(yearly.status, 200);
+  assert.deepEqual(linePrices(yearly.calls[0].params), [PRICE_MAP['growth-bundle-year']]);
+  const engine = await call({ items: [{ key: 'growth-engine-month' }] });
+  assert.equal(engine.status, 200);
+  assert.deepEqual(linePrices(engine.calls[0].params), [PRICE_MAP['growth-engine-month']]);
+  const blog = await call({ items: [{ key: 'seo-blog-year' }] });
+  assert.equal(blog.status, 200);
+  assert.deepEqual(linePrices(blog.calls[0].params), [PRICE_MAP['seo-blog-year']]);
 });
 
 test('a yearly plan replaces the monthly one, never mixed', async () => {
@@ -307,15 +316,39 @@ const CONFLICT_CARTS: Array<{ items: string[]; error: string }> = [
     error: "Lead Pack isn't available with Scale.",
   },
   {
-    items: ['grow-month', 'lead-pack-month', 'review-month'],
+    items: ['grow-month', 'lead-pack-month'],
+    error: "Lead Pack isn't available with Grow.",
+  },
+  {
+    items: ['launch-month', 'growth-bundle-month'],
+    error: "Growth Bundle isn't available with Launch.",
+  },
+  {
+    items: ['scale-month', 'growth-engine-month'],
+    error: "Growth Engine isn't available with Scale.",
+  },
+  {
+    items: ['grow-month', 'growth-bundle-month', 'review-month'],
+    error: 'Growth Bundle already includes Grow, Review Generation Engine.',
+  },
+  {
+    items: ['growth-bundle-month', 'lead-pack-month'],
+    error: 'Lead Pack and Growth Bundle both include the Review Generation Engine.',
+  },
+  {
+    items: ['growth-engine-month', 'ads-starter-month'],
+    error: 'Growth Engine already includes Starter test.',
+  },
+  {
+    items: ['launch-month', 'lead-pack-month', 'review-month'],
     error: 'Lead Pack already includes Review Generation Engine.',
   },
   {
-    items: ['grow-month', 'lead-pack-month', 'localseo-month', 'review-month', 'aichat-month'],
-    error: 'Lead Pack already includes Local SEO Management, Review Generation Engine, Trained AI Chat Assistant.',
+    items: ['launch-month', 'lead-pack-month', 'localseo-month', 'review-month', 'aichat-month'],
+    error: 'Lead Pack already includes Local SEO Management, Review Generation Engine, Online Receptionist.',
   },
   {
-    items: ['grow-month', 'lead-pack-month', 'visibility-pack-month'],
+    items: ['launch-month', 'lead-pack-month', 'visibility-pack-month'],
     error: 'Lead Pack and Visibility Pack both include the Review Generation Engine.',
   },
   {
@@ -328,11 +361,11 @@ const CONFLICT_CARTS: Array<{ items: string[]; error: string }> = [
   },
   {
     items: ['ai-pack-month', 'aichat-month'],
-    error: 'The AI Pack already includes AI Receptionist, Trained AI Chat Assistant and AI Follow-up. Buy the pack on its own, or the individual services on their own.',
+    error: 'The AI Pack already includes AI Receptionist, Online Receptionist and AI Follow-up. Buy the pack on its own, or the individual services on their own.',
   },
   {
     items: ['ai-pack-year', 'aichat-year'],
-    error: 'The AI Pack already includes AI Receptionist, Trained AI Chat Assistant and AI Follow-up. Buy the pack on its own, or the individual services on their own.',
+    error: 'The AI Pack already includes AI Receptionist, Online Receptionist and AI Follow-up. Buy the pack on its own, or the individual services on their own.',
   },
   {
     items: ['grow-year', 'ads-meta-month'],

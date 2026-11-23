@@ -1,6 +1,7 @@
 ---
 import { useTranslations, type Locale } from "../../lib/i18n";
 import PlanCards from "../pricing/PlanCards.astro";
+import PlanEstimator from "../pricing/PlanEstimator.astro";
 import BundleCarousel from "../pricing/BundleCarousel.astro";
 import AdsPackCard from "../pricing/AdsPackCard.astro";
 import AddonList from "../pricing/AddonList.astro";
@@ -31,6 +32,7 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
       </div>
 
       <div class="service-chooser" role="tablist" aria-label={r.chooserLabel}>
+        <button type="button" class="service-pill" role="tab" id="p2-tab-services" aria-controls="p2-panel-web p2-panel-ads p2-panel-ai" aria-selected="false" data-service-pill="services">{r.pillServices}</button>
         <button type="button" class="service-pill" role="tab" id="p2-tab-ads" aria-controls="p2-panel-ads" aria-selected="false" data-service-pill="ads">{r.pillAds}</button>
         <button type="button" class="service-pill is-active" role="tab" id="p2-tab-web" aria-controls="p2-panel-web" aria-selected="true" data-service-pill="web">{r.pillWeb}</button>
         <button type="button" class="service-pill" role="tab" id="p2-tab-ai" aria-controls="p2-panel-ai" aria-selected="false" data-service-pill="ai">{r.pillAi}</button>
@@ -57,6 +59,9 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
   <div class="p2-panels">
     <!-- Web (default): the normal price cards, bundles and add-ons. -->
     <section class="p2-panel" role="tabpanel" id="p2-panel-web" aria-labelledby="p2-tab-web" data-service-panel="web">
+      <!-- PLAN ESTIMATOR -->
+      <PlanEstimator locale={locale} showCompare={false} />
+
       <section class="section plans-section">
         <div class="shell">
           <h2 id="plans-h" class="visually-hidden">{t.pricing.plansTitle}</h2>
@@ -148,33 +153,38 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
     var current = "web";
     var busy = false;
     var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // "services" shows all three panels at once; the other tabs show
+    // one. Panels are handled as key lists so both directions fade
+    // the same way.
+    var ALL_PANELS = ["web", "ads", "ai"];
+    function visibleKeys() {
+      return current === "services" ? ALL_PANELS : [current];
+    }
     function show(next) {
       if (next === current || busy) return false;
-      var from = panels[current];
-      var to = panels[next];
-      if (!from || !to) return false;
+      var fromKeys = visibleKeys();
+      var toKeys = next === "services" ? ALL_PANELS : [next];
+      if (!panels[toKeys[0]]) return false;
       pills.forEach(function (b) {
         var on = b.getAttribute("data-service-pill") === next;
         b.classList.toggle("is-active", on);
         b.setAttribute("aria-selected", on ? "true" : "false");
       });
       if (reduced) {
-        from.hidden = true;
-        to.hidden = false;
+        fromKeys.forEach(function (k) { if (panels[k]) panels[k].hidden = true; });
+        toKeys.forEach(function (k) { if (panels[k]) panels[k].hidden = false; });
         current = next;
         return true;
       }
       busy = true;
       current = next;
-      from.classList.add("is-leaving");
+      fromKeys.forEach(function (k) { if (panels[k]) panels[k].classList.add("is-leaving"); });
       window.setTimeout(function () {
-        from.hidden = true;
-        from.classList.remove("is-leaving");
-        to.hidden = false;
-        to.classList.add("is-entering");
+        fromKeys.forEach(function (k) { if (panels[k]) { panels[k].hidden = true; panels[k].classList.remove("is-leaving"); } });
+        toKeys.forEach(function (k) { if (panels[k]) { panels[k].hidden = false; panels[k].classList.add("is-entering"); } });
         requestAnimationFrame(function () {
           requestAnimationFrame(function () {
-            to.classList.remove("is-entering");
+            toKeys.forEach(function (k) { if (panels[k]) panels[k].classList.remove("is-entering"); });
             busy = false;
           });
         });
@@ -259,7 +269,7 @@ const termsPath = locale === "fr" ? "/fr/conditions" : "/terms";
     var chooser = root.querySelector(".service-chooser");
     if (chooser) {
       chooser.addEventListener("keydown", function (event) {
-        var order = ["ads", "web", "ai"];
+        var order = ["services", "ads", "web", "ai"];
         var idx = order.indexOf(current);
         var next = null;
         if (event.key === "ArrowRight") next = order[(idx + 1) % order.length];

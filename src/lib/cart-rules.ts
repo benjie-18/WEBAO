@@ -15,9 +15,10 @@
  * - the AI Pack excludes the individual AI services;
  * - an add-on already included in the plan cannot be bought with it;
  * - an add-on not available on the plan cannot be bought with it;
- * - a bundle cannot be bought with one of its own components, and the
- *   two bundles cannot be bought together (both include the Review
- *   Generation Engine);
+ * - a bundle cannot be bought with one of its own components, and
+ *   bundles that share a component cannot be bought together (the two
+ *   original bundles both include the Review Generation Engine; the
+ *   Growth Bundle and Growth Engine share it too, through the bundle);
  * - recurring items in one checkout share a single billing interval.
  *
  * Deliberately NOT rules: website add-ons with no plan (existing
@@ -76,10 +77,12 @@ export const ADS_OPTIONS = ["ads-pack", "ads-meta", "ads-google", "ads-both", "a
 export const AI_PACK = "ai-pack";
 export const AI_INDIVIDUALS = ["ai-receptionist", "aichat", "ai-followup"] as const;
 
-/** Bundle -> the add-ons it already includes. */
+/** Bundle -> the products it already includes (add-ons, plans, or bundles). */
 export const BUNDLE_COMPONENTS: Record<string, string[]> = {
   "lead-pack": ["localseo", "review", "aichat"],
   "visibility-pack": ["review", "report"],
+  "growth-bundle": ["grow", "localseo", "review"],
+  "growth-engine": ["growth-bundle", "ads-starter"],
 };
 
 /** Plan -> add-ons already included in the plan. */
@@ -90,8 +93,9 @@ export const INCLUDED_IN_PLAN: Record<string, string[]> = {
 
 /** Plan -> products not available on that plan. */
 export const NOT_AVAILABLE_ON_PLAN: Record<string, string[]> = {
-  launch: ["admin"],
-  scale: ["lead-pack", "visibility-pack"],
+  launch: ["admin", "growth-bundle", "growth-engine"],
+  grow: ["lead-pack"],
+  scale: ["lead-pack", "visibility-pack", "growth-bundle", "growth-engine"],
 };
 
 /**
@@ -103,19 +107,22 @@ export const MONTHLY_PRICE_CENTS: Record<string, number> = {
   launch: 8999,
   grow: 14999,
   scale: 34999,
-  "lead-pack": 23999,
-  "visibility-pack": 9999,
-  "ads-pack": 89999,
-  "ads-meta": 89999,
-  "ads-google": 89999,
-  "ads-both": 134999,
-  "ads-starter": 49999,
+  "lead-pack": 49999,
+  "visibility-pack": 34999,
+  "growth-bundle": 54999,
+  "growth-engine": 89999,
+  "seo-blog": 3999,
+  "ads-pack": 64999,
+  "ads-meta": 64999,
+  "ads-google": 64999,
+  "ads-both": 99999,
+  "ads-starter": 39999,
   "ai-receptionist": 29999,
   aichat: 9999,
   "ai-followup": 9999,
   "ai-pack": 39999,
   localseo: 15999,
-  review: 9999,
+  review: 39999,
   booking: 4999,
   report: 2999,
   admin: 3999,
@@ -221,7 +228,8 @@ export function findConflicts(items: RuleItem[]): CartConflict[] {
 
   const bundles = Object.keys(BUNDLE_COMPONENTS).filter((bundle) => has(bundle));
   if (bundles.length > 1) {
-    // Both bundles include the Review Generation Engine: keep the dearer one.
+    // Bundles that share a component (the Review Generation Engine, directly
+    // or through another bundle): keep the dearer one.
     conflicts.push({
       kind: "bundle-overlap",
       products: bundles,

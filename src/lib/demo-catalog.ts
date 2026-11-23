@@ -10,6 +10,9 @@ export interface DemoCardFilters {
   style: string;
   trade: string;
   query: string;
+  /** When true, only cards whose demo id is in `favorites` show. */
+  onlyFavorites?: boolean;
+  favorites?: ReadonlySet<string>;
 }
 
 /**
@@ -31,7 +34,9 @@ export function filterDemoCards(cards: readonly HTMLElement[], filters: DemoCard
     const matchStyle = filters.style === "All" || family === filters.style;
     const matchTrade = filters.trade === "All" || trade === filters.trade;
     const matchQuery = !q || text.includes(q);
-    const show = matchStyle && matchTrade && matchQuery;
+    const matchFavorites =
+      !filters.onlyFavorites || (filters.favorites?.has(card.getAttribute("data-demo-id") || "") ?? false);
+    const show = matchStyle && matchTrade && matchQuery && matchFavorites;
     card.style.display = show ? "" : "none";
     if (show) visible++;
   }

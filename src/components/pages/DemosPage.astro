@@ -1,7 +1,8 @@
 ---
 import { useTranslations, localizedPaths, getDemos, type Locale } from "../../lib/i18n";
-import { styleFamilies, getDemoFamily, tradeFilters } from "../../lib/demos";
+import { styleFamilies, getDemoFamily, tradeFilters, liveDemoIds } from "../../lib/demos";
 import { sortCatalogForFallback } from "../../lib/demo-order";
+import QuickLook from "../demos/QuickLook.astro";
 
 interface Props {
   locale: Locale;
@@ -12,7 +13,7 @@ const paths = localizedPaths[locale];
 const demos = getDemos(locale);
 
 // Demos with published standalone microsites
-const liveDemos = new Set(["nora", "mira", "atelier-nord", "encre-brute", "kanso", "leduc", "boise", "sora", "forma", "toit-fils", "verte", "lune", "maison-lune", "finition-r", "pouf", "hexline", "papier-ciseaux", "studio-reve", "cyberdoll", "pixelforge", "vhs-dreams", "prism", "tactile", "lattice", "maximal", "atelier-caractere", "esquisse", "brume", "sahara-sage", "aeris", "debit", "bec-fin", "voltige", "lueur", "21-degres", "extreme-climat", "confort-76", "zenith", "toitures-tempete", "chantier-brut", "maison-dore", "sneaker-pro", "onde", "noctua", "lisiere", "boreal", "rive-nord"]);
+const liveDemos = liveDemoIds;
 // Hidden from the catalog: style already covered by another demo (boba-club = Y2K, covered by cyberdoll)
 const hiddenDemos = new Set(["boba-club"]);
 const visibleDemos = demos.filter((d) => !hiddenDemos.has(d.id));
@@ -31,32 +32,12 @@ const families = styleFamilies;
 
 <section class="demos-hero grain">
   <div class="shell">
-    <div class="demos-hero-grid" data-reveal>
-      <div>
-        <div class="eyebrow">{t.demos.hero.eyebrow}</div>
-        <h1 class="display" style="font-size: clamp(2.6rem, 6vw, 5rem); line-height:.88; margin-top:12px;" set:html={t.demos.hero.title}></h1>
-        <p class="prose" style="margin-top:14px; max-width: 52ch; font-size: 15px;">
-          {t.demos.hero.desc}
-        </p>
-        <div class="mono" style="margin-top:10px; font-size:11px; color: var(--muted);">{t.demos.hero.countNote}</div>
-      </div>
-      <div class="demos-hero-card">
-        <div class="demos-hero-preview">
-          <div class="mono" style="font-size:10px; opacity:.5;">{t.demos.hero.howTitle}</div>
-          <ol class="mono" style="margin-top:12px; display:grid; gap:8px; font-size:12px; line-height:1.5; color: var(--ink-3); list-style: none; padding:0;">
-            {t.demos.hero.howSteps.map((step, i) => (
-              <li><strong style="color: var(--ink);">{i+1}. {step.split(":")[0]}</strong>{step.includes(":") ? `: ${step.split(":").slice(1).join(":")}` : ""}</li>
-            ))}
-          </ol>
-          <div style="margin-top:14px; height:1px; background: var(--line);"></div>
-          <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
-            {t.demos.hero.pills.map((pill, i) => (
-              <span class="pill mono" style={i===0 ? "background: var(--ink); color: var(--paper);" : "background: var(--paper-2); border:1px solid var(--line);"}>{pill}</span>
-            ))}
-          </div>
-        </div>
-        <div class="mono" style="margin-top:10px; font-size:10px; text-align:center; color: var(--muted);">{t.demos.hero.fictionalNote}</div>
-      </div>
+    <div data-reveal style="max-width: 62ch;">
+      <div class="eyebrow">{t.demos.hero.eyebrow}</div>
+      <h1 class="display" style="font-size: clamp(2.6rem, 6vw, 5rem); line-height:.88; margin-top:12px;" set:html={t.demos.hero.title}></h1>
+      <p class="prose" style="margin-top:14px; max-width: 52ch; font-size: 15px;">
+        {t.demos.hero.desc}
+      </p>
     </div>
 
     <!-- Controls -->
@@ -78,6 +59,13 @@ const families = styleFamilies;
           <button class="chip" data-trade-filter={trade} aria-pressed="false">{t.demos.trades[trade]}</button>
         ))}
       </div>
+      <div class="filters" role="group" aria-label={t.demos.favoritesOnly}>
+        <button class="chip" data-favorites-only aria-pressed="false">{t.demos.favoritesOnly}</button>
+      </div>
+      <p class="shortlist-status mono" data-shortlist-status data-status-template={t.demos.shortlistStatus} data-full-template={t.demos.shortlistFull} hidden>
+        <span data-shortlist-text></span>
+        <a href={paths.start} class="shortlist-cta">{t.demos.shortlistCta}</a>
+      </p>
     </div>
   </div>
 </section>
@@ -86,7 +74,8 @@ const families = styleFamilies;
   <div class="shell">
     <div id="demo-grid" class="demo-grid">
       {displayDemos.map((d, i) => (
-        <a href={liveDemos.has(d.id) ? demoHref(d.id) : "#"} class="demo-card-demo" data-category={d.category} data-search={`${d.name} ${d.category} ${d.city} ${d.tone} ${d.palette} ${d.localizedDescription} ${((t.demos.categories as any)[d.category] ?? d.category)} ${d.trade ? ((t.demos.trades as any)[d.trade] ?? d.trade) : ""}`.toLowerCase()} data-reveal style={`--d:${(i%3)*80}ms`} data-demo-id={d.id} data-demo-index={catalogIndex.get(d.id)} data-demo-tone={d.tone} data-demo-family={getDemoFamily(d.id)} data-demo-trade={d.trade ?? ""} data-demo-palette={d.palette} data-live={liveDemos.has(d.id) ? "true" : undefined} aria-label={`${d.name} — ${t.demos.viewDemo.replace(" →", "")}`}>
+        <div class="demo-card-wrap" data-category={d.category} data-search={`${d.name} ${d.category} ${d.city} ${d.tone} ${d.palette} ${d.localizedDescription} ${((t.demos.categories as any)[d.category] ?? d.category)} ${d.trade ? ((t.demos.trades as any)[d.trade] ?? d.trade) : ""}`.toLowerCase()} data-reveal style={`--d:${(i%3)*80}ms`} data-demo-id={d.id} data-demo-index={catalogIndex.get(d.id)} data-demo-tone={d.tone} data-demo-family={getDemoFamily(d.id)} data-demo-trade={d.trade ?? ""} data-demo-palette={d.palette} data-live={liveDemos.has(d.id) ? "true" : undefined}>
+          <a href={liveDemos.has(d.id) ? demoHref(d.id) : "#"} class="demo-card-demo" aria-label={`${d.name} — ${t.demos.viewDemo.replace(" →", "")}`}>
           {liveDemos.has(d.id) ? (
             <div class={`demo-thumb dthumb dthumb-${d.id}`}>
               {d.id === "nora" && (
@@ -509,6 +498,30 @@ const families = styleFamilies;
             <span class="mono" style="font-size:11px; background: var(--paper-2); border:1px solid var(--line); padding:6px 10px; border-radius:99px;">{liveDemos.has(d.id) ? t.demos.viewDemo : t.demos.details}</span>
           </div>
         </a>
+        <div class="demo-actions">
+          {liveDemos.has(d.id) && (
+            <button
+              type="button"
+              class="demo-quicklook"
+              data-quicklook-open={d.id}
+              data-demo-href={demoHref(d.id)}
+              data-demo-name={d.name}
+              data-demo-meta={`${d.city} · ${d.tone}`}
+              aria-label={t.demos.quickLookOpen.replace("{name}", d.name)}
+            ><span aria-hidden="true">👁</span> {t.demos.quickLook}</button>
+          )}
+          <button
+            type="button"
+            class="demo-shortlist"
+            data-shortlist-toggle={d.id}
+            aria-pressed="false"
+            aria-label={t.demos.shortlistAdd.replace("{name}", d.name)}
+            data-add-label={t.demos.shortlistAdd.replace("{name}", d.name)}
+            data-remove-label={t.demos.shortlistRemove.replace("{name}", d.name)}
+          >☆</button>
+          <a class="demo-build" data-demo-build href={`${paths.start}?demo=${d.id}`}>{t.demos.quickLookBuildShort}</a>
+        </div>
+        </div>
       ))}
     </div>
 
@@ -523,6 +536,8 @@ const families = styleFamilies;
     </div>
   </div>
 </section>
+
+<QuickLook locale={locale} />
 
 <!-- CTA -->
 <section class="section section--dark grain" style="padding-block: 48px;">
@@ -546,6 +561,7 @@ const families = styleFamilies;
 <script>
   import { applyDemoOrderToCatalog, getDemoOrderSeed } from "../../lib/demo-order";
   import { filterDemoCards } from "../../lib/demo-catalog";
+  import { readShortlist, toggleShortlist } from "../../lib/shortlist";
 
   function initDemosPage() {
     const search = document.getElementById('search') as HTMLInputElement | null;
@@ -595,6 +611,7 @@ const families = styleFamilies;
     let activeStyle = 'All';
     let activeTrade = 'All';
     let query = '';
+    let onlyFavorites = false;
 
     // Deep link: /demos?trade=plumbing preselects the trade filter, so
     // trade-specific landing pages can link straight into a filtered catalog.
@@ -614,7 +631,13 @@ const families = styleFamilies;
     }
 
     function apply() {
-      const visible = filterDemoCards(cards, { style: activeStyle, trade: activeTrade, query });
+      const visible = filterDemoCards(cards, {
+        style: activeStyle,
+        trade: activeTrade,
+        query,
+        onlyFavorites,
+        favorites: new Set(readShortlist(window)),
+      });
       if (empty) (empty as HTMLElement).hidden = visible !== 0;
       const count = document.querySelector('[data-count]');
       if (count) count.textContent = countTemplate.replace('{count}', String(visible));
@@ -640,6 +663,15 @@ const families = styleFamilies;
         apply();
       });
     }
+    const favoritesBtn = document.querySelector('[data-favorites-only]');
+    if (favoritesBtn) {
+      favoritesBtn.addEventListener('click', () => {
+        onlyFavorites = !onlyFavorites;
+        favoritesBtn.classList.toggle('chip--active', onlyFavorites);
+        favoritesBtn.setAttribute('aria-pressed', String(onlyFavorites));
+        apply();
+      });
+    }
     if (clearBtn && search) {
       clearBtn.addEventListener('click', () => {
         query = '';
@@ -660,6 +692,9 @@ const families = styleFamilies;
       // Published demos navigate to their microsite; others show the "not yet published" toast.
       if (card.getAttribute('data-live') === 'true') continue;
       card.addEventListener('click', (e) => {
+        // The action buttons sit beside the card link; their clicks must
+        // not also fire the "not yet published" toast.
+        if ((e.target as HTMLElement).closest('[data-shortlist-toggle], [data-quicklook-open], [data-demo-build]')) return;
         e.preventDefault();
         const name = card.querySelector('.demo-card-foot div div')?.textContent || 'Demo';
         const tone = card.getAttribute('data-demo-tone') || '';
@@ -682,6 +717,40 @@ const families = styleFamilies;
         setTimeout(()=> { toast.style.opacity='0'; toast.style.transform='translateX(-50%) translateY(8px)'; setTimeout(()=> toast.remove(), 220); }, 3400);
       });
     }
+
+    // Shortlist: up to 3 demos the visitor can keep and carry into
+    // /start. The toggle sits beside the card link (not inside it), so
+    // its click never navigates.
+    const shortlistStatus = document.querySelector('[data-shortlist-status]') as HTMLElement | null;
+    const shortlistText = document.querySelector('[data-shortlist-text]') as HTMLElement | null;
+    const syncShortlist = (ids: string[], full: boolean) => {
+      document.querySelectorAll('[data-shortlist-toggle]').forEach((btn) => {
+        const b = btn as HTMLButtonElement;
+        const on = ids.includes(b.getAttribute('data-shortlist-toggle') || '');
+        b.setAttribute('aria-pressed', String(on));
+        b.textContent = on ? '★' : '☆';
+        b.setAttribute('aria-label', on ? (b.dataset.removeLabel || '') : (b.dataset.addLabel || ''));
+      });
+      if (shortlistStatus && shortlistText) {
+        if (ids.length === 0 && !full) {
+          shortlistStatus.hidden = true;
+        } else {
+          shortlistStatus.hidden = false;
+          shortlistText.textContent = full
+            ? (shortlistStatus.dataset.fullTemplate || '')
+            : (shortlistStatus.dataset.statusTemplate || '').replace('{n}', String(ids.length));
+        }
+      }
+      if (onlyFavorites) apply();
+    };
+    syncShortlist(readShortlist(window), false);
+    grid?.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest('[data-shortlist-toggle]') as HTMLButtonElement | null;
+      if (!btn) return;
+      const id = btn.getAttribute('data-shortlist-toggle') || '';
+      const { ids, full } = toggleShortlist(window, id);
+      syncShortlist(ids, full);
+    });
   }
 
   // Immediate init (house pattern: Support/Contact/Portal all call
@@ -694,10 +763,18 @@ const families = styleFamilies;
 
 <style>
   .demos-hero { padding-block: clamp(28px,5vw,56px); background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%); border-bottom: 1px solid var(--line); }
-  .demos-hero-grid { display:grid; grid-template-columns: 1.2fr .8fr; gap: clamp(24px,4vw,32px); align-items:start; }
-  .demos-hero-card { background: var(--card-bg); border:1px solid var(--line); border-radius:16px; padding:14px; box-shadow: var(--shadow-sm); }
-  .demos-hero-preview { background: var(--paper-3); border:1px solid var(--line); border-radius:12px; padding:14px; }
-  .pill { padding:6px 10px; border-radius:99px; font-size:10px; letter-spacing:.06em; }
+  .demo-grid { display:grid; grid-template-columns: repeat(3,1fr); gap:16px; }
+  .demo-card-wrap { position:relative; background: var(--card-bg); border:1px solid var(--line); border-radius:18px; overflow:clip; box-shadow: var(--shadow-sm); display:flex; flex-direction:column; transition: transform .35s var(--ease-out), box-shadow .35s; }
+  .demo-card-wrap:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .demo-card-demo { display:flex; flex-direction:column; flex:1; color: inherit; text-decoration: none; }
+  .demo-actions { display:flex; align-items:center; gap:8px; padding:10px 12px; border-top:1px solid var(--line); background: var(--card-bg); }
+  .demo-quicklook { flex:1; min-width:0; min-height:36px; padding:8px 10px; border-radius:10px; border:1px solid var(--line); background: var(--paper-2); font-size:12.5px; font-weight:600; cursor:pointer; color: var(--ink); }
+  .demo-quicklook:hover { background: var(--paper-3); }
+  .demo-shortlist { flex:none; width:36px; height:36px; min-height:36px; border-radius:10px; border:1px solid var(--line); background: var(--paper-2); font-size:16px; line-height:1; cursor:pointer; color: var(--ink); }
+  .demo-shortlist[aria-pressed="true"] { color: var(--accent); border-color: var(--accent); }
+  .demo-build { flex:1; min-width:0; min-height:36px; display:inline-flex; align-items:center; justify-content:center; padding:8px 10px; border-radius:10px; background: var(--accent); color: #fff; font-size:12.5px; font-weight:700; text-decoration:none; text-align:center; }
+  .shortlist-status { margin-top:12px; font-size:12px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .shortlist-cta { color: var(--accent); font-weight:700; }
   .controls { margin-top: 18px; display:grid; gap:12px; background: var(--card-bg); border:1px solid var(--line); border-radius:16px; padding:14px; box-shadow: var(--shadow-sm); }
   .search { display:flex; align-items:center; gap:10px; background: var(--paper-3); border:1px solid var(--line); border-radius:12px; padding:10px 12px; }
   .search span:first-child { font-size:16px; opacity:.5; }
@@ -709,8 +786,6 @@ const families = styleFamilies;
   .chip:hover { background: var(--paper-3); }
   .chip--active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
   .demo-grid { display:grid; grid-template-columns: repeat(3,1fr); gap:16px; }
-  .demo-card-demo { position:relative; background: var(--card-bg); border:1px solid var(--line); border-radius:18px; overflow:clip; box-shadow: var(--shadow-sm); display:flex; flex-direction:column; transition: transform .35s var(--ease-out), box-shadow .35s; }
-  .demo-card-demo:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
   .demo-thumb { position:relative; min-height: 220px; padding:16px; display:flex; flex-direction:column; justify-content:space-between; overflow:clip; }
   .demo-thumb::after { content:""; position:absolute; inset:0; background: radial-gradient(400px 200px at 80% 20%, rgba(255,255,255,.18) 0%, transparent 60%), linear-gradient(180deg, rgba(0,0,0,.08) 0%, rgba(0,0,0,.22) 100%); pointer-events:none; }
   .thumb-inner { position:relative; z-index:1; }
@@ -1428,5 +1503,5 @@ const families = styleFamilies;
   }
   .empty { text-align:center; padding:32px; background: var(--paper-2); border:1px dashed var(--line-strong); border-radius:16px; font-size:13px; color: var(--muted); margin-top:12px; }
   .demos-note { margin-top:14px; display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; font-size:10px; color: var(--muted); border-top:1px solid var(--line); padding-top:12px; }
-  @media (max-width: 960px) { .demos-hero-grid, .demo-grid { grid-template-columns: 1fr; } .demo-thumb { min-height: 180px; } }
+  @media (max-width: 960px) { .demo-grid { grid-template-columns: 1fr; } .demo-thumb { min-height: 180px; } }
 </style>

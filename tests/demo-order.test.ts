@@ -306,6 +306,32 @@ test('filtering and searching a shuffled catalog does not reshuffle it', () => {
   dom.window.close();
 });
 
+test('the favorites filter shows only shortlisted demos, and composes with search', () => {
+  const { dom, root } = fixture('catalog');
+  const cards = applyDemoOrderToCatalog(root, 42);
+  const favorites = new Set(['nora', 'boreal', 'leduc']);
+  const visibleAfter = (filters: { onlyFavorites?: boolean; query?: string }) =>
+    filterDemoCards(cards, {
+      style: 'All',
+      trade: 'All',
+      query: filters.query ?? '',
+      onlyFavorites: filters.onlyFavorites,
+      favorites,
+    });
+
+  assert.equal(visibleAfter({ onlyFavorites: true }), 3);
+  for (const card of cards) {
+    const id = card.getAttribute('data-demo-id') ?? '';
+    assert.equal(card.style.display, favorites.has(id) ? '' : 'none', id);
+  }
+  // An empty shortlist shows nothing; without the flag everything shows.
+  assert.equal(filterDemoCards(cards, { style: 'All', trade: 'All', query: '', onlyFavorites: true, favorites: new Set() }), 0);
+  assert.equal(visibleAfter({}), visible.length);
+  // Search narrows the favorites, not the whole catalog.
+  assert.equal(visibleAfter({ onlyFavorites: true, query: 'boreal' }), 1);
+  dom.window.close();
+});
+
 test('reorderDemoNodes never adds or removes nodes', () => {
   const { dom, root } = fixture('catalog');
   const before = new Set(Array.from(root.children));

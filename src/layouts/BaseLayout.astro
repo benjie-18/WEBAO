@@ -38,6 +38,11 @@ const {
 
 const url = Astro.url;
 const detected = getLocaleFromUrl(url);
+// #67: active nav state — the current page's link carries aria-current
+// and a subtle pill. Paths are compared without trailing slashes so
+// "/pricing/" matches the "/pricing" link target.
+const currentPath = url.pathname.replace(/\/$/, "") || "/";
+const isCurrent = (href: string) => href.replace(/\/$/, "") === currentPath;
 const locale: Locale = localeProp ?? detected;
 const t = useTranslations(locale);
 
@@ -85,6 +90,10 @@ const crumbLabels: Record<string, string> = {
   sources: "Sources",
   refunds: locale === "fr" ? "Remboursements" : "Refunds",
   guideIndex: "Guides",
+  services: locale === "fr" ? "Services" : "Services",
+  serviceWebsites: locale === "fr" ? "Sites web" : "Websites",
+  serviceAds: locale === "fr" ? "Publicité" : "Advertising",
+  serviceAi: locale === "fr" ? "IA" : "AI",
 };
 const crumbName = pageKey ? crumbLabels[pageKey] : undefined;
 const breadcrumbSchema = crumbName
@@ -115,6 +124,8 @@ const navLinks = {
   portal: localizedPaths[locale].portal,
   serviceDesign: localizedPaths[locale].serviceDesign,
   servicePlans: localizedPaths[locale].servicePlans,
+  serviceHosting: localizedPaths[locale].serviceHosting,
+  serviceMontreal: localizedPaths[locale].serviceMontreal,
   guideCost: localizedPaths[locale].guideCost,
   guideBill96: localizedPaths[locale].guideBill96,
   guideLaw25: localizedPaths[locale].guideLaw25,
@@ -414,6 +425,28 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
             <a href={navLinks.demos}>{t.nav.demos}</a>
             <a href={navLinks.pricing}>{t.nav.pricing}</a>
             <a href={navLinks.audit}>{t.nav.audit}</a>
+            <div class="nav-item--mega" data-mega>
+              <button type="button" class="nav-mega-trigger" aria-expanded="false" aria-haspopup="true" data-mega-trigger>
+                {t.nav.services} <span class="nav-mega-caret" aria-hidden="true">▾</span>
+              </button>
+              <div class="nav-mega" data-mega-panel hidden>
+                <div class="nav-mega-col">
+                  <p class="nav-mega-heading">{t.nav.services}</p>
+                  <a href={navLinks.serviceDesign} aria-current={isCurrent(navLinks.serviceDesign) ? "page" : undefined}>{t.nav.megaDesign}</a>
+                  <a href={navLinks.servicePlans} aria-current={isCurrent(navLinks.servicePlans) ? "page" : undefined}>{t.nav.megaPlans}</a>
+                  <a href={navLinks.serviceHosting} aria-current={isCurrent(navLinks.serviceHosting) ? "page" : undefined}>{t.nav.megaHosting}</a>
+                  <a href={navLinks.serviceMontreal} aria-current={isCurrent(navLinks.serviceMontreal) ? "page" : undefined}>{t.nav.megaMontreal}</a>
+                </div>
+                <div class="nav-mega-col">
+                  <p class="nav-mega-heading">{t.nav.megaResources}</p>
+                  <a href={navLinks.guideIndex} aria-current={isCurrent(navLinks.guideIndex) ? "page" : undefined}>{t.nav.guides}</a>
+                  <a href={navLinks.guideBill96} aria-current={isCurrent(navLinks.guideBill96) ? "page" : undefined}>{t.nav.megaBill96}</a>
+                  <a href={navLinks.guideLaw25} aria-current={isCurrent(navLinks.guideLaw25) ? "page" : undefined}>{t.nav.megaLaw25}</a>
+                  <a href={navLinks.portal} aria-current={isCurrent(navLinks.portal) ? "page" : undefined}>{t.nav.portal}</a>
+                  <a href={navLinks.support} aria-current={isCurrent(navLinks.support) ? "page" : undefined}>{t.nav.support}</a>
+                </div>
+              </div>
+            </div>
             <a href={navLinks.contact}>{t.nav.contact}</a>
             <a href={navLinks.pricing} class="cta" data-track="cta" data-track-label={t.nav.startSite} data-start-cta>{t.nav.startSite}</a>
           </nav>
@@ -448,11 +481,17 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
       </div>
     </header>
 
+    <div class="nav-scrim" data-mega-scrim hidden></div>
+
     <div id="mobile-panel" class="mobile-panel" hidden>
       <a href={navLinks.demos}>{t.nav.demos} <span aria-hidden="true">→</span></a>
       <a href={navLinks.pricing}>{t.nav.pricing} <span aria-hidden="true">→</span></a>
       <a href={navLinks.audit}>{t.nav.audit} <span aria-hidden="true">→</span></a>
       <a href={navLinks.contact}>{t.nav.contact} <span aria-hidden="true">→</span></a>
+      <a href={navLinks.serviceDesign}>{t.nav.megaDesign} <span aria-hidden="true">→</span></a>
+      <a href={navLinks.guideIndex}>{t.nav.guides} <span aria-hidden="true">→</span></a>
+      <a href={navLinks.portal}>{t.nav.portal} <span aria-hidden="true">→</span></a>
+      <a href={navLinks.support}>{t.nav.support} <span aria-hidden="true">→</span></a>
       <a
         href={navLinks.pricing}
         data-track="cta"
@@ -467,10 +506,6 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
       </div>
       <LanguageSwitcher locale={locale} currentPath={url.pathname} variant="mobile" />
     </div>
-
-    <!-- Full-viewport overlays (kept outside <main> so they are never affected
-         by the landing page's own transforms). Used by the landing page intro. -->
-    <slot name="overlay" />
 
     <main id="main">
       <slot />
@@ -615,6 +650,58 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
           }
           menuKeyHandler = onKeyDown;
           document.addEventListener('keydown', menuKeyHandler);
+        }
+
+        // Desktop mega-menu (#31): frosted Services/Resources dropdown.
+        // Hover and focus open it; click toggles (touch); Esc or a scrim
+        // click closes it. Guarded so a ClientRouter re-init never
+        // double-binds the same trigger.
+        const mega = document.querySelector('[data-mega]') as HTMLElement | null;
+        const megaTrigger = document.querySelector('[data-mega-trigger]') as HTMLButtonElement | null;
+        const megaPanel = document.querySelector('[data-mega-panel]') as HTMLElement | null;
+        const megaScrim = document.querySelector('[data-mega-scrim]') as HTMLElement | null;
+        if (mega && megaTrigger && megaPanel && megaScrim && !megaTrigger.dataset.webaoBound) {
+          megaTrigger.dataset.webaoBound = '1';
+          let megaHoverTimer = 0;
+          const setMega = (open: boolean) => {
+            mega.classList.toggle('is-open', open);
+            megaTrigger.setAttribute('aria-expanded', String(open));
+            if (open) {
+              megaPanel.removeAttribute('hidden');
+              megaScrim.removeAttribute('hidden');
+            } else {
+              megaPanel.setAttribute('hidden', '');
+              megaScrim.setAttribute('hidden', '');
+            }
+          };
+          const openSoon = () => {
+            window.clearTimeout(megaHoverTimer);
+            megaHoverTimer = window.setTimeout(() => setMega(true), 120);
+          };
+          const closeSoon = () => {
+            window.clearTimeout(megaHoverTimer);
+            megaHoverTimer = window.setTimeout(() => setMega(false), 180);
+          };
+          mega.addEventListener('mouseenter', openSoon);
+          mega.addEventListener('mouseleave', closeSoon);
+          megaTrigger.addEventListener('focus', openSoon);
+          mega.addEventListener('focusout', (e: FocusEvent) => {
+            if (!mega.contains(e.relatedTarget as Node | null)) closeSoon();
+          });
+          megaTrigger.addEventListener('click', () => {
+            window.clearTimeout(megaHoverTimer);
+            setMega(!mega.classList.contains('is-open'));
+          });
+          megaScrim.addEventListener('click', () => setMega(false));
+          megaPanel.querySelectorAll('a').forEach((a) => {
+            a.addEventListener('click', () => setMega(false));
+          });
+          document.addEventListener('keydown', (e: KeyboardEvent) => {
+            if (e.key === 'Escape' && mega.classList.contains('is-open')) {
+              setMega(false);
+              megaTrigger.focus();
+            }
+          });
         }
 
         // Reveal on scroll, respects prefers-reduced-motion.
@@ -877,6 +964,10 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
       data-label-empty-confirm={t.cart.emptyConfirm}
       data-empty-title={t.cart.emptyTitle}
       data-empty-hint={t.cart.emptyHint}
+      data-empty-starter={t.cart.emptyStarter}
+      data-empty-add-grow={t.cart.emptyAddGrow}
+      data-empty-browse-demos={t.cart.emptyBrowseDemos}
+      data-demos-path={navLinks.demos}
       data-suffix-month={t.cart.suffixMonth}
       data-suffix-year={t.cart.suffixYear}
       data-suffix-one-time={t.cart.suffixOneTime}
@@ -897,6 +988,19 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
           <div class="cart-drawer-empty">{t.cart.emptyTitle}<br/>{t.cart.emptyHint}</div>
         </div>
         <button type="button" class="cart-empty-all" data-cart-empty-all hidden>{t.cart.emptyAll}</button>
+        <!-- Bundle suggestion: Local SEO + Reviews cost more than the Lead
+             Pack that covers both. Filled + shown by cart-ui.ts only when
+             both are in the cart and the Pack isn't. -->
+        <div
+          class="cart-pack-suggest"
+          data-pack-suggest
+          data-pack-suggest-template={t.cart.packSuggest}
+          data-pack-name={t.pricing.bundles.lead.name}
+          hidden
+        >
+          <p data-pack-suggest-text></p>
+          <button type="button" data-pack-switch>{t.cart.packSwitch}</button>
+        </div>
       </div>
       <div class="cart-drawer-footer">
         <div class="cart-drawer-total">
@@ -917,6 +1021,19 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
         <p class="cart-drawer-note">{t.cart.note}</p>
       </div>
     </aside>
+
+    <!-- Add-to-cart toast: brief confirmation after an add, with a direct
+         path to checkout. Hidden until cart-ui.ts shows it. -->
+    <div
+      class="cart-toast"
+      data-cart-toast
+      data-added-toast={t.cart.addedToast}
+      role="status"
+      hidden
+    >
+      <span data-cart-toast-text></span>
+      <button type="button" data-cart-open>{t.cart.checkout} →</button>
+    </div>
 
     <!-- Cart conflict popup. Hidden until cart-ui.ts shows it: one short
          line explaining why a combination can't be bought, plus buttons
@@ -1090,6 +1207,85 @@ const showStickyCta = stickyCtaProp && pageKey !== "start" && pageKey !== "prici
         text-align: center;
         color: var(--muted);
         padding: 40px 20px;
+      }
+      /* #74: empty-cart quick starter, rendered by cart-ui.ts. */
+      :global(.cart-empty-starter) {
+        display: grid;
+        gap: 10px;
+        padding: 0 20px 20px;
+        text-align: center;
+      }
+      :global(.cart-empty-starter p) {
+        margin: 0;
+        font-size: 0.95rem;
+        color: var(--ink);
+      }
+      :global(.cart-empty-starter .btn) {
+        width: 100%;
+        justify-content: center;
+      }
+      /* Bundle suggestion: a quiet card inside the drawer, not a popup. */
+      .cart-pack-suggest {
+        margin-top: 14px;
+        padding: 14px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--paper-3);
+      }
+      .cart-pack-suggest p {
+        font-size: 13px;
+        line-height: 1.55;
+        color: var(--ink-3);
+      }
+      .cart-pack-suggest button {
+        margin-top: 10px;
+        border: 0;
+        border-radius: 999px;
+        padding: 9px 16px;
+        background: var(--ink);
+        color: var(--paper);
+        font: inherit;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      /* Add-to-cart toast: dark pill, bottom center, above the drawer. */
+      .cart-toast {
+        position: fixed;
+        left: 50%;
+        bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+        transform: translate(-50%, 16px);
+        z-index: 120;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        max-width: calc(100vw - 32px);
+        padding: 12px 12px 12px 18px;
+        border-radius: 999px;
+        background: var(--ink);
+        color: var(--paper);
+        font-size: 13.5px;
+        font-weight: 600;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+        opacity: 0;
+        transition: opacity .25s ease, transform .25s cubic-bezier(.16, 1, .3, 1);
+        pointer-events: none;
+      }
+      .cart-toast.is-visible {
+        opacity: 1;
+        transform: translate(-50%, 0);
+        pointer-events: auto;
+      }
+      .cart-toast button {
+        flex: none;
+        border: 0;
+        border-radius: 999px;
+        padding: 8px 14px;
+        background: var(--paper);
+        color: var(--ink);
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
       }
       :global(.cart-item) {
         display: flex;

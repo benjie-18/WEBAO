@@ -140,8 +140,8 @@ test('every footnote reference resolves to a terms note in both languages', () =
   const sectionNotes = termSections.flatMap((section) => [...section.notes]);
   assert.deepEqual(
     [...sectionNotes].sort((a, b) => a - b),
-    Array.from({ length: 31 }, (_, i) => i + 1),
-    'the six sections cover notes 1..31 exactly once',
+    Array.from({ length: 34 }, (_, i) => i + 1),
+    'the six sections cover notes 1..34 exactly once',
   );
   for (const note of referenced) {
     assert.ok(sectionNotes.includes(note), `note ${note} belongs to a section`);
@@ -150,7 +150,7 @@ test('every footnote reference resolves to a terms note in both languages', () =
 
 test('terms notes have the same structure in both languages', () => {
   const noteIds = Object.keys(en.terms.notes).map(Number).sort((a, b) => a - b);
-  assert.deepEqual(noteIds, Array.from({ length: 31 }, (_, i) => i + 1));
+  assert.deepEqual(noteIds, Array.from({ length: 34 }, (_, i) => i + 1));
   assert.deepEqual(Object.keys(fr.terms.notes).map(Number).sort((a, b) => a - b), noteIds);
   for (const id of noteIds) {
     const english = en.terms.notes[String(id)];
@@ -250,6 +250,95 @@ test('the contact form marks the fields that failed, like the start page', () =>
     'the selection error is announced to screen readers',
   );
   assert.equal(startPage.includes('data-astro-reload'), false, 'the start form has no dead reload attribute');
+});
+
+test('the hero shows a random live demo and the intro lives only in the archive', () => {
+  const home = read('src/components/pages/HomePage.astro');
+  assert.ok(home.includes('<HeroPreview locale={locale} />'), 'the hero renders the live demo preview');
+  assert.equal(home.includes('hero-stars'), false, 'the hero stars are gone');
+  assert.ok(
+    home.includes('<a href={paths.pricing} class="btn btn--on-dark btn--lg">{t.home.finalCta.ctaPrimary}</a>'),
+    'the final CTA is one normal button',
+  );
+  assert.equal(home.includes('cta-statement-title'), false, 'the final CTA title is gone');
+  assert.equal(home.includes('btn--crack'), false, 'the crack button is gone');
+  const preview = read('src/components/home/HeroPreview.astro');
+  assert.ok(preview.includes('Math.floor(Math.random() * demos.length)'), 'the preview picks a random demo on every load');
+  assert.ok(preview.includes('liveDemoIds'), 'the preview draws from the live demos only');
+  // Intro archived, not live.
+  assert.ok(existsSync('src/archive/intro-animation/IntroSequence.astro'), 'the archived intro component exists');
+  assert.ok(existsSync('src/archive/intro-animation/README.md'), 'the archive explains how to restore it');
+  assert.equal(existsSync('src/components/anim/IntroSequence.astro'), false, 'the live intro component is gone');
+  assert.equal(existsSync('src/lib/intro/config.ts'), false, 'the live intro config is gone');
+  assert.equal(existsSync('src/lib/intro/engine.ts'), false, 'the live intro engine is gone');
+  assert.equal(existsSync('tests/intro-engine.test.ts'), false, 'the live intro test is gone');
+  const indexEn = read('src/pages/index.astro');
+  assert.equal(indexEn.includes('IntroSequence'), false, 'the EN home page no longer renders the intro');
+  const indexFr = read('src/pages/fr/index.astro');
+  assert.equal(indexFr.includes('IntroSequence'), false, 'the FR home page no longer renders the intro');
+});
+
+test('the header dropdown carries the client portal and the estimator uses current tiers', () => {
+  const layout = read('src/layouts/BaseLayout.astro');
+  assert.ok(layout.includes('data-mega-trigger'), 'the header has the Services dropdown trigger');
+  assert.ok(layout.includes('data-mega-panel'), 'the header has the dropdown panel');
+  assert.ok(layout.includes('data-mega-scrim'), 'the dropdown has a scrim');
+  assert.ok(layout.includes('href={navLinks.portal}'), 'the client portal is in the header dropdown');
+  assert.ok(layout.includes('href={navLinks.serviceHosting}'), 'hosting is in the dropdown');
+  assert.ok(layout.includes('href={navLinks.serviceMontreal}'), 'Montreal is in the dropdown');
+  const panel = layout.split('id="mobile-panel"')[1];
+  assert.ok(panel.includes('href={navLinks.portal}'), 'the mobile panel has the portal link');
+  assert.ok(panel.includes('href={navLinks.serviceDesign}'), 'the mobile panel has the services link');
+  const estimator = read('src/components/pricing/PlanEstimator.astro');
+  assert.ok(estimator.includes('value="5"'), 'the quiz offers 1 to 5 pages');
+  assert.ok(estimator.includes('value="10"'), 'the quiz offers 5 to 10 pages');
+  assert.ok(estimator.includes('value="20"'), 'the quiz offers 10 to 20 pages');
+  assert.ok(estimator.includes('if (pages === "20") id = "scale";'), '10 to 20 pages recommends Scale');
+  assert.ok(estimator.includes('else if (pages === "10" || job !== "inform") id = "grow";'), '5 to 10 pages, or a booking/sales job, recommends Grow');
+  const en = read('src/lib/i18n/en.ts');
+  assert.ok(en.includes('title: "Find your plan in 5 seconds"'), 'the quiz title is 5 seconds, not 15');
+  assert.ok(en.includes('one channel from C$649.99/mo'), 'the ads note carries the current single-channel price');
+  const home = read('src/components/pages/HomePage.astro');
+  assert.ok(home.includes('<PlanEstimator locale={locale} />'), 'the home page shows the quiz');
+  const pricing = read('src/components/pages/PricingPage2.astro');
+  assert.ok(pricing.includes('<PlanEstimator locale={locale} showCompare={false} />'), 'the live pricing page shows the quiz without the compare link');
+});
+
+test('the services home and branch pages exist, with the model page treatment', () => {
+  for (const [path, key, schema] of [
+    ['src/pages/services/index.astro', 'services', 'WEBAO services'],
+    ['src/pages/services/websites/index.astro', 'serviceWebsites', 'Website design and monthly plans'],
+    ['src/pages/services/ads/index.astro', 'serviceAds', 'Ads Packages'],
+    ['src/pages/services/ai/index.astro', 'serviceAi', 'AI services'],
+    ['src/pages/fr/services/index.astro', 'services', 'Services WEBAO'],
+    ['src/pages/fr/services/sites-web/index.astro', 'serviceWebsites', 'Conception de site web et forfaits mensuels'],
+    ['src/pages/fr/services/publicite/index.astro', 'serviceAds', 'Forfaits publicitaires'],
+    ['src/pages/fr/services/ia/index.astro', 'serviceAi', 'Services IA'],
+  ] as const) {
+    const page = read(path);
+    assert.ok(page.includes('<ServicePage'), `${path} uses the shared service page`);
+    assert.ok(page.includes(`pageKey="${key}"`), `${path} carries pageKey ${key}`);
+    assert.ok(page.includes(`name: "${schema}"`), `${path} carries its Service schema`);
+    assert.ok(page.includes('serviceSchema={{'), `${path} carries its Service schema`);
+  }
+  const servicePage = read('src/components/pages/ServicePage.astro');
+  assert.ok(servicePage.includes('<RelatedDemos locale={locale} />'), 'service pages show three demo directions');
+  assert.ok(servicePage.includes('t.ctaBand.title'), 'service pages end with the what-next band');
+  const related = read('src/components/RelatedDemos.astro');
+  assert.ok(related.includes('{d.tone}'), 'related demos show the demo tone');
+  assert.equal(related.includes('localizedTone'), false, 'no localized tone field is used');
+});
+
+test('the audit pages show what a report looks like, labelled as an example', () => {
+  // The sample scores are illustrative, so the page says so in both
+  // locales; a real audit result never appears on the landing page.
+  const enAudit = read('src/pages/audit.astro');
+  assert.ok(enAudit.includes('What a report looks like'), 'the EN audit page has the sample-report section');
+  assert.ok(enAudit.includes('Example scores for an example site, not a real audit.'), 'the EN sample is labelled as an example');
+  assert.ok(enAudit.includes('52/100') && enAudit.includes('61/100') && enAudit.includes('48/100'), 'the EN sample shows three example scores');
+  const frAudit = read('src/pages/fr/eval.astro');
+  assert.ok(frAudit.includes('À quoi ressemble un rapport'), 'the FR audit page has the sample-report section');
+  assert.ok(frAudit.includes("Scores d'exemple pour un site fictif, pas un vrai audit."), 'the FR sample is labelled as an example');
 });
 
 test('the image provenance list is well-formed and matches the catalog', () => {
