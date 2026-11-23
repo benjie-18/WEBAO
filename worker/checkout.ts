@@ -162,10 +162,12 @@ export const PRICE_MAP: Record<string, string> = {
   "scale-month": "price_1UO3DtE57vVzxI41h8bSDqZd",
   "scale-year": "price_1UU1M8E57vVzxI419tR3a3Gy",
   "visibility-pack-month": "price_1UehJsE57vVzxI41zns1Z4ma", // C$349.99 (was price_1UO3DzE57vVzxI4199bDK2uj at C$99.99; left active for existing subscribers)
-  // AI services. Receptionist and Follow-up are monthly only; the AI Pack
-  // is yearly available too. No setup fee on any AI service.
+  // AI services. All three are yearly available too (10x monthly,
+  // 2 months free), like the AI Pack. No setup fee on any AI service.
   "ai-receptionist-month": "price_1UYFX9E57vVzxI41tORfQmiE",
+  "ai-receptionist-year": "price_1UezyQE57vVzxI41nUaR5c5W", // C$2,999.90/yr (10x monthly, 2 months free)
   "ai-followup-month": "price_1UYFXJE57vVzxI41rtocXmsu",
+  "ai-followup-year": "price_1UezyUE57vVzxI41x4ty5TIo", // C$999.90/yr (10x monthly, 2 months free)
   "ai-pack-month": "price_1UZg5vE57vVzxI41U5J4rBPd", // C$399.99 (was price_1UYFXOE57vVzxI41aR00rKZe at C$449.99; left active for existing subscribers)
   "ai-pack-year": "price_1UZhOPE57vVzxI41KxH5xHzf", // C$3,999.90/yr (10x monthly, 2 months free)
   "visibility-pack-year": "price_1UehJwE57vVzxI41unkN2eaa", // C$3,499.90/yr (10x monthly, 2 months free)

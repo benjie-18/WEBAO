@@ -61,7 +61,7 @@ const recs = {
   "ads-meta": rec("ads-meta", `${ap.name} (${ap.metaLabel})`, ap.metaPrice, "", e.whyAdsSingle),
   "ads-google": rec("ads-google", `${ap.name} (${ap.googleLabel})`, ap.metaPrice, "", e.whyAdsSingle),
   "ads-both": rec("ads-both", `${ap.name} (${ap.bothLabel})`, ap.bothPrice, "", e.whyAdsBoth),
-  "ai-receptionist": rec("ai-receptionist", t.start.selection.aiReceptionist, ai.receptionistPrice, "", e.whyReceptionist),
+  "ai-receptionist": rec("ai-receptionist", t.start.selection.aiReceptionist, ai.receptionistPrice, yearlyLabel(cartProducts["ai-receptionist"]?.yearCents ?? 0), e.whyReceptionist),
   aichat: rec(
     "aichat",
     t.start.selection.aiChat,
@@ -69,7 +69,7 @@ const recs = {
     yearlyLabel(cartProducts["aichat"]?.yearCents ?? 0),
     e.whyOnlineReceptionist,
   ),
-  "ai-followup": rec("ai-followup", t.start.selection.aiFollowup, ai.followupPrice, "", e.whyFollowup),
+  "ai-followup": rec("ai-followup", t.start.selection.aiFollowup, ai.followupPrice, yearlyLabel(cartProducts["ai-followup"]?.yearCents ?? 0), e.whyFollowup),
   "ai-pack": rec("ai-pack", t.start.selection.aiPack, ai.packPrice, stripParens(ai.packYearlyPrice), e.whyAiPack),
   "growth-engine": rec("growth-engine", t.pricing.bundles.engine.name, t.pricing.bundles.engine.price, "", e.whyGrowthEngine),
 };

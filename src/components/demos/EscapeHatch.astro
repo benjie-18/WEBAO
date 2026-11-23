@@ -24,6 +24,19 @@ const label = locale === "fr" ? "Retour aux démos · démo fictive" : "Back to 
   <span class="demo-exit-note">{locale === "fr" ? "démo fictive" : "fictional demo"}</span>
 </a>
 
+<script is:inline>
+  // The exit pill belongs on the standalone demo page. Inside an iframe
+  // (the home hero preview, Quick Look) the host already provides close
+  // and open controls, so the pill only covers the demo it sits on.
+  // Runs inline, right after the pill, so a framed page never paints it.
+  try {
+    if (window.self !== window.top) {
+      var __exit = document.querySelector(".demo-exit");
+      if (__exit) __exit.style.display = "none";
+    }
+  } catch (e) {}
+</script>
+
 <style>
   .demo-exit {
     position: fixed;

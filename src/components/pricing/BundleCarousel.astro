@@ -184,7 +184,7 @@ const names = bundles.map((bd) => tb[bd.id].name);
 
   .bcard {
     position: absolute;
-    top: 44%;
+    top: 42%;
     left: 50%;
     width: min(560px, 88vw);
     translate: -50% -50%;
@@ -193,9 +193,16 @@ const names = bundles.map((bd) => tb[bd.id].name);
        back shows its content mirrored (reversed text) around the front
        card's edges at rest. */
     backface-visibility: hidden;
-    /* Short viewports (landscape phones): shrink cards to fit instead of
-       clipping them. `scale` composes with the JS-driven transform. */
-    scale: min(1, calc((100svh - 100px) / 560px));
+    /* Short viewports: shrink cards to fit instead of clipping them.
+       `scale` composes with the JS-driven transform. The divisor (720px)
+       is the tallest bundle card's height with room to spare; the 280px
+       reserve is the progress UI at the stage bottom (pills + rail +
+       arrows, ~130px) plus the card's contact shadow (~45px) and margin,
+       so the front card's bottom edge never reaches the pills. Without
+       the reserve the tallest card covered the pills on short viewports:
+       the old formula only subtracted 100px and divided by 560px, which
+       assumed a shorter card and no UI zone. */
+    scale: min(1, calc((100svh - 280px) / 720px));
   }
 
   /* Soft contact shadow floating behind/below each card in 3D space. */
@@ -430,6 +437,14 @@ const names = bundles.map((bd) => tb[bd.id].name);
     var cardCount = cards.length;
     var degPerCard = 360 / cardCount; // angular spacing between adjacent cards
     var segCount = Math.max(cardCount - 1, 1); // scroll segments between first/last card
+    // Full carousel progress is reached at 70% of the scroll distance,
+    // leaving 30% as trailing breathing room: every place that converts
+    // a progress value back into a scroll position must use this same
+    // factor, or the pill/arrow targets land past the card they name.
+    // (goTo and the snap correction both used the full distance, so the
+    // third card's target read as progress 0.95 and rounded up to the
+    // fourth: its pill could never be landed on.)
+    var progressEnd = 0.7;
     var current = 0; // eased scroll progress (what the ring shows)
     var target = 0; // raw scroll progress (where the ring is heading)
     var ticking = false;
@@ -467,7 +482,7 @@ const names = bundles.map((bd) => tb[bd.id].name);
       if (scrollTotal <= 0) return 0;
       // Reach full progress at 70% of scroll distance, leaving 30% as
       // trailing breathing room after the last card settles into view.
-      return clamp01(((window.scrollY - scrollTop) / scrollTotal) / 0.7);
+      return clamp01(((window.scrollY - scrollTop) / scrollTotal) / progressEnd);
     }
     function segIndex(p) {
       return Math.max(0, Math.min(cardCount - 1, Math.round(p * segCount)));
@@ -595,7 +610,7 @@ const names = bundles.map((bd) => tb[bd.id].name);
             var top = scroll.getBoundingClientRect().top + window.scrollY;
             var total = scroll.offsetHeight - window.innerHeight;
             snapY0 = window.scrollY;
-            snapY = top + nearest * total;
+            snapY = top + nearest * progressEnd * total;
             snapDir = snapY >= snapY0 ? 1 : -1;
             snapping = true;
             try {
@@ -616,9 +631,9 @@ const names = bundles.map((bd) => tb[bd.id].name);
       var top = scroll.getBoundingClientRect().top + window.scrollY;
       var total = scroll.offsetHeight - window.innerHeight;
       try {
-        window.scrollTo({ top: top + (i / segCount) * total, behavior: "smooth" });
+        window.scrollTo({ top: top + (i / segCount) * progressEnd * total, behavior: "smooth" });
       } catch (e) {
-        window.scrollTo(0, top + (i / segCount) * total);
+        window.scrollTo(0, top + (i / segCount) * progressEnd * total);
       }
     }
 

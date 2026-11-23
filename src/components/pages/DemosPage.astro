@@ -786,7 +786,7 @@ const families = styleFamilies;
   .chip:hover { background: var(--paper-3); }
   .chip--active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
   .demo-grid { display:grid; grid-template-columns: repeat(3,1fr); gap:16px; }
-  .demo-thumb { position:relative; min-height: 220px; padding:16px; display:flex; flex-direction:column; justify-content:space-between; overflow:clip; }
+  .demo-thumb { position:relative; min-height: 220px; padding:16px; display:flex; flex-direction:column; justify-content:space-between; overflow:clip; flex: 1; }
   .demo-thumb::after { content:""; position:absolute; inset:0; background: radial-gradient(400px 200px at 80% 20%, rgba(255,255,255,.18) 0%, transparent 60%), linear-gradient(180deg, rgba(0,0,0,.08) 0%, rgba(0,0,0,.22) 100%); pointer-events:none; }
   .thumb-inner { position:relative; z-index:1; }
   .thumb-bar { font-size:10px; color: rgba(255,255,255,.72); letter-spacing:.08em; }

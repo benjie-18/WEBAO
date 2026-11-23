@@ -201,25 +201,10 @@ const selected = variants[0];
     var includeEl = root.querySelector("[data-ads-include]");
     var btn = root.querySelector("[data-ads-cta]") as HTMLElement | null;
     var adsKeys = ["ads-pack-month", "ads-meta-month", "ads-google-month", "ads-both-month"];
-    // Starter test is Meta-only and monthly-only: show it for Meta on the
-    // monthly term, hide it for Google/Both and when yearly is selected.
-    // The billing term lives in localStorage (same key as cart-ui).
-    // The element is re-queried each time so a ClientRouter remount cannot
-    // leave this pointing at a detached card.
-    function isYearlyBilling() {
-      try {
-        return window.localStorage.getItem("webao_billing_v1") === "year";
-      } catch (e) {
-        return false;
-      }
-    }
-    function syncStarter(product: string) {
-      var live = document.querySelector("[data-ads-starter]") as HTMLElement | null;
-      if (!live) return;
-      live.hidden = product !== "ads-meta" || isYearlyBilling();
-    }
-    var checkedInput = root.querySelector('input[name="ads-channel"]:checked') as HTMLInputElement | null;
-    if (checkedInput) syncStarter(checkedInput.dataset.product || "");
+    // The Starter test is a separate trial block inside this card, always
+    // visible: it is Meta-only and monthly-only by its own copy, and its
+    // add button always adds the monthly trial, whatever channel the
+    // picker shows or which billing term is active.
     root.addEventListener("change", function (event) {
       var input = event.target as HTMLInputElement | null;
       if (!input || input.name !== "ads-channel" || !input.checked) return;
@@ -227,7 +212,6 @@ const selected = variants[0];
       if (setupEl) setupEl.textContent = input.dataset.setup || "";
       if (budgetEl) budgetEl.textContent = input.dataset.budget || "";
       if (includeEl) includeEl.textContent = input.dataset.include || "";
-      syncStarter(input.dataset.product || "");
       if (btn) {
         btn.dataset.product = input.dataset.product || "";
         btn.dataset.name = input.dataset.name || "";
@@ -273,30 +257,6 @@ const selected = variants[0];
         // Cart swap is a convenience; the button still adds the new variant.
       }
     });
-    // Re-check the Starter when the billing term changes. The toggle lives
-    // outside this card; its handler (cart-ui applyBilling) dispatches
-    // webao:billing-change after storing the new term, so this always reads
-    // the new value. A document click listener cannot do that: this card's
-    // script registers before cart-ui's, so the click handler runs before
-    // the toggle writes and reads the old term, which left the card visible
-    // on Yearly and hidden again on Monthly until a reload. A storage
-    // listener covers a term change from another tab. The cart-change event
-    // is not used: it only fires when cart items actually convert, never
-    // with an empty cart. Bound once per document; the handler re-queries
-    // the live card.
-    var docState = document as unknown as Record<string, unknown>;
-    if (!docState.__webaoStarterBillingBound) {
-      docState.__webaoStarterBillingBound = true;
-      window.addEventListener("webao:billing-change", function () {
-        var checked = document.querySelector('input[name="ads-channel"]:checked') as HTMLInputElement | null;
-        if (checked) syncStarter(checked.dataset.product || "");
-      });
-      window.addEventListener("storage", function (event) {
-        if (event.key !== "webao_billing_v1") return;
-        var checked = document.querySelector('input[name="ads-channel"]:checked') as HTMLInputElement | null;
-        if (checked) syncStarter(checked.dataset.product || "");
-      });
-    }
   }
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", initAdsPack);
@@ -443,9 +403,6 @@ const selected = variants[0];
     justify-content: space-between;
     align-items: flex-start;
     gap: 12px;
-  }
-  .bc-starter[hidden] {
-    display: none;
   }
   .bc-starter .bc-label {
     margin-top: 0;

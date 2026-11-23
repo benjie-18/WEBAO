@@ -83,13 +83,12 @@ const catalog = {
   // admin panel, Coupons tab, and is never shown on the site).
   "website-touchup": { product: "website-touchup", type: "addon", oneTimeCents: 19999 },
 
-  /* ── AI services (monthly only, like the Ads Pack), except the AI Pack,
-     which is yearly available too (2 months free, like the plans). No
-     setup fee on any AI service. The chat service is the Online
+  /* ── AI services, yearly available like the plans (2 months free:
+     yearly = 10x monthly). The chat service is the Online
      Receptionist (aichat, in the add-ons below): one product, C$149.99/mo,
-     yearly available, no setup fee. */
-  "ai-receptionist": { product: "ai-receptionist", type: "addon", monthCents: 29999 },
-  "ai-followup": { product: "ai-followup", type: "addon", monthCents: 9999 },
+     yearly available, no setup fee. No setup fee on any AI service. */
+  "ai-receptionist": { product: "ai-receptionist", type: "addon", monthCents: 29999, yearCents: 29999 * TEN_MONTHS },
+  "ai-followup": { product: "ai-followup", type: "addon", monthCents: 9999, yearCents: 9999 * TEN_MONTHS },
   "ai-pack": { product: "ai-pack", type: "bundle", monthCents: 39999, yearCents: 39999 * TEN_MONTHS },
 
   /* ── Add-ons (featured group first, then the rest) ───────────────────── */
