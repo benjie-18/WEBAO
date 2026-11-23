@@ -776,9 +776,11 @@ export function renderDrawer(doc: Document): void {
   });
 
   // Bundle suggestion: Local SEO + Reviews together cost more than the
-  // Lead Pack that covers both. Shown only when both are in the cart and
-  // the Pack isn't, with the saving computed from the catalog prices for
-  // the cart's own billing interval.
+  // Lead Pack that covers both, and the Pack also includes the Online
+  // Receptionist, so the saving is counted against the Pack's full
+  // individual value. Shown only when both are in the cart and the Pack
+  // isn't, with the saving computed from the catalog prices for the
+  // cart's own billing interval.
   const suggest = doc.querySelector<HTMLElement>("[data-pack-suggest]");
   if (suggest) {
     const seo = items.find((item) => item.product === "localseo");
@@ -786,16 +788,19 @@ export function renderDrawer(doc: Document): void {
     const pack = items.find((item) => item.product === "lead-pack");
     if (seo && review && !pack && seo.interval === review.interval) {
       const packCents = priceCentsFor("lead-pack", seo.interval);
+      const aichatCents = priceCentsFor("aichat", seo.interval);
       const combined = seo.priceCents + review.priceCents;
-      if (packCents !== undefined && combined > packCents) {
+      const value = combined + (aichatCents ?? 0);
+      if (packCents !== undefined && value > packCents) {
         const suffix = intervalSuffix(doc, seo.interval);
         const textEl = suggest.querySelector<HTMLElement>("[data-pack-suggest-text]");
-        const template = suggest.dataset.packSuggestTemplate ?? "Local SEO + Reviews cost {combined}. The Lead Pack covers both for {pack}, saving you {save}.";
+        const template = suggest.dataset.packSuggestTemplate ?? "Local SEO + Reviews cost {combined}. The Lead Pack covers both, plus the Online Receptionist, for {pack}, {value} of services, saving you {save}.";
         if (textEl) {
           textEl.textContent = template
             .replace("{combined}", formatMoney(combined, fmt) + suffix)
             .replace("{pack}", formatMoney(packCents, fmt) + suffix)
-            .replace("{save}", formatMoney(combined - packCents, fmt) + suffix);
+            .replace("{value}", formatMoney(value, fmt) + suffix)
+            .replace("{save}", formatMoney(value - packCents, fmt) + suffix);
         }
         suggest.hidden = false;
       } else {

@@ -86,7 +86,7 @@ const catalog = {
   /* ── AI services (monthly only, like the Ads Pack), except the AI Pack,
      which is yearly available too (2 months free, like the plans). No
      setup fee on any AI service. The chat service is the Online
-     Receptionist (aichat, in the add-ons below): one product, C$99.99/mo,
+     Receptionist (aichat, in the add-ons below): one product, C$149.99/mo,
      yearly available, no setup fee. */
   "ai-receptionist": { product: "ai-receptionist", type: "addon", monthCents: 29999 },
   "ai-followup": { product: "ai-followup", type: "addon", monthCents: 9999 },
@@ -95,9 +95,9 @@ const catalog = {
   /* ── Add-ons (featured group first, then the rest) ───────────────────── */
   localseo: { product: "localseo", type: "addon", monthCents: 15999, yearCents: 15999 * TEN_MONTHS },
   booking: { product: "booking", type: "addon", monthCents: 4999, yearCents: 4999 * TEN_MONTHS },
-  review: { product: "review", type: "addon", monthCents: 39999, yearCents: 39999 * TEN_MONTHS },
+  review: { product: "review", type: "addon", monthCents: 34999, yearCents: 34999 * TEN_MONTHS },
   ecommerce: { product: "ecommerce", type: "addon", monthCents: 5999, yearCents: 5999 * TEN_MONTHS },
-  aichat: { product: "aichat", type: "addon", monthCents: 9999, yearCents: 9999 * TEN_MONTHS },
+  aichat: { product: "aichat", type: "addon", monthCents: 14999, yearCents: 14999 * TEN_MONTHS },
   blog: { product: "blog", type: "addon", monthCents: 1999, yearCents: 1999 * TEN_MONTHS },
   // Weekly SEO Blog: a new SEO blog post every week, written for the
   // business and published to its site. Distinct from DIY Blog Page,
