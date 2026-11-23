@@ -247,7 +247,7 @@ test('an empty cart is seeded with the Grow plan and says so', () => {
 
 test('a visitor arriving with a cart keeps exactly that cart', () => {
   const launch = planItem('launch', 'Launch', 'year')!;
-  const extra: CartItem = { key: 'extrapage-one-time', product: 'extrapage', name: 'Extra Page', priceCents: 4499, interval: 'one-time', type: 'addon' };
+  const extra: CartItem = { key: 'extrapage-one-time', product: 'extrapage', name: 'Extra Page', priceCents: 1499, interval: 'one-time', type: 'addon' };
   const { window, doc, cart, radio, price } = fixture({ cart: [launch, extra], billing: 'year' });
   assert.deepEqual(
     cart().map((item) => item.key),
@@ -260,12 +260,12 @@ test('a visitor arriving with a cart keeps exactly that cart', () => {
   const extras = doc.querySelector<HTMLElement>('[data-start-extras]')!;
   assert.equal(extras.hidden, false);
   assert.match(extras.textContent ?? '', /Extra Page/);
-  assert.match(extras.textContent ?? '', /C\$44\.99 one-time/);
+  assert.match(extras.textContent ?? '', /C\$14\.99 one-time/);
   assert.equal(
     extras.querySelector('[data-remove-key="extrapage-one-time"]')!.getAttribute('aria-label'),
     'Remove Extra Page',
   );
-  assert.equal(doc.querySelector('[data-start-total]')!.textContent, 'C$944.89');
+  assert.equal(doc.querySelector('[data-start-total]')!.textContent, 'C$914.89');
   window.close();
 });
 
@@ -330,7 +330,7 @@ test('the yearly toggle converts the AI Pack to its yearly price', () => {
 });
 
 test('removing an add-on from the selection card updates the cart', () => {
-  const extra: CartItem = { key: 'extrapage-one-time', product: 'extrapage', name: 'Extra Page', priceCents: 4499, interval: 'one-time', type: 'addon' };
+  const extra: CartItem = { key: 'extrapage-one-time', product: 'extrapage', name: 'Extra Page', priceCents: 1499, interval: 'one-time', type: 'addon' };
   const { window, doc, cart, click, summary } = fixture({ cart: [planItem('grow', 'Grow', 'month')!, extra] });
   click(doc.querySelector('[data-remove-key="extrapage-one-time"]'));
   assert.deepEqual(
@@ -486,7 +486,7 @@ test('French pages hand over to the French checkout with French money', () => {
 });
 
 test('add-ons without a plan can continue, with a hint', () => {
-  const extra: CartItem = { key: 'extrapage-one-time', product: 'extrapage', name: 'Extra Page', priceCents: 4499, interval: 'one-time', type: 'addon' };
+  const extra: CartItem = { key: 'extrapage-one-time', product: 'extrapage', name: 'Extra Page', priceCents: 1499, interval: 'one-time', type: 'addon' };
   const { window, doc, cart, fill, submit, navigations } = fixture({ cart: [extra] });
   // No seeding: the visitor already chose something.
   assert.deepEqual(

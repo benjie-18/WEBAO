@@ -98,14 +98,14 @@ const catalog = {
   review: { product: "review", type: "addon", monthCents: 39999, yearCents: 39999 * TEN_MONTHS },
   ecommerce: { product: "ecommerce", type: "addon", monthCents: 5999, yearCents: 5999 * TEN_MONTHS },
   aichat: { product: "aichat", type: "addon", monthCents: 9999, yearCents: 9999 * TEN_MONTHS },
-  blog: { product: "blog", type: "addon", monthCents: 3499, yearCents: 3499 * TEN_MONTHS },
+  blog: { product: "blog", type: "addon", monthCents: 1999, yearCents: 1999 * TEN_MONTHS },
   // Weekly SEO Blog: a new SEO blog post every week, written for the
   // business and published to its site. Distinct from DIY Blog Page,
   // which is for posts the client writes themselves.
-  "seo-blog": { product: "seo-blog", type: "addon", monthCents: 3999, yearCents: 3999 * TEN_MONTHS },
+  "seo-blog": { product: "seo-blog", type: "addon", monthCents: 2999, yearCents: 2999 * TEN_MONTHS },
   email: { product: "email", type: "addon", monthCents: 2999, yearCents: 2999 * TEN_MONTHS },
   report: { product: "report", type: "addon", monthCents: 2999, yearCents: 2999 * TEN_MONTHS },
-  extrapage: { product: "extrapage", type: "addon", oneTimeCents: 4499 },
+  extrapage: { product: "extrapage", type: "addon", oneTimeCents: 1499 },
   priority: { product: "priority", type: "addon", monthCents: 5999, yearCents: 5999 * TEN_MONTHS },
   admin: { product: "admin", type: "addon", monthCents: 3999, yearCents: 3999 * TEN_MONTHS },
   quotephoto: { product: "quotephoto", type: "addon", monthCents: 999, yearCents: 999 * TEN_MONTHS },

@@ -111,7 +111,7 @@ export const MONTHLY_PRICE_CENTS: Record<string, number> = {
   "visibility-pack": 34999,
   "growth-bundle": 54999,
   "growth-engine": 89999,
-  "seo-blog": 3999,
+  "seo-blog": 2999,
   "ads-pack": 64999,
   "ads-meta": 64999,
   "ads-google": 64999,
@@ -128,7 +128,7 @@ export const MONTHLY_PRICE_CENTS: Record<string, number> = {
   admin: 3999,
   quotephoto: 999,
   ecommerce: 5999,
-  blog: 3499,
+  blog: 1999,
   email: 2999,
   priority: 5999,
 };

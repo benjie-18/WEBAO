@@ -101,7 +101,7 @@ function fixture(options: { french?: boolean; cart?: CartItem[] } = {}) {
         <button type="button" class="cart-btn" data-cart-btn data-key="growth-engine-month" data-product="growth-engine"
           data-name="Growth Engine" data-price-cents="89999" data-interval="month" data-type="bundle"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="seo-blog-month" data-product="seo-blog"
-          data-name="Weekly SEO Blog" data-price-cents="3999" data-interval="month" data-type="addon" data-price-year="39990"></button>
+          data-name="Weekly SEO Blog" data-price-cents="2999" data-interval="month" data-type="addon" data-price-year="29990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="ai-pack-month" data-product="ai-pack"
           data-name="AI Pack" data-price-cents="39999" data-interval="month" data-type="bundle" data-price-year="399990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="localseo-month" data-product="localseo"
@@ -109,7 +109,7 @@ function fixture(options: { french?: boolean; cart?: CartItem[] } = {}) {
         <button type="button" class="cart-btn" data-cart-btn data-key="review-month" data-product="review"
           data-name="Review Generation Engine" data-price-cents="39999" data-interval="month" data-type="addon" data-price-year="399990"></button>
         <button type="button" class="cart-btn" data-cart-btn data-key="extrapage-one-time" data-product="extrapage"
-          data-name="Extra Page" data-price-cents="4499" data-interval="one-time" data-type="addon"></button>
+          data-name="Extra Page" data-price-cents="1499" data-interval="one-time" data-type="addon"></button>
       </main>
       <div class="cart-overlay" data-cart-overlay hidden></div>
       <aside class="cart-drawer" ${attrs} data-cart-drawer hidden>
@@ -253,8 +253,8 @@ test('only one plan at a time, add-ons stack, totals add up', () => {
   click(button('review'));
   click(button('extrapage'));
   assert.deepEqual(cart().map((i) => i.key), ['grow-month', 'review-month', 'extrapage-one-time']);
-  assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$594.97');
-  assert.match(doc.querySelector('[data-cart-items]')!.textContent ?? '', /C\$44\.99 one-time/);
+  assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$564.97');
+  assert.match(doc.querySelector('[data-cart-items]')!.textContent ?? '', /C\$14\.99 one-time/);
   assert.equal(doc.querySelector('[data-cart-count]')!.textContent, '3');
 });
 
@@ -269,13 +269,13 @@ test('the yearly toggle prices every recurring item, one-time items untouched', 
   assert.deepEqual(cart().map((i) => [i.key, i.priceCents]), [
     ['launch-year', 89990],
     ['review-year', 399990],
-    ['extrapage-one-time', 4499],
+    ['extrapage-one-time', 1499],
   ]);
   assert.equal(doc.querySelector('[data-billing-opt="year"]')!.getAttribute('aria-pressed'), 'true');
   assert.equal(doc.querySelector('[data-billing-opt="year"]')!.classList.contains('is-active'), true);
   assert.equal(doc.querySelector('[data-billing-opt="month"]')!.classList.contains('is-active'), false);
   assert.equal(button('launch')!.classList.contains('is-added'), true, 'the yearly button stays marked');
-  assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$4,944.79');
+  assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$4,914.79');
   assert.match(doc.querySelector('[data-cart-items]')!.textContent ?? '', /C\$899\.90\/yr/);
 
   // A button clicked while yearly adds the yearly price, and plans still
@@ -289,7 +289,7 @@ test('the yearly toggle prices every recurring item, one-time items untouched', 
   click(doc.querySelector('[data-billing-opt="month"]'));
   assert.deepEqual(cart().map((i) => [i.key, i.priceCents]), [
     ['review-month', 39999],
-    ['extrapage-one-time', 4499],
+    ['extrapage-one-time', 1499],
     ['grow-month', 14999],
   ]);
   assert.equal(window.localStorage.getItem(BILLING_KEY), 'month');
@@ -493,13 +493,13 @@ test('billing changes only touch recurring items', () => {
     STORAGE_KEY,
     JSON.stringify([
       { key: cartKey('launch', 'month'), product: 'launch', name: 'Launch', priceCents: 8999, interval: 'month', type: 'plan' },
-      { key: cartKey('extrapage', 'one-time'), product: 'extrapage', name: 'Extra Page', priceCents: 4499, interval: 'one-time', type: 'addon' },
+      { key: cartKey('extrapage', 'one-time'), product: 'extrapage', name: 'Extra Page', priceCents: 1499, interval: 'one-time', type: 'addon' },
     ]),
   );
   applyBilling(doc, 'year');
   assert.deepEqual(cart().map((i) => [i.key, i.priceCents]), [
     ['launch-year', 89990],
-    ['extrapage-one-time', 4499],
+    ['extrapage-one-time', 1499],
   ]);
   window.close();
 });
