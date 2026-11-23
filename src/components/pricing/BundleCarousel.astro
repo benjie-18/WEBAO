@@ -389,6 +389,16 @@ const names = bundles.map((bd) => tb[bd.id].name);
   }
 
   @media (max-width: 819px) {
+    /* Phones: the 3D ring shrinks the front card to fit a short
+       viewport (scale ~0.53 on a ~660px phone, on a 340px card), so
+       the bundles read tiny. Show the static grid instead: same cards,
+       full size, stacked. Same fallback as reduced motion. */
+    .bundle-scroll {
+      display: none;
+    }
+    .bundle-static {
+      display: block;
+    }
     .bcard {
       width: min(340px, 86vw);
       top: 42%;

@@ -98,8 +98,8 @@ test("monthly-only set matches the catalog", () => {
   );
   assert.ok(!monthlyOnly().has("aichat"), "the online receptionist is yearly available");
   assert.ok(!monthlyOnly().has("ai-pack"), "the AI Pack is yearly available (Benji, 2026-11-08)");
-  assert.ok(!monthlyOnly().has("ai-receptionist"), "the AI Receptionist is yearly available");
-  assert.ok(!monthlyOnly().has("ai-followup"), "the AI Follow-up is yearly available");
+  assert.ok(!monthlyOnly().has("ai-receptionist"), "the Receptionist is yearly available");
+  assert.ok(!monthlyOnly().has("ai-followup"), "the Smart Follow-up is yearly available");
 });
 
 test("monthly price table matches the catalog", () => {

@@ -357,7 +357,7 @@ test('the pricing card buttons wrap instead of cutting the label off', () => {
   assert.match(block, /line-height:\s*1\.35/, 'the wrapped label keeps readable line height');
 });
 
-test('the pricing chooser has no Services pill: Ads, Web and AI only', () => {
+test('the pricing chooser has no Services pill: Ads, Web and Services only', () => {
   // The Services pill showed all three panels at once and was removed:
   // the chooser is three tabs, Web by default.
   const page = read('src/components/pages/PricingPage2.astro');
@@ -398,6 +398,38 @@ test('the bundle carousel cards clear the pills on short viewports', () => {
   assert.ok(carousel.includes('var progressEnd = 0.7;'), 'one shared progress factor');
   assert.ok(carousel.includes('top + (i / segCount) * progressEnd * total'), 'goTo lands on the card it names');
   assert.ok(carousel.includes('snapY = top + nearest * progressEnd * total;'), 'the snap correction lands on the nearest card');
+});
+
+test('the bundle carousel becomes a full-size stacked grid on phones', () => {
+  // On a phone the ring's scale (~0.53 on a ~660px viewport, on a 340px
+  // card) shrank the bundles to ~180px wide. The scroll stage hides and
+  // the static grid shows the same cards full size instead.
+  const carousel = read('src/components/pricing/BundleCarousel.astro');
+  const at = carousel.indexOf('@media (max-width: 819px)');
+  assert.ok(at > 0, 'the phone media query exists');
+  const block = carousel.slice(at, carousel.indexOf('</style>', at));
+  assert.match(block, /\.bundle-scroll\s*\{\s*display:\s*none;\s*\}/, 'the scroll stage hides on phones');
+  assert.match(block, /\.bundle-static\s*\{\s*display:\s*block;\s*\}/, 'the static grid shows on phones');
+});
+
+test('the AI services are named without AI: Receptionist, Smart Follow-up, Services', () => {
+  // The pill, the /start group and the two product names drop "AI":
+  // the tab is Services, the products are Receptionist and Smart Follow-up.
+  const en = read('src/lib/i18n/en.ts');
+  const fr = read('src/lib/i18n/fr.ts');
+  const checkout = read('worker/checkout.ts');
+  assert.ok(en.includes('pillAi: "Services"'), 'the EN pill is Services');
+  assert.ok(fr.includes('pillAi: "Services"'), 'the FR pill is Services');
+  assert.ok(en.includes('aiReceptionist: "Receptionist"'), 'the EN receptionist drops AI');
+  assert.ok(fr.includes('aiReceptionist: "Réceptionniste"'), 'the FR receptionist drops IA');
+  assert.ok(en.includes('aiFollowup: "Smart Follow-up"'), 'the EN follow-up is Smart Follow-up');
+  assert.ok(fr.includes('aiFollowup: "Suivi intelligent"'), 'the FR follow-up is Suivi intelligent');
+  assert.ok(checkout.includes('"ai-receptionist": "Receptionist"'), 'checkout names the Receptionist');
+  assert.ok(checkout.includes('"ai-followup": "Smart Follow-up"'), 'checkout names the Smart Follow-up');
+  for (const [name, src] of [['en', en], ['fr', fr], ['checkout', checkout]]) {
+    assert.ok(!src.includes('AI Receptionist'), `no AI Receptionist left in ${name}`);
+    assert.ok(!src.includes('AI Follow-up'), `no AI Follow-up left in ${name}`);
+  }
 });
 
 test('the AI services are yearly available, like the plans', () => {

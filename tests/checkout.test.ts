@@ -361,11 +361,11 @@ const CONFLICT_CARTS: Array<{ items: string[]; error: string }> = [
   },
   {
     items: ['ai-pack-month', 'aichat-month'],
-    error: 'The AI Pack already includes AI Receptionist, Online Receptionist and AI Follow-up. Buy the pack on its own, or the individual services on their own.',
+    error: 'The AI Pack already includes Receptionist, Online Receptionist and Smart Follow-up. Buy the pack on its own, or the individual services on their own.',
   },
   {
     items: ['ai-pack-year', 'aichat-year'],
-    error: 'The AI Pack already includes AI Receptionist, Online Receptionist and AI Follow-up. Buy the pack on its own, or the individual services on their own.',
+    error: 'The AI Pack already includes Receptionist, Online Receptionist and Smart Follow-up. Buy the pack on its own, or the individual services on their own.',
   },
   {
     items: ['grow-year', 'ads-meta-month'],
