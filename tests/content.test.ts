@@ -556,6 +556,19 @@ test('the mobile menu fits short viewports', () => {
   assert.match(block, /overflow-y:\s*auto/, 'the panel scrolls when it is taller than the viewport');
 });
 
+test('the desktop mega-menu stays hidden until it opens', () => {
+  // The panel carries the hidden attribute until the menu opens, but the
+  // .nav-mega rule sets display: flex, and an author display rule beats
+  // the browser's built-in hidden styling, so the panel showed on every
+  // page, all the time. The [hidden] rule below restores hidden as the
+  // source of truth.
+  const css = read('src/styles/global.css');
+  const at = css.indexOf('.nav-mega[hidden] {');
+  assert.ok(at > 0, 'the .nav-mega[hidden] rule exists');
+  const block = css.slice(at, css.indexOf('}', at));
+  assert.match(block, /display:\s*none/, 'a hidden panel is not displayed');
+});
+
 test('the header controls meet the 44px touch target and the row still fits at 320px', () => {
   // The menu toggle, theme toggle and mobile flag toggle sat at 40px,
   // below the site's 44px minimum (EscapeHatch, portal buttons,
