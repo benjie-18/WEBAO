@@ -949,6 +949,17 @@ html.theming *::after {
 .btn:hover::after { transform: translateX(100%); opacity: 1; }
 .btn:active { transform: translateY(1px) scale(.98); }
 .btn:focus-visible { outline-offset: 3px; }
+/* Pricing CTAs carry "Choose {name} · {price}" labels that outgrow the
+   card below about 1150px of viewport (the card keeps 52px of inline
+   padding, so the button is narrower than the label): .btn's nowrap +
+   overflow: clip cut the text off instead of wrapping it. The label
+   wraps to a second line instead, on the plan, bundle, Ads, AI and
+   quiz buttons alike. */
+.btn [data-cta-label] {
+  white-space: normal;
+  line-height: 1.35;
+  text-align: center;
+}
 .btn--primary {
   background: var(--btn-primary-bg);
   color: white;

@@ -9,7 +9,10 @@
 // never hardcoded, and the result button is a real cart button (same attrs
 // as the pricing cards), so cart-ui keeps its label and added state in
 // sync. Monthly-only products carry no yearly price, so the button follows
-// the monthly term for them.
+// the monthly term for them. A fixed service skips the service question
+// and opens that service's follow-ups directly: on /pricing the visitor
+// already picked the service with the pill, so the quiz there is
+// website-only.
 import { useTranslations, localizedPaths, type Locale } from "../../lib/i18n";
 import { cartProducts } from "../../lib/cart-catalog";
 
@@ -18,9 +21,13 @@ interface Props {
   // On /pricing the visitor is already comparing plans, so the
   // "Compare all plans" link is redundant there.
   showCompare?: boolean;
+  // Fixed service: the quiz skips the service question and opens that
+  // service's follow-ups directly. On /pricing the visitor already
+  // picked the service with the pill, so the quiz there is website-only.
+  service?: "website" | "ads" | "ai" | "all";
 }
 
-const { locale, showCompare = true } = Astro.props as Props;
+const { locale, showCompare = true, service } = Astro.props as Props;
 const t = useTranslations(locale);
 const e = t.estimator;
 const tp = t.pricing.plans;
@@ -69,14 +76,14 @@ const recs = {
 const def = recs.launch;
 ---
 
-<section class="estimator" data-estimator data-recs={JSON.stringify(recs)} data-choose={tp.choose} data-chosen={tp.chosen} data-add={t.cart.add} aria-labelledby="estimator-h">
+<section class="estimator" data-estimator data-recs={JSON.stringify(recs)} data-est-fixed-service={service} data-choose={tp.choose} data-chosen={tp.chosen} data-add={t.cart.add} aria-labelledby="estimator-h">
   <div class="shell estimator-inner" data-reveal>
     <p class="eyebrow">{e.eyebrow}</p>
     <h2 id="estimator-h" class="display estimator-title">{e.title}</h2>
     <p class="estimator-sub">{e.sub}</p>
 
     <form class="estimator-questions" data-estimator-form>
-      <fieldset class="estimator-q">
+      <fieldset class="estimator-q" hidden={service !== undefined}>
         <legend>{e.qService}</legend>
         <label class="estimator-opt">
           <input type="radio" name="est-service" value="website" />
@@ -212,99 +219,115 @@ const def = recs.launch;
   </div>
 </section>
 
-<script>
-  // One init per estimator on the page; the follow-up questions for the
-  // picked service show, the others hide and their answers clear, and the
-  // result recomputes on every change. The cart button's dataset is
-  // rewritten to the recommended product so cart-ui treats it exactly
-  // like a pricing-card CTA.
-  document.querySelectorAll("[data-estimator]").forEach((root) => {
-    const el = root as HTMLElement;
-    if (el.dataset.estimatorInit === "1") return;
-    el.dataset.estimatorInit = "1";
-    const result = root.querySelector("[data-estimator-result]") as HTMLElement | null;
-    const planEl = root.querySelector("[data-estimator-plan]") as HTMLElement | null;
-    const priceEl = root.querySelector("[data-estimator-price]") as HTMLElement | null;
-    const whyEl = root.querySelector("[data-estimator-why]") as HTMLElement | null;
-    const btn = root.querySelector("[data-estimator-cta]") as HTMLButtonElement | null;
-    const label = btn?.querySelector("[data-cta-label]") as HTMLElement | null;
-    const recs = JSON.parse(el.dataset.recs || "{}") as Record<
-      string,
-      { name: string; monthly: string; annual: string; monthCents: number; yearCents: number; type: string; why: string }
-    >;
-    const chooseTemplate = el.dataset.choose || "";
-    const chosenTemplate = el.dataset.chosen || "";
-    const addTemplate = el.dataset.add || "";
-    const followGroups = Array.from(root.querySelectorAll("[data-est-follow]")) as HTMLElement[];
-    const read = (name: string): string | null => {
-      const input = root.querySelector(`input[name="${name}"]:checked`) as HTMLInputElement | null;
-      return input ? input.value : null;
-    };
-    const syncFollow = () => {
-      const service = read("est-service");
-      followGroups.forEach((g) => {
-        const show = g.dataset.estFollow === service;
-        g.hidden = !show;
-        if (!show) {
-          g.querySelectorAll('input[type="radio"]').forEach((i) => {
-            (i as HTMLInputElement).checked = false;
-          });
+<script data-astro-rerun>
+  // ClientRouter fix: without data-astro-rerun and the astro:page-load
+  // listener below, the quiz is dead after a ClientRouter navigation
+  // (for example, home -> /pricing): the module script runs once per
+  // page load and never re-binds, so clicking an option does nothing.
+  // Same failure the pills had, same fix. Plain JavaScript on purpose:
+  // with data-astro-rerun, astro check treats this block as JS, and any
+  // TypeScript annotation in it fails the deploy.
+  function initEstimators() {
+    // One init per estimator on the page; the follow-up questions for the
+    // picked service show, the others hide and their answers clear, and
+    // the result recomputes on every change. The cart button's dataset is
+    // rewritten to the recommended product so cart-ui treats it exactly
+    // like a pricing-card CTA.
+    document.querySelectorAll("[data-estimator]").forEach(function (root) {
+      var el = root;
+      if (el.dataset.estimatorInit === "1") return;
+      el.dataset.estimatorInit = "1";
+      var result = root.querySelector("[data-estimator-result]");
+      var planEl = root.querySelector("[data-estimator-plan]");
+      var priceEl = root.querySelector("[data-estimator-price]");
+      var whyEl = root.querySelector("[data-estimator-why]");
+      var btn = root.querySelector("[data-estimator-cta]");
+      var label = btn ? btn.querySelector("[data-cta-label]") : null;
+      var recs = JSON.parse(el.dataset.recs || "{}");
+      var chooseTemplate = el.dataset.choose || "";
+      var chosenTemplate = el.dataset.chosen || "";
+      var addTemplate = el.dataset.add || "";
+      var fixedService = el.getAttribute("data-est-fixed-service") || null;
+      var followGroups = Array.prototype.slice.call(root.querySelectorAll("[data-est-follow]"));
+      var read = function (name) {
+        var input = root.querySelector('input[name="' + name + '"]:checked');
+        return input ? input.value : null;
+      };
+      var pickedService = function () {
+        return fixedService || read("est-service");
+      };
+      var syncFollow = function () {
+        var s = pickedService();
+        followGroups.forEach(function (g) {
+          var show = g.getAttribute("data-est-follow") === s;
+          g.hidden = !show;
+          if (!show) {
+            g.querySelectorAll('input[type="radio"]').forEach(function (i) {
+              i.checked = false;
+            });
+          }
+        });
+      };
+      var render = function () {
+        if (!result || !planEl || !priceEl || !whyEl) return;
+        syncFollow();
+        var s = pickedService();
+        var id = null;
+        if (s === "website") {
+          var pages = read("est-pages");
+          var job = read("est-job");
+          if (!pages || !job) {
+            result.hidden = true;
+            return;
+          }
+          // Page count is the real plan boundary; a booking or sales job
+          // needs the room Grow gives even on a small site.
+          if (pages === "20") id = "scale";
+          else if (pages === "10" || job !== "inform") id = "grow";
+          else id = "launch";
+        } else if (s === "ads") {
+          id = read("est-channel");
+        } else if (s === "ai") {
+          id = read("est-ai");
+        } else if (s === "all") {
+          id = "growth-engine";
         }
-      });
-    };
-    const render = () => {
-      if (!result || !planEl || !priceEl || !whyEl) return;
-      syncFollow();
-      const service = read("est-service");
-      let id: string | null = null;
-      if (service === "website") {
-        const pages = read("est-pages");
-        const job = read("est-job");
-        if (!pages || !job) {
+        if (!id) {
           result.hidden = true;
           return;
         }
-        // Page count is the real plan boundary; a booking or sales job
-        // needs the room Grow gives even on a small site.
-        if (pages === "20") id = "scale";
-        else if (pages === "10" || job !== "inform") id = "grow";
-        else id = "launch";
-      } else if (service === "ads") {
-        id = read("est-channel");
-      } else if (service === "ai") {
-        id = read("est-ai");
-      } else if (service === "all") {
-        id = "growth-engine";
-      }
-      if (!id) {
-        result.hidden = true;
-        return;
-      }
-      const r = recs[id];
-      if (!r) return;
-      planEl.textContent = r.name;
-      priceEl.textContent = r.monthly;
-      whyEl.textContent = r.why;
-      if (btn && label) {
-        btn.dataset.key = `${id}-month`;
-        btn.dataset.product = id;
-        btn.dataset.name = r.name;
-        btn.dataset.priceCents = String(r.monthCents);
-        btn.dataset.priceYear = r.yearCents ? String(r.yearCents) : "";
-        btn.dataset.type = r.type;
-        btn.setAttribute("aria-label", addTemplate.replace("{name}", r.name));
-        btn.title = addTemplate.replace("{name}", r.name);
-        label.dataset.month = chooseTemplate.replace("{name}", r.name).replace("{price}", r.monthly);
-        label.dataset.year = chooseTemplate.replace("{name}", r.name).replace("{price}", r.annual || r.monthly);
-        label.dataset.added = chosenTemplate.replace("{name}", r.name);
-        label.textContent = label.dataset.month;
-        btn.setAttribute("aria-pressed", "false");
-        btn.classList.remove("is-added");
-      }
-      result.hidden = false;
-    };
-    root.addEventListener("change", render);
-  });
+        var r = recs[id];
+        if (!r) return;
+        planEl.textContent = r.name;
+        priceEl.textContent = r.monthly;
+        whyEl.textContent = r.why;
+        if (btn && label) {
+          btn.dataset.key = id + "-month";
+          btn.dataset.product = id;
+          btn.dataset.name = r.name;
+          btn.dataset.priceCents = String(r.monthCents);
+          btn.dataset.priceYear = r.yearCents ? String(r.yearCents) : "";
+          btn.dataset.type = r.type;
+          btn.setAttribute("aria-label", addTemplate.replace("{name}", r.name));
+          btn.title = addTemplate.replace("{name}", r.name);
+          label.dataset.month = chooseTemplate.replace("{name}", r.name).replace("{price}", r.monthly);
+          label.dataset.year = chooseTemplate.replace("{name}", r.name).replace("{price}", r.annual || r.monthly);
+          label.dataset.added = chosenTemplate.replace("{name}", r.name);
+          label.textContent = label.dataset.month;
+          btn.setAttribute("aria-pressed", "false");
+          btn.classList.remove("is-added");
+        }
+        result.hidden = false;
+      };
+      root.addEventListener("change", render);
+      render();
+    });
+  }
+  initEstimators();
+  if (!window.__webaoEstimatorPL) {
+    window.__webaoEstimatorPL = true;
+    document.addEventListener("astro:page-load", initEstimators);
+  }
 </script>
 
 <style>
@@ -321,6 +344,12 @@ const def = recs.launch;
   }
   .estimator-sub { color: var(--muted); margin-top: 10px; }
   .estimator-questions { display: grid; gap: 24px; margin-top: 28px; }
+  /* The service question hides when the quiz takes a fixed service.
+     The .estimator-q rule below sets display: grid, which would beat
+     the browser's built-in hidden styling, so this rule restores it. */
+  .estimator-q[hidden] {
+    display: none;
+  }
   .estimator-q {
     border: 0;
     margin: 0;

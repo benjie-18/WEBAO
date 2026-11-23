@@ -321,7 +321,40 @@ test('the header dropdown drops guides and website design, and the estimator sta
   const home = read('src/components/pages/HomePage.astro');
   assert.ok(home.includes('<PlanEstimator locale={locale} />'), 'the home page shows the quiz');
   const pricing = read('src/components/pages/PricingPage2.astro');
-  assert.ok(pricing.includes('<PlanEstimator locale={locale} showCompare={false} />'), 'the live pricing page shows the quiz without the compare link');
+  assert.ok(pricing.includes('<PlanEstimator locale={locale} showCompare={false} service="website" />'), 'the live pricing page shows the quiz without the compare link, website-only');
+});
+
+test('the quiz works after a ClientRouter navigation, and the pricing quiz is website-only', () => {
+  // The quiz was dead after a ClientRouter navigation (home -> /pricing):
+  // the module script runs once per page load and never re-bound, so
+  // clicking an option did nothing. Same failure the pills had, same fix.
+  const estimator = read('src/components/pricing/PlanEstimator.astro');
+  assert.ok(estimator.includes('<script data-astro-rerun>'), 'the quiz script re-runs on navigation');
+  assert.ok(estimator.includes('document.addEventListener("astro:page-load", initEstimators)'), 'the quiz re-inits on page-load');
+  assert.ok(estimator.includes('if (el.dataset.estimatorInit === "1") return;'), 'a re-init does not double-bind');
+  assert.ok(estimator.includes('render();'), 'the follow-ups show on init, not only on change');
+  // On /pricing the visitor already picked the service with the pill, so
+  // the quiz there skips the service question and opens the website
+  // follow-ups directly instead of proposing all services.
+  assert.ok(estimator.includes('data-est-fixed-service={service}'), 'the fixed service reaches the script');
+  assert.ok(estimator.includes('hidden={service !== undefined}'), 'the service question hides when the service is fixed');
+  assert.ok(estimator.includes('return fixedService || read("est-service");'), 'the fixed service drives the follow-ups');
+  assert.ok(estimator.includes('.estimator-q[hidden] {'), 'the hidden service question is really hidden (display: grid would beat hidden)');
+  // The home quiz keeps the full service picker: no fixed service there.
+  const home = read('src/components/pages/HomePage.astro');
+  assert.ok(home.includes('<PlanEstimator locale={locale} />'), 'the home quiz still asks the service first');
+});
+
+test('the pricing card buttons wrap instead of cutting the label off', () => {
+  // "Choose Scale · C$3,499.90/yr →" outgrows the plan button below
+  // about 1150px of viewport (the card keeps 52px of inline padding),
+  // and .btn's nowrap + overflow: clip cut it off instead of wrapping.
+  const css = read('src/styles/global.css');
+  const at = css.indexOf('.btn [data-cta-label] {');
+  assert.ok(at > 0, 'the pricing CTA label rule exists');
+  const block = css.slice(at, css.indexOf('}', at));
+  assert.match(block, /white-space:\s*normal/, 'the label wraps to a second line');
+  assert.match(block, /line-height:\s*1\.35/, 'the wrapped label keeps readable line height');
 });
 
 test('the services home and branch pages exist, with the model page treatment', () => {
