@@ -1,8 +1,7 @@
 ---
 // Ads Pack card: a standalone service, sold on its own or next to a website
-// plan. Monthly only, there is no annual term; the one-time setup fee is
-// added by checkout server-side and is stated on the card so the total is
-// clear before buying.
+// plan. Monthly only, there is no annual term and no setup fee on any
+// channel.
 //
 // Channel picker: one channel (Meta or Google) is the single price; both
 // together are the bundle price. The picker only changes which cart product
@@ -10,6 +9,7 @@
 // a single channel is the same either way, and checkout records the channel
 // from the cart key in metadata[items].
 import { useTranslations, type Locale } from "../../lib/i18n";
+import { priceCentsFor } from "../../lib/cart-catalog";
 import CartButton from "./CartButton.astro";
 
 interface Props {
@@ -26,7 +26,7 @@ const variants = [
     product: "ads-meta",
     label: a.metaLabel,
     price: a.metaPrice,
-    priceCents: 89999,
+    priceCents: priceCentsFor("ads-meta", "month") ?? 0,
     setup: a.setup,
     budget: a.budget,
     include: a.metaInclude,
@@ -37,7 +37,7 @@ const variants = [
     product: "ads-google",
     label: a.googleLabel,
     price: a.metaPrice,
-    priceCents: 89999,
+    priceCents: priceCentsFor("ads-google", "month") ?? 0,
     setup: a.setup,
     budget: a.budget,
     include: a.googleInclude,
@@ -48,7 +48,7 @@ const variants = [
     product: "ads-both",
     label: a.bothLabel,
     price: a.bothPrice,
-    priceCents: 134999,
+    priceCents: priceCentsFor("ads-both", "month") ?? 0,
     setup: a.bothSetup,
     budget: a.bothBudget,
     include: a.bothInclude,
@@ -139,7 +139,7 @@ const selected = variants[0];
     </div>
     <span class="addon-add">
       <span class="addon-add-label" aria-hidden="true"><span class="addon-add-label--add">{t.cart.addShort}</span><span class="addon-add-label--added">{t.cart.addedShort}</span></span>
-      <CartButton locale={locale} product="ads-starter" name={a.starterTitle} priceCents={39999} interval="month" type="bundle" />
+      <CartButton locale={locale} product="ads-starter" name={a.starterTitle} priceCents={priceCentsFor("ads-starter", "month") ?? 0} interval="month" type="bundle" />
     </span>
   </div>
 
@@ -153,7 +153,7 @@ const selected = variants[0];
     </div>
     <span class="addon-add">
       <span class="addon-add-label" aria-hidden="true"><span class="addon-add-label--add">{t.cart.addShort}</span><span class="addon-add-label--added">{t.cart.addedShort}</span></span>
-      <CartButton locale={locale} product="gbp-revamp" name={a.gbpName} priceCents={14999} interval="one-time" type="addon" />
+      <CartButton locale={locale} product="gbp-revamp" name={a.gbpName} priceCents={priceCentsFor("gbp-revamp", "one-time") ?? 0} interval="one-time" type="addon" />
     </span>
   </div>
 

@@ -1,14 +1,17 @@
 ---
-// Plan & Price Estimator: three quick questions, one plan
-// recommendation. The recommendation is driven by page count first (the
-// real plan boundary: Launch is 1-5 pages, Grow is 5-10, Scale is 10-20),
-// with the visitor's job as a secondary signal (bookings or sales need the
-// room Grow gives). AI and Ads never change the plan — they are add-ons,
-// so they only add a note line. Prices come from the cart catalog, never
-// hardcoded, and the result button is a real cart button (same attrs as
-// PlanCards), so cart-ui keeps its label and added state in sync.
+// Quiz, redone from services: the first question is the service, then one
+// follow-up per service. Website: pages + job -> Launch/Grow/Scale (the
+// real plan boundaries: Launch 1-5 pages, Grow 5-10, Scale 10-20, with a
+// booking or sales job needing the room Grow gives). Ads: channel ->
+// Starter test (Meta), one channel, or both. AI: need -> Receptionist,
+// Online Receptionist, Follow-up, or the AI Pack. Everything ->
+// Growth Engine, no follow-up needed. Prices come from the cart catalog,
+// never hardcoded, and the result button is a real cart button (same attrs
+// as the pricing cards), so cart-ui keeps its label and added state in
+// sync. Monthly-only products carry no yearly price, so the button follows
+// the monthly term for them.
 import { useTranslations, localizedPaths, type Locale } from "../../lib/i18n";
-import { priceCentsFor } from "../../lib/cart-catalog";
+import { cartProducts } from "../../lib/cart-catalog";
 
 interface Props {
   locale: Locale;
@@ -21,40 +24,52 @@ const { locale, showCompare = true } = Astro.props as Props;
 const t = useTranslations(locale);
 const e = t.estimator;
 const tp = t.pricing.plans;
+const ap = t.pricing.adsPack;
+const ai = t.pricing.ai;
 const paths = localizedPaths[locale];
 
 const stripParens = (s: string) => s.replace(/^\(|\)$/g, "");
-const planData = {
-  launch: {
-    name: tp.launch.name,
-    monthly: tp.launch.monthly,
-    annual: stripParens(tp.launch.annual),
-    monthCents: priceCentsFor("launch", "month") ?? 0,
-    yearCents: priceCentsFor("launch", "year") ?? 0,
-    why: e.whyLaunch,
-  },
-  grow: {
-    name: tp.grow.name,
-    monthly: tp.grow.monthly,
-    annual: stripParens(tp.grow.annual),
-    monthCents: priceCentsFor("grow", "month") ?? 0,
-    yearCents: priceCentsFor("grow", "year") ?? 0,
-    why: e.whyGrow,
-  },
-  scale: {
-    name: tp.scale.name,
-    monthly: tp.scale.monthly,
-    annual: stripParens(tp.scale.annual),
-    monthCents: priceCentsFor("scale", "month") ?? 0,
-    yearCents: priceCentsFor("scale", "year") ?? 0,
-    why: e.whyScale,
-  },
+// Yearly label for the one recommendation with a yearly term but no i18n
+// yearly string (Online Receptionist): same format as the AI cards.
+const yearlyLabel = (cents: number) =>
+  `C$${(cents / 100).toLocaleString("en-CA", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}${locale === "fr" ? "/an" : "/yr"}`;
+
+const rec = (product: string, name: string, monthly: string, annual: string, why: string) => {
+  const p = cartProducts[product];
+  return {
+    name,
+    monthly,
+    annual,
+    monthCents: p?.monthCents ?? 0,
+    yearCents: p?.yearCents ?? 0,
+    type: p?.type ?? "addon",
+    why,
+  };
 };
-const extraNotes = { ai: e.extraAiNote, ads: e.extraAdsNote };
-const def = planData.launch;
+const recs = {
+  launch: rec("launch", tp.launch.name, tp.launch.monthly, stripParens(tp.launch.annual), e.whyLaunch),
+  grow: rec("grow", tp.grow.name, tp.grow.monthly, stripParens(tp.grow.annual), e.whyGrow),
+  scale: rec("scale", tp.scale.name, tp.scale.monthly, stripParens(tp.scale.annual), e.whyScale),
+  "ads-starter": rec("ads-starter", ap.starterTitle, ap.starterPrice, "", e.whyAdsStarter),
+  "ads-meta": rec("ads-meta", `${ap.name} (${ap.metaLabel})`, ap.metaPrice, "", e.whyAdsSingle),
+  "ads-google": rec("ads-google", `${ap.name} (${ap.googleLabel})`, ap.metaPrice, "", e.whyAdsSingle),
+  "ads-both": rec("ads-both", `${ap.name} (${ap.bothLabel})`, ap.bothPrice, "", e.whyAdsBoth),
+  "ai-receptionist": rec("ai-receptionist", t.start.selection.aiReceptionist, ai.receptionistPrice, "", e.whyReceptionist),
+  aichat: rec(
+    "aichat",
+    t.start.selection.aiChat,
+    ai.chatPrice,
+    yearlyLabel(cartProducts["aichat"]?.yearCents ?? 0),
+    e.whyOnlineReceptionist,
+  ),
+  "ai-followup": rec("ai-followup", t.start.selection.aiFollowup, ai.followupPrice, "", e.whyFollowup),
+  "ai-pack": rec("ai-pack", t.start.selection.aiPack, ai.packPrice, stripParens(ai.packYearlyPrice), e.whyAiPack),
+  "growth-engine": rec("growth-engine", t.pricing.bundles.engine.name, t.pricing.bundles.engine.price, "", e.whyGrowthEngine),
+};
+const def = recs.launch;
 ---
 
-<section class="estimator" data-estimator data-plans={JSON.stringify(planData)} data-extras={JSON.stringify(extraNotes)} data-choose={tp.choose} data-chosen={tp.chosen} data-add={t.cart.add} aria-labelledby="estimator-h">
+<section class="estimator" data-estimator data-recs={JSON.stringify(recs)} data-choose={tp.choose} data-chosen={tp.chosen} data-add={t.cart.add} aria-labelledby="estimator-h">
   <div class="shell estimator-inner" data-reveal>
     <p class="eyebrow">{e.eyebrow}</p>
     <h2 id="estimator-h" class="display estimator-title">{e.title}</h2>
@@ -62,52 +77,102 @@ const def = planData.launch;
 
     <form class="estimator-questions" data-estimator-form>
       <fieldset class="estimator-q">
-        <legend>{e.qPages}</legend>
+        <legend>{e.qService}</legend>
         <label class="estimator-opt">
-          <input type="radio" name="est-pages" value="5" />
-          <span>{e.pages5}</span>
+          <input type="radio" name="est-service" value="website" />
+          <span>{e.serviceWebsite}</span>
         </label>
         <label class="estimator-opt">
-          <input type="radio" name="est-pages" value="10" />
-          <span>{e.pages10}</span>
+          <input type="radio" name="est-service" value="ads" />
+          <span>{e.serviceAds}</span>
         </label>
         <label class="estimator-opt">
-          <input type="radio" name="est-pages" value="20" />
-          <span>{e.pages20}</span>
-        </label>
-      </fieldset>
-
-      <fieldset class="estimator-q">
-        <legend>{e.qJob}</legend>
-        <label class="estimator-opt">
-          <input type="radio" name="est-job" value="inform" />
-          <span>{e.jobInform}</span>
+          <input type="radio" name="est-service" value="ai" />
+          <span>{e.serviceAi}</span>
         </label>
         <label class="estimator-opt">
-          <input type="radio" name="est-job" value="book" />
-          <span>{e.jobBook}</span>
-        </label>
-        <label class="estimator-opt">
-          <input type="radio" name="est-job" value="sell" />
-          <span>{e.jobSell}</span>
+          <input type="radio" name="est-service" value="all" />
+          <span>{e.serviceAll}</span>
         </label>
       </fieldset>
 
-      <fieldset class="estimator-q">
-        <legend>{e.qExtra}</legend>
-        <label class="estimator-opt">
-          <input type="radio" name="est-extra" value="none" />
-          <span>{e.extraNone}</span>
-        </label>
-        <label class="estimator-opt">
-          <input type="radio" name="est-extra" value="ai" />
-          <span>{e.extraAi}</span>
-        </label>
-        <label class="estimator-opt">
-          <input type="radio" name="est-extra" value="ads" />
-          <span>{e.extraAds}</span>
-        </label>
-      </fieldset>
+      <div data-est-follow="website" hidden>
+        <fieldset class="estimator-q">
+          <legend>{e.qPages}</legend>
+          <label class="estimator-opt">
+            <input type="radio" name="est-pages" value="5" />
+            <span>{e.pages5}</span>
+          </label>
+          <label class="estimator-opt">
+            <input type="radio" name="est-pages" value="10" />
+            <span>{e.pages10}</span>
+          </label>
+          <label class="estimator-opt">
+            <input type="radio" name="est-pages" value="20" />
+            <span>{e.pages20}</span>
+          </label>
+        </fieldset>
+
+        <fieldset class="estimator-q">
+          <legend>{e.qJob}</legend>
+          <label class="estimator-opt">
+            <input type="radio" name="est-job" value="inform" />
+            <span>{e.jobInform}</span>
+          </label>
+          <label class="estimator-opt">
+            <input type="radio" name="est-job" value="book" />
+            <span>{e.jobBook}</span>
+          </label>
+          <label class="estimator-opt">
+            <input type="radio" name="est-job" value="sell" />
+            <span>{e.jobSell}</span>
+          </label>
+        </fieldset>
+      </div>
+
+      <div data-est-follow="ads" hidden>
+        <fieldset class="estimator-q">
+          <legend>{e.qChannel}</legend>
+          <label class="estimator-opt">
+            <input type="radio" name="est-channel" value="ads-starter" />
+            <span>{e.channelStarter}</span>
+          </label>
+          <label class="estimator-opt">
+            <input type="radio" name="est-channel" value="ads-meta" />
+            <span>{e.channelMeta}</span>
+          </label>
+          <label class="estimator-opt">
+            <input type="radio" name="est-channel" value="ads-google" />
+            <span>{e.channelGoogle}</span>
+          </label>
+          <label class="estimator-opt">
+            <input type="radio" name="est-channel" value="ads-both" />
+            <span>{e.channelBoth}</span>
+          </label>
+        </fieldset>
+      </div>
+
+      <div data-est-follow="ai" hidden>
+        <fieldset class="estimator-q">
+          <legend>{e.qAiNeed}</legend>
+          <label class="estimator-opt">
+            <input type="radio" name="est-ai" value="ai-receptionist" />
+            <span>{e.aiCalls}</span>
+          </label>
+          <label class="estimator-opt">
+            <input type="radio" name="est-ai" value="aichat" />
+            <span>{e.aiVisitors}</span>
+          </label>
+          <label class="estimator-opt">
+            <input type="radio" name="est-ai" value="ai-followup" />
+            <span>{e.aiQuotes}</span>
+          </label>
+          <label class="estimator-opt">
+            <input type="radio" name="est-ai" value="ai-pack" />
+            <span>{e.aiAll}</span>
+          </label>
+        </fieldset>
+      </div>
     </form>
 
     <div class="estimator-result" data-estimator-result hidden>
@@ -115,7 +180,6 @@ const def = planData.launch;
       <p class="display estimator-result-plan" data-estimator-plan></p>
       <p class="estimator-result-price" data-estimator-price></p>
       <p class="estimator-result-why" data-estimator-why></p>
-      <p class="estimator-result-extra" data-estimator-extra hidden></p>
       <div class="estimator-result-actions">
         <button
           type="button"
@@ -126,9 +190,9 @@ const def = planData.launch;
           data-product="launch"
           data-name={def.name}
           data-price-cents={def.monthCents}
+          data-price-year={def.yearCents}
           data-interval="month"
           data-type="plan"
-          data-price-year={def.yearCents}
           aria-label={t.cart.add.replace("{name}", def.name)}
           title={t.cart.add.replace("{name}", def.name)}
           aria-pressed="false"
@@ -149,9 +213,11 @@ const def = planData.launch;
 </section>
 
 <script>
-  // One init per estimator on the page; the result recomputes on every
-  // change, and the cart button's dataset is rewritten to the recommended
-  // plan so cart-ui treats it exactly like a plan-card CTA.
+  // One init per estimator on the page; the follow-up questions for the
+  // picked service show, the others hide and their answers clear, and the
+  // result recomputes on every change. The cart button's dataset is
+  // rewritten to the recommended product so cart-ui treats it exactly
+  // like a pricing-card CTA.
   document.querySelectorAll("[data-estimator]").forEach((root) => {
     const el = root as HTMLElement;
     if (el.dataset.estimatorInit === "1") return;
@@ -160,54 +226,77 @@ const def = planData.launch;
     const planEl = root.querySelector("[data-estimator-plan]") as HTMLElement | null;
     const priceEl = root.querySelector("[data-estimator-price]") as HTMLElement | null;
     const whyEl = root.querySelector("[data-estimator-why]") as HTMLElement | null;
-    const extraEl = root.querySelector("[data-estimator-extra]") as HTMLElement | null;
     const btn = root.querySelector("[data-estimator-cta]") as HTMLButtonElement | null;
     const label = btn?.querySelector("[data-cta-label]") as HTMLElement | null;
-    const plans = JSON.parse(el.dataset.plans || "{}") as Record<
+    const recs = JSON.parse(el.dataset.recs || "{}") as Record<
       string,
-      { name: string; monthly: string; annual: string; monthCents: number; yearCents: number; why: string }
+      { name: string; monthly: string; annual: string; monthCents: number; yearCents: number; type: string; why: string }
     >;
-    const extras = JSON.parse(el.dataset.extras || "{}") as Record<string, string>;
     const chooseTemplate = el.dataset.choose || "";
     const chosenTemplate = el.dataset.chosen || "";
     const addTemplate = el.dataset.add || "";
+    const followGroups = Array.from(root.querySelectorAll("[data-est-follow]")) as HTMLElement[];
     const read = (name: string): string | null => {
       const input = root.querySelector(`input[name="${name}"]:checked`) as HTMLInputElement | null;
       return input ? input.value : null;
     };
+    const syncFollow = () => {
+      const service = read("est-service");
+      followGroups.forEach((g) => {
+        const show = g.dataset.estFollow === service;
+        g.hidden = !show;
+        if (!show) {
+          g.querySelectorAll('input[type="radio"]').forEach((i) => {
+            (i as HTMLInputElement).checked = false;
+          });
+        }
+      });
+    };
     const render = () => {
-      if (!result || !planEl || !priceEl || !whyEl || !extraEl) return;
-      const pages = read("est-pages");
-      const job = read("est-job");
-      const extra = read("est-extra");
-      if (!pages || !job || !extra) {
+      if (!result || !planEl || !priceEl || !whyEl) return;
+      syncFollow();
+      const service = read("est-service");
+      let id: string | null = null;
+      if (service === "website") {
+        const pages = read("est-pages");
+        const job = read("est-job");
+        if (!pages || !job) {
+          result.hidden = true;
+          return;
+        }
+        // Page count is the real plan boundary; a booking or sales job
+        // needs the room Grow gives even on a small site.
+        if (pages === "20") id = "scale";
+        else if (pages === "10" || job !== "inform") id = "grow";
+        else id = "launch";
+      } else if (service === "ads") {
+        id = read("est-channel");
+      } else if (service === "ai") {
+        id = read("est-ai");
+      } else if (service === "all") {
+        id = "growth-engine";
+      }
+      if (!id) {
         result.hidden = true;
         return;
       }
-      // Page count is the real plan boundary; a booking or sales job
-      // needs the room Grow gives even on a small site.
-      let id = "launch";
-      if (pages === "20") id = "scale";
-      else if (pages === "10" || job !== "inform") id = "grow";
-      const p = plans[id];
-      if (!p) return;
-      planEl.textContent = p.name;
-      priceEl.textContent = p.monthly;
-      whyEl.textContent = p.why;
-      const extraNote = extra === "none" ? "" : (extras[extra] || "");
-      extraEl.textContent = extraNote;
-      extraEl.hidden = extraNote === "";
+      const r = recs[id];
+      if (!r) return;
+      planEl.textContent = r.name;
+      priceEl.textContent = r.monthly;
+      whyEl.textContent = r.why;
       if (btn && label) {
         btn.dataset.key = `${id}-month`;
         btn.dataset.product = id;
-        btn.dataset.name = p.name;
-        btn.dataset.priceCents = String(p.monthCents);
-        btn.dataset.priceYear = String(p.yearCents);
-        btn.setAttribute("aria-label", addTemplate.replace("{name}", p.name));
-        btn.title = addTemplate.replace("{name}", p.name);
-        label.dataset.month = chooseTemplate.replace("{name}", p.name).replace("{price}", p.monthly);
-        label.dataset.year = chooseTemplate.replace("{name}", p.name).replace("{price}", p.annual);
-        label.dataset.added = chosenTemplate.replace("{name}", p.name);
+        btn.dataset.name = r.name;
+        btn.dataset.priceCents = String(r.monthCents);
+        btn.dataset.priceYear = r.yearCents ? String(r.yearCents) : "";
+        btn.dataset.type = r.type;
+        btn.setAttribute("aria-label", addTemplate.replace("{name}", r.name));
+        btn.title = addTemplate.replace("{name}", r.name);
+        label.dataset.month = chooseTemplate.replace("{name}", r.name).replace("{price}", r.monthly);
+        label.dataset.year = chooseTemplate.replace("{name}", r.name).replace("{price}", r.annual || r.monthly);
+        label.dataset.added = chosenTemplate.replace("{name}", r.name);
         label.textContent = label.dataset.month;
         btn.setAttribute("aria-pressed", "false");
         btn.classList.remove("is-added");
@@ -293,7 +382,6 @@ const def = planData.launch;
     margin-top: 8px;
   }
   .estimator-result-why { color: var(--muted); margin-top: 8px; line-height: 1.55; }
-  .estimator-result-extra { color: var(--muted); margin-top: 8px; line-height: 1.55; }
   .estimator-result-actions {
     display: flex;
     flex-wrap: wrap;
