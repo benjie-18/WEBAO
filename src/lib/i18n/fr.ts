@@ -91,6 +91,7 @@ const fr = {
     monthlyPlans: "Forfaits mensuels de site web",
     adsPackages: "Packs publicitaires",
     aiServices: "Services",
+    bestAgency: "Meilleure agence de conception de site web au Canada",
     contactTitle: "Contact",
     replyTime: "On répond habituellement en un jour ouvrable.<br />Du lundi au vendredi, de 9 h à 17 h, heure de l’Est.",
     copyright: "© {year} WEBAO · Fait à Montréal.",

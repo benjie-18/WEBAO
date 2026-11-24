@@ -88,6 +88,7 @@ const en = {
     monthlyPlans: "Monthly website plans",
     adsPackages: "Ads Packages",
     aiServices: "Services",
+    bestAgency: "Best web design agency in Canada",
     contactTitle: "Contact",
     replyTime: "We usually reply within one business day.<br />Monday to Friday, 9am to 5pm Eastern.",
     copyright: "© {year} WEBAO · Made in Montréal.",

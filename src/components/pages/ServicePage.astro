@@ -8,6 +8,7 @@ export interface ServiceSection {
   body?: string;
   items?: string[];
   link?: { href: string; label: string };
+  links?: { href: string; label: string }[];
 }
 
 export interface ServiceFaq {
@@ -101,6 +102,13 @@ const faqSchema = {
             )}
             {section.link && (
               <p><a href={section.link.href} style="color: var(--accent-text); font-weight:600; text-decoration: underline; text-underline-offset:3px;">{section.link.label}</a></p>
+            )}
+            {section.links && (
+              <ul>
+                {section.links.map((item) => (
+                  <li><a href={item.href} style="color: var(--accent-text); font-weight:600; text-decoration: underline; text-underline-offset:3px;">{item.label}</a></li>
+                ))}
+              </ul>
             )}
           </div>
         ))}
