@@ -126,7 +126,7 @@ const fr = {
       title2: "notre",
       title3: "mission",
       lead: "Un site web sur mesure pour votre entreprise, conçu et entretenu par une vraie personne.",
-      leadStrong: "Un seul frais mensuel.",
+      leadStrong: "Un seul paiement mensuel.",
       leadRest: "On conçoit, on lance, on héberge et on entretient. Vous gérez votre entreprise.",
       ctaPrimary: "Démarrer mon site",
       auditCta: "Auditez le vôtre",
@@ -246,9 +246,9 @@ const fr = {
       builtDesc1: "Rapide par défaut. Accessible. Testé sur de vrais",
       builtDesc2: "téléphones, pas juste sur le portable d’un designer.",
       badges: ["Statique + rapide", "Accessible"],
+      collageAlt: "Collage artisanal",
     },
     faq: {
-      eyebrow: "Questions avant d’écrire",
       title: "Les <span>petits caractères</span><br />sans les petits caractères.",
       contactPrompt: "Vous ne trouvez pas votre question ? {link}. Une vraie personne lit chaque message.",
       askDirectly: "écrivez-nous directement",
@@ -263,7 +263,7 @@ const fr = {
         },
         {
           q: "Et les mises à jour et photos ?",
-          a: "Écrivez-nous. Les petites mises à jour comme les heures, services, photos et bannières promo sont incluses dans votre frais mensuel. Pas de CMS à apprendre et pas de facturation à la pièce.",
+          a: "Écrivez-nous. Les petites mises à jour comme les heures, services, photos et bannières promo sont incluses dans vos frais mensuels. Pas de CMS à apprendre et pas de facturation à la pièce.",
         },
         {
           q: "Est-ce que je peux partir ? Est-ce que c’est mon site ?",
@@ -279,7 +279,7 @@ const fr = {
         },
         {
           q: "Qu’est-ce qui est vraiment inclus dans le 89,99 $/mois ?",
-          a: "Tout ce dont un site de petite entreprise a besoin : un site sur mesure d’une page, votre domaine, l’hébergement, le SSL, un design adapté au mobile, un formulaire de contact, le SEO fondamental, les statistiques, la sécurité et la maintenance, plus une heure de mises à jour de contenu par mois. Pas de frais d’installation, pas de facturation à la pièce.",
+          a: "Tout ce dont un site de petite entreprise a besoin : un site sur mesure de 1 à 5 pages, votre domaine, l’hébergement, le SSL, un design adapté au mobile, un formulaire de contact, le SEO fondamental, les statistiques, la sécurité et la maintenance, plus une heure de mises à jour de contenu par mois. Pas de frais d’installation, pas de facturation à la pièce.",
         },
         {
           q: "Est-ce que mon site va apparaître sur Google ?",

@@ -243,9 +243,9 @@ const en = {
       builtDesc1: "Fast by default. Accessible. Checked on real",
       builtDesc2: "phones, not just a designer’s laptop.",
       badges: ["Static + fast", "Accessible"],
+      collageAlt: "Craft collage",
     },
     faq: {
-      eyebrow: "Questions before you write",
       title: "The <span>fine print</span><br />without the fine print.",
       contactPrompt: "If you don’t see your question, {link}. A person reads every message.",
       askDirectly: "ask us directly",
@@ -276,7 +276,7 @@ const en = {
         },
         {
           q: "What’s actually included in the $89.99/mo?",
-          a: "Everything a small-business site needs: a custom 1-page site, your domain, hosting, SSL, mobile-friendly design, a contact form, Foundational SEO, stats, security and maintenance, plus an hour of content updates each month. No setup fee, no per-change billing.",
+          a: "Everything a small-business site needs: a custom site of 1 to 5 pages, your domain, hosting, SSL, mobile-friendly design, a contact form, Foundational SEO, stats, security and maintenance, plus an hour of content updates each month. No setup fee, no per-change billing.",
         },
         {
           q: "Will my site show up on Google?",

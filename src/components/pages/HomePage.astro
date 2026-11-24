@@ -228,7 +228,7 @@ const processId = locale === "fr" ? "processus" : "process";
       <div class="craft-visual">
         <div class="craft-frame">
           <div class="craft-img">
-            <svg viewBox="0 0 560 680" class="craft-svg" role="img" aria-label="Craft collage">
+            <svg viewBox="0 0 560 680" class="craft-svg" role="img" aria-label={t.home.craft.collageAlt}>
               <rect width="560" height="680" rx="18" fill="#0A0F1C"/>
               <g opacity=".95">
                 <rect x="0" y="0" width="560" height="420" rx="18" fill="#0A0F1C"/>
@@ -337,14 +337,13 @@ const processId = locale === "fr" ? "processus" : "process";
   /* --- HERO: asymmetric editorial ---
      12-track grid: copy 1-7, 14px vertical fracture divider, visual 9-12
      bleeding off the right viewport edge. Entrance gated on
-     [data-hero-enter="true"] (intro handoff or immediate). */
+     [data-hero-enter="true"]. */
   .hero { padding-block: clamp(24px, 4vw, 56px) clamp(32px, 5vw, 72px); background: linear-gradient(180deg, var(--paper) 0%, var(--paper-3) 100%); overflow: clip; position: relative; isolation: isolate; }
   .hero::before { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0; background: radial-gradient(700px 400px at 18% 18%, var(--hero-glow-a) 0%, transparent 62%), radial-gradient(600px 600px at 92% 88%, var(--hero-glow-b) 0%, transparent 58%); }
   .hero-grid { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)) 14px repeat(4, minmax(0, 1fr)); gap: clamp(20px, 3vw, 40px); align-items: center; }
   .hero-copy { grid-column: 1 / 8; min-width: 0; }
   .hero-fracture { grid-column: 8 / 9; align-self: stretch; display: flex; min-width: 0; }
   .fracture-v { width: 14px; align-self: stretch; min-height: 240px; background: var(--line); clip-path: polygon(43% 0%, 57% 7%, 36% 14%, 57% 22%, 43% 31%, 64% 40%, 36% 49%, 57% 58%, 43% 67%, 64% 76%, 36% 85%, 57% 93%, 43% 100%, 57% 100%, 71% 93%, 50% 85%, 78% 76%, 57% 67%, 71% 58%, 50% 49%, 78% 40%, 57% 31%, 71% 22%, 50% 14%, 71% 7%, 57% 0%); }
-  .hero-visual { grid-column: 9 / 13; min-width: 0; position: relative; margin-right: calc((min(var(--content-max), 100vw - var(--content-pad) * 2) - 100vw) / 2); }
   .hero-title { font-size: clamp(2.9rem, 7.4vw, 6.4rem); line-height: .88; letter-spacing: -0.04em; text-wrap: balance; }
   .hero-title .hero-italic { font-style: italic; font-weight: 400; color: var(--accent); position: relative; }
   .hero-title .w { display: inline-block; opacity: 0; transform: translateY(.55em); will-change: transform, opacity; }
@@ -367,41 +366,13 @@ const processId = locale === "fr" ? "processus" : "process";
     letter-spacing: .04em;
     color: var(--muted);
   }
-  .hero-visual { opacity: 0; }
   [data-hero-enter="true"] .hero-lead, [data-hero-enter="true"] .hero-actions { animation: hero-rise var(--dur-4) var(--ease-out-expo) forwards; }
   [data-hero-enter="true"] .hero-lead { animation-delay: calc(5 * var(--stagger)); }
   [data-hero-enter="true"] .hero-actions { animation-delay: calc(7 * var(--stagger)); }
-  [data-hero-enter="true"] .hero-visual { animation: hero-visual-in var(--dur-5) var(--ease-out-expo) forwards; animation-delay: calc(3 * var(--stagger)); }
   @keyframes hero-rise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes hero-visual-in { from { opacity: 0; transform: translateX(56px) rotate(.6deg); } to { opacity: 1; transform: translateX(0) rotate(0deg); } }
-  .visual-stack { position: relative; background: var(--card-bg); border: 1px solid var(--line); border-radius: 22px; box-shadow: var(--shadow-lg); overflow: clip; transform: perspective(1400px) rotateY(-6deg) rotateX(1deg); transform-origin: left center; }
-  .browser-bar { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid var(--line); background: var(--card-bg); }
-  .dots { display:flex; gap:6px; } .dots i { width:10px; height:10px; border-radius:99px; background: #E6E0D6; display:block; } .dots i:nth-child(1){ background:#FF5F57; } .dots i:nth-child(2){ background:#FFBD2E; } .dots i:nth-child(3){ background:#28C940; }
-  .url { font-family: var(--font-mono); font-size:11px; letter-spacing:.04em; background: var(--paper-3); border:1px solid var(--line); padding:5px 10px; border-radius:99px; color: var(--ink-3); min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .live { margin-left: auto; font-size:11px; color: var(--muted); font-weight:650; display:flex; align-items:center; gap:6px; } .live i { width:7px; height:7px; border-radius:99px; background: var(--muted); display:block; }
-  .preview-main { padding: 14px; background: var(--paper-2); }
-  .preview-media { border-radius: 14px; overflow: clip; border: 1px solid var(--line); background: var(--card-bg); }
-  .preview-art { width:100%; height:auto; display:block; }
-  .preview-meta { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:10px; font-size:12px; }
-  .meta-left { display: grid; gap:2px; }
-  .pill { font-size:11px; font-weight:650; background: var(--ink); color: var(--paper); padding:6px 10px; border-radius:99px; }
-  .float-card { position: absolute; background: var(--card-bg); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow-md); padding: 12px 14px; display: flex; align-items: center; gap:12px; }
-  .float-a { right: -10px; bottom: 54px; transform: rotate(1.2deg); max-width: 300px; }
-  .float-icon { width:36px; height:36px; border-radius:10px; background: var(--paper-2); display:grid; place-items:center; font-size:14px; flex:none; }
-  .float-card .check { margin-left:auto; width:24px; height:24px; border-radius:99px; background:#00C950; color:white; display:grid; place-items:center; }
-  .float-card .check svg { width:12px; height:12px; display:block; }
-  .float-b { left: -14px; bottom: -18px; flex-direction: column; align-items: stretch; gap: 4px; width: 205px; transform: rotate(-1deg); }
-  .float-list { list-style:none; padding:0; margin:8px 0 0; display:grid; gap:5px; }
-  .float-list li { display:flex; align-items:center; gap:6px; font-size:11.5px; color: var(--ink-3); line-height:1.3; }
-  .float-list li i { width:16px; height:16px; border-radius:99px; background:#00C950; color:white; display:grid; place-items:center; font-style:normal; flex:none; }
-  .float-list li i svg { width:8px; height:8px; display:block; }
-  .visual-caption { display:flex; justify-content:space-between; gap:12px; margin-top:10px; font-size:10px; color: var(--muted); padding-inline: 4px; }
-  .live i { animation: pulseLive 1.8s ease-in-out infinite; }
-  @keyframes pulseLive { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .7; transform: scale(0.85); } }
   @media (prefers-reduced-motion: reduce) {
-    .live i { animation: none; }
     .hero-title .w { opacity: 1; transform: none; animation: none; }
-    .hero-lead, .hero-actions, .hero-visual { opacity: 1; transform: none; animation: none; }
+    .hero-lead, .hero-actions { opacity: 1; transform: none; animation: none; }
     [data-hero-enter="true"] .hero-title .hero-italic::after { transform: scaleX(1); transition: none; }
     .fracture-v { clip-path: none; width: 1px; }
   }
@@ -409,11 +380,8 @@ const processId = locale === "fr" ? "processus" : "process";
     .hero-grid { grid-template-columns: 1fr; }
     .hero-copy { grid-column: 1 / -1; }
     .hero-fracture { display: none; }
-    .hero-visual { grid-column: 1 / -1; margin-right: 0; }
-    .float-a { right: 8px; bottom: 8px; }
-    .float-b { left: 8px; bottom: -10px; }
   }
-  @media (max-width: 560px) { .hero { padding-block: 12px 16px; } .hero-title { font-size: clamp(2.6rem, 12.5vw, 4.2rem); } .float-card { position: relative; inset:auto !important; transform: none !important; margin-top:12px; width:auto; } .visual-stack { transform: none; } .preview-meta { flex-direction: column; align-items: flex-start; } }
+  @media (max-width: 560px) { .hero { padding-block: 12px 16px; } .hero-title { font-size: clamp(2.6rem, 12.5vw, 4.2rem); } }
   .section-head { max-width: 60ch; }
   .process { --journey-accent: var(--btn-primary-bg); }
   /* Pinned scrub stage: the wrap provides scroll distance, the stage sticks */
@@ -672,51 +640,6 @@ const processId = locale === "fr" ? "processus" : "process";
     disposeHome();
     const hero = document.getElementById('hero');
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const isCoarse = window.matchMedia('(pointer: coarse), (hover: none)').matches;
-    if (hero && !prefersReduced && !isCoarse) {
-      const stack = hero.querySelector('[data-parallax="stack"]') as HTMLElement | null;
-      const a = hero.querySelector('[data-parallax="a"]') as HTMLElement | null;
-      const b = hero.querySelector('[data-parallax="b"]') as HTMLElement | null;
-      let raf = 0, tx = 0, ty = 0, cx = 0, cy = 0;
-      let px = 0, py = 0, hasPointer = false;
-      const onMove = (e: MouseEvent) => {
-        // Store the pointer only; the rect read happens once per frame in
-        // tick() instead of once per mousemove event (high-polling mice
-        // fire far more events than frames). Same math, same result.
-        px = e.clientX;
-        py = e.clientY;
-        hasPointer = true;
-        if (!raf) raf = requestAnimationFrame(tick);
-      };
-      const onLeave = () => {
-        hasPointer = false;
-        tx = 0; ty = 0;
-        if (!raf) raf = requestAnimationFrame(tick);
-      };
-      hero.addEventListener('mousemove', onMove);
-      hero.addEventListener('mouseleave', onLeave);
-      onHomeDispose(() => {
-        hero.removeEventListener('mousemove', onMove);
-        hero.removeEventListener('mouseleave', onLeave);
-        if (raf) cancelAnimationFrame(raf);
-      });
-      function tick() {
-        raf = 0;
-        if (hasPointer) {
-          const r = hero!.getBoundingClientRect();
-          tx = ((px - r.left) / r.width - 0.5) * 2;
-          ty = ((py - r.top) / r.height - 0.5) * 2;
-        }
-        cx += (tx - cx) * 0.08;
-        cy += (ty - cy) * 0.08;
-        if (stack) stack.style.transform = `perspective(1400px) rotateY(-6deg) rotateX(1deg) translate3d(${cx * 6}px, ${cy * 6}px, 0)`;
-        if (a) a.style.transform = `rotate(1.2deg) translate3d(${cx * 14}px, ${cy * 10}px, 0)`;
-        if (b) b.style.transform = `rotate(-1deg) translate3d(${cx * -12}px, ${cy * -8}px, 0)`;
-        if (Math.abs(tx - cx) > 0.001 || Math.abs(ty - cy) > 0.001) {
-          raf = requestAnimationFrame(tick);
-        }
-      }
-    }
 
     initHeroEntrance(hero, prefersReduced);
 
@@ -873,8 +796,8 @@ const processId = locale === "fr" ? "processus" : "process";
   }
 
   /* Hero entrance: word-split title reveal gated on data-hero-enter.
-     The archived intro used to signal completion by adding .wi-released
-     to <html>; with no intro running, the hero enters on the next frames. */
+     The intro is archived and never runs, so the hero enters on the
+     next frames. */
   function splitWords(root: HTMLElement, lang: string): void {
     const segmenter = new Intl.Segmenter(lang, { granularity: 'word' });
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
@@ -932,16 +855,9 @@ const processId = locale === "fr" ? "processus" : "process";
 
       if (prefersReduced) { enter(); return; }
 
-      const html = document.documentElement;
-      if (html.classList.contains('wi-run') && !html.classList.contains('wi-released')) {
-        const mo = new MutationObserver(() => {
-          if (html.classList.contains('wi-released')) { mo.disconnect(); enter(); }
-        });
-        mo.observe(html, { attributes: true, attributeFilter: ['class'] });
-        window.setTimeout(() => { mo.disconnect(); enter(); }, 9000);
-      } else {
-        requestAnimationFrame(() => requestAnimationFrame(enter));
-      }
+      // The intro is archived and never runs, so nothing ever gates
+      // the entrance: the hero enters on the next frames.
+      requestAnimationFrame(() => requestAnimationFrame(enter));
     };
 
     // Wait for fonts before splitting words: splitting with fallback fonts

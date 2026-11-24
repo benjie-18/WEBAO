@@ -262,6 +262,20 @@ test('the hero shows a random live demo and the intro lives only in the archive'
   );
   assert.equal(home.includes('cta-statement-title'), false, 'the final CTA title is gone');
   assert.equal(home.includes('btn--crack'), false, 'the crack button is gone');
+  // The old hero visual (browser-frame preview with floating cards) was
+  // replaced by the live demo preview, but its parallax script, its CSS
+  // and the intro-handoff wait survived: no element carries data-parallax
+  // any more, so the mousemove loop only ever moved nulls, and the intro
+  // is archived, so the wait could never fire.
+  assert.equal(home.includes('data-parallax'), false, 'the hero parallax is gone');
+  assert.equal(home.includes('wi-run'), false, 'the intro-handoff wait is gone');
+  assert.equal(home.includes('wi-released'), false, 'no intro release class is waited on');
+  assert.equal(home.includes('.hero-visual'), false, 'the old hero visual CSS is gone');
+  assert.equal(home.includes('.visual-stack'), false, 'the old preview frame CSS is gone');
+  assert.equal(home.includes('.float-card'), false, 'the old floating-card CSS is gone');
+  assert.equal(home.includes('hero-visual-in'), false, 'the old hero visual keyframes are gone');
+  // The craft collage label is localized, not hardcoded English on the FR page.
+  assert.ok(home.includes('aria-label={t.home.craft.collageAlt}'), 'the craft collage label comes from i18n');
   const preview = read('src/components/home/HeroPreview.astro');
   assert.ok(preview.includes('Math.floor(Math.random() * demos.length)'), 'the preview picks a random demo on every load');
   assert.ok(preview.includes('liveDemoIds'), 'the preview draws from the live demos only');
@@ -858,6 +872,36 @@ test('the homepage timeline agrees with the FAQ: two to three weeks, not one wee
   assert.ok(home.includes('data-week-readout'), 'the scrub readout is a week readout');
   assert.ok(!home.includes('data-day-readout'), 'no day readout remains');
   assert.ok(!home.includes('Math.round(progress * 7)'), 'no 7-day readout math remains');
+});
+
+test('the homepage FAQ states the Launch page range and the FR copy uses the plural of "frais"', () => {
+  // The $89.99/mo answer once said "a custom 1-page site" while the
+  // pricing page says Launch is 1 to 5 pages; the FAQ understated the
+  // plan. "Frais" is a plural-only noun: the FR hero lead said "Un seul
+  // frais mensuel" and the updates FAQ "dans votre frais mensuel".
+  assert.ok(
+    en.home.faq.items.some((item) => item.a.includes('a custom site of 1 to 5 pages')),
+    'the EN FAQ states the Launch page range',
+  );
+  assert.ok(
+    fr.home.faq.items.some((item) => item.a.includes('un site sur mesure de 1 à 5 pages')),
+    'the FR FAQ states the Launch page range',
+  );
+  assert.equal(fr.home.hero.leadStrong, 'Un seul paiement mensuel.', 'the FR hero lead avoids the singular "frais"');
+  assert.ok(
+    fr.home.faq.items.some((item) => item.a.includes('incluses dans vos frais mensuels')),
+    'the FR updates FAQ uses the plural "frais"',
+  );
+  const frHome = JSON.stringify(fr.home);
+  for (const bad of ['Un seul frais', 'votre frais', 'un frais ', 'le frais ', 'Aucun frais']) {
+    assert.equal(frHome.includes(bad), false, `home FR has no "${bad}" left`);
+  }
+  // The FAQ eyebrow key was dead: the FAQ section renders no eyebrow.
+  assert.equal('eyebrow' in en.home.faq, false, 'no dead FAQ eyebrow key in EN');
+  assert.equal('eyebrow' in fr.home.faq, false, 'no dead FAQ eyebrow key in FR');
+  // The craft collage label is localized in both dictionaries.
+  assert.equal(en.home.craft.collageAlt, 'Craft collage', 'the EN collage label');
+  assert.equal(fr.home.craft.collageAlt, 'Collage artisanal', 'the FR collage label');
 });
 
 test('the pricing cart button meets the 44px touch target', () => {
