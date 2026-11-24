@@ -326,6 +326,26 @@ const processId = locale === "fr" ? "processus" : "process";
   </div>
 </section>
 
+<!-- MORE SERVICES: the rest of what WEBAO does. Three small cards in the
+     site's card language, at the bottom of the page, before the final CTA. -->
+<section class="section section--tight">
+  <div class="shell">
+    <div class="section-head" data-reveal>
+      <div class="eyebrow">{t.home.more.eyebrow}</div>
+      <h2 class="display" style="font-size: clamp(2rem, 4.4vw, 3.4rem); margin-top:10px; line-height:.92;" set:html={t.home.more.title}></h2>
+    </div>
+    <div class="more-grid" data-reveal style="--d:100ms">
+      {t.home.more.cards.map((card) => (
+        <a href={card.href} class="more-card">
+          <h3>{card.title}</h3>
+          <p>{card.desc}</p>
+          <span class="more-cta">{card.cta} <span aria-hidden="true">↗</span></span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
 <!-- FINAL CTA: one normal button, nothing else. -->
 <section class="cta-statement grain">
   <div class="shell cta-statement-inner" data-reveal>
@@ -609,6 +629,18 @@ const processId = locale === "fr" ? "processus" : "process";
   .fracture-divider { height: 8px; margin-block: 2px; background: var(--line-strong); opacity: .75; clip-path: polygon(0 42%, 9% 60%, 20% 34%, 33% 64%, 46% 38%, 59% 62%, 72% 36%, 84% 60%, 100% 42%, 100% 58%, 84% 74%, 72% 50%, 59% 76%, 46% 52%, 33% 78%, 20% 48%, 9% 74%, 0 56%); }
   @media (max-width: 880px) { .faq-grid { grid-template-columns: 1fr; } }
   @media (prefers-reduced-motion: reduce) { .fracture-divider { clip-path: none; height: 1px; } }
+  /* MORE SERVICES: three small cards in the site's card language. */
+  .more-grid { margin-top: 28px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .more-card { display: grid; gap: 10px; align-content: start; background: var(--card-bg); border: 1px solid var(--line); border-radius: 16px; padding: 20px 22px; box-shadow: var(--shadow-sm); color: var(--ink); }
+  .more-card h3 { font-size: 1.15rem; letter-spacing: -0.02em; }
+  .more-card p { font-size: 13.5px; line-height: 1.6; color: var(--muted); }
+  .more-cta { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 13px; color: var(--accent-text); width: fit-content; border-bottom: 1px solid var(--line); padding-bottom: 2px; }
+  @media (hover: hover) and (pointer: fine) {
+    .more-card { transition: transform var(--dur-3) var(--ease-out-expo); }
+    .more-card:hover { transform: translateY(-4px); }
+  }
+  @media (max-width: 880px) { .more-grid { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { .more-card { transition: none; } .more-card:hover { transform: none; } }
   /* FINAL CTA: dark band with one normal button. */
   .cta-statement { background: var(--section-dark-bg); color: var(--section-dark-text); display: grid; align-items: center; position: relative; overflow: clip; border-top: 1px solid var(--line-on-dark); }
   .cta-statement::before { content:""; position:absolute; inset:0; background: radial-gradient(700px 460px at 50% 8%, var(--cta-glow-a) 0%, transparent 60%), radial-gradient(500px 500px at 50% 108%, rgba(255,255,255,.05) 0%, transparent 60%); pointer-events:none; }

@@ -6,7 +6,7 @@ const fr = {
     home: {
       title: "Sites web sur mesure pour PME au Canada | WEBAO",
       description:
-        "Des sites web sur mesure pour les entreprises partout au Canada, à partir de 89,99 $ CAD par mois. Design, domaine, hébergement, mises à jour et soutien inclus.",
+        "Des sites web sur mesure pour les entreprises partout au Canada, à partir de 89,99 $ CAD par mois, avec des services intelligents et des publicités sur Meta et Google. Design, hébergement, mises à jour et soutien inclus.",
     },
     pricing: {
       title: "Tarifs site web · Forfaits dès C$89.99/mois | WEBAO",
@@ -128,7 +128,7 @@ const fr = {
       title3: "mission",
       lead: "Un site web sur mesure pour votre entreprise, conçu et entretenu par une vraie personne.",
       leadStrong: "Un seul paiement mensuel.",
-      leadRest: "On conçoit, on lance, on héberge et on entretient. Vous gérez votre entreprise.",
+      leadRest: "On conçoit, on lance, on héberge et on entretient. Nos services intelligents et nos publicités amènent aussi les clients. Vous gérez votre entreprise.",
       ctaPrimary: "Démarrer mon site",
       auditCta: "Auditez le vôtre",
       priceNote: "89,99 $ <span>CAD/mois</span> · Tout inclus",
@@ -221,7 +221,7 @@ const fr = {
       float2: "→ Vérifié avant le lancement",
       eyebrow: "Savoir-faire · Les détails sur lesquels on capote",
       title: "Rapide, trouvable<br />et <span>entretenu.</span>",
-      desc: "Vos visiteurs jugent votre entreprise en quelques secondes, habituellement sur un téléphone. On fait compter ces secondes, puis on garde le site à jour longtemps après le lancement.",
+      desc: "Vos visiteurs jugent votre entreprise en quelques secondes, habituellement sur un téléphone. On fait compter ces secondes, puis on garde le site à jour longtemps après le lancement. Quand une visite devient un appel ou un message, nos services intelligents répondent, même après les heures d’ouverture.",
       items: [
         {
           title: "Mobile d’abord, pour vrai.",
@@ -294,10 +294,42 @@ const fr = {
           q: "Vous faites seulement des sites pour les métiers ?",
           a: "Les métiers sont notre terrain de jeu : électriciens, plombiers, chauffage-climatisation, paysagistes. Mais on crée des sites pour toute entreprise de services locale : restaurants, cliniques, garages, entretien ménager et plus. Si vous servez des clients en personne, on peut probablement vous aider. Demandez-nous.",
         },
+        {
+          q: "Faites-vous autre chose que des sites web ?",
+          a: "Oui. La même équipe s’occupe des services intelligents et de la publicité. Les automatisations intelligentes répondent à vos appels et vos messages, relancent vos devis et réservent pendant que vous travaillez, à partir de 99,99 $ CA par mois. Les publicités sur Meta et Google amènent des clients, à partir de 399,99 $ CA par mois pour le test Démarrage publicités, avec les dépenses publicitaires sur votre propre carte.",
+        },
+        {
+          q: "Faites-vous de la publicité sur Meta et Google ?",
+          a: "Oui. Les Ads Packages sont diffusés sur Meta, Google ou les deux. Un canal coûte 649,99 $ CA par mois, les deux canaux coûtent 999,99 $ CA par mois, sans frais d’installation. Vos dépenses publicitaires restent sur votre propre carte, et chaque demande vous est envoyée par courriel sur-le-champ.",
+        },
       ],
     },
     finalCta: {
       ctaPrimary: "Démarrer mon site · 89,99 $/mois →",
+    },
+    more: {
+      eyebrow: "Services · Sites web, services intelligents et publicités",
+      title: "Un site web, c’est le début. Les <span>services intelligents et les publicités</span> le font travailler.",
+      cards: [
+        {
+          title: "Services intelligents",
+          desc: "Des automatisations intelligentes, propulsées par l’intelligence artificielle, répondent à vos appels et vos messages, relancent vos devis et réservent pendant que vous travaillez. Réceptionniste 299,99 $ CA, réceptionniste en ligne 149,99 $ CA, Suivi intelligent 99,99 $ CA par mois, ou le Pack IA avec les trois pour 399,99 $ CA par mois.",
+          cta: "Voir les services intelligents",
+          href: "/fr/services/ia/",
+        },
+        {
+          title: "Publicités sur Meta et Google",
+          desc: "Des publicités qui amènent des clients pendant que votre site reçoit la demande. Le test Démarrage publicités coûte 399,99 $ CA par mois, Meta seulement, pour 90 jours. Un canal coûte 649,99 $ CA par mois, les deux canaux coûtent 999,99 $ CA par mois, avec les dépenses publicitaires sur votre propre carte.",
+          cta: "Voir les Ads Packages",
+          href: "/fr/services/publicite/",
+        },
+        {
+          title: "Tous les services, une seule équipe",
+          desc: "Sites web, services intelligents et publicités, conçus et suivis par la même personne, sur une seule facture mensuelle. Aucuns frais d’installation sur aucun service, jamais.",
+          cta: "Parcourir tous les services",
+          href: "/fr/services/",
+        },
+      ],
     },
   },
 

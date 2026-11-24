@@ -3,7 +3,7 @@ const en = {
     home: {
       title: "Custom Websites for Small Businesses in Canada | WEBAO",
       description:
-        "Custom websites for businesses across Canada, from $89.99 CAD a month. Design, domain, hosting, updates and support included.",
+        "Custom websites for businesses across Canada, from $89.99 CAD a month, with smart services and ads on Meta and Google. Design, hosting, updates and support included.",
     },
     pricing: {
       title: "Website Pricing · Plans from C$89.99/mo | WEBAO",
@@ -125,7 +125,7 @@ const en = {
       title3: "mission",
       lead: "A custom website for your business, built and looked after by a person.",
       leadStrong: "One simple monthly fee.",
-      leadRest: "We design, launch, host and maintain it. You run your business.",
+      leadRest: "We design, launch, host and maintain it. Smart services and ads can bring the customers in too. You run your business.",
       ctaPrimary: "Start your site",
       auditCta: "Audit yours now",
       priceNote: "$89.99 <span>CAD/month</span> · All-inclusive",
@@ -218,7 +218,7 @@ const en = {
       float2: "→ Checked before launch",
       eyebrow: "Craft · The details we obsess over",
       title: "Fast, findable,<br />and <span>maintained.</span>",
-      desc: "Visitors judge your business in a few seconds, usually on a phone. We make those seconds count, then keep the site accurate long after launch.",
+      desc: "Visitors judge your business in a few seconds, usually on a phone. We make those seconds count, then keep the site accurate long after launch. When a visit turns into a call or a message, our smart services answer it, even after hours.",
       items: [
         {
           title: "Mobile-first, actually.",
@@ -291,10 +291,42 @@ const en = {
           q: "Do you only build sites for trades?",
           a: "Trades are our home turf: electricians, plumbers, HVAC, landscapers. But we build sites for any local service business: restaurants, clinics, garages, cleaning services, and more. If you serve customers in person, we can probably help. Just ask.",
         },
+        {
+          q: "Do you do anything besides websites?",
+          a: "Yes. The same team runs smart services and ads. Smart automation answers your calls and chats, chases your quotes, and books while you work, from C$99.99 per month. Ads on Meta and Google bring in customers, from C$399.99 per month for the Ads Starter test, with ad spend on your own card.",
+        },
+        {
+          q: "Do you run ads on Meta and Google?",
+          a: "Yes. Ads Packages run on Meta, Google, or both. One channel is C$649.99 per month, both channels are C$999.99 per month, with no setup fee. Your ad spend stays on your own card, and every lead is emailed to you instantly.",
+        },
       ],
     },
     finalCta: {
       ctaPrimary: "Start your site · $89.99/mo →",
+    },
+    more: {
+      eyebrow: "Services · Websites, smart services and ads",
+      title: "A website is the start. <span>Smart services and ads</span> keep it working.",
+      cards: [
+        {
+          title: "Smart services",
+          desc: "Smart automation, powered by artificial intelligence, answers your calls and chats, chases your quotes, and books while you work. Receptionist C$299.99, online receptionist C$149.99, Smart Follow-up C$99.99 per month, or the AI Pack with all three for C$399.99 per month.",
+          cta: "See smart services",
+          href: "/services/ai/",
+        },
+        {
+          title: "Ads on Meta and Google",
+          desc: "Ads that bring in customers while your site takes the enquiry. The Ads Starter test is C$399.99 per month, Meta only, for 90 days. One channel is C$649.99 per month, both channels are C$999.99 per month, with ad spend on your own card.",
+          cta: "See Ads Packages",
+          href: "/services/ads/",
+        },
+        {
+          title: "Every service, one team",
+          desc: "Websites, smart services, and ads, built and looked after by the same person, on one monthly bill. No setup fee on any service, ever.",
+          cta: "Browse all services",
+          href: "/services/",
+        },
+      ],
     },
   },
 
