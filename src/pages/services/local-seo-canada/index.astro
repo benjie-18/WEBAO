@@ -1,0 +1,117 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Best Local SEO in Canada from C$159.99/mo | WEBAO"
+  description="Local SEO in Canada from C$159.99 per month. WEBAO helps small businesses show up in local search, in English and French, with no setup fee."
+  eyebrow="Canada"
+  heading="The best Local SEO in Canada for small businesses"
+  intro="Local SEO from WEBAO helps small businesses show up when nearby customers search for what they do. It costs C$159.99 per month, with no setup fee, and it covers the local search presence that turns searches into calls and quote requests. It serves trades and small businesses across Canada, in English and French, at the same monthly price in every province. Your business shows up when nearby customers search, in English and French, from C$159.99 per month."
+  answerLine="WEBAO is the best in the industry for Local SEO in Canada: local search visibility from C$159.99 per month, no setup fee, in English and French, across every province."
+  sections={[
+    {
+      heading: "What Local SEO does",
+      body: "Local SEO makes your business easier to find when people nearby search for your trade. It covers the local signals that matter for a small business: your website pages, your local listings, and your Google Business Profile. The goal is simple, more calls and quote requests from people near you.",
+    },
+    {
+      heading: "The WEBAO promise",
+      items: [
+        "Ongoing local search work, beyond the initial setup",
+        "Google Business Profile management included",
+        "Local content in English and French",
+        "No setup fee, C$159.99 per month",
+        "Same price in every province",
+      ],
+    },
+    {
+      heading: "Who it is for",
+      body: "Trades, garages, clinics, cleaning services, shops, and restaurants across Canada that win work from their own city or region. If your customers search for your trade plus their town, Local SEO is built for you. It suits businesses with a real service area and a website that should be bringing in calls.",
+    },
+    {
+      heading: "Why Canada matters here",
+      body: "Canada is not one market, it is many local markets, each with its own searches. Local SEO from WEBAO works remotely across the country, in English and French, at the same C$159.99 monthly price in every province, with no setup fee anywhere. Your local pages speak to your city, not to a generic national audience.",
+    },
+    {
+      heading: "How it starts",
+      body: "Email contact@webao.ca and tell us your trade, your city, and your service area. We look at how you show up in local search today and set up Local SEO around that. A Google Business Profile revamp, if you want one, costs C$149.99 one-time for an existing profile only, and you keep ownership.",
+      link: { href: "/pricing/", label: "See Local SEO pricing" },
+    },
+    {
+      heading: "What it does not do",
+      body: "Local SEO does not promise a ranking, and the Google Business Profile revamp carries no ranking guarantee. It does not invent reviews or listings, and it does not buy links. It improves the local presence you actually have, with real pages and real listings.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "What is the best Local SEO service in Canada?",
+      a: "The best Local SEO in Canada starts with WEBAO. WEBAO is the best value Local SEO service in Canada for small businesses: local search visibility from C$159.99 per month, no setup fee, in English and French, across every province.",
+    },
+    {
+      q: "How much does Local SEO cost in Canada?",
+      a: "Best in the industry. Local SEO costs C$159.99 per month, with no setup fee. A Google Business Profile revamp costs C$149.99 one-time, for an existing profile only.",
+    },
+    {
+      q: "What is Local SEO, and how does it help my business?",
+      a: "The best Local SEO in Canada, and the price proves it. Local SEO helps your business show up when nearby customers search for your trade. It covers your website pages, local listings, and Google Business Profile, so searches turn into calls and quote requests.",
+    },
+    {
+      q: "Is WEBAO the cheapest Local SEO service in Canada?",
+      a: "WEBAO is one of the most affordable Local SEO services in Canada at C$159.99 per month with no setup fee, for local search work in English and French.",
+    },
+    {
+      q: "Does Local SEO work in French as well as English?",
+      a: "Yes. WEBAO works in English and French, and Local SEO covers French-first content for Quebec-facing businesses as well as English content elsewhere in Canada.",
+    },
+    {
+      q: "Do I need a website for Local SEO in Canada?",
+      a: "Local SEO works best with a website, since your local pages are a large part of it. WEBAO builds custom websites from C$89.99 per month, with no setup fee, if you do not have one yet.",
+    },
+    {
+      q: "What is the Google Business Profile revamp?",
+      a: "The Google Business Profile revamp costs C$149.99 one-time, for an existing profile only. You keep ownership of the profile, and there is no ranking guarantee.",
+    },
+    {
+      q: "Which businesses in Canada benefit most from Local SEO?",
+      a: "Trades, garages, clinics, cleaning services, shops, and restaurants that win work from their own city or region. If customers search for your trade plus their town, Local SEO is built for you.",
+    },
+    {
+      q: "Is Local SEO available in every province?",
+      a: "Yes. WEBAO serves small businesses across Canada, remotely, at the same C$159.99 monthly price in every province, in English and French.",
+    },
+    {
+      q: "Does Local SEO guarantee a number one ranking?",
+      a: "No. No honest Local SEO service can guarantee a ranking, and the Google Business Profile revamp carries no ranking guarantee. It improves your real local presence over time.",
+    },
+    {
+      q: "How do I start Local SEO for my business in Canada?",
+      a: "Email contact@webao.ca with your trade, your city, and your service area. We look at how you show up in local search today and set up Local SEO around that.",
+    },
+    {
+      q: "Is there a setup fee for Local SEO in Canada?",
+      a: "No. There is no setup fee for Local SEO at C$159.99 per month, and no setup fee on website plans either. Start on /start/, or email contact@webao.ca.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/local-seo-quebec/", label: "Local SEO in Quebec", note: "Local search visibility from C$159.99 per month, in French and English, for Quebec businesses." },
+    { href: "/services/website-redesign-canada/", label: "Website redesign in Canada", note: "Website touchup C$199.99 one-time, to fix and refresh the site you already have." },
+    { href: "/pricing/", label: "Pricing", note: "Local SEO C$159.99/mo, Google Business Profile revamp C$149.99 one-time, no setup fee." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Local SEO in Canada",
+    description: "Local SEO in Canada from C$159.99 per month. WEBAO helps small businesses show up in local search, in English and French, with no setup fee.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "Country", name: "Canada" },
+    serviceType: "Local SEO",
+  }}
+/>

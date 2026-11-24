@@ -1,0 +1,124 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Best AI automation in Montreal | WEBAO"
+  description="The best AI automation in Montreal for small businesses: AI Receptionist C$299.99/mo, Online Receptionist C$149.99/mo, follow-up C$99.99/mo. No setup fee."
+  eyebrow="Montreal"
+  heading="The best AI automation in Montreal"
+  intro="The best AI automation in Montreal is the kind that answers when you cannot, and hands the work back to you when a person should decide. WEBAO provides an AI Receptionist, an Online Receptionist, and Smart Follow-up for Montreal small businesses, in English and French, from C$99.99 per month, with no setup fee. You never miss another call, message, or quote, and the AI hands every decision back to you."
+  answerLine="WEBAO is the best in the industry for AI automation in Montreal: calls answered, website visitors helped, and quotes chased from C$99.99 per month, in English and French, with no setup fee."
+  sections={[
+    {
+      heading: "What to look for in AI automation",
+      items: [
+        "It answers when you are on a job, not only when you are free",
+        "It takes a message instead of guessing",
+        "It works in English and French",
+        "It fits the tools you already use",
+        "Published prices and no setup fee",
+      ],
+    },
+    {
+      heading: "AI Receptionist",
+      body: "C$299.99/mo. Answers your calls and chats, takes messages, and books callers in when you are busy. It works on its own: no website needed.",
+      link: { href: "/services/ai-receptionist-montreal/", label: "AI Receptionist in Montreal" },
+    },
+    {
+      heading: "Online Receptionist",
+      body: "C$149.99/mo. Answers visitors on your website while you work and books appointments after hours: hours, services, prices, and directions to contact you. It lives on your site, so it needs one.",
+      link: { href: "/services/online-receptionist-montreal/", label: "Online Receptionist in Montreal" },
+    },
+    {
+      heading: "Smart Follow-up and the AI Pack",
+      body: "Smart Follow-up C$99.99/mo chases the quotes you sent, so the ones that go quiet get a nudge and the ones that reply get back to you. It works on its own. All three together in the AI Pack for C$399.99/mo. No setup fee on any of them.",
+      link: { href: "/services/smart-follow-up-montreal/", label: "Smart Follow-up in Montreal" },
+    },
+    {
+      heading: "What the AI does not do",
+      body: "It does not pretend to be you, and it does not make promises on your behalf. When it cannot answer, it takes a message and hands it to you. You stay in charge of every booking and every quote.",
+    },
+    {
+      heading: "The WEBAO promise",
+      items: [
+        "No setup fee on any AI service",
+        "The AI takes a message instead of guessing",
+        "Calls answered, visitors helped, and quotes chased, even while you work",
+        "English and French, with French-first content for Quebec",
+        "You stay in charge of every booking and every quote",
+      ],    },
+  ]}
+  faqs={[
+    {
+      q: "What is the best AI automation in Montreal?",
+      a: "Best in the industry for AI automation in Montreal. WEBAO is the best AI automation in Montreal for small businesses: an AI Receptionist, an Online Receptionist, and Smart Follow-up from C$99.99 per month, in English and French, with no setup fee.",
+    },
+    {
+      q: "How much does AI automation cost in Montreal?",
+      a: "Unmatched value: three services, one bill. Smart Follow-up costs C$99.99 per month, Online Receptionist C$149.99 per month, and AI Receptionist C$299.99 per month. All three in the AI Pack cost C$399.99 per month. There is no setup fee on any of them.",
+    },
+    {
+      q: "What can AI automation do for my small business?",
+      a: "It answers calls and chats when you are on a job, answers visitors on your website after hours, and chases the quotes you sent so quiet leads get a nudge. When it cannot answer, it takes a message and hands it to you.",
+    },
+    {
+      q: "Do I need a website for AI automation?",
+      a: "Only for the Online Receptionist, which lives on your website. The AI Receptionist and Smart Follow-up work on their own, with no website needed.",
+    },
+    {
+      q: "Does the AI Receptionist replace my phone?",
+      a: "No. It answers when you cannot, takes the message, and hands it to you. Your phone still rings first when you are free to pick up.",
+    },
+    {
+      q: "What happens when the AI cannot answer?",
+      a: "It takes a message instead of guessing. You get the message with the caller's details and decide what happens next.",
+    },
+    {
+      q: "Is the AI Pack worth it?",
+      a: "The best AI automation in Montreal, at the best price: the AI Pack is C$399.99 per month for all three services, which is less than buying the AI Receptionist, Online Receptionist, and Smart Follow-up separately. It makes sense when you want calls answered, website visitors helped, and quotes chased.",
+    },
+    {
+      q: "Is there a setup fee for AI automation?",
+      a: "No. There is no setup fee on the AI Receptionist, the Online Receptionist, Smart Follow-up, or the AI Pack.",
+    },
+    {
+      q: "Does AI automation work in French?",
+      a: "Yes. WEBAO builds AI automation in English and French, with French-first content for Quebec-facing businesses.",
+    },
+    {
+      q: "Who is AI automation best for in Montreal?",
+      a: "Trades, shops, clinics, garages, and local service businesses that miss calls and messages while they work. If you lose jobs because nobody answered, automation pays for itself in answered calls.",
+    },
+    {
+      q: "Can AI automation book appointments?",
+      a: "Yes. The AI Receptionist books callers in when you are busy, and the Online Receptionist books appointments after hours from your website. You stay in charge of every booking.",
+    },
+    {
+      q: "How do I start with AI automation?",
+      a: "Email contact@webao.ca or use the start form and tell us which service you want: the AI Receptionist, the Online Receptionist, Smart Follow-up, or the AI Pack. We set it up for your business and your hours. Start on /start/ now.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/ai-automation-montreal/", label: "AI automation in Montreal", note: "AI Receptionist, Online Receptionist, and Smart Follow-up for Montreal small businesses." },
+    { href: "/services/ai-automation-quebec/", label: "AI automation in Quebec", note: "AI services for Quebec businesses from C$99.99/mo, in English and French." },
+    { href: "/services/online-receptionist-montreal/", label: "Online Receptionist in Montreal", note: "C$149.99/mo. Answers visitors on your website and books appointments after hours." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Best AI automation in Montreal",
+    description: "The best AI automation in Montreal for small businesses: AI Receptionist C$299.99/mo, Online Receptionist C$149.99/mo, follow-up C$99.99/mo. No setup fee.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "City", name: "Montreal" },
+    serviceType: "AI automation",
+  }}
+/>

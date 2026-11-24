@@ -1,0 +1,124 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Best Visibility Pack in Canada C$349.99/mo | WEBAO"
+  description="The Visibility Pack is C$349.99/mo: the Review Generation Engine and the Monthly Growth Report together. Individual value C$379.98/mo. Available on Launch and Grow. No setup fee."
+  eyebrow="Bundles"
+  heading="Visibility Pack: the best visibility bundle in Canada"
+  intro="The Visibility Pack bundles the two services that make your business visible and keep you informed: the Review Generation Engine and the Monthly Growth Report. It costs C$349.99 per month, against an individual value of C$379.98 per month. It is available on Launch and Grow, in English and French, across Canada. Your reviews grow after every job, and you see exactly how your site is doing every month."
+  answerLine="WEBAO is the best in the industry for visibility bundles in Canada: the Review Generation Engine and the Monthly Growth Report for C$349.99 per month, against an individual value of C$379.98 per month."
+  sections={[
+    {
+      heading: "What the Visibility Pack is",
+      body: "The Visibility Pack is a bundle for businesses that want reviews to grow and a clear monthly report on how the site is doing. Reviews build trust with new customers, and the report shows what is working, so you are never guessing.",
+    },
+    {
+      heading: "What is included",
+      items: [
+        "Review Generation Engine, C$349.99/mo on its own",
+        "Monthly Growth Report, C$29.99/mo on its own",
+        "Individual value C$379.98/mo, bundle price C$349.99/mo",
+        "Automatic review requests after each job",
+        "A monthly report on how your site is doing",
+      ],
+    },
+    {
+      heading: "The WEBAO promise",
+      body: "The Visibility Pack costs C$349.99 per month. The two services on their own would cost C$379.98 per month. It is available on Launch and Grow, and it sits on top of the website plan you already have.",
+      items: [
+        "No setup fee, ever",
+        "Review requests after every job",
+        "A growth report every month",
+        "English and French",
+        "Monthly billing, cancel with 30 days notice after the initial term",
+      ],
+    },
+    {
+      heading: "Who the Visibility Pack is for",
+      body: "Launch and Grow clients who want their Google reviews to grow without chasing customers by hand, and who want a monthly report instead of silence. Trades, shops, clinics, garages and other local service businesses across Canada.",
+    },
+    {
+      heading: "How to add the Visibility Pack",
+      body: "The Visibility Pack is added from the pricing page or the start form. It works on Launch and Grow. Scale clients already have both services included in the Scale plan, so they do not need this bundle.",
+      link: { href: "/pricing/", label: "See the Visibility Pack on the pricing page" },
+    },
+    {
+      heading: "What the Visibility Pack does not do",
+      body: "The Visibility Pack does not include Local SEO Management, the Online Receptionist, advertising, or AI services. It covers reviews and reporting only. If you also want local search and a website receptionist, the Lead Pack is the bundle for Launch clients.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "How much does the Visibility Pack cost in Canada?",
+      a: "Best in the industry for Visibility Pack in Canada, and the price proves it. The Visibility Pack costs C$349.99 per month. The two services on their own would cost C$379.98 per month.",
+    },
+    {
+      q: "What is included in the Visibility Pack?",
+      a: "The Review Generation Engine and the Monthly Growth Report. Reviews grow automatically after each job, and the report shows how your site is doing each month.",
+    },
+    {
+      q: "What is the best visibility bundle in Canada?",
+      a: "The Visibility Pack is the best visibility bundle for Launch and Grow clients: the Review Generation Engine and the Monthly Growth Report for C$349.99 per month, against an individual value of C$379.98 per month.",
+    },
+    {
+      q: "Who can buy the Visibility Pack?",
+      a: "The Visibility Pack is available on Launch and Grow. Scale clients already have both services included in the Scale plan.",
+    },
+    {
+      q: "How much do I save with the Visibility Pack?",
+      a: "The two services on their own cost C$379.98 per month: the Review Generation Engine C$349.99 and the Monthly Growth Report C$29.99. The Visibility Pack is C$349.99 per month.",
+    },
+    {
+      q: "How do the review requests work?",
+      a: "The best Visibility Pack in Canada, built on reviews that grow and a report that shows it. The Review Generation Engine sends automatic review requests after each job, so happy customers are asked at the right moment and your Google reviews grow steadily.",
+    },
+    {
+      q: "What is in the Monthly Growth Report?",
+      a: "Unmatched value for Visibility Pack in Canada: two services for C$349.99 per month against C$379.98 on their own. It is a monthly report on how your site is doing, so you can see what is working instead of guessing. On its own it costs C$29.99 per month.",
+    },
+    {
+      q: "Does the Visibility Pack include Local SEO?",
+      a: "No. Local SEO Management is a separate service at C$159.99 per month. The Visibility Pack covers reviews and reporting only.",
+    },
+    {
+      q: "Does the Visibility Pack include advertising?",
+      a: "No. Ads Packages are separate, starting with the Ads Starter test at C$399.99 per month.",
+    },
+    {
+      q: "Is there a setup fee for the Visibility Pack?",
+      a: "No. There is no setup fee on the Visibility Pack or on the website plans it sits on.",
+    },
+    {
+      q: "Can I add the Visibility Pack to Grow?",
+      a: "Yes. The Visibility Pack is available on Launch and Grow. If you are on Grow, it adds reviews and reporting to the quote form and Google Business Profile you already have.",
+    },
+    {
+      q: "How do I add the Visibility Pack?",
+      a: "Add it from the pricing page or the start form. You need a Launch or Grow plan first, since the Visibility Pack is available on those two plans. Add it from /pricing/ or start at /start/ today.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/review-generation-engine/", label: "Review Generation Engine", note: "C$349.99/mo for automatic review requests after each job. Included in the Visibility Pack." },
+    { href: "/services/lead-pack/", label: "Lead Pack", note: "C$499.99/mo for Launch clients: Local SEO Management, Review Generation Engine and Online Receptionist together." },
+    { href: "/services/scale-plan/", label: "Scale plan", note: "C$349.99/mo. Both Visibility Pack services are already included in Scale." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Visibility Pack",
+    description: "The Visibility Pack is C$349.99/mo: the Review Generation Engine and the Monthly Growth Report together. Individual value C$379.98/mo. Available on Launch and Grow. No setup fee.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "Country", name: "Canada" },
+    serviceType: "Bundle",
+  }}
+/>

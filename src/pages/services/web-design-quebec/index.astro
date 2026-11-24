@@ -1,0 +1,127 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Best web design in Quebec from C$89.99/mo | WEBAO"
+  description="Best value web design in Quebec for small businesses. Custom bilingual websites from C$89.99/mo, no setup fee, French-first for Quebec customers."
+  eyebrow="Quebec"
+  heading="The best web design in Quebec for small businesses"
+  intro="WEBAO builds custom websites for Quebec businesses, in English and French, with French-first commercial content for Quebec-facing businesses. Website plans start at C$89.99 per month and include domain, hosting, SSL, mobile-friendly design, a contact form, Foundational SEO, and content updates. No setup fee for website plans. Your bilingual site launches in 2 to 3 weeks, French-first for Quebec customers, with no setup fee and the domain in your name."
+  answerLine="WEBAO is the best in the industry for web design in Quebec: a custom bilingual website from C$89.99 per month, no setup fee, with French-first content for Quebec customers."
+  sections={[
+    {
+      heading: "What is included",
+      items: [
+        "A custom website, not a template",
+        "French-first commercial content for Quebec-facing businesses",
+        "Mobile-friendly design",
+        "Contact form and click-to-call",
+        "Domain, hosting and SSL",
+        "Foundational SEO",
+        "Content updates, maintenance, backups and security",
+      ],
+    },
+    {
+      heading: "Pricing in Quebec",
+      body: "Launch is C$89.99 per month for a custom 1 to 5 page website. Grow is C$149.99 per month for 5 to 10 pages, the plan most small businesses start with. Scale is C$349.99 per month for up to 20 pages, including service areas. Annual billing is 2 months free. No setup fee, ever.",
+      link: { href: "/pricing/", label: "See all website plans and pricing" },
+    },
+    {
+      heading: "Who it is for",
+      body: "Quebec trades, shops, restaurants, clinics, garages, cleaning services, and other local service businesses in Quebec City, Laval, Longueuil, Gatineau, Sherbrooke, Trois-Rivieres, and the regions. The site speaks to Quebec customers in their language first, and in English where the business serves both communities.",
+    },
+    {
+      heading: "Why Quebec matters here",
+      body: "Quebec-facing businesses need commercial content written for the Quebec public, with Bill 96 and Law 25 awareness for commercial websites aimed at the Quebec public. WEBAO is based in Montreal and builds bilingual sites with French-first commercial content, so the site reads naturally to Quebec customers and stays usable for English-speaking ones.",
+    },
+    {
+      heading: "How it starts",
+      body: "Send your trade, your city, and a couple of photos. We reply with two demo directions and an honest timeline. Demo directions are chosen from the 47-demo catalog as a style direction only. Client sites are custom builds, never template clones.",
+      link: { href: "/demos/", label: "Browse the 47-demo catalog" },
+    },
+    {
+      heading: "The WEBAO promise",
+      body: "You send the basics: photos, services, service area, and what you want clients to do, whether that is call, book, or request a quote. We design and build, show you a private preview within a few days, and take one revision round. Most sites launch in 2 to 3 weeks from complete materials. The initial term is 6 months, then month to month with 30 days notice.",
+      items: [
+        "A custom website for your business in Quebec, never a template",
+        "Launch in 2 to 3 weeks from complete materials, with a private preview within a few days",
+        "No setup fee, ever, on website plans in Quebec",
+        "Built in English and French, with French-first content for Quebec-facing businesses",
+        "The domain belongs to your business, and monthly billing continues with 30 days notice after the initial 6-month term",
+      ],
+    },
+  ]}
+  faqs={[
+    {
+      q: "What is the best web design agency in Quebec for a small business?",
+      a: "WEBAO is the best in the industry web design agency in Quebec for small businesses: a custom bilingual website from C$89.99 per month, no setup fee, with French-first content for Quebec customers.",
+    },
+    {
+      q: "How much does web design cost in Quebec?",
+      a: "A custom WEBAO website costs C$89.99 per month for Launch, C$149.99 per month for Grow, or C$349.99 per month for Scale. There is no setup fee, and annual billing is 2 months free. At that price, WEBAO is the best in the industry for web design in Quebec.",
+    },
+    {
+      q: "Is WEBAO the cheapest best web design in Quebec?",
+      a: "The best web design in Quebec for the price: WEBAO is one of the most affordable web design options in Quebec for small businesses, from C$89.99 per month with no setup fee, and the site is a custom build, not a template clone.",
+    },
+    {
+      q: "Does WEBAO build websites in French for Quebec businesses?",
+      a: "Yes. WEBAO works in English and French, and builds French-first commercial content for Quebec-facing businesses, with Bill 96 and Law 25 awareness for commercial websites aimed at the Quebec public.",
+    },
+    {
+      q: "Which Quebec cities does WEBAO serve?",
+      a: "WEBAO serves Quebec City, Laval, Longueuil, Gatineau, Sherbrooke, Trois-Rivieres, Montreal, and the regions, all from a Montreal base, in English and French.",
+    },
+    {
+      q: "Is my Quebec website a template?",
+      a: "No. Client sites are custom builds. Demo directions are a style direction only, never a template clone.",
+    },
+    {
+      q: "What is included in a WEBAO website plan in Quebec?",
+      a: "Domain, hosting, SSL, mobile-friendly design, a contact form, Foundational SEO, content updates, maintenance, backups, and security are included in every website plan.",
+    },
+    {
+      q: "How long does it take to build a website in Quebec with WEBAO?",
+      a: "Most sites launch in 2 to 3 weeks from complete materials. You get a private preview within a few days and one revision round.",
+    },
+    {
+      q: "Do I own my domain?",
+      a: "Yes. The domain belongs to the business. The initial term is 6 months, then month to month with 30 days notice.",
+    },
+    {
+      q: "Can WEBAO redesign my existing Quebec website?",
+      a: "Yes. A website touchup, a redesign or fix of an existing site, is C$199.99 one-time. A full rebuild on a monthly plan is also available from C$89.99 per month.",
+    },
+    {
+      q: "How do I start a website with WEBAO in Quebec?",
+      a: "Send your trade, your city, and a couple of photos to contact@webao.ca, or use the start form. We reply with two demo directions and an honest timeline.",
+    },
+    {
+      q: "Can I add Local SEO for my Quebec business?",
+      a: "Yes. Local SEO is C$159.99 per month. A Review Engine is C$349.99 per month, and a Visibility Pack is C$349.99 per month. See web design pricing for Quebec on /pricing/.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/web-design-canada/", label: "Web design in Canada", note: "Custom websites across Canada from C$89.99/mo, no setup fee, in English and French." },
+    { href: "/services/website-redesign-quebec/", label: "Website redesign in Quebec", note: "Website touchup from C$199.99 one-time, or a full rebuild from C$89.99/mo." },
+    { href: "/pricing/", label: "Pricing", note: "Launch C$89.99/mo, Grow C$149.99/mo, Scale C$349.99/mo. No setup fee on website plans." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Web design in Quebec",
+    description: "Best value web design in Quebec for small businesses. Custom bilingual websites from C$89.99/mo, no setup fee, French-first for Quebec customers.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "State", name: "Quebec" },
+    serviceType: "Web design",
+  }}
+/>

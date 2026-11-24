@@ -1,0 +1,123 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Best ads agency in Quebec | WEBAO"
+  description="The best ads agency in Quebec for small businesses: Meta and Google Ads Packages from C$399.99/mo, spend on your own card. No setup fee."
+  eyebrow="Quebec"
+  heading="The best ads agency in Quebec"
+  intro="The best ads agency in Quebec is the one that brings you customers you can count, at a price you can see before you start. WEBAO runs Ads Packages on Meta, Google, or both for Quebec small businesses, from C$399.99 per month, with the ad spend on your own card and no setup fee. Every lead is emailed to you instantly, and the ad spend stays on your own card."
+  answerLine="WEBAO is the best in the industry for ads in Quebec: Ads Packages on Meta and Google from C$399.99 per month, with the ad spend on your own card, leads emailed instantly, and no setup fee."
+  sections={[
+    {
+      heading: "What makes an ads agency the best in Quebec",
+      items: [
+        "Published prices and no setup fee",
+        "Ad spend on your own card, so the spend is always yours",
+        "Every lead emailed instantly and shown in the client portal",
+        "Meta and Google from one team",
+        "Bilingual ads in English and French",
+      ],
+    },
+    {
+      heading: "Ads Starter test",
+      body: "Meta only, C$399.99/mo, ad spend from C$750/mo on your own card. A 90-day test with one campaign: then step up to a full package or stop. No setup fee.",
+      link: { href: "/services/ads-agency-quebec/", label: "Ads agency in Quebec" },
+    },
+    {
+      heading: "One channel or both",
+      body: "Meta or Google, C$649.99/mo. Minimum ad spend C$1,500/mo on your own card. Both channels together, C$999.99/mo, with minimum total ad spend C$2,500/mo and at least C$1,000 per channel. Already on one channel? Upgrade to both for C$350/mo more. No setup fee.",
+    },
+    {
+      heading: "Where the leads go",
+      body: "An ad click goes to a Meta instant form inside Facebook or Instagram, or to a landing page on the WEBAO domain, so you do not need a website to run ads. Every submission is emailed to you instantly and stored in the client portal, where you can mark the ones that booked.",
+    },
+    {
+      heading: "The WEBAO promise",
+      items: [
+        "No setup fee on any Ads Packages plan",
+        "The ad spend stays on your own card",
+        "Every lead emailed to you instantly and shown in the client portal",
+        "A 90-day Starter test on Meta from C$399.99 per month, then step up or stop",
+        "Ads in English and French, with French-first content for Quebec",
+      ],    },
+    {
+      heading: "How it starts",
+      body: "Tell us your trade, your service area, and what a good lead looks like. We build the campaign, you set the ad budget on your own card, and every lead is emailed to you instantly. The monthly report counts the leads we recorded, and the bookings you mark in the portal.",
+      link: { href: "/pricing/", label: "See Ads Packages pricing" },
+    },
+  ]}
+  faqs={[
+    {
+      q: "What is the best ads agency in Quebec?",
+      a: "Best in the industry for ads in Quebec. WEBAO is the best ads agency in Quebec for small businesses: Ads Packages on Meta and Google from C$399.99 per month, with the ad spend on your own card, leads emailed instantly, and no setup fee.",
+    },
+    {
+      q: "How much do ads cost in Quebec?",
+      a: "Unmatched value for Quebec advertisers: the Ads Starter test costs C$399.99 per month on Meta, with ad spend from C$750 per month. One channel costs C$649.99 per month with at least C$1,500 per month in ad spend. Both channels cost C$999.99 per month with at least C$2,500 per month in total ad spend.",
+    },
+    {
+      q: "Who pays the ad spend?",
+      a: "You do, on your own card, so the spend is always yours. The Starter test needs at least C$750 per month, one channel C$1,500 per month, and both channels C$2,500 per month in total, with at least C$1,000 per channel.",
+    },
+    {
+      q: "Should I run Meta ads or Google ads in Quebec?",
+      a: "Meta finds customers who match your service before they search. Google catches customers who are already searching. If you can only pick one, Meta is the cheaper test at C$399.99 per month. Both together cost C$999.99 per month and cover both kinds of customer.",
+    },
+    {
+      q: "Do I need a website to run ads?",
+      a: "No. An ad click can go to a Meta instant form or to a landing page on the WEBAO domain. A website still helps: it gives customers somewhere to check you out before they contact you.",
+    },
+    {
+      q: "What happens after the 90-day Starter test?",
+      a: "You step up to a full package or stop. There is no lock-in beyond the test, and the monthly package cancels with 90 days notice.",
+    },
+    {
+      q: "How do I know the ads are working?",
+      a: "Every lead is emailed to you instantly and shown in the client portal. The monthly report counts the leads we recorded, and the bookings you mark in the portal.",
+    },
+    {
+      q: "Is there a setup fee for ads?",
+      a: "No. There is no setup fee on the Ads Starter test, the one-channel package, or the both-channels package.",
+    },
+    {
+      q: "Do you run ads in French?",
+      a: "Yes. WEBAO runs ads in English and French, with French-first ad content for Quebec-facing businesses.",
+    },
+    {
+      q: "What is the best ads agency in Quebec for small businesses?",
+      a: "Best in the industry: for small businesses that want published prices, spend on their own card, and leads they can count, WEBAO is the best choice in Quebec: a 90-day Starter test on Meta from C$399.99 per month, then one channel or both.",
+    },
+    {
+      q: "Can I upgrade from one channel to both?",
+      a: "Yes. Already on one channel? Upgrade to both for C$350 per month more, with no setup fee.",
+    },
+    {
+      q: "How do I start ads with WEBAO?",
+      a: "Email contact@webao.ca or use the start form and tell us your trade, your service area, and what a good lead looks like. We build the campaign and you set the ad budget on your own card. Start on /start/ now.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/ads-agency-quebec/", label: "Ads agency in Quebec", note: "Ads Packages on Meta and Google from C$399.99/mo, with ad spend on your own card." },
+    { href: "/services/meta-ads-quebec/", label: "Meta Ads in Quebec", note: "Meta ads for Quebec small businesses, from the C$399.99/mo Starter test." },
+    { href: "/services/google-ads-quebec/", label: "Google Ads in Quebec", note: "Google ads for customers already searching, one channel C$649.99/mo." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Best ads agency in Quebec",
+    description: "The best ads agency in Quebec for small businesses: Meta and Google Ads Packages from C$399.99/mo, spend on your own card. No setup fee.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "State", name: "Quebec" },
+    serviceType: "Advertising",
+  }}
+/>

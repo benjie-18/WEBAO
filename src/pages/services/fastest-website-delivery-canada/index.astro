@@ -1,0 +1,127 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Best and fastest website delivery in Canada | WEBAO"
+  description="Fast website delivery in Canada: most sites launch in 2 to 3 weeks from complete materials, with a private preview within a few days. From C$89.99/mo. No setup fee."
+  eyebrow="Canada"
+  heading="The fastest website delivery in Canada for small businesses"
+  intro="A fast website is one that launches on a date you were told in advance, not one that was rushed and never finished. WEBAO delivers most small business websites in Canada in 2 to 3 weeks from complete materials, with a private preview within a few days, from C$89.99 per month and no setup fee. Send your trade, your city, and a couple of photos today, and see your private preview within a few days."
+  answerLine="WEBAO is the best in the industry for fast website delivery in Canada: a custom website from C$89.99 per month, a private preview within a few days, and most sites live in 2 to 3 weeks, with no setup fee."
+  sections={[
+    {
+      heading: "The timeline",
+      items: [
+        "Send your trade, city, and photos: we reply with two demo directions and an honest timeline",
+        "Private preview within a few days",
+        "One revision round",
+        "Most sites launch in 2 to 3 weeks from complete materials",
+      ],
+    },
+    {
+      heading: "What to send to start",
+      body: "Your trade, your city, a couple of photos, your services, your service area, and what you want clients to do: call, book, or request a quote. That is enough to start. We ask for the rest as we build, so you are not stuck writing a brief before you have a site.",
+    },
+    {
+      heading: "What slows a launch",
+      items: [
+        "Missing photos of your work, your team, or your shop",
+        "No list of services or service area",
+        "No decision on what visitors should do first",
+        "Waiting on a logo or brand colours",
+      ],
+    },
+    {
+      heading: "The WEBAO promise",
+      items: [
+        "A private preview within a few days",
+        "Most sites live in 2 to 3 weeks from complete materials",
+        "A custom build, never a template clone",
+        "One revision round before launch",
+        "No setup fee, from C$89.99 per month",
+      ],
+      link: { href: "/demos/", label: "Browse the 47-demo catalog" },    },
+    {
+      heading: "Plans and prices",
+      body: "Launch C$89.99/mo for a custom 1 to 5 page website. Grow C$149.99/mo for 5 to 10 pages, the plan most small businesses start with. Scale C$349.99/mo for up to 20 pages, including service areas. Annual billing is 2 months free. No setup fee. The initial term is 6 months, then month to month with 30 days notice.",
+    },
+    {
+      heading: "What happens after launch",
+      body: "We maintain the site: domain, hosting, SSL, backups, and small updates are included in the monthly fee. You can add a page for C$14.99 one-time, or add Local SEO, a weekly SEO blog, or the AI services when you are ready.",
+      link: { href: "/pricing/", label: "See all pricing" },
+    },
+  ]}
+  faqs={[
+    {
+      q: "What is the fastest website delivery in Canada?",
+      a: "Best in the industry for fast website delivery in Canada. WEBAO delivers most small business websites in 2 to 3 weeks from complete materials, with a private preview within a few days. Simple one-pagers can go faster.",
+    },
+    {
+      q: "How fast can I get a website in Canada?",
+      a: "The best fast website delivery in Canada, with a preview in days: most WEBAO sites launch in 2 to 3 weeks from complete materials. You get a private preview within a few days and one revision round.",
+    },
+    {
+      q: "What do I need to send to start?",
+      a: "Your trade, your city, a couple of photos, your services, your service area, and what you want clients to do: call, book, or request a quote.",
+    },
+    {
+      q: "What slows a website launch down?",
+      a: "Missing photos, no list of services or service area, and no decision on what visitors should do first. Send those four things and the build moves fast.",
+    },
+    {
+      q: "Is a fast website a template?",
+      a: "No. Client sites are custom builds. The 47-demo catalog gives a style direction, so design starts fast instead of from a blank page.",
+    },
+    {
+      q: "How much does a fast website cost?",
+      a: "Unmatched value at full speed: Launch costs C$89.99 per month, Grow C$149.99 per month, and Scale C$349.99 per month, with no setup fee. Domain, hosting, SSL, mobile-friendly design, a contact form, Foundational SEO, and updates are included.",
+    },
+    {
+      q: "Do I get to see the site before it launches?",
+      a: "Yes. You get a private preview within a few days, and one revision round before launch.",
+    },
+    {
+      q: "Can a one-page website launch faster?",
+      a: "Yes. Simple one-pagers can go faster than the usual 2 to 3 weeks, when the photos and text arrive with the order.",
+    },
+    {
+      q: "Do you build sites in French?",
+      a: "Yes. We work in English and French, and build French-first commercial content for Quebec-facing businesses.",
+    },
+    {
+      q: "What happens after my site launches?",
+      a: "We maintain it: domain, hosting, SSL, backups, and small updates are included in the monthly fee. You can cancel with 30 days notice after the initial 6-month term.",
+    },
+    {
+      q: "Can I add pages after launch?",
+      a: "Yes. An extra page costs C$14.99 one-time. You can also move to Grow at C$149.99 per month or Scale at C$349.99 per month for more pages.",
+    },
+    {
+      q: "How do I start?",
+      a: "Send your trade, your city, and a couple of photos to contact@webao.ca, or use the start form. We reply with two demo directions and an honest timeline. Start on /start/ now.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/web-design-canada/", label: "Web design in Canada", note: "Custom websites across Canada from C$89.99/mo, in English and French." },
+    { href: "/services/small-business-websites-canada/", label: "Small business websites in Canada", note: "Custom sites for trades, shops, clinics, and garages from C$89.99/mo." },
+    { href: "/services/monthly-website-plans-canada/", label: "Monthly website plans in Canada", note: "Launch C$89.99/mo, Grow C$149.99/mo, Scale C$349.99/mo. Annual billing is 2 months free." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Fastest website delivery in Canada",
+    description: "Fast website delivery in Canada: most sites launch in 2 to 3 weeks from complete materials, with a private preview within a few days. From C$89.99/mo.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "Country", name: "Canada" },
+    serviceType: "Web design",
+  }}
+/>

@@ -1,0 +1,117 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Best Online Receptionist Canada, C$149.99/mo | WEBAO"
+  description="Online Receptionist in Canada: a receptionist on your website that answers visitors and books appointments after hours. C$149.99/mo, no setup fee, needs a website."
+  eyebrow="AI services"
+  heading="Online Receptionist for your website"
+  intro="The Online Receptionist is a receptionist on your website that answers visitors while you work and books appointments after hours. It costs C$149.99 per month, answers your business-specific questions, qualifies leads, and captures their details. It needs a website, and there is no setup fee. Your website never sleeps, and your visitors always get an answer."
+  answerLine="WEBAO is the best in the industry for online receptionist service in Canada: your website visitors answered and booked after hours for C$149.99 per month, with no setup fee."
+  sections={[
+    {
+      heading: "What it is",
+      body: "A receptionist that lives on your website. It answers visitors in English and French, covers your services and basic business information, and books appointments after hours, so a visitor who arrives while you work still gets an answer.",
+    },
+    {
+      heading: "The WEBAO promise",
+      items: [
+        "Your visitors answered in English and French, around the clock",
+        "Appointments booked after hours, with booking integration where supported",
+        "Your business-specific FAQs answered, 25+ common questions covered",
+        "Every lead qualified and captured, details handed to you",
+        "No setup fee, ever",
+      ],
+    },
+    {
+      heading: "Price",
+      body: "C$149.99 per month. There is no setup fee. It is also available as part of the AI Pack for C$399.99 per month, together with the AI Receptionist and Smart Follow-up.",
+    },
+    {
+      heading: "Who it is for, and which plan it works with",
+      body: "Small businesses with a website that get visitors after hours: trades, shops, clinics, and local service businesses. It needs a website, so it works with a WEBAO website on Launch, Grow, or Scale, or with a site you already have.",
+    },
+    {
+      heading: "How to add it",
+      body: "Add it on the pricing page or from the start form at /start/. Tell us your services, your hours, and your most common questions, and we set it up with your business-specific answers.",
+      link: { href: "/pricing/", label: "See pricing and add the Online Receptionist" },
+    },
+    {
+      heading: "What it does not do",
+      body: "It does not pretend to be you, and it does not make promises on your behalf. When it cannot answer, it takes the visitor's details and hands them to you, and you decide what happens next.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "What is the Online Receptionist?",
+      a: "Best in the industry for websites that get visitors after hours: it is a receptionist on your website that answers visitors, covers your business-specific questions, and books appointments after hours. It costs C$149.99 per month.",
+    },
+    {
+      q: "How much does the Online Receptionist cost in Canada?",
+      a: "The best Online Receptionist in Canada at a flat published price: C$149.99 per month. There is no setup fee.",
+    },
+    {
+      q: "Do I need a website for the Online Receptionist?",
+      a: "Yes. It lives on your website, so it needs one. It works with a WEBAO website on Launch, Grow, or Scale, or with a site you already have.",
+    },
+    {
+      q: "What questions does the Online Receptionist answer?",
+      a: "Your business-specific FAQs, 25+ common questions and answers, plus your services and basic business information, in English and French.",
+    },
+    {
+      q: "Does it book appointments?",
+      a: "Yes. It books appointments after hours, with booking integration where supported, and captures the visitor's details for you.",
+    },
+    {
+      q: "Does it qualify leads?",
+      a: "Yes. It qualifies leads and captures their details, so you get the visitors who are ready to book or ask for a quote.",
+    },
+    {
+      q: "Is there a setup fee for the Online Receptionist?",
+      a: "No. There is no setup fee on the Online Receptionist, or on any WEBAO AI service.",
+    },
+    {
+      q: "What happens when it cannot answer a visitor?",
+      a: "It takes the visitor's details instead of guessing, and hands them to you so you can follow up yourself.",
+    },
+    {
+      q: "Can I get the Online Receptionist with the other AI services?",
+      a: "Yes. The AI Pack is C$399.99 per month for all three: AI Receptionist, Online Receptionist, and Smart Follow-up.",
+    },
+    {
+      q: "Who is the Online Receptionist best for?",
+      a: "Best in the industry for small businesses with a website that get visitors after hours: trades, shops, clinics, and local service businesses across Canada.",
+    },
+    {
+      q: "Does it work in French?",
+      a: "Yes. WEBAO works in English and French, and the Online Receptionist answers visitors in both languages.",
+    },
+    {
+      q: "How do I start with the Online Receptionist?",
+      a: "Add it on the pricing page or from the start form. Tell us your services, hours, and most common questions, and we set it up with your business-specific answers. Start on /start/ today, or email contact@webao.ca.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/ai-receptionist/", label: "AI Receptionist", note: "Answers your calls as your business and takes messages, C$299.99/mo, no website needed." },
+    { href: "/services/ai-pack/", label: "AI Pack", note: "All three AI services together for C$399.99/mo: AI Receptionist, Online Receptionist, and Smart Follow-up." },
+    { href: "/services/smart-follow-up/", label: "Smart Follow-up", note: "Missed-call text-back and quote follow-ups until they answer, C$99.99/mo." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Online Receptionist",
+    description: "Online Receptionist in Canada: a receptionist on your website that answers visitors and books appointments after hours. C$149.99/mo, no setup fee, needs a website.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "Country", name: "Canada" },
+    serviceType: "Online Receptionist",
+  }}
+/>
