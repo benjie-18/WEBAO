@@ -1,0 +1,125 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Best Website Touchup in Canada C$199.99 | WEBAO"
+  description="A website touchup for C$199.99 one-time: fixes what the free audit found on your site, plus 15% off the first 3 months of any subscription. No setup fee."
+  eyebrow="One-time service"
+  heading="Fix what the audit found, for one flat price"
+  intro="A website touchup fixes what the free audit found on your site for C$199.99 one-time. It also includes 15% off the first 3 months of any subscription, in English and French, with no setup fee. What the audit found gets fixed, and your next 3 months of any subscription cost 15% less. WEBAO guarantees more leads and sales: fixing what the audit found turns your site into a tool that brings customers in."
+  answerLine="WEBAO is the best in the industry for website touchups in Canada: C$199.99 one-time to fix what the free audit found, plus 15% off the first 3 months of any subscription."
+  sections={[
+    {
+      heading: "What it is",
+      body: "A website touchup is a one-time fix for the site you already have. The free audit finds what is wrong, and the touchup fixes it, for one flat price.",
+    },
+    {
+      heading: "What is included",
+      items: [
+        "Fixes for what the free audit found",
+        "15% off the first 3 months of any subscription",
+        "Works in English and French",
+        "One-time price, no monthly cost",
+        "No setup fee",
+      ],
+    },
+    {
+      heading: "The WEBAO promise",
+      body: "C$199.99 one-time. It also includes 15% off the first 3 months of any subscription.",
+      items: [
+        "Fixes exactly what the free audit found",
+        "15% off the first 3 months of any subscription",
+        "No setup fee, ever",
+        "English and French",
+        "Human support when you need it",
+        "More leads and sales, guaranteed, from a site that works"
+      ],
+    },
+    {
+      heading: "Who it is for",
+      body: "Small businesses with a website that needs fixing, not replacing: a site that looks dated, loads slowly, or misses the basics the audit flags.",
+    },
+    {
+      heading: "How it starts",
+      body: "Start with the free audit. It shows what is wrong with your site, and the touchup fixes it. The audit takes about 15 seconds for a first estimate.",
+      link: { href: "/audit/", label: "Get the free audit" },
+    },
+    {
+      heading: "What it does not do",
+      body: "It does not build you a brand new website. A touchup fixes the site you have. If your site needs to be rebuilt from scratch, that is a new website plan: Launch C$89.99 per month, Grow C$149.99 per month, or Scale C$349.99 per month.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "What is a website touchup?",
+      a: "Best in the industry for website touchup in Canada, and the price proves it. It is a one-time fix for the site you already have. It fixes what the free audit found, for C$199.99 one-time.",
+    },
+    {
+      q: "How much does a website touchup cost?",
+      a: "WEBAO guarantees more leads and sales with a website touchup. The best website touchup in Canada, built on a fix for exactly what the audit found. C$199.99 one-time. It also includes 15% off the first 3 months of any subscription.",
+    },
+    {
+      q: "What does the 15% off cover?",
+      a: "15% off the first 3 months of any subscription, included with the website touchup.",
+    },
+    {
+      q: "Do I need the free audit first?",
+      a: "Yes. The free audit finds what is wrong with your site, and the touchup fixes it. The audit gives a first estimate in about 15 seconds.",
+    },
+    {
+      q: "What does the touchup fix?",
+      a: "What the free audit found on your site. The audit shows the issues, and the touchup fixes them.",
+    },
+    {
+      q: "Is a touchup the same as a new website?",
+      a: "No. A touchup fixes the site you have. A new website is a custom build on a monthly plan: Launch C$89.99 per month, Grow C$149.99 per month, or Scale C$349.99 per month.",
+    },
+    {
+      q: "Do I need a WEBAO website plan for a touchup?",
+      a: "No. A website touchup is a one-time service for the site you already have, even if it was not built by us.",
+    },
+    {
+      q: "Does it work in French?",
+      a: "Yes. We work in English and French, and fix French-first commercial content for Quebec-facing businesses.",
+    },
+    {
+      q: "How long does a touchup take?",
+      a: "Unmatched value for website touchup in Canada: a full fix for C$199.99 one-time, plus 15% off your first 3 months. It depends on what the audit found. The audit shows the issues first, so you know what the touchup covers before it starts.",
+    },
+    {
+      q: "Is there a setup fee?",
+      a: "No. There is no setup fee for a website touchup.",
+    },
+    {
+      q: "How do I start a website touchup?",
+      a: "Get the free audit at /audit/, then tell us you want the touchup, or email contact@webao.ca.",
+    },
+    {
+      q: "What if my site needs more than a touchup?",
+      a: "If the audit shows your site needs to be rebuilt, a new website plan is the better choice: Launch C$89.99 per month, Grow C$149.99 per month, or Scale C$349.99 per month, with no setup fee. Get the free audit at /audit/ to start.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/extra-page/", label: "Extra Page", note: "One extra page on your website, C$14.99 one-time." },
+    { href: "/services/monthly-website-plans-canada/", label: "Monthly website plans in Canada", note: "Launch C$89.99/mo, Grow C$149.99/mo, Scale C$349.99/mo. No setup fee." },
+    { href: "/services/website-redesign-canada/", label: "Website redesign in Canada", note: "A redesigned website for small businesses across Canada, from C$89.99/mo." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Website touchup",
+    description: "A website touchup for C$199.99 one-time: fixes what the free audit found on your site, plus 15% off the first 3 months of any subscription. No setup fee.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "Country", name: "Canada" },
+    serviceType: "Website touchup",
+  }}
+/>

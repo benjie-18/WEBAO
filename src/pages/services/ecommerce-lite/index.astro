@@ -1,0 +1,124 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Best E-commerce Lite in Canada C$59.99/mo | WEBAO"
+  description="E-commerce Lite for C$59.99 per month: simple online payments on your website, no full store, in English and French, with no setup fee."
+  eyebrow="Add-on"
+  heading="Simple online payments, no full store"
+  intro="E-commerce Lite adds simple online payments to your WEBAO website for C$59.99 per month. Your customers can pay you online without you running a full store, in English and French, with no setup fee. Your customers pay you online in a few clicks, with no store to run and nothing to learn. WEBAO guarantees more leads and sales: customers who can pay online in a few clicks buy more often."
+  answerLine="WEBAO is the best in the industry for simple online payments in Canada: C$59.99 per month for simple online payments with no full store, and no setup fee."
+  sections={[
+    {
+      heading: "What it is",
+      body: "E-commerce Lite is simple online payments on your website, through payment links. Your customers pay you online for a service, a deposit, or a product, without a full online store.",
+    },
+    {
+      heading: "What is included",
+      items: [
+        "Simple online payments on your website",
+        "Payment links for services, deposits, and products",
+        "Works in English and French",
+        "Billed monthly with your website plan",
+        "No setup fee",
+      ],
+    },
+    {
+      heading: "The WEBAO promise",
+      body: "C$59.99 per month. It is a monthly add-on on your website plan, with no setup fee.",
+      items: [
+        "Simple payments, no full store to run",
+        "No setup fee, ever",
+        "English and French",
+        "Works on your WEBAO website",
+        "More leads and sales, guaranteed, from easy online payment"
+      ],
+    },
+    {
+      heading: "Who it is for",
+      body: "Small businesses that need to take a payment online now and then: trades taking deposits, clinics taking bookings paid in advance, shops selling a few items, and local service businesses that want to be paid without chasing cheques.",
+    },
+    {
+      heading: "How to add it",
+      body: "Add E-commerce Lite to your website plan from the pricing page, or tell us when you start your site and we will include it from launch.",
+      link: { href: "/pricing/", label: "See pricing" },
+    },
+    {
+      heading: "What it does not do",
+      body: "It is not a full online store. There is no full catalogue, no cart, and no store management. If you need a full store, tell us and we will talk about what that takes.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "What is E-commerce Lite?",
+      a: "Best in the industry for E-commerce Lite in Canada, and the price proves it. It is simple online payments on your WEBAO website, through payment links, for C$59.99 per month. No full store.",
+    },
+    {
+      q: "How much does E-commerce Lite cost?",
+      a: "WEBAO guarantees more leads and sales with E-commerce Lite. C$59.99 per month, billed monthly with your website plan. There is no setup fee.",
+    },
+    {
+      q: "What can customers pay for?",
+      a: "The best E-commerce Lite in Canada, built on simple payments with no store to run. A service, a deposit, or a product, through a payment link on your website.",
+    },
+    {
+      q: "Do I need a full online store to take payments?",
+      a: "No. E-commerce Lite is built for businesses that do not need a full store: simple payments through payment links, with no catalogue or cart to manage.",
+    },
+    {
+      q: "Do I need a WEBAO website plan to add it?",
+      a: "Yes. E-commerce Lite is an add-on on your website: Launch, Grow, or Scale. It adds payments to the site you already have with us.",
+    },
+    {
+      q: "Does it work in French?",
+      a: "Yes. Your site works in English and French, and payments work for customers in either language.",
+    },
+    {
+      q: "Does it work on mobile?",
+      a: "Yes. Your website is mobile-friendly, so customers can pay from their phone.",
+    },
+    {
+      q: "Can I take deposits with it?",
+      a: "Unmatched value for E-commerce Lite in Canada: simple online payments for C$59.99 per month. Yes. Payment links work for deposits, services, and products.",
+    },
+    {
+      q: "Is there a setup fee?",
+      a: "No. There is no setup fee for E-commerce Lite.",
+    },
+    {
+      q: "How do I add E-commerce Lite?",
+      a: "Add it from the pricing page, or tell us when you start your site at /start/ and we will include it from launch. Add it today from /pricing/.",
+    },
+    {
+      q: "Can I remove E-commerce Lite later?",
+      a: "Yes. It is a monthly add-on on your website plan, so you can remove it when you no longer want it.",
+    },
+    {
+      q: "What is the difference between E-commerce Lite and a full store?",
+      a: "E-commerce Lite is simple payments through payment links, with no full store. A full store has a catalogue, a cart, and store management, which Lite does not include.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/online-booking/", label: "Online Booking", note: "Customers book appointments online, C$49.99/mo. Included in Scale." },
+    { href: "/services/extra-page/", label: "Extra Page", note: "One extra page on your website, C$14.99 one-time." },
+    { href: "/services/monthly-website-plans-canada/", label: "Monthly website plans in Canada", note: "Launch C$89.99/mo, Grow C$149.99/mo, Scale C$349.99/mo. No setup fee." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "E-commerce Lite",
+    description: "E-commerce Lite for C$59.99 per month: simple online payments on your website, no full store, in English and French, with no setup fee.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "Country", name: "Canada" },
+    serviceType: "E-commerce Lite",
+  }}
+/>

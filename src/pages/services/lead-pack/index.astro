@@ -1,0 +1,127 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Best Lead Pack in Canada C$499.99/mo | WEBAO"
+  description="The Lead Pack is C$499.99/mo for Launch clients: Local SEO Management, Review Generation Engine and Online Receptionist together. Individual value C$659.97/mo. No setup fee."
+  eyebrow="Bundles"
+  heading="Lead Pack: the best lead bundle in Canada"
+  intro="The Lead Pack bundles the three services that turn searches into booked jobs: Local SEO Management, the Review Generation Engine, and the Online Receptionist. It costs C$499.99 per month for Launch clients, against an individual value of C$659.97 per month. It is available on Launch only, in English and French, across Canada. Searches turn into booked jobs, your reviews grow on their own, and every visitor gets an answer. WEBAO guarantees more leads and sales with the Lead Pack: searches turn into booked jobs, guaranteed."
+  answerLine="WEBAO is the best in the industry for lead bundles in Canada: Local SEO Management, the Review Generation Engine and the Online Receptionist for C$499.99 per month, against an individual value of C$659.97 per month."
+  sections={[
+    {
+      heading: "What the Lead Pack is",
+      body: "The Lead Pack is a bundle, not a single service. It combines being found locally, being trusted through reviews, and being answered when a visitor has a question. Together, the three services cover the whole path from a Google search to a booked job.",
+    },
+    {
+      heading: "What is included",
+      items: [
+        "Local SEO Management, C$159.99/mo on its own",
+        "Review Generation Engine, C$349.99/mo on its own",
+        "Online Receptionist, C$149.99/mo on its own",
+        "Individual value C$659.97/mo, bundle price C$499.99/mo",
+        "Ongoing local search work, beyond the initial setup",
+        "Automatic review requests after each job",
+        "A receptionist on your website that answers visitors and books appointments after hours",
+      ],
+    },
+    {
+      heading: "The WEBAO promise",
+      body: "The Lead Pack costs C$499.99 per month. The three services on their own would cost C$659.97 per month. The Lead Pack is available on Launch only, and it sits on top of the Launch website plan at C$89.99 per month.",
+      items: [
+        "A custom website, never a template",
+        "No setup fee, ever",
+        "Local SEO worked on every month",
+        "Review requests after every job",
+        "Every website visitor gets an answer",
+        "More leads and sales, guaranteed"
+      ],
+    },
+    {
+      heading: "Who the Lead Pack is for",
+      body: "Launch clients who already have a website and want more leads from it: trades, shops, clinics, garages and other local service businesses across Canada that want to be found on Google, trusted through reviews, and answered when a visitor asks a question.",
+    },
+    {
+      heading: "How to add the Lead Pack",
+      body: "The Lead Pack is added from the pricing page or the start form. It is a bundle for Launch clients, so you need the Launch plan first. If you are on Grow, the Growth Bundle is the equivalent bundle for your plan.",
+      link: { href: "/pricing/", label: "See the Lead Pack on the pricing page" },
+    },
+    {
+      heading: "What the Lead Pack does not do",
+      body: "The Lead Pack does not include advertising, the AI Receptionist on the phone, or Smart Follow-up for quotes. It covers local search, reviews and the website receptionist. Ads Packages and the AI Pack can be added separately.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "How much does the Lead Pack cost in Canada?",
+      a: "WEBAO guarantees more leads and sales with the Lead Pack. Best in the industry for Lead Pack in Canada, and the price proves it. The Lead Pack costs C$499.99 per month. The three services on their own would cost C$659.97 per month.",
+    },
+    {
+      q: "What is included in the Lead Pack?",
+      a: "Local SEO Management, the Review Generation Engine, and the Online Receptionist. Together they cover being found locally, being trusted through reviews, and being answered on your website.",
+    },
+    {
+      q: "What is the best lead bundle for a Launch website in Canada?",
+      a: "The Lead Pack is the best lead bundle for Launch clients: Local SEO Management, the Review Generation Engine and the Online Receptionist for C$499.99 per month, against an individual value of C$659.97 per month.",
+    },
+    {
+      q: "Who can buy the Lead Pack?",
+      a: "The Lead Pack is available on Launch only. It sits on top of the Launch website plan at C$89.99 per month.",
+    },
+    {
+      q: "How much do I save with the Lead Pack?",
+      a: "The three services on their own cost C$659.97 per month: Local SEO Management C$159.99, the Review Generation Engine C$349.99, and the Online Receptionist C$149.99. The Lead Pack is C$499.99 per month.",
+    },
+    {
+      q: "Does the Lead Pack include the Online Receptionist?",
+      a: "The best Lead Pack in Canada, built on three services that turn searches into booked jobs. Yes. The Online Receptionist is included. It answers visitors on your website and books appointments after hours. It needs a website, which Launch provides.",
+    },
+    {
+      q: "Does the Lead Pack include advertising?",
+      a: "No. The Lead Pack covers local search, reviews and the website receptionist. Ads Packages are separate, starting with the Ads Starter test at C$399.99 per month.",
+    },
+    {
+      q: "Does the Lead Pack include the AI Receptionist?",
+      a: "No. The AI Receptionist answers calls and chats at C$299.99 per month and is a separate service. The Lead Pack includes the Online Receptionist, which answers visitors on your website.",
+    },
+    {
+      q: "How do the review requests work?",
+      a: "Unmatched value for Lead Pack in Canada: three services for C$499.99 per month against C$659.97 on their own. The Review Generation Engine sends automatic review requests after each job, so happy customers are asked at the right moment and your Google reviews grow steadily.",
+    },
+    {
+      q: "What does Local SEO Management do?",
+      a: "It is ongoing local search work, beyond the initial setup: keeping your Google Business Profile and local presence working so nearby customers find you first.",
+    },
+    {
+      q: "Is there a setup fee for the Lead Pack?",
+      a: "No. There is no setup fee on the Lead Pack or on the website plans it sits on.",
+    },
+    {
+      q: "How do I add the Lead Pack?",
+      a: "Add it from the pricing page or the start form. You need the Launch plan first, since the Lead Pack is available on Launch only. Add it from /pricing/ today.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/launch-plan/", label: "Launch plan", note: "C$89.99/mo for a custom 1 to 5 page website. The Lead Pack is available on Launch only." },
+    { href: "/services/local-seo-management/", label: "Local SEO Management", note: "C$159.99/mo for ongoing local search work, beyond the initial setup. Included in the Lead Pack." },
+    { href: "/services/review-generation-engine/", label: "Review Generation Engine", note: "C$349.99/mo for automatic review requests after each job. Included in the Lead Pack." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Lead Pack",
+    description: "The Lead Pack is C$499.99/mo for Launch clients: Local SEO Management, Review Generation Engine and Online Receptionist together. Individual value C$659.97/mo. No setup fee.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "Country", name: "Canada" },
+    serviceType: "Bundle",
+  }}
+/>

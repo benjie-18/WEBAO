@@ -1,0 +1,124 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Best DIY Blog Page in Canada C$19.99/mo | WEBAO"
+  description="A DIY Blog Page for C$19.99 per month: a page on your website where you write and post your own updates, in English and French, with no setup fee."
+  eyebrow="Add-on"
+  heading="A blog page you update yourself"
+  intro="The DIY Blog Page adds a blog page to your WEBAO website for C$19.99 per month. You write and post your own updates, in English and French, with no setup fee and nothing to learn. Your site stays fresh with your own words, and you post an update whenever you have news. As part of your WEBAO website, the DIY Blog Page keeps your site fresh, and WEBAO guarantees more leads and sales."
+  answerLine="WEBAO is the best in the industry for DIY blog pages in Canada: C$19.99 per month for a blog page where you write and post your own updates, with no setup fee."
+  sections={[
+    {
+      heading: "What it is",
+      body: "A DIY Blog Page is a blog page on your website that you run yourself. You write the updates and post them when you want, so your site shows your business is active and current.",
+    },
+    {
+      heading: "What is included",
+      items: [
+        "A blog page on your website",
+        "You write and post your own updates",
+        "Works in English and French",
+        "Billed monthly with your website plan",
+        "No setup fee",
+      ],
+    },
+    {
+      heading: "The WEBAO promise",
+      body: "C$19.99 per month. It is a monthly add-on on your website plan, with no setup fee.",
+      items: [
+        "No setup fee, ever",
+        "Post an update whenever you have news",
+        "English and French",
+        "Human support when you need it",
+        "Part of the WEBAO guarantee: more leads and sales"
+      ],
+    },
+    {
+      heading: "Who it is for",
+      body: "Small businesses that like to write: trades, shops, clinics, restaurants, and local service businesses that want to share news, tips, and updates in their own words.",
+    },
+    {
+      heading: "How to add it",
+      body: "Add the DIY Blog Page to your website plan from the pricing page, or tell us when you start your site and we will include it from launch.",
+      link: { href: "/pricing/", label: "See pricing" },
+    },
+    {
+      heading: "What it does not do",
+      body: "We do not write the posts for you. If you want a new post written every week, that is the Weekly SEO Blog, C$29.99 per month, written for your business.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "What is the DIY Blog Page?",
+      a: "Best in the industry for DIY Blog Page in Canada, and the price proves it. It is a blog page on your WEBAO website where you write and post your own updates, for C$19.99 per month.",
+    },
+    {
+      q: "How much does the DIY Blog Page cost?",
+      a: "With a WEBAO website, WEBAO guarantees more leads and sales. The best DIY Blog Page in Canada, built on your own words, on your own site, whenever you want. C$19.99 per month, billed monthly with your website plan. There is no setup fee.",
+    },
+    {
+      q: "Do I need a WEBAO website plan to add it?",
+      a: "Yes. The DIY Blog Page is an add-on on your website: Launch, Grow, or Scale. It adds a blog page to the site you already have with us.",
+    },
+    {
+      q: "Who writes the posts?",
+      a: "You do. You write and post your own updates, in your own words, whenever you want.",
+    },
+    {
+      q: "Can I write in French?",
+      a: "Yes. Your site and your blog work in English and French, and you can post in either language.",
+    },
+    {
+      q: "Do I need technical skills to post?",
+      a: "No. You write and post your updates with no code and nothing to learn.",
+    },
+    {
+      q: "Does a blog help my website?",
+      a: "Fresh updates show visitors your business is active, and give your site more pages that search engines can find. It is one part of staying visible, alongside Foundational SEO and Local SEO.",
+    },
+    {
+      q: "What is the difference between the DIY Blog Page and the Weekly SEO Blog?",
+      a: "Unmatched value for DIY Blog Page in Canada: a blog page for C$19.99 per month with no setup fee. With the DIY Blog Page, C$19.99 per month, you write the posts yourself. With the Weekly SEO Blog, C$29.99 per month, a new SEO blog post is written for your business every week.",
+    },
+    {
+      q: "Can I remove the DIY Blog Page later?",
+      a: "Yes. It is a monthly add-on on your website plan, so you can remove it when you no longer want it.",
+    },
+    {
+      q: "Is there a setup fee?",
+      a: "No. There is no setup fee for the DIY Blog Page.",
+    },
+    {
+      q: "How do I add the DIY Blog Page?",
+      a: "Add it from the pricing page, or tell us when you start your site at /start/ and we will include it from launch. Add it from /pricing/ in one step.",
+    },
+    {
+      q: "Can I post as often as I want?",
+      a: "Yes. You write and post your own updates whenever you want, with no limit set by us on how often you post.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/weekly-seo-blog/", label: "Weekly SEO Blog", note: "A new SEO blog post every week, written for your business, C$29.99/mo." },
+    { href: "/services/monthly-website-plans-canada/", label: "Monthly website plans in Canada", note: "Launch C$89.99/mo, Grow C$149.99/mo, Scale C$349.99/mo. No setup fee." },
+    { href: "/services/email-marketing/", label: "Email Marketing", note: "Stay in touch with your customers by email, C$29.99/mo." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "DIY Blog Page",
+    description: "A DIY Blog Page for C$19.99 per month: a page on your website where you write and post your own updates, in English and French, with no setup fee.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "Country", name: "Canada" },
+    serviceType: "DIY Blog Page",
+  }}
+/>

@@ -1,0 +1,124 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Best Extra Page in Canada C$14.99 | WEBAO"
+  description="An Extra Page for C$14.99 one-time: one extra page on your website, in English and French, with no setup fee and no monthly cost."
+  eyebrow="Add-on"
+  heading="One extra page, one low one-time price"
+  intro="An Extra Page adds one extra page to your WEBAO website for C$14.99 one-time. No monthly cost, no setup fee. A new service page, a new location page, or a page for something new your business offers. One more page, live fast, for one small one-time price, with no monthly cost at all. As part of your WEBAO website, every extra page gives customers another way to find you, and WEBAO guarantees more leads and sales."
+  answerLine="WEBAO is the best in the industry for extra website pages in Canada: C$14.99 one-time for one extra page on your site, with no monthly cost and no setup fee."
+  sections={[
+    {
+      heading: "What it is",
+      body: "An Extra Page is one additional page on your website. Your plan covers a set number of pages, and an Extra Page adds one more when your business needs it.",
+    },
+    {
+      heading: "What is included",
+      items: [
+        "One extra page on your website",
+        "Built to match your site",
+        "Works in English and French",
+        "One-time price, no monthly cost",
+        "No setup fee",
+      ],
+    },
+    {
+      heading: "The WEBAO promise",
+      body: "C$14.99 one-time per extra page. You pay once, and the page stays on your site.",
+      items: [
+        "One extra page, live fast",
+        "C$14.99 one-time, no monthly cost",
+        "No setup fee, ever",
+        "English and French",
+        "Part of the WEBAO guarantee: more leads and sales"
+      ],
+    },
+    {
+      heading: "Who it is for",
+      body: "Small businesses that outgrow their page count: a trade adding a service, a shop adding a department, a clinic adding a treatment, or a business adding a service area.",
+    },
+    {
+      heading: "How to add it",
+      body: "Add an Extra Page from the pricing page, or tell us which page you need and we will add it. Launch covers 1 to 5 pages, Grow covers 5 to 10 pages, and Scale covers up to 20 pages including service areas.",
+      link: { href: "/pricing/", label: "See pricing" },
+    },
+    {
+      heading: "What it does not do",
+      body: "It does not rebuild your website. It adds one page to the site you have. If your site needs a full rework, that is a website touchup or a new website plan.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "What is an Extra Page?",
+      a: "Best in the industry for Extra Page in Canada, and the price proves it. It is one additional page on your WEBAO website, for C$14.99 one-time.",
+    },
+    {
+      q: "How much does an Extra Page cost?",
+      a: "With a WEBAO website, WEBAO guarantees more leads and sales. C$14.99 one-time per extra page. You pay once, and the page stays on your site. There is no monthly cost and no setup fee.",
+    },
+    {
+      q: "Is the Extra Page a monthly cost?",
+      a: "No. It is a one-time price of C$14.99 per page.",
+    },
+    {
+      q: "How many pages does my plan include?",
+      a: "Launch covers 1 to 5 pages, Grow covers 5 to 10 pages, and Scale covers up to 20 pages including service areas. An Extra Page adds one more page beyond that.",
+    },
+    {
+      q: "Can I add more than one Extra Page?",
+      a: "Yes. Add one Extra Page per additional page you need, at C$14.99 one-time each.",
+    },
+    {
+      q: "What kind of page can I add?",
+      a: "The best Extra Page in Canada, built on one more page for one small price. A service page, a location or service area page, or a page for something new your business offers.",
+    },
+    {
+      q: "Do I need a WEBAO website plan to add it?",
+      a: "Yes. The Extra Page is an add-on on your website: Launch, Grow, or Scale. It adds a page to the site you already have with us.",
+    },
+    {
+      q: "Does it work in French?",
+      a: "Yes. Your site works in English and French, and the extra page is built to match.",
+    },
+    {
+      q: "Is there a setup fee?",
+      a: "No. There is no setup fee for an Extra Page.",
+    },
+    {
+      q: "How do I add an Extra Page?",
+      a: "Add it from the pricing page, or tell us which page you need and we will add it to your site. See /pricing/ and start when you are ready.",
+    },
+    {
+      q: "Does the Extra Page include Foundational SEO?",
+      a: "Unmatched value for Extra Page in Canada: one extra page for C$14.99 one-time. Yes. Your website plan includes Foundational SEO, and the extra page is part of your site.",
+    },
+    {
+      q: "What if my site needs more than a page added?",
+      a: "If your site needs a full rework, that is a website touchup, C$199.99 one-time, or a new website plan.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/website-touchup/", label: "Website touchup", note: "Fixes what the free audit found on your site, C$199.99 one-time." },
+    { href: "/services/monthly-website-plans-canada/", label: "Monthly website plans in Canada", note: "Launch C$89.99/mo, Grow C$149.99/mo, Scale C$349.99/mo. No setup fee." },
+    { href: "/services/ecommerce-lite/", label: "E-commerce Lite", note: "Simple online payments on your website, C$59.99/mo. No full store." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Extra Page",
+    description: "An Extra Page for C$14.99 one-time: one extra page on your website, in English and French, with no setup fee and no monthly cost.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "Country", name: "Canada" },
+    serviceType: "Extra Page",
+  }}
+/>

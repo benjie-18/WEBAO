@@ -1,0 +1,125 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Best Weekly SEO Blog in Canada C$29.99/mo | WEBAO"
+  description="A Weekly SEO Blog for C$29.99 per month: a new SEO blog post every week, written for your business, in English and French, with no setup fee."
+  eyebrow="Add-on"
+  heading="A new SEO blog post every week"
+  intro="The Weekly SEO Blog gives your website a new SEO blog post every week, written for your business, for C$29.99 per month. You do not write a word. Your site stays fresh in English and French, with no setup fee. A new post lands on your site every single week, and you do not write a word. WEBAO guarantees more leads and sales: a fresh post every week brings more visitors to your site, and visitors become customers."
+  answerLine="WEBAO is the best in the industry for weekly SEO blogs in Canada: C$29.99 per month for a new SEO blog post every week, written for your business, with no setup fee."
+  sections={[
+    {
+      heading: "What it is",
+      body: "A Weekly SEO Blog is a blog on your website with a new post every week, written for your business. Each post is written to help your site be found for the services you offer.",
+    },
+    {
+      heading: "What is included",
+      items: [
+        "A new SEO blog post every week",
+        "Written for your business and your services",
+        "Works in English and French",
+        "Billed monthly with your website plan",
+        "No setup fee",
+      ],
+    },
+    {
+      heading: "The WEBAO promise",
+      body: "C$29.99 per month. It is a monthly add-on on your website plan, with no setup fee.",
+      items: [
+        "A new post every week, written for you",
+        "No setup fee, ever",
+        "English and French",
+        "Remove it when you no longer want it",
+        "Human support when you need it",
+        "More leads and sales, guaranteed, from fresh content every week"
+      ],
+    },
+    {
+      heading: "Who it is for",
+      body: "Small businesses that want fresh content without writing it themselves: trades, shops, clinics, restaurants, and local service businesses that want their site to keep growing.",
+    },
+    {
+      heading: "How to add it",
+      body: "Add the Weekly SEO Blog to your website plan from the pricing page, or tell us when you start your site and we will include it from launch.",
+      link: { href: "/pricing/", label: "See pricing" },
+    },
+    {
+      heading: "What it does not do",
+      body: "It does not guarantee a ranking or a number of visitors. It gives your site fresh, relevant content every week, which is one part of staying visible, alongside Foundational SEO and Local SEO.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "What is the Weekly SEO Blog?",
+      a: "Best in the industry for Weekly SEO Blog in Canada, and the price proves it. It is a blog on your WEBAO website with a new SEO blog post every week, written for your business, for C$29.99 per month.",
+    },
+    {
+      q: "How much does the Weekly SEO Blog cost?",
+      a: "WEBAO guarantees more leads and sales with the Weekly SEO Blog. C$29.99 per month, billed monthly with your website plan. There is no setup fee.",
+    },
+    {
+      q: "How often do I get a new post?",
+      a: "The best Weekly SEO Blog in Canada, built on a new post every week, written for you. Every week. A new SEO blog post is written for your business each week.",
+    },
+    {
+      q: "Who writes the posts?",
+      a: "We do. Each post is written for your business and the services you offer.",
+    },
+    {
+      q: "Are the posts written in French?",
+      a: "Yes. Your site works in English and French, and posts are written for your business in the language your customers use.",
+    },
+    {
+      q: "Do I need a WEBAO website plan to add it?",
+      a: "Yes. The Weekly SEO Blog is an add-on on your website: Launch, Grow, or Scale. It adds a blog to the site you already have with us.",
+    },
+    {
+      q: "Does a weekly blog help my website be found?",
+      a: "Unmatched value for Weekly SEO Blog in Canada: a new SEO post every week for C$29.99 per month. Fresh, relevant posts give search engines more pages to find and give visitors more reasons to trust your business. It is one part of staying visible, alongside Foundational SEO and Local SEO.",
+    },
+    {
+      q: "What is the difference between the Weekly SEO Blog and the DIY Blog Page?",
+      a: "With the Weekly SEO Blog, C$29.99 per month, a new post is written for you every week. With the DIY Blog Page, C$19.99 per month, you write and post your own updates.",
+    },
+    {
+      q: "Can I remove the Weekly SEO Blog later?",
+      a: "Yes. It is a monthly add-on on your website plan, so you can remove it when you no longer want it. Add it from /pricing/ or tell us at /start/.",
+    },
+    {
+      q: "Is there a setup fee?",
+      a: "No. There is no setup fee for the Weekly SEO Blog.",
+    },
+    {
+      q: "How do I add the Weekly SEO Blog?",
+      a: "Add it from the pricing page, or tell us when you start your site at /start/ and we will include it from launch.",
+    },
+    {
+      q: "What does the Weekly SEO Blog not do?",
+      a: "It does not guarantee a ranking or a number of visitors. It gives your site a new, relevant post every week, which helps your site stay fresh and visible over time.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/diy-blog-page/", label: "DIY Blog Page", note: "A blog page where you write and post your own updates, C$19.99/mo." },
+    { href: "/services/local-seo-management/", label: "Local SEO Management", note: "Ongoing local search work beyond the initial setup, C$159.99/mo." },
+    { href: "/services/monthly-growth-report/", label: "Monthly Growth Report", note: "A monthly report on your website's growth, C$29.99/mo. Included in Scale." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Weekly SEO Blog",
+    description: "A Weekly SEO Blog for C$29.99 per month: a new SEO blog post every week, written for your business, in English and French, with no setup fee.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "Country", name: "Canada" },
+    serviceType: "Weekly SEO Blog",
+  }}
+/>

@@ -1,0 +1,124 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Best Quote Photo Upload Canada C$9.99/mo | WEBAO"
+  description="Quote Photo Upload for C$9.99 per month on Launch: customers attach photos to quote requests. Included in Grow and Scale. No setup fee."
+  eyebrow="Add-on"
+  heading="Let customers send photos with their quote request"
+  intro="Quote Photo Upload lets customers attach photos to their quote request for C$9.99 per month on Launch. It is included in Grow and Scale at no extra cost, in English and French, with no setup fee. Every quote request arrives with photos, so you quote accurately before you visit. As part of your WEBAO website, Quote Photo Upload helps you quote accurately and win the job, and WEBAO guarantees more leads and sales."
+  answerLine="WEBAO is the best in the industry for quote photo uploads in Canada: C$9.99 per month on Launch, included in Grow and Scale, so customers send photos with their quote request."
+  sections={[
+    {
+      heading: "What it is",
+      body: "Quote Photo Upload adds photo upload to your quote form. A customer sends a photo of the job with their quote request, so you can see what they need before you quote.",
+    },
+    {
+      heading: "What is included",
+      items: [
+        "Photo upload on your quote form",
+        "Customers send photos with their request",
+        "Works in English and French",
+        "Billed monthly with your website plan",
+        "No setup fee",
+      ],
+    },
+    {
+      heading: "The WEBAO promise",
+      body: "C$9.99 per month on Launch. It is included in Grow, C$149.99 per month, and Scale, C$349.99 per month, at no extra cost.",
+      items: [
+        "Photos with every quote request",
+        "Included in Grow and Scale",
+        "No setup fee, ever",
+        "English and French",
+        "Part of the WEBAO guarantee: more leads and sales"
+      ],
+    },
+    {
+      heading: "Which plans have it",
+      body: "Launch only as a paid add-on: C$9.99 per month. Grow already includes a quote form with photo upload, and Scale includes it too.",
+    },
+    {
+      heading: "Who it is for",
+      body: "Trades and local service businesses that quote from photos: plumbers, electricians, roofers, renovators, landscapers, and any business where seeing the job helps you quote it right.",
+    },
+    {
+      heading: "How to add it",
+      body: "Add Quote Photo Upload to your Launch plan from the pricing page, or choose Grow and it is included. Tell us when you start your site and we will include it from launch.",
+      link: { href: "/pricing/", label: "See pricing" },
+    },
+  ]}
+  faqs={[
+    {
+      q: "What is Quote Photo Upload?",
+      a: "Best in the industry for Quote Photo Upload in Canada, and the price proves it. It adds photo upload to your quote form, so customers attach photos to their quote request, for C$9.99 per month on Launch.",
+    },
+    {
+      q: "How much does Quote Photo Upload cost?",
+      a: "With a WEBAO website, WEBAO guarantees more leads and sales. C$9.99 per month on Launch. It is included in Grow and Scale at no extra cost.",
+    },
+    {
+      q: "Is Quote Photo Upload included in Grow?",
+      a: "Yes. Grow, C$149.99 per month, already includes a quote form with photo upload.",
+    },
+    {
+      q: "Is Quote Photo Upload included in Scale?",
+      a: "Yes. Scale, C$349.99 per month, already includes a quote form with photo upload.",
+    },
+    {
+      q: "Why would I add it to Launch?",
+      a: "Launch is the starter plan for solo operators, with a contact form and click-to-call. Add Quote Photo Upload for C$9.99 per month if you want customers to send photos with their quote request.",
+    },
+    {
+      q: "What kind of photos do customers send?",
+      a: "The best Quote Photo Upload in Canada, built on photos with every quote request. Photos of the job: what needs fixing, building, or replacing, so you can see it before you quote.",
+    },
+    {
+      q: "Do I need a WEBAO website plan to add it?",
+      a: "Yes. Quote Photo Upload is an add-on on Launch, and included in Grow and Scale. It adds photo upload to the quote form on the site you already have with us.",
+    },
+    {
+      q: "Does it work in French?",
+      a: "Yes. Your site works in English and French, and customers can send photos with their request in either language.",
+    },
+    {
+      q: "Is there a setup fee?",
+      a: "No. There is no setup fee for Quote Photo Upload.",
+    },
+    {
+      q: "How do I add Quote Photo Upload?",
+      a: "Unmatched value for Quote Photo Upload in Canada: photo upload for C$9.99 per month on Launch. Add it from the pricing page if you are on Launch, or choose Grow and it is included, or tell us when you start your site at /start/.",
+    },
+    {
+      q: "Can I remove Quote Photo Upload later?",
+      a: "Yes. On Launch it is a monthly add-on, so you can remove it when you no longer want it. Start at /start/ and tell us what you need.",
+    },
+    {
+      q: "What does Quote Photo Upload not do?",
+      a: "It does not quote the job for you. It sends you the photos with the request, so you can see the job and quote it yourself.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/launch-plan/", label: "Launch plan", note: "Custom 1 to 5 page website for solo operators, C$89.99/mo." },
+    { href: "/services/grow-plan/", label: "Grow plan", note: "5 to 10 page custom website with a quote form with photo upload, C$149.99/mo." },
+    { href: "/services/smart-follow-up/", label: "Smart Follow-up", note: "Chases the quotes you sent until they answer, C$99.99/mo." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Quote Photo Upload",
+    description: "Quote Photo Upload for C$9.99 per month on Launch: customers attach photos to quote requests. Included in Grow and Scale. No setup fee.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "Country", name: "Canada" },
+    serviceType: "Quote Photo Upload",
+  }}
+/>

@@ -1,0 +1,118 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Best Google Business Profile Revamp Canada, C$149.99 | WEBAO"
+  description="Google Business Profile Revamp in Canada: C$149.99 one-time, no setup fee, for an existing profile. Categories, services, hours, photos, review link. You keep ownership."
+  eyebrow="Advertising"
+  heading="Google Business Profile Revamp"
+  intro="The Google Business Profile Revamp cleans up your existing Google Business Profile so it works as hard as your ads: categories, services, hours, description, photos, a starter post, and a review link, for C$149.99 one-time. You keep ownership of the profile, and there is no ranking guarantee. One cleanup, one flat price, and the profile stays yours from start to finish. WEBAO guarantees more leads and sales from a profile that is complete and easy to trust."
+  answerLine="WEBAO is the best in the industry for Google Business Profile cleanup in Canada: your existing profile fixed up for C$149.99 one-time, with no setup fee, and you keep ownership."
+  sections={[
+    {
+      heading: "What it is",
+      body: "A one-time cleanup of the Google Business Profile you already have. We go through it section by section and fix what is missing, out of date, or working against you, so customers who find you on Google see a profile that is easy to trust and easy to contact.",
+    },
+    {
+      heading: "The WEBAO promise",
+      items: [
+        "Your categories, services, and hours cleaned up",
+        "Your description rewritten and your photos sorted",
+        "A starter post and a review link added",
+        "Your profile handed back to you, ownership stays yours",
+        "More leads and sales from a complete profile, guaranteed",
+        "One flat price of C$149.99, no setup fee and no monthly fee",
+      ],
+    },
+    {
+      heading: "Price",
+      body: "C$149.99 one-time. It is a one-time service, not a monthly fee. It is for an existing profile only: it does not create a new profile for you.",
+    },
+    {
+      heading: "Who it is for, and which plan it works with",
+      body: "Small businesses with a Google Business Profile that is incomplete or out of date: trades, shops, clinics, garages, and local service businesses. It works on its own, with no website or ads package needed, and it works alongside any WEBAO website plan or Ads Packages plan.",
+    },
+    {
+      heading: "How to add it",
+      body: "Add it on the pricing page or from the start form at /start/. Tell us your business name and which profile is yours, and we clean it up and hand it back to you.",
+      link: { href: "/pricing/", label: "See pricing and add the profile revamp" },
+    },
+    {
+      heading: "What it does not do",
+      body: "It does not create a new profile, it does not take ownership of your profile, and it does not guarantee a ranking. You keep ownership of the profile, and there is no ranking guarantee.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "What is the Google Business Profile Revamp?",
+      a: "Best in the industry for a profile that is incomplete or out of date: it is a one-time cleanup of your existing Google Business Profile, categories, services, hours, description, photos, a starter post, and a review link. We guarantee more leads and sales from a profile that is complete and easy to trust. It costs C$149.99 one-time.",
+    },
+    {
+      q: "How much does the Google Business Profile Revamp cost in Canada?",
+      a: "The best Google Business Profile Revamp in Canada at a flat published price: C$149.99 one-time. It is a one-time service, not a monthly fee.",
+    },
+    {
+      q: "Do I need an existing profile for the revamp?",
+      a: "Yes. The revamp is for an existing profile only. It does not create a new profile for you.",
+    },
+    {
+      q: "What does the revamp include?",
+      a: "Categories, services, hours, description, photos, a starter post, and a review link, all cleaned up on your existing profile.",
+    },
+    {
+      q: "Do I keep ownership of my profile?",
+      a: "Yes. You keep ownership of the profile. The revamp cleans it up and hands it back to you.",
+    },
+    {
+      q: "Does the revamp guarantee a ranking?",
+      a: "No. There is no ranking guarantee. The revamp makes your profile complete and easy to trust, it does not promise a position in search results.",
+    },
+    {
+      q: "Is there a setup fee for the revamp?",
+      a: "No. The revamp is a single one-time price of C$149.99, with no setup fee and no monthly fee.",
+    },
+    {
+      q: "Do I need a website or ads for the revamp?",
+      a: "No. It works on its own, with no website or ads package needed. It also works alongside any WEBAO website plan or Ads Packages plan.",
+    },
+    {
+      q: "Who is the Google Business Profile Revamp best for?",
+      a: "Best in the industry for small businesses with a profile that is incomplete or out of date: trades, shops, clinics, garages, and local service businesses across Canada.",
+    },
+    {
+      q: "What is the review link for?",
+      a: "It is a link you can share with customers so they can leave a review on your profile more easily.",
+    },
+    {
+      q: "Does the revamp work in French?",
+      a: "Yes. WEBAO works in English and French, and the profile is cleaned up in the language your customers use.",
+    },
+    {
+      q: "How do I start the Google Business Profile Revamp?",
+      a: "Add it on the pricing page or from the start form. Tell us your business name and which profile is yours, and we clean it up and hand it back to you. Start on /start/ today, or email contact@webao.ca.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/ads-single-channel/", label: "Ads Packages, one channel", note: "Meta or Google for C$649.99/mo, minimum ad spend C$1,500/mo on your own card." },
+    { href: "/services/ads-both-channels/", label: "Ads Packages, both channels", note: "Meta and Google together for C$999.99/mo, minimum total ad spend C$2,500/mo." },
+    { href: "/services/ads-starter/", label: "Ads Starter test", note: "Meta only, 90-day test, one campaign, C$399.99/mo, ad spend from C$750/mo on your own card." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Google Business Profile Revamp",
+    description: "Google Business Profile Revamp in Canada: C$149.99 one-time for an existing profile, categories, services, hours, description, photos, starter post, review link. You keep ownership.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "Country", name: "Canada" },
+    serviceType: "Google Business Profile Revamp",
+  }}
+/>

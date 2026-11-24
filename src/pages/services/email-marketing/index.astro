@@ -1,0 +1,124 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Best Email Marketing in Canada C$29.99/mo | WEBAO"
+  description="Email Marketing for C$29.99 per month: stay in touch with your customers by email, in English and French, with no setup fee."
+  eyebrow="Add-on"
+  heading="Stay in touch with your customers by email"
+  intro="Email Marketing keeps you in touch with your customers by email for C$29.99 per month. Your news, offers, and updates go straight to the people who already know your business, in English and French, with no setup fee. Your news reaches the people who already know you, month after month. WEBAO guarantees more leads and sales: staying in touch with past customers brings them back to buy again."
+  answerLine="WEBAO is the best in the industry for small business email marketing in Canada: C$29.99 per month to stay in touch with your customers by email, with no setup fee."
+  sections={[
+    {
+      heading: "What it is",
+      body: "Email Marketing is a monthly add-on that lets you send email updates to your customers: your news, your offers, and your updates, to the people who already know your business.",
+    },
+    {
+      heading: "What is included",
+      items: [
+        "Email updates to your customers",
+        "Your news, offers, and updates",
+        "Works in English and French",
+        "Billed monthly with your website plan",
+        "No setup fee",
+      ],
+    },
+    {
+      heading: "The WEBAO promise",
+      body: "C$29.99 per month. It is a monthly add-on on your website plan, with no setup fee.",
+      items: [
+        "Your news goes straight to people who already know you",
+        "No setup fee, ever",
+        "English and French",
+        "Monthly billing",
+        "More leads and sales, guaranteed, from customers who come back"
+      ],
+    },
+    {
+      heading: "Who it is for",
+      body: "Small businesses with customers worth keeping in touch with: shops, clinics, restaurants, trades, and local service businesses that want past customers to come back.",
+    },
+    {
+      heading: "How to add it",
+      body: "Add Email Marketing to your website plan from the pricing page, or tell us when you start your site and we will include it from launch.",
+      link: { href: "/pricing/", label: "See pricing" },
+    },
+    {
+      heading: "What it does not do",
+      body: "It does not find new customers for you. It keeps you in touch with the customers you already have. Finding new customers is what the website, Local SEO, and Ads Packages are for.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "What is Email Marketing?",
+      a: "Best in the industry for Email Marketing in Canada, and the price proves it. It is a monthly add-on, C$29.99 per month, that lets you send email updates to your customers: your news, offers, and updates.",
+    },
+    {
+      q: "How much does Email Marketing cost?",
+      a: "WEBAO guarantees more leads and sales with Email Marketing. C$29.99 per month, billed monthly with your website plan. There is no setup fee.",
+    },
+    {
+      q: "What do I send to my customers?",
+      a: "The best Email Marketing in Canada, built on your news reaching people who already trust you. Your news, offers, and updates: what is new, what is on offer, and what your customers should know.",
+    },
+    {
+      q: "Do I need a WEBAO website plan to add it?",
+      a: "Yes. Email Marketing is an add-on on your website: Launch, Grow, or Scale. It works with the site you already have with us.",
+    },
+    {
+      q: "Does it work in French?",
+      a: "Yes. Your site and your emails work in English and French.",
+    },
+    {
+      q: "Who are the emails for?",
+      a: "Your customers: the people who already know your business and want to hear from you.",
+    },
+    {
+      q: "Does Email Marketing bring in new customers?",
+      a: "No. It keeps you in touch with the customers you already have, so they come back. New customers come from your website, Local SEO, and Ads Packages.",
+    },
+    {
+      q: "Is there a setup fee?",
+      a: "No. There is no setup fee for Email Marketing.",
+    },
+    {
+      q: "How do I add Email Marketing?",
+      a: "Add it from the pricing page, or tell us when you start your site at /start/ and we will include it from launch. Email contact@webao.ca to start.",
+    },
+    {
+      q: "Can I remove Email Marketing later?",
+      a: "Yes. It is a monthly add-on on your website plan, so you can remove it when you no longer want it.",
+    },
+    {
+      q: "Does Email Marketing work with my contact form?",
+      a: "Yes. Your website has a contact form, and Email Marketing is how you stay in touch with your customers after they reach you.",
+    },
+    {
+      q: "What is the best use of Email Marketing for a small business?",
+      a: "Unmatched value for Email Marketing in Canada: email that brings customers back for C$29.99 per month. Staying in touch with past customers: your news and offers, sent by email, so the people who already trust you come back.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/weekly-seo-blog/", label: "Weekly SEO Blog", note: "A new SEO blog post every week, written for your business, C$29.99/mo." },
+    { href: "/services/review-generation-engine/", label: "Review Generation Engine", note: "Automatic review requests after each job, C$349.99/mo. Included in Scale." },
+    { href: "/services/diy-blog-page/", label: "DIY Blog Page", note: "A blog page where you write and post your own updates, C$19.99/mo." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Email Marketing",
+    description: "Email Marketing for C$29.99 per month: stay in touch with your customers by email, in English and French, with no setup fee.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "Country", name: "Canada" },
+    serviceType: "Email Marketing",
+  }}
+/>

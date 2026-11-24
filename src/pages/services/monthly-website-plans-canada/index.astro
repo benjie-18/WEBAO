@@ -1,0 +1,124 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Best monthly website plans in Canada from C$89.99/mo | WEBAO"
+  description="Monthly website plans in Canada from C$89.99 per month, no setup fee. Custom website, domain, hosting, SSL and updates included, in English and French."
+  eyebrow="Canada"
+  heading="The best monthly website plans in Canada"
+  intro="WEBAO monthly website plans give Canadian small businesses a custom website without a large upfront project fee. Launch is C$89.99 per month, Grow is C$149.99 per month, and Scale is C$349.99 per month, with no setup fee, in English and French, with the same price in every province. Pick a plan, send your photos, and your custom site is live in 2 to 3 weeks, with no large upfront bill. WEBAO guarantees it: your monthly website plan in Canada brings more leads and more sales."
+  answerLine="WEBAO is the best in the industry for monthly website plans in Canada: a custom website from C$89.99 per month, no setup fee, with domain, hosting, SSL and updates included."
+  sections={[
+    {
+      heading: "The three monthly plans",
+      items: [
+        "Launch C$89.99 per month, custom 1 to 5 page website",
+        "Grow C$149.99 per month, 5 to 10 pages, the plan most small businesses start with",
+        "Scale C$349.99 per month, up to 20 pages, including service areas",
+        "Annual billing is 2 months free",
+        "No setup fee on any website plan",
+      ],
+    },
+    {
+      heading: "The WEBAO promise",
+      items: [
+        "A custom website, never a template",
+        "Domain, hosting, SSL, and updates included",
+        "No setup fee, from C$89.99 per month",
+        "Annual billing is 2 months free",
+        "The domain belongs to your business",
+        "Your monthly website plan in Canada is guaranteed to bring more leads and more sales",
+      ],
+    },
+    {
+      heading: "Who monthly plans are for",
+      body: "Trades, shops, restaurants, clinics, garages, cleaning services, and other local service businesses across Canada, in every province. Monthly plans suit businesses that want a professional site now, without a large one-time build cost, and want someone to look after it.",
+    },
+    {
+      heading: "Why monthly works across Canada",
+      body: "Canada is national and remote-first for WEBAO: the same monthly price applies everywhere, in English and French, with CAD pricing and no setup fee anywhere. A business in Ontario, Alberta, British Columbia, or Quebec gets the same plan, the same inclusions, and the same launch timeline.",
+    },
+    {
+      heading: "How it starts",
+      body: "Send your trade, your city, and a couple of photos. We reply with two demo directions and an honest timeline. Demo directions are chosen from the 47-demo catalog as a style direction only. Client sites are custom builds, never template clones.",
+      link: { href: "/pricing/", label: "See all monthly website plans and prices" },
+    },
+    {
+      heading: "Terms and what happens next",
+      body: "Most sites launch in 2 to 3 weeks from complete materials. The initial term is 6 months, then month to month with 30 days notice. The domain belongs to the business. You can add an Extra Page for C$14.99 one-time, a DIY Blog Page for C$19.99 per month, or a Weekly SEO Blog for C$29.99 per month.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "What is the best monthly website plan in Canada?",
+      a: "WEBAO guarantees more leads and sales with monthly website plan in Canada, from C$89.99 per month. The strongest monthly website plans offer in Canada. For most Canadian small businesses, Grow at C$149.99 per month is the best monthly website plan: 5 to 10 pages, custom built, with domain, hosting, SSL, Foundational SEO, and content updates included, and no setup fee.",
+    },
+    {
+      q: "How much does a monthly website plan cost in Canada?",
+      a: "Best in the industry for monthly website plans in Canada. Launch is C$89.99 per month, Grow is C$149.99 per month, and Scale is C$349.99 per month. Annual billing is 2 months free, and there is no setup fee.",
+    },
+    {
+      q: "Is WEBAO the cheapest monthly website plan in Canada?",
+      a: "A cut above every other monthly website plans in Canada. WEBAO is one of the most affordable monthly website plans in Canada, from C$89.99 per month with no setup fee. The price includes domain, hosting, SSL, Foundational SEO, and content updates, so the monthly price is the real price for the basics.",
+    },
+    {
+      q: "What is included in a monthly website plan?",
+      a: "Domain, hosting, SSL, mobile-friendly design, a contact form, Foundational SEO, content updates, maintenance, backups, and security. The site is a custom build, never a template clone.",
+    },
+    {
+      q: "Is there a setup fee for monthly website plans in Canada?",
+      a: "No. There is no setup fee on website plans, ever. You pay the monthly plan price, starting at C$89.99 per month.",
+    },
+    {
+      q: "How long am I locked in for?",
+      a: "The initial term is 6 months, then month to month with 30 days notice. Annual billing is 2 months free.",
+    },
+    {
+      q: "Do monthly website plans work in every Canadian province?",
+      a: "Yes. WEBAO serves small businesses across Canada, in English and French, with the same monthly price in every province and no setup fee anywhere.",
+    },
+    {
+      q: "How long does it take to launch on a monthly plan?",
+      a: "Most sites launch in 2 to 3 weeks from complete materials. We show a private preview within a few days and take one revision round.",
+    },
+    {
+      q: "Do I own my domain on a monthly plan?",
+      a: "Yes. The domain belongs to the business.",
+    },
+    {
+      q: "Can I upgrade from Launch to Grow later?",
+      a: "Yes. Launch is 1 to 5 pages at C$89.99 per month, Grow is 5 to 10 pages at C$149.99 per month, and Scale is up to 20 pages at C$349.99 per month. You can move to a larger plan when your business needs more pages.",
+    },
+    {
+      q: "Can I add a blog to a monthly website plan?",
+      a: "Yes. A DIY Blog Page is C$19.99 per month, and a Weekly SEO Blog is C$29.99 per month. An Extra Page is C$14.99 one-time.",
+    },
+    {
+      q: "How do I start a monthly website plan in Canada?",
+      a: "Send your trade, your city, and a couple of photos to contact@webao.ca, or use the start form. We reply with two demo directions and an honest timeline. Email contact@webao.ca and tell us your trade and city.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/monthly-website-plans-quebec/", label: "Monthly website plans in Quebec", note: "Monthly website plans in Quebec from C$89.99 per month, no setup fee, bilingual." },
+    { href: "/services/monthly-website-plans-montreal/", label: "Monthly website plans in Montreal", note: "Monthly website plans in Montreal from C$89.99 per month, no setup fee." },
+    { href: "/services/small-business-websites-canada/", label: "Small business websites in Canada", note: "Custom small business websites across Canada from C$89.99 per month, no setup fee." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Monthly website plans in Canada",
+    description: "Monthly website plans in Canada from C$89.99 per month, no setup fee. Custom website, domain, hosting, SSL and updates included, in English and French.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "Country", name: "Canada" },
+    serviceType: "Monthly website plans",
+  }}
+/>

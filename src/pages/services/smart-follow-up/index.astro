@@ -1,0 +1,118 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Best Smart Follow-up Canada, C$99.99/mo | WEBAO"
+  description="Smart Follow-up in Canada: missed-call text-back and quote follow-ups until they answer, including quote chasing. C$99.99/mo, no setup fee, no website needed."
+  eyebrow="AI services"
+  heading="Smart Follow-up that chases your quotes"
+  intro="Smart Follow-up texts back the calls you miss and chases the quotes you sent until they answer, including quote chasing. It costs C$99.99 per month, works on its own with no website needed, and there is no setup fee. No missed call goes quiet, and no quote gets forgotten. WEBAO guarantees more leads and sales from the quotes you already sent."
+  answerLine="WEBAO is the best in the industry for Smart Follow-up in Canada: missed calls texted back and quotes chased until they answer for C$99.99 per month, with no setup fee."
+  sections={[
+    {
+      heading: "What it is",
+      body: "A follow-up service that works while you are on a job. When a call is missed, it texts the caller back. When a quote you sent goes quiet, it follows up until the person answers, so the work you already quoted does not slip away.",
+    },
+    {
+      heading: "The WEBAO promise",
+      items: [
+        "Every missed call texted back right away",
+        "Every quote chased until the person answers",
+        "More leads and sales from your quotes, guaranteed",
+        "Quote chasing included in the flat price",
+        "Works on its own, no website needed",
+        "No setup fee, ever",
+      ],
+    },
+    {
+      heading: "Price",
+      body: "C$99.99 per month. There is no setup fee. It is also available as part of the AI Pack for C$399.99 per month, together with the AI Receptionist and Online Receptionist.",
+    },
+    {
+      heading: "Who it is for, and which plan it works with",
+      body: "Small businesses that send quotes and miss calls while they work: trades, garages, clinics, shops, and local service businesses. It works on its own, so it needs no website plan, and it works alongside any WEBAO website plan.",
+    },
+    {
+      heading: "How to add it",
+      body: "Add it on the pricing page or from the start form at /start/. Tell us how you send quotes and what you want the follow-up to say, and we set it up to chase them for you.",
+      link: { href: "/pricing/", label: "See pricing and add Smart Follow-up" },
+    },
+    {
+      heading: "What it does not do",
+      body: "It does not pretend to be you, and it does not make promises on your behalf. When a person replies, the reply comes back to you, and you decide what happens next.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "What is Smart Follow-up?",
+      a: "Best in the industry for quotes that go quiet: it is a follow-up service that texts back missed calls and chases the quotes you sent until they answer, including quote chasing. We guarantee more leads and sales from the quotes that used to go quiet. It costs C$99.99 per month.",
+    },
+    {
+      q: "How much does Smart Follow-up cost in Canada?",
+      a: "The best Smart Follow-up in Canada at a flat published price: C$99.99 per month. There is no setup fee.",
+    },
+    {
+      q: "Do I need a website for Smart Follow-up?",
+      a: "No. It works on its own, with no website needed. It also works alongside a WEBAO website if you have one.",
+    },
+    {
+      q: "What is missed-call text-back?",
+      a: "When a call is missed, Smart Follow-up texts the caller back right away, so the person who called still gets a reply while you work.",
+    },
+    {
+      q: "Does Smart Follow-up chase quotes?",
+      a: "Yes. Quote chasing is included: it follows up on the quotes you sent until the person answers.",
+    },
+    {
+      q: "How long does it follow up for?",
+      a: "It follows up on a quote until the person answers, so a quote that goes quiet gets a nudge instead of being forgotten.",
+    },
+    {
+      q: "Is there a setup fee for Smart Follow-up?",
+      a: "No. There is no setup fee on Smart Follow-up, or on any WEBAO AI service.",
+    },
+    {
+      q: "What happens when someone replies to a follow-up?",
+      a: "The reply comes back to you, and you decide what happens next. Smart Follow-up does not make promises on your behalf.",
+    },
+    {
+      q: "Can I get Smart Follow-up with the other AI services?",
+      a: "Yes. The AI Pack is C$399.99 per month for all three: AI Receptionist, Online Receptionist, and Smart Follow-up.",
+    },
+    {
+      q: "Who is Smart Follow-up best for?",
+      a: "Best in the industry for small businesses that send quotes and miss calls while they work: trades, garages, clinics, shops, and local service businesses across Canada.",
+    },
+    {
+      q: "Does it work in French?",
+      a: "Yes. WEBAO works in English and French, and Smart Follow-up messages go out in the language your customer uses.",
+    },
+    {
+      q: "How do I start with Smart Follow-up?",
+      a: "Add it on the pricing page or from the start form. Tell us how you send quotes and what you want the follow-up to say, and we set it up for you. Start on /start/ today, or email contact@webao.ca.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/ai-receptionist/", label: "AI Receptionist", note: "Answers your calls as your business and takes messages, C$299.99/mo, no website needed." },
+    { href: "/services/ai-pack/", label: "AI Pack", note: "All three AI services together for C$399.99/mo: AI Receptionist, Online Receptionist, and Smart Follow-up." },
+    { href: "/services/online-receptionist/", label: "Online Receptionist", note: "A receptionist on your website that answers visitors and books after hours, C$149.99/mo." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Smart Follow-up",
+    description: "Smart Follow-up in Canada: missed-call text-back and quote follow-ups until they answer, including quote chasing. C$99.99/mo, no setup fee, no website needed.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "Country", name: "Canada" },
+    serviceType: "Smart Follow-up",
+  }}
+/>

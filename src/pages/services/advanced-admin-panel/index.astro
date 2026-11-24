@@ -1,0 +1,124 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Best Advanced Admin Panel Canada C$39.99/mo | WEBAO"
+  description="An Advanced Admin Panel for C$39.99 per month: more control over your website, on Grow and Scale. Not available on Launch. No setup fee."
+  eyebrow="Add-on"
+  heading="More control over your website"
+  intro="The Advanced Admin Panel gives you more control over your WEBAO website for C$39.99 per month. It is available on Grow and Scale, not on Launch, in English and French, with no setup fee. You stay in control of your own site, with the tools to change what you need, when you need it. With a WEBAO website, WEBAO guarantees more leads and sales: the admin panel keeps your site working hard for your business."
+  answerLine="WEBAO is the best in the industry for website admin panels in Canada: C$39.99 per month for more control over your website, on Grow and Scale."
+  sections={[
+    {
+      heading: "What it is",
+      body: "An Advanced Admin Panel is an advanced panel for managing your website. It gives you more control over your site than the standard plan includes.",
+    },
+    {
+      heading: "What is included",
+      items: [
+        "An advanced panel for your website",
+        "More control over your site",
+        "Works in English and French",
+        "Billed monthly with your website plan",
+        "No setup fee",
+      ],
+    },
+    {
+      heading: "The WEBAO promise",
+      body: "C$39.99 per month. It is a monthly add-on on your website plan, with no setup fee.",
+      items: [
+        "More control over your own website",
+        "Available on Grow and Scale",
+        "No setup fee, ever",
+        "English and French",
+        "Part of the WEBAO guarantee: more leads and sales"
+      ],
+    },
+    {
+      heading: "Which plans can add it",
+      body: "Grow and Scale. The Advanced Admin Panel is not available on Launch. Grow is C$149.99 per month for a 5 to 10 page custom website, and Scale is C$349.99 per month for up to 20 pages including service areas.",
+    },
+    {
+      heading: "Who it is for",
+      body: "Small businesses on Grow or Scale that want more control over their website: established local businesses that manage their site often and want the advanced panel to do it with.",
+    },
+    {
+      heading: "How to add it",
+      body: "Add the Advanced Admin Panel to your Grow or Scale plan from the pricing page, or tell us when you start your site and we will include it from launch.",
+      link: { href: "/pricing/", label: "See pricing" },
+    },
+  ]}
+  faqs={[
+    {
+      q: "What is the Advanced Admin Panel?",
+      a: "Best in the industry for Advanced Admin Panel in Canada, and the price proves it. It is an advanced panel for managing your WEBAO website, giving you more control over your site, for C$39.99 per month.",
+    },
+    {
+      q: "How much does the Advanced Admin Panel cost?",
+      a: "With a WEBAO website, WEBAO guarantees more leads and sales. The best Advanced Admin Panel in Canada, built on real control over your own site. C$39.99 per month, billed monthly with your website plan. There is no setup fee.",
+    },
+    {
+      q: "Which plans can add the Advanced Admin Panel?",
+      a: "Grow and Scale. It is not available on Launch.",
+    },
+    {
+      q: "Why is it not available on Launch?",
+      a: "Launch is the starter plan for solo operators, with a 1 to 5 page website. The Advanced Admin Panel is available on Grow and Scale.",
+    },
+    {
+      q: "Can I get it if I am on Launch?",
+      a: "Not on Launch. Move to Grow, C$149.99 per month, or Scale, C$349.99 per month, and you can add the Advanced Admin Panel.",
+    },
+    {
+      q: "Do I need a WEBAO website plan to add it?",
+      a: "Yes. The Advanced Admin Panel is an add-on on Grow or Scale. It adds more control to the site you already have with us.",
+    },
+    {
+      q: "Does it work in French?",
+      a: "Yes. Your site works in English and French, and the panel works with your site in either language.",
+    },
+    {
+      q: "Is there a setup fee?",
+      a: "No. There is no setup fee for the Advanced Admin Panel.",
+    },
+    {
+      q: "How do I add the Advanced Admin Panel?",
+      a: "Add it from the pricing page if you are on Grow or Scale, or tell us when you start your site at /start/. Start at /start/ or email contact@webao.ca.",
+    },
+    {
+      q: "Can I remove the Advanced Admin Panel later?",
+      a: "Yes. It is a monthly add-on on your website plan, so you can remove it when you no longer want it.",
+    },
+    {
+      q: "What is the difference between the standard plan and the Advanced Admin Panel?",
+      a: "Unmatched value for Advanced Admin Panel in Canada: more control for C$39.99 per month. Your plan already covers your site, hosting, and updates, with no CMS to learn. The Advanced Admin Panel adds more control over your site for businesses that want it.",
+    },
+    {
+      q: "Do I need the Advanced Admin Panel to update my site?",
+      a: "No. Content updates are included in your plan: 1 hour a month on Launch, 3 hours a month on Grow, and unlimited on Scale. The panel is for businesses that want more control themselves.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/priority-support/", label: "Priority Support", note: "Priority support plus 1 strategy call per month, C$59.99/mo." },
+    { href: "/services/grow-plan/", label: "Grow plan", note: "5 to 10 page custom website, the plan most small businesses start with, C$149.99/mo." },
+    { href: "/services/scale-plan/", label: "Scale plan", note: "Up to 20 pages including service areas, C$349.99/mo." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Advanced Admin Panel",
+    description: "An Advanced Admin Panel for C$39.99 per month: more control over your website, on Grow and Scale. Not available on Launch. No setup fee.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "Country", name: "Canada" },
+    serviceType: "Advanced Admin Panel",
+  }}
+/>

@@ -1,0 +1,118 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Best Ads Packages Both Channels, C$999.99/mo | WEBAO"
+  description="Ads Packages, both channels, in Canada: Meta and Google together for C$999.99/mo, minimum total ad spend C$2,500/mo, at least C$1,000 per channel, no setup fee."
+  eyebrow="Advertising"
+  heading="Ads Packages: both channels, Meta and Google"
+  intro="Both channels of the WEBAO Ads Packages put your business in front of customers on Meta and Google together, for C$999.99 per month, with a minimum total ad spend of C$2,500 per month on your own card. We build and manage the campaigns, and every lead is emailed to you instantly. There is no setup fee. Two channels, two kinds of customers, and every lead in your inbox the moment it arrives. WEBAO guarantees more leads and sales from both channels together."
+  answerLine="WEBAO is the best in the industry for two-channel ads in Canada: Meta and Google together for C$999.99 per month, with no setup fee."
+  sections={[
+    {
+      heading: "What it is",
+      body: "An ongoing ads package on both channels at once: Meta and Google. Meta reaches people browsing Facebook and Instagram, Google reaches people already searching, and together they cover both kinds of customers.",
+    },
+    {
+      heading: "The WEBAO promise",
+      items: [
+        "Both channels, Meta and Google, covering both kinds of customers",
+        "One campaign per channel, built and managed for you",
+        "Every lead emailed to you instantly and shown in the client portal",
+        "More leads and sales from both channels together, guaranteed",
+        "Ad spend on your own card, at least C$1,000 per channel, C$2,500 in total per month",
+        "No setup fee, ever",
+      ],
+    },
+    {
+      heading: "Price",
+      body: "C$999.99 per month. Minimum total ad spend C$2,500 per month on your own card, at least C$1,000 per channel. Already on one channel? Upgrade to both for C$350 per month more. The package cancels with 90 days notice. There is no setup fee.",
+    },
+    {
+      heading: "Who it is for, and which plan it works with",
+      body: "Small businesses that want steady leads from both channels: trades, shops, clinics, garages, and local service businesses. It works on its own and needs no website, and it works alongside any WEBAO website plan.",
+    },
+    {
+      heading: "How to add it",
+      body: "Add it on the pricing page or from the start form at /start/. Tell us your trade, your city, and what you want customers to do, and we build the campaigns for both channels.",
+      link: { href: "/pricing/", label: "See pricing and add both channels" },
+    },
+    {
+      heading: "What it does not do",
+      body: "It does not promise a number of leads, and it does not spend less than the minimums: at least C$1,000 per channel, C$2,500 in total per month, on your own card. Every lead it records is emailed to you instantly and shown in the client portal, where you can mark the ones that booked.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "What is the both-channels Ads Packages plan?",
+      a: "Best in the industry for leads from both channels at once: it is an ongoing ads package on Meta and Google together, for C$999.99 per month, with one campaign per channel managed for you. We guarantee more leads and sales from both channels together.",
+    },
+    {
+      q: "How much does the both-channels Ads Packages plan cost in Canada?",
+      a: "The best both-channels Ads Packages plan in Canada at a flat published price: C$999.99 per month, with a minimum total ad spend of C$2,500 per month on your own card, at least C$1,000 per channel. There is no setup fee.",
+    },
+    {
+      q: "Can I upgrade from one channel to both?",
+      a: "Yes. Upgrade from one channel to both channels for C$350 per month more, for a total of C$999.99 per month.",
+    },
+    {
+      q: "Do I need a website to run ads on both channels?",
+      a: "No. An ad click can go to a Meta instant form or to a landing page on the WEBAO domain. A website still helps customers check you out before they contact you.",
+    },
+    {
+      q: "Who pays the ad spend, and how much?",
+      a: "You do, on your own card, so the spend is always yours. Both channels need a minimum total ad spend of C$2,500 per month, at least C$1,000 per channel.",
+    },
+    {
+      q: "Is there a setup fee for the both-channels Ads Packages plan?",
+      a: "No. There is no setup fee on any WEBAO Ads Packages plan.",
+    },
+    {
+      q: "How do I cancel the both-channels Ads Packages plan?",
+      a: "The monthly package cancels with 90 days notice.",
+    },
+    {
+      q: "Why run both channels instead of one?",
+      a: "Meta reaches people browsing Facebook and Instagram, Google reaches people already searching. Together they cover both kinds of customers.",
+    },
+    {
+      q: "How do I know the ads are working?",
+      a: "Every lead is emailed to you instantly and shown in the client portal. The monthly report counts the leads we recorded, and the bookings you mark in the portal.",
+    },
+    {
+      q: "Who is the both-channels Ads Packages plan best for?",
+      a: "Best in the industry for small businesses that want steady leads from both channels: trades, shops, clinics, garages, and local service businesses across Canada.",
+    },
+    {
+      q: "Does the both-channels Ads Packages plan work in French?",
+      a: "Yes. WEBAO works in English and French, and the campaigns are built in the language your customers use.",
+    },
+    {
+      q: "How do I start with both channels?",
+      a: "Add it on the pricing page or from the start form. Tell us your trade, your city, and what you want customers to do, and we build the campaigns for both channels. Start on /start/ today, or email contact@webao.ca.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/ads-single-channel/", label: "Ads Packages, one channel", note: "Meta or Google for C$649.99/mo, minimum ad spend C$1,500/mo on your own card." },
+    { href: "/services/ads-starter/", label: "Ads Starter test", note: "Meta only, 90-day test, one campaign, C$399.99/mo, ad spend from C$750/mo on your own card." },
+    { href: "/services/google-business-profile-revamp/", label: "Google Business Profile Revamp", note: "C$149.99 one-time for an existing profile, you keep ownership, no ranking guarantee." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Ads Packages, both channels",
+    description: "Ads Packages, both channels, in Canada: Meta and Google together for C$999.99/mo, minimum total ad spend C$2,500/mo, at least C$1,000 per channel. No setup fee.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "Country", name: "Canada" },
+    serviceType: "Ads Packages, both channels",
+  }}
+/>

@@ -1,0 +1,118 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Best Ads Starter Test Canada, C$399.99/mo | WEBAO"
+  description="Ads Starter test in Canada: Meta only, 90-day test, one campaign, ad spend from C$750/mo on your own card. C$399.99/mo, no setup fee. Then step up or stop."
+  eyebrow="Advertising"
+  heading="Ads Starter test: try Meta ads for 90 days"
+  intro="The Ads Starter test is a 90-day test of Meta ads for your business: one campaign, for C$399.99 per month, with ad spend from C$750 per month on your own card. After 90 days you step up to a full Ads Packages plan or stop. There is no setup fee, and you do not need a website. One campaign, 90 days, a bounded test with a clear end. WEBAO guarantees more leads and sales from the test campaign."
+  answerLine="WEBAO is the best in the industry for testing Meta ads in Canada: a 90-day Meta-only test with one campaign for C$399.99 per month, ad spend from C$750 per month on your own card, and no setup fee."
+  sections={[
+    {
+      heading: "What it is",
+      body: "A 90-day test with one Meta campaign, built and managed for you. It is for small businesses that want to know if Meta ads bring customers before they commit to an ongoing package.",
+    },
+    {
+      heading: "The WEBAO promise",
+      items: [
+        "One Meta campaign built and managed for you",
+        "A 90-day test, then step up or stop, no lock-in beyond the test",
+        "Ad spend from C$750/mo on your own card, so the spend is always yours",
+        "Every lead emailed to you instantly and shown in the client portal",
+        "More leads and sales from the test, guaranteed",
+        "No setup fee, ever",
+      ],
+    },
+    {
+      heading: "Price",
+      body: "C$399.99 per month for 90 days. Ad spend is separate, from C$750 per month, paid on your own card, so the spend is always yours. There is no setup fee.",
+    },
+    {
+      heading: "Who it is for, and which plan it works with",
+      body: "Small businesses that have never run ads and want a bounded test: trades, shops, clinics, garages, and local service businesses. It works on its own and needs no website: an ad click can go to a Meta instant form or to a landing page on the WEBAO domain. It also works alongside any WEBAO website plan.",
+    },
+    {
+      heading: "How to add it",
+      body: "Add it on the pricing page or from the start form at /start/. Tell us your trade, your city, and what you want customers to do, and we build the one campaign for the test.",
+      link: { href: "/pricing/", label: "See pricing and add the Ads Starter test" },
+    },
+    {
+      heading: "What it does not do",
+      body: "It does not run on Google, and it does not run more than one campaign: the test is Meta only, one campaign, for 90 days. It also does not promise a number of leads. Every lead it records is emailed to you instantly and shown in the client portal.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "What is the Ads Starter test?",
+      a: "Best in the industry for a first Meta ads test: it is a 90-day test of Meta ads, one campaign, built and managed for you, for C$399.99 per month, with ad spend from C$750 per month on your own card. We guarantee more leads and sales from the test campaign.",
+    },
+    {
+      q: "How much does the Ads Starter test cost in Canada?",
+      a: "The best Ads Starter test in Canada at a flat published price: C$399.99 per month for 90 days, plus ad spend from C$750 per month on your own card. There is no setup fee.",
+    },
+    {
+      q: "Is the Ads Starter test Meta only?",
+      a: "Yes. The Ads Starter test is Meta only, with one campaign. Google ads start with the one-channel Ads Packages plan at C$649.99 per month.",
+    },
+    {
+      q: "Do I need a website to run the Ads Starter test?",
+      a: "No. An ad click can go to a Meta instant form or to a landing page on the WEBAO domain. A website still helps customers check you out before they contact you.",
+    },
+    {
+      q: "Who pays the ad spend, and how much?",
+      a: "You do, on your own card, so the spend is always yours. The Starter test needs at least C$750 per month in ad spend.",
+    },
+    {
+      q: "What happens after the 90-day test?",
+      a: "You step up to a full Ads Packages plan or stop. There is no lock-in beyond the test.",
+    },
+    {
+      q: "Is there a setup fee for the Ads Starter test?",
+      a: "No. There is no setup fee on the Ads Starter test, or on any WEBAO Ads Packages plan.",
+    },
+    {
+      q: "How do I know the test is working?",
+      a: "Every lead is emailed to you instantly and shown in the client portal, where you can mark the ones that booked.",
+    },
+    {
+      q: "How many campaigns does the test include?",
+      a: "One campaign, on Meta, for 90 days. The full Ads Packages run one campaign per channel.",
+    },
+    {
+      q: "Who is the Ads Starter test best for?",
+      a: "Best in the industry for small businesses that have never run ads and want a bounded 90-day test before committing: trades, shops, clinics, and local service businesses across Canada.",
+    },
+    {
+      q: "Does the Ads Starter test work in French?",
+      a: "Yes. WEBAO works in English and French, and the test campaign is built in the language your customers use.",
+    },
+    {
+      q: "How do I start the Ads Starter test?",
+      a: "Add it on the pricing page or from the start form. Tell us your trade, your city, and what you want customers to do, and we build the one campaign. Start on /start/ today, or email contact@webao.ca.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/ads-single-channel/", label: "Ads Packages, one channel", note: "Meta or Google for C$649.99/mo, minimum ad spend C$1,500/mo on your own card." },
+    { href: "/services/ads-both-channels/", label: "Ads Packages, both channels", note: "Meta and Google together for C$999.99/mo, minimum total ad spend C$2,500/mo." },
+    { href: "/services/ai-pack/", label: "AI Pack", note: "All three AI services together for C$399.99/mo: AI Receptionist, Online Receptionist, and Smart Follow-up." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Ads Starter test",
+    description: "Ads Starter test in Canada: Meta only, 90-day test, one campaign, ad spend from C$750/mo on your own card. C$399.99/mo, no setup fee. Then step up or stop.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "Country", name: "Canada" },
+    serviceType: "Ads Starter test",
+  }}
+/>

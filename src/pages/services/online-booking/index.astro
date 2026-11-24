@@ -1,0 +1,126 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Best Online Booking in Canada C$49.99/mo | WEBAO"
+  description="Online Booking is C$49.99/mo: customers book appointments online, any time, straight from your website. Included in Scale. No setup fee."
+  eyebrow="Add-ons"
+  heading="Online Booking: the best booking add-on in Canada"
+  intro="Online Booking lets customers book appointments online, any time, straight from your website. It costs C$49.99 per month, and it is included in the Scale plan. No more phone tag, no more missed bookings while you are on a job: the booking lands in your schedule and the customer gets a confirmed time. It is available as an add-on on Launch and Grow, in English and French, across Canada. Your calendar fills itself while you are on a job, with no phone tag and no missed bookings. WEBAO guarantees more leads and sales: every booking made online is a sale that would have been a missed call."
+  answerLine="WEBAO is the best in the industry for online booking in Canada: customers book appointments online for C$49.99 per month, straight from your website, any time."
+  sections={[
+    {
+      heading: "What Online Booking is",
+      body: "Online Booking is scheduling on your website. A visitor picks a service, picks a time, and books. You get the booking without a phone call, and the customer gets a confirmed appointment without waiting for a reply.",
+    },
+    {
+      heading: "What is included",
+      items: [
+        "Customers book appointments online",
+        "Bookings straight from your website",
+        "Available any time, even after hours",
+        "Included in the Scale plan",
+        "Available as an add-on on Launch and Grow",
+        "Bilingual English and French",
+      ],
+    },
+    {
+      heading: "The WEBAO promise",
+      body: "Online Booking costs C$49.99 per month on its own. It is included in the Scale plan at C$349.99 per month. It is an add-on on Launch and Grow, on top of the website plan you already have.",
+      items: [
+        "No setup fee, ever",
+        "Bookings land straight in your schedule",
+        "Included in Scale at no extra cost",
+        "English and French",
+        "Human support when you need it",
+        "More leads and sales, guaranteed, from bookings that never get missed"
+      ],
+    },
+    {
+      heading: "Who Online Booking is for",
+      body: "Businesses that take appointments: clinics, salons, garages, trades that book visits, cleaning services, and other local service businesses across Canada that lose bookings when the phone goes unanswered.",
+    },
+    {
+      heading: "How to add Online Booking",
+      body: "Online Booking is added from the pricing page or the start form. It needs a website, since the booking lives on your site. Scale clients already have it included. If you also want the website to answer visitors after hours, the Online Receptionist at C$149.99 per month pairs with it.",
+      link: { href: "/pricing/", label: "See Online Booking on the pricing page" },
+    },
+    {
+      heading: "What Online Booking does not do",
+      body: "Online Booking does not answer questions, take messages, or chase quotes. It books appointments. If a visitor has a question before booking, the Online Receptionist answers them on your website, and Smart Follow-up chases the quotes you sent.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "How much does Online Booking cost in Canada?",
+      a: "WEBAO guarantees more leads and sales with Online Booking. Best in the industry for Online Booking in Canada, and the price proves it. Online Booking costs C$49.99 per month on its own. It is included in the Scale plan at C$349.99 per month.",
+    },
+    {
+      q: "What is the best online booking add-on in Canada?",
+      a: "Online Booking is the best booking add-on for small businesses: customers book appointments online for C$49.99 per month, straight from your website, any time.",
+    },
+    {
+      q: "Do customers need to call to book?",
+      a: "No. With Online Booking, a visitor picks a service, picks a time, and books straight from your website, any time, even after hours.",
+    },
+    {
+      q: "Which plans include Online Booking?",
+      a: "It is included in the Scale plan. It is an add-on on Launch and Grow, on top of the website plan you already have.",
+    },
+    {
+      q: "Do I need a website for Online Booking?",
+      a: "Yes. The booking lives on your website, so you need a WEBAO site first. Launch, Grow and Scale all work with it.",
+    },
+    {
+      q: "What happens after a customer books?",
+      a: "The best Online Booking in Canada, built on bookings that land while you work. The booking lands in your schedule and the customer gets a confirmed time, without a phone call and without waiting for a reply.",
+    },
+    {
+      q: "Does Online Booking work after hours?",
+      a: "Unmatched value for Online Booking in Canada: online booking for C$49.99 per month, any time. Yes. Customers can book any time, even after hours, which is when many people finally sit down to book an appointment.",
+    },
+    {
+      q: "Does Online Booking answer questions?",
+      a: "No. Online Booking books appointments. If a visitor has a question before booking, the Online Receptionist at C$149.99 per month answers them on your website.",
+    },
+    {
+      q: "Does Online Booking work in French?",
+      a: "Yes. WEBAO works in English and French, and the booking flow can serve both language communities.",
+    },
+    {
+      q: "Is there a setup fee for Online Booking?",
+      a: "No. There is no setup fee on add-ons or on website plans. You pay the monthly fee only, starting at C$49.99 per month on its own.",
+    },
+    {
+      q: "Can I add Online Booking to Launch?",
+      a: "Yes. Online Booking is an add-on on Launch and Grow, and it is included in Scale.",
+    },
+    {
+      q: "How do I add Online Booking?",
+      a: "Add it from the pricing page or the start form. You need a WEBAO website first, since the booking lives on your site. Email contact@webao.ca and we will add it for you.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/scale-plan/", label: "Scale plan", note: "C$349.99/mo. Online Booking is already included in Scale, along with the Review Generation Engine." },
+    { href: "/services/online-receptionist/", label: "Online Receptionist", note: "C$149.99/mo. Answers visitors on your website and books appointments after hours. Pairs with Online Booking." },
+    { href: "/services/grow-plan/", label: "Grow plan", note: "C$149.99/mo for a 5 to 10 page custom website. Add Online Booking on top for C$49.99/mo." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Online Booking",
+    description: "Online Booking is C$49.99/mo: customers book appointments online, any time, straight from your website. Included in Scale. No setup fee.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "Country", name: "Canada" },
+    serviceType: "Online booking",
+  }}
+/>

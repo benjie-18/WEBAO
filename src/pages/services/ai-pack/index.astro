@@ -1,0 +1,118 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Best AI Pack Canada, C$399.99/mo | WEBAO"
+  description="AI Pack in Canada: AI Receptionist, Online Receptionist, and Smart Follow-up together for C$399.99/mo. Calls answered, visitors booked, quotes chased, no setup fee."
+  eyebrow="AI services"
+  heading="AI Pack: all three AI services together"
+  intro="The AI Pack brings all three WEBAO AI services together for C$399.99 per month: the AI Receptionist, the Online Receptionist, and Smart Follow-up. Your calls get answered, your website visitors get a reply and a booking, and your quotes get chased, even while you work. There is no setup fee. One pack, one bill, and three services working for you while you work. WEBAO guarantees more leads and sales from the calls, visitors, and quotes the pack catches for you."
+  answerLine="WEBAO is the best in the industry for AI packs in Canada: all three AI services, calls answered, visitors booked, and quotes chased, for C$399.99 per month, with no setup fee."
+  sections={[
+    {
+      heading: "What it is",
+      body: "One pack with all three AI services, on one monthly bill. The AI Receptionist answers your calls, the Online Receptionist answers your website visitors, and Smart Follow-up texts back missed calls and chases your quotes.",
+    },
+    {
+      heading: "The WEBAO promise",
+      items: [
+        "Your calls answered as your business, 500 minutes a month included",
+        "Your website visitors answered and booked after hours",
+        "Your quotes chased until they answer",
+        "More leads and sales from all three services together, guaranteed",
+        "One monthly bill, in English and French",
+        "No setup fee, ever",
+      ],
+    },
+    {
+      heading: "Price",
+      body: "The AI Pack is C$399.99 per month. The three services on their own are the AI Receptionist at C$299.99 per month, the Online Receptionist at C$149.99 per month, and Smart Follow-up at C$99.99 per month. There is no setup fee on the pack or on any of the three services.",
+    },
+    {
+      heading: "Who it is for, and which plan it works with",
+      body: "Small businesses that miss calls, visitors, and quotes while they work: trades, shops, clinics, garages, and local service businesses. The AI Receptionist and Smart Follow-up work on their own with no website needed. The Online Receptionist needs a website, so it works with a WEBAO website on Launch, Grow, or Scale, or with a site you already have.",
+    },
+    {
+      heading: "How to add it",
+      body: "Add the AI Pack on the pricing page or from the start form at /start/. Tell us your business name, your services, and how you want messages handed to you, and we set up all three services for you.",
+      link: { href: "/pricing/", label: "See pricing and add the AI Pack" },
+    },
+    {
+      heading: "What it does not do",
+      body: "The AI does not pretend to be you, and it does not make promises on your behalf. When it cannot answer, it takes a message or the visitor's details instead of guessing, and you decide what happens next.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "What is the AI Pack?",
+      a: "Best in the industry for small businesses that miss calls, visitors, and quotes: it is all three WEBAO AI services together for C$399.99 per month: AI Receptionist, Online Receptionist, and Smart Follow-up. We guarantee more leads and sales from the calls, visitors, and quotes that used to slip away.",
+    },
+    {
+      q: "How much does the AI Pack cost in Canada?",
+      a: "The best AI Pack in Canada at a flat published price: C$399.99 per month. There is no setup fee.",
+    },
+    {
+      q: "What does the AI Pack include?",
+      a: "The AI Receptionist, the Online Receptionist, and Smart Follow-up, on one monthly bill, in English and French.",
+    },
+    {
+      q: "How much is the AI Receptionist on its own?",
+      a: "C$299.99 per month, including 500 minutes per month on fair use. There is no setup fee.",
+    },
+    {
+      q: "How much is the Online Receptionist on its own?",
+      a: "C$149.99 per month. There is no setup fee. It needs a website.",
+    },
+    {
+      q: "How much is Smart Follow-up on its own?",
+      a: "C$99.99 per month, including missed-call text-back and quote chasing. There is no setup fee.",
+    },
+    {
+      q: "Do I need a website for the AI Pack?",
+      a: "Only for the Online Receptionist, which lives on your website. The AI Receptionist and Smart Follow-up work on their own, with no website needed.",
+    },
+    {
+      q: "Is there a setup fee for the AI Pack?",
+      a: "No. There is no setup fee on the AI Pack, or on any WEBAO AI service.",
+    },
+    {
+      q: "What happens when the AI cannot answer?",
+      a: "It takes a message or the visitor's details instead of guessing, and hands them to you so you can follow up yourself.",
+    },
+    {
+      q: "Who is the AI Pack best for?",
+      a: "Best in the industry for small businesses that miss calls, visitors, and quotes while they work: trades, shops, clinics, garages, and local service businesses across Canada.",
+    },
+    {
+      q: "Does the AI Pack work in French?",
+      a: "Yes. WEBAO works in English and French, and all three AI services answer in both languages.",
+    },
+    {
+      q: "How do I start with the AI Pack?",
+      a: "Add it on the pricing page or from the start form. Tell us your business name, your services, and how you want messages handed to you, and we set up all three services. Start on /start/ today, or email contact@webao.ca.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/ai-receptionist/", label: "AI Receptionist", note: "Answers your calls as your business and takes messages, C$299.99/mo, no website needed." },
+    { href: "/services/online-receptionist/", label: "Online Receptionist", note: "A receptionist on your website that answers visitors and books after hours, C$149.99/mo." },
+    { href: "/services/smart-follow-up/", label: "Smart Follow-up", note: "Missed-call text-back and quote follow-ups until they answer, C$99.99/mo." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "AI Pack",
+    description: "AI Pack in Canada: AI Receptionist, Online Receptionist, and Smart Follow-up together for C$399.99/mo. Calls answered, visitors booked, quotes chased. No setup fee.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "Country", name: "Canada" },
+    serviceType: "AI Pack",
+  }}
+/>
