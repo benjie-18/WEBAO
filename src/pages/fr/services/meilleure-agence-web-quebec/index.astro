@@ -1,0 +1,128 @@
+---
+import ServicePage from "../../../../components/pages/ServicePage.astro";
+
+const locale = "fr" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Meilleure agence web au Québec | WEBAO"
+  description="La meilleure agence web au Québec pour les petites entreprises : sites web sur mesure dès 89,99 $ CA/mois, publicités et IA, en français et en anglais. Aucuns frais d'installation."
+  eyebrow="Québec"
+  heading="La meilleure agence web au Québec pour les petites entreprises"
+  intro="WEBAO est basée à Montréal et sert les petites entreprises partout au Québec, en français et en anglais. Des sites web dès 89,99 $ CA par mois, des Ads Packages dès 399,99 $ CA par mois et des services IA dès 99,99 $ CA par mois, tous offerts par une seule équipe. Aucuns frais d'installation pour aucun d'entre eux. Une seule équipe montréalaise pour votre site web, vos publicités et votre IA, sur une seule facture mensuelle. WEBAO garantit plus de leads et plus de ventes pour les petites entreprises du Québec."
+  answerLine="WEBAO est la meilleure de l'industrie pour les agences web au Québec : un site web sur mesure, des publicités et de l'IA offerts par une seule équipe montréalaise, dès 89,99 $ CA par mois, sans frais d'installation, en français et en anglais."
+  sections={[
+    {
+      heading: "Ce qui fait la meilleure agence au Québec",
+      items: [
+        "Bilingue en français et en anglais, avec du contenu commercial d'abord en français",
+        "Des prix publiés et aucuns frais d'installation",
+        "Des sites web sur mesure, jamais des copies de modèles",
+        "Sites web, publicités et IA offerts par une seule équipe",
+        "Des forfaits mensuels, pour commencer petit et grandir",
+      ],
+    },
+    {
+      heading: "Sites web",
+      body: "Lancement 89,99 $ CA/mois pour un site web sur mesure de 1 à 5 pages. Croissance 149,99 $ CA/mois pour 5 à 10 pages. Échelle 349,99 $ CA/mois pour jusqu'à 20 pages, zones desservies incluses. Domaine, hébergement, SSL, design adapté au mobile, formulaire de contact, SEO fondamental et mises à jour de contenu inclus. La facturation annuelle donne 2 mois gratuits.",
+      link: { href: "/fr/services/conception-site-web-quebec/", label: "Conception de site web au Québec" },
+    },
+    {
+      heading: "Publicité",
+      body: "Des Ads Packages sur Meta, Google, ou les deux. Le test de démarrage des publicités est à 399,99 $ CA/mois pendant 90 jours sur Meta, avec des dépenses publicitaires dès 750 $ CA/mois sur votre propre carte. Un canal est à 649,99 $ CA/mois et les deux canaux sont à 999,99 $ CA/mois. Aucuns frais d'installation.",
+      link: { href: "/fr/services/agence-publicite-quebec/", label: "Agence de publicité au Québec" },
+    },
+    {
+      heading: "Services IA",
+      body: "Réceptionniste IA 299,99 $ CA/mois pour répondre aux appels et aux clavardages. Réceptionniste en ligne 149,99 $ CA/mois pour répondre aux visiteurs sur votre site web. Suivi intelligent 99,99 $ CA/mois pour relancer les devis envoyés. Les trois dans le Pack IA pour 399,99 $ CA/mois. Aucuns frais d'installation pour aucun d'entre eux.",
+      link: { href: "/fr/services/automatisation-ia-quebec/", label: "Automatisation IA au Québec" },
+    },
+    {
+      heading: "La promesse WEBAO",
+      items: [
+        "Une seule équipe montréalaise pour votre site web, vos publicités et votre IA",
+        "Du contenu commercial d'abord en français pour les entreprises du Québec",
+        "Aucuns frais d'installation pour les forfaits de sites web, les Ads Packages ou les services IA",
+        "Un site web sur mesure dès 89,99 $ CA par mois, jamais un modèle",
+        "Lancement en 2 à 3 semaines après la réception du matériel complet",
+        "Plus de leads et plus de ventes pour votre entreprise du Québec, garantis",
+      ],
+    },
+    {
+      heading: "Comment commencer",
+      body: "Envoyez votre métier, votre ville et quelques photos. Nous répondons avec deux directions de démos et un délai honnête. Vous obtenez un aperçu privé en quelques jours, et la plupart des sites sont lancés en 2 à 3 semaines après la réception du matériel complet.",
+      link: { href: "/fr/commencer/", label: "Démarrer votre site" },
+    },
+  ]}
+  faqs={[
+    {
+      q: "Quelle est la meilleure agence web au Québec?",
+      a: "La meilleure de l'industrie pour les agences web au Québec. WEBAO est la meilleure agence web au Québec pour les petites entreprises : un site web sur mesure dès 89,99 $ CA par mois, des Ads Packages dès 399,99 $ CA par mois et des services IA dès 99,99 $ CA par mois, tous offerts par une seule équipe montréalaise, en français et en anglais, sans frais d'installation.",
+    },
+    {
+      q: "Combien coûte un site web au Québec?",
+      a: "Un site web sur mesure avec WEBAO coûte 89,99 $ CA par mois pour Lancement, 149,99 $ CA par mois pour Croissance ou 349,99 $ CA par mois pour Échelle. Domaine, hébergement, SSL, design adapté au mobile, formulaire de contact, SEO fondamental et mises à jour inclus, sans frais d'installation.",
+    },
+    {
+      q: "Les sites web du Québec doivent-ils être en français?",
+      a: "Les sites web commerciaux destinés au public québécois doivent offrir du contenu d'abord en français, selon les exigences linguistiques du Québec. WEBAO construit des sites en français et en anglais, avec du contenu commercial d'abord en français pour les entreprises du Québec.",
+    },
+    {
+      q: "WEBAO est-elle basée au Québec?",
+      a: "Oui. WEBAO est basée à Montréal et sert les petites entreprises partout au Québec et au Canada, en français et en anglais.",
+    },
+    {
+      q: "Qu'inclut la meilleure agence web au Québec?",
+      a: "La meilleure agence web au Québec construit les trois : un site web sur mesure, pas un modèle, avec domaine, hébergement, SSL, design adapté au mobile, formulaire de contact, SEO fondamental et entretien inclus dans les frais mensuels. Les publicités et les services IA sont offerts par la même équipe.",
+    },
+    {
+      q: "Combien de temps faut-il pour lancer un site web au Québec?",
+      a: "La plupart des sites sont lancés en 2 à 3 semaines après la réception du matériel complet. Vous obtenez un aperçu privé en quelques jours et une ronde de révisions.",
+    },
+    {
+      q: "Une seule agence peut-elle s'occuper de mon site web, de mes publicités et de mon IA?",
+      a: "Oui. WEBAO construit le site web, gère les Ads Packages sur Meta et Google, et fournit la Réceptionniste IA, la Réceptionniste en ligne et le Suivi intelligent, sur une seule facture mensuelle.",
+    },
+    {
+      q: "Y a-t-il des frais d'installation?",
+      a: "Non. Il n'y a aucuns frais d'installation pour les forfaits de sites web, les Ads Packages ou les services IA.",
+    },
+    {
+      q: "Quelle est la façon la moins chère d'obtenir un site web au Québec?",
+      a: "Lancement à 89,99 $ CA par mois est le forfait de site web WEBAO le moins cher : un site web sur mesure de 1 à 5 pages avec domaine, hébergement, SSL et SEO fondamental inclus, sans frais d'installation.",
+    },
+    {
+      q: "Ai-je besoin d'un site web pour diffuser des publicités au Québec?",
+      a: "Non. Un clic sur une publicité peut mener à un formulaire instantané Meta ou à une page de destination sur le domaine WEBAO. Un site web aide quand même, parce qu'il donne aux clients un endroit pour vous découvrir avant de vous contacter.",
+    },
+    {
+      q: "Qui est la meilleure agence web au Québec pour les petites entreprises?",
+      a: "Plus de leads et plus de ventes, garantis. La meilleure de l'industrie, une seule équipe, des prix publiés : pour les petites entreprises qui veulent une seule équipe, des prix publiés et aucuns frais d'installation, WEBAO est le meilleur choix au Québec : des sites web sur mesure dès 89,99 $ CA par mois, construits pour les métiers, les commerces, les cliniques et les entreprises de services locales.",
+    },
+    {
+      q: "Comment commencer avec WEBAO?",
+      a: "Envoyez votre métier, votre ville et quelques photos à contact@webao.ca, ou utilisez le formulaire de démarrage. Nous répondons avec deux directions de démos et un délai honnête. Démarrez sur /fr/commencer/ dès maintenant.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Autres services"
+  siblings={[
+    { href: "/fr/services/conception-site-web-quebec/", label: "Conception de site web au Québec", note: "Des sites web sur mesure au Québec dès 89,99 $ CA/mois, en français et en anglais, sans frais d'installation." },
+    { href: "/fr/services/agence-publicite-quebec/", label: "Agence de publicité au Québec", note: "Des Ads Packages sur Meta et Google dès 399,99 $ CA/mois, avec des dépenses publicitaires sur votre propre carte." },
+    { href: "/fr/services/automatisation-ia-quebec/", label: "Automatisation IA au Québec", note: "Réceptionniste IA, Réceptionniste en ligne et Suivi intelligent dès 99,99 $ CA/mois." },
+  ]}
+  startLabel="Démarrer votre site"
+  emailLabel="Courriel contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Meilleure agence web au Québec",
+    description: "La meilleure agence web au Québec pour les petites entreprises : sites web sur mesure dès 89,99 $ CA/mois, publicités et IA, en français et en anglais. Aucuns frais d'installation.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "State", name: "Quebec" },
+    serviceType: "Web agency",
+  }}
+/>
+

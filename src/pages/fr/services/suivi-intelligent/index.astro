@@ -1,0 +1,118 @@
+---
+import ServicePage from "../../../../components/pages/ServicePage.astro";
+
+const locale = "fr" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Meilleur Suivi intelligent au Canada, 99,99 $ CA/mois | WEBAO"
+  description="Suivi intelligent au Canada : réponse par texto aux appels manqués et relance de devis jusqu'à ce qu'ils répondent, incluant la relance de devis. 99,99 $ CA/mois, aucuns frais d'installation, aucun site web nécessaire."
+  eyebrow="Services IA"
+  heading="Suivi intelligent qui relance vos devis"
+  intro="Le Suivi intelligent répond par texto aux appels que vous manquez et relance les devis que vous avez envoyés jusqu'à ce qu'ils répondent, incluant la relance de devis. Il coûte 99,99 $ CA par mois, fonctionne seul sans site web nécessaire, et il n'y a aucuns frais d'installation. Aucun appel manqué ne reste silencieux, et aucun devis n'est oublié. WEBAO garantit plus de leads et plus de ventes grâce aux devis que vous avez déjà envoyés."
+  answerLine="WEBAO est la meilleure de l'industrie pour le Suivi intelligent au Canada : appels manqués répondus par texto et devis relancés jusqu'à ce qu'ils répondent pour 99,99 $ CA par mois, sans frais d'installation."
+  sections={[
+    {
+      heading: "Ce que c'est",
+      body: "Un service de suivi qui travaille pendant que vous êtes sur un chantier. Quand un appel est manqué, il répond à l'appelant par texto. Quand un devis que vous avez envoyé reste silencieux, il fait le suivi jusqu'à ce que la personne réponde, pour que le travail déjà soumis ne se perde pas.",
+    },
+    {
+      heading: "La promesse WEBAO",
+      items: [
+        "Chaque appel manqué répondu par texto tout de suite",
+        "Chaque devis relancé jusqu'à ce que la personne réponde",
+        "Plus de leads et plus de ventes grâce à vos devis, garantis",
+        "Relance de devis incluse dans le prix forfaitaire",
+        "Fonctionne seul, aucun site web nécessaire",
+        "Aucuns frais d'installation, jamais",
+      ],
+    },
+    {
+      heading: "Prix",
+      body: "99,99 $ CA par mois. Aucuns frais d'installation. Il est aussi offert dans le Pack IA pour 399,99 $ CA par mois, avec la Réceptionniste IA et la Réceptionniste en ligne.",
+    },
+    {
+      heading: "Pour qui, et avec quel forfait",
+      body: "Petites entreprises qui envoient des devis et manquent des appels pendant qu'elles travaillent : métiers, garages, cliniques, commerces et entreprises de services locales. Il fonctionne seul, donc aucun forfait de site web n'est nécessaire, et il fonctionne avec n'importe quel forfait de site web WEBAO.",
+    },
+    {
+      heading: "Comment l'ajouter",
+      body: "Ajoutez-le sur la page des tarifs ou à partir du formulaire de démarrage sur /fr/commencer/. Dites-nous comment vous envoyez vos devis et ce que vous voulez que le suivi dise, et nous le configurons pour relancer vos devis pour vous.",
+      link: { href: "/fr/tarifs/", label: "Voir les tarifs et ajouter le Suivi intelligent" },
+    },
+    {
+      heading: "Ce qu'il ne fait pas",
+      body: "Il ne prétend pas être vous et ne fait pas de promesses en votre nom. Quand une personne répond, la réponse vous revient, et c'est vous qui décidez de la suite.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "Qu'est-ce que le Suivi intelligent ?",
+      a: "Le meilleur de l'industrie pour les devis qui restent silencieux : c'est un service de suivi qui répond par texto aux appels manqués et relance les devis que vous avez envoyés jusqu'à ce qu'ils répondent, incluant la relance de devis. Nous garantissons plus de leads et plus de ventes grâce aux devis qui restaient silencieux avant. Il coûte 99,99 $ CA par mois.",
+    },
+    {
+      q: "Combien coûte le Suivi intelligent au Canada ?",
+      a: "Le meilleur Suivi intelligent au Canada à un prix forfaitaire publié : 99,99 $ CA par mois. Aucuns frais d'installation.",
+    },
+    {
+      q: "Ai-je besoin d'un site web pour le Suivi intelligent ?",
+      a: "Non. Il fonctionne seul, sans site web nécessaire. Il fonctionne aussi avec un site web WEBAO si vous en avez un.",
+    },
+    {
+      q: "Qu'est-ce que la réponse par texto aux appels manqués ?",
+      a: "Quand un appel est manqué, le Suivi intelligent répond à l'appelant par texto tout de suite, pour que la personne qui a appelé obtienne quand même une réponse pendant que vous travaillez.",
+    },
+    {
+      q: "Le Suivi intelligent relance-t-il les devis ?",
+      a: "Oui. La relance de devis est incluse : il fait le suivi des devis que vous avez envoyés jusqu'à ce que la personne réponde.",
+    },
+    {
+      q: "Pendant combien de temps fait-il le suivi ?",
+      a: "Il fait le suivi d'un devis jusqu'à ce que la personne réponde, pour qu'un devis silencieux reçoive un rappel au lieu d'être oublié.",
+    },
+    {
+      q: "Y a-t-il des frais d'installation pour le Suivi intelligent ?",
+      a: "Non. Aucuns frais d'installation pour le Suivi intelligent, ni pour aucun service IA de WEBAO.",
+    },
+    {
+      q: "Que se passe-t-il quand quelqu'un répond à un suivi ?",
+      a: "La réponse vous revient, et c'est vous qui décidez de la suite. Le Suivi intelligent ne fait pas de promesses en votre nom.",
+    },
+    {
+      q: "Puis-je obtenir le Suivi intelligent avec les autres services IA ?",
+      a: "Oui. Le Pack IA est à 399,99 $ CA par mois pour les trois : Réceptionniste IA, Réceptionniste en ligne et Suivi intelligent.",
+    },
+    {
+      q: "Pour qui le Suivi intelligent est-il idéal ?",
+      a: "Le meilleur de l'industrie pour les petites entreprises qui envoient des devis et manquent des appels pendant qu'elles travaillent : métiers, garages, cliniques, commerces et entreprises de services locales partout au Canada.",
+    },
+    {
+      q: "Fonctionne-t-il en français ?",
+      a: "Oui. WEBAO travaille en français et en anglais, et les messages du Suivi intelligent partent dans la langue que votre client utilise.",
+    },
+    {
+      q: "Comment commencer avec le Suivi intelligent ?",
+      a: "Ajoutez-le sur la page des tarifs ou à partir du formulaire de démarrage. Dites-nous comment vous envoyez vos devis et ce que vous voulez que le suivi dise, et nous le configurons pour vous. Commencez sur /fr/commencer/ aujourd'hui, ou écrivez à contact@webao.ca.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Autres services"
+  siblings={[
+    { href: "/fr/services/receptionniste-ia/", label: "Réceptionniste IA", note: "Répond à vos appels comme votre entreprise et prend les messages, 299,99 $ CA/mois, aucun site web nécessaire." },
+    { href: "/fr/services/pack-ia/", label: "Pack IA", note: "Les trois services IA ensemble pour 399,99 $ CA/mois : Réceptionniste IA, Réceptionniste en ligne et Suivi intelligent." },
+    { href: "/fr/services/receptionniste-en-ligne/", label: "Réceptionniste en ligne", note: "Une réceptionniste sur votre site web qui répond aux visiteurs et réserve après les heures d'ouverture, 149,99 $ CA/mois." },
+  ]}
+  startLabel="Démarrer votre site"
+  emailLabel="Courriel contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Suivi intelligent",
+    description: "Suivi intelligent au Canada : réponse par texto aux appels manqués et relance de devis jusqu'à ce qu'ils répondent, incluant la relance de devis. 99,99 $ CA/mois, aucuns frais d'installation, aucun site web nécessaire.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "Country", name: "Canada" },
+    serviceType: "Smart Follow-up",
+  }}
+/>
