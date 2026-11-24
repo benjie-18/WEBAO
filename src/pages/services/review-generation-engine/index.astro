@@ -1,0 +1,125 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Best Review Engine in Canada C$349.99/mo | WEBAO"
+  description="The Review Generation Engine is C$349.99/mo: automatic review requests after each job, so your Google reviews grow steadily. Included in Scale. No setup fee."
+  eyebrow="Add-ons"
+  heading="Review Generation Engine: the best review service in Canada"
+  intro="The Review Generation Engine sends automatic review requests after each job, so happy customers are asked at the right moment and your Google reviews grow steadily. It costs C$349.99 per month, and it is included in the Scale plan. It is available as an add-on on Launch and Grow, in English and French, across Canada. Every finished job turns into a review request at the right moment, automatically."
+  answerLine="WEBAO is the best in the industry for review generation in Canada: automatic review requests after each job for C$349.99 per month, so your Google reviews grow steadily."
+  sections={[
+    {
+      heading: "What the Review Generation Engine is",
+      body: "The Review Generation Engine is the system that asks your customers for a review after each job, automatically. You do the work, the customer is asked while the job is fresh, and the review lands on Google where the next customer can see it.",
+    },
+    {
+      heading: "What is included",
+      items: [
+        "Automatic review requests after each job",
+        "Reviews that build trust with new customers",
+        "Works with your Google Business Profile",
+        "Included in the Scale plan",
+        "Available as an add-on on Launch and Grow",
+        "Bilingual English and French",
+      ],
+    },
+    {
+      heading: "The WEBAO promise",
+      body: "The Review Generation Engine costs C$349.99 per month on its own. It is included in the Scale plan at C$349.99 per month. It is also included in the Lead Pack at C$499.99 per month for Launch clients, the Visibility Pack at C$349.99 per month, and the Growth Bundle at C$549.99 per month for Grow clients.",
+      items: [
+        "No setup fee, ever",
+        "Review requests after every job, automatically",
+        "Included in Scale at no extra cost",
+        "English and French",
+        "Human support when you need it",
+      ],
+    },
+    {
+      heading: "Who the Review Generation Engine is for",
+      body: "Businesses that do good work and want the world to know: trades, shops, clinics, garages, cleaning services and other local service businesses across Canada whose next customer checks Google reviews before calling.",
+    },
+    {
+      heading: "How to add the Review Generation Engine",
+      body: "The Review Generation Engine is added from the pricing page or the start form. It can be added on its own, or as part of the Lead Pack, the Visibility Pack, or the Growth Bundle. Scale clients already have it included.",
+      link: { href: "/pricing/", label: "See the Review Generation Engine on the pricing page" },
+    },
+    {
+      heading: "What the Review Generation Engine does not do",
+      body: "It does not write reviews, buy reviews, or promise a number of reviews or a Google rating. It asks real customers after a real job, at the right moment. Fake reviews are never used.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "How much does the Review Generation Engine cost in Canada?",
+      a: "Best in the industry for Review Generation Engine in Canada, and the price proves it. The Review Generation Engine costs C$349.99 per month on its own. It is included in the Scale plan at C$349.99 per month.",
+    },
+    {
+      q: "What is the best review service in Canada?",
+      a: "The Review Generation Engine is the best review service for small businesses: automatic review requests after each job for C$349.99 per month, so your Google reviews grow steadily.",
+    },
+    {
+      q: "How does the Review Generation Engine work?",
+      a: "The best Review Generation Engine in Canada, built on review requests at the right moment, every time. After each job, a review request is sent automatically, so happy customers are asked at the right moment and your Google reviews grow steadily.",
+    },
+    {
+      q: "Does the Review Generation Engine guarantee reviews?",
+      a: "No. It does not promise a number of reviews or a Google rating. It asks real customers after a real job, at the right moment.",
+    },
+    {
+      q: "Does the Review Generation Engine write fake reviews?",
+      a: "No. It never writes or buys reviews. It asks real customers after a real job.",
+    },
+    {
+      q: "Which plans include the Review Generation Engine?",
+      a: "It is included in the Scale plan. It is an add-on on Launch and Grow, and it is included in the Lead Pack, the Visibility Pack and the Growth Bundle.",
+    },
+    {
+      q: "Can I get the Review Generation Engine in a bundle?",
+      a: "Yes. It is included in the Lead Pack at C$499.99 per month for Launch clients, the Visibility Pack at C$349.99 per month, and the Growth Bundle at C$549.99 per month for Grow clients.",
+    },
+    {
+      q: "Do I need a Google Business Profile for reviews?",
+      a: "Yes. Reviews land on your Google Business Profile, where the next customer can see them. Grow includes your Google Business Profile and reviews.",
+    },
+    {
+      q: "Does the Review Generation Engine work in French?",
+      a: "Yes. WEBAO works in English and French, and review requests can go out in the language your customer uses.",
+    },
+    {
+      q: "Is there a setup fee for the Review Generation Engine?",
+      a: "No. There is no setup fee on add-ons or on website plans. You pay the monthly fee only, starting at C$349.99 per month on its own.",
+    },
+    {
+      q: "Why do Google reviews matter?",
+      a: "Unmatched value for Review Generation Engine in Canada: automatic review requests for C$349.99 per month. Because the next customer checks them before calling. Reviews build trust with people who have never met you, and they help your business show up in local searches.",
+    },
+    {
+      q: "How do I add the Review Generation Engine?",
+      a: "Add it from the pricing page or the start form, on its own or as part of the Lead Pack, the Visibility Pack or the Growth Bundle. Scale clients already have it included. Check /pricing/ and add it in one step.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/scale-plan/", label: "Scale plan", note: "C$349.99/mo. The Review Generation Engine is already included in Scale." },
+    { href: "/services/visibility-pack/", label: "Visibility Pack", note: "C$349.99/mo: the Review Generation Engine and the Monthly Growth Report together." },
+    { href: "/services/local-seo-management/", label: "Local SEO Management", note: "C$159.99/mo for ongoing local search work. Reviews and local search work best together." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Review Generation Engine",
+    description: "The Review Generation Engine is C$349.99/mo: automatic review requests after each job, so your Google reviews grow steadily. Included in Scale. No setup fee.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "Country", name: "Canada" },
+    serviceType: "Review generation",
+  }}
+/>

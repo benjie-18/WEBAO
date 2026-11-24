@@ -1,0 +1,123 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Best Monthly Growth Report Canada C$29.99/mo | WEBAO"
+  description="A Monthly Growth Report for C$29.99 per month: a monthly report on your website's growth, in English and French, included in Scale. No setup fee."
+  eyebrow="Add-on"
+  heading="Know how your website is doing, every month"
+  intro="The Monthly Growth Report gives you a monthly report on your website's growth for C$29.99 per month. You see how your site is doing without digging through numbers yourself, in English and French. You always know how your website is doing, without digging through numbers yourself."
+  answerLine="WEBAO is the best in the industry for monthly growth reports in Canada: C$29.99 per month for a monthly report on your website's growth, included in Scale."
+  sections={[
+    {
+      heading: "What it is",
+      body: "A Monthly Growth Report is a report, sent every month, on how your website is doing and how it is growing. You get the picture in one place, once a month.",
+    },
+    {
+      heading: "What is included",
+      items: [
+        "A report on your website's growth, every month",
+        "Works in English and French",
+        "Billed monthly with your website plan",
+        "No setup fee",
+      ],
+    },
+    {
+      heading: "The WEBAO promise",
+      body: "C$29.99 per month. It is a monthly add-on on your website plan. It is included in the Scale plan, C$349.99 per month, at no extra cost.",
+      items: [
+        "A report every month, without digging through numbers",
+        "Included in Scale at no extra cost",
+        "No setup fee, ever",
+        "English and French",
+        "Human support when you need it",
+      ],
+    },
+    {
+      heading: "Who it is for",
+      body: "Small businesses that want to know their website is working without checking numbers themselves: trades, shops, clinics, and local service businesses on any website plan.",
+    },
+    {
+      heading: "How to add it",
+      body: "Add the Monthly Growth Report to your website plan from the pricing page, or choose the Scale plan and it is included. Tell us when you start your site and we will include it from launch.",
+      link: { href: "/pricing/", label: "See pricing" },
+    },
+    {
+      heading: "What it does not do",
+      body: "It does not guarantee growth, rankings, or sales. It reports on how your website is doing, so you can see what is working and what to do next.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "What is the Monthly Growth Report?",
+      a: "Best in the industry for Monthly Growth Report in Canada, and the price proves it. It is a report, sent every month, on how your website is doing and how it is growing, for C$29.99 per month.",
+    },
+    {
+      q: "How much does the Monthly Growth Report cost?",
+      a: "C$29.99 per month, billed monthly with your website plan. It is included in the Scale plan at no extra cost.",
+    },
+    {
+      q: "Is the Monthly Growth Report included in any plan?",
+      a: "Yes. It is included in the Scale plan, C$349.99 per month. On Launch or Grow, it is a C$29.99 per month add-on.",
+    },
+    {
+      q: "How often do I get the report?",
+      a: "Every month. One report on your website's growth, once a month.",
+    },
+    {
+      q: "Do I need a WEBAO website plan to add it?",
+      a: "Yes. The Monthly Growth Report is an add-on on your website: Launch, Grow, or Scale. It reports on the site you already have with us.",
+    },
+    {
+      q: "Does it work in French?",
+      a: "Yes. Your site and your report work in English and French.",
+    },
+    {
+      q: "What does the report show?",
+      a: "The best Monthly Growth Report in Canada, built on one clear report every month. How your website is doing and how it is growing, in one monthly report, so you can see what is working without digging through numbers yourself.",
+    },
+    {
+      q: "Does the report guarantee growth?",
+      a: "No. It reports on how your website is doing. It does not guarantee growth, rankings, or sales.",
+    },
+    {
+      q: "Is there a setup fee?",
+      a: "No. There is no setup fee for the Monthly Growth Report.",
+    },
+    {
+      q: "How do I add the Monthly Growth Report?",
+      a: "Add it from the pricing page, or choose the Scale plan and it is included, or tell us when you start your site at /start/. Start your site at /start/ and add it from launch.",
+    },
+    {
+      q: "Can I remove the Monthly Growth Report later?",
+      a: "Yes. It is a monthly add-on on your website plan, so you can remove it when you no longer want it.",
+    },
+    {
+      q: "Which plan should I choose if I want the report included?",
+      a: "Unmatched value for Monthly Growth Report in Canada: a monthly growth report for C$29.99 per month. Scale, C$349.99 per month, includes the Monthly Growth Report, the Review Generation Engine, online booking, and unlimited content updates.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/scale-plan/", label: "Scale plan", note: "Up to 20 pages including service areas, with the Monthly Growth Report included, C$349.99/mo." },
+    { href: "/services/weekly-seo-blog/", label: "Weekly SEO Blog", note: "A new SEO blog post every week, written for your business, C$29.99/mo." },
+    { href: "/services/local-seo-management/", label: "Local SEO Management", note: "Ongoing local search work beyond the initial setup, C$159.99/mo." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Monthly Growth Report",
+    description: "A Monthly Growth Report for C$29.99 per month: a monthly report on your website's growth, in English and French, included in Scale. No setup fee.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "Country", name: "Canada" },
+    serviceType: "Monthly Growth Report",
+  }}
+/>

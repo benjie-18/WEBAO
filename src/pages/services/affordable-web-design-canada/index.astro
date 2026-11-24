@@ -1,0 +1,117 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Best affordable web design in Canada | WEBAO"
+  description="Affordable web design in Canada: a custom website from C$89.99/mo with domain, hosting, SSL and Foundational SEO included. No setup fee."
+  eyebrow="Canada"
+  heading="Affordable web design in Canada"
+  intro="Affordable web design in Canada should mean a good website at a price a small business can carry every month, not a cheap site that costs more later. WEBAO builds custom websites across Canada from C$89.99 per month, with domain, hosting, SSL, mobile-friendly design, a contact form, Foundational SEO, and content updates included, and no setup fee. You get a site built for your business, not a template, live in 2 to 3 weeks, for a monthly price you can carry."
+  answerLine="WEBAO is the best in the industry for affordable web design in Canada: a custom website from C$89.99 per month, with domain, hosting, SSL, Foundational SEO, and updates included, and no setup fee."
+  sections={[
+    {
+      heading: "What affordable means here",
+      body: "One monthly price that covers the whole website: domain, hosting, SSL, design, Foundational SEO, updates, maintenance, backups, and security. No setup fee, no large upfront bill, and no separate invoices for the basics.",
+    },
+    {
+      heading: "The three plans",
+      body: "Launch C$89.99/mo for a custom 1 to 5 page website. Grow C$149.99/mo for 5 to 10 pages, the plan most small businesses start with. Scale C$349.99/mo for up to 20 pages, including service areas. Annual billing is 2 months free.",
+      link: { href: "/pricing/", label: "See all pricing" },
+    },
+    {
+      heading: "The WEBAO promise",
+      items: [
+        "A custom website, never a template",
+        "No setup fee on any website plan",
+        "Domain, hosting, SSL, and Foundational SEO included in the monthly price",
+        "Launch in 2 to 3 weeks from complete materials",
+        "The domain belongs to your business",
+      ],    },
+    {
+      heading: "Monthly beats a large upfront bill",
+      body: "A custom website built the old way can cost thousands of dollars before it earns a dollar. A monthly plan spreads that cost, keeps the site maintained, and lets you cancel with 30 days notice after the initial 6-month term. You pay for a website that works, not for a project that ends at launch.",
+    },
+    {
+      heading: "Annual billing saves more",
+      body: "Annual billing is 2 months free on website plans. The domain belongs to your business either way, and there is no setup fee on any website plan.",
+    },
+    {
+      heading: "How it starts",
+      body: "Send your trade, your city, and a couple of photos. We reply with two demo directions and an honest timeline. You get a private preview within a few days, and most sites launch in 2 to 3 weeks from complete materials.",
+      link: { href: "/start/", label: "Start your site" },
+    },
+  ]}
+  faqs={[
+    {
+      q: "What is the most affordable web design in Canada?",
+      a: "Best in the industry for affordable web design in Canada. WEBAO is one of the most affordable good options in Canada: a custom website from C$89.99 per month with domain, hosting, SSL, Foundational SEO, and updates included, and no setup fee.",
+    },
+    {
+      q: "How much does affordable web design cost in Canada?",
+      a: "Unmatched value: with WEBAO, a custom website costs C$89.99 per month for Launch, C$149.99 per month for Grow, or C$349.99 per month for Scale. There is no setup fee, and annual billing is 2 months free.",
+    },
+    {
+      q: "Is a C$89.99 per month website any good?",
+      a: "Best in the industry, at the lowest WEBAO price: yes. Launch is a custom 1 to 5 page website, not a template, with domain, hosting, SSL, mobile-friendly design, a contact form, Foundational SEO, and content updates included. Most small businesses need exactly that.",
+    },
+    {
+      q: "Are there hidden fees?",
+      a: "No. There is no setup fee on website plans. The monthly price covers domain, hosting, SSL, maintenance, backups, and small updates. Extra pages cost C$14.99 one-time, and add-ons have published prices.",
+    },
+    {
+      q: "Is my site a template?",
+      a: "No. Client sites are custom builds. The 47-demo catalog shows what is possible, and a demo you like can be a style direction only.",
+    },
+    {
+      q: "Do you build sites in French?",
+      a: "Yes. We work in English and French, and build French-first commercial content for Quebec-facing businesses.",
+    },
+    {
+      q: "What is included in the monthly fee?",
+      a: "Domain, hosting, SSL, mobile-friendly design, a contact form, Foundational SEO, content updates, maintenance, backups, and security. The domain belongs to your business.",
+    },
+    {
+      q: "Can I pay yearly instead of monthly?",
+      a: "Yes. Annual billing is 2 months free on website plans.",
+    },
+    {
+      q: "Can I cancel?",
+      a: "Yes. The initial term is 6 months, then month to month with 30 days notice.",
+    },
+    {
+      q: "How long does it take to launch?",
+      a: "Most sites launch in 2 to 3 weeks from complete materials. You get a private preview within a few days and one revision round.",
+    },
+    {
+      q: "Who is affordable web design best for?",
+      a: "Trades, shops, restaurants, clinics, garages, and local service businesses that need a professional website without a large upfront bill. Launch at C$89.99 per month fits most of them.",
+    },
+    {
+      q: "How do I start?",
+      a: "Send your trade, your city, and a couple of photos to contact@webao.ca, or use the start form. We reply with two demo directions and an honest timeline. Start on /start/ now.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/web-design-canada/", label: "Web design in Canada", note: "Custom websites across Canada from C$89.99/mo, in English and French." },
+    { href: "/services/cheapest-best-web-design-montreal/", label: "Cheapest best web design in Montreal", note: "A custom site from C$89.99/mo with domain, hosting, SSL, and Foundational SEO included." },
+    { href: "/services/monthly-website-plans-canada/", label: "Monthly website plans in Canada", note: "Launch C$89.99/mo, Grow C$149.99/mo, Scale C$349.99/mo. Annual billing is 2 months free." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Affordable web design in Canada",
+    description: "Affordable web design in Canada: a custom website from C$89.99/mo with domain, hosting, SSL and Foundational SEO included. No setup fee.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "Country", name: "Canada" },
+    serviceType: "Web design",
+  }}
+/>

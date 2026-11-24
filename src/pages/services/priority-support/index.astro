@@ -1,0 +1,123 @@
+---
+import ServicePage from "../../../components/pages/ServicePage.astro";
+
+const locale = "en" as const;
+---
+
+<ServicePage
+  locale={locale}
+  pageKey="services"
+  title="Best Priority Support in Canada C$59.99/mo | WEBAO"
+  description="Priority Support for C$59.99 per month: priority support plus 1 strategy call per month, in English and French, with no setup fee."
+  eyebrow="Add-on"
+  heading="Priority support, plus a strategy call every month"
+  intro="Priority Support gives you priority support plus 1 strategy call per month for C$59.99 per month. You get answers fast and a monthly call to plan what comes next for your business, in English and French, with no setup fee. You get answers fast, and a monthly strategy call keeps your business moving ahead."
+  answerLine="WEBAO is the best in the industry for priority support in Canada: C$59.99 per month for priority support plus 1 strategy call per month, with no setup fee."
+  sections={[
+    {
+      heading: "What it is",
+      body: "Priority Support is a monthly add-on that puts your questions first and adds 1 strategy call per month: a regular call to plan what comes next for your website and your business.",
+    },
+    {
+      heading: "What is included",
+      items: [
+        "Priority support",
+        "1 strategy call per month",
+        "Works in English and French",
+        "Billed monthly with your website plan",
+        "No setup fee",
+      ],
+    },
+    {
+      heading: "The WEBAO promise",
+      body: "C$59.99 per month. It is a monthly add-on on your website plan, with no setup fee.",
+      items: [
+        "Priority support when you need it",
+        "1 strategy call every month",
+        "No setup fee, ever",
+        "English and French",
+      ],
+    },
+    {
+      heading: "Who it is for",
+      body: "Small businesses that want fast answers and a plan: trades, shops, clinics, and local service businesses that rely on their website and want to keep improving it.",
+    },
+    {
+      heading: "How to add it",
+      body: "Add Priority Support to your website plan from the pricing page, or tell us when you start your site and we will include it from launch.",
+      link: { href: "/pricing/", label: "See pricing" },
+    },
+    {
+      heading: "What it does not do",
+      body: "It does not replace your website plan. Your plan still covers your site, hosting, and updates. Priority Support adds faster answers and a monthly strategy call on top of it.",
+    },
+  ]}
+  faqs={[
+    {
+      q: "What is Priority Support?",
+      a: "Best in the industry for Priority Support in Canada, and the price proves it. It is a monthly add-on, C$59.99 per month, that gives you priority support plus 1 strategy call per month.",
+    },
+    {
+      q: "How much does Priority Support cost?",
+      a: "C$59.99 per month, billed monthly with your website plan. There is no setup fee.",
+    },
+    {
+      q: "What is a strategy call?",
+      a: "The best Priority Support in Canada, built on fast answers and a monthly strategy call. A call, once a month, to plan what comes next for your website and your business.",
+    },
+    {
+      q: "How often do I get a strategy call?",
+      a: "Unmatched value for Priority Support in Canada: priority support and a strategy call for C$59.99 per month. Once a month. Priority Support includes 1 strategy call per month.",
+    },
+    {
+      q: "Do I need a WEBAO website plan to add it?",
+      a: "Yes. Priority Support is an add-on on your website: Launch, Grow, or Scale. It adds faster answers and a monthly call to the plan you already have.",
+    },
+    {
+      q: "Do the Grow and Scale plans already include priority support?",
+      a: "Yes. Grow includes priority support with a 2-day response, and Scale includes same-day priority support. This add-on adds the monthly strategy call on top of that.",
+    },
+    {
+      q: "Do I need Priority Support if I am on Grow or Scale?",
+      a: "Grow and Scale already include priority support. Add this if you also want the 1 strategy call per month.",
+    },
+    {
+      q: "Does it work in French?",
+      a: "Yes. We work in English and French, and your strategy call is in the language you prefer.",
+    },
+    {
+      q: "Is there a setup fee?",
+      a: "No. There is no setup fee for Priority Support.",
+    },
+    {
+      q: "How do I add Priority Support?",
+      a: "Add it from the pricing page, or tell us when you start your site at /start/ and we will include it from launch. Add it from the pricing page today.",
+    },
+    {
+      q: "Can I remove Priority Support later?",
+      a: "Yes. It is a monthly add-on on your website plan, so you can remove it when you no longer want it.",
+    },
+    {
+      q: "What does Priority Support not do?",
+      a: "It does not replace your website plan. Your plan still covers your site, hosting, and updates. Priority Support adds faster answers and a monthly strategy call.",
+    },
+  ]}
+  faqHeading="Questions"
+  siblingsHeading="Other services"
+  siblings={[
+    { href: "/services/advanced-admin-panel/", label: "Advanced Admin Panel", note: "More control over your website, C$39.99/mo. On Grow and Scale, not Launch." },
+    { href: "/services/monthly-growth-report/", label: "Monthly Growth Report", note: "A monthly report on your website's growth, C$29.99/mo. Included in Scale." },
+    { href: "/services/grow-plan/", label: "Grow plan", note: "5 to 10 page custom website, the plan most small businesses start with, C$149.99/mo." },
+  ]}
+  startLabel="Start your site"
+  emailLabel="Email contact@webao.ca"
+  serviceSchema={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Priority Support",
+    description: "Priority Support for C$59.99 per month: priority support plus 1 strategy call per month, in English and French, with no setup fee.",
+    provider: { "@type": "Organization", name: "WEBAO", url: "https://webao.ca" },
+    areaServed: { "@type": "Country", name: "Canada" },
+    serviceType: "Priority Support",
+  }}
+/>
