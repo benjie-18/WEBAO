@@ -163,6 +163,64 @@ test('charts reads lead keys from leads:index instead of scanning', async () => 
   );
 });
 
+test('charts all-time pages leads in slices and counts every form once', async () => {
+  // 900 leads: 450 sent today, 450 sent 40 days ago; 2 forms today.
+  // One call cannot fetch 900 leads (worker subrequest budget), so the
+  // panel fetches slice after slice via leadOffset; the slices are
+  // disjoint and together cover every lead, forms only on slice one.
+  const seed: Record<string, unknown> = {
+    'form:1:a': form('contact', tToday),
+    'form:2:b': form('contact', tYesterday),
+  };
+  const keys: string[] = [];
+  for (let i = 0; i < 900; i++) {
+    const id = `ld_${String(i).padStart(24, '0')}`;
+    keys.push('lead:' + id);
+    seed['lead:' + id] = lead({ id, sentAt: i < 450 ? tToday : tToday - 40 * DAY });
+  }
+  seed['leads:index'] = keys;
+  const memory = memoryKV(seed);
+  const token = await issueToken(memory.kv, '203.0.113.9');
+
+  const first = await bodyOf(await handleAdmin(get('/api/admin/charts?range=all', token), envOf(memory.kv), url('/api/admin/charts?range=all')));
+  assert.equal(first.range, 'all');
+  assert.equal(first.leadsTotal, 900);
+  assert.equal(first.leadsNextOffset, 850, 'first slice stops inside the subrequest budget');
+  assert.equal(first.formsTotal, 2);
+  assert.equal(first.formsNextOffset, null);
+  assert.equal(first.forms.total.reduce((s: number, v: number) => s + v, 0), 2, 'forms arrive on slice one');
+  assert.equal(first.leads.sent.reduce((s: number, v: number) => s + v, 0), 850);
+  assert.ok(first.labels.includes(dayKey(tToday - 40 * DAY).slice(0, 7)), 'labels reach the oldest month');
+
+  const second = await bodyOf(await handleAdmin(get('/api/admin/charts?range=all&leadOffset=850&formOffset=100', token), envOf(memory.kv), url('/api/admin/charts?range=all&leadOffset=850&formOffset=100')));
+  assert.equal(second.leadsNextOffset, null, 'no third slice');
+  assert.equal(second.formsNextOffset, null);
+  assert.equal(second.forms.total.reduce((s: number, v: number) => s + v, 0), 0, 'forms are not counted twice');
+  assert.equal(second.leads.sent.reduce((s: number, v: number) => s + v, 0), 50);
+
+  const sentTotal =
+    first.leads.sent.reduce((s: number, v: number) => s + v, 0) +
+    second.leads.sent.reduce((s: number, v: number) => s + v, 0);
+  assert.equal(sentTotal, 900, 'both slices together count every lead');
+});
+
+test('charts all-time pages forms in slices of 100', async () => {
+  const seed: Record<string, unknown> = { 'leads:index': [] };
+  for (let i = 0; i < 150; i++) seed[`form:${i}:x`] = form('contact', tToday);
+  const memory = memoryKV(seed);
+  const token = await issueToken(memory.kv, '203.0.113.9');
+
+  const first = await bodyOf(await handleAdmin(get('/api/admin/charts?range=all', token), envOf(memory.kv), url('/api/admin/charts?range=all')));
+  assert.equal(first.formsTotal, 150);
+  assert.equal(first.formsNextOffset, 100);
+  assert.equal(first.forms.total.reduce((s: number, v: number) => s + v, 0), 100);
+
+  const second = await bodyOf(await handleAdmin(get('/api/admin/charts?range=all&leadOffset=0&formOffset=100', token), envOf(memory.kv), url('/api/admin/charts?range=all&leadOffset=0&formOffset=100')));
+  assert.equal(second.formsNextOffset, null);
+  assert.equal(second.forms.total.reduce((s: number, v: number) => s + v, 0), 50);
+  assert.equal(second.leads.sent.reduce((s: number, v: number) => s + v, 0), 0, 'no leads, no double count');
+});
+
 test('charts falls back to the full scan when leads:index is missing or empty', async () => {
   for (const index of [undefined, []]) {
     const seed: Record<string, unknown> = {

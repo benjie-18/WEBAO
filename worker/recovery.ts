@@ -55,10 +55,13 @@ export async function storeAbandonedCheckout(
   await putJson(kv, INDEX, index);
 }
 
-/** Newest abandoned checkouts first (admin warm-lead list + follow-ups). */
+/** Newest abandoned checkouts first (admin warm-lead list + follow-ups).
+ * No limit by default: the whole index is returned (the index itself
+ * keeps at most MAX_INDEX newest), so the admin sees every abandoned
+ * checkout on file, not just the first 50. */
 export async function listAbandoned(
   kv: KVNamespace,
-  limit: number = 50,
+  limit: number = Number.POSITIVE_INFINITY,
 ): Promise<AbandonedCheckout[]> {
   const index = (await getJson<string[]>(kv, INDEX)) || [];
   const records = await batch(index.slice(0, limit), 25, (k) =>

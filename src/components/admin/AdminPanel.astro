@@ -107,6 +107,7 @@ const a = t.admin;
           <button type="button" class="admin-seg-btn" data-range="week">{a.stats.range.week}</button>
           <button type="button" class="admin-seg-btn" data-range="month">{a.stats.range.month}</button>
           <button type="button" class="admin-seg-btn" data-range="year">{a.stats.range.year}</button>
+          <button type="button" class="admin-seg-btn" data-range="all">{a.stats.range.all}</button>
         </div>
         <label class="admin-field admin-field--inline">
           <span>{a.stats.pageLabel}</span>
@@ -150,6 +151,9 @@ const a = t.admin;
       data-panel="visitors" class="admin-panel" hidden
     >
       <div class="admin-forms-list" data-visitors-list></div>
+      <div class="admin-center">
+        <button type="button" class="admin-ghost-btn" data-visitors-more hidden>{a.visitors.loadMore}</button>
+      </div>
     </section>
 
     <!-- Tab 3 · Forms -->
@@ -169,6 +173,7 @@ const a = t.admin;
           <button type="button" class="admin-seg-btn" data-forms-range="week">{a.stats.range.week}</button>
           <button type="button" class="admin-seg-btn is-active" data-forms-range="month">{a.stats.range.month}</button>
           <button type="button" class="admin-seg-btn" data-forms-range="year">{a.stats.range.year}</button>
+          <button type="button" class="admin-seg-btn" data-forms-range="all">{a.stats.range.all}</button>
         </div>
       </div>
       <div data-forms-charts></div>
@@ -189,6 +194,7 @@ const a = t.admin;
           <button type="button" class="admin-seg-btn" data-leads-range="week">{a.stats.range.week}</button>
           <button type="button" class="admin-seg-btn is-active" data-leads-range="month">{a.stats.range.month}</button>
           <button type="button" class="admin-seg-btn" data-leads-range="year">{a.stats.range.year}</button>
+          <button type="button" class="admin-seg-btn" data-leads-range="all">{a.stats.range.all}</button>
         </div>
       </div>
       <div data-leads-charts></div>

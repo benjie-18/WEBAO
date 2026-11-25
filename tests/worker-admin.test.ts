@@ -339,6 +339,103 @@ test('changing the password verifies the old one, enforces length and logs other
   assert.equal(login.status, 200, 'the new password works');
 });
 
+test('stats all-time covers every session in the store, monthly buckets', async () => {
+  const memory = memoryKV();
+  const token = await authed(memory);
+  const today = dayKey();
+  const todayTs = Date.parse(today + 'T12:00:00Z');
+  const oldTs = todayTs - 400 * 24 * 3600 * 1000; // past the 365-day year window
+  // One visitor 400 days ago (1 page then, 1 today), one visitor today.
+  const old = JSON.parse(session('desktop', 'CA', oldTs));
+  old.pages = [
+    { path: '/pricing', at: oldTs, durationMs: 0 },
+    { path: '/pricing', at: todayTs, durationMs: 0 },
+  ];
+  memory.store.set('session:old', JSON.stringify(old));
+  const fresh = JSON.parse(session('mobile', 'US', todayTs));
+  fresh.pages = [{ path: '/', at: todayTs, durationMs: 0 }];
+  memory.store.set('session:fresh', JSON.stringify(fresh));
+
+  const response = await handleAdmin(adminGet('/api/admin/stats?range=all', token), envOf(memory.kv), url('/api/admin/stats?range=all'));
+  assert.equal(response.status, 200);
+  const stats = await bodyOf(response);
+  assert.equal(stats.range, 'all');
+  assert.equal(stats.labels[0], dayKey(oldTs).slice(0, 7), 'first bucket is the oldest stored month');
+  assert.equal(stats.labels.at(-1), today.slice(0, 7));
+  assert.equal(stats.views.reduce((s: number, v: number) => s + v, 0), 3, 'every stored page counts');
+  assert.equal(stats.visitors.reduce((s: number, v: number) => s + v, 0), 2, 'every session counts');
+  assert.deepEqual(stats.topPages, [
+    { path: '/pricing', views: 2 },
+    { path: '/', views: 1 },
+  ]);
+});
+
+test('visitors list paginates with a cursor so every session is reachable', async () => {
+  const memory = memoryKV();
+  const token = await authed(memory);
+  const now = Date.now();
+  for (const [sid, mins] of [['session:a', 30], ['session:b', 20], ['session:c', 10]] as const) {
+    memory.store.set(sid, JSON.stringify({
+      ip: '203.0.113.1', country: 'CA', ua: '', device: 'desktop', browser: 'chrome',
+      startedAt: now - mins * 60_000, lastSeenAt: now - mins * 60_000, pages: [], clicks: [],
+    }));
+  }
+
+  const first = await bodyOf(await handleAdmin(adminGet('/api/admin/visitors?limit=2', token), envOf(memory.kv), url('/api/admin/visitors?limit=2')));
+  assert.deepEqual(first.items.map((i: { sid: string }) => i.sid), ['c', 'b'], 'newest first');
+  assert.equal(first.nextCursor, '2');
+
+  const second = await bodyOf(await handleAdmin(adminGet('/api/admin/visitors?limit=2&cursor=2', token), envOf(memory.kv), url('/api/admin/visitors?limit=2&cursor=2')));
+  assert.deepEqual(second.items.map((i: { sid: string }) => i.sid), ['a']);
+  assert.equal(second.nextCursor, null);
+});
+
+test('a repeated stats call answers from the 60 s cache instead of re-reading sessions', async () => {
+  const memory = memoryKV();
+  const token = await authed(memory);
+  const today = dayKey();
+  const todayTs = Date.parse(today + 'T12:00:00Z');
+  const s = JSON.parse(session('mobile', 'ca', todayTs));
+  s.pages = [{ path: '/pricing', at: todayTs, durationMs: 0 }];
+  memory.store.set('session:one', JSON.stringify(s));
+
+  const first = await handleAdmin(adminGet('/api/admin/stats?range=week', token), envOf(memory.kv), url('/api/admin/stats?range=week'));
+  assert.equal(first.status, 200);
+  const sessionGetsAfterFirst = memory.gets.filter((k: string) => k.startsWith('session:')).length;
+  assert.ok(sessionGetsAfterFirst > 0, 'first call reads the sessions');
+
+  const second = await handleAdmin(adminGet('/api/admin/stats?range=week', token), envOf(memory.kv), url('/api/admin/stats?range=week'));
+  assert.equal(second.status, 200);
+  assert.deepEqual(await bodyOf(second), await bodyOf(first));
+  assert.equal(
+    memory.gets.filter((k: string) => k.startsWith('session:')).length,
+    sessionGetsAfterFirst,
+    'second call reads no session again',
+  );
+  assert.equal(memory.ttls.get('admin:cache:stats:week:all'), 60, 'cache entry carries a 60 s TTL');
+});
+
+test('clients first page returns every abandoned checkout, not just the first 50', async () => {
+  const memory = memoryKV();
+  const token = await authed(memory);
+  const keys: string[] = [];
+  for (let i = 0; i < 55; i++) {
+    const key = `abandoned:sess_${i}`;
+    keys.push(key);
+    memory.store.set(key, JSON.stringify({
+      sessionId: `sess_${i}`, email: `buyer${i}@example.ca`, items: ['launch-month'], lang: 'en',
+      createdAt: Date.now() - i * 60_000, status: 'pending',
+    }));
+  }
+  memory.store.set('abandoned:index', JSON.stringify(keys));
+
+  const list = await handleAdmin(adminGet('/api/admin/clients', token), envOf(memory.kv), url('/api/admin/clients'));
+  assert.equal(list.status, 200);
+  const body = await bodyOf(list);
+  assert.equal(body.abandoned.length, 55, 'the whole abandoned index, past the old 50 cap');
+  assert.equal(body.abandoned[0].email, 'buyer0@example.ca');
+});
+
 test('unknown admin routes are a clean 404 for authenticated callers', async () => {
   const memory = memoryKV();
   const token = await authed(memory);

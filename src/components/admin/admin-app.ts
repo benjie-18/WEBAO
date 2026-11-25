@@ -130,6 +130,11 @@ interface ChartsResponse {
   leads: { sent: number[]; clicked: number[]; replied: number[] };
   leadStages: { replied: number; clicked: number; none: number; optout: number; bounced: number };
   clickDests: { demos: number; home: number; pricing: number; start: number };
+  /** All-time paging: total leads/forms in the store, and the next offsets (null when done). */
+  leadsTotal?: number;
+  leadsNextOffset?: number | null;
+  formsTotal?: number;
+  formsNextOffset?: number | null;
 }
 
 interface Settings {
@@ -337,7 +342,7 @@ function initAdmin(): void {
     if (!tabLoaded[name]) {
       tabLoaded[name] = true;
       if (name === "stats") void loadStats();
-      else if (name === "visitors") void loadVisitors();
+      else if (name === "visitors") void loadVisitors(true);
       else if (name === "forms") void loadForms(true);
       else if (name === "leads") void loadLeads(true);
       else if (name === "audits") void loadAudits(true);
@@ -349,7 +354,7 @@ function initAdmin(): void {
   }
 
   /* ── Stats tab ── */
-  type Range = "day" | "week" | "month" | "year";
+  type Range = "day" | "week" | "month" | "year" | "all";
   let range: Range = "day";
   let pageFilter = "all";
 
@@ -700,8 +705,8 @@ function initAdmin(): void {
   }
 
   /* ── Forms + Outreach charts (one /api/admin/charts fetch per range) ── */
-  let formsRange: "day" | "week" | "month" | "year" = "month";
-  let leadsRange: "day" | "week" | "month" | "year" = "month";
+  let formsRange: "day" | "week" | "month" | "year" | "all" = "month";
+  let leadsRange: "day" | "week" | "month" | "year" | "all" = "month";
   let formsChartsLoaded = false;
   let leadsChartsLoaded = false;
   const chartsCache = new Map<string, ChartsResponse>();
@@ -709,9 +714,82 @@ function initAdmin(): void {
   async function fetchCharts(r: string): Promise<ChartsResponse> {
     const hit = chartsCache.get(r);
     if (hit) return hit;
-    const data = (await api(`/api/admin/charts?range=${r}`)) as unknown as ChartsResponse;
-    chartsCache.set(r, data);
-    return data;
+    if (r !== "all") {
+      const data = (await api(`/api/admin/charts?range=${r}`)) as unknown as ChartsResponse;
+      chartsCache.set(r, data);
+      return data;
+    }
+    // All time: the endpoint pages records (850 leads and 100 forms per
+    // call, inside the worker subrequest budget); fetch slice after
+    // slice and merge them by month label. Each slice returns a
+    // disjoint set of leads and forms, so summing the slices counts
+    // every entry exactly once.
+    let merged: ChartsResponse | null = null;
+    let leadOffset = 0;
+    let formOffset = 0;
+    for (;;) {
+      const slice = (await api(
+        `/api/admin/charts?range=all&leadOffset=${leadOffset}&formOffset=${formOffset}`,
+      )) as unknown as ChartsResponse;
+      merged = merged ? mergeCharts(merged, slice) : slice;
+      const nextLead = slice.leadsNextOffset;
+      const nextForm = slice.formsNextOffset;
+      if (
+        (nextLead === null || nextLead === undefined) &&
+        (nextForm === null || nextForm === undefined)
+      )
+        break;
+      // A finished dimension stays past the end (empty slice on the next
+      // call) so it is never fetched — and merged — twice.
+      leadOffset = nextLead ?? (slice.leadsTotal ?? Number.MAX_SAFE_INTEGER);
+      formOffset = nextForm ?? (slice.formsTotal ?? Number.MAX_SAFE_INTEGER);
+    }
+    chartsCache.set(r, merged);
+    return merged;
+  }
+
+  /** Merge two all-time charts slices: union of month labels, series summed per label. */
+  function mergeCharts(a: ChartsResponse, b: ChartsResponse): ChartsResponse {
+    const labels = [...new Set([...a.labels, ...b.labels])].sort();
+    const align = (vals: number[], src: string[]): number[] =>
+      labels.map((l) => {
+        const i = src.indexOf(l);
+        return i >= 0 ? vals[i] || 0 : 0;
+      });
+    const sum = (x: number[], y: number[]): number[] => x.map((v, i) => v + y[i]);
+    const sumSeries = (x: number[], xs: string[], y: number[], ys: string[]): number[] =>
+      sum(align(x, xs), align(y, ys));
+    return {
+      ok: true,
+      range: "all",
+      labels,
+      forms: {
+        total: sumSeries(a.forms.total, a.labels, b.forms.total, b.labels),
+        byType: {
+          contact: sumSeries(a.forms.byType.contact, a.labels, b.forms.byType.contact, b.labels),
+          support: sumSeries(a.forms.byType.support, a.labels, b.forms.byType.support, b.labels),
+          pricing: sumSeries(a.forms.byType.pricing, a.labels, b.forms.byType.pricing, b.labels),
+        },
+      },
+      leads: {
+        sent: sumSeries(a.leads.sent, a.labels, b.leads.sent, b.labels),
+        clicked: sumSeries(a.leads.clicked, a.labels, b.leads.clicked, b.labels),
+        replied: sumSeries(a.leads.replied, a.labels, b.leads.replied, b.labels),
+      },
+      leadStages: {
+        replied: a.leadStages.replied + b.leadStages.replied,
+        clicked: a.leadStages.clicked + b.leadStages.clicked,
+        none: a.leadStages.none + b.leadStages.none,
+        optout: a.leadStages.optout + b.leadStages.optout,
+        bounced: a.leadStages.bounced + b.leadStages.bounced,
+      },
+      clickDests: {
+        demos: a.clickDests.demos + b.clickDests.demos,
+        home: a.clickDests.home + b.clickDests.home,
+        pricing: a.clickDests.pricing + b.clickDests.pricing,
+        start: a.clickDests.start + b.clickDests.start,
+      },
+    };
   }
 
   async function loadFormsCharts(): Promise<void> {
@@ -1420,6 +1498,7 @@ function initAdmin(): void {
   interface VisitorsResponse {
     ok: boolean;
     items: VisitorItem[];
+    nextCursor: string | null;
   }
 
   interface AuditsResponse {
@@ -1582,22 +1661,39 @@ function initAdmin(): void {
     );
   }
 
-  async function loadVisitors(): Promise<void> {
+  let visitorsCursor: string | null = null;
+
+  async function loadVisitors(reset: boolean): Promise<void> {
     const list = qq("[data-visitors-list]");
-    if (!list) return;
-    list.innerHTML = `<p class="admin-loading">${esc(I18N.stats.loading)}</p>`;
+    const more = qq<HTMLButtonElement>("[data-visitors-more]");
+    if (!list || !more) return;
+    if (reset) {
+      list.innerHTML = "";
+      visitorsCursor = null;
+    }
+    more.hidden = true;
+    if (reset) list.innerHTML = `<p class="admin-loading">${esc(I18N.stats.loading)}</p>`;
     try {
-      const data = (await api(`/api/admin/visitors?limit=50`)) as unknown as VisitorsResponse;
-      if (data.items.length === 0) {
+      const data = (await api(
+        `/api/admin/visitors?limit=50${visitorsCursor ? `&cursor=${encodeURIComponent(visitorsCursor)}` : ""}`,
+      )) as unknown as VisitorsResponse;
+      if (reset && data.items.length === 0) {
         list.innerHTML = `<div class="admin-empty">${esc(I18N.visitors.empty)}</div>`;
         return;
       }
-      list.innerHTML = data.items.map((item) => visitorCard(item)).join("");
+      if (reset) list.innerHTML = "";
+      for (const item of data.items) list.insertAdjacentHTML("beforeend", visitorCard(item));
+      visitorsCursor = data.nextCursor;
+      more.hidden = !visitorsCursor;
     } catch (e) {
       if (e instanceof ExpiredSession) return;
-      list.innerHTML =
-        `<div class="admin-retry"><p>${esc(I18N.visitors.loadError)}</p>` +
-        `<button type="button" class="admin-ghost-btn" data-visitors-retry>${esc(I18N.visitors.retry)}</button></div>`;
+      if (reset) {
+        list.innerHTML =
+          `<div class="admin-retry"><p>${esc(I18N.visitors.loadError)}</p>` +
+          `<button type="button" class="admin-ghost-btn" data-visitors-retry>${esc(I18N.visitors.retry)}</button></div>`;
+      } else {
+        toast(String(I18N.visitors.loadError), "err");
+      }
     }
   }
 
@@ -1712,9 +1808,9 @@ function initAdmin(): void {
   rangeBtns.forEach((b) =>
     b.addEventListener("click", () => {
       const r = b.dataset.range;
-      const valid = r === "day" || r === "week" || r === "month" || r === "year";
+      const valid = r === "day" || r === "week" || r === "month" || r === "year" || r === "all";
       if (valid && r !== range) {
-        range = r as "day" | "week" | "month" | "year";
+        range = r as "day" | "week" | "month" | "year" | "all";
         rangeBtns.forEach((x) => x.classList.toggle("is-active", x === b));
         void loadStats();
       }
@@ -1725,7 +1821,7 @@ function initAdmin(): void {
   formsRangeBtns.forEach((b) =>
     b.addEventListener("click", () => {
       const r = b.dataset.formsRange;
-      if ((r === "day" || r === "week" || r === "month" || r === "year") && r !== formsRange) {
+      if ((r === "day" || r === "week" || r === "month" || r === "year" || r === "all") && r !== formsRange) {
         formsRange = r;
         formsRangeBtns.forEach((x) => x.classList.toggle("is-active", x === b));
         void loadFormsCharts();
@@ -1737,7 +1833,7 @@ function initAdmin(): void {
   leadsRangeBtns.forEach((b) =>
     b.addEventListener("click", () => {
       const r = b.dataset.leadsRange;
-      if ((r === "day" || r === "week" || r === "month" || r === "year") && r !== leadsRange) {
+      if ((r === "day" || r === "week" || r === "month" || r === "year" || r === "all") && r !== leadsRange) {
         leadsRange = r;
         leadsRangeBtns.forEach((x) => x.classList.toggle("is-active", x === b));
         void loadLeadsCharts();
@@ -1831,6 +1927,7 @@ function initAdmin(): void {
   qq("[data-leads-more]")?.addEventListener("click", () => void loadLeads(false));
   qq("[data-audits-more]")?.addEventListener("click", () => void loadAudits(false));
   qq("[data-clients-more]")?.addEventListener("click", () => void loadClients(false));
+  qq("[data-visitors-more]")?.addEventListener("click", () => void loadVisitors(false));
   qq("[data-clients-create-test]")?.addEventListener("click", () => void createTestClient());
   qq<HTMLFormElement>("[data-settings-form]")?.addEventListener("submit", (e) => void onSettingsSubmit(e));
   qq<HTMLFormElement>("[data-pw-form]")?.addEventListener("submit", (e) => void onPasswordSubmit(e));
@@ -1880,7 +1977,7 @@ function initAdmin(): void {
       return;
     }
     if (t.closest("[data-visitors-retry]")) {
-      void loadVisitors();
+      void loadVisitors(true);
       return;
     }
     if (t.closest("[data-clients-retry]")) {
