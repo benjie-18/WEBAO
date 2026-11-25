@@ -28,7 +28,7 @@ import {
   isMonthKey,
 } from "./util";
 import type { Session } from "./track";
-import { handleLeadsList, handleLeadDelete, type Lead } from "./leads";
+import { handleLeadsList, handleLeadDelete, LEADS_INDEX_KEY, type Lead } from "./leads";
 import {
   CLIENTS_INDEX,
   createClient,
@@ -459,13 +459,29 @@ async function handleCharts(kv: KVNamespace, url: URL): Promise<Response> {
   }
 
   // --- Leads: activity series, exclusive outcome stages, click targets ---
+  // Lead keys come from `leads:index` (newest-first, maintained on register/
+  // delete; see worker/leads.ts) instead of a full prefix scan: the charts
+  // tab loads on every admin visit and the scan cost a key list plus one
+  // read per lead (~1,000 today, in 40 sequential batches of 25). The index
+  // is a best-effort cache, so a missing, empty or malformed index falls
+  // back to the full scan; a drifted index (a failed index update on
+  // register) self-heals on the next Outreach-tab load, which rebuilds it
+  // on count mismatch (see handleLeadsList). The 1,000 cap is unchanged,
+  // but it now takes the newest 1,000 leads instead of an arbitrary 1,000:
+  // key order is random hex, so the scan used to drop a random slice once
+  // the store passed 1,000 leads (1,172 today). Fetch batch is 50, matching
+  // the session handlers, so the fetch is 20 sequential batches, not 40.
   const leadsSent = series();
   const leadsClicked = series();
   const leadsReplied = series();
   const leadStages = { replied: 0, clicked: 0, none: 0, optout: 0, bounced: 0 };
   const clickDests = { demos: 0, home: 0, pricing: 0, start: 0 };
-  const leadKeys = await listAllKeys(kv, "lead:", 5000);
-  const leadRecs = await batch(leadKeys.slice(0, 1000), 25, (k) => getJson<Lead>(kv, k));
+  const leadsIndex = await getJson<string[]>(kv, LEADS_INDEX_KEY);
+  const leadKeys =
+    Array.isArray(leadsIndex) && leadsIndex.length > 0
+      ? leadsIndex.slice(0, 1000)
+      : (await listAllKeys(kv, "lead:", 5000)).slice(0, 1000);
+  const leadRecs = await batch(leadKeys, 50, (k) => getJson<Lead>(kv, k));
   for (const lead of leadRecs) {
     if (!lead) continue;
     bump(leadsSent, lead.sentAt);

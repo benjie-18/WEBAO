@@ -122,3 +122,63 @@ test('charts year range aggregates into monthly buckets', async () => {
   // All four forms fall inside the year (the pricing one is 40 days old).
   assert.equal(body.forms.total.reduce((s: number, v: number) => s + v, 0), 4);
 });
+
+test('charts reads lead keys from leads:index instead of scanning', async () => {
+  // Index lists only ld_a + ld_b plus a stale key for a deleted lead;
+  // ld_c is in the store but NOT in the index, so it must not be counted.
+  const memory = memoryKV({
+    'form:1:a': form('contact', tToday),
+    'leads:index': ['lead:ld_a', 'lead:ld_b', 'lead:ld_deleted'],
+    'lead:ld_a': lead({
+      id: 'ld_a',
+      sentAt: tToday,
+      clickCount: 2,
+      firstClickAt: tToday + 60_000,
+      repliedAt: tToday + 120_000,
+      clicks: [{ at: tToday + 60_000, dest: 'demos', country: 'CA', suspect: false }],
+    }),
+    'lead:ld_b': lead({
+      id: 'ld_b',
+      sentAt: tYesterday,
+      clickCount: 1,
+      firstClickAt: tYesterday + 60_000,
+      clicks: [{ at: tYesterday + 60_000, dest: 'home', country: 'CA', suspect: false }],
+    }),
+    'lead:ld_c': lead({ id: 'ld_c', sentAt: tToday, bouncedAt: tToday + 30_000 }),
+  });
+  const token = await issueToken(memory.kv, '203.0.113.9');
+  const res = await handleAdmin(get('/api/admin/charts?range=week', token), envOf(memory.kv), url('/api/admin/charts?range=week'));
+  assert.equal(res.status, 200);
+  const body = await bodyOf(res);
+  // ld_c (bounced today) is not counted: the index, not the scan, decides.
+  assert.deepEqual(body.leadStages, { replied: 1, clicked: 1, none: 0, optout: 0, bounced: 0 });
+  assert.equal(body.leads.sent[6], 1);
+  assert.equal(body.leads.sent[5], 1);
+  // Read fan-out: the index once, then exactly the indexed keys — the
+  // stale key is fetched (null, filtered) but no other lead: key is read.
+  assert.equal(memory.gets.filter((k: string) => k === 'leads:index').length, 1);
+  assert.deepEqual(
+    memory.gets.filter((k: string) => k.startsWith('lead:')),
+    ['lead:ld_a', 'lead:ld_b', 'lead:ld_deleted'],
+  );
+});
+
+test('charts falls back to the full scan when leads:index is missing or empty', async () => {
+  for (const index of [undefined, []]) {
+    const seed: Record<string, unknown> = {
+      'form:1:a': form('contact', tToday),
+      'lead:ld_a': lead({ id: 'ld_a', sentAt: tToday, repliedAt: tToday + 120_000 }),
+      'lead:ld_b': lead({ id: 'ld_b', sentAt: tYesterday }),
+      'lead:ld_c': lead({ id: 'ld_c', sentAt: tToday, bouncedAt: tToday + 30_000 }),
+    };
+    if (index !== undefined) seed['leads:index'] = index;
+    const memory = memoryKV(seed);
+    const token = await issueToken(memory.kv, '203.0.113.9');
+    const res = await handleAdmin(get('/api/admin/charts?range=week', token), envOf(memory.kv), url('/api/admin/charts?range=week'));
+    assert.equal(res.status, 200);
+    const body = await bodyOf(res);
+    // Without a usable index the scan sees all three leads, ld_c included.
+    assert.deepEqual(body.leadStages, { replied: 1, clicked: 0, none: 1, optout: 0, bounced: 1 });
+    assert.equal(body.leads.sent[6], 2);
+  }
+});

@@ -88,7 +88,7 @@ export interface Lead {
 const LEAD_ID_RE = /^ld_[a-f0-9]{24}$/;
 
 /** `leads:index`: lead keys (`lead:<id>`), newest-first, cap MAX_LISTED. */
-const LEADS_INDEX_KEY = "leads:index";
+export const LEADS_INDEX_KEY = "leads:index";
 
 /**
  * Best-effort index maintenance. The index is a cache so the admin list can
