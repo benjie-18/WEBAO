@@ -663,7 +663,7 @@ test('the Pack keeps the individuals when all three together cost more', () => {
   toggleBox(aiBox('ai-pack'), true);
   assert.equal(conflict().hidden, false);
   assert.equal(conflictMessage(), 'The AI Pack already includes Receptionist, Online Receptionist, Smart Follow-up.');
-  // All three individuals ($499.97) cost more than the Pack ($399.99), so
+  // All three individuals ($549.97) cost more than the Pack ($399.99), so
   // the main button keeps them and the Pack swap is the second choice.
   assert.deepEqual(conflictButtons(), [
     'Keep Receptionist, Online Receptionist, Smart Follow-up',

@@ -425,6 +425,11 @@ const selected = variants[0];
     font-weight: 650;
     margin-top: 6px;
   }
+  /* The revamp price must not split across lines ("ONE-" / "TIME"):
+     it wraps as one unit below the name instead. */
+  .bc-gbp-name .mono {
+    white-space: nowrap;
+  }
   .bc-gbp-short {
     font-size: 0.88rem;
     color: var(--bc-soft);

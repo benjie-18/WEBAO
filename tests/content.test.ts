@@ -7,6 +7,7 @@ import test from 'node:test';
 import { demos } from '../src/lib/demos';
 import en from '../src/lib/i18n/en';
 import fr from '../src/lib/i18n/fr';
+import { cartProducts } from '../src/lib/cart-catalog';
 import {
   bundleOrder,
   bundles,
@@ -459,6 +460,30 @@ test('the AI services are yearly available, like the plans', () => {
   const estimator = read('src/components/pricing/PlanEstimator.astro');
   assert.ok(estimator.includes('yearlyLabel(cartProducts["ai-receptionist"]?.yearCents ?? 0)'), 'the quiz shows the Receptionist yearly price');
   assert.ok(estimator.includes('yearlyLabel(cartProducts["ai-followup"]?.yearCents ?? 0)'), 'the quiz shows the Follow-up yearly price');
+});
+
+test('the AI Pack saving is the sum of its three services', () => {
+  // The pack card said "Individual value C$499.97/mo" while the three
+  // services on the same panel cost C$299.99 + C$149.99 + C$99.99 =
+  // C$549.97, so the saving read C$99.98 instead of C$149.98. The
+  // guides already state 549.97 / 149.98.
+  const month = (id: string) => cartProducts[id].monthCents ?? 0;
+  const individual = month('ai-receptionist') + month('aichat') + month('ai-followup');
+  const pack = month('ai-pack');
+  assert.equal(individual, 54997, 'the three AI services cost C$549.97/mo together');
+  assert.equal(pack, 39999, 'the AI Pack costs C$399.99/mo');
+  const fmt = (cents: number) => `C$${(cents / 100).toFixed(2)}`;
+  for (const [name, dict, suffix] of [['en', en, '/mo'], ['fr', fr, '/mois']] as const) {
+    const ai = dict.pricing.ai;
+    assert.equal(ai.packIndividualValue, `${fmt(individual)}${suffix}`, `the ${name} pack card states the summed individual value`);
+    assert.equal(ai.packMonthlySaving, `${fmt(individual - pack)}${suffix}`, `the ${name} pack card states the real monthly saving`);
+  }
+  // The two dead pricing keys are gone: the card prices the single
+  // channel from metaPrice/bothPrice, and the chooser has no Services pill.
+  for (const [name, dict] of [['en', en], ['fr', fr]] as const) {
+    assert.equal((dict.pricing.adsPack as Record<string, unknown>).price, undefined, `no unused ads price in ${name}`);
+    assert.equal((dict.pricing.revamped as Record<string, unknown>).pillServices, undefined, `no unused Services pill in ${name}`);
+  }
 });
 
 test('the start summary never overlaps the page below it', () => {
