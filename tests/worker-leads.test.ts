@@ -30,7 +30,7 @@ async function registerOne(memory: ReturnType<typeof memoryKV>, body: Record<str
   return bodyOf(res);
 }
 
-test('register stores the lead and returns tracked links (no index write)', async () => {
+test('register stores the lead and returns tracked links (plus one index write)', async () => {
   const memory = memoryKV();
   const body = await registerOne(memory);
   assert.match(body.id, /^ld_[a-f0-9]{24}$/);
@@ -44,10 +44,11 @@ test('register stores the lead and returns tracked links (no index write)', asyn
   assert.equal(stored.city, 'Varennes');
   assert.equal(stored.clickCount, 0);
   assert.deepEqual(stored.clicks, []);
-  // No index key: the admin list derives from the lead: prefix, so a
-  // register costs exactly one write.
-  assert.equal(memory.store.has('leads:index'), false);
-  assert.deepEqual(memory.puts, [`lead:${body.id}`]);
+  // One extra write per new register keeps the admin list fast (the list
+  // fetches one page via the index instead of every record); at ~150
+  // sends/day it is far under the 1,000/day KV write cap.
+  assert.deepEqual(JSON.parse(memory.store.get('leads:index') ?? 'null'), [`lead:${body.id}`]);
+  assert.deepEqual(memory.puts, [`lead:${body.id}`, 'leads:index']);
 });
 
 test('register is idempotent for a caller-supplied id', async () => {
@@ -57,9 +58,10 @@ test('register is idempotent for a caller-supplied id', async () => {
   assert.equal(first.id, id);
   const second = await bodyOf(await handleLeadRegister(register({ ...leadBody, id }), envOf(memory.kv)));
   assert.equal(second.existing, true);
-  // Idempotent re-register writes nothing new and keeps one record.
-  assert.equal(memory.store.has('leads:index'), false);
-  assert.deepEqual(memory.puts, [`lead:${id}`]);
+  // Idempotent re-register writes nothing new and keeps one record; the
+  // index still holds the single entry from the first register.
+  assert.deepEqual(JSON.parse(memory.store.get('leads:index') ?? 'null'), [`lead:${id}`]);
+  assert.deepEqual(memory.puts, [`lead:${id}`, 'leads:index']);
 });
 
 test('register validates business, email and id', async () => {
@@ -226,4 +228,162 @@ test('admin leads list needs auth and delete removes record + index entry', asyn
     new URL('https://webao.ca/api/admin/leads/nope'),
   );
   assert.equal(badDel.status, 400);
+});
+
+/** Make the next kv.put throw once, then behave normally; returns attempts. */
+function failNextPut(memory: ReturnType<typeof memoryKV>): () => number {
+  const origPut = memory.kv.put.bind(memory.kv);
+  let attempts = 0;
+  memory.kv.put = async (...args: any[]) => {
+    attempts += 1;
+    if (attempts === 1) throw new Error('KV write failed (test)');
+    return origPut(...args);
+  };
+  return () => attempts;
+}
+
+test('register retries a transient KV failure once instead of 503ing', async () => {
+  const memory = memoryKV();
+  const attempts = failNextPut(memory);
+  const body = await registerOne(memory);
+  assert.equal(attempts(), 3, 'lead put retried once, index put first try');
+  assert.equal(memory.store.has(`lead:${body.id}`), true);
+  assert.deepEqual(JSON.parse(memory.store.get('leads:index') ?? 'null'), [`lead:${body.id}`]);
+});
+
+test('reply retries a transient KV failure once and records the reply', async () => {
+  const memory = memoryKV();
+  const { id } = await registerOne(memory);
+  const attempts = failNextPut(memory);
+  const res = await bodyOf(
+    await handleLeadReply(reply({ leadId: id, kind: 'reply', subject: 'Re: Quick question' }), envOf(memory.kv)),
+  );
+  assert.deepEqual(res, { ok: true, matched: true, id, kind: 'reply' });
+  assert.equal(attempts(), 2, 'lead put retried once');
+  const stored = JSON.parse(memory.store.get(`lead:${id}`) ?? 'null');
+  assert.equal(stored.replies.length, 1);
+});
+
+test('a sustained KV outage still surfaces as a write error (honest 503 upstream)', async () => {
+  const memory = memoryKV();
+  memory.failWrites(true);
+  await assert.rejects(handleLeadRegister(register(leadBody), envOf(memory.kv)), /KV write failed/);
+});
+
+test('an identical reply posted twice is recorded once', async () => {
+  const memory = memoryKV();
+  const { id } = await registerOne(memory);
+  const first = await bodyOf(
+    await handleLeadReply(
+      reply({ leadId: id, kind: 'reply', from: 'a@example.ca', subject: 'Re: Quick question' }),
+      envOf(memory.kv),
+    ),
+  );
+  assert.deepEqual(first, { ok: true, matched: true, id, kind: 'reply' });
+  const second = await bodyOf(
+    await handleLeadReply(
+      reply({ leadId: id, kind: 'reply', from: 'a@example.ca', subject: 'Re: Quick question' }),
+      envOf(memory.kv),
+    ),
+  );
+  assert.deepEqual(second, { ok: true, matched: true, id, kind: 'reply', duplicate: true });
+  let stored = JSON.parse(memory.store.get(`lead:${id}`) ?? 'null');
+  assert.equal(stored.replies.length, 1, 'retry did not duplicate the reply');
+  // A different kind with the same subject is a genuinely new event.
+  await handleLeadReply(
+    reply({ leadId: id, kind: 'optout', from: 'a@example.ca', subject: 'Re: Quick question' }),
+    envOf(memory.kv),
+  );
+  stored = JSON.parse(memory.store.get(`lead:${id}`) ?? 'null');
+  assert.equal(stored.replies.length, 2);
+});
+
+/** Admin list call with a fresh token; clears the read log first. */
+async function listLeads(memory: ReturnType<typeof memoryKV>, query = '') {
+  const token = await issueToken(memory.kv, '203.0.113.9');
+  const url = new URL(`https://webao.ca/api/admin/leads${query}`);
+  memory.gets.length = 0;
+  return bodyOf(
+    await handleAdmin(
+      apiGet(`/api/admin/leads${query}`, { headers: { authorization: `Bearer ${token}` } }),
+      envOf(memory.kv),
+      url,
+    ),
+  );
+}
+
+function seededLead(id: string, sentAt: number): Record<string, unknown> {
+  return {
+    [`lead:${id}`]: {
+      id,
+      business: `Co ${id}`,
+      email: `${id}@example.ca`,
+      sentAt,
+      clicks: [],
+      replies: [],
+      clickCount: 0,
+    },
+  };
+}
+
+test('admin list uses the index: one page costs one page of reads', async () => {
+  const a = 'ld_' + 'a'.repeat(24);
+  const b = 'ld_' + 'b'.repeat(24);
+  const c = 'ld_' + 'c'.repeat(24);
+  const memory = memoryKV({
+    'leads:index': [`lead:${c}`, `lead:${b}`, `lead:${a}`],
+    ...seededLead(a, 1000),
+    ...seededLead(b, 2000),
+    ...seededLead(c, 3000),
+  });
+  const page1 = await listLeads(memory, '?limit=2');
+  assert.deepEqual(
+    page1.items.map((i: { id: string }) => i.id),
+    [c, b],
+  );
+  assert.equal(page1.nextCursor, '2');
+  // Index read + 2 page records (plus the session read); the third record
+  // was never fetched.
+  assert.ok(memory.gets.includes('leads:index'));
+  assert.equal(memory.gets.filter((g) => g.startsWith('lead:')).length, 2);
+  assert.ok(!memory.gets.includes(`lead:${a}`));
+  const page2 = await listLeads(memory, '?limit=2&cursor=2');
+  assert.deepEqual(
+    page2.items.map((i: { id: string }) => i.id),
+    [a],
+  );
+  assert.equal(page2.nextCursor, null);
+});
+
+test('admin list rebuilds a missing or drifted index from a full scan', async () => {
+  const a = 'ld_' + 'a'.repeat(24);
+  const b = 'ld_' + 'b'.repeat(24);
+  const memory = memoryKV({
+    // No index: first list falls back to the full scan and rebuilds it.
+    ...seededLead(a, 1000),
+    ...seededLead(b, 2000),
+  });
+  const list = await listLeads(memory, '?limit=50');
+  assert.deepEqual(
+    list.items.map((i: { id: string }) => i.id),
+    [b, a],
+  );
+  assert.deepEqual(JSON.parse(memory.store.get('leads:index') ?? 'null'), [`lead:${b}`, `lead:${a}`]);
+
+  // Drift: a record the index does not know about triggers a rebuild too.
+  const d = 'ld_' + 'd'.repeat(24);
+  memory.store.set(
+    `lead:${d}`,
+    JSON.stringify({ id: d, business: 'Co d', email: 'd@example.ca', sentAt: 4000, clicks: [], replies: [], clickCount: 0 }),
+  );
+  const relist = await listLeads(memory, '?limit=50');
+  assert.deepEqual(
+    relist.items.map((i: { id: string }) => i.id),
+    [d, b, a],
+  );
+  assert.deepEqual(JSON.parse(memory.store.get('leads:index') ?? 'null'), [
+    `lead:${d}`,
+    `lead:${b}`,
+    `lead:${a}`,
+  ]);
 });

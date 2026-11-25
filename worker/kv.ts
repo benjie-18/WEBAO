@@ -45,6 +45,31 @@ export async function putJson(
   }
 }
 
+/**
+ * Put JSON, retrying once after a short pause when the first write fails.
+ * KV writes from a Worker fail intermittently even while the namespace is
+ * healthy (observed 2026-11-25: 9 of 10 lead-reply writes 503d while direct
+ * Cloudflare API writes to the same namespace succeeded). One retry turns
+ * a transient blip into a success; a second failure still surfaces as
+ * KvWriteError, so the caller can answer honestly instead of pretending
+ * the write landed. Callers that retry must be idempotent (see the reply
+ * dedupe in leads.ts) so a write that landed but reported failure is safe.
+ */
+export async function putJsonWithRetry(
+  kv: KVNamespace,
+  key: string,
+  value: unknown,
+  expirationTtl?: number,
+): Promise<void> {
+  try {
+    await putJson(kv, key, value, expirationTtl);
+  } catch (e) {
+    if (!(e instanceof KvWriteError)) throw e;
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    await putJson(kv, key, value, expirationTtl);
+  }
+}
+
 /** Delete a key, surfacing write failures as KvWriteError. */
 export async function deleteKey(kv: KVNamespace, key: string): Promise<void> {
   try {

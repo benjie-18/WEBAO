@@ -9,6 +9,8 @@ export interface MemoryKV {
   /** Keys written / deleted, in order. */
   puts: string[];
   deletes: string[];
+  /** Keys read, in order (for asserting a handler's read fan-out). */
+  gets: string[];
   /** expirationTtl seen for each put, keyed by KV key. */
   ttls: Map<string, number | undefined>;
   /** When true, every write throws (simulates the daily KV write quota). */
@@ -22,6 +24,7 @@ export function memoryKV(seed: Record<string, unknown> = {}): MemoryKV {
   const ttls = new Map<string, number | undefined>();
   const puts: string[] = [];
   const deletes: string[] = [];
+  const gets: string[] = [];
   let failWrites = false;
   let listError: Error | null = null;
 
@@ -31,6 +34,7 @@ export function memoryKV(seed: Record<string, unknown> = {}): MemoryKV {
 
   const kv = {
     async get(key: string, options?: { type?: string } | string) {
+      gets.push(key);
       const raw = store.get(key);
       if (raw === undefined) return null;
       // Workers KV accepts both get(key, "json") and get(key, { type: "json" }).
@@ -72,6 +76,7 @@ export function memoryKV(seed: Record<string, unknown> = {}): MemoryKV {
     store,
     puts,
     deletes,
+    gets,
     ttls,
     failWrites: (fail: boolean) => {
       failWrites = fail;

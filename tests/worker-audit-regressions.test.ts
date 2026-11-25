@@ -268,9 +268,13 @@ test('audit M3: a new lead registration never deletes older records', async () =
   const memory = memoryKV(seed);
   const res = await handleLeadRegister(apiRequest('/api/leads/register', { business: 'New Co', email: 'new@example.ca' }), envOf(memory.kv, {}));
   assert.equal(res.status, 200);
+  const body = await bodyOf(res);
   assert.ok(memory.store.has('lead:0000'), 'oldest record survives');
   assert.ok(memory.store.has('lead:5000'), 'record at the old cap survives too');
-  assert.equal(memory.store.has('leads:index'), false, 'no index key is written');
+  // The index is a cache, not a record store: it holds only the new key
+  // (it rebuilds from a full scan on the next list call) and no record
+  // is deleted or trimmed by registering.
+  assert.deepEqual(JSON.parse(memory.store.get('leads:index') ?? 'null'), [`lead:${body.id}`]);
   assert.equal(memory.deletes.length, 0, 'nothing is deleted');
 });
 

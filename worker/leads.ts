@@ -8,11 +8,12 @@
 // back with POST /api/leads/reply (by lead id, else by sender email) by
 // whatever reads the WEBAO inbox, e.g. the daily inbox report job.
 //
-// Records live in KV as lead:<id>; the admin lists them by the "lead:"
-// prefix (newest first by sentAt, capped at 5000). No index key is kept:
-// rewriting one on every register cost a KV write per send. Lead ids are 24
-// random hex chars minted by the sender (or here, when omitted), so a
-// tracked link is unguessable and only the recipient and the sender know it.
+// Records live in KV as lead:<id>; the admin lists them newest-first via
+// the `leads:index` key (lead keys, newest-first, cap 5000), with a full
+// prefix scan as fallback when the index is missing or drifted — the index
+// is a best-effort cache, never load-bearing. Lead ids are 24 random hex
+// chars minted by the sender (or here, when omitted), so a tracked link is
+// unguessable and only the recipient and the sender know it.
 //
 // Ingest posture matches /api/forms/submit (same-origin gate + the edge
 // rate-limit rule on /api/leads/*, /go/*, /api/forms/* and
@@ -20,7 +21,7 @@
 // and reply additionally require it in the x-ingest-key header; set the same
 // key on the sender side to harden the endpoints.
 
-import { getJson, putJson, deleteKey, listAllKeys } from "./kv";
+import { getJson, getJsonStrict, putJson, putJsonWithRetry, deleteKey, listAllKeys } from "./kv";
 import {
   clientCountry,
   clampStr,
@@ -85,6 +86,44 @@ export interface Lead {
 }
 
 const LEAD_ID_RE = /^ld_[a-f0-9]{24}$/;
+
+/** `leads:index`: lead keys (`lead:<id>`), newest-first, cap MAX_LISTED. */
+const LEADS_INDEX_KEY = "leads:index";
+
+/**
+ * Best-effort index maintenance. The index is a cache so the admin list can
+ * fetch one page instead of every record; it is never load-bearing — the
+ * list handler falls back to a full scan and rebuilds it when it is missing
+ * or drifted — so every failure here is swallowed: a register/reply must
+ * never 503 because the cache update failed. Uses getJsonStrict so a failed
+ * read (not a genuinely absent key) skips the update instead of overwriting
+ * the index with a single entry. Two concurrent registers can each
+ * read-then-write and lose the other's entry; the list handler's key-count
+ * check detects the drift and rebuilds, and sends are sequential in
+ * practice. Index trim only: records are never deleted.
+ */
+async function updateLeadsIndex(kv: KVNamespace, key: string): Promise<void> {
+  try {
+    const index = (await getJsonStrict<string[]>(kv, LEADS_INDEX_KEY)) || [];
+    const next = [key, ...index.filter((k) => k !== key)].slice(0, MAX_LISTED);
+    await putJsonWithRetry(kv, LEADS_INDEX_KEY, next);
+  } catch {
+    // Index is a cache; the list handler rebuilds it.
+  }
+}
+
+async function removeFromLeadsIndex(kv: KVNamespace, key: string): Promise<void> {
+  try {
+    const index = (await getJsonStrict<string[]>(kv, LEADS_INDEX_KEY)) || [];
+    await putJsonWithRetry(
+      kv,
+      LEADS_INDEX_KEY,
+      index.filter((k) => k !== key),
+    );
+  } catch {
+    // Index is a cache; the list handler rebuilds it.
+  }
+}
 
 /** User-agent fragments that mean "a machine fetched this link, not a human". */
 const SCANNER_UA =
@@ -182,11 +221,13 @@ export async function handleLeadRegister(req: Request, env: Env): Promise<Respon
     clickCount: 0,
   };
   const key = "lead:" + id;
-  await putJson(kv, key, lead);
+  // One retry on a transient KV failure (see putJsonWithRetry): a register
+  // that 503s on a blip loses the send's tracking links.
+  await putJsonWithRetry(kv, key, lead);
+  // One extra write per new register keeps the admin list fast (see
+  // handleLeadsList); best-effort, never fails the register.
+  await updateLeadsIndex(kv, key);
 
-  // No index key: the admin Leads tab lists records by the "lead:"
-  // prefix instead, so registering a send costs exactly one write.
-  // (The old leads:index key is an inert leftover.)
   return json({ ok: true, id, links, replyTo });
 }
 
@@ -273,17 +314,25 @@ export async function handleLeadReply(req: Request, env: Env): Promise<Response>
   }
   if (!lead) return json({ ok: true, matched: false });
 
-  lead.replies.push({
-    at,
-    kind,
-    from: clampStr(body.from || body.email, 160).trim() || undefined,
-    subject: clampStr(body.subject, 200).trim() || undefined,
-  });
+  const from = clampStr(body.from || body.email, 160).trim() || undefined;
+  const subject = clampStr(body.subject, 200).trim() || undefined;
+  // Idempotent: the endpoint had no dedupe, so a retried reply (e.g. after
+  // a transient KV failure, or a later inbox run re-posting an already
+  // recorded reply) appended a duplicate entry. Skip when an identical
+  // kind+subject+from reply is already recorded.
+  if (
+    lead.replies.some((r) => r.kind === kind && r.from === from && r.subject === subject)
+  ) {
+    return json({ ok: true, matched: true, id: lead.id, kind, duplicate: true });
+  }
+
+  lead.replies.push({ at, kind, from, subject });
   if (lead.replies.length > MAX_REPLIES) lead.replies = lead.replies.slice(-MAX_REPLIES);
   if (kind === "reply" && !lead.repliedAt) lead.repliedAt = at;
   if (kind === "optout" && !lead.optOutAt) lead.optOutAt = at;
   if (kind === "bounce" && !lead.bouncedAt) lead.bouncedAt = at;
-  await putJson(kv, "lead:" + lead.id, lead);
+  // One retry on a transient KV failure (see putJsonWithRetry).
+  await putJsonWithRetry(kv, "lead:" + lead.id, lead);
 
   return json({ ok: true, matched: true, id: lead.id, kind });
 }
@@ -299,8 +348,30 @@ export async function handleLeadsList(kv: KVNamespace, url: URL): Promise<Respon
   const rawCursor = parseInt(url.searchParams.get("cursor") || "0", 10);
   const cursor = Math.max(isNaN(rawCursor) ? 0 : rawCursor, 0);
 
-  // No index key: list the lead: records and sort newest-first by sentAt
-  // (lead ids are random hex, so key order is not chronological).
+  // Fast path: `leads:index` holds the lead keys newest-first, so one page
+  // costs ~limit reads instead of one read per lead (~1400 today: a key
+  // list plus 56 sequential batches of 25 GETs). The index is a
+  // best-effort cache, so verify it first: when the key count disagrees
+  // with the index length it drifted (a failed index update, a concurrent
+  // register), fall through to the full scan, which rebuilds it.
+  const index = await getJson<string[]>(kv, LEADS_INDEX_KEY);
+  if (Array.isArray(index) && index.length > 0) {
+    const keys = await listAllKeys(kv, "lead:", MAX_LISTED);
+    if (keys.length === index.length) {
+      const page = index.slice(cursor, cursor + limit);
+      const items = (
+        await batch(page, 25, (key) => getJson<Lead>(kv, key))
+      ).filter((x): x is Lead => x !== null);
+      return json({
+        ok: true,
+        items,
+        nextCursor: cursor + limit < index.length ? String(cursor + limit) : null,
+      });
+    }
+  }
+
+  // Full scan: index missing or drifted. Rebuild the index from it
+  // (best-effort; a failure just means the next call retries the rebuild).
   const keys = await listAllKeys(kv, "lead:", MAX_LISTED);
   const records = (
     await batch(keys, 25, async (key) => {
@@ -312,6 +383,15 @@ export async function handleLeadsList(kv: KVNamespace, url: URL): Promise<Respon
     (a, b) => (b.sentAt || 0) - (a.sentAt || 0) || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0),
   );
   const items = records.slice(cursor, cursor + limit);
+  try {
+    await putJsonWithRetry(
+      kv,
+      LEADS_INDEX_KEY,
+      records.map((r) => "lead:" + r.id),
+    );
+  } catch {
+    // Stale index is safe: the next list call retries the rebuild.
+  }
 
   return json({
     ok: true,
@@ -333,5 +413,6 @@ export async function handleLeadDelete(kv: KVNamespace, path: string): Promise<R
   if (!LEAD_ID_RE.test(id)) return err("Invalid id", 400);
   const key = "lead:" + id;
   await deleteKey(kv, key);
+  await removeFromLeadsIndex(kv, key);
   return json({ ok: true });
 }
