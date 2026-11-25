@@ -1697,12 +1697,12 @@ const en = {
     coupons: {
       title: "Coupons",
       intro:
-        "Coupon codes live here and nowhere else. They are never shown on the public site, in the terms, or in checkout text. Share a code with a buyer only after they have earned it.",
+        "Coupon codes live here and nowhere else. They are never shown on the public site, in the terms, or in checkout text. Codes are issued automatically when a buyer earns one: never share a coupon id yourself.",
       items: [
         {
           code: "WEBAOFIXIT15",
           detail:
-            "15% off any subscription (website plan, Ads Pack, or AI service) for the first 3 months, one use only, on a single subscription. Unlocked by buying the Website touchup (C$199.99). Send it to the buyer after their touchup purchase, unless they bought the touchup together with a subscription: then the 15% was already applied automatically at checkout (see the order's touchup_discount metadata) and the code must not be sent. Note: in Stripe this coupon has no product restriction, so it applies to any subscription; it is not limited to one redemption in Stripe, so use it once per buyer.",
+            "15% off any subscription (website plan, Ads Pack, or AI service) for the first 3 months, one use only, on a single subscription. Unlocked by buying the Website touchup (C$199.99). If the touchup was bought together with a subscription, the 15% was already applied automatically at checkout (see the order's touchup_discount metadata) and nothing more is owed. If the touchup was bought on its own, the webhook creates a single-use code locked to that buyer and emails it to them automatically: never send this coupon id to a buyer yourself. Note: in Stripe this coupon has no product restriction, so it applies to any subscription; its redemptions are not capped in Stripe because a cap there would be global, not per buyer.",
         },
       ],
     },

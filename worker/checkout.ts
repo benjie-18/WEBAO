@@ -21,10 +21,13 @@ const PLAN_PRODUCTS = new Set(["launch", "grow", "scale"]);
 
 /**
  * Stripe coupon for the Website touchup discount: 15% off any
- * subscription for the first 3 months, one use only. The coupon's Stripe
- * id IS the code, and it is applied directly by coupon id below: no
- * promotion-code object exists in Stripe, so a buyer typing the code
- * could not redeem it.
+ * subscription for the first 3 months, one use only. The coupon is
+ * applied directly by coupon id below when the touchup is bought
+ * together with a subscription. A standalone touchup earns a per-buyer
+ * promotion code instead (created by the Stripe webhook, locked to
+ * that buyer, one redemption): the coupon id itself is never typed by
+ * a buyer. The coupon carries no redemption cap in Stripe because a
+ * cap there would be global, not per buyer.
  */
 const TOUCHUP_COUPON_ID = "WEBAOFIXIT15";
 

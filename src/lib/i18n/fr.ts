@@ -1705,12 +1705,12 @@ const fr = {
     coupons: {
       title: "Coupons",
       intro:
-        "Les codes de coupon vivent ici et nulle part ailleurs. Ils ne sont jamais affichés sur le site public, dans les conditions, ou dans le texte de paiement. Partagez un code avec un acheteur seulement après qu'il l'a obtenu.",
+        "Les codes de coupon vivent ici et nulle part ailleurs. Ils ne sont jamais affichés sur le site public, dans les conditions, ou dans le texte de paiement. Les codes sont émis automatiquement quand un acheteur en gagne un : ne partagez jamais un identifiant de coupon vous-même.",
       items: [
         {
           code: "WEBAOFIXIT15",
           detail:
-            "15 % de rabais sur n'importe quel abonnement (forfait site web, Pack publicitaire ou service IA) pendant les 3 premiers mois, une seule utilisation, sur un seul abonnement. Débloqué par l'achat de la retouche de site web (C$199.99). Envoyez-le à l'acheteur après son achat de retouche, sauf s'il a acheté la retouche avec un abonnement : le rabais de 15 % a alors déjà été appliqué automatiquement au paiement (voir les métadonnées touchup_discount de la commande) et le code ne doit pas être envoyé. Note : dans Stripe, ce coupon n'a aucune restriction de produit, donc il s'applique à n'importe quel abonnement; il n'est pas limité à une seule utilisation dans Stripe, donc utilisez-le une fois par acheteur.",
+            "15 % de rabais sur n'importe quel abonnement (forfait site web, Pack publicitaire ou service IA) pendant les 3 premiers mois, une seule utilisation, sur un seul abonnement. Débloqué par l'achat de la retouche de site web (C$199.99). Si la retouche a été achetée avec un abonnement, le rabais de 15 % a déjà été appliqué automatiquement au paiement (voir les métadonnées touchup_discount de la commande) et rien d'autre n'est dû. Si la retouche a été achetée seule, le webhook crée un code à usage unique réservé à cet acheteur et le lui envoie par courriel automatiquement : n'envoyez jamais cet identifiant de coupon à un acheteur vous-même. Note : dans Stripe, ce coupon n'a aucune restriction de produit, donc il s'applique à n'importe quel abonnement; ses utilisations ne sont pas plafonnées dans Stripe parce qu'un plafond serait global, et non par acheteur.",
         },
       ],
     },

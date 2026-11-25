@@ -213,3 +213,114 @@ test('one-time-only checkout creates a one-time client; failed handling leaves n
   await assert.rejects(() => send(failing, checkoutEvent));
   assert.equal(failing.store.has('stripe-event:evt_checkout_1'), false);
 });
+
+/** Run the webhook with a stubbed Stripe API that records promotion-code creates. */
+async function sendWithStripe(
+  memory: ReturnType<typeof memoryKV>,
+  event: unknown,
+  options: { stripeOk?: boolean; secretKey?: string | null } = {},
+) {
+  const calls: { url: string; params: URLSearchParams; authorization: string | null }[] = [];
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
+    const params = new URLSearchParams(String(init?.body ?? ''));
+    calls.push({
+      url: String(input),
+      params,
+      authorization: new Headers(init?.headers).get('authorization'),
+    });
+    return new Response(JSON.stringify({ id: 'promo_test', code: params.get('code') }), {
+      status: options.stripeOk === false ? 400 : 200,
+      headers: { 'content-type': 'application/json' },
+    });
+  }) as typeof fetch;
+  try {
+    const raw = JSON.stringify(event);
+    const env = envOf(memory.kv, {
+      STRIPE_WEBHOOK_SECRET: SECRET,
+      ...(options.secretKey === null ? {} : { STRIPE_SECRET_KEY: options.secretKey ?? 'sk_test_123' }),
+    });
+    const res = await handleStripeWebhook(webhookRequest(raw, sign(raw)), env);
+    return { res, calls };
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+}
+
+function touchupEvent(id: string, overrides: Record<string, unknown> = {}) {
+  return {
+    id,
+    type: 'checkout.session.completed',
+    created: 1792800000,
+    data: {
+      object: {
+        customer: 'cus_touchup',
+        subscription: null,
+        customer_email: 'solo@example.ca',
+        customer_details: { email: 'solo@example.ca', name: 'Solo Buyer' },
+        metadata: { items: 'website-touchup-onetime', lang: 'en' },
+        ...overrides,
+      },
+    },
+  };
+}
+
+test('standalone touchup issues a single-use promotion code locked to the buyer', async () => {
+  const memory = memoryKV();
+  const { res, calls } = await sendWithStripe(memory, touchupEvent('evt_touchup_1'));
+  assert.equal(res.status, 200);
+  assert.equal(calls.length, 1);
+  const [call] = calls;
+  assert.equal(call.url, 'https://api.stripe.com/v1/promotion_codes');
+  assert.equal(call.authorization, 'Bearer sk_test_123');
+  assert.equal(call.params.get('promotion[type]'), 'coupon');
+  assert.equal(call.params.get('promotion[coupon]'), 'WEBAOFIXIT15');
+  assert.equal(call.params.get('customer'), 'cus_touchup');
+  assert.equal(call.params.get('max_redemptions'), '1');
+  assert.equal(call.params.get('active'), 'true');
+  assert.match(call.params.get('code') ?? '', /^WEBAO-[0-9A-F]{8}$/);
+  const client = JSON.parse(memory.store.get(clientsIn(memory)[0])!);
+  assert.equal(client.billingStatus, 'one-time');
+});
+
+test('touchup bought with a subscription issues no code: the discount was already applied', async () => {
+  const memory = memoryKV();
+  const event = touchupEvent('evt_touchup_2', {
+    subscription: 'sub_9',
+    metadata: { items: 'website-touchup-onetime,launch-month', lang: 'en' },
+  });
+  const { res, calls } = await sendWithStripe(memory, event);
+  assert.equal(res.status, 200);
+  assert.equal(calls.length, 0);
+});
+
+test('a repeat standalone touchup purchase issues a code to the existing client', async () => {
+  const memory = memoryKV();
+  await send(memory, checkoutEvent);
+  const event = touchupEvent('evt_touchup_3', {
+    customer: 'cus_123',
+    customer_email: 'owner@example.ca',
+    customer_details: { email: 'owner@example.ca', name: 'Pat Proprio' },
+  });
+  const { res, calls } = await sendWithStripe(memory, event);
+  assert.equal(res.status, 200);
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].params.get('customer'), 'cus_123');
+  assert.equal(clientsIn(memory).length, 1);
+});
+
+test('a refused promotion code never fails the webhook', async () => {
+  const memory = memoryKV();
+  const { res, calls } = await sendWithStripe(memory, touchupEvent('evt_touchup_4'), { stripeOk: false });
+  assert.equal(res.status, 200);
+  assert.equal(calls.length, 3);
+  const codes = new Set(calls.map((c) => c.params.get('code')));
+  assert.equal(codes.size, 3);
+});
+
+test('without a Stripe secret key no code is attempted', async () => {
+  const memory = memoryKV();
+  const { res, calls } = await sendWithStripe(memory, touchupEvent('evt_touchup_5'), { secretKey: null });
+  assert.equal(res.status, 200);
+  assert.equal(calls.length, 0);
+});

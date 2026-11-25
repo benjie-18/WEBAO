@@ -27,7 +27,7 @@
 // Anything else is acknowledged and ignored.
 
 import { putJson } from "./kv";
-import { EMAIL_RE, isTestMode, json, err, timingSafeEqual, clampStr } from "./util";
+import { EMAIL_RE, isTestMode, json, err, timingSafeEqual, clampStr, randomHex } from "./util";
 import { buildInboxEmail, notifyInbox, sendClientEmail, INBOX_ADDRESS } from "./mailer";
 import { storeAbandonedCheckout } from "./recovery";
 import {
@@ -58,6 +58,16 @@ const EVENT_TTL_SEC = 30 * 24 * 60 * 60;
 /** Processing-claim TTL: long enough for one handler run, short enough that
  *  a failed run's claim expires before Stripe gives up retrying. */
 const CLAIM_TTL_SEC = 60;
+
+/** The Website touchup discount coupon (Stripe): 15% off any subscription
+ *  for the first 3 months. Checkout applies it automatically when the
+ *  touchup is bought together with a subscription. A standalone touchup
+ *  earns a per-buyer promotion code instead (see issueTouchupCode): the
+ *  coupon id itself is never typed by a buyer, and the coupon carries no
+ *  redemption cap in Stripe because a cap there would be global, not per
+ *  buyer. */
+const TOUCHUP_COUPON_ID = "WEBAOFIXIT15";
+const TOUCHUP_ITEM_KEY = "website-touchup-onetime";
 
 // ---------------------------------------------------------------------------
 // Signature verification (Stripe's v1 scheme: HMAC-SHA256 of "<t>.<payload>")
@@ -131,6 +141,15 @@ async function resolveClient(
   return null;
 }
 
+/** True when this checkout bought a touchup on its own: no subscription
+ *  was created and no recurring item is in the cart, so checkout did not
+ *  apply the discount and the buyer is owed a code instead. */
+function isStandaloneTouchup(items: string[], subscriptionId: string): boolean {
+  if (!items.includes(TOUCHUP_ITEM_KEY)) return false;
+  if (subscriptionId) return false;
+  return !items.some((k) => k.endsWith("-month") || k.endsWith("-year"));
+}
+
 async function onCheckoutCompleted(
   kv: KVNamespace,
   env: Env,
@@ -179,6 +198,9 @@ async function onCheckoutCompleted(
     await saveClient(kv, client);
     await notifyNewClient(env, client);
     await sendWelcomeEmail(env, client);
+    if (isStandaloneTouchup(items, subscriptionId)) {
+      await issueTouchupCode(env, client, customerId);
+    }
     return;
   }
 
@@ -199,6 +221,9 @@ async function onCheckoutCompleted(
     existing.billingStatus = "active";
   }
   await saveClient(kv, existing);
+  if (isStandaloneTouchup(items, subscriptionId)) {
+    await issueTouchupCode(env, existing, customerId);
+  }
 }
 
 async function onInvoice(
@@ -417,6 +442,99 @@ async function onPaymentActionRequired(
 // ---------------------------------------------------------------------------
 // Internal notification (best effort, same pattern as form email copies)
 // ---------------------------------------------------------------------------
+
+/**
+ * Issue a single-use promotion code for a standalone Website touchup
+ * purchase. The code is locked to this buyer's Stripe customer (when
+ * known) and capped at one redemption, so "one use only" is enforced by
+ * Stripe instead of by process, and the buyer gets the code by email.
+ * Best effort: a Stripe or mail failure is logged and reported to the
+ * inbox so the code can be issued by hand, and never fails the webhook
+ * (the purchase itself already succeeded).
+ */
+async function issueTouchupCode(env: Env, client: Client, customerId: string): Promise<void> {
+  if (!env.STRIPE_SECRET_KEY) return;
+  const secretKey = env.STRIPE_SECRET_KEY;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const code = `WEBAO-${randomHex(4).toUpperCase()}`;
+    const params = new URLSearchParams();
+    params.set("promotion[type]", "coupon");
+    params.set("promotion[coupon]", TOUCHUP_COUPON_ID);
+    params.set("code", code);
+    if (customerId) params.set("customer", customerId);
+    params.set("max_redemptions", "1");
+    params.set("active", "true");
+    params.set("metadata[source]", "website-touchup");
+    let res: Response;
+    try {
+      res = await fetch("https://api.stripe.com/v1/promotion_codes", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${secretKey}`,
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: params.toString(),
+      });
+    } catch (e) {
+      console.error("stripe webhook: promotion code create failed", e);
+      break;
+    }
+    if (res.ok) {
+      await sendTouchupCodeEmail(env, client, code);
+      return;
+    }
+    // A taken code (or a transient error) is worth one retry with a fresh
+    // code; a systematic rejection fails the same way three times and the
+    // inbox alert below covers it.
+    const detail = await res.text().catch(() => "");
+    console.error("stripe webhook: promotion code create failed", res.status, detail);
+  }
+  await notifyInbox(env, "Touchup discount code NOT issued", [
+    `The Website touchup buyer ${client.email} did not get a discount code: Stripe refused the promotion code three times.`,
+    `Issue one by hand: promotion code for coupon ${TOUCHUP_COUPON_ID}, customer ${customerId || "(unknown)"}, max redemptions 1, and email it to the buyer.`,
+    `Record: client:${client.id}.`,
+  ]);
+}
+
+/**
+ * Email a buyer their single-use touchup discount code. The code works
+ * once, only for this buyer, on any subscription, 15% off the first
+ * 3 months. Best effort via SMTP2GO, like the welcome email.
+ */
+async function sendTouchupCodeEmail(env: Env, client: Client, code: string): Promise<void> {
+  const fr = client.lang === "fr";
+  await sendClientEmail(env, {
+    to: client.email,
+    subject: fr ? "Votre code de rabais WEBAO : 15 % pendant 3 mois" : "Your WEBAO discount code: 15% off for 3 months",
+    text: fr
+      ? [
+          "Bonjour,",
+          "",
+          "Merci pour votre retouche de site web. Elle donne droit à 15 % de rabais sur n'importe quel abonnement WEBAO pendant les 3 premiers mois.",
+          "",
+          `Votre code : ${code}`,
+          "",
+          "Entrez-le au paiement quand vous choisirez votre abonnement. Le code fonctionne une seule fois, et seulement pour vous, alors gardez-le pour vous.",
+          "",
+          "Des questions ? Répondez à ce courriel ou écrivez à support@webao.ca.",
+          "",
+          "L'équipe Webao",
+        ].join("\n")
+      : [
+          "Hi,",
+          "",
+          "Thanks for your Website touchup. It comes with 15% off any WEBAO subscription for the first 3 months.",
+          "",
+          `Your code: ${code}`,
+          "",
+          "Enter it at checkout when you choose your subscription. The code works once, and only for you, so keep it to yourself.",
+          "",
+          "Questions? Reply to this email or write to support@webao.ca.",
+          "",
+          "The Webao team",
+        ].join("\n"),
+  });
+}
 
 /**
  * Welcome email to the new client (best effort, via SMTP2GO; a no-op until
