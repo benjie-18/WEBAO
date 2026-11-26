@@ -412,7 +412,7 @@ test('a repeated stats call answers from the 60 s cache instead of re-reading se
     sessionGetsAfterFirst,
     'second call reads no session again',
   );
-  assert.equal(memory.ttls.get('admin:cache:stats:week:all'), 60, 'cache entry carries a 60 s TTL');
+  assert.equal(memory.ttls.get('admin:cache:stats:week:all:0'), 60, 'cache entry carries a 60 s TTL');
 });
 
 test('clients first page returns every abandoned checkout, not just the first 50', async () => {
@@ -442,4 +442,310 @@ test('unknown admin routes are a clean 404 for authenticated callers', async () 
   const response = await handleAdmin(adminGet('/api/admin/nope', token), envOf(memory.kv), url('/api/admin/nope'));
   assert.equal(response.status, 404);
   assert.deepEqual(await bodyOf(response), { ok: false, error: 'Not found' });
+});
+
+test('stats slice-looping counts every session exactly once', async () => {
+  const memory = memoryKV();
+  const token = await authed(memory);
+  const today = dayKey();
+  const yesterday = addDays(today, -1);
+  const day1Ts = Date.parse(yesterday + 'T12:00:00Z');
+  const day2Ts = Date.parse(today + 'T12:00:00Z');
+  // 1,200 sessions, 600 started yesterday and 600 today, one pricing
+  // page each on their start day. No bundles seeded, so stats falls back
+  // to the session scan in slices of 500.
+  for (let i = 0; i < 1200; i++) {
+    const startedAt = i % 2 === 0 ? day1Ts : day2Ts;
+    memory.store.set(`session:sess-${i}`, JSON.stringify({
+      ip: '1.2.3.4', country: 'CA', ua: '', device: 'desktop', browser: 'other',
+      startedAt, lastSeenAt: startedAt,
+      pages: [{ path: '/pricing', at: startedAt, durationMs: 0 }], clicks: [],
+    }));
+  }
+  const fetch = async (offset: number) => {
+    const res = await handleAdmin(
+      adminGet(`/api/admin/stats?range=week&sessionOffset=${offset}`, token),
+      envOf(memory.kv),
+      url(`/api/admin/stats?range=week&sessionOffset=${offset}`),
+    );
+    assert.equal(res.status, 200);
+    return bodyOf(res);
+  };
+  const first = await fetch(0);
+  assert.equal(first.source, 'slice');
+  assert.equal(first.sessionsTotal, 1200);
+  assert.equal(first.sessionsNextOffset, 500);
+  const second = await fetch(500);
+  assert.equal(second.sessionsNextOffset, 1000);
+  const third = await fetch(1000);
+  assert.equal(third.sessionsNextOffset, null);
+  // Merged by label, the three disjoint slices count every session once.
+  const at = (stats: any, label: string) => stats.views[stats.labels.indexOf(label)];
+  const visitorsAt = (stats: any, label: string) => stats.visitors[stats.labels.indexOf(label)];
+  assert.equal(at(first, yesterday) + at(second, yesterday) + at(third, yesterday), 600);
+  assert.equal(at(first, today) + at(second, today) + at(third, today), 600);
+  assert.equal(
+    visitorsAt(first, yesterday) + visitorsAt(second, yesterday) + visitorsAt(third, yesterday),
+    600,
+  );
+  assert.equal(
+    visitorsAt(first, today) + visitorsAt(second, today) + visitorsAt(third, today),
+    600,
+  );
+});
+
+test('stats reads from fresh day-bundles without scanning sessions', async () => {
+  const memory = memoryKV();
+  const token = await authed(memory);
+  const today = dayKey();
+  const days = [addDays(today, -2), addDays(today, -1), today];
+  let n = 0;
+  for (const day of days) {
+    const ts = Date.parse(day + 'T12:00:00Z');
+    const sessions = [];
+    for (let i = 0; i < 40; i++, n++) {
+      const sid = `bundle-${day}-${i}`;
+      const s = {
+        ip: '1.2.3.4', country: 'CA', ua: '', device: 'desktop', browser: 'other',
+        startedAt: ts, lastSeenAt: ts,
+        pages: [{ path: '/pricing', at: ts, durationMs: 0 }], clicks: [],
+      };
+      memory.store.set(`session:${sid}`, JSON.stringify(s));
+      sessions.push({ sid, ...s });
+    }
+    memory.store.set(`session-bundle:${day}`, JSON.stringify({ day, builtAt: Date.now(), sessions }));
+  }
+  const response = await handleAdmin(adminGet('/api/admin/stats?range=week', token), envOf(memory.kv), url('/api/admin/stats?range=week'));
+  assert.equal(response.status, 200);
+  const stats = await bodyOf(response);
+  assert.equal(stats.source, 'bundles');
+  assert.equal(stats.sessionsTotal, 120);
+  assert.equal(stats.sessionsNextOffset, null);
+  assert.equal(stats.visitors.at(-1), 40, 'today');
+  assert.equal(stats.views.at(-1), 40);
+  // The only session reads are the bundle values themselves: no
+  // per-session GET at all, however many sessions the store holds.
+  // (The admin token read is auth, not a session record.)
+  assert.ok(
+    memory.gets.every((k) => !k.startsWith('session:') || k.startsWith('session-bundle:')),
+    `unexpected session reads: ${memory.gets.filter((k) => k.startsWith('session:') && !k.startsWith('session-bundle:')).join(', ')}`,
+  );
+});
+
+test('stale bundles fall back to the session scan', async () => {
+  const memory = memoryKV();
+  const token = await authed(memory);
+  const today = dayKey();
+  const ts = Date.parse(today + 'T12:00:00Z');
+  const s = {
+    ip: '1.2.3.4', country: 'CA', ua: '', device: 'desktop', browser: 'other',
+    startedAt: ts, lastSeenAt: ts,
+    pages: [{ path: '/pricing', at: ts, durationMs: 0 }], clicks: [],
+  };
+  memory.store.set('session:only-one', JSON.stringify(s));
+  // Bundle built 48 hours ago: older than the 36-hour staleness bound.
+  memory.store.set(`session-bundle:${today}`, JSON.stringify({
+    day: today, builtAt: Date.now() - 48 * 3600 * 1000, sessions: [{ sid: 'only-one', ...s }],
+  }));
+  const response = await handleAdmin(adminGet('/api/admin/stats?range=week', token), envOf(memory.kv), url('/api/admin/stats?range=week'));
+  const stats = await bodyOf(response);
+  assert.equal(stats.source, 'slice', 'stale bundles are not trusted');
+  assert.equal(stats.visitors.at(-1), 1, 'the scan still finds the session');
+  assert.ok(memory.gets.includes('session:only-one'), 'the fallback reads session records');
+});
+
+test('visitors sort stays exact with bundles plus a fresh active overlay', async () => {
+  const memory = memoryKV();
+  const token = await authed(memory);
+  const today = dayKey();
+  const yesterday = addDays(today, -1);
+  const mk = (startedAt: number, lastSeenAt: number) => ({
+    ip: '1.2.3.4', country: 'CA', ua: '', device: 'desktop', browser: 'other',
+    startedAt, lastSeenAt, pages: [], clicks: [],
+  });
+  // Bundle copies: A last seen yesterday 23:00, B yesterday 12:00.
+  const aTs = Date.parse(yesterday + 'T23:00:00Z');
+  const bBundleTs = Date.parse(yesterday + 'T12:00:00Z');
+  const a = mk(aTs, aTs);
+  const bBundle = mk(bBundleTs, bBundleTs);
+  memory.store.set(`session-bundle:${yesterday}`, JSON.stringify({
+    day: yesterday, builtAt: Date.now(), sessions: [{ sid: 'vis-a', ...a }, { sid: 'vis-b', ...bBundle }],
+  }));
+  // Yesterday is registered as holding sessions and has its bundle.
+  memory.store.set(`sessions:day:${yesterday}`, '"1"');
+  memory.store.set('session:vis-a', JSON.stringify(a));
+  // B was seen again today at 09:00 (after the rebuild): the live record
+  // and today's marker carry the fresh time; the bundle copy is stale.
+  const bFresh = mk(bBundleTs, Date.parse(today + 'T09:00:00Z'));
+  memory.store.set('session:vis-b', JSON.stringify(bFresh));
+  memory.store.set(`sessions:active:${today}:vis-b`, '1');
+  // C started today at 10:00 and is in no bundle yet.
+  const c = mk(Date.parse(today + 'T10:00:00Z'), Date.parse(today + 'T10:00:00Z'));
+  memory.store.set('session:vis-c', JSON.stringify(c));
+  memory.store.set(`sessions:active:${today}:vis-c`, '1');
+
+  const response = await handleAdmin(adminGet('/api/admin/visitors?limit=50', token), envOf(memory.kv), url('/api/admin/visitors?limit=50'));
+  assert.equal(response.status, 200);
+  const body = await bodyOf(response);
+  assert.equal(body.source, 'bundles');
+  assert.deepEqual(
+    body.items.map((i: any) => i.sid),
+    ['vis-c', 'vis-b', 'vis-a'],
+    'fresh lastSeenAt order: C (today 10:00), B (today 09:00 via overlay), A (yesterday 23:00)',
+  );
+  assert.equal(body.items[1].lastSeenAt, Date.parse(today + 'T09:00:00Z'));
+});
+
+test('a registered day with no bundle falls back to the scan', async () => {
+  const memory = memoryKV();
+  const token = await authed(memory);
+  const today = dayKey();
+  const oldDay = addDays(today, -5);
+  const ts = Date.parse(oldDay + 'T12:00:00Z');
+  const s = {
+    ip: '1.2.3.4', country: 'CA', ua: '', device: 'desktop', browser: 'other',
+    startedAt: ts, lastSeenAt: ts,
+    pages: [{ path: '/pricing', at: ts, durationMs: 0 }], clicks: [],
+  };
+  memory.store.set('session:old-one', JSON.stringify(s));
+  // The day is registered as holding sessions, but its bundle is
+  // missing (never built): the loader must not silently drop it.
+  memory.store.set(`sessions:day:${oldDay}`, '"1"');
+  // A fresh bundle for today exists, so only the coverage check can
+  // catch the gap.
+  memory.store.set(`session-bundle:${today}`, JSON.stringify({ day: today, builtAt: Date.now(), sessions: [] }));
+  const response = await handleAdmin(adminGet('/api/admin/stats?range=all', token), envOf(memory.kv), url('/api/admin/stats?range=all'));
+  const stats = await bodyOf(response);
+  assert.equal(stats.source, 'slice', 'missing bundle for a registered day is not trusted');
+  assert.equal(stats.visitors.reduce((a: number, v: number) => a + v, 0), 1, 'the scan still finds the old session');
+});
+
+// ---------------------------------------------------------------------------
+// Precomputed aggregates (worker/aggregates.ts, written by the rebuild)
+// ---------------------------------------------------------------------------
+
+/** Three days x 40 sessions in fresh day-bundles, one pricing page each. */
+function aggregateSeed(memory: MemoryKV) {
+  const today = dayKey();
+  const days = [addDays(today, -2), addDays(today, -1), today];
+  let n = 0;
+  for (const day of days) {
+    const ts = Date.parse(day + 'T12:00:00Z');
+    const sessions = [];
+    for (let i = 0; i < 40; i++, n++) {
+      const sid = `bundle-${day}-${i}`;
+      const s = {
+        ip: '1.2.3.4', country: 'CA', ua: '', device: 'desktop', browser: 'other',
+        startedAt: ts, lastSeenAt: ts,
+        pages: [{ path: '/pricing', at: ts, durationMs: 0 }], clicks: [],
+      };
+      memory.store.set(`session:${sid}`, JSON.stringify(s));
+      sessions.push({ sid, ...s });
+    }
+    memory.store.set(`session-bundle:${day}`, JSON.stringify({ day, builtAt: Date.now(), sessions }));
+  }
+}
+
+const clearAdminCache = (memory: MemoryKV) => {
+  for (const k of [...memory.store.keys()]) if (k.startsWith('admin:cache:')) memory.store.delete(k);
+};
+
+test('stats serves a fresh precomputed aggregate with one KV read', async () => {
+  const memory = memoryKV();
+  const token = await authed(memory);
+  aggregateSeed(memory);
+  const live = await bodyOf(
+    await handleAdmin(adminGet('/api/admin/stats?range=week', token), envOf(memory.kv), url('/api/admin/stats?range=week')),
+  );
+  assert.equal(live.source, 'bundles');
+  const stored = { ...live, source: 'precomputed', builtAt: Date.now() };
+  memory.store.set('stats:agg:week', JSON.stringify(stored));
+  memory.gets.length = 0;
+  const res = await handleAdmin(adminGet('/api/admin/stats?range=week', token), envOf(memory.kv), url('/api/admin/stats?range=week'));
+  assert.equal(res.status, 200);
+  assert.deepEqual(await bodyOf(res), stored);
+  assert.ok(memory.gets.includes('stats:agg:week'));
+  assert.ok(
+    memory.gets.every((k) => !k.startsWith('session:')),
+    `aggregate path must not read sessions: ${memory.gets.join(', ')}`,
+  );
+});
+
+test('a stale stats aggregate falls back to live aggregation', async () => {
+  const memory = memoryKV();
+  const token = await authed(memory);
+  aggregateSeed(memory);
+  const live = await bodyOf(
+    await handleAdmin(adminGet('/api/admin/stats?range=week', token), envOf(memory.kv), url('/api/admin/stats?range=week')),
+  );
+  memory.store.set('stats:agg:week', JSON.stringify({ ...live, source: 'precomputed', builtAt: Date.now() - 40 * 3600 * 1000 }));
+  clearAdminCache(memory);
+  memory.gets.length = 0;
+  const res = await handleAdmin(adminGet('/api/admin/stats?range=week', token), envOf(memory.kv), url('/api/admin/stats?range=week'));
+  const stats = await bodyOf(res);
+  assert.equal(stats.source, 'bundles', 'stale aggregates are not trusted');
+  assert.equal(stats.visitors.at(-1), 40);
+  assert.ok(memory.gets.includes('stats:agg:week'), 'the stale aggregate is read, then ignored');
+  assert.ok(memory.gets.some((k) => k.startsWith('session-bundle:')), 'the fallback reads the bundles');
+});
+
+test('a page-filtered stats call ignores the precomputed aggregate', async () => {
+  const memory = memoryKV();
+  const token = await authed(memory);
+  aggregateSeed(memory);
+  const live = await bodyOf(
+    await handleAdmin(adminGet('/api/admin/stats?range=week', token), envOf(memory.kv), url('/api/admin/stats?range=week')),
+  );
+  memory.store.set('stats:agg:week', JSON.stringify({ ...live, source: 'precomputed', builtAt: Date.now() }));
+  const res = await handleAdmin(adminGet('/api/admin/stats?range=week&page=/pricing', token), envOf(memory.kv), url('/api/admin/stats?range=week&page=/pricing'));
+  const stats = await bodyOf(res);
+  assert.equal(stats.source, 'bundles', 'aggregates cover page=all only');
+  assert.equal(stats.page, '/pricing');
+  assert.equal(stats.views.at(-1), 40, 'only the chosen path counts');
+});
+
+test('charts serves a fresh precomputed aggregate with one KV read', async () => {
+  const memory = memoryKV();
+  const token = await authed(memory);
+  const today = dayKey();
+  const tToday = Date.parse(today + 'T12:00:00Z');
+  memory.store.set('form:1:a', JSON.stringify({ form: 'contact', fields: {}, ip: '1.2.3.4', country: 'CA', ua: '', at: tToday }));
+  memory.store.set('form:2:b', JSON.stringify({ form: 'support', fields: {}, ip: '1.2.3.4', country: 'CA', ua: '', at: tToday }));
+  memory.store.set('leads:index', JSON.stringify(['lead:ld_a']));
+  memory.store.set('lead:ld_a', JSON.stringify({ id: 'ld_a', business: 'Test', email: 't@example.com', sentAt: tToday, clicks: [], replies: [], clickCount: 0 }));
+  const live = await bodyOf(
+    await handleAdmin(adminGet('/api/admin/charts?range=week', token), envOf(memory.kv), url('/api/admin/charts?range=week')),
+  );
+  const stored = { ...live, source: 'precomputed', builtAt: Date.now() };
+  memory.store.set('charts:agg:week', JSON.stringify(stored));
+  memory.gets.length = 0;
+  const res = await handleAdmin(adminGet('/api/admin/charts?range=week', token), envOf(memory.kv), url('/api/admin/charts?range=week'));
+  assert.equal(res.status, 200);
+  assert.deepEqual(await bodyOf(res), stored);
+  assert.ok(memory.gets.includes('charts:agg:week'));
+  assert.ok(
+    memory.gets.every((k) => !k.startsWith('lead:') && !k.startsWith('form:')),
+    `aggregate path must not read leads or forms: ${memory.gets.join(', ')}`,
+  );
+});
+
+test('a stale charts aggregate falls back to live aggregation', async () => {
+  const memory = memoryKV();
+  const token = await authed(memory);
+  const today = dayKey();
+  const tToday = Date.parse(today + 'T12:00:00Z');
+  memory.store.set('form:1:a', JSON.stringify({ form: 'contact', fields: {}, ip: '1.2.3.4', country: 'CA', ua: '', at: tToday }));
+  memory.store.set('leads:index', JSON.stringify(['lead:ld_a']));
+  memory.store.set('lead:ld_a', JSON.stringify({ id: 'ld_a', business: 'Test', email: 't@example.com', sentAt: tToday, clicks: [], replies: [], clickCount: 0 }));
+  const live = await bodyOf(
+    await handleAdmin(adminGet('/api/admin/charts?range=week', token), envOf(memory.kv), url('/api/admin/charts?range=week')),
+  );
+  memory.store.set('charts:agg:week', JSON.stringify({ ...live, source: 'precomputed', builtAt: Date.now() - 40 * 3600 * 1000 }));
+  clearAdminCache(memory);
+  memory.gets.length = 0;
+  const res = await handleAdmin(adminGet('/api/admin/charts?range=week', token), envOf(memory.kv), url('/api/admin/charts?range=week'));
+  const body = await bodyOf(res);
+  assert.equal(body.forms.total.reduce((a: number, v: number) => a + v, 0), 1);
+  assert.equal(body.leads.sent.reduce((a: number, v: number) => a + v, 0), 1);
+  assert.ok(memory.gets.includes('lead:ld_a'), 'the fallback reads the leads');
 });

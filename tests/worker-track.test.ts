@@ -352,3 +352,78 @@ test('heartbeats only touch the most recent visit of the given path', async () =
   await handleHeartbeat(heartbeat({ sid: SID, path: '/unknown', durationMs: 9_000, final: true }), envOf(memory.kv));
   assert.deepEqual(sessionOf(memory.store).pages.map((p) => p.durationMs), [0, 0, 7_000], 'unknown paths change nothing');
 });
+
+test('a pageview marks the session active once per day, with a 3-day marker', async () => {
+  const memory = memoryKV();
+  await handlePageview(pageview({ sid: SID, path: '/pricing' }), envOf(memory.kv));
+  const marker = `sessions:active:${DAY}:${SID}`;
+  assert.deepEqual(
+    memory.puts.filter((k) => k.startsWith('sessions:active:')),
+    [marker],
+    'a new session is marked active on creation',
+  );
+  assert.equal(memory.ttls.get(marker), 3 * 24 * 3600, 'markers expire after 3 days');
+
+  // A second pageview the same day writes the session again but no marker:
+  // lastSeenAt is already today, so this is not a first touch of the day.
+  await handlePageview(pageview({ sid: SID, path: '/contact' }), envOf(memory.kv));
+  assert.equal(
+    memory.puts.filter((k) => k.startsWith('sessions:active:')).length,
+    1,
+    'no second marker for the same day',
+  );
+});
+
+test('a first touch on a new day marks the session active again', async () => {
+  const memory = memoryKV();
+  const yesterday = Date.parse(`${dayKey(Date.now() - 24 * 3600 * 1000)}T12:00:00Z`);
+  const seeded = JSON.parse(
+    JSON.stringify({
+      ip: '1.2.3.4', country: 'CA', ua: '', device: 'desktop', browser: 'other',
+      startedAt: yesterday, lastSeenAt: yesterday, pages: [], clicks: [],
+    }),
+  );
+  memory.store.set(`session:${SID}`, JSON.stringify(seeded));
+  await handlePageview(pageview({ sid: SID, path: '/pricing' }), envOf(memory.kv));
+  assert.ok(
+    memory.puts.includes(`sessions:active:${DAY}:${SID}`),
+    'lastSeenAt was yesterday, so this touch marks today',
+  );
+
+  // A click and a heartbeat on that same new day do not mark twice.
+  const before = memory.puts.filter((k) => k.startsWith('sessions:active:')).length;
+  await handleClick(click({ sid: SID, path: '/pricing', kind: 'click', label: 'x' }), envOf(memory.kv));
+  await handleHeartbeat(
+    heartbeat({ sid: SID, path: '/pricing', durationMs: 1000, final: true }),
+    envOf(memory.kv),
+  );
+  assert.equal(
+    memory.puts.filter((k) => k.startsWith('sessions:active:')).length,
+    before,
+    'click and heartbeat the same day add no further marker',
+  );
+});
+
+test('a coalesced heartbeat writes nothing, marker included', async () => {
+  const memory = memoryKV();
+  await handlePageview(pageview({ sid: SID, path: '/pricing' }), envOf(memory.kv));
+  const putsAfterView = memory.puts.length;
+  // Within the 5-minute coalesce window, not final, no clicks: no write at all.
+  await handleHeartbeat(heartbeat({ sid: SID, path: '/pricing', durationMs: 1000 }), envOf(memory.kv));
+  assert.equal(memory.puts.length, putsAfterView, 'coalesced beat persists nothing');
+});
+
+test('a new session registers its start day for the bundle loader', async () => {
+  const memory = memoryKV();
+  await handlePageview(pageview({ sid: SID, path: '/pricing' }), envOf(memory.kv));
+  assert.equal(memory.store.get(`sessions:day:${DAY}`), '"1"', 'creation writes the day entry');
+  assert.equal(memory.ttls.get(`sessions:day:${DAY}`), 400 * 24 * 3600);
+  // A returning session the same day does not write the registry again.
+  const putsBefore = memory.puts.filter((k) => k.startsWith('sessions:day:')).length;
+  await handlePageview(pageview({ sid: SID, path: '/contact' }), envOf(memory.kv));
+  assert.equal(
+    memory.puts.filter((k) => k.startsWith('sessions:day:')).length,
+    putsBefore,
+    'only creation registers a day',
+  );
+});

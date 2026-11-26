@@ -21,13 +21,26 @@ import {
   originAllowed,
   clientIp,
   dayKey,
-  addDays,
   sanitizePath,
   sha256Hex,
   batch,
   isMonthKey,
 } from "./util";
 import type { Session } from "./track";
+import {
+  listSessionKeys,
+  loadAllSessionsScan,
+  loadSessionSlice,
+  loadSessionsFromBundles,
+} from "./sessions";
+import {
+  aggregateCharts,
+  aggregateStats,
+  chartsAggregateKey,
+  isFreshAggregate,
+  statsAggregateKey,
+  type RangeName,
+} from "./aggregates";
 import { handleLeadsList, handleLeadDelete, LEADS_INDEX_KEY, type Lead } from "./leads";
 import {
   CLIENTS_INDEX,
@@ -117,15 +130,6 @@ export async function handleAdmin(req: Request, env: Env, url: URL): Promise<Res
 // Stats
 // ---------------------------------------------------------------------------
 
-type RangeName = "day" | "week" | "month" | "year" | "all";
-
-function rangeDays(range: Exclude<RangeName, "all">, today: string): string[] {
-  const n = range === "day" ? 1 : range === "week" ? 7 : range === "month" ? 30 : 365;
-  const out: string[] = [];
-  for (let i = n - 1; i >= 0; i--) out.push(addDays(today, -i));
-  return out;
-}
-
 /** 60 s response cache for the heavy admin reads (stats/charts/visitors). */
 const ADMIN_CACHE_TTL_SECONDS = 60;
 
@@ -155,12 +159,23 @@ async function cachedJson<T extends object>(
 }
 
 /**
- * GET /api/admin/stats?range=day|week|month|year|all&page=<path|all>
+ * GET /api/admin/stats?range=day|week|month|year|all&page=<path|all>&sessionOffset=0
  * views/visitors series, top pages, device + country breakdowns.
- * Correct for the expected scale; sessions are scanned from KV (capped).
- * The "all" range covers every session in the store (sessions live 365
- * days in KV, so all time is at most ~365 days of data) and rolls up
- * into monthly buckets like the year range.
+ *
+ * Two read paths. The normal one is the day-bundles (see
+ * worker/sessions.ts): one GET per day in the store instead of one per
+ * session, fresh to the minute through the active-session overlay, so
+ * a first load costs ~85 reads today and at most ~420 at a full year
+ * of data. When the bundles are missing, malformed or stale the call
+ * falls back to the session scan in slices of SESSION_SLICE — the
+ * panel loops `sessionOffset` and merges the partials, exactly like
+ * the charts tab loops its lead slices — so stats can never breach
+ * the worker subrequest budget however many sessions the store holds.
+ *
+ * Above both sits the precomputed aggregate (`stats:agg:<range>`,
+ * written by the rebuild job): one KV read and no aggregation at all,
+ * which is what keeps a cold-isolate first call cheap. It covers
+ * page=all only; a page filter or a slice loop still goes live.
  */
 async function handleStats(kv: KVNamespace, url: URL): Promise<Response> {
   const rangeParam = url.searchParams.get("range") || "week";
@@ -181,125 +196,69 @@ async function handleStats(kv: KVNamespace, url: URL): Promise<Response> {
     if (!pageFilter) return err("Invalid page");
   }
 
-  return cachedJson(kv, `admin:cache:stats:${range}:${pageFilter || "all"}`, async () => {
-    const today = dayKey();
+  const rawOffset = parseInt(url.searchParams.get("sessionOffset") || "0", 10);
+  const sessionOffset = Math.max(isNaN(rawOffset) ? 0 : rawOffset, 0);
 
-    // --- 1. Sessions: one scan feeds both views and visitors ---
-    // Views used to come from per-day per-path counter keys
-    // (views:<day>:<path>), one KV write per pageview. The counters are
-    // gone: every pageview is already stored in its session (path +
-    // timestamp), so views are derived from the sessions themselves and
-    // a pageview costs exactly one write. Trade-off: sessions expire
-    // after 365 days and keep only the last 100 pages, so derived views
-    // undercount very old or very long sessions where the counters
-    // never decayed. Old views: keys are inert leftovers.
-    const sessionKeys = await listAllKeys(kv, "session:", 20000);
-    const allSessions = (await batch(sessionKeys, 50, (k) => getJson<Session>(kv, k))).filter(
-      (s): s is Session => !!s,
+  // Precomputed aggregate (page=all, first call only): one KV read
+  // instead of re-reading every session and aggregating. Fresh for
+  // 36 h after the rebuild writes it; a missing, malformed or stale
+  // aggregate falls through to the live bundle/slice paths below.
+  if (sessionOffset === 0 && pageFilter === null) {
+    const agg = await getJson<{ ok?: unknown; builtAt?: unknown }>(
+      kv,
+      statsAggregateKey(range),
     );
+    if (agg && agg.ok === true && isFreshAggregate(agg.builtAt)) return json(agg);
+  }
 
-    // Days covered: the fixed window per range, or — for "all" — every
-    // day from the earliest stored page or session start to today.
-    let days: string[];
-    if (range === "all") {
-      let minDay = today;
-      for (const s of allSessions) {
-        const sd = dayKey(s.startedAt);
-        if (sd < minDay) minDay = sd;
-        for (const p of s.pages || []) {
-          if (typeof p.at !== "number") continue;
-          const pd = dayKey(p.at);
-          if (pd < minDay) minDay = pd;
+  return cachedJson(
+    kv,
+    `admin:cache:stats:${range}:${pageFilter || "all"}:${sessionOffset}`,
+    async () => {
+      const today = dayKey();
+
+      // Bundle path (offset 0 only — a looping caller is already on
+      // the slice path): complete aggregates in one call.
+      if (sessionOffset === 0) {
+        const bundled = await loadSessionsFromBundles(kv);
+        if (bundled) {
+          return {
+            ok: true,
+            range,
+            page: pageFilter || "all",
+            ...aggregateStats(
+              bundled.sessions.map(({ s }) => s),
+              range,
+              pageFilter,
+              today,
+            ),
+            sessionsTotal: bundled.sessions.length,
+            sessionsNextOffset: null,
+            source: "bundles",
+          };
         }
       }
-      days = [];
-      for (let d = minDay; ; d = addDays(d, 1)) {
-        days.push(d);
-        if (d === today) break;
-      }
-    } else {
-      days = rangeDays(range, today);
-    }
-    const daySet = new Set(days);
 
-    const startTs = Date.parse(days[0] + "T00:00:00Z");
-    const endTs = Date.parse(today + "T00:00:00Z") + 24 * 3600 * 1000;
-
-    // Views: bucket every stored page by the day it happened, so a
-    // session that started before the range still contributes the pages
-    // it served inside the range.
-    const perPath = new Map<string, number>();
-    const viewsByDay = new Map<string, number>();
-    for (const s of allSessions) {
-      for (const p of s.pages || []) {
-        if (typeof p.at !== "number" || typeof p.path !== "string") continue;
-        const d = dayKey(p.at);
-        if (!daySet.has(d)) continue;
-        perPath.set(p.path, (perPath.get(p.path) || 0) + 1);
-        if (!pageFilter || p.path === pageFilter) viewsByDay.set(d, (viewsByDay.get(d) || 0) + 1);
-      }
-    }
-    for (const d of days) if (!viewsByDay.has(d)) viewsByDay.set(d, 0);
-
-    // --- 2. Visitors/devices/countries: sessions started in the range ---
-    const sessions = allSessions.filter((s) => s.startedAt >= startTs && s.startedAt < endTs);
-
-    const visitorsByDay = new Map<string, number>();
-    const devices = { mobile: 0, tablet: 0, desktop: 0 };
-    const countryCounts = new Map<string, number>();
-    for (const s of sessions) {
-      const d = dayKey(s.startedAt);
-      visitorsByDay.set(d, (visitorsByDay.get(d) || 0) + 1);
-      devices[s.device] = (devices[s.device] || 0) + 1;
-      const cc = (s.country || "XX").toUpperCase();
-      countryCounts.set(cc, (countryCounts.get(cc) || 0) + 1);
-    }
-
-    // --- 3. Shape the response (day/week/month => daily buckets, year/all => monthly) ---
-    let labels: string[];
-    let views: number[];
-    let visitors: number[];
-    if (range === "year" || range === "all") {
-      const months: string[] = [];
-      for (const d of days) {
-        const m = d.slice(0, 7);
-        if (months[months.length - 1] !== m) months.push(m);
-      }
-      labels = months;
-      views = months.map((m) =>
-        days.filter((d) => d.startsWith(m)).reduce((a, d) => a + (viewsByDay.get(d) || 0), 0),
-      );
-      visitors = months.map((m) =>
-        days.filter((d) => d.startsWith(m)).reduce((a, d) => a + (visitorsByDay.get(d) || 0), 0),
-      );
-    } else {
-      labels = days;
-      views = days.map((d) => viewsByDay.get(d) || 0);
-      visitors = days.map((d) => visitorsByDay.get(d) || 0);
-    }
-
-    const topPages = [...perPath.entries()]
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 10)
-      .map(([path, v]) => ({ path, views: v }));
-
-    const countries = [...countryCounts.entries()]
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 15)
-      .map(([code, count]) => ({ code, count }));
-
-    return {
-      ok: true,
-      range,
-      page: pageFilter || "all",
-      labels,
-      views,
-      visitors,
-      topPages,
-      devices,
-      countries,
-    };
-  });
+      // Slice path: one slice of the session scan; the panel loops
+      // sessionOffset until sessionsNextOffset is null.
+      const keys = await listSessionKeys(kv);
+      const slice = await loadSessionSlice(kv, keys, sessionOffset);
+      return {
+        ok: true,
+        range,
+        page: pageFilter || "all",
+        ...aggregateStats(
+          slice.sessions.map(({ s }) => s),
+          range,
+          pageFilter,
+          today,
+        ),
+        sessionsTotal: keys.length,
+        sessionsNextOffset: slice.nextOffset,
+        source: "slice",
+      };
+    },
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -328,17 +287,23 @@ async function handleVisitorsList(kv: KVNamespace, url: URL): Promise<Response> 
 
   // Cursor-paginated like the other lists, so every session is reachable:
   // the tab used to return only the first page of all sessions.
+  // Sessions normally come from the day-bundles (one GET per day plus
+  // the fresh active overlay) instead of one GET per session. The
+  // fallback is the full scan: visitors needs the global lastSeenAt
+  // order, which a slice cannot give, so unlike stats it has no slice
+  // mode — the fallback only runs while the bundles are missing or
+  // stale, and it is bounded by the same ~990-session ceiling the
+  // bundles exist to avoid.
   return cachedJson(kv, `admin:cache:visitors:${limit}:${cursor}`, async () => {
-    const keys = await listAllKeys(kv, "session:", 20000);
-    const sessions = (
-      await batch(keys, 50, async (k) => {
-        const s = await getJson<Session>(kv, k);
-        return s ? { sid: k.slice("session:".length), s } : null;
-      })
-    ).filter((x): x is { sid: string; s: Session } => !!x && typeof x.s.startedAt === "number");
-    sessions.sort((a, b) => (b.s.lastSeenAt || b.s.startedAt) - (a.s.lastSeenAt || a.s.startedAt));
+    const bundled = await loadSessionsFromBundles(kv);
+    const sessions = bundled ? bundled.sessions : await loadAllSessionsScan(kv);
+    const source = bundled ? "bundles" : "scan";
+    const usable = sessions.filter(
+      (x): x is { sid: string; s: Session } => !!x && typeof x.s.startedAt === "number",
+    );
+    usable.sort((a, b) => (b.s.lastSeenAt || b.s.startedAt) - (a.s.lastSeenAt || a.s.startedAt));
 
-    const items: VisitorItem[] = sessions.slice(cursor, cursor + limit).map(({ sid, s }) => ({
+    const items: VisitorItem[] = usable.slice(cursor, cursor + limit).map(({ sid, s }) => ({
       sid,
       startedAt: s.startedAt,
       lastSeenAt: s.lastSeenAt || s.startedAt,
@@ -353,7 +318,8 @@ async function handleVisitorsList(kv: KVNamespace, url: URL): Promise<Response> 
     return {
       ok: true,
       items,
-      nextCursor: cursor + limit < sessions.length ? String(cursor + limit) : null,
+      nextCursor: cursor + limit < usable.length ? String(cursor + limit) : null,
+      source,
     };
   });
 }
@@ -483,6 +449,12 @@ async function handleAuditDelete(kv: KVNamespace, path: string): Promise<Respons
  * outcome) so they can be drawn as a donut: bounced > opted out >
  * replied > clicked > no response.
  *
+ * Above the live paths sits the precomputed aggregate
+ * (`charts:agg:<range>`, written by the rebuild job): one KV read and
+ * no aggregation, which is what keeps a cold-isolate first call cheap.
+ * It covers the whole store (no 1,000 cap) and the first call only; a
+ * missing or stale aggregate falls through to the live slices below.
+ *
  * The "all" range returns every entry to date: the 1,000-lead cap is
  * lifted and the forms cap with it. One call cannot fetch that many
  * leads — a worker invocation is capped at 1,000 subrequests and one
@@ -513,6 +485,18 @@ async function handleCharts(kv: KVNamespace, url: URL): Promise<Response> {
   const leadOffset = range === "all" ? Math.max(isNaN(rawOffset) ? 0 : rawOffset, 0) : 0;
   const rawFormOffset = parseInt(url.searchParams.get("formOffset") || "0", 10);
   const formOffset = range === "all" ? Math.max(isNaN(rawFormOffset) ? 0 : rawFormOffset, 0) : 0;
+
+  // Precomputed aggregate (first call only): one KV read instead of
+  // re-reading every lead and form and aggregating. Fresh for 36 h
+  // after the rebuild writes it; a missing, malformed or stale
+  // aggregate falls through to the live sliced paths below.
+  if (leadOffset === 0 && formOffset === 0) {
+    const agg = await getJson<{ ok?: unknown; builtAt?: unknown }>(
+      kv,
+      chartsAggregateKey(range),
+    );
+    if (agg && agg.ok === true && isFreshAggregate(agg.builtAt)) return json(agg);
+  }
 
   return cachedJson(kv, `admin:cache:charts:${range}:${leadOffset}:${formOffset}`, async () => {
     const today = dayKey();
@@ -564,104 +548,17 @@ async function handleCharts(kv: KVNamespace, url: URL): Promise<Response> {
         ? leadOffset + LEAD_SLICE
         : null;
 
-    // Days covered: the fixed window per range, or — for "all" — every
-    // day from the earliest stored event in this slice to today. Each
-    // slice buckets into monthly labels from its own span; the panel
-    // merges slices by month label, so slices may span different months.
-    let days: string[];
-    if (range === "all") {
-      let minTs: number | undefined;
-      const consider = (ts: number | undefined): void => {
-        if (typeof ts === "number" && (minTs === undefined || ts < minTs)) minTs = ts;
-      };
-      for (const rec of formRecs) consider(rec?.at);
-      for (const lead of leadRecs) {
-        if (!lead) continue;
-        consider(lead.sentAt);
-        consider(lead.firstClickAt);
-        consider(lead.repliedAt);
-        for (const c of lead.clicks || []) consider(c.at);
-      }
-      const minDay = minTs === undefined ? today : dayKey(minTs);
-      days = [];
-      for (let d = minDay; ; d = addDays(d, 1)) {
-        days.push(d);
-        if (d === today) break;
-      }
-    } else {
-      days = rangeDays(range, today);
-    }
-    const startTs = Date.parse(days[0] + "T00:00:00Z");
-    const endTs = Date.parse(today + "T00:00:00Z") + 24 * 3600 * 1000;
-
-    // Label positions: daily buckets, or one bucket per month for the
-    // year and all-time ranges.
-    let labels: string[];
-    const bucketOf = new Map<string, number>();
-    if (range === "year" || range === "all") {
-      const months: string[] = [];
-      for (const d of days) {
-        const m = d.slice(0, 7);
-        if (months[months.length - 1] !== m) months.push(m);
-      }
-      labels = months;
-      months.forEach((m, i) => bucketOf.set(m, i));
-    } else {
-      labels = days;
-      days.forEach((d, i) => bucketOf.set(d, i));
-    }
-    const series = (): number[] => labels.map(() => 0);
-    const bump = (arr: number[], ts: number | undefined): void => {
-      if (typeof ts !== "number" || ts < startTs || ts >= endTs) return;
-      const key = range === "year" || range === "all" ? dayKey(ts).slice(0, 7) : dayKey(ts);
-      const i = bucketOf.get(key);
-      if (i !== undefined) arr[i] += 1;
-    };
-
-    const formsTotal = series();
-    const formsByType = { contact: series(), support: series(), pricing: series() };
-    for (const rec of formRecs) {
-      if (!rec || typeof rec.at !== "number") continue;
-      bump(formsTotal, rec.at);
-      if (rec.form === "contact" || rec.form === "support" || rec.form === "pricing")
-        bump(formsByType[rec.form], rec.at);
-    }
-
-    const leadsSent = series();
-    const leadsClicked = series();
-    const leadsReplied = series();
-    const leadStages = { replied: 0, clicked: 0, none: 0, optout: 0, bounced: 0 };
-    const clickDests = { demos: 0, home: 0, pricing: 0, start: 0 };
-    for (const lead of leadRecs) {
-      if (!lead) continue;
-      bump(leadsSent, lead.sentAt);
-      bump(leadsClicked, lead.firstClickAt);
-      bump(leadsReplied, lead.repliedAt);
-      if (lead.sentAt >= startTs && lead.sentAt < endTs) {
-        if (lead.bouncedAt) leadStages.bounced += 1;
-        else if (lead.optOutAt) leadStages.optout += 1;
-        else if (lead.repliedAt) leadStages.replied += 1;
-        else if ((lead.clickCount || 0) > 0) leadStages.clicked += 1;
-        else leadStages.none += 1;
-      }
-      for (const c of lead.clicks || []) {
-        if (c.suspect || c.at < startTs || c.at >= endTs) continue;
-        if (c.dest === "demos" || c.dest === "home" || c.dest === "pricing" || c.dest === "start")
-          clickDests[c.dest] += 1;
-      }
-    }
+    // One pure aggregation over this slice's records, shared with the
+    // rebuild job (worker/aggregates.ts) so precomputed aggregates match
+    // live numbers exactly.
+    const agg = aggregateCharts(formRecs, leadRecs, range, today, {
+      leadsTotal,
+      formsTotal: formsCount,
+    });
 
     return {
-      ok: true,
-      range,
-      labels,
-      forms: { total: formsTotal, byType: formsByType },
-      leads: { sent: leadsSent, clicked: leadsClicked, replied: leadsReplied },
-      leadStages,
-      clickDests,
-      leadsTotal,
+      ...agg,
       leadsNextOffset,
-      formsTotal: formsCount,
       formsNextOffset,
     };
   });

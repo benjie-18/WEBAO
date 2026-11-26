@@ -172,7 +172,14 @@ export interface DomainCheckResult {
   checked: number;
   connected: number;
   stillPending: number;
+  /** True when the run stopped early at the per-run fetch cap. */
+  capped: boolean;
 }
+
+/** Max external DNS fetches per sweep: the Free plan caps a worker
+ * invocation at 50 external fetches, so the sweep stops at 40 and
+ * leaves the rest pending for the next run. */
+export const DOMAIN_CHECK_CAP = 40;
 
 /**
  * DNS verification sweep: a domain counts as connected when its CNAME
@@ -189,12 +196,19 @@ export async function handleDomainChecks(req: Request, env: TenantEnv): Promise<
   const kv = env.WEBAO_KV;
   const index = (await getJson<string[]>(kv, CLIENTS_INDEX)) || [];
   const records = await batch(index.slice(0, 1000), 25, (k) => getJson<Client>(kv, k));
-  const result: DomainCheckResult = { checked: 0, connected: 0, stillPending: 0 };
+  const result: DomainCheckResult = { checked: 0, connected: 0, stillPending: 0, capped: false };
 
   for (const client of records) {
     if (!client || !client.domain) continue;
     if (client.domainStatus !== "pending-dns" && client.domainStatus !== "to-register") {
       continue;
+    }
+    // One external fetch per pending client: stop at the cap so a
+    // sweep can never breach the 50-fetch invocation budget, however
+    // many clients are pending. The rest stay pending for the next run.
+    if (result.checked >= DOMAIN_CHECK_CAP) {
+      result.capped = true;
+      break;
     }
     result.checked++;
     client.domainCheckedAt = Date.now();

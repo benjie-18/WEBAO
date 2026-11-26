@@ -4,6 +4,7 @@
 
 import { getJson, putJson } from "./kv";
 import { getSettings } from "./auth";
+import { noteSessionCreated, noteSessionTouch } from "./sessions";
 import {
   clientIp,
   clientCountry,
@@ -15,6 +16,7 @@ import {
   json,
   err,
   originAllowed,
+  dayKey,
 } from "./util";
 
 const SESSION_TTL = 365 * 24 * 3600; // 365 days, in seconds
@@ -141,6 +143,10 @@ export async function handlePageview(req: Request, env: Env): Promise<Response> 
   const ua = req.headers.get("user-agent") || "";
   const key = "session:" + body.sid;
   let s = await getJson<Session>(kv, key);
+  // First touch of the day is decided from the pre-write lastSeenAt
+  // (null when the session is minted here): the admin day-bundles go
+  // stale intraday, and this marker is what keeps them fresh.
+  const prevLastSeenAt = s ? s.lastSeenAt : null;
   if (!s) {
     const { device, browser } = parseUserAgent(ua);
     s = {
@@ -186,6 +192,10 @@ export async function handlePageview(req: Request, env: Env): Promise<Response> 
   });
   if (s.pages.length > MAX_PAGES) s.pages = s.pages.slice(-MAX_PAGES);
   await putJson(kv, key, s, SESSION_TTL);
+  // Register the start day in the day registry (one write per new
+  // session) so the bundle loader can prove its bundle set is complete.
+  if (prevLastSeenAt === null) await noteSessionCreated(kv, dayKey(s.startedAt));
+  await noteSessionTouch(kv, body.sid, prevLastSeenAt);
 
   // No per-path counter write: the admin stats endpoint derives views
   // from the sessions themselves (each page carries its path and
@@ -224,6 +234,7 @@ export async function handleClick(req: Request, env: Env): Promise<Response> {
   const s = await getJson<Session>(kv, key);
   if (!s) return err("Unknown session", 404);
 
+  const prevLastSeenAt = s.lastSeenAt;
   s.lastSeenAt = Date.now();
   s.clicks.push({
     path,
@@ -233,6 +244,7 @@ export async function handleClick(req: Request, env: Env): Promise<Response> {
   });
   if (s.clicks.length > MAX_CLICKS) s.clicks = s.clicks.slice(-MAX_CLICKS);
   await putJson(kv, key, s, SESSION_TTL);
+  await noteSessionTouch(kv, body.sid, prevLastSeenAt);
   return json({ ok: true });
 }
 
@@ -291,7 +303,9 @@ export async function handleHeartbeat(req: Request, env: Env): Promise<Response>
     }
   }
   appendClicks(s, body.clicks);
+  const prevLastSeenAt = s.lastSeenAt;
   s.lastSeenAt = now;
   await putJson(kv, key, s, SESSION_TTL);
+  await noteSessionTouch(kv, body.sid, prevLastSeenAt);
   return json({ ok: true });
 }

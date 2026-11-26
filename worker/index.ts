@@ -24,6 +24,7 @@ import {
 import { handleDomainChecks, isMainHost, resolveTenant, tenantPageResponse } from "./tenants";
 import { handleInternalBuild, servePreviewSite, servePublishedSite } from "./builds";
 import { handleMonthlyReports, recordTenantView } from "./reports";
+import { handleSessionBundlesRebuild } from "./sessions";
 import { handleAdsLeadIntake } from "./ads";
 import { handleAbandonedFollowups } from "./recovery";
 import { isTestMode, json } from "./util";
@@ -58,6 +59,8 @@ async function routeApi(req: Request, env: Env): Promise<Response> {
   if (p === "/api/internal/domain-checks" && req.method === "POST") return handleDomainChecks(req, env);
   if (p === "/api/internal/build" && req.method === "POST") return handleInternalBuild(req, env);
   if (p === "/api/internal/monthly-reports" && req.method === "POST") return handleMonthlyReports(req, env);
+  if (p === "/api/internal/session-bundles/rebuild" && req.method === "POST")
+    return handleSessionBundlesRebuild(req, env);
   if (p === "/api/internal/abandoned-followups" && req.method === "POST") return handleAbandonedFollowups(req, env);
   if (p === "/api/internal/ads-lead" && req.method === "POST") return handleAdsLeadIntake(req, env);
   if (p.startsWith("/api/admin/")) return handleAdmin(req, env, url);

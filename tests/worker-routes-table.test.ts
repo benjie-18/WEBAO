@@ -1,7 +1,7 @@
 // Route-dispatch table: every /api route entry in worker/index.ts must
 // reach its handler instead of falling through to the JSON 404. This pins
 // the dispatch table itself; each handler's behavior is covered by its own
-// test file. (24 route entries, 25 cases: the admin prefix is tested
+// test file. (25 route entries, 26 cases: the admin prefix is tested
 // twice. An earlier comment said "25 routes"; that was a miscount.)
 import assert from 'node:assert/strict';
 import test from 'node:test';
@@ -61,6 +61,7 @@ test('route table: every API route dispatches (no fall-through 404)', async () =
     ['POST', '/api/internal/monthly-reports', {}, wrongHeaders, 401],
     ['POST', '/api/internal/abandoned-followups', {}, wrongHeaders, 401],
     ['POST', '/api/internal/ads-lead', {}, wrongHeaders, 401],
+    ['POST', '/api/internal/session-bundles/rebuild', {}, wrongHeaders, 401],
     ['GET', '/api/admin/stats', null, adminHeaders, 200],
     ['GET', '/api/admin/clients', null, adminHeaders, 200],
   ];

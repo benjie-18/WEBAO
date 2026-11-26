@@ -271,3 +271,42 @@ test('domain sweep: a CNAME into webao.ca connects, anything else stays pending'
     stub.restore();
   }
 });
+
+test('domain sweep stops at 40 fetches per run and reports capped', async () => {
+  const memory = memoryKV();
+  const clients = [];
+  for (let i = 0; i < 41; i++) {
+    clients.push(await tenantClient(memory, `c${i}@example.ca`, `client${i}.ca`));
+  }
+  const before = (await getClient(memory.kv, clients[40].id))!.domainCheckedAt;
+  assert.equal(before, undefined, 'no client is stamped before the sweep');
+  let fetches = 0;
+  const stub = stubFetch((url) => {
+    if (url.includes('dns-query')) {
+      fetches++;
+      return { ok: true, body: { Answer: [] } };
+    }
+    return { ok: false, body: {} };
+  });
+  try {
+    const res = await handleDomainChecks(
+      apiRequest('/api/internal/domain-checks', {}, { headers: { authorization: 'Bearer s3cret' } }),
+      envOf(memory.kv, { INTERNAL_CRON_SECRET: 's3cret' }),
+    );
+    assert.equal(res.status, 200);
+    const out = await bodyOf(res);
+    assert.equal(fetches, 40, 'one external fetch per checked client, capped at 40');
+    assert.equal(out.checked, 40);
+    assert.equal(out.stillPending, 40);
+    assert.equal(out.capped, true);
+    // The client index is newest-first, so do not assume which client the
+    // cap leaves behind — exactly one of the 41 stays unstamped.
+    let stamped = 0;
+    for (const c of clients) {
+      if ((await getClient(memory.kv, c.id))!.domainCheckedAt !== undefined) stamped++;
+    }
+    assert.equal(stamped, 40, 'exactly 40 clients were checked; one stays pending for the next run');
+  } finally {
+    stub.restore();
+  }
+});

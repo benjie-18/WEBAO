@@ -18,6 +18,8 @@ interface StatsResponse {
   topPages: { path: string; views: number }[];
   devices: { mobile: number; tablet: number; desktop: number };
   countries: { code: string; count: number }[];
+  sessionsTotal?: number;
+  sessionsNextOffset?: number | null;
 }
 
 interface FormItem {
@@ -382,15 +384,82 @@ function initAdmin(): void {
   async function loadStats(): Promise<void> {
     setStatsLoading();
     try {
-      const data = (await api(
-        `/api/admin/stats?range=${range}&page=${encodeURIComponent(pageFilter)}`
-      )) as unknown as StatsResponse;
+      const data = await fetchStats();
       lastStats = data;
       renderStats(data);
     } catch (e) {
       if (e instanceof ExpiredSession) return;
       setStatsError();
     }
+  }
+
+  /**
+   * Stats normally answer in one call from the day-bundles
+   * (sessionsNextOffset null). When the bundles are down the endpoint
+   * falls back to the session scan in slices of 500: fetch slice after
+   * slice and merge them. Each slice holds a disjoint set of sessions,
+   * so summing each series per label and re-sorting the top lists
+   * counts every session exactly once.
+   */
+  async function fetchStats(): Promise<StatsResponse> {
+    let merged: StatsResponse | null = null;
+    let offset = 0;
+    for (;;) {
+      const slice = (await api(
+        `/api/admin/stats?range=${range}&page=${encodeURIComponent(pageFilter)}&sessionOffset=${offset}`,
+      )) as unknown as StatsResponse;
+      merged = merged ? mergeStats(merged, slice) : slice;
+      const next = slice.sessionsNextOffset;
+      if (next === null || next === undefined) break;
+      offset = next;
+    }
+    return merged;
+  }
+
+  /** Merge two stats slices: union of labels, series summed per label. */
+  function mergeStats(a: StatsResponse, b: StatsResponse): StatsResponse {
+    const labels = [...new Set([...a.labels, ...b.labels])].sort();
+    const align = (vals: number[], src: string[]): number[] =>
+      labels.map((l) => {
+        const i = src.indexOf(l);
+        return i >= 0 ? vals[i] || 0 : 0;
+      });
+    const sum = (x: number[], y: number[]): number[] => x.map((v, i) => v + y[i]);
+    const sumSeries = (x: number[], xs: string[], y: number[], ys: string[]): number[] =>
+      sum(align(x, xs), align(y, ys));
+    const topPages = [...a.topPages, ...b.topPages]
+      .reduce(
+        (m, row) => m.set(row.path, (m.get(row.path) || 0) + row.views),
+        new Map<string, number>(),
+      );
+    const countries = [...a.countries, ...b.countries]
+      .reduce(
+        (m, row) => m.set(row.code, (m.get(row.code) || 0) + row.count),
+        new Map<string, number>(),
+      );
+    return {
+      ok: true,
+      range: a.range,
+      page: a.page,
+      labels,
+      views: sumSeries(a.views, a.labels, b.views, b.labels),
+      visitors: sumSeries(a.visitors, a.labels, b.visitors, b.labels),
+      topPages: [...topPages.entries()]
+        .sort((x, y) => y[1] - x[1])
+        .slice(0, 10)
+        .map(([path, views]) => ({ path, views })),
+      devices: {
+        mobile: a.devices.mobile + b.devices.mobile,
+        tablet: a.devices.tablet + b.devices.tablet,
+        desktop: a.devices.desktop + b.devices.desktop,
+      },
+      countries: [...countries.entries()]
+        .sort((x, y) => y[1] - x[1])
+        .slice(0, 15)
+        .map(([code, count]) => ({ code, count })),
+      sessionsTotal: a.sessionsTotal ?? b.sessionsTotal,
+      sessionsNextOffset: null,
+    };
   }
 
   function syncPageOptions(paths: string[]): void {

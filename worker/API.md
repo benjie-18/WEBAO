@@ -243,7 +243,7 @@ Token is 256-bit, stored server-side with a 7-day TTL. Pass it as
 Login is throttled: 10 attempts/min per IP.
 Default password is set on first deploy (see DEPLOY.md); change it in the panel immediately.
 
-### `GET /api/admin/stats?range=day|week|month|year&page=<path|all>`
+### `GET /api/admin/stats?range=day|week|month|year|all&page=<path|all>&sessionOffset=0`
 →
 ```json
 {
@@ -252,13 +252,23 @@ Default password is set on first deploy (see DEPLOY.md); change it in the panel 
   "views": [12, 45], "visitors": [3, 9],
   "topPages": [{ "path": "/pricing", "views": 120 }],
   "devices": { "mobile": 10, "tablet": 2, "desktop": 30 },
-  "countries": [{ "code": "CA", "count": 25 }]
+  "countries": [{ "code": "CA", "count": 25 }],
+  "sessionsTotal": 636, "sessionsNextOffset": null, "source": "bundles"
 }
 ```
 `day`/`week`/`month` return daily buckets (1/7/30 days); `year` returns 12 monthly
 buckets. `visitors` counts distinct sessions by `startedAt`; devices/countries are
 aggregated over sessions in range. `topPages` is always the global top 10 for the
-range (not filtered by `page`).
+range (not filtered by `page`). `all` covers every session in the store, monthly
+buckets. When a fresh precomputed aggregate exists (`stats:agg:<range>`, page=all
+only), the call answers from that one KV read instead of aggregating at all.
+Otherwise sessions normally come from the day-bundles (one GET per day plus the
+fresh active overlay — see `session-bundle:` below), so a first load costs ~85
+reads instead of one per session. When the bundles are missing or stale the call
+falls back to the session scan in slices of 500: pass `sessionOffset` (the
+returned `sessionsNextOffset`, null when done) and merge the partials by summing
+each series per label and re-sorting top pages/countries — the panel loops this
+automatically, exactly like the charts lead slices.
 
 ### `GET /api/admin/visitors?limit=50`
 → `{ "ok": true, "items": [{ sid, startedAt, lastSeenAt, device, browser, country, city?, ip, pages: [{ path, at, durationMs, referrer? }], clicks: [{ path, kind, label, at }] }] }`
@@ -429,8 +439,37 @@ Same build as the admin action, for agent jobs. → `{ ok, buildId, qaPassed, ch
 Shared-secret Bearer auth (`INTERNAL_CRON_SECRET`), called daily by a cron.
 For each `pending-dns` / `to-register` domain, a DNS-over-HTTPS lookup marks
 it `connected` when its CNAME points into webao.ca (the instructed target is
-hosting.webao.ca); `domainCheckedAt` is stamped either way.
-Answers `{ checked, connected, stillPending }`.
+hosting.webao.ca); `domainCheckedAt` is stamped either way. At most 40
+domains per run (the Free plan caps a worker invocation at 50 external
+fetches): the rest stay pending for the next run, and the answer carries
+`capped: true` when the run stopped early.
+Answers `{ checked, connected, stillPending, capped }`.
+
+### `POST /api/internal/session-bundles/rebuild`
+Shared-secret Bearer auth (`INTERNAL_CRON_SECRET`). Rebuilds the
+day-bundles the admin stats/visitors tabs read instead of scanning every
+session (see `session-bundle:` in the key table). Body
+`{ mode?: "incremental" | "full" | "charts", offset?: number,
+   leadOffset?: number, formOffset?: number }`. Incremental (default,
+daily) freshens the bundles from the last 3 days of active markers — the
+sessions touched since the last run — then recomputes the stats aggregates
+(see `stats:agg:` in the key table), and answers
+`{ mode, days, sessions, builtAt, statsAggregates }`. Full (weekly) rebuilds
+every bundle from the session records in slices of 500: call with `offset`
+0, then with each returned `nextOffset` until `done` is true; the final
+slice swaps the staging bundles into live, drops bundles for days with no
+sessions, and recomputes the stats aggregates.
+Answers `{ mode, done, offset, nextOffset, total, days, sessions, statsAggregates }`.
+Charts (daily) rebuilds the charts aggregates from the lead/form stores in
+slices of 850 leads + 100 forms: call with `leadOffset` 0 and `formOffset`
+0, then with each returned `nextLeadOffset`/`nextFormOffset` until `done`
+is true (a finished dimension stays past the end, so it is never fetched
+twice). A call that replays the offsets of the last merged call returns
+the same next offsets without counting twice. Answers
+`{ mode, done, leadOffset, formOffset, nextLeadOffset, nextFormOffset, leadsTotal, formsTotal }`.
+A failed bundle write surfaces as a 500 so the cron run visibly fails.
+Aggregates are fresh for 36 h; a missing or stale aggregate never fails a
+load — the admin handlers fall back to live aggregation.
 
 ### `GET /api/admin/charts?range=day|week|month|year`
 Per-day form + outreach series for the admin chart cards, in the same label
@@ -462,6 +501,13 @@ and revokes all other admin tokens (the caller stays logged in).
 | `config:auth` | `{ passwordHash }` — SHA-256 hex |
 | `config:settings` | `{ defaultTheme, trackingEnabled }` |
 | `session:<uuid>` | session object (TTL 365 days) |
+| `session-bundle:<yyyy-mm-dd>` | `{ day, builtAt, sessions: [{ sid, ...session }] }` — derived cache of the sessions started that day; rebuilt daily by `POST /api/internal/session-bundles/rebuild`, read by stats/visitors instead of one GET per session. A missing/malformed bundle set, or one whose newest build is older than 36 h, falls back to the session scan. Sessions stay the only source of truth; bundles never delete or trim them. |
+| `sessions:active:<yyyy-mm-dd>:<sid>` | `"1"` (TTL 3 days) — first touch of the day marker, written by the track path so the admin tabs see intraday activity the daily bundles do not hold yet. At most one per session per day. |
+| `sessions:day:<yyyy-mm-dd>` | `"1"` (TTL 400 days) — day registry: the day holds sessions. Written once when a session is created, so the bundle loader can prove a missing bundle for an old day falls back to the scan instead of silently dropping sessions. Pruned by the weekly full rebuild. |
+| `session-bundle-staging:<yyyy-mm-dd>` | staging copy used by the sliced full rebuild; swapped into live bundles on the final slice, then deleted. Never read by the admin tabs. |
+| `stats:agg:<range>` | the stats response for one range (`day`/`week`/`month`/`year`/`all`, page=all) precomputed by the rebuild from the day-bundles, with `source: "precomputed"` and `builtAt`. Served by `GET /api/admin/stats` when fresh (36 h); a missing or stale aggregate falls back to live aggregation. |
+| `charts:agg:<range>` | the charts response for one range precomputed by the rebuild's `charts` mode from the lead/form stores, with `source: "precomputed"` and `builtAt`. Served by `GET /api/admin/charts` when fresh (36 h); a missing or stale aggregate falls back to live aggregation. |
+| `charts:agg:staging` | merged-so-far charts partials for a charts rebuild in progress; cleared by the next run that starts at offsets (0, 0). Never read by the admin tabs. |
 | `views:<yyyy-mm-dd>:<urlenc-path>` | legacy integer pageview counter — no longer written; stats derive from sessions |
 | `form:<ts>:<rand>` | form submission object |
 | `forms:index` | JSON array of form keys, newest-first, cap 1000 (index trim only; records are never deleted) |
