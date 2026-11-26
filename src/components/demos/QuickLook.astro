@@ -5,7 +5,8 @@
 // follows the visitor's filters), and a "Build my site like this" link
 // that carries ?demo=<slug> into /start (the #23 mechanism). Only live
 // demos get a trigger: a demo with no published page has nothing to
-// preview, and the catalog toast already says so.
+// preview. Every visible demo is live, so the catalog has no
+// unpublished-demo fallback.
 import { useTranslations, localizedPaths, type Locale } from "../../lib/i18n";
 
 interface Props {
@@ -197,9 +198,9 @@ const paths = localizedPaths[locale];
   .quicklook-meta { font-size: 11px; color: var(--muted); margin: 4px 0 0; }
   .quicklook-close {
     flex: none;
-    width: 36px;
-    height: 36px;
-    min-height: 36px;
+    width: 44px;
+    height: 44px;
+    min-height: 44px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -230,7 +231,7 @@ const paths = localizedPaths[locale];
     font-size: 13px;
     font-weight: 600;
     padding: 8px 14px;
-    min-height: 36px;
+    min-height: 44px;
     cursor: pointer;
   }
   .quicklook-width button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }

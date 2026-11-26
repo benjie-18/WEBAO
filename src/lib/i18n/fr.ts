@@ -1391,7 +1391,6 @@ const fr = {
     },
     searchPlaceholder: "Chercher des démos : essayez « métiers », « éditorial », « Laval », « haut de gamme »…",
     searchCount: "{count} démos",
-    filterLabel: "Filtrer par catégorie",
     styleLabel: "Style",
     allStyles: "Tous les styles",
     tradeLabel: "Métier",
@@ -1430,9 +1429,7 @@ const fr = {
     },
     empty: "Aucune démo ne correspond. Essayez « métiers » ou « restaurant », ou effacez les filtres.",
     clear: "Effacer la recherche",
-    details: "Détails →",
     viewDemo: "Voir la démo →",
-    fictional: "FICTIVE",
     noteLeft: "TOUTES LES DÉMOS SONT FICTIVES · PAS DE VRAIS CLIENTS WEBAO",
     noteRight:
       "→ Vous aimez une direction ? Dites-le-nous et on bâtira votre site autour.",
@@ -1441,7 +1438,6 @@ const fr = {
     ctaPrimary: "Partir d’une démo →",
     ctaSecondary: "Voir les tarifs",
     sourcesLink: "Sources / Crédits",
-    toast: "{name} est une entreprise fictive et une de nos directions : {tone}, {palette}. Le site démo cliquable n’est pas encore publié. Vous aimez cette direction ? Mentionnez-la quand vous nous contactez.",
     categories: {
       All: "Tous",
       Trades: "Métiers",

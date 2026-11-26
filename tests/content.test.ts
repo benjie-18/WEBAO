@@ -4,7 +4,8 @@
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import test from 'node:test';
-import { demos } from '../src/lib/demos';
+import { demos, liveDemoIds } from '../src/lib/demos';
+import { HIDDEN_DEMOS } from '../src/lib/demo-seo';
 import en from '../src/lib/i18n/en';
 import fr from '../src/lib/i18n/fr';
 import { cartProducts } from '../src/lib/cart-catalog';
@@ -50,6 +51,19 @@ test('the demo catalog entries are well-formed and unique', () => {
     assert.ok(Array.isArray(demo.pages) && demo.pages.length > 0, `${demo.id} has sub-pages`);
     assert.equal(new Set(demo.pages).size, demo.pages!.length, `${demo.id} pages are unique`);
   }
+});
+
+test('every visible demo is live, so the catalog links each card to its microsite', () => {
+  // The catalog has no unpublished-demo fallback: every visible card links
+  // straight to its demo page. If a demo is ever added without a published
+  // page, this fails instead of the card silently linking nowhere.
+  for (const demo of demos) {
+    if (HIDDEN_DEMOS.has(demo.id)) continue;
+    assert.ok(liveDemoIds.has(demo.id), `${demo.id} is visible but not live`);
+  }
+  const page = read('src/components/pages/DemosPage.astro');
+  assert.equal(page.includes('toast'), false, 'no unpublished-demo toast remains');
+  assert.equal(page.includes('data-demo-tone'), false, 'no toast-only data attribute remains');
 });
 
 test('every demo has an English and a French page on disk', () => {
