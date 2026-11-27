@@ -108,6 +108,12 @@ const routes = { start: paths.start, pricing: paths.pricing, locale };
         return;
       }
       const total = rows.reduce((sum, i) => sum + i.priceCents, 0);
+      // The drawer total carries the billing suffix when every item shares
+      // one term ("C$149.99/mo"); the checkout summary showed a bare total
+      // instead. Mixed carts (recurring plus one-time) carry no suffix
+      // rather than a wrong one, same as the drawer.
+      const totalIntervals = new Set(rows.map((i) => i.interval));
+      const totalSuffix = rows.length > 0 && totalIntervals.size === 1 ? suffix(rows[0].interval) : '';
       itemsEl.innerHTML =
         '<div style="border:1px solid var(--line); border-radius:12px; padding:16px; background:var(--card-bg);">' +
         '<p class="mono" style="font-size:10px; letter-spacing:.14em; opacity:.5; margin-bottom:12px;">' +
@@ -124,7 +130,7 @@ const routes = { start: paths.start, pricing: paths.pricing, locale };
           .join('') +
         '<div style="display:flex; justify-content:space-between; align-items:baseline; gap:12px; padding-top:12px; font-size:1.1rem;">' +
         '<strong>' + esc(labels.total) + '</strong>' +
-        '<strong class="mono">' + esc(money(total)) + '</strong>' +
+        '<strong class="mono">' + esc(money(total) + totalSuffix) + '</strong>' +
         '</div>' +
         '</div>';
     }
@@ -144,6 +150,9 @@ const routes = { start: paths.start, pricing: paths.pricing, locale };
         btn.textContent = labels.retry;
         btn.addEventListener('click', () => location.reload());
         loadingEl.appendChild(btn);
+        // Land keyboard and screen-reader users on the recovery action
+        // instead of leaving them on the status line above it.
+        btn.focus();
       }
     }
 

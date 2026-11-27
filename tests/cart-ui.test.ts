@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { JSDOM, VirtualConsole } from 'jsdom';
 import { STORAGE_KEY, cartKey, type CartItem } from '../src/lib/cart';
+import { priceCentsFor } from '../src/lib/cart-catalog';
 import {
   BILLING_KEY,
   applyBilling,
@@ -203,6 +204,12 @@ test('an empty cart renders the localized empty state', () => {
   // #74: the empty drawer is a quick starter, not a void.
   assert.match(doc.querySelector('[data-cart-items]')!.textContent ?? '', /Most small businesses start with Grow \(C\$149\.99\/mo\)\./);
   assert.equal(doc.querySelector('[data-cart-items] [data-cart-btn][data-product="grow"]')?.textContent, 'Add Grow to cart');
+  // The starter button's prices come from the catalog: a Grow price change
+  // used to leave the drawer adding Grow at the old price while the
+  // pricing page showed the new one.
+  const growBtn = doc.querySelector('[data-cart-items] [data-cart-btn][data-product="grow"]');
+  assert.equal(growBtn?.getAttribute('data-price-cents'), String(priceCentsFor('grow', 'month')));
+  assert.equal(growBtn?.getAttribute('data-price-year'), String(priceCentsFor('grow', 'year')));
   assert.equal(doc.querySelector('[data-cart-items] .cart-empty-starter a')?.getAttribute('href'), '/demos');
   assert.equal(doc.querySelector('[data-cart-total]')!.textContent, 'C$0.00');
   assert.equal(doc.querySelector('[data-cart-checkout]')!.getAttribute('aria-disabled'), 'true');

@@ -980,6 +980,36 @@ test('the cart drawer controls meet the 44px touch target', () => {
   assert.match(title, /margin:\s*0 60px 8px 0/, 'the conflict title clears the close button');
 });
 
+test('the conflict popup close button is labelled Close, not Close cart', () => {
+  // The popup is a dialog, not the cart: its close button used to carry
+  // the drawer's "Close cart" / "Fermer le panier" label, so a screen
+  // reader announced the wrong thing when the popup was open. The
+  // generic Close label lives in t.common, in both locales.
+  const layout = read('src/layouts/BaseLayout.astro');
+  const at = layout.indexOf('data-cart-conflict-close');
+  assert.ok(at > 0, 'the conflict close button exists');
+  const block = layout.slice(at, layout.indexOf('>', at));
+  assert.match(block, /t\.common\.close/, 'the conflict close button uses the generic Close label');
+  assert.doesNotMatch(block, /t\.cart\.close/, 'the conflict close button does not say Close cart');
+  assert.equal(en.common.close, 'Close', 'the EN Close label');
+  assert.equal(fr.common.close, 'Fermer', 'the FR Close label');
+  // The drawer close button keeps its own label.
+  const drawerAt = layout.indexOf('data-cart-close');
+  assert.ok(drawerAt > 0, 'the drawer close button exists');
+  assert.match(layout.slice(drawerAt, layout.indexOf('>', drawerAt)), /t\.cart\.close/);
+});
+
+test('a failed payment load puts focus on the retry button', () => {
+  // The failure message is announced through the status line, but a
+  // keyboard user had to tab to reach the retry button; the button is
+  // the recovery action, so focus moves onto it when it appears.
+  const page = read('src/components/pages/CheckoutPage.astro');
+  const at = page.indexOf("btn.addEventListener('click', () => location.reload());");
+  assert.ok(at > 0, 'the retry button exists');
+  const block = page.slice(at, page.indexOf('}', at));
+  assert.match(block, /btn\.focus\(\)/, 'the retry button takes focus');
+});
+
 test('an empty cart shows its message once on the checkout page', () => {
   // The empty message used to render twice on /checkout and /fr/checkout:
   // once in the summary slot (renderItems) and once in the payment box

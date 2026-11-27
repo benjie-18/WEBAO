@@ -734,10 +734,15 @@ export function renderDrawer(doc: Document): void {
     const addGrow = label(doc, "emptyAddGrow", "Add Grow to cart");
     const browseDemos = label(doc, "emptyBrowseDemos", "Browse 47 demos");
     const demosPath = label(doc, "demosPath", "/demos");
+    // The starter button's prices come from the catalog, not literals: a
+    // Grow price change used to leave the drawer adding Grow at the old
+    // price while the pricing page showed the new one.
+    const growMonth = priceCentsFor("grow", "month") ?? 14999;
+    const growYear = priceCentsFor("grow", "year") ?? 149990;
     container.innerHTML = `<div class="cart-drawer-empty">${escapeHtml(title)}<br/>${escapeHtml(hint)}</div>
       <div class="cart-empty-starter">
         <p>${escapeHtml(starter)}</p>
-        <button type="button" class="btn btn--primary" data-cart-btn data-key="grow-month" data-product="grow" data-name="Grow" data-price-cents="14999" data-price-year="149990" data-interval="month" data-type="plan" aria-label="${escapeHtml(addGrow)}">${escapeHtml(addGrow)}</button>
+        <button type="button" class="btn btn--primary" data-cart-btn data-key="grow-month" data-product="grow" data-name="Grow" data-price-cents="${growMonth}" data-price-year="${growYear}" data-interval="month" data-type="plan" aria-label="${escapeHtml(addGrow)}">${escapeHtml(addGrow)}</button>
         <a class="btn btn--ghost" href="${escapeHtml(demosPath)}">${escapeHtml(browseDemos)}</a>
       </div>`;
   } else {

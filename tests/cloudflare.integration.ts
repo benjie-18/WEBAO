@@ -280,6 +280,20 @@ test('built checkout page renders the cart and posts its keys', async () => {
     dom?.window.close();
   }
 
+  let single: JSDOM | undefined;
+  try {
+    // Every item on one term: the total carries that term's suffix, like
+    // the drawer total does — a bare total reads as a one-off price.
+    single = await render([
+      { key: 'launch-month', product: 'launch', name: 'Launch', priceCents: 8999, interval: 'month', type: 'plan' },
+      { key: 'review-month', product: 'review', name: 'Review Generation Engine', priceCents: 34999, interval: 'month', type: 'addon' },
+    ]);
+    const singleSummary = single.window.document.getElementById('checkout-items')?.textContent ?? '';
+    assert.match(singleSummary, /C\$439\.98\/mo/, 'the total carries the billing suffix when every item shares one term');
+  } finally {
+    single?.window.close();
+  }
+
   let detailsMissing: JSDOM | undefined;
   try {
     // Step 1 skipped (direct hit on /checkout): no session, back to /start.
